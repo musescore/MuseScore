@@ -123,6 +123,8 @@ std::string MScore::errorToString(MsError err)
     case MsError::CANNOT_REPEAT_SELECTION: return "CANNOT_REPEAT_SELECTION";
     case MsError::TRANSPOSE_NO_FRET_DIAGRAM: return "TRANSPOSE_NO_FRET_DIAGRAM";
     case MsError::CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG: return "CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG";
+    case MsError::NO_SPACE_FOR_TUPLET: return "NO_SPACE_FOR_TUPLET";
+    case MsError::TUPLET_NOTE_VALUE_TOO_SHORT: return "TUPLET_NOTE_VALUE_TOO_SHORT";
     }
 
     return {};

@@ -1510,6 +1510,7 @@ muse::Ret NotationActionController::putTuplet(const muse::rcommand::Params& para
     options.numberType = Contract<TupletNumberType>::get(params);
     options.bracketType = Contract<TupletBracketType>::get(params);
     options.autoBaseLen = params.at("auto-baselen", Val(false)).toBool();
+    options.selectedDurationAs = Contract<TupletSelectedDuration>::get(params);
 
     putTuplet(options);
     return muse::make_ok();
@@ -1525,11 +1526,6 @@ void NotationActionController::putTuplet(const TupletOptions& options)
 
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
-    }
-
-    if (!interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->error(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
         return;
     }
 

@@ -32,6 +32,7 @@
 namespace mu::engraving {
 enum class TupletNumberType : unsigned char;
 enum class TupletBracketType : unsigned char;
+enum class TupletSelectedDuration : unsigned char;
 }
 
 namespace mu::notation {
@@ -54,6 +55,7 @@ public:
 
     engraving::TupletNumberType numberType() const;
     engraving::TupletBracketType bracketType() const;
+    engraving::TupletSelectedDuration selectedDurationAs() const;
 
     INotationStylePtr style() const;
     INotationPtr notation() const;

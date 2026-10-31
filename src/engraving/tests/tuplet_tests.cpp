@@ -884,6 +884,407 @@ TEST_F(Engraving_TupletTests, canAddTuplet)
     delete score;
 }
 
+TEST_F(Engraving_TupletTests, canAddTupletInEmptyVoice)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+
+    // halfway through m1, where voice 2 is empty
+    const Segment* segment = chordRestAt(measureAt(score, 0), 4)->segment();
+    ASSERT_FALSE(segment->cr(1));
+
+    // fits exactly up to the barline
+    EXPECT_TRUE(score->canAddTuplet(segment, 1, Fraction(3, 2), DurationType::V_QUARTER));
+    // would cross the barline
+    EXPECT_FALSE(score->canAddTuplet(segment, 1, Fraction(3, 2), DurationType::V_HALF));
+    // with a chord/rest in the track, the same as for that chord/rest: would cross the barline
+    EXPECT_FALSE(score->canAddTuplet(chordRestAt(measureAt(score, 3), 4)->segment(), 0, Fraction(3, 5), DurationType::V_EIGHTH));
+    // invalid ratio
+    EXPECT_FALSE(score->canAddTuplet(segment, 1, Fraction(0, 2), DurationType::V_QUARTER));
+    // no track
+    EXPECT_FALSE(score->canAddTuplet(segment, muse::nidx, Fraction(3, 2), DurationType::V_QUARTER));
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, canAddTupletInEmptyVoiceDotted)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+
+    TDuration dottedEighth(DurationType::V_EIGHTH);
+    dottedEighth.setDots(1);
+    TDuration doubleDottedEighth(DurationType::V_EIGHTH);
+    doubleDottedEighth.setDots(2);
+
+    // halfway through m1, where voice 2 is empty
+    const Segment* segment = chordRestAt(measureAt(score, 0), 4)->segment();
+    // 3 dotted eighths in the time of 2: 3/8 fits
+    EXPECT_TRUE(score->canAddTuplet(segment, 1, Fraction(3, 2), dottedEighth));
+    // 2 dotted eighths in the time of 3: 9/16 would cross the barline
+    EXPECT_FALSE(score->canAddTuplet(segment, 1, Fraction(2, 3), dottedEighth));
+    // 3 double-dotted eighths in the time of 2: 7/16 fits
+    EXPECT_TRUE(score->canAddTuplet(segment, 1, Fraction(3, 2), doubleDottedEighth));
+    // 2 double-dotted eighths in the time of 3: 21/32 would cross the barline
+    EXPECT_FALSE(score->canAddTuplet(segment, 1, Fraction(2, 3), doubleDottedEighth));
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, canAddTupletInsideLongerChordRest)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // voice 2 of m1: 3 quarter rests in the time of 2 over the first half
+    Segment* first = m1->first(SegmentType::ChordRest);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->expandVoice(first, 1);
+    score->endCmd();
+    ASSERT_TRUE(first->cr(1));
+    ASSERT_TRUE(addTuplet(first->cr(1), Fraction(3, 2), DurationType::V_QUARTER));
+
+    // the second eighth of m1, inside the first rest of that tuplet
+    const Segment* segment = m1->findSegment(SegmentType::ChordRest, Fraction(1, 8));
+    ASSERT_TRUE(segment);
+    ASSERT_FALSE(segment->cr(1));
+
+    // 3 eighths in the time of 2 fit in the tuplet
+    EXPECT_TRUE(score->canAddTuplet(segment, 1, Fraction(3, 2), DurationType::V_EIGHTH));
+    // 4 quarters in the time of 3 would cross the end of the tuplet, though not the barline
+    EXPECT_FALSE(score->canAddTuplet(segment, 1, Fraction(4, 3), DurationType::V_QUARTER));
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, tupletEndTick)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+
+    const TDuration eighth(DurationType::V_EIGHTH);
+
+    // 3 eighths in the time of 2, from the start of m1
+    EXPECT_EQ(score->tupletEndTick(chordRestAt(measureAt(score, 0), 0), Fraction(3, 2), eighth), Fraction(1, 4));
+    // 3 eighths in the time of 5, from halfway through m1: it ends after the barline
+    EXPECT_EQ(score->tupletEndTick(chordRestAt(measureAt(score, 0), 4), Fraction(3, 5), eighth), Fraction(9, 8));
+    // 3 eighths in the time of 5 in the 9:8 tuplet of m3: it ends with the 9:8 tuplet
+    EXPECT_EQ(score->tupletEndTick(chordRestAt(measureAt(score, 2), 4), Fraction(3, 5), eighth), measureAt(score, 2)->endTick());
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, tupletEndTickDotted)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+
+    TDuration dottedEighth(DurationType::V_EIGHTH);
+    dottedEighth.setDots(1);
+    TDuration doubleDottedEighth(DurationType::V_EIGHTH);
+    doubleDottedEighth.setDots(2);
+
+    // from the start of m1
+    ChordRest* first = chordRestAt(measureAt(score, 0), 0);
+    // 2 dotted eighths in the time of 3: 9/16
+    EXPECT_EQ(score->tupletEndTick(first, Fraction(2, 3), dottedEighth), Fraction(9, 16));
+    // 2 double-dotted eighths in the time of 3: 21/32
+    EXPECT_EQ(score->tupletEndTick(first, Fraction(2, 3), doubleDottedEighth), Fraction(21, 32));
+
+    delete score;
+}
+
+// Checks and adds tuplets that use the selected durations as the subdivision, as the tuplet commands do
+static std::vector<Tuplet*> addTupletsWithSelectedDurations(Score* score, const Fraction& ratio)
+{
+    MScore::setError(MsError::MS_NO_ERROR);
+    if (!EditTuplet::checkAddTupletsWithSelectedDurations(score, ratio)) {
+        return {};
+    }
+
+    std::vector<Tuplet*> tuplets;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {
+        tuplets = EditTuplet::addTuplets(tx, score, ratio, TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET,
+                                         /*autoBaseLen*/ true, TupletSelectedDuration::SUBDIVISION);
+    });
+    return tuplets;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurations)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // the first 3 eighths of m1: the first tuplet replaces the second eighth, so it gets no tuplet of its own
+    score->select(chordRestAt(m1, 0), SelectType::SINGLE);
+    score->select(chordRestAt(m1, 1), SelectType::ADD);
+    score->select(chordRestAt(m1, 2), SelectType::ADD);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 2);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 3:2[8 r8 r8] 8 8 8 8");
+
+    // the start of the first tuplet is selected
+    EXPECT_EQ(score->selection().element(), toChord(chordRestAt(m1, 0))->upNote());
+    EXPECT_EQ(score->inputState().duration(), TDuration(DurationType::V_EIGHTH));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "8 8 8 8 8 8 8 8");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsInRange)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // a range of 1 eighth
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 1);
+    EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 8 8 8 8 8 8");
+
+    // the range grows to the end of the tuplet
+    EXPECT_TRUE(score->selection().isRange());
+    EXPECT_EQ(score->selection().tickStart(), Fraction(0, 1));
+    EXPECT_EQ(score->selection().tickEnd(), Fraction(1, 4));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "8 8 8 8 8 8 8 8");
+
+    // a range of 3 eighths: the first tuplet replaces the second eighth, and the third gets a tuplet that ends after
+    // the range
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(m1, 2), SelectType::RANGE);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 2);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 3:2[8 r8 r8] 8 8 8 8");
+    EXPECT_EQ(score->selection().tickEnd(), Fraction(1, 2));
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "8 8 8 8 8 8 8 8");
+
+    // the whole measure: a tuplet on every other eighth
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(m1, 7), SelectType::RANGE);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 4);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 3:2[8 r8 r8] 3:2[8 r8 r8] 3:2[8 r8 r8]");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsNoSpace)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // the last eighth's tuplet would cross the barline: nothing fits
+    score->select(chordRestAt(m1, 7), SelectType::SINGLE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(3, 2)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_EQ(rhythm(m1), "8 8 8 8 8 8 8 8");
+
+    // the first one fits, the last one is left out
+    score->select(chordRestAt(m1, 0), SelectType::SINGLE);
+    score->select(chordRestAt(m1, 7), SelectType::ADD);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 1);
+    EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 8 8 8 8 8 8");
+
+    score->undoRedo(true, nullptr);
+
+    // would cross the end of the 9:8 tuplet of m3
+    Measure* m3 = measureAt(score, 2);
+    score->select(chordRestAt(m3, 8), SelectType::SINGLE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(3, 2)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsInRangeNoSpace)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    TDuration dottedHalf(DurationType::V_HALF);
+    dottedHalf.setDots(1);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(chordRestAt(m1, 0), dottedHalf);
+    score->endCmd();
+    ASSERT_EQ(rhythm(m1), "2. 8 8");
+
+    // 3 dotted halves in the time of 2 don't fit, so they replace nothing: the next eighth gets its tuplet
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(m1, 2), SelectType::RANGE);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 1);
+    EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "2. 3:2[8 r8 r8]");
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "2. 8 8");
+
+    // a dotted half and a quarter: neither tuplet fits
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(chordRestAt(m1, 1), TDuration(DurationType::V_QUARTER));
+    score->endCmd();
+    ASSERT_EQ(rhythm(m1), "2. 4");
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(m1, 1), SelectType::RANGE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(3, 2)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_EQ(rhythm(m1), "2. 4");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsRangeAcrossStaves)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    addSecondStaff(score, /*linked*/ false);
+    Measure* m1 = measureAt(score, 0);
+
+    // m1 on both staves: the eighths of the first staff get a tuplet on every other eighth, and the measure rest of the
+    // second staff is left as it is
+    score->selection().setRange(chordRestAt(m1, 0)->segment(), chordRestAt(measureAt(score, 1), 0)->segment(), 0, 2);
+    score->selection().updateSelectedElements();
+    const std::vector<Tuplet*> tuplets = addTupletsWithSelectedDurations(score, Fraction(3, 2));
+    EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 3:2[8 r8 r8] 3:2[8 r8 r8] 3:2[8 r8 r8]");
+    EXPECT_TRUE(m1->first(SegmentType::ChordRest)->cr(VOICES)->durationType().isMeasure());
+
+    ASSERT_EQ(tuplets.size(), 4);
+    for (const Tuplet* tuplet : tuplets) {
+        EXPECT_EQ(tuplet->staffIdx(), 0);
+    }
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsMeasureRest)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    // a measure rest has no duration to use as the subdivision, so it gets no tuplet, alone or in a range
+    score->select(chordRestAt(m1, 0), SelectType::SINGLE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(3, 2)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+
+    score->select(chordRestAt(m1, 0), SelectType::RANGE);
+    score->select(chordRestAt(measureAt(score, 1), 0), SelectType::RANGE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(3, 2)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_EQ(rhythm(m1), "R");
+    EXPECT_EQ(rhythm(measureAt(score, 1)), "R");
+
+    // with the selected duration as the tuplet length, each is divided
+    EXPECT_EQ(addTuplets(score, Fraction(3, 2)).size(), 2);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[r2 r2 r2]");
+    EXPECT_EQ(rhythm(measureAt(score, 1)), "3:2[r2 r2 r2]");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsLinkedStaff)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    addSecondStaff(score, /*linked*/ true);
+    Measure* m1 = measureAt(score, 0);
+
+    // the first eighth of m1 on both staves: the tuplet on the first staff replaces the linked one
+    Segment* first = m1->first(SegmentType::ChordRest);
+    score->select(first->cr(0), SelectType::RANGE);
+    score->select(first->cr(VOICES), SelectType::RANGE);
+    ASSERT_EQ(score->getSelectedChordRests().size(), 2);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 1);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[8 r8 r8] 8 8 8 8 8 8");
+
+    const Tuplet* linkedTuplet = first->cr(VOICES)->tuplet();
+    ASSERT_TRUE(linkedTuplet);
+    EXPECT_EQ(linkedTuplet->ratio(), Fraction(3, 2));
+    EXPECT_FALSE(linkedTuplet->tuplet());
+    EXPECT_EQ(linkedTuplet->elements().size(), 3);
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsDotted)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureAt(score, 0);
+
+    TDuration dottedQuarter(DurationType::V_QUARTER);
+    dottedQuarter.setDots(1);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(chordRestAt(m1, 0), dottedQuarter);
+    score->endCmd();
+    ASSERT_EQ(rhythm(m1), "4. 8 8 8 8 8");
+
+    // 3 dotted quarters in the time of 2 end at 3/4: the eighth at 3/8 gets no tuplet of its own
+    score->select(chordRestAt(m1, 0), SelectType::SINGLE);
+    score->select(chordRestAt(m1, 1), SelectType::ADD);
+    score->select(chordRestAt(m1, 4), SelectType::ADD);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 2);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m1), "3:2[4. r4. r4.] 3:2[8 r8 r8]");
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m1), "4. 8 8 8 8 8");
+
+    // 2 dotted quarters in the time of 3: 9/8 would cross the barline
+    score->select(chordRestAt(m1, 0), SelectType::SINGLE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(2, 3)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsDoubleDotted)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"addTuplet.mscx");
+    ASSERT_TRUE(score);
+    Measure* m2 = measureAt(score, 1);
+
+    TDuration doubleDottedQuarter(DurationType::V_QUARTER);
+    doubleDottedQuarter.setDots(2);
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
+    score->changeCRlen(chordRestAt(m2, 0), doubleDottedQuarter);
+    score->endCmd();
+    ASSERT_EQ(rhythm(m2), "4.. r16 r2");
+
+    // 3 double-dotted quarters in the time of 2 end at 7/8: the 16th rest at 7/16 gets no tuplet of its own
+    score->select(chordRestAt(m2, 0), SelectType::SINGLE);
+    score->select(chordRestAt(m2, 1), SelectType::ADD);
+    EXPECT_EQ(addTupletsWithSelectedDurations(score, Fraction(3, 2)).size(), 1);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(rhythm(m2), "3:2[4.. r4.. r4..] r8");
+
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(rhythm(m2), "4.. r16 r2");
+
+    // 2 double-dotted quarters in the time of 3: 21/16 would cross the barline
+    score->select(chordRestAt(m2, 0), SelectType::SINGLE);
+    EXPECT_TRUE(addTupletsWithSelectedDurations(score, Fraction(2, 3)).empty());
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+
+    delete score;
+}
+
 //-----------------------------------------
 //    deleteTupletSelection
 //     deleting a tuplet selects the rest that replaces it

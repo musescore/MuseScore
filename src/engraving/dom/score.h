@@ -421,6 +421,8 @@ public:
     Tuplet* addTuplet(ChordRest* destinationChordRest, const Fraction& ratio, const TDuration& baseLen, TupletNumberType numberType,
                       TupletBracketType bracketType);
     bool canAddTuplet(const ChordRest* chordRest, const Fraction& ratio, const TDuration& baseLen) const;
+    bool canAddTuplet(const Segment* segment, track_idx_t track, const Fraction& ratio, const TDuration& baseLen) const;
+    Fraction tupletEndTick(const ChordRest* chordRest, const Fraction& ratio, const TDuration& baseLen) const;
     void selectNewTuplet(Tuplet* tuplet);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
