@@ -1462,6 +1462,35 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
 }
 
 //---------------------------------------------------------
+//   tupletPreview
+//    The tuplet waiting at the input position for the
+//    duration that sizes it
+//---------------------------------------------------------
+
+std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
+{
+    const InputState& is = score->inputState();
+    if (!is.segment() || !is.pendingTupletHere()) {
+        return std::nullopt;
+    }
+
+    const PendingTuplet& pending = *is.pendingTuplet();
+    // its ratio as if the input duration sized it
+    const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, is.duration());
+    if (!shape) {
+        return std::nullopt;
+    }
+    TupletPreview::Level level;
+    level.ratio = shape->ratio;
+    level.numberType = pending.numberType;
+
+    TupletPreview preview;
+    preview.tick = is.beyondScore() ? score->endTick() : is.tick();
+    preview.levels.push_back(level);
+    return preview;
+}
+
+//---------------------------------------------------------
 //   addPendingTuplet
 //    Create the tuplet waiting at the input position, sized
 //    by the input duration, and make its note value the input
