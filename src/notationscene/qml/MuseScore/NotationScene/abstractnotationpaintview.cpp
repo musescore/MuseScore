@@ -115,6 +115,7 @@ void AbstractNotationPaintView::load()
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
+    m_pendingTupletMarker = std::make_unique<PendingTupletMarker>(iocContext());
 
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
@@ -764,6 +765,7 @@ void AbstractNotationPaintView::paint(QPainter* qp)
         } else {
             m_noteInputCursor->paint(painter);
         }
+        m_pendingTupletMarker->paint(painter, noteInput->state());
     }
 
     m_loopInMarker->paint(painter);
