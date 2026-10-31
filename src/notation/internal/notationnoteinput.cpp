@@ -859,6 +859,11 @@ void NotationNoteInput::forgetPendingTuplets()
     score()->inputState().forgetPendingTuplets();
 }
 
+String NotationNoteInput::pendingTupletInfo() const
+{
+    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet()) : String();
+}
+
 // Moving the input position elsewhere cancels a pending tuplet
 void NotationNoteInput::cancelPendingTupletIfMoved()
 {

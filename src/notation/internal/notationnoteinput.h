@@ -74,6 +74,7 @@ public:
     void setPendingTuplet(const TupletOptions& options) override;
     void cancelPendingTuplet() override;
     void forgetPendingTuplets() override;
+    muse::String pendingTupletInfo() const override;
 
     void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;

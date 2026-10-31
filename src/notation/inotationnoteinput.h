@@ -61,6 +61,8 @@ public:
     virtual void cancelPendingTuplet() = 0;
     // Escape: the tuplets that waited so far don't come back with undo
     virtual void forgetPendingTuplets() = 0;
+    // e.g. "Triplet waiting for a duration", or empty if no tuplet is pending
+    virtual muse::String pendingTupletInfo() const = 0;
 
     virtual void doubleNoteInputDuration() = 0;
     virtual void halveNoteInputDuration() = 0;
