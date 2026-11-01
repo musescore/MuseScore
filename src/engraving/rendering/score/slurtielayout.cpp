@@ -2461,7 +2461,9 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         return;
     }
 
-    bool isSmallTie = tieLength < 2.0 * spatium && tieHeight < 0.7 * spatium;
+    bool isSmallTie = (tieLength < 2.0 * spatium
+                       || (tieSegment->tie()->isLaissezVib() && muse::RealIsEqual(tieLength, 2.0 * spatium)))
+                      && tieHeight < 0.7 * spatium;
     // For ties this small, try to fit them within a staff space before changing their arc
     if (isSmallTie) {
         Tie* tie2 = tieSegment->tie();
