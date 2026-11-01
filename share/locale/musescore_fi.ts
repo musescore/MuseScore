@@ -5642,6 +5642,7 @@ jos perässä on tavuviivoja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="238"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="87"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="88"/>
         <source>Copy</source>
         <translation>Kopioi</translation>
@@ -5654,6 +5655,7 @@ jos perässä on tavuviivoja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="246"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="86"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="95"/>
         <source>Cut</source>
         <translation>Leikkaa</translation>
@@ -5666,6 +5668,7 @@ jos perässä on tavuviivoja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="254"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="88"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="102"/>
         <source>Paste</source>
         <translation>Liitä</translation>
@@ -6391,6 +6394,7 @@ jos perässä on tavuviivoja</translation>
         <translation>Valitse k&amp;aikki</translation>
     </message>
     <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="90"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="367"/>
         <source>Select all</source>
         <translation>Valitse kaikki</translation>
@@ -9693,12 +9697,12 @@ jos perässä on tavuviivoja</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Convert &amp;file…</source>
-        <translation type="unfinished"/>
+        <translation>Muunna &amp;tiedosto…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Convert file</source>
-        <translation type="unfinished"/>
+        <translation>Muunna tiedosto</translation>
     </message>
     <message>
         <source>Import P&amp;DF…</source>
@@ -9757,7 +9761,7 @@ jos perässä on tavuviivoja</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="56"/>
         <source>Home menu</source>
-        <translation>Kotivalikko</translation>
+        <translation>Etusivu-valikko</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="91"/>
@@ -9969,7 +9973,7 @@ Tämä toiminto ei poista yhtään partituuriasi.</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="105"/>
         <source>Home</source>
-        <translation>Koti</translation>
+        <translation>Etusivu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="106"/>
@@ -10833,7 +10837,7 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/engraving/dom/check.cpp" line="223"/>
         <source>&lt;b&gt;Element outside measure&lt;/b&gt;: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Elementti tahdin ulkopuolella&lt;/b&gt;: %1, tahti %2, viivasto %3. Sijainti: %4. Odotettu arvo välillä 0 – %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
@@ -20672,7 +20676,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="80"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>Vaihtoehtoisesti voit ottaa sen käyttöön milloin tahansa kohdasta Koti &gt; Lisäosat.</translation>
+        <translation>Vaihtoehtoisesti voit ottaa sen käyttöön milloin tahansa kohdasta Etusivu &gt; Lisäosat.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="43"/>
@@ -20730,7 +20734,7 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="194"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="56"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="583"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="593"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -20796,7 +20800,7 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="80"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="284"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="285"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="184"/>
         <source>Clear</source>
         <translation>Tyhjennä</translation>
@@ -20862,7 +20866,7 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml" line="82"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="99"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="141"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="142"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="68"/>
         <source>Close</source>
@@ -21440,8 +21444,8 @@ Otenauha %1 kielissä %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="165"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="137"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="66"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="600"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="623"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="610"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="633"/>
         <source>Retry</source>
         <translation>Yritä uudelleen</translation>
     </message>
@@ -21537,9 +21541,9 @@ Otenauha %1 kielissä %2</translation>
         <translation>Jatka</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="560"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="599"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="622"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="570"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="609"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="632"/>
         <source>Dismiss</source>
         <translation>Hylkää</translation>
     </message>
@@ -21550,7 +21554,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="121"/>
         <source>Go back</source>
-        <translation type="unfinished"/>
+        <translation>Palaa takaisin</translation>
     </message>
 </context>
 <context>
@@ -26905,7 +26909,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>MuseSampler library could not be initialized, version %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler-kirjastoa ei voitu alustaa, versio %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -26938,36 +26942,40 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="78"/>
         <source>Troubleshoot</source>
-        <translation type="unfinished"/>
+        <translation>Vianmääritys</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="83"/>
         <source>Open MuseSounds Manager</source>
-        <translation type="unfinished"/>
+        <translation>Avaa MuseSounds Manager</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="85"/>
         <source>To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>Avaa MuseSounds Manager -sovellus ja tarkista, että käytössäsi on uusin versio MuseSoundsin lataamista varten. Päivitä tarvittaessa ja käynnistä tietokoneesi uudelleen. 
+
+Jos ongelma jatkuu, noudata alla olevan vianmääritysohjeen ohjeita.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="90"/>
         <source>Open MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Avaa MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="92"/>
         <source>To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>Avaa Muse Hub ja tarkista, että käytössäsi on uusin versio MuseSoundsin lataamista varten. Päivitä tarvittaessa ja käynnistä tietokoneesi uudelleen. 
+
+Jos ongelma jatkuu, noudata alla olevan vianmääritysohjeen ohjeita.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="103"/>
         <source>MuseSounds could not be loaded</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds-ääniä ei voitu ladata</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="122"/>
@@ -34917,8 +34925,8 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="183"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="339"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="188"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="349"/>
         <source>Untitled score</source>
         <translation>Nimetön partituuri</translation>
     </message>
@@ -35035,74 +35043,74 @@ avaaminen epäonnistui: %2</translation>
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="104"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="109"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="116"/>
         <source>Scores</source>
         <translation>Partituurit</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="124"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="129"/>
         <source>Search recent scores</source>
         <translation>Hae viimeaikaiset partituurit</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="159"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="164"/>
         <source>Scores tab bar</source>
         <translation>Partituurin välilehtipalkki</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="170"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="175"/>
         <source>New &amp; recent</source>
         <translation>Uusi &amp; viimeaikaiset</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="178"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="183"/>
         <source>My online scores</source>
         <translation>Omat online-partituurit</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="193"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="198"/>
         <source>View buttons</source>
         <translation>Näkymäpainikkeet</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="205"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="210"/>
         <source>Refresh</source>
         <translation>Virkistä</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="217"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="222"/>
         <source>Grid view</source>
         <translation>Ruudukkonäkymä</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="218"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="223"/>
         <source>List view</source>
         <translation>Luettelonäkymä</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="362"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="367"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
         <translation>Partiruutin toiminnot</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="375"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="380"/>
         <source>Score manager (online)</source>
         <translation>Partituurin hallinta (verkossa)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="395"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="400"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="407"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="412"/>
         <source>Convert…</source>
-        <translation type="unfinished"/>
+        <translation>Muunna…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="419"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="424"/>
         <source>Open other…</source>
         <translation>Avaa toinen...</translation>
     </message>
@@ -35285,7 +35293,7 @@ avaaminen epäonnistui: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1925"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="390"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="395"/>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="76"/>
         <source>All supported files</source>
         <translation>Kaikki tuetut tiedostot</translation>
@@ -35378,12 +35386,12 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="69"/>
         <source>Show in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Näytä Finderissa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="70"/>
         <source>Show in File Manager</source>
-        <translation type="unfinished"/>
+        <translation>Näytä tiedostonhallinnassa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="80"/>
@@ -35399,12 +35407,12 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="94"/>
         <source>Remove from recent files list</source>
-        <translation type="unfinished"/>
+        <translation>Poista viimeisimpien tiedostojen luettelosta</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="98"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Poista partituuri</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="142"/>
@@ -35479,7 +35487,7 @@ avaaminen epäonnistui: %2</translation>
         <translation>Käsitellään kohdetta %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="391"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="396"/>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="77"/>
         <source>All</source>
         <translation>Kaikki</translation>
@@ -35587,28 +35595,28 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="82"/>
         <source>Are you sure you want to delete “%1”?</source>
         <extracomment>%1 is the name of the score that is about to be deleted</extracomment>
-        <translation type="unfinished"/>
+        <translation>Haluatko varmasti poistaa kohteen ”%1”?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="83"/>
         <source>Are you sure you want to delete this score?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko varmasti poistaa tämän partituurin?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="95"/>
         <source>I understand that deleting is permanent and can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Ymmärrän, että poistaminen on pysyvää eikä sitä voi perua.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="130"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Poista partituuri</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/deletecloudscorescenario.cpp" line="72"/>
         <location filename="../../src/project/tests/deletecloudscorescenario_tests.cpp" line="247"/>
         <source>Unable to delete the score</source>
-        <translation type="unfinished"/>
+        <translation>Partituurin poistaminen epäonnistui</translation>
     </message>
 </context>
 <context>
@@ -35627,12 +35635,12 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="62"/>
         <source>Convert PDF to score</source>
-        <translation type="unfinished"/>
+        <translation>Muunna PDF partituuriksi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="64"/>
         <source>Convert images to score</source>
-        <translation type="unfinished"/>
+        <translation>Muunna kuvat partituuriksi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="69"/>
@@ -35663,7 +35671,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="125"/>
         <source>Use a PDF, images, or an audio file (beta)</source>
-        <translation type="unfinished"/>
+        <translation>Käytä PDF-, kuva- tai äänitiedostoa (beta)</translation>
     </message>
     <message>
         <source>Use a PDF, images, or MP3 (beta)</source>
@@ -35677,23 +35685,23 @@ avaaminen epäonnistui: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="327"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1271"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1320"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1368"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1306"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1355"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1403"/>
         <source>Would you like to convert this file to a score?</source>
         <translation>Haluatko muuntaa tämän tiedoston partituuriksi?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="328"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1272"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1321"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1369"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1307"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1356"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1404"/>
         <source>This file needs to be converted online before it can be edited. Would you like to proceed?</source>
         <translation>Tämä tiedosto täytyy muuntaa verkossa ennen muokkaamista. Haluatko jatkaa?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="423"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="617"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="426"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="627"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="450"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="783"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="860"/>
@@ -35705,28 +35713,28 @@ avaaminen epäonnistui: %2</translation>
         <translation>Tiedoston muuntamiseen tarvitaan internet-yhteys. Tarkista internet-yhteytesi tai yritä uudelleen myöhemmin.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="431"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="434"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="566"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1153"/>
         <source>Something went wrong</source>
         <translation>Jokin meni pieleen</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="432"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="435"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="567"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1154"/>
         <source>Check your internet connection and try again.</source>
         <translation>Tarkista internetyhteytesi ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="452"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="455"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="597"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="608"/>
         <source>The maximum file size is %1. Reduce the size of your file and try again.</source>
         <translation>Tiedoston suurin koko on %1. Pienennä tiedostokokoa ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="454"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="457"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="600"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="611"/>
         <source>This file is too large</source>
@@ -35737,13 +35745,13 @@ avaaminen epäonnistui: %2</translation>
         <translation>Varmista, että tuot sopivan PDF-, kuva- tai MP3-tiedoston.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="509"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="512"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="630"/>
         <source>You can convert up to %n audio file(s) at a time. Remove some files and try again.</source>
         <translation><numerusform>Voit muuntaa enintään %n äänitiedostoa kerrallaan. Poista joitakin tiedostoja ja yritä uudelleen.</numerusform><numerusform>Voit muuntaa enintään %n äänitiedostoa kerrallaan. Poista joitakin tiedostoja ja yritä uudelleen.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="517"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="520"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="641"/>
         <source>You can convert up to %n image(s) at a time. Remove some images and try again.</source>
         <translation><numerusform>Voit muuntaa enintään %n kuvaa kerrallaan. Poista joitakin kuvia ja yritä uudelleen.</numerusform><numerusform>Voit muuntaa enintään %n kuvaa kerrallaan. Poista joitakin kuvia ja yritä uudelleen.</numerusform></translation>
@@ -35755,19 +35763,19 @@ avaaminen epäonnistui: %2</translation>
         <translation>Latausohjeet</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="461"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="464"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="619"/>
         <source>The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.</source>
         <translation>Kaikkien kuvien yhteenlaskettu suurin koko on %1. Valitse pienempi tiedosto tai poista joitakin kuvia jatkaaksesi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="464"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="467"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="623"/>
         <source>Maximum file size exceeded</source>
         <translation>Tiedoston suurin koko ylitetty</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="470"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="473"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="573"/>
         <source>This file type is not compatible</source>
         <translation>Tämä tiedostotyyppi ei ole yhteensopiva</translation>
@@ -35779,81 +35787,81 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="191"/>
         <source>Continue converting</source>
-        <translation type="unfinished"/>
+        <translation>Jatka muuntamista</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="198"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1429"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1476"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1464"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1511"/>
         <source>Are you sure you want to cancel this file conversion?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko varmasti peruuttaa tämän tiedoston muunnoksen?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="199"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1430"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1477"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1465"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1512"/>
         <source>Processing will be canceled and this score will be removed from your scores.</source>
-        <translation type="unfinished"/>
+        <translation>Käsittely keskeytetään ja tämä partituuri poistetaan partituureistasi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="424"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="618"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="427"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="628"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="451"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="784"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="861"/>
         <source>An internet connection is required for file conversion. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Tiedoston muuntaminen edellyttää internetyhteyttä. Tarkista verkkoyhteys tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="439"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="442"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1123"/>
         <source>One or more files could not be read</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="440"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1124"/>
-        <source>Make sure the files still exist and that you have permission to open them.</source>
-        <translation type="unfinished"/>
+        <translation>Yhtä tai useampaa tiedostoa ei voitu lukea</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="443"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1124"/>
+        <source>Make sure the files still exist and that you have permission to open them.</source>
+        <translation>Varmista, että tiedostot ovat olemassa ja että sinulla on niiden avaamiseen tarvittavat käyttöoikeudet.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="446"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1088"/>
         <source>This file could not be read</source>
-        <translation type="unfinished"/>
+        <translation>Tätä tiedostoa ei voitu lukea.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="444"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1089"/>
         <source>Make sure the file still exists and that you have permission to open it.</source>
-        <translation type="unfinished"/>
+        <translation>Varmista, että tiedosto on olemassa ja että sinulla on sen avaamiseen tarvittavat käyttöoikeudet.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="471"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="474"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="574"/>
         <source>Make sure you’re importing a suitable PDF, image or audio file.</source>
-        <translation type="unfinished"/>
+        <translation>Varmista, että tuot sopivan PDF-, kuva- tai äänitiedoston.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="481"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="484"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="677"/>
         <source>Make sure you’re using a valid link from YouTube or Audio.com.</source>
         <translation>Varmista, että linkki on peräisin YouTubesta tai Audio.com-palvelusta.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="483"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="486"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="728"/>
         <source>Make sure you’re using a valid link from YouTube.</source>
         <translation>Varmista, että linkki on peräisin YouTubesta.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="485"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="488"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="754"/>
         <source>Make sure you’re using a valid link from Audio.com.</source>
         <translation>Varmista, että linkki on peräisin Audio.com-palvelusta.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="488"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="491"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="676"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="702"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="727"/>
@@ -35862,58 +35870,70 @@ avaaminen epäonnistui: %2</translation>
         <translation>Käytä yhteensopivaa URL-osoitetta</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="494"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="497"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="580"/>
         <source>Please select files of the same type</source>
         <translation>Valitse samantyyppisiä tiedostoja</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="495"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="498"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="581"/>
         <source>Per conversion, you may select either one audio file, one PDF file, or multiple image files.</source>
+        <translation>Voit valita muunnosta kohden joko yhden äänitiedoston, yhden PDF-tiedoston tai useita kuvatiedostoja.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
+        <source>Upload limit reached</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="582"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
+        <source>You’ve reached the limit for file conversions. Please try again later.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
         <source>Try another file</source>
-        <translation type="unfinished"/>
+        <translation>Kokeile toista tiedostoa</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="593"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1185"/>
         <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Kohdetta ”%1” ei voitu ladata palvelimelle. Tarkista verkkoyhteys ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="596"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="606"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1184"/>
         <source>Error uploading score</source>
-        <translation type="unfinished"/>
+        <translation>Partituurin lataaminen palvelimelle epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="611"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="621"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="431"/>
         <source>We’re having trouble connecting to MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Yhteyden muodostamisessa MuseScore.com-sivustoon on ongelmia.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="612"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="622"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="432"/>
         <source>We’ll keep trying intermittently.</source>
-        <translation type="unfinished"/>
+        <translation>Yritämme uudelleen säännöllisin väliajoin.</translation>
     </message>
     <message>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
         <translation>Voit valita yhtä muunnosta kohden joko yhden MP3-tiedoston, yhden PDF-tiedoston tai useita kuvatiedostoja.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="502"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="505"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="588"/>
         <source>Please select a single PDF file</source>
         <translation>Valitse vain yksi PDF-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="503"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="506"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="589"/>
         <source>Only one PDF file can be converted at a time.</source>
         <translation>Vain yksi PDF-tiedosto voidaan muuntaa kerrallaan.</translation>
@@ -35923,7 +35943,7 @@ avaaminen epäonnistui: %2</translation>
         <translation>Voit muuntaa enintään %1 äänitiedostoa kerrallaan. Poista joitakin tiedostoja ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="511"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="514"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="634"/>
         <source>Too many files selected</source>
         <translation>Liian monta tiedostoa valittu</translation>
@@ -35933,7 +35953,7 @@ avaaminen epäonnistui: %2</translation>
         <translation>Voit muuntaa enintään %1 kuvaa kerrallaan. Poista kuvia ja yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="519"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="522"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="644"/>
         <source>Too many images selected</source>
         <translation>Liian monta kuvaa valittu</translation>
@@ -35944,12 +35964,12 @@ avaaminen epäonnistui: %2</translation>
     </message>
     <message>
         <source>Home &gt; Scores</source>
-        <translation>Koti &gt; Partituurit</translation>
+        <translation>Etusivu &gt; Partituurit</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
         <source>Home &gt; Scores &gt; My online scores</source>
-        <translation type="unfinished"/>
+        <translation>Etusivu &gt; Partituurit &gt; Omat verkkopartituurit</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="44"/>
@@ -35968,7 +35988,7 @@ avaaminen epäonnistui: %2</translation>
     </message>
     <message>
         <source>We’ll notify you once the score is ready to open. You can check the status of the score in Home &gt; Scores.</source>
-        <translation>Ilmoitamme sinulle, kun partituuri on valmis avattavaksi. Voit tarkistaa partituurin tilan kohdassa Koti &gt; Partituurit.</translation>
+        <translation>Ilmoitamme sinulle, kun partituuri on valmis avattavaksi. Voit tarkistaa partituurin tilan kohdassa Etusivu &gt; Partituurit.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="144"/>
@@ -35976,7 +35996,7 @@ avaaminen epäonnistui: %2</translation>
         <translation>Partituuria käsitellään</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="561"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="571"/>
         <source>Open score</source>
         <translation>Avaa partituuri</translation>
     </message>
@@ -35985,25 +36005,25 @@ avaaminen epäonnistui: %2</translation>
         <translation>Hylkää</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="554"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="564"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="243"/>
         <source>‘%1’ has finished processing and is ready to open.</source>
         <translation>‘%1’ on käsitelty ja on valmis avattavaksi.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="557"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="567"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="242"/>
         <source>Your score is ready!</source>
         <translation>Partituurisi on valmis!</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="576"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="586"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="343"/>
         <source>We weren’t able to convert ‘%1’. Please try again with a better quality file.</source>
         <translation>Tiedoston ‘%1’ muuntaminen ei onnistunut. Yritä uudelleen parempilaatuisella tiedostolla.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="579"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="589"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="342"/>
         <source>Error processing score</source>
         <translation>Virhe partituurin käsittelyssä</translation>
@@ -36034,15 +36054,15 @@ avaaminen epäonnistui: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="62"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="379"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="393"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="389"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="403"/>
         <source>%1 max</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max&quot;; shown as a short label/badge</extracomment>
         <translation>Enintään %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="69"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="387"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="397"/>
         <source>%1 max combined</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max combined&quot;; shown as a short label/badge</extracomment>
         <translation>Yhteensä enintään %1</translation>
@@ -36052,10 +36072,10 @@ avaaminen epäonnistui: %2</translation>
         <translation>Enintään %1 sivua</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="215"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="368"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="410"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="428"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="220"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="378"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="420"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="438"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
@@ -36081,15 +36101,15 @@ avaaminen epäonnistui: %2</translation>
         <translation>Käytetty %1/%2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="243"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="369"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="416"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="248"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="379"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="426"/>
         <source>Images</source>
         <translation>Kuvat</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="252"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="392"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="257"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="402"/>
         <source>%1 format</source>
         <extracomment>%1 is one or more file format names, e.g. &quot;MP3 format&quot; or &quot;MP3, WAV format&quot;</extracomment>
         <translation>Muoto: %1</translation>
@@ -36103,26 +36123,26 @@ avaaminen epäonnistui: %2</translation>
         <translation>Enintään %1 tiedostoa latausta kohden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="265"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="370"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="422"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="270"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="380"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="432"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="113"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="546"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="547"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="559"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="560"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="556"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="557"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="569"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="570"/>
         <source>Paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Liitä linkki palvelusta %1 (beta)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="108"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="533"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="535"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="543"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="545"/>
         <source>Paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>Liitä linkki palvelusta %1 tai %2 (beta)</translation>
@@ -36136,16 +36156,16 @@ avaaminen epäonnistui: %2</translation>
         <translation>Enintään %1 tiedostoa muunnosta kohden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="322"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="531"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="327"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="541"/>
         <source>Or paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>Tai liitä linkki palvelusta %1 tai %2 (beta)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="327"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="545"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="558"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="332"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="555"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="568"/>
         <source>Or paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>Tai liitä linkki palvelusta %1 (beta)</translation>
@@ -36163,67 +36183,67 @@ avaaminen epäonnistui: %2</translation>
         <translation>Valitse tiedosto</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="481"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="503"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="486"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="508"/>
         <source>No, stay here</source>
         <translation>Ei, pysy tällä sivulla</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="194"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="484"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="489"/>
         <source>Yes, cancel</source>
         <translation>Kyllä, peruuta</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="488"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="815"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="832"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="493"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="825"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="842"/>
         <source>Are you sure you want to cancel?</source>
         <translation>Haluatko varmasti peruuttaa?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="506"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="511"/>
         <source>Yes, go back</source>
         <translation>Kyllä, palaa takaisin</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="510"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="849"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="868"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="515"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="859"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="878"/>
         <source>Are you sure you want to go back?</source>
         <translation>Oletko varma, että haluat palata takaisin?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="489"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="511"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="494"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="516"/>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="149"/>
         <source>Your current selection will be lost.</source>
         <translation>Nykyinen valintasi menetetään.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="208"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="380"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="213"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="390"/>
         <source>%n page(s) max.</source>
         <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
         <translation><numerusform>Enintään %n sivua</numerusform><numerusform>Enintään %n sivua</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="212"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="260"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="381"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="394"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="217"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="265"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="391"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="404"/>
         <source>%n file(s) per conversion</source>
         <translation><numerusform>%n tiedostoa muunnosta kohden</numerusform><numerusform>%n tiedostoa muunnosta kohden</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="239"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="388"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="244"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="398"/>
         <source>Max. %n image(s)</source>
         <translation><numerusform>Enintään %n kuvaa</numerusform><numerusform>Enintään %n kuvaa</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="470"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="802"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="475"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="812"/>
         <source>“%1” cannot be used as a file name. Please choose a different name.</source>
         <translation>”%1” ei voi olla tiedoston nimenä. Valitse toinen nimi.</translation>
     </message>
@@ -36233,15 +36253,15 @@ avaaminen epäonnistui: %2</translation>
         <translation>Muunna linkistä</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="123"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkPastePanel.qml" line="82"/>
         <source>Link</source>
         <translation>Linkki</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="132"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="264"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="395"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="134"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="269"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="405"/>
         <source>Recommended for solo arrangements only</source>
         <translation>Suositellaan vain soolosovituksille</translation>
     </message>
@@ -36254,7 +36274,7 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="268"/>
         <source>%1/%n file(s) max.</source>
         <extracomment>%1 is the number of files currently selected, %n is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Enintään %1 / %n tiedostoa</numerusform><numerusform>Enintään %1 / %n tiedostoa</numerusform></translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
@@ -36268,41 +36288,52 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="37"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="73"/>
         <source>Help us improve score processing with your thoughts on what went wrong</source>
-        <translation type="unfinished"/>
+        <translation>Auta meitä parantamaan partituurien käsittelyä kertomalla ajatuksesi siitä, mikä meni pieleen.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="82"/>
         <source>Tell us how your score could look better</source>
-        <translation type="unfinished"/>
+        <translation>Kerro, miten partituurisi voisi näyttää paremmalta</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="88"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="89"/>
         <source>Feedback</source>
         <translation>Palaute</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
         <source>%1/%2 characters</source>
         <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 / %2 merkkiä</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
         <source>Submit feedback</source>
-        <translation type="unfinished"/>
+        <translation>Lähetä palautetta</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="70"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="69"/>
         <source>Processing failed: %1</source>
         <extracomment>%1 is the name of the score whose conversion failed</extracomment>
-        <translation type="unfinished"/>
+        <translation>Käsittely epäonnistui: %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="155"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="124"/>
         <source>Processing failed</source>
         <extracomment>Status label shown on a score's thumbnail when its conversion failed</extracomment>
+        <translation>Käsittely epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
+        <source>Terms of Use</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
+        <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
+        <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -37914,7 +37945,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="98"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
@@ -37925,19 +37956,19 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="69"/>
         <source>%n hour(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n tunti(a) jäljellä</numerusform><numerusform>%n tunti(a) jäljellä</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="72"/>
         <source>%n minute(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n minuutti(a) jäljellä</numerusform><numerusform>%n minuutti(a) jäljellä</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="75"/>
         <source>%n second(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n sekuntti(a) jäljellä</numerusform><numerusform>%n sekunti(a) jäljellä</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="43"/>
@@ -37962,7 +37993,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="106"/>
         <source>Press F6 to go to the notification.</source>
-        <translation type="unfinished"/>
+        <translation>Siirry ilmoitukseen painamalla F6.</translation>
     </message>
 </context>
 <context>
@@ -37997,9 +38028,9 @@ Haluatko korvata sen?</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="131"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="396"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="399"/>
-        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="684"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="401"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="404"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="694"/>
         <source>Choose file</source>
         <translation>Valitse tiedosto</translation>
     </message>
