@@ -107,6 +107,7 @@ private:
     void showMultiplePdfFilesError();
     void showTooManyAudioFilesError(int maxFiles);
     void showTooManyImagesError(int maxImages);
+    void showUploadLimitReachedError();
 
     void showFileProcessingDialog();
     void showScoreReadyNotification(const WatchedScore& watched);

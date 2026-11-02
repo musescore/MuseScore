@@ -336,7 +336,10 @@ RetVal<Progress> ConvertFileToScoreService::uploadToConvert(const ConvertInput& 
         if (!res.ret) {
             LOGE() << "Could not upload files for \"" << convertedScoreName << "\" (type: "
                    << convertTypeToString(type) << "): " << res.ret.toString();
-            progress.finish(make_ret(Err::ConvertUploadFailed, res.ret.toString()));
+
+            const ConvertErrorCode errorCode = res.ret.data<ConvertErrorCode>(CONVERT_ERROR_CODE_KEY, ConvertErrorCode::Unknown);
+            const Err err = errorCode == ConvertErrorCode::RateLimited ? Err::ConvertRateLimited : Err::ConvertUploadFailed;
+            progress.finish(make_ret(err, res.ret.toString()));
             return;
         }
 
