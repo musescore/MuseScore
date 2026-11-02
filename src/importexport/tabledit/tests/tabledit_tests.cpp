@@ -183,6 +183,10 @@ TEST_F(TablEdit_Tests, tef_notes_dotted) {
     tefReadTest("notes_dotted");
 }
 
+TEST_F(TablEdit_Tests, tef_notes_double_dotted) {
+    tefReadTest("notes_double_dotted");
+}
+
 TEST_F(TablEdit_Tests, tef_notes_normal) {
     tefReadTest("notes_normal");
 }
