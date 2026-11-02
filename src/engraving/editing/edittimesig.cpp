@@ -450,7 +450,7 @@ bool EditTimeSig::rewriteMeasures(Transaction& tx, Score* score, Measure* fm, co
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local)
+TimeSig* EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local)
 {
     score->deselectAll();
 
@@ -482,7 +482,7 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
         //  with same values
         //
         delete ts;
-        return;
+        return ots;
     }
 
     seg = fm->undoGetSegment(SegmentType::TimeSig, tick);
@@ -510,6 +510,8 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
         }
         return std::make_pair(startStaffIdx, endStaffIdx);
     };
+
+    TimeSig* result = nullptr;
 
     if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
         //
@@ -543,6 +545,10 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
                 nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
                 nsig->setSelected(false);
                 nsig->setDropTarget(false);
+
+                if (lscore == score && si == staffIdx) {
+                    result = nsig;
+                }
             }
         }
     } else {
@@ -566,7 +572,7 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
                     if (score->staff(i)->timeSig(tick) && score->staff(i)->timeSig(tick)->isLocal()) {
                         if (!rewriteMeasures(tx, mScore, mf, ns, i)) {
                             score->undoStack()->activeTransaction()->unwind();
-                            return;
+                            return nullptr;
                         }
                     }
                 }
@@ -582,7 +588,7 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
             if (staffIdxRangeOnMaster.second != staffIdxRangeOnMaster.first
                 && !rewriteMeasures(tx, mScore, mf, ns, local ? staffIdxRangeOnMaster.first : muse::nidx)) {
                 score->undoStack()->activeTransaction()->unwind();
-                return;
+                return nullptr;
             }
         }
         // add the time signatures
@@ -628,10 +634,16 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
                 if (lscore->isMaster()) {
                     masterTimeSigs[nsig->track()] = nsig;
                 }
+
+                if (lscore == score && si == staffIdx) {
+                    result = nsig;
+                }
             }
         }
     }
     delete ts;
+
+    return result;
 }
 
 //---------------------------------------------------------
