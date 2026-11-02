@@ -28,6 +28,7 @@
 
 #include "async/async.h"
 
+#include "engraving/dom/score.h"
 #include "engraving/dom/shadownote.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
@@ -281,6 +282,11 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         scheduleRedraw(updateRect.isValid() ? fromLogical(updateRect) : RectF());
     });
 
+    // Layout may delete the cached page before notationChanged is sent
+    m_notation->elements()->msScore()->changesChannel().onReceive(this, [this](const engraving::ScoreChanges&) {
+        m_pageCache.clear();
+    });
+
     onNoteInputStateChanged();
     if (isNoteEnterMode()) {
         emit activeFocusRequested();
@@ -414,6 +420,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     m_pageCache.clear();
 
     m_notation->notationChanged().disconnect(this);
+    m_notation->elements()->msScore()->changesChannel().disconnect(this);
     INotationInteractionPtr interaction = m_notation->interaction();
     interaction->noteInput()->stateChanged().disconnect(this);
     interaction->noteInput()->noteInputStarted().disconnect(this);
