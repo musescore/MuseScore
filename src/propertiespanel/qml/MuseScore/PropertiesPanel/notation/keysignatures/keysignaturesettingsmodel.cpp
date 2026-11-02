@@ -82,7 +82,7 @@ void KeySignatureSettingsModel::loadProperties()
     m_mode->setIsEnabled(enableMode);
     m_jianpuNumbering->setIsEnabled(enableMode);
 
-    const bool customJianpuMapping = m_jianpuNumbering->value().toInt() == int(mu::engraving::JianpuTonicMode::CUSTOM);
+    const bool customJianpuMapping = m_jianpuNumbering->value().toInt() == int(mu::engraving::JianpuNumbering::CUSTOM);
     m_jianpuTonicKey->setIsEnabled(enableMode && customJianpuMapping);
     m_jianpuTonicMode->setIsEnabled(enableMode && customJianpuMapping);
 

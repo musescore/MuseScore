@@ -190,7 +190,7 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     bool bTab = (instrument.stringData()->frettedStrings() > 0);
     int idx           = 0;
     for (const mu::engraving::StaffType& t : mu::engraving::StaffType::presets()) {
-        if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
+        if (((t.group() == mu::engraving::StaffGroup::STANDARD || t.group() == mu::engraving::StaffGroup::JIANPU) && bStandard)
             || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
             || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.staffTypeName(), idx);
@@ -310,7 +310,8 @@ void EditStaffType::setValues()
 
     mu::engraving::StaffGroup group = staffType.group();
     int i = int(group);
-    stack->setCurrentIndex(i);
+    // Jianpu has no dedicated settings page yet; use the Standard page for now.
+    stack->setCurrentIndex(group == mu::engraving::StaffGroup::JIANPU ? int(mu::engraving::StaffGroup::STANDARD) : i);
     groupName->setText(TConv::translatedUserName(group));
 
     name->setText(staffType.staffTypeName());
@@ -322,6 +323,7 @@ void EditStaffType::setValues()
 
     switch (group) {
     case mu::engraving::StaffGroup::STANDARD:
+    case mu::engraving::StaffGroup::JIANPU:
         genKeysigPitched->setChecked(staffType.genKeysig());
         showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
         stemlessPitched->setChecked(staffType.stemless());
@@ -523,7 +525,8 @@ void EditStaffType::setFromDlg()
     staffType.setGenClef(genClef->isChecked());
     staffType.setShowBarlines(showBarlines->isChecked());
     staffType.setGenTimesig(genTimesig->isChecked());
-    if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+    if (staffType.group() == mu::engraving::StaffGroup::STANDARD
+        || staffType.group() == mu::engraving::StaffGroup::JIANPU) {
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
@@ -719,7 +722,8 @@ void EditStaffType::updatePreview()
     ExampleView* preview = nullptr;
     if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         preview = tabPreview;
-    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD
+               || staffType.group() == mu::engraving::StaffGroup::JIANPU) {
         preview = standardPreview;
     }
     if (preview) {
@@ -742,6 +746,9 @@ QString EditStaffType::createUniqueStaffTypeName(mu::engraving::StaffGroup group
         switch (group) {
         case mu::engraving::StaffGroup::STANDARD:
             sn = QString("Standard-%1 [*]").arg(idx);
+            break;
+        case mu::engraving::StaffGroup::JIANPU:
+            sn = QString("Jianpu-%1 [*]").arg(idx);
             break;
         case mu::engraving::StaffGroup::PERCUSSION:
             sn = QString("Perc-%1 [*]").arg(idx);

@@ -570,7 +570,7 @@ int pitch2JianpuOctave(int pitch, int tpc, Key key, KeyMode mode)
 
 void jianpuKeyMapping(const KeySigEvent& ks, KeyMode& mode, int& tonicTpc)
 {
-    if (ks.jianpuNumbering() == JianpuTonicMode::CUSTOM) {
+    if (ks.jianpuNumbering() == JianpuNumbering::CUSTOM) {
         mode = ks.jianpuTonicMode();
         tonicTpc = key2Tpc(ks.jianpuTonicKey());
     } else {

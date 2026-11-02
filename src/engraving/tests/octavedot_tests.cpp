@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -54,7 +54,7 @@ Note* findJianpuNoteInChord(MasterScore* score)
             }
 
             Chord* chord = toChord(item);
-            if (!chord->isJianpuStaff() || chord->notes().empty()) {
+            if (!chord->onJianpuStaff() || chord->notes().empty()) {
                 continue;
             }
 
@@ -104,7 +104,7 @@ class Engraving_OctaveDotTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_OctaveDotTests, propertiesAndSpatiumScaling)
+TEST_F(Engraving_OctaveDotTests, layoutDataStoresGeometry)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -118,16 +118,11 @@ TEST_F(Engraving_OctaveDotTests, propertiesAndSpatiumScaling)
     OctaveDot* octaveDot = note->octaveDots().front();
     EXPECT_EQ(octaveDot->note(), note);
 
-    octaveDot->setLen(2.0);
-    octaveDot->setAbove(true);
-    EXPECT_DOUBLE_EQ(octaveDot->len(), 2.0);
-    EXPECT_TRUE(octaveDot->above());
-
-    octaveDot->spatiumChanged(2.0, 3.0);
-    EXPECT_DOUBLE_EQ(octaveDot->len(), 3.0);
-
-    octaveDot->spatiumChanged(0.0, 3.0);
-    EXPECT_DOUBLE_EQ(octaveDot->len(), 3.0);
+    OctaveDot::LayoutData* ldata = octaveDot->mutldata();
+    ldata->len = 2.0;
+    ldata->above = true;
+    EXPECT_DOUBLE_EQ(ldata->len, 2.0);
+    EXPECT_TRUE(ldata->above);
 
     delete score;
 }
@@ -186,10 +181,6 @@ TEST_F(Engraving_OctaveDotTests, jianpuCloneNoteKeepsOctaveDotsOwnership)
     expectOctaveDotsOwnedByNote(cloned);
 
     OctaveDot* clonedOctaveDot = cloned->octaveDots().front();
-    clonedOctaveDot->setLen(2.5);
-    clonedOctaveDot->setAbove(true);
-    EXPECT_DOUBLE_EQ(clonedOctaveDot->len(), 2.5);
-    EXPECT_TRUE(clonedOctaveDot->above());
     EXPECT_NE(clonedOctaveDot, source->octaveDots().front());
 
     delete cloned;

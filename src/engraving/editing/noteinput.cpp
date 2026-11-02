@@ -273,7 +273,9 @@ NoteVal NoteInput::noteValForPosition(const Score* score, Position pos, Accident
         break;
     }
 
-    case StaffGroup::STANDARD: {
+    case StaffGroup::STANDARD:
+    case StaffGroup::JIANPU:
+    {
         AccidentalVal acci
             = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, staffIdx, line, error) : Accidental::subtype2value(at));
         if (error) {
@@ -828,6 +830,7 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
         is.setDrumNote(-1);
         break;
     case StaffGroup::STANDARD:
+    case StaffGroup::JIANPU:
         is.setDrumNote(-1);
         break;
     }

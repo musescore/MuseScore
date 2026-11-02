@@ -79,8 +79,8 @@ public:
     bool custom() const { return m_custom; }
 
     // Jianpu tonic numbering: per key-signature override of the digit/mode mapping
-    JianpuTonicMode jianpuNumbering() const { return m_jianpuNumbering; }
-    void setJianpuNumbering(JianpuTonicMode v) { m_jianpuNumbering = v; }
+    JianpuNumbering jianpuNumbering() const { return m_jianpuNumbering; }
+    void setJianpuNumbering(JianpuNumbering v) { m_jianpuNumbering = v; }
     Key jianpuTonicKey() const { return m_jianpuTonicKey; }
     void setJianpuTonicKey(Key v) { m_jianpuTonicKey = v; }
     KeyMode jianpuTonicMode() const { return m_jianpuTonicMode; }
@@ -106,7 +106,7 @@ private:
     bool m_forInstrumentChange = false;
     std::vector<CustDef> m_customKeyDefs;
 
-    JianpuTonicMode m_jianpuNumbering = JianpuTonicMode::FOLLOW_SCORE_KEY;
+    JianpuNumbering m_jianpuNumbering = JianpuNumbering::FOLLOW_SCORE_KEY;
     Key m_jianpuTonicKey = Key::C;
     KeyMode m_jianpuTonicMode = KeyMode::MAJOR;
 };

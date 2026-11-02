@@ -232,9 +232,9 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
     case Pid::KEYSIG_MODE:
         return mode();
     case Pid::JIANPU_NUMBERING:
-        return int(jianpuNumbering());
+        return jianpuNumbering();
     case Pid::JIANPU_TONIC_KEY:
-        return int(jianpuTonicKey());
+        return jianpuTonicKey();
     case Pid::JIANPU_TONIC_MODE:
         return jianpuTonicMode();
     case Pid::IS_COURTESY:
@@ -280,11 +280,11 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_NUMBERING:
-        setJianpuNumbering(JianpuTonicMode(v.toInt()));
+        setJianpuNumbering(v.value<JianpuNumbering>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_TONIC_KEY:
-        setJianpuTonicKey(Key(v.toInt()));
+        setJianpuTonicKey(v.value<Key>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_TONIC_MODE:
@@ -342,9 +342,9 @@ PropertyValue KeySig::propertyDefault(Pid id) const
     case Pid::KEYSIG_MODE:
         return KeyMode::UNKNOWN;
     case Pid::JIANPU_NUMBERING:
-        return int(JianpuTonicMode::FOLLOW_SCORE_KEY);
+        return JianpuNumbering::FOLLOW_SCORE_KEY;
     case Pid::JIANPU_TONIC_KEY:
-        return int(Key::C);
+        return Key::C;
     case Pid::JIANPU_TONIC_MODE:
         return KeyMode::MAJOR;
     case Pid::IS_COURTESY:

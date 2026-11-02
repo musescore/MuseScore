@@ -421,7 +421,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->endCR()->tick());
-    bool useJianpu = item->isJianpuStaff();
+    bool useJianpu = item->onJianpuStaff();
     bool staffHasStems = useJianpu ? false : true; // assume staff uses stems except jianpu
     const StaffType* stt = 0;
     if (useTablature) {
@@ -2687,7 +2687,7 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
             break;
         }
 
-        if (chord1 && chord1->isJianpuStaff()) {
+        if (chord1 && chord1->onJianpuStaff()) {
             // In Jianpu mode, slurs follow the opposite side of the diminution beams.
             slur->setUp(ctx.conf().style().styleV(Sid::jianpuDiminutionBeamPlacement).value<PlacementV>() != PlacementV::ABOVE);
             break;

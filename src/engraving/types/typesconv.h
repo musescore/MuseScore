@@ -112,6 +112,12 @@ public:
     static AsciiStringView toXml(KeyMode v);
     static KeyMode fromXml(const AsciiStringView& tag, KeyMode def);
 
+    static AsciiStringView toXml(JianpuNumbering v);
+    static JianpuNumbering fromXml(const AsciiStringView& tag, JianpuNumbering def);
+
+    static AsciiStringView toXml(Key v);
+    static Key fromXml(const AsciiStringView& tag, Key def);
+
     static const TranslatableString& userName(TextStyleType v);
     static String translatedUserName(TextStyleType v);
     static AsciiStringView toXml(TextStyleType v);

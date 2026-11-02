@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,17 +40,6 @@ OctaveDot::OctaveDot(DummyParentOr<Note> parent)
     : EngravingItem(ElementType::OCTAVE_DOT, parent)
 {
     setSelectable(false);
-}
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void OctaveDot::spatiumChanged(double oldValue, double newValue)
-{
-    if (oldValue != 0.0) {
-        m_len = (m_len / oldValue) * newValue;
-    }
 }
 
 //---------------------------------------------------------

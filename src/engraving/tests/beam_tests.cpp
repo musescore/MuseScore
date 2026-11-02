@@ -202,7 +202,7 @@ TEST_F(Engraving_BeamTests, jianpuDraggedBeamKeepsDurationLineStyle)
     ASSERT_TRUE(first);
     Beam* beam = first->beam();
     ASSERT_TRUE(beam);
-    ASSERT_TRUE(beam->isJianpuStaff());
+    ASSERT_TRUE(beam->onJianpuStaff());
     ASSERT_FALSE(beam->beamFragments().empty());
     const double width = beam->beamWidth();
     const double distance = beam->beamDist();

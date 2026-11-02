@@ -144,13 +144,11 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // https://github.com/musescore/MuseScore/issues/8970
     std::vector<Accidental*> chordAccidentals;
 
-    const bool isJianpuStaff = item->isJianpuStaff();
+    const bool isJianpuStaff = item->onJianpuStaff();
 
-    auto notes = item->notes();
+    std::vector<Note*> notes = item->notes();
     if (isJianpuStaff) {
-        std::sort(notes.begin(), notes.end(), [](const Note* n1, const Note* n2) {
-            return noteIsBefore(n2, n1); // highest pitch on top
-        });
+        std::reverse(notes.begin(), notes.end()); // highest pitch on top
     }
 
     // Jianpu Y origin is at the center of the number.
@@ -170,7 +168,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         TLayout::layoutNote(note, ldata);
 
         if (isJianpuStaff) {
-            std::vector<OctaveDot*> dots = note->octaveDots();
+            const std::vector<OctaveDot*>& dots = note->octaveDots();
             // Jianpu spacing rules for octave dots, beams, and notes:
             // - Dot-to-note uses dot centerline to note boundary distance.
             // - Beam-to-note uses beam centerline to note boundary distance.
@@ -178,7 +176,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             const double dotDistance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * itemMag;
 
             // Move the current note down if it is has octave dots above it
-            if (note != upnote && !dots.empty() && dots.back()->above()) {
+            if (note != upnote && !dots.empty() && dots.back()->ldata()->above) {
                 jianpuOffsetY += dots.size() * dotDistance;
             }
 
@@ -186,7 +184,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             ldata->moveY(jianpuOffsetY);
 
             // Move the next note down if current note has octave dots in below
-            if (!dots.empty() && !dots.back()->above()) {
+            if (!dots.empty() && !dots.back()->ldata()->above) {
                 jianpuOffsetY += dots.size() * dotDistance;
             }
 
@@ -1743,7 +1741,7 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         dl->setOwnershipParent(item);
         dl->setTrack(track);
         dl->setVisible(staffVisible);
-        dl->setLen(hw);
+        dl->mutldata()->len = hw;
         dl->setPos(hx + hw * 1.2 * (i + 1), lengtheningY);
     }
 
@@ -1779,15 +1777,13 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
     jianpuKeyMapping(ks, mode, tonicTpc);
 
     for (Note* note : item->notes()) {
-        int dots = 0;
+        const double distance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
+        const int octave = pitch2JianpuOctave(note->epitch(), note->tpc(), tonicTpc, mode);
+        const int dots = abs(octave);
         double offsetY = 0;
-        double distance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
-        int octave = pitch2JianpuOctave(note->epitch(), note->tpc(), tonicTpc, mode);
         if (octave > 0) {
-            dots = octave;
             offsetY = -(height * .5 + dots * distance);
         } else if (octave < 0) {
-            dots = -octave;
             offsetY = height * .5 + distance;
             if (note == item->upNote()) {
                 // The octave dot should be under the jianpu beam
@@ -1808,8 +1804,8 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
             dot->setOwnershipParent(note);
             dot->setTrack(track);
             dot->setVisible(staffVisible);
-            dot->setAbove(octave > 0);
-            dot->setLen(maxX - minX);
+            dot->mutldata()->above = octave > 0;
+            dot->mutldata()->len = maxX - minX;
             dot->setPos(minX, offsetY + i * distance);
         }
 
@@ -1891,7 +1887,7 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
                 const double y = note->ldata()->pos().y();
                 top = std::min(top, y + note->ldata()->bbox().top());
                 for (OctaveDot* dot : note->octaveDots()) {
-                    if (dot->above()) {
+                    if (dot->ldata()->above) {
                         top = std::min(top, y + dot->ldata()->pos().y() + dot->ldata()->bbox().top());
                     }
                 }
@@ -1912,7 +1908,7 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
                 const double y = note->ldata()->pos().y();
                 bottom = std::max(bottom, y + note->ldata()->bbox().bottom());
                 for (OctaveDot* dot : note->octaveDots()) {
-                    if (!dot->above()) {
+                    if (!dot->ldata()->above) {
                         bottom = std::max(bottom, y + dot->ldata()->pos().y() + dot->ldata()->bbox().bottom());
                         if (note == chord->upNote()) {
                             upNoteHasBelowDot = true;

@@ -567,6 +567,7 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
         }
         break;
         case StaffGroup::STANDARD:
+        case StaffGroup::JIANPU:
             switch (mode) {
             case UpDownMode::OCTAVE:
                 if (up) {

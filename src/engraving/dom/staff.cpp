@@ -409,6 +409,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         }
         break;
         case StaffGroup::STANDARD:
+        case StaffGroup::JIANPU:
             ct = defaultClefType();
             break;
         case StaffGroup::PERCUSSION:

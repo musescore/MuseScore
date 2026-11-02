@@ -538,7 +538,7 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
     // TODO: remove Accidental in layout
     // don't show accidentals for tab or slash notation; Jianpu shows its
     // accidental as part of the digit label instead of this glyph
-    if (item->onTabStaff() || item->isJianpuStaff() || (item->note() && item->note()->fixed())) {
+    if (item->onTabStaff() || item->onJianpuStaff() || (item->note() && item->note()->fixed())) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -1962,7 +1962,7 @@ void TLayout::layoutDurationLine(DurationLine* item, const LayoutContext& ctx)
     }
 
     double w2 = ldata->lineWidth * .5;
-    ldata->setBbox(0, -w2, item->len(), 2 * w2);
+    ldata->setBbox(0, -w2, ldata->len, 2 * w2);
 }
 
 void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -4343,7 +4343,7 @@ void TLayout::layoutOctaveDot(OctaveDot* item, LayoutContext& ctx)
     ldata->radius = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotRadius) * mag;
 
     double diameter = ldata->radius * 2;
-    ldata->setBbox(0, -ldata->radius, item->len(), diameter);
+    ldata->setBbox(0, -ldata->radius, ldata->len, diameter);
 }
 
 void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)

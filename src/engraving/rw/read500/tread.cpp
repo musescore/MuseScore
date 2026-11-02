@@ -446,6 +446,11 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::KEY_MODE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), KeyMode::NONE));
+    case P_TYPE::KEY:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), Key::C));
+
+    case P_TYPE::JIANPU_NUMBERING:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), JianpuNumbering::FOLLOW_SCORE_KEY));
 
     case P_TYPE::TEXT_STYLE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
@@ -1378,9 +1383,9 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mode") {
             sig.setMode(TConv::fromXml(e.readAsciiText(), KeyMode::UNKNOWN));
         } else if (tag == "jianpuNumbering") {
-            sig.setJianpuNumbering(JianpuTonicMode(e.readInt()));
+            sig.setJianpuNumbering(TConv::fromXml(e.readAsciiText(), JianpuNumbering::FOLLOW_SCORE_KEY));
         } else if (tag == "jianpuTonicKey") {
-            sig.setJianpuTonicKey(Key(e.readInt()));
+            sig.setJianpuTonicKey(TConv::fromXml(e.readAsciiText(), Key::C));
         } else if (tag == "jianpuTonicMode") {
             sig.setJianpuTonicMode(TConv::fromXml(e.readAsciiText(), KeyMode::MAJOR));
         } else if (tag == "subtype") {

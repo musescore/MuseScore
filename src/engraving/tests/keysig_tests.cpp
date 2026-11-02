@@ -33,6 +33,7 @@
 #include "engraving/editing/editkeysig.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/types/typesconv.h"
 
 #include "utils/scorecomp.h"
 #include "utils/scorerw.h"
@@ -280,7 +281,7 @@ TEST_F(Engraving_KeySigTests, jianpuKeySigEventEquality)
     KeySigEvent b = a;
     EXPECT_TRUE(a == b);
 
-    b.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    b.setJianpuNumbering(JianpuNumbering::CUSTOM);
     EXPECT_FALSE(a == b);
     EXPECT_TRUE(a != b);
 
@@ -310,7 +311,7 @@ TEST_F(Engraving_KeySigTests, jianpuKeyMapping)
     EXPECT_EQ(mode, KeyMode::DORIAN);
     EXPECT_EQ(tonicTpc, jianpuTonicTpc(Key::D, KeyMode::DORIAN));
 
-    ks.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    ks.setJianpuNumbering(JianpuNumbering::CUSTOM);
     ks.setJianpuTonicKey(Key::A_B);
     ks.setJianpuTonicMode(KeyMode::LYDIAN);
 
@@ -363,7 +364,7 @@ TEST_F(Engraving_KeySigTests, jianpuKeyLabel)
     // Custom numbering always shows a label, regardless of the score's mode
     KeySigEvent custom;
     custom.setConcertKey(Key::G);
-    custom.setJianpuNumbering(JianpuTonicMode::CUSTOM);
+    custom.setJianpuNumbering(JianpuNumbering::CUSTOM);
     custom.setJianpuTonicKey(Key::C);
     custom.setJianpuTonicMode(KeyMode::MAJOR);
     EXPECT_EQ(jianpuKeyLabel(custom), u"1=C");
@@ -373,6 +374,20 @@ TEST_F(Engraving_KeySigTests, jianpuKeyLabel)
 //   The three new Jianpu Pids must round-trip through KeySig::setProperty /
 //   getProperty and report the documented defaults via propertyDefault.
 //---------------------------------------------------------
+TEST_F(Engraving_KeySigTests, jianpuEnumXmlConversions)
+{
+    for (JianpuNumbering numbering : { JianpuNumbering::FOLLOW_SCORE_KEY, JianpuNumbering::CUSTOM }) {
+        EXPECT_EQ(TConv::fromXml(TConv::toXml(numbering), JianpuNumbering::FOLLOW_SCORE_KEY), numbering);
+    }
+    for (int key = int(Key::MIN); key <= int(Key::MAX); ++key) {
+        EXPECT_EQ(TConv::fromXml(TConv::toXml(Key(key)), Key::INVALID), Key(key));
+    }
+    EXPECT_EQ(TConv::toXml(JianpuNumbering::CUSTOM), "custom");
+    EXPECT_EQ(TConv::toXml(Key::E_B), "Eb");
+    EXPECT_EQ(TConv::fromXml("unrecognized", JianpuNumbering::FOLLOW_SCORE_KEY), JianpuNumbering::FOLLOW_SCORE_KEY);
+    EXPECT_EQ(TConv::fromXml("unrecognized", Key::C), Key::C);
+}
+
 TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
 {
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx");
@@ -380,20 +395,36 @@ TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
     Measure* m1 = score->firstMeasure();
     KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
 
-    EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::FOLLOW_SCORE_KEY));
-    EXPECT_EQ(Key(ke->propertyDefault(Pid::JIANPU_TONIC_KEY).toInt()), Key::C);
+    EXPECT_EQ(propertyType(Pid::JIANPU_NUMBERING), P_TYPE::JIANPU_NUMBERING);
+    EXPECT_EQ(propertyType(Pid::JIANPU_TONIC_KEY), P_TYPE::KEY);
+    EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_NUMBERING).value<JianpuNumbering>(), JianpuNumbering::FOLLOW_SCORE_KEY);
+    EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_TONIC_KEY).value<Key>(), Key::C);
     EXPECT_EQ(ke->propertyDefault(Pid::JIANPU_TONIC_MODE).value<KeyMode>(), KeyMode::MAJOR);
 
-    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::FOLLOW_SCORE_KEY));
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).value<JianpuNumbering>(), JianpuNumbering::FOLLOW_SCORE_KEY);
 
-    ke->setProperty(Pid::JIANPU_NUMBERING, int(JianpuTonicMode::CUSTOM));
-    ke->setProperty(Pid::JIANPU_TONIC_KEY, int(Key::E_B));
+    ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM);
+    ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::E_B);
     ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::PHRYGIAN);
 
-    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).toInt(), int(JianpuTonicMode::CUSTOM));
-    EXPECT_EQ(Key(ke->getProperty(Pid::JIANPU_TONIC_KEY).toInt()), Key::E_B);
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).type(), P_TYPE::JIANPU_NUMBERING);
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_TONIC_KEY).type(), P_TYPE::KEY);
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).value<JianpuNumbering>(), JianpuNumbering::CUSTOM);
+    EXPECT_EQ(ke->getProperty(Pid::JIANPU_TONIC_KEY).value<Key>(), Key::E_B);
     EXPECT_EQ(ke->getProperty(Pid::JIANPU_TONIC_MODE).value<KeyMode>(), KeyMode::PHRYGIAN);
 
+    for (Pid property : { Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY }) {
+        const PropertyValue value = ke->getProperty(property);
+        EXPECT_EQ(PropertyValue::fromQVariant(value.toQVariant(), propertyType(property)), value);
+    }
+
+    std::unique_ptr<KeySig> restored(toKeySig(ScoreRW::writeReadElement(ke)));
+    ASSERT_TRUE(restored);
+    EXPECT_EQ(restored->jianpuNumbering(), JianpuNumbering::CUSTOM);
+    EXPECT_EQ(restored->jianpuTonicKey(), Key::E_B);
+    EXPECT_EQ(restored->jianpuTonicMode(), KeyMode::PHRYGIAN);
+
+    restored.reset();
     delete score;
 }
 
@@ -412,7 +443,7 @@ TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
     linked->linkTo(source);
 
     const Pid properties[] = { Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY, Pid::JIANPU_TONIC_MODE };
-    const PropertyValue values[] = { int(JianpuTonicMode::CUSTOM), int(Key::E_B), KeyMode::PHRYGIAN };
+    const PropertyValue values[] = { JianpuNumbering::CUSTOM, Key::E_B, KeyMode::PHRYGIAN };
     PropertyValue originalValues[3];
     for (size_t index = 0; index < 3; ++index) {
         originalValues[index] = source->getProperty(properties[index]);
@@ -474,8 +505,8 @@ TEST_F(Engraving_KeySigTests, jianpuKeyLabelLayout)
     ke = toKeySig(keySigSeg->element(0));
     EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=C");
 
-    ke->setProperty(Pid::JIANPU_NUMBERING, int(JianpuTonicMode::CUSTOM));
-    ke->setProperty(Pid::JIANPU_TONIC_KEY, int(Key::D));
+    ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM);
+    ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::D);
     ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::MAJOR);
     score->doLayout();
     keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());

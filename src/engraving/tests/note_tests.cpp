@@ -515,7 +515,7 @@ TEST_F(Engraving_NoteTests, jianpuChordNotesAlignHorizontally)
     ASSERT_TRUE(chordRest);
     ASSERT_TRUE(chordRest->isChord());
     Chord* chord = toChord(chordRest);
-    ASSERT_TRUE(chord->isJianpuStaff());
+    ASSERT_TRUE(chord->onJianpuStaff());
     ASSERT_EQ(chord->notes().size(), 1);
 
     Note* firstNote = chord->notes().front();
@@ -540,7 +540,7 @@ TEST_F(Engraving_NoteTests, jianpuChordNotesAlignHorizontally)
     }
 
     chord->staff()->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::STANDARD));
-    ASSERT_FALSE(chord->isJianpuStaff());
+    ASSERT_FALSE(chord->onJianpuStaff());
     for (DirectionV direction : { DirectionV::UP, DirectionV::DOWN }) {
         chord->setStemDirection(direction);
         score->doLayout();

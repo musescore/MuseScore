@@ -114,6 +114,7 @@ QVariantList StaffSettingsModel::allStaffTypes() const
         case mu::engraving::StaffGroup::PERCUSSION: return isPercussion;
         case mu::engraving::StaffGroup::TAB: return type.lines() <= maxLines;
         case mu::engraving::StaffGroup::STANDARD: return true;
+        case mu::engraving::StaffGroup::JIANPU: return true;
         }
 
         return false;

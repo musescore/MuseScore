@@ -947,7 +947,8 @@ static const StaffTypes _defaultPreset[STAFF_GROUP_MAX] =
 {
     StaffTypes::STANDARD,   // default pitched preset is "stdNormal"
     StaffTypes::PERC_5LINE, // default percussion preset is "perc5lines"
-    StaffTypes::TAB_6COMMON // default tab preset is "tab6StrCommon"
+    StaffTypes::TAB_6COMMON, // default tab preset is "tab6StrCommon"
+    StaffTypes::JIANPU      // default jianpu preset
 };
 
 //---------------------------------------------------------
@@ -994,7 +995,6 @@ void StaffType::initStaffTypes(const Color& defaultColor)
     m_presets = {
 //                       group,              staff type,                    lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffGroup::STANDARD,   StaffTypes::STANDARD,             5, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
-        StaffType(StaffGroup::STANDARD,   StaffTypes::JIANPU,               0, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_1LINE,           1, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_2LINE,           2, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_3LINE,           3, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
@@ -1023,6 +1023,8 @@ void StaffType::initStaffTypes(const Color& defaultColor)
         StaffType(StaffGroup::TAB, StaffTypes::TAB_8SIMPLE,   8,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
         StaffType(StaffGroup::TAB, StaffTypes::TAB_9SIMPLE,   9,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
         StaffType(StaffGroup::TAB, StaffTypes::TAB_10SIMPLE,  10, 0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+
+        StaffType(StaffGroup::JIANPU, StaffTypes::JIANPU, 0, 0, 1, true, true, false, true, true, true, false, defaultColor),
     };
 }
 /* *INDENT-ON* */

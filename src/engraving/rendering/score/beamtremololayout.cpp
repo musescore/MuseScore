@@ -637,7 +637,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     bool hasChordAboveBeam = false;
     bool hasChordBelowBeam = false;
 
-    const bool isJianpuStaff = item->isJianpuStaff();
+    const bool isJianpuStaff = item->onJianpuStaff();
     double beamDotStack = 0.0;
     bool beamAbove = false;
     double beamDistance = 0.0;
@@ -676,8 +676,8 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
             int aboveDots = 0;
             const Chord* chord = chordRest->isChord() ? toChord(chordRest) : nullptr;
             if (chord) {
-                std::vector<OctaveDot*> dots = chord->upNote()->octaveDots();
-                if (!dots.empty() && dots.front()->above()) {
+                const std::vector<OctaveDot*>& dots = chord->upNote()->octaveDots();
+                if (!dots.empty() && dots.front()->ldata()->above) {
                     aboveDots = static_cast<int>(dots.size());
                 }
             }
@@ -1350,7 +1350,7 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
-    bool isJianpu = cr->isJianpuStaff();
+    bool isJianpu = cr->onJianpuStaff();
     double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam ? ldata->beam->pagePos().x() : 0.0;
     double crPosX = cr->pagePos().x() - pagePosX;
     auto stemPosX = [cr, crPosX]() { return StemLayout::stemPosX(cr) + crPosX; };
@@ -1414,7 +1414,7 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
     }
 
     const Chord* chord = toChord(cr);
-    if (chord->isJianpuStaff()) {
+    if (chord->onJianpuStaff()) {
         return chord->upNote()->pagePos().y();
     }
 

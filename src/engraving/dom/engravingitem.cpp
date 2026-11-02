@@ -469,7 +469,7 @@ bool EngravingItem::onTabStaff() const
     return stt ? stt->isTabStaff() : false;
 }
 
-bool EngravingItem::isJianpuStaff() const
+bool EngravingItem::onJianpuStaff() const
 {
     const Staff* st = staff();
     return st ? st->isJianpuStaff(tick()) : false;

@@ -1186,7 +1186,7 @@ enum class CourtesyBarlineMode : char {
 };
 
 // How the tonic ("1") of a Jianpu staff is determined
-enum class JianpuTonicMode : char {
+enum class JianpuNumbering : char {
     FOLLOW_SCORE_KEY = 0,     // tonic follows the actual key signature
     CUSTOM           = 1      // tonic and mode are selected independently
 };
@@ -1329,13 +1329,13 @@ enum class MarkerType : unsigned char {
 };
 
 enum class StaffGroup : unsigned char {
-    STANDARD, PERCUSSION, TAB
+    STANDARD, PERCUSSION, TAB, JIANPU
 };
-constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
+constexpr int STAFF_GROUP_MAX = int(StaffGroup::JIANPU) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
 // keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset for legacy scores
 enum class StaffTypes : signed char {
-    STANDARD, JIANPU,
+    STANDARD,
     PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
     TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
     TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
@@ -1344,6 +1344,7 @@ enum class StaffTypes : signed char {
     TAB_ITALIAN, TAB_FRENCH,
     TAB_7COMMON, TAB_8COMMON, TAB_9COMMON, TAB_10COMMON,
     TAB_7SIMPLE, TAB_8SIMPLE, TAB_9SIMPLE, TAB_10SIMPLE,
+    JIANPU,
     STAFF_TYPES,
     PERC_DEFAULT = StaffTypes::PERC_5LINE,
     TAB_DEFAULT = StaffTypes::TAB_6COMMON,

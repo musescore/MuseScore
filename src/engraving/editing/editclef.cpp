@@ -206,7 +206,9 @@ void EditClef::undoChangeClef(Transaction&, Score* score, Staff* ostaff, Engravi
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
+        const StaffGroup clefStaffGroup = ClefInfo::staffGroup(ct);
+        const bool compatibleJianpuClef = staffGroup == StaffGroup::JIANPU && clefStaffGroup == StaffGroup::STANDARD;
+        if (clefStaffGroup != staffGroup && !compatibleJianpuClef && !forInstrumentChange) {
             continue;
         }
 

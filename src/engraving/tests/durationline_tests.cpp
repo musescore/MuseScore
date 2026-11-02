@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -54,7 +54,7 @@ ChordRest* findJianpuChordRestWithDurationLines(MasterScore* score)
             }
 
             ChordRest* chordRest = toChordRest(item);
-            if (!chordRest->isJianpuStaff() || chordRest->durationLines().empty()) {
+            if (!chordRest->onJianpuStaff() || chordRest->durationLines().empty()) {
                 continue;
             }
 
@@ -100,7 +100,7 @@ class Engraving_DurationLineTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_DurationLineTests, propertiesAndSpatiumScaling)
+TEST_F(Engraving_DurationLineTests, layoutDataStoresComputedLength)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_DURATION_LINES_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -114,14 +114,9 @@ TEST_F(Engraving_DurationLineTests, propertiesAndSpatiumScaling)
     EXPECT_EQ(durationLine->chordRest(), chordRest);
     EXPECT_DOUBLE_EQ(durationLine->mag(), chordRest->mag());
 
-    durationLine->setLen(2.0);
-    EXPECT_DOUBLE_EQ(durationLine->len(), 2.0);
-
-    durationLine->spatiumChanged(2.0, 3.0);
-    EXPECT_DOUBLE_EQ(durationLine->len(), 3.0);
-
-    durationLine->spatiumChanged(0.0, 3.0);
-    EXPECT_DOUBLE_EQ(durationLine->len(), 3.0);
+    const DurationLine::LayoutData* ldata = durationLine->ldata();
+    EXPECT_GT(ldata->len, 0.0);
+    EXPECT_DOUBLE_EQ(ldata->bbox().width(), ldata->len);
 
     delete score;
 }
@@ -198,8 +193,6 @@ TEST_F(Engraving_DurationLineTests, jianpuCloneResizeDurationLinesUsesCloneAsOwn
     ASSERT_FALSE(cloned->durationLines().empty());
 
     DurationLine* clonedDurationLine = cloned->durationLines().front();
-    clonedDurationLine->setLen(2.5);
-    EXPECT_DOUBLE_EQ(clonedDurationLine->len(), 2.5);
     EXPECT_NE(clonedDurationLine, sourceDurationLine);
 
     delete cloned;

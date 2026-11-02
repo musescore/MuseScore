@@ -71,8 +71,8 @@ public:
     KeyMode mode() const { return m_sig.mode(); }
     void setMode(KeyMode v) { m_sig.setMode(v); }
 
-    JianpuTonicMode jianpuNumbering() const { return m_sig.jianpuNumbering(); }
-    void setJianpuNumbering(JianpuTonicMode v) { m_sig.setJianpuNumbering(v); }
+    JianpuNumbering jianpuNumbering() const { return m_sig.jianpuNumbering(); }
+    void setJianpuNumbering(JianpuNumbering v) { m_sig.setJianpuNumbering(v); }
     Key jianpuTonicKey() const { return m_sig.jianpuTonicKey(); }
     void setJianpuTonicKey(Key v) { m_sig.setJianpuTonicKey(v); }
     KeyMode jianpuTonicMode() const { return m_sig.jianpuTonicMode(); }
