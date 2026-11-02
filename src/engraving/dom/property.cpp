@@ -256,10 +256,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::USER_STRETCH,                        P_TYPE::REAL,                      PropertyGroup::NONE,       false, "stretch",                         QT_TRANSLATE_NOOP("engraving/propertyName", "stretch") },
     { Pid::MEASURE_NUMBER_OFFSET,               P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "noOffset",                        QT_TRANSLATE_NOOP("engraving/propertyName", "measure number offset") },
     { Pid::EXCLUDE_FROM_NUMBERING,              P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "irregular",                       QT_TRANSLATE_NOOP("engraving/propertyName", "exclude from numbering") },
-    { Pid::SLUR_UOFF1,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o1",                              QT_TRANSLATE_NOOP("engraving/propertyName", "start offset") },
-    { Pid::SLUR_UOFF2,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o2",                              QT_TRANSLATE_NOOP("engraving/propertyName", "left shoulder offset") },
-    { Pid::SLUR_UOFF3,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o3",                              QT_TRANSLATE_NOOP("engraving/propertyName", "right shoulder offset") },
-    { Pid::SLUR_UOFF4,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o4",                              QT_TRANSLATE_NOOP("engraving/propertyName", "end offset") },
+    { Pid::BEZIER_OFFSET1,                      P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o1",                              QT_TRANSLATE_NOOP("engraving/propertyName", "start offset") },
+    { Pid::BEZIER_OFFSET2,                      P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o2",                              QT_TRANSLATE_NOOP("engraving/propertyName", "first control point offset") },
+    { Pid::BEZIER_OFFSET3,                      P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o3",                              QT_TRANSLATE_NOOP("engraving/propertyName", "second control point offset") },
+    { Pid::BEZIER_OFFSET4,                      P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o4",                              QT_TRANSLATE_NOOP("engraving/propertyName", "end offset") },
     { Pid::STAFF_MOVE,                          P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "staffMove",                       QT_TRANSLATE_NOOP("engraving/propertyName", "staff move") },
     { Pid::VERSE,                               P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "no",                              QT_TRANSLATE_NOOP("engraving/propertyName", "verse") },
 
@@ -464,8 +464,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::START_WITH_LONG_NAMES,               P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "startWithLongNames",              QT_TRANSLATE_NOOP("engraving/propertyName", "start with long names") },
     { Pid::START_WITH_MEASURE_ONE,              P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "startWithMeasureOne",             QT_TRANSLATE_NOOP("engraving/propertyName", "start with measure one") },
     { Pid::FIRST_SYSTEM_INDENTATION,            P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "firstSystemIndentation",          QT_TRANSLATE_NOOP("engraving/propertyName", "first system indentation") },
-
-    { Pid::PATH,                                P_TYPE::DRAW_PATH,                 PropertyGroup::APPEARANCE, false, "path",                            QT_TRANSLATE_NOOP("engraving/propertyName", "path") },
 
     { Pid::PREFER_SHARP_FLAT,                   P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "preferSharpFlat",                 QT_TRANSLATE_NOOP("engraving/propertyName", "prefer sharps or flats") },
 
