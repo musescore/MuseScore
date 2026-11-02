@@ -1597,6 +1597,7 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
             label = Factory::createStaveSharingLabel(segment);
             label->setOwnershipParent(segment);
             label->setTrack(unisonNote->track());
+            label->setGenerated(true);
             label->setXmlText(text);
 
             ctx.score->undoAddElement(label, /*addToLinkedStaves*/ false);

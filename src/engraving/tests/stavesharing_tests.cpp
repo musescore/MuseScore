@@ -1134,3 +1134,78 @@ TEST_F(Engraving_StaveSharingTests, testUserTrackMapWithVoiceCrossing)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testTimeDeleteAtStaveSharingChangeUndo)
+{
+    // [GIVEN] A score of 5 measures of 4/4 with 2 staves
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_15.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Stave sharing is enabled, with a stave sharing change at the start of measure 2
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m2);
+    ASSERT_EQ(m2->tick(), Fraction(1, 1));
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m2->first(SegmentType::ChordRest), sharedPart, false);
+    });
+    score->doLayout();
+
+    using SegmentInfo = std::pair<SegmentType, Fraction>;
+    auto collectSegments = [m2]() {
+        std::vector<SegmentInfo> segments;
+        for (Segment* s = m2->first(); s; s = s->next()) {
+            segments.emplace_back(s->segmentType(), s->tick());
+        }
+        return segments;
+    };
+
+    auto expectTicksInOrder = [](const std::vector<SegmentInfo>& segments) {
+        for (size_t i = 1; i < segments.size(); ++i) {
+            EXPECT_LE(segments[i - 1].second, segments[i].second);
+        }
+    };
+
+    const std::vector<SegmentInfo> segmentsBefore = collectSegments();
+    expectTicksInOrder(segmentsBefore);
+
+    // [WHEN] The time of the first note in measure 2 is deleted
+    const track_idx_t originTrack = staff2track(originParts.front()->staff(0)->idx());
+    ChordRest* cr = m2->findChordRest(m2->tick(), originTrack);
+    ASSERT_TRUE(cr && cr->isChord());
+    const Fraction deletedTicks = cr->actualTicks();
+    score->select(toChord(cr)->upNote());
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Remove time"), [&](Transaction&) {
+        score->cmdTimeDelete();
+    });
+    score->doLayout();
+
+    // [THEN] Measure 2 is shortened, and its segment ticks are in order
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4) - deletedTicks);
+    expectTicksInOrder(collectSegments());
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, nullptr);
+    score->doLayout();
+
+    // [THEN] The segments are back in their original order
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4));
+    const std::vector<SegmentInfo> segmentsAfter = collectSegments();
+    EXPECT_EQ(segmentsAfter, segmentsBefore);
+    expectTicksInOrder(segmentsAfter);
+
+    delete score;
+}
