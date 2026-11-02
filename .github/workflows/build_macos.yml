@@ -305,7 +305,7 @@ jobs:
 
     - name: Checksum
       run: |
-        bash ./buildscripts/ci/tools/checksum.sh
+        bash ./muse/buildscripts/ci/tools/checksum.sh
 
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'

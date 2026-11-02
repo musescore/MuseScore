@@ -273,7 +273,7 @@ jobs:
         buildscripts\ci\windows\package.bat --signsecret "%WIN_SIGN_S3_SECRET%" --signkey "%WIN_SIGN_S3_KEY%" --guid %WIN_MSI_GUID%
     - name: Checksum
       run: |
-        bash ./buildscripts/ci/tools/checksum.sh
+        bash ./muse/buildscripts/ci/tools/checksum.sh
 
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
@@ -451,7 +451,7 @@ jobs:
         buildscripts\ci\windows\package.bat --portable ON --signsecret "%WIN_SIGN_S3_SECRET%" --signkey "%WIN_SIGN_S3_KEY%"
     - name: Checksum
       run: |
-        bash ./buildscripts/ci/tools/checksum.sh
+        bash ./muse/buildscripts/ci/tools/checksum.sh
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
