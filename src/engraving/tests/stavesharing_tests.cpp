@@ -505,3 +505,35 @@ TEST_F(Engraving_StaveSharingTests, testTimeShiftMovesSharedTupletsOnce)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testSharedNestedTupletAddedOnce)
+{
+    // [GIVEN] Two flutes, each with an eighth triplet nested in a quarter triplet on beat 2, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_20.mscx");
+    ASSERT_TRUE(score);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    const track_idx_t sharedTrack = staff2track(sharedPart->staff(0)->idx());
+
+    // [WHEN] The layout is updated twice more
+    score->doLayout();
+    score->doLayout();
+
+    // [THEN] Each shared tuplet holds its three elements once
+    ChordRest* cr = score->firstMeasure()->findChordRest(Fraction(1, 4), sharedTrack);
+    ASSERT_TRUE(cr);
+    Tuplet* innerTuplet = cr->tuplet();
+    ASSERT_TRUE(innerTuplet);
+    Tuplet* outerTuplet = innerTuplet->tuplet();
+    ASSERT_TRUE(outerTuplet);
+    EXPECT_EQ(innerTuplet->elements().size(), 3);
+    EXPECT_EQ(outerTuplet->elements().size(), 3);
+
+    delete score;
+}
