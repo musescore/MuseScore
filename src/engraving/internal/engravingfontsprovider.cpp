@@ -24,6 +24,7 @@
 
 #include "global/stringutils.h"
 
+#include "io/file.h"
 #include "log.h"
 
 using namespace mu;
@@ -48,7 +49,14 @@ void EngravingFontsProvider::addInternalFont(const std::string& name, const std:
 void EngravingFontsProvider::addExternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
                                              const muse::io::path_t& metadataPath)
 {
-    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath, metadataPath);
+    addExternalFont(name, family, std::make_shared<muse::io::File>(filePath), std::make_shared<muse::io::File>(metadataPath));
+}
+
+void EngravingFontsProvider::addExternalFont(const std::string& name, const std::string& family, std::shared_ptr<muse::io::IODevice> font,
+                                             std::shared_ptr<muse::io::IODevice> metadata)
+{
+    UNUSED(family);
+    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, std::move(font), std::move(metadata));
     m_externalSymbolFonts.emplace(muse::strings::toLower(name), f);
 }
 

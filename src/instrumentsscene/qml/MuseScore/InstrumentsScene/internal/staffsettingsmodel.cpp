@@ -183,7 +183,7 @@ INotationPtr StaffSettingsModel::currentNotation() const
 
 INotationPtr StaffSettingsModel::currentMasterNotation() const
 {
-    return context()->currentMasterNotation()->notation();
+    return context()->masterNotation()->notation();
 }
 
 bool StaffSettingsModel::isSmallStaff() const
@@ -371,7 +371,7 @@ INotationPartsPtr StaffSettingsModel::notationParts() const
 
 INotationPartsPtr StaffSettingsModel::masterNotationParts() const
 {
-    if (IMasterNotationPtr master = context()->currentMasterNotation()) {
+    if (IMasterNotationPtr master = context()->masterNotation()) {
         return master->parts();
     }
 

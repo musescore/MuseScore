@@ -131,7 +131,7 @@ static void drawInputStringMarks(const StaffType& staffType, muse::draw::Painter
 
 INotationNoteInputPtr NoteInputCursor::currentNoteInput() const
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = projectSession()->currentNotation();
     if (!notation) {
         return nullptr;
     }

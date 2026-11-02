@@ -29,9 +29,10 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "async/promise.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 #include "rcommand/icommanddispatcher.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "inotationproject.h"
 #include "isaveprojectscenario.h"
@@ -43,7 +44,8 @@ public:
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
     CloseProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}

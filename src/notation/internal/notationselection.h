@@ -58,6 +58,7 @@ public:
     NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;
+    bool isSingle() const override;
     bool isRange() const override;
     SelectionState state() const override;
 
@@ -80,6 +81,7 @@ public:
 
     mu::engraving::MeasureBase* startMeasureBase() const override;
     mu::engraving::MeasureBase* endMeasureBase() const override;
+    std::vector<mu::engraving::MeasureBase*> measureBasesInSelection() const override;
     std::vector<mu::engraving::System*> selectedSystems() const override;
     std::vector<mu::engraving::Page*> pagesContainingSelection() const override;
 

@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "rcommand/commandable.h"
@@ -59,7 +59,7 @@ public:
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<print::IPrintProvider> printProvider = { this };
 
     ProjectActionsController(const muse::modularity::ContextPtr& iocCtx)

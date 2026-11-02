@@ -25,14 +25,14 @@
 #include <QColor>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
 class NoteInputCursor : public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     NoteInputCursor(const muse::modularity::ContextPtr& iocCtx, bool isThinLine = false);

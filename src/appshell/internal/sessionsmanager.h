@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "rcommand/icommanddispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectconfiguration.h"
 #include "iappshellconfiguration.h"
@@ -42,7 +42,7 @@ class SessionsManager : public ISessionsManager, public muse::Contextable, publi
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     SessionsManager(const muse::modularity::ContextPtr& iocCtx)

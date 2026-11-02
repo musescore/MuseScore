@@ -336,7 +336,7 @@ void NotationAutomationController::init()
         rebuildAllPolylines();
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
@@ -1230,13 +1230,13 @@ AutomationType NotationAutomationController::currentAutomationType() const
 
 INotationAutomationPtr NotationAutomationController::automation() const
 {
-    const IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    const IMasterNotationPtr masterNotation = projectSession()->masterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
 }
 
 INotationPtr NotationAutomationController::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 mu::engraving::AutomationDataConstPtr NotationAutomationController::automationData() const

@@ -44,7 +44,7 @@ void ProjectPropertiesModel::classBegin()
 
 void ProjectPropertiesModel::init()
 {
-    INotationProjectPtr project = context()->currentProject();
+    INotationProjectPtr project = context()->project();
     if (project) {
         m_projectMetaInfo = project->metaInfo();
     }
@@ -203,7 +203,7 @@ void ProjectPropertiesModel::deleteProperty(int index)
 
 void ProjectPropertiesModel::saveProperties()
 {
-    INotationProjectPtr project = context()->currentProject();
+    INotationProjectPtr project = context()->project();
     if (!project) {
         return;
     }

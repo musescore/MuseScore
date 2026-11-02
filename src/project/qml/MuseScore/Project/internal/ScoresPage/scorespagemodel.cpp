@@ -87,6 +87,11 @@ void ScoresPageModel::viewOnline(int scoreId)
     });
 }
 
+void ScoresPageModel::deleteScore(int scoreId, const QString& scoreName)
+{
+    deleteCloudScoreScenario()->deleteScore(scoreId, scoreName);
+}
+
 void ScoresPageModel::openScoreManager()
 {
     platformInteractive()->openUrl(museScoreComService()->scoreManagerUrl());

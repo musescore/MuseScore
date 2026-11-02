@@ -27,7 +27,7 @@
 
 #include "async/asyncable.h"
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 
 namespace mu::engraving {
@@ -39,7 +39,7 @@ class EngravingUndoStackModel : public QAbstractItemModel, public muse::async::A
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     EngravingUndoStackModel(QObject* parent = 0);

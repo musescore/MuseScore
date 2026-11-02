@@ -184,7 +184,7 @@ jobs:
         ARTIFACT_NAME="$(<"${ARTIFACTS_DIR}/env/artifact_name.env")"
 
         echo "Hello, world!" >"${ARTIFACTS_DIR}/${ARTIFACT_NAME}"
-        buildscripts/ci/tools/checksum.sh
+        muse/buildscripts/ci/tools/checksum.sh
 
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy-${{ matrix.os }}_${BUILD_BRANCH}")"
         echo "UPLOAD_ARTIFACT_NAME=${UPLOAD_ARTIFACT_NAME}" | tee -a "${GITHUB_ENV}"

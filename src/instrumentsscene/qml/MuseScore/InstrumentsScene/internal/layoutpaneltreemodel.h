@@ -32,7 +32,7 @@
 
 #include "modularity/ioc.h"
 #include "notationscene/iselectinstrumentscenario.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "rcommand/icommanddispatcher.h"
 #include "interactive/iinteractive.h"
 #include "shortcuts_v2/icommandshortcutsregister.h"
@@ -67,7 +67,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     QML_ELEMENT
 
     muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };

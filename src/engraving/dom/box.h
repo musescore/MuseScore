@@ -152,6 +152,8 @@ public:
 
     VBox* clone() const override { return new VBox(*this); }
 
+    void add(EngravingItem* e) override;
+
     double minHeight() const;
     double maxHeight() const;
 
@@ -160,6 +162,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
     void startDragGrip(EditData&) override;
+
+    bool acceptDrop(EditData&) const override;
 
     std::vector<PointF> gripsPositions(const EditData&) const override;
 

@@ -278,7 +278,7 @@ public:
     void  setShowTabFingering(bool val) { m_showTabFingering = val; }
     void  setUseNumbers(bool val);
     void  setShowBackTied(bool val) { m_showBackTied = val; }
-    void  setScore(Score* score) { m_score = score; }
+    void  setScore(Score* score);
     void  setFretUseTextStyle(bool val) { m_fretUseTextStyle = val; }
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);

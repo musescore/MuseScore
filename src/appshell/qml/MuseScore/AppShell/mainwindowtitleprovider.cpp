@@ -38,8 +38,8 @@ void MainWindowTitleProvider::load()
 {
     update();
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        if (auto currentProject = context()->currentProject()) {
+    context()->projectChanged().onNotify(this, [this]() {
+        if (auto currentProject = context()->project()) {
             currentProject->displayNameChanged().onNotify(this, [this]() {
                 update();
             });
@@ -102,7 +102,7 @@ void MainWindowTitleProvider::setFileModified(bool fileModified)
 
 void MainWindowTitleProvider::update()
 {
-    project::INotationProjectPtr project = context()->currentProject();
+    project::INotationProjectPtr project = context()->project();
 
     if (!project) {
         setTitle(muse::qtrc("appshell", "MuseScore Studio"));

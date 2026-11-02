@@ -688,13 +688,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        FLIP_COMMAND,
-        TranslatableString("action", "Flip direction"),
-        TranslatableString("action", "Flip direction"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_FLIP)
-    },
+    makeCommandInfo<FlipCommand>(),
     CommandInfo{
         FLIP_HORIZONTALLY_COMMAND,
         TranslatableString("action", "Flip horizontally"),
@@ -704,22 +698,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // note operation
-    CommandInfo{
-        ADD_NOTE_COMMAND,
-        TranslatableString("action", "Add note"),
-        TranslatableString("action", "Add note"),
-        InputSchema({
-            { "note", Arg(DataType::String, u"Note name (c, d, e, f, g, a, b)") },
-            { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
-        }),
-        Decoration()
-    },
+    makeCommandInfo<AddNoteCommand>(),
+
     CommandInfo{
         ADD_DRUM_NOTE_COMMAND,
         TranslatableString("action", "Add drum note"),
         TranslatableString("action", "Add drum note"),
         InputSchema({
-            { "pitch", Arg(DataType::Integer, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
+            { "pitch", Arg(DataType::Int, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
             { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
         }),
         Decoration()
@@ -896,7 +882,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "ratio", Arg(DataType::String, u"Tuplet ratio (e.g. 3/2, 4/3, 5/4, 6/5, 7/6, 8/7, 9/8)") },
             { "number-type", Arg(DataType::String, u"Tuplet number type (number, relation, none)") },
             { "bracket-type", Arg(DataType::String, u"Tuplet bracket type (auto, show, none)") },
-            { "auto-baselen", Arg(DataType::Boolean, u"Auto base length") },
+            { "auto-baselen", Arg(DataType::Bool, u"Auto base length") },
         }),
         Decoration()
     },
@@ -1460,7 +1446,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Insert &before selection…"),
         TranslatableString("action", "Insert measures before selection"),
         InputSchema({
-            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+            { "count", Arg(DataType::Int, u"Number of measures to insert") },
         }),
         Decoration()
     },
@@ -1469,7 +1455,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Insert &after selection…"),
         TranslatableString("action", "Insert measures after selection"),
         InputSchema({
-            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+            { "count", Arg(DataType::Int, u"Number of measures to insert") },
         }),
         Decoration()
     },
@@ -1478,7 +1464,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Insert at &start of score…"),
         TranslatableString("action", "Insert measures at start of score"),
         InputSchema({
-            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+            { "count", Arg(DataType::Int, u"Number of measures to insert") },
         }),
         Decoration()
     },
@@ -1494,7 +1480,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Insert at &end of score…"),
         TranslatableString("action", "Insert measures at end of score"),
         InputSchema({
-            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+            { "count", Arg(DataType::Int, u"Number of measures to insert") },
         }),
         Decoration()
     },
@@ -2985,8 +2971,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema({
             { "pos_x", Arg(DataType::Float, u"X position") },
             { "pos_y", Arg(DataType::Float, u"Y position") },
-            { "replace", Arg(DataType::Boolean, u"Replace") },
-            { "insert", Arg(DataType::Boolean, u"Insert") },
+            { "replace", Arg(DataType::Bool, u"Replace") },
+            { "insert", Arg(DataType::Bool, u"Insert") },
         }),
         Decoration()
     },
@@ -3069,7 +3055,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Zoom to percent"),
         TranslatableString("action", "Zoom to percent"),
         InputSchema({
-            { "percent", Arg(DataType::Integer, u"Percent") },
+            { "percent", Arg(DataType::Int, u"Percent") },
         }),
         Decoration()
     },
@@ -3168,7 +3154,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Piano keyboard: Set number of keys"),
         TranslatableString("action", "Set number of keys for piano keyboard"),
         InputSchema({
-            { "keys", Arg(DataType::Integer, u"Number of keys") },
+            { "keys", Arg(DataType::Int, u"Number of keys") },
         }),
         Decoration()
     },
@@ -3272,6 +3258,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+
+    makeCommandInfo<GetNoteInputStateCommand>()
 };
 
 std::string NotationCommandsRegister::moduleName() const

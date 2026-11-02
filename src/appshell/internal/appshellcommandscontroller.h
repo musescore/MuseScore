@@ -39,13 +39,13 @@
 #include "project/iopenprojectscenario.h"
 #include "project/icloseprojectscenario.h"
 #include "project/iconvertfiletoscorescenario.h"
+#include "project/iprojectsession.h"
 #include "update/iappupdateservice.h"
 #include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
-#include "context/iglobalcontext.h"
-#include "context/iuicontextresolver.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "iappshellcommandscontroller.h"
 
@@ -72,8 +72,8 @@ class AppshellCommandsController : public QObject, public IAppshellCommandsContr
     muse::ContextInject<muse::update::IAppUpdateService> appUpdateService = { this };
     muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
+    muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
     AppshellCommandsController(const muse::modularity::ContextPtr& iocCtx)

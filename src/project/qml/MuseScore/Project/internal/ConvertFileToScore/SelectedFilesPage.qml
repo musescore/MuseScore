@@ -33,29 +33,22 @@ Item {
     property alias saveAsTrimmed: saveAsField.trimmedText
     property alias saveAsErrorText: saveAsField.errorText
 
-    property var files: []
+    property FileListModel fileListModel: null
 
-    property var convertLimits: ({})
     property var fileRequirements: []
     property bool canSelectMultipleFiles: true
+    property string termsOfUseUrl: ""
 
     property NavigationSection navigationSection: null
 
     signal cancelRequested()
     signal backRequested()
-    signal selectMoreFilesRequested(var existingPaths)
-    signal applyFilesRequested(var paths)
-    signal convertRequested(var paths, string convertedScoreName)
+    signal selectMoreFilesRequested()
+    signal addFilesRequested(var urls)
+    signal convertRequested(string convertedScoreName)
 
     function focusOnDefault() {
         saveAsField.focusOnInput()
-    }
-
-    FileListModel {
-        id: fileListModel
-
-        paths: root.files
-        convertLimits: root.convertLimits
     }
 
     NavigationPanel {
@@ -93,19 +86,36 @@ Item {
             navigationOrder: 0
         }
 
+        TermsOfUseCheckBox {
+            id: termsOfUseCheckBox
+
+            Layout.fillWidth: true
+
+            termsOfUseUrl: root.termsOfUseUrl
+
+            navigation.panel: NavigationPanel {
+                name: "SelectedFilesPageTermsOfUse"
+                section: root.navigationSection
+                order: 3
+                enabled: root.enabled && root.visible
+            }
+            navigation.order: 0
+        }
+
         ConvertButtonBox {
             Layout.fillWidth: true
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            navigationPanel.order: 4
 
-            convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !fileListModel.exceedsLimits
+            convertEnabled: Boolean(saveAsField.currentText) && !saveAsField.errorText && !root.fileListModel.exceedsLimits
+                            && termsOfUseCheckBox.checked
 
             onCancelRequested: root.cancelRequested()
             onBackRequested: root.backRequested()
 
             onConvertRequested: {
-                root.convertRequested(fileListModel.paths, saveAsField.trimmedText)
+                root.convertRequested(saveAsField.trimmedText)
             }
         }
     }
@@ -115,15 +125,13 @@ Item {
 
         MultipleFilesPanel {
             navigationPanel: navPanel
-            filesModel: fileListModel
+            filesModel: root.fileListModel
             fileRequirements: root.fileRequirements
 
-            onSelectMoreFilesRequested: function(existingPaths) {
-                root.selectMoreFilesRequested(existingPaths)
-            }
+            onSelectMoreFilesRequested: root.selectMoreFilesRequested()
 
             onFilesDropped: function(urls) {
-                root.applyFilesRequested(fileListModel.paths.concat(urls))
+                root.addFilesRequested(urls)
             }
 
             onRemoveLastFileRequested: root.backRequested()
@@ -134,12 +142,12 @@ Item {
         id: singleFilePanelComponent
 
         SingleFilePanel {
-            property var item: fileListModel.get(0)
+            property var item: root.fileListModel.get(0)
 
             navigationPanel: navPanel
             fileName: item.fileNameRole
             fileSize: item.fileSizeRole
-            iconCode: fileListModel.fileIconCode
+            iconCode: root.fileListModel.fileIconCode
             fileRequirements: root.fileRequirements
 
             onRemoveRequested: root.backRequested()

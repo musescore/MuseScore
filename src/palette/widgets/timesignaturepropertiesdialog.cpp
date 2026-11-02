@@ -250,5 +250,5 @@ void TimeSignaturePropertiesDialog::accept()
 
 INotationPtr TimeSignaturePropertiesDialog::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }

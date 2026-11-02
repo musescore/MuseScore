@@ -93,15 +93,15 @@ void ProjectActionsController::init()
     });
 
     // listen changes
-    globalContext()->currentProjectChanged().onNotify(this, [this]() {
-        auto project = globalContext()->currentProject();
+    projectSession()->projectChanged().onNotify(this, [this]() {
+        auto project = projectSession()->project();
         if (project) {
             project->needSaveChanged().onNotify(this, [this]() {
                 m_needSaveChanged.notify();
             });
         }
 
-        auto notation = globalContext()->currentNotation();
+        auto notation = projectSession()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
                 m_hasSelectionChanged.notify();
@@ -117,7 +117,7 @@ bool ProjectActionsController::hasProject() const
 
 muse::async::Notification ProjectActionsController::hasProjectChanged() const
 {
-    return globalContext()->currentProjectChanged();
+    return projectSession()->projectChanged();
 }
 
 bool ProjectActionsController::needSave() const
@@ -171,7 +171,7 @@ muse::async::Notification ProjectActionsController::hasSelectionChanged() const
 
 INotationProjectPtr ProjectActionsController::currentNotationProject() const
 {
-    return globalContext()->currentProject();
+    return projectSession()->project();
 }
 
 IMasterNotationPtr ProjectActionsController::currentMasterNotation() const
@@ -214,7 +214,7 @@ muse::Ret ProjectActionsController::openProject(const muse::rcommand::Params& pa
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
 {
-    auto project = globalContext()->currentProject();
+    auto project = projectSession()->project();
     if (!project) {
         return false;
     }
@@ -229,7 +229,7 @@ bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath
 
 bool ProjectActionsController::isAnyProjectOpened() const
 {
-    auto project = globalContext()->currentProject();
+    auto project = projectSession()->project();
     if (project) {
         return true;
     }
@@ -253,9 +253,9 @@ muse::Ret ProjectActionsController::newProject()
         setBusy(BusyStatus::Opening, false);
     };
 
-    if (globalContext()->currentProject()) {
+    if (projectSession()->project()) {
         if (multiwindowsProvider()->isHasWindowWithoutProject()) {
-            multiwindowsProvider()->activateWindowWithoutProject({ "file-new" });
+            multiwindowsProvider()->activateWindowWithoutProject({ QString::fromStdString(PROJECT_NEW_COMMAND.toString()) });
             return make_ok();
         }
         QStringList args;
@@ -365,7 +365,7 @@ muse::Ret ProjectActionsController::exportScore()
 
 muse::Ret ProjectActionsController::printScore()
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }

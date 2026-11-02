@@ -25,8 +25,6 @@ else()
     add_subdirectory(stubs/braille)
 endif()
 
-add_subdirectory(context)
-
 if (MUE_BUILD_CONVERTER_MODULE)
     add_subdirectory(converter)
 endif()

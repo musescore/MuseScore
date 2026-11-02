@@ -261,7 +261,6 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
     }
 
     Fraction f(destinationChordRest->ticks());
-    Tuplet* ot  = destinationChordRest->tuplet();
 
     f.reduce();         //measure duration might not be reduced
 
@@ -277,8 +276,78 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         return nullptr;
     }
 
+    return addTuplet(destinationChordRest, _ratio, TDuration(fr), numberType, bracketType);
+}
+
+//---------------------------------------------------------
+//   canAddTuplet
+//    Whether addTuplet() can create a tuplet with this ratio
+//    and base length at chordRest
+//---------------------------------------------------------
+
+bool Score::canAddTuplet(const ChordRest* chordRest, const Fraction& ratio, const TDuration& baseLen) const
+{
+    if (!chordRest || !baseLen.isValid() || baseLen.isMeasure() || ratio.numerator() <= 0 || ratio.denominator() <= 0) {
+        return false;
+    }
+
+    const Measure* measure = chordRest->measure();
+    if (!measure || measure->isMMRest() || chordRest->isGrace()) {
+        return false;
+    }
+
+    // changeCRlen() can't change the length of a measure repeat
+    const Fraction ticks = baseLen.fraction() * ratio.denominator();
+    if (chordRest->isMeasureRepeat() && ticks != chordRest->ticks()) {
+        return false;
+    }
+
+    // the tuplet must not cross a barline or the end of a parent tuplet
+    Tuplet* parent = chordRest->tuplet();
+    const Fraction timeStretch = chordRest->staff()->timeStretch(chordRest->tick());
+    const Fraction end = chordRest->tick() + actualTicks(ticks, parent, timeStretch);
+    const Fraction limit = parent ? parent->tick() + parent->actualTicks() : measure->endTick();
+
+    return end <= limit;
+}
+
+//---------------------------------------------------------
+//   addTuplet
+//    Create a tuplet of ratio.denominator() * baseLen, starting
+//    at destinationChordRest and replacing everything in that
+//    time in its track. The tuplet can be longer or shorter than
+//    destinationChordRest, but must not cross a barline or the end
+//    of a parent tuplet.
+//---------------------------------------------------------
+
+Tuplet* Score::addTuplet(ChordRest* destinationChordRest, const Fraction& ratio, const TDuration& baseLen,
+                         TupletNumberType numberType, TupletBracketType bracketType)
+{
+    if (!canAddTuplet(destinationChordRest, ratio, baseLen)) {
+        const Fraction duration = baseLen.fraction() * ratio.denominator();
+        MessageBox(iocContext()).warning(muse::mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
+                                         .arg(ratio.toString(), duration.toString()).toStdString(),
+                                         std::string(), { MessageBox::Ok });
+        return nullptr;
+    }
+
+    Measure* measure = destinationChordRest->measure();
+    Tuplet* ot = destinationChordRest->tuplet();
+    const Fraction f = baseLen.fraction() * ratio.denominator();
+
+    // Shorten a longer chord/rest first, so that the remainder is filled with rests. Shorten it to
+    // the base length, since changeCRlen() only shortens correctly to a single note value
+    if (destinationChordRest->ticks() > f) {
+        changeCRlen(destinationChordRest, baseLen.fraction());
+    }
+
+    // Clear the rest of the time the tuplet will take
+    if (destinationChordRest->ticks() < f) {
+        makeGap(destinationChordRest->segment(), destinationChordRest->track(), f, ot, /*keepChord*/ true);
+    }
+
     Tuplet* tuplet = Factory::createTuplet(measure);
-    tuplet->setRatio(_ratio);
+    tuplet->setRatio(ratio);
 
     tuplet->setNumberType(numberType);
     if (tuplet->numberType() == TupletNumberType(tuplet->style().styleI(Sid::tupletNumberType))) {
@@ -295,7 +364,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
     }
 
     tuplet->setTicks(f);
-    tuplet->setBaseLen(fr);
+    tuplet->setBaseLen(baseLen);
 
     tuplet->setTrack(destinationChordRest->track());
     tuplet->setTick(destinationChordRest->tick());
@@ -306,6 +375,17 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     cmdCreateTuplet(destinationChordRest, tuplet);
 
+    return tuplet;
+}
+
+//---------------------------------------------------------
+//   selectNewTuplet
+//    Select where input continues in a new tuplet, and use
+//    its base length as the input duration
+//---------------------------------------------------------
+
+void Score::selectNewTuplet(Tuplet* tuplet)
+{
     const std::vector<DurationElement*>& elements = tuplet->elements();
     DurationElement* elementForSelect = nullptr;
     if (!elements.empty()) {
@@ -321,8 +401,6 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         score()->select(elementForSelect, SelectType::SINGLE, 0);
         score()->inputState().setDuration(tuplet->baseLen());
     }
-
-    return tuplet;
 }
 
 //---------------------------------------------------------
@@ -2302,6 +2380,9 @@ void Score::cmdDeleteSelection()
                 }
             } else if (e->isSoundFlag()) {
                 tick = e->tick();
+            } else if (e->isTuplet()) {
+                // the rests replacing the tuplet start at its tick
+                tick = toTuplet(e)->tick();
             } else if (e->ownershipParent()
                        && (e->ownershipParent()->isSegment() || e->ownershipParent()->isChord() || e->ownershipParent()->isNote()
                            || e->ownershipParent()->isRest())) {
@@ -2658,7 +2739,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
         }
         doUndoRemoveElement(static_cast<EngravingItem*>(e));
         if (clearSegment) {
-            Segment* s = cr->segment();
+            Segment* s = toChordRest(e)->segment();
             if (segments.find(s) == segments.end()) {
                 segments.insert(s);
             }
@@ -3199,11 +3280,23 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
         undo(new InsertTime(score, abstick, -len));
 
         Fraction updatedTick = tick;
+        // tuplets store their tick: move those after the removed time back with their segments
+        std::set<Tuplet*> tuplets;
         for (Segment* s = localMeasure->first(SegmentType::ChordRest); s; s = s->next()) {
             if (s->rtick() < etick || s->rtick() == updatedTick) {
                 continue;
             }
 
+            if (s->isChordRestType()) {
+                for (EngravingItem* e : s->elist()) {
+                    for (Tuplet* t = e ? toChordRest(e)->tuplet() : nullptr; t && t->tick() >= abstick + len; t = t->tuplet()) {
+                        // shared tuplets follow their origin
+                        if (t->originItems().empty()) {
+                            tuplets.insert(t);
+                        }
+                    }
+                }
+            }
             s->undoChangeProperty(Pid::TICK, updatedTick);
             updatedTick += s->ticks();
 
@@ -3212,6 +3305,10 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
                     emptySegments.push_back(s);
                 }
             }
+        }
+
+        for (Tuplet* t : tuplets) {
+            t->undoChangeProperty(Pid::TICK, t->tick() - len);
         }
 
         undo(new ChangeMeasureLen(localMeasure, localMeasure->ticks() - f));

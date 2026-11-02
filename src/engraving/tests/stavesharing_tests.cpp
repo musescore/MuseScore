@@ -22,15 +22,19 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/chord.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/tuplet.h"
 
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/flip.h"
+#include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -420,6 +424,84 @@ TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves
     ASSERT_TRUE(keySigSeg);
     EXPECT_TRUE(keySigSeg->element(secondSharedTrack) && keySigSeg->element(secondSharedTrack)->isKeySig());
     EXPECT_FALSE(keySigSeg->element(firstSharedTrack));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testTimeShiftMovesSharedTupletsOnce)
+{
+    // [GIVEN] Two flutes, the second with an eighth triplet on beat 2, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_05.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    const track_idx_t flute1Track = originParts.front()->staff(0)->idx() * VOICES;
+
+    // [THEN] The second flute and the shared staff each have the triplet on beat 2
+    std::set<Tuplet*> tuplets;
+    for (Segment* s = m1->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        for (EngravingItem* e : s->elist()) {
+            if (e && toChordRest(e)->tuplet()) {
+                tuplets.insert(toChordRest(e)->tuplet());
+            }
+        }
+    }
+    ASSERT_EQ(tuplets.size(), 2);
+    for (Tuplet* t : tuplets) {
+        ASSERT_EQ(t->tick(), Fraction(1, 4));
+    }
+
+    // [WHEN] A quarter is inserted on the first flute's beat 1
+    InputState& is = score->inputState();
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    is.setTrack(flute1Track);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    score->select(toChord(is.cr())->upNote());
+    is.setTrack(flute1Track);
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Insert note"), [&](Transaction& tx) {
+        NoteInput::addPitch(tx, score, NoteInputParams { 0 }, false, false);
+    });
+
+    // [THEN] Both triplets move to beat 3, once
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m1->ticks(), Fraction(5, 4));
+    for (Tuplet* t : tuplets) {
+        EXPECT_EQ(t->tick(), Fraction(2, 4));
+        EXPECT_EQ(t->elements().front()->tick(), Fraction(2, 4));
+    }
+
+    // [WHEN] Undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Both triplets are back on beat 2
+    for (Tuplet* t : tuplets) {
+        EXPECT_EQ(t->tick(), Fraction(1, 4));
+    }
+
+    // [WHEN] Redo, then remove the inserted quarter
+    score->undoRedo(false, nullptr);
+    is.setNoteEntryMode(false);
+    score->select(toChord(m1->findChordRest(m1->tick(), flute1Track))->upNote());
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Remove time"), [&](Transaction&) {
+        score->cmdTimeDelete();
+    });
+
+    // [THEN] Both triplets move back to beat 2, once
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m1->ticks(), Fraction(4, 4));
+    for (Tuplet* t : tuplets) {
+        EXPECT_EQ(t->tick(), Fraction(1, 4));
+        EXPECT_EQ(t->elements().front()->tick(), Fraction(1, 4));
+    }
 
     delete score;
 }

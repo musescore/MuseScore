@@ -31,6 +31,7 @@ class NotationSelectionMock : public INotationSelection
 {
 public:
     MOCK_METHOD(bool, isNone, (), (const, override));
+    MOCK_METHOD(bool, isSingle, (), (const, override));
     MOCK_METHOD(bool, isRange, (), (const, override));
     MOCK_METHOD(SelectionState, state, (), (const, override));
 
@@ -51,6 +52,7 @@ public:
 
     MOCK_METHOD(mu::engraving::MeasureBase*, startMeasureBase, (), (const, override));
     MOCK_METHOD(mu::engraving::MeasureBase*, endMeasureBase, (), (const, override));
+    MOCK_METHOD(std::vector<mu::engraving::MeasureBase*>, measureBasesInSelection, (), (const, override));
     MOCK_METHOD(std::vector<System*>, selectedSystems, (), (const, override));
     MOCK_METHOD(std::vector<Page*>, pagesContainingSelection, (), (const, override));
 

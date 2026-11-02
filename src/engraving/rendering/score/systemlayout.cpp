@@ -2678,6 +2678,13 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
         Shape shape = shapeRelativeToStaff(item, systemX);
         shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
 
+        // Items left out of the skyline (e.g. invisible) must not take up space in the gap
+        const bool takesSpace = item->isLyricsLineSegment() ? toLyricsLineSegment(item)->lyricsAddToSkyline()
+                                : item->addToSkyline();
+        if (!takesSpace) {
+            shape.clear();
+        }
+
         Gap& gap = gaps[gapIdx];
         if (above) {
             // Inside a gap, everything is expressed relative to its upper staff

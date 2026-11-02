@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
@@ -51,7 +51,7 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
     muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::ui::IUiEngine> uiEngine = { this };
     muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };

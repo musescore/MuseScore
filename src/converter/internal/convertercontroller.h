@@ -29,7 +29,7 @@
 #include "notation/notationtypes.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "extensions/iextensionsprovider.h"
 
 #include "types/retval.h"
@@ -39,7 +39,7 @@ class ConverterController : public IConverterController, public muse::Contextabl
 {
     muse::GlobalInject<project::IProjectCreator> notationCreator;
     muse::GlobalInject<project::INotationWritersRegister> writers;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:

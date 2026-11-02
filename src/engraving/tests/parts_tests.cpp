@@ -24,6 +24,7 @@
 
 #include "io/fileinfo.h"
 
+#include "engraving/dom/beam.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
@@ -38,11 +39,14 @@
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stem.h"
 
 #include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/editvisibility.h"
 #include "engraving/editing/editvoice.h"
 #include "engraving/editing/transaction/transaction.h"
 
@@ -1438,6 +1442,126 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
 }
 
 //---------------------------------------------------------
+//   noteVisibilityBeams
+//   stems and beams follow each score's own note visibility (#31928)
+//---------------------------------------------------------
+
+static std::vector<Chord*> firstMeasureChords(Score* score, track_idx_t track)
+{
+    std::vector<Chord*> chords;
+    for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        if (s->element(track) && s->element(track)->isChord()) {
+            chords.push_back(toChord(s->element(track)));
+        }
+    }
+    return chords;
+}
+
+static void setNoteVisibility(Score* score, track_idx_t track, bool visible)
+{
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        for (Chord* chord : firstMeasureChords(score, track)) {
+            for (Note* note : chord->notes()) {
+                EditVisibility::undoChangeVisible(tx, note, visible);
+            }
+        }
+    });
+}
+
+static void expectBeamedChordsVisible(Score* score, track_idx_t track, bool visible)
+{
+    const std::vector<Chord*> chords = firstMeasureChords(score, track);
+    ASSERT_EQ(chords.size(), 4u);
+    for (const Chord* chord : chords) {
+        EXPECT_EQ(chord->notes().front()->visible(), visible);
+        ASSERT_TRUE(chord->stem());
+        EXPECT_EQ(chord->stem()->visible(), visible);
+        ASSERT_TRUE(chord->beam());
+        EXPECT_EQ(chord->beam()->visible(), visible);
+    }
+}
+
+TEST_F(Engraving_PartsTests, noteVisibilityBeams)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visibility-beams.mscx");
+    ASSERT_TRUE(score);
+    Score* part = TestUtils::createPart(score);
+    ASSERT_TRUE(part);
+
+    // hide the notes in the score, then show them in the part
+    setNoteVisibility(score, 0, false);
+    setNoteVisibility(part, 0, true);
+    expectBeamedChordsVisible(score, 0, false);
+    expectBeamedChordsVisible(part, 0, true);
+
+    // hiding them in the score again leaves the part's stems and beams visible
+    setNoteVisibility(score, 0, false);
+    expectBeamedChordsVisible(score, 0, false);
+    expectBeamedChordsVisible(part, 0, true);
+
+    delete score;
+}
+
+TEST_F(Engraving_PartsTests, noteVisibilityBeamsTwoParts)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visibility-beams.mscx");
+    ASSERT_TRUE(score);
+    Score* part1 = TestUtils::createPart(score);
+    Score* part2 = TestUtils::createPart(score);
+    ASSERT_TRUE(part1 && part2);
+
+    // showing the notes in one part leaves the other part alone
+    setNoteVisibility(score, 0, false);
+    setNoteVisibility(part1, 0, true);
+    expectBeamedChordsVisible(score, 0, false);
+    expectBeamedChordsVisible(part1, 0, true);
+    expectBeamedChordsVisible(part2, 0, false);
+
+    // and so does hiding them again
+    setNoteVisibility(part2, 0, true);
+    setNoteVisibility(part1, 0, false);
+    expectBeamedChordsVisible(score, 0, false);
+    expectBeamedChordsVisible(part1, 0, false);
+    expectBeamedChordsVisible(part2, 0, true);
+
+    delete score;
+}
+
+TEST_F(Engraving_PartsTests, noteVisibilityBeamsVoiceParts)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visibility-beams.mscx");
+    ASSERT_TRUE(score);
+    Score* voice1Part = TestUtils::createPart(score);
+    Score* voice2Part = TestUtils::createPart(score);
+    ASSERT_TRUE(voice1Part && voice2Part);
+
+    // one part per voice
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    score->excerpts().at(0)->setVoiceVisible(voice1Part->staff(0), 1, false);
+    score->excerpts().at(1)->setVoiceVisible(voice2Part->staff(0), 0, false);
+    score->endCmd();
+    voice1Part->doLayout();
+    voice2Part->doLayout();
+    ASSERT_TRUE(firstMeasureChords(voice1Part, 1).empty());
+    ASSERT_EQ(firstMeasureChords(voice2Part, 0).at(0)->notes().front()->pitch(), 67);
+
+    // hide voice 2 in the score, then show it in its own part
+    setNoteVisibility(score, 1, false);
+    setNoteVisibility(voice2Part, 0, true);
+    expectBeamedChordsVisible(score, 0, true);
+    expectBeamedChordsVisible(score, 1, false);
+    expectBeamedChordsVisible(voice1Part, 0, true);
+    expectBeamedChordsVisible(voice2Part, 0, true);
+
+    // hide voice 2 in the score again
+    setNoteVisibility(score, 1, false);
+    expectBeamedChordsVisible(score, 1, false);
+    expectBeamedChordsVisible(voice2Part, 0, true);
+
+    delete score;
+}
+
+//---------------------------------------------------------
 //   staffStyles
 //---------------------------------------------------------
 
@@ -1466,6 +1590,52 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+TEST_F(Engraving_PartsTests, deleteLinkedRestsRemovesEmptySegments)
+{
+    for (bool fromPart : { false, true }) {
+        SCOPED_TRACE(fromPart);
+        MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"delete-linked-rests.mscx");
+        ASSERT_TRUE(score);
+        Score* part = TestUtils::createPart(score);
+        ASSERT_TRUE(part);
+        auto check = [&](size_t expected) {
+            for (Score* s : { static_cast<Score*>(score), part }) {
+                size_t count = 0;
+                for (Segment* segment = s->firstMeasure()->first(SegmentType::ChordRest); segment;
+                     segment = segment->next(SegmentType::ChordRest)) {
+                    EXPECT_FALSE(segment->empty());
+                    EngravingItem* item = segment->element(0);
+                    EXPECT_TRUE(item && item->isRest());
+                    if (item && item->isRest()) {
+                        EXPECT_EQ(toRest(item)->ticks(), expected == 1 ? Fraction(1, 1) : Fraction(1, 4));
+                    }
+                    ++count;
+                }
+                EXPECT_EQ(count, expected);
+            }
+        };
+        check(4);
+        Score* owner = fromPart ? part : score;
+        score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+        owner->select(owner->firstMeasure(), SelectType::SINGLE, 0);
+        owner->cmdDeleteSelection();
+        score->endCmd();
+        check(1);
+        score->undoRedo(true, nullptr);
+        check(4);
+        score->undoRedo(false, nullptr);
+        check(1);
+        ASSERT_TRUE(ScoreRW::saveScore(score, u"delete-linked-rests-test.mscx"));
+        delete score;
+        score = ScoreRW::readScore(u"delete-linked-rests-test.mscx", true);
+        ASSERT_TRUE(score);
+        ASSERT_EQ(score->excerpts().size(), 1u);
+        part = score->excerpts().front()->excerptScore();
+        check(1);
+        delete score;
+    }
+}
 
 TEST_F(Engraving_PartsTests, crossMeasureUpwardGlissExcerpt)
 {

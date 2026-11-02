@@ -31,6 +31,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
+#include "notation/utilities/offsetutilities.h"
+
 #include "ui/view/widgetstatestore.h"
 
 #include "log.h"
@@ -216,7 +218,7 @@ void EditStaffType::enablePresets()
     fretFontSize->setValue(staffType.fretFontSize());
     // Displayed: positive = up, negative = down
     // Internal:  negative = up, positive = down
-    fretY->setValue(-staffType.fretFontUserY());
+    fretY->setValue(OffsetUtils::flipSign(staffType.fretFontUserY()));
 }
 
 void EditStaffType::enableTextStyles()
@@ -357,7 +359,7 @@ void EditStaffType::setValues()
         durFontSize->setValue(staffType.durationFontSize());
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        durY->setValue(-staffType.durationFontUserY());
+        durY->setValue(OffsetUtils::flipSign(staffType.durationFontUserY()));
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
         // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
@@ -437,7 +439,7 @@ void EditStaffType::durFontNameChanged(int idx)
         durFontSize->setValue(size);
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        durY->setValue(-yOff);
+        durY->setValue(OffsetUtils::flipSign(yOff));
     }
     updatePreview();
 }
@@ -449,7 +451,7 @@ void EditStaffType::fretFontNameChanged(int idx)
         fretFontSize->setValue(size);
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        fretY->setValue(-yOff);
+        fretY->setValue(OffsetUtils::flipSign(yOff));
     }
     updatePreview();
 }
@@ -539,7 +541,7 @@ void EditStaffType::setFromDlg()
         staffType.setDurationFontSize(durFontSize->value());
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        staffType.setDurationFontUserY(-durY->value());
+        staffType.setDurationFontUserY(OffsetUtils::flipSign(durY->value()));
         staffType.setFretUseTextStyle(textStyleRadioButton->isChecked());
         if (staffType.fretUseTextStyle()) {
             staffType.setFretTextStyle(getTextStyle(textStyleComboBox->currentText()));
@@ -548,7 +550,7 @@ void EditStaffType::setFromDlg()
             staffType.setFretFontSize(fretFontSize->value());
             // Displayed: positive = up, negative = down
             // Internal:  negative = up, positive = down
-            staffType.setFretFontUserY(-fretY->value());
+            staffType.setFretFontUserY(OffsetUtils::flipSign(fretY->value()));
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE

@@ -29,7 +29,7 @@
 #include <QPointF>
 #include <QQuickItem>
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuicontextconfiguration.h"
@@ -51,7 +51,7 @@ struct ScoreChanges;
 namespace mu::notation {
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IUiContextConfiguration> uiContextConfiguration = { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<INotationConfiguration> notationConfiguration;

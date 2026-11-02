@@ -58,6 +58,11 @@ bool NotationSelection::isNone() const
     return score()->selection().isNone();
 }
 
+bool NotationSelection::isSingle() const
+{
+    return score()->selection().isSingle();
+}
+
 bool NotationSelection::isRange() const
 {
     return score()->selection().isRange();
@@ -165,6 +170,11 @@ MeasureBase* NotationSelection::startMeasureBase() const
 MeasureBase* NotationSelection::endMeasureBase() const
 {
     return score()->selection().endMeasureBase();
+}
+
+std::vector<MeasureBase*> NotationSelection::measureBasesInSelection() const
+{
+    return score()->selection().measureBasesInSelection();
 }
 
 std::vector<System*> NotationSelection::selectedSystems() const
@@ -317,7 +327,7 @@ void NotationSelection::addToSelection(SelectionTarget target)
         addToSelection(MoveDirection::Down, MoveSelectionType::Track);
         break;
     default:
-        NOT_SUPPORTED << "SelectionTarget: " << str_conv(target);
+        NOT_SUPPORTED << "SelectionTarget: " << (int)target;
         break;
     }
 }
@@ -336,13 +346,17 @@ void NotationSelection::select(const std::vector<EngravingItem*>& elements, Sele
     const staff_idx_t oldStartStaff = selection.staffStart();
     const staff_idx_t oldEndStaff = selection.staffEnd();
 
+    const Box* oldStartBox = selection.startBox();
+    const Box* oldEndBox = selection.endBox();
+
     doSelect(elements, type, staffIndex);
 
     bool rangeChanged = false;
     if (selection.isRange()) {
         const bool ticksChanged = oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd();
         const bool stavesChanged = oldStartStaff != selection.staffStart() || oldEndStaff != selection.staffEnd();
-        rangeChanged = ticksChanged || stavesChanged;
+        const bool boxesChanged = oldStartBox != selection.startBox() || oldEndBox != selection.endBox();
+        rangeChanged = ticksChanged || stavesChanged || boxesChanged;
     }
 
     if (rangeChanged || oldSelectionState != selection.state() || oldSelectedElements != selection.elements()) {

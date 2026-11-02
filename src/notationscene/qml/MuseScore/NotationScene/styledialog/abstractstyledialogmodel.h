@@ -36,7 +36,7 @@
 #include "styleitem.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::notation {
 class AbstractStyleDialogModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -46,7 +46,7 @@ class AbstractStyleDialogModel : public QObject, public muse::Contextable, publi
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
 protected:
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
     StyleItem* styleItem(StyleId id) const;

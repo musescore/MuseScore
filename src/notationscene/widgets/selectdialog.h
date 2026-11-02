@@ -26,7 +26,7 @@
 #include "ui_selectdialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "notation/notationtypes.h"
 
@@ -44,7 +44,7 @@ class SelectDialog : public muse::ui::WidgetDialog, private Ui::SelectDialog
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     SelectDialog(QWidget* parent = nullptr);

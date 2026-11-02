@@ -29,7 +29,7 @@
 #include "uicomponents/qml/Muse/UiComponents/widgetview.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "async/asyncable.h"
 
 namespace mu::notation {
@@ -38,7 +38,7 @@ class TimelineView : public muse::uicomponents::WidgetView, public muse::Context
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit TimelineView(QQuickItem* parent = nullptr);

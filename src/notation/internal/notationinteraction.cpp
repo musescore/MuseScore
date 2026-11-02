@@ -33,6 +33,7 @@
 #include <QEventLoop>
 #include <QGuiApplication>
 #include <QKeyEvent>
+#include <QKeySequence>
 #include <QMimeData>
 #include <QPainter>
 #include <QRectF>
@@ -119,6 +120,7 @@
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
+#include "engraving/editing/edittuplet.h"
 #include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editposition.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -3194,6 +3196,9 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
         if (dropAccepted) {
             setAnchorLines({ LineF(pos, mbRect.topLeft()) });
             setDropRects(dropHighlightRects(dropElem, mb, mbRect, edd.ed.modifiers));
+        } else {
+            score()->addRefresh(mb->canvasBoundingRect());
+            setDropTarget(nullptr);
         }
 
         return dropAccepted;
@@ -4728,6 +4733,11 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
 
 void NotationInteraction::editElement(QKeyEvent* event)
 {
+#if 0
+    static int index = 0;
+    LOGDA() << "[" << ++index << "] " << QKeySequence(event->keyCombination()).toString();
+#endif
+
     if (!m_editData.element) {
         return;
     }
@@ -5695,19 +5705,10 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Add tuplet"));
-
-    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (!chordRest->isGrace() && !(chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
-            Fraction ratio = options.ratio;
-            if (options.autoBaseLen) {
-                ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), chordRest->ticks()));
-            }
-            score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
-        }
-    }
-
-    apply();
+    transaction(TranslatableString("undoableAction", "Add tuplet"), [&](mu::engraving::Transaction& tx) {
+        EditTuplet::addTuplets(tx, score(), options.ratio, options.numberType, options.bracketType, options.autoBaseLen);
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)

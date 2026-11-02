@@ -52,7 +52,7 @@ void RecentFilesController::init()
             if (!m_isSaving) {
                 m_dirty = true;
 
-                m_recentFilesListChanged.notify();
+                m_recentFilesListChanged.send(RecentFilesReset {});
             }
         }
     });
@@ -71,7 +71,7 @@ const RecentFilesList& RecentFilesController::recentFilesList() const
     return m_recentFilesList;
 }
 
-Notification RecentFilesController::recentFilesListChanged() const
+Channel<RecentFilesChange> RecentFilesController::recentFilesListChanged() const
 {
     return m_recentFilesListChanged;
 }
@@ -88,13 +88,25 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
     newList.reserve(m_recentFilesList.size() + 1);
     newList.push_back(newFile);
 
+    bool nonexistentRemoved = false;
+
     for (const RecentFile& file : m_recentFilesList) {
-        if (file.path != newFile.path && fileSystem()->exists(file.path)) {
+        if (file.path == newFile.path) {
+            continue;
+        }
+
+        if (fileSystem()->exists(file.path)) {
             newList.push_back(file);
+        } else {
+            nonexistentRemoved = true;
         }
     }
 
-    setRecentFilesList(newList, true);
+    if (nonexistentRemoved) {
+        setRecentFilesListAndNotify(newList, RecentFilesReset {});
+    } else {
+        setRecentFilesListAndNotify(newList, RecentFilePrepended { newFile });
+    }
 
     prependPlatformRecentFile(newFile.path);
 }
@@ -115,7 +127,7 @@ void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const
     }
 
     if (moved) {
-        setRecentFilesList(newList, true);
+        setRecentFilesListAndNotify(newList, RecentFilePathChanged { before, after });
     }
 }
 
@@ -142,13 +154,13 @@ void RecentFilesController::removeRecentFile(const muse::io::path_t& path)
     }
 
     if (removed) {
-        setRecentFilesList(newList, true);
+        setRecentFilesListAndNotify(newList, RecentFileRemoved { path });
     }
 }
 
 void RecentFilesController::clearRecentFiles()
 {
-    setRecentFilesList({}, true);
+    setRecentFilesListAndNotify({}, RecentFilesReset {});
 
     clearPlatformRecentFiles();
 }
@@ -162,7 +174,7 @@ void RecentFilesController::loadRecentFilesList()
     RecentFilesList newList;
 
     DEFER {
-        setRecentFilesList(newList, false);
+        setRecentFilesList(newList);
     };
 
     RetVal<ByteArray> data;
@@ -224,31 +236,38 @@ void RecentFilesController::removeNonexistentFiles()
     }
 
     if (removed) {
-        setRecentFilesList(newList, false);
+        setRecentFilesList(newList);
 
         async::Async::call(nullptr, [this, newList]() {
             saveRecentFilesList();
 
-            m_recentFilesListChanged.notify();
+            m_recentFilesListChanged.send(RecentFilesReset {});
         });
     }
 }
 
-void RecentFilesController::setRecentFilesList(const RecentFilesList& list, bool saveAndNotify)
+bool RecentFilesController::setRecentFilesList(const RecentFilesList& list)
 {
     if (m_recentFilesList == list) {
-        return;
+        return false;
     }
 
     m_recentFilesList = list;
 
     cleanUpThumbnailCache(list);
 
-    if (saveAndNotify) {
-        saveRecentFilesList();
+    return true;
+}
 
-        m_recentFilesListChanged.notify();
+void RecentFilesController::setRecentFilesListAndNotify(const RecentFilesList& list, const RecentFilesChange& change)
+{
+    if (!setRecentFilesList(list)) {
+        return;
     }
+
+    saveRecentFilesList();
+
+    m_recentFilesListChanged.send(change);
 }
 
 void RecentFilesController::saveRecentFilesList()

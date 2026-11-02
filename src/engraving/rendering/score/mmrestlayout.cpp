@@ -201,12 +201,16 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
     Segment* chordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         track_idx_t track = staffIdx * VOICES;
-        if (chordRestSeg->element(track) == 0) {
+        EngravingItem* existing = chordRestSeg->element(track);
+        if (!existing) {
             MMRest* mmr = Factory::createMMRest(chordRestSeg);
             mmr->setDurationType(DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
             ctx.mutDom().doUndoAddElement(mmr);
+        } else if (existing->isMMRest()) {
+            // a reused mmrMeasure may have changed length, so keep its MM rests in sync
+            toMMRest(existing)->setTicks(mmrMeasure->ticks());
         }
     }
 

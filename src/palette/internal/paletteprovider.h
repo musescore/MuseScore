@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "ipaletteconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "ipaletteprovider.h"
 #include "palettemodel.h"
@@ -142,7 +142,7 @@ class UserPaletteController : public AbstractPaletteController, public muse::asy
     Q_OBJECT
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
     QAbstractItemModel* _model;

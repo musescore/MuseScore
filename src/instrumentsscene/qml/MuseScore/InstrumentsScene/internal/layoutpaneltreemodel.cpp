@@ -86,7 +86,7 @@ void LayoutPanelTreeModel::init()
     });
 
     onMasterNotationChanged();
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->masterNotationChanged().onNotify(this, [this]() {
         onMasterNotationChanged();
     });
 
@@ -102,7 +102,7 @@ void LayoutPanelTreeModel::init()
 
 void LayoutPanelTreeModel::onMasterNotationChanged()
 {
-    m_masterNotation = context()->currentMasterNotation();
+    m_masterNotation = context()->masterNotation();
 }
 
 void LayoutPanelTreeModel::onNotationChanged()

@@ -23,7 +23,7 @@
 #pragma once
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
@@ -37,7 +37,7 @@ class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:

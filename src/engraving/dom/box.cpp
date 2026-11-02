@@ -592,6 +592,28 @@ VBox::VBox(Score* parent)
 {
 }
 
+void VBox::add(EngravingItem* e)
+{
+    IF_ASSERT_FAILED(e) {
+        return;
+    }
+    if (e->isLayoutBreak()) {
+        const LayoutBreakType type = toLayoutBreak(e)->layoutBreakType();
+        if (type == LayoutBreakType::LINE) {
+            LOGW("Cannot add %s", e->typeName());
+            return;
+        }
+    }
+    if (e->isActionIcon()) {
+        const ActionIconType type = toActionIcon(e)->actionType();
+        if (type == ActionIconType::SYSTEM_LOCK) {
+            LOGW("Cannot add %s", e->typeName());
+            return;
+        }
+    }
+    Box::add(e);
+}
+
 double VBox::minHeight() const
 {
     return absoluteFromSpatium(10_sp);
@@ -659,6 +681,27 @@ void VBox::startDragGrip(EditData& ed)
         setBoxHeight(Spatium(height() / sp));
     }
     Box::startDragGrip(ed);
+}
+
+bool VBox::acceptDrop(EditData& data) const
+{
+    const EngravingItem* e = data.dropElement;
+    IF_ASSERT_FAILED(e) {
+        return false;
+    }
+    if (e->isLayoutBreak()) {
+        const LayoutBreakType type = toLayoutBreak(e)->layoutBreakType();
+        if (type == LayoutBreakType::LINE) {
+            return false;
+        }
+    }
+    if (e->isActionIcon()) {
+        const ActionIconType type = toActionIcon(e)->actionType();
+        if (type == ActionIconType::SYSTEM_LOCK) {
+            return false;
+        }
+    }
+    return Box::acceptDrop(data);
 }
 
 //---------------------------------------------------------

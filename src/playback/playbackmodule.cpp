@@ -88,6 +88,7 @@ void PlaybackContext::registerExports()
 
     ioc()->registerExport<IPlaybackCommandsController>(mname, m_commandsController);
     ioc()->registerExport<IPlaybackController>(mname, m_playbackController);
+    ioc()->registerExport<IPlaybackState>(mname, m_playbackController);
     ioc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
 }
 

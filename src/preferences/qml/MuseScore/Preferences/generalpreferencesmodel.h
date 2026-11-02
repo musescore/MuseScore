@@ -34,8 +34,9 @@
 #include "interactive/iinteractive.h"
 #include "languages/ilanguagesconfiguration.h"
 #include "languages/ilanguagesservice.h"
-#include "shortcuts/ishortcutsconfiguration.h"
 #include "update/iupdateconfiguration.h"
+
+#include "shortcuts_v2/ishortcutsconfiguration.h"
 
 namespace mu::preferences {
 class GeneralPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable

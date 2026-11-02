@@ -24,8 +24,6 @@
 #include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
-#include "context/shortcutcontext.h"
-
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
@@ -145,7 +143,7 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
             { ToolConfig::____________, true },
             { CROSS_STAFF_BEAMING_SUBITEMS, true }, // service
             { TUPLET_SUBITEMS, true },              // service
-            { FLIP_COMMAND, true },
+            { FlipCommand::id, true },
             { ToolConfig::____________, true },
             { USE_VOICE_1_COMMAND, true },
             { USE_VOICE_2_COMMAND, true },

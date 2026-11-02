@@ -41,7 +41,7 @@ CorruptScoreDevToolsModel::CorruptScoreDevToolsModel(QObject* parent)
 
 void CorruptScoreDevToolsModel::corruptOpenScore()
 {
-    project::INotationProjectPtr project = globalContext()->currentProject();
+    project::INotationProjectPtr project = projectSession()->project();
     if (!project) {
         return;
     }

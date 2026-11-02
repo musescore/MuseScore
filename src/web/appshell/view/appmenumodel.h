@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "context/iprojectsession.h"
 #include "global/iglobalconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "ui/imainwindow.h"
@@ -47,7 +47,7 @@ public:
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::context::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };

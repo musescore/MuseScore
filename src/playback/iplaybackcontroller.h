@@ -43,7 +43,24 @@ class Segment;
 }
 
 namespace mu::playback {
-class IPlaybackController : MODULE_CONTEXT_INTERFACE
+//! NOTE We need to get the current state: playing position, status
+//! But direct manage (play, seek..) is bad idea, need send commands (to playback controller)
+//! So, this interface limits the playback controller interface so that it cannot be misused.
+class IPlaybackState : MODULE_CONTEXT_INTERFACE
+{
+    INTERFACE_ID(IPlaybackState)
+
+public:
+    virtual ~IPlaybackState() = default;
+
+    virtual bool isPlaying() const = 0;
+    virtual muse::async::Channel<bool> isPlayingChanged() const = 0;
+
+    virtual muse::audio::secs_t playbackPosition() const = 0;
+    virtual muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const = 0;
+};
+
+class IPlaybackController : public IPlaybackState
 {
     INTERFACE_ID(IPlaybackController)
 
@@ -55,9 +72,6 @@ public:
 
     virtual bool isPlayAllowed() const = 0;
     virtual muse::async::Channel<bool> isPlayAllowedChanged() const = 0;
-
-    virtual bool isPlaying() const = 0;
-    virtual muse::async::Channel<bool> isPlayingChanged() const = 0;
 
     virtual muse::Ret togglePlay() = 0;
     virtual muse::Ret play(bool showErrors = true) = 0;

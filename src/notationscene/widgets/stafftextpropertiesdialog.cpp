@@ -54,7 +54,7 @@ StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 
 void StaffTextPropertiesDialog::componentComplete()
 {
-    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = projectSession()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
     StaffTextBase* st = element && element->isStaffTextBase() ? toStaffTextBase(element) : nullptr;
@@ -164,6 +164,6 @@ void StaffTextPropertiesDialog::saveValues()
 
 INotationUndoStackPtr StaffTextPropertiesDialog::undoStack() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
 }

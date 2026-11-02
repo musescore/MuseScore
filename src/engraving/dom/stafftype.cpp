@@ -387,8 +387,21 @@ void StaffType::setFretPreset(const String& name)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
+void StaffType::setScore(Score* score)
+{
+    m_score = score;
+    if (m_score && m_group == StaffGroup::TAB) {
+        setDurationMetrics();
+        setFretMetrics();
+    }
+}
+
 void StaffType::setDurationMetrics()
 {
+    if (!m_score) {
+        return;
+    }
+
 // FontMetrics returns results unreliably rounded to integral pixels;
 // use a scaled up font and then scale computed values down
     Font font(durationFont());
@@ -411,6 +424,10 @@ void StaffType::setDurationMetrics()
 
 void StaffType::setFretMetrics()
 {
+    if (!m_score) {
+        return;
+    }
+
     FontMetrics fm(fretFont());
     RectF bb;
     // compute vertical displacement

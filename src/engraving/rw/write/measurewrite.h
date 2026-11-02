@@ -21,11 +21,14 @@
  */
 #pragma once
 
+#include <vector>
+
 #include "../xmlwriter.h"
 #include "writecontext.h"
 
 namespace mu::engraving {
 class Measure;
+class Segment;
 }
 
 namespace mu::engraving::write {
@@ -35,5 +38,8 @@ public:
 
     static void writeMeasure(const Measure* measure, XmlWriter& xml, WriteContext& ctx, staff_idx_t staff, bool writeSystemElements,
                              bool forceTimeSig);
+
+private:
+    static std::vector<Segment*> segmentsToWrite(const Measure* measure);
 };
 }

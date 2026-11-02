@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "rcommand/icommandsregister.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "ui/iuistate.h"
 #include "notationscene/inotationcommandscontroller.h"
 
@@ -44,7 +44,7 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public Q
 
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<muse::ui::IUiState> uiState = { this };
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
 
 public:

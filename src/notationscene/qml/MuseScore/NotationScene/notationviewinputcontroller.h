@@ -29,7 +29,7 @@
 
 #include "async/asyncable.h"
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
@@ -106,7 +106,7 @@ public:
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
 
@@ -223,7 +223,7 @@ private:
     bool mousePress_considerDragOutgoingRange(const ClickContext& ctx);
     bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
-    void handleRightClick(const ClickContext& ctx);
+    void handleRightClick();
     void handleLeftClickRelease(const QPointF& releasePoint);
 
     bool startTextEditingAllowed() const;

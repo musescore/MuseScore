@@ -39,11 +39,13 @@
 
 #include "../appshellcommands.h"
 #include "project/projectcommands.h"
+#include "playback/playbackcommands.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace mu::appshell;
+using namespace mu::playback;
 
 static const std::map<rcommand::Command, DockName> s_dockToggleCommands = {
     { DOCK_TOGGLE_PLAYBACK_COMMAND, PLAYBACK_TOOLBAR_NAME },
@@ -172,7 +174,7 @@ AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(co
             return DragTarget::Extension;
         } else {
             bool scorePageWithProjectOpen = interactive()->currentUri().val == NOTATION_URI
-                                            && globalContext()->currentProject() != nullptr;
+                                            && projectSession()->project() != nullptr;
             if (!scorePageWithProjectOpen && convertFileToScoreScenario()->isFileSupported(filePath)) {
                 return DragTarget::ConvertibleFile;
             }
@@ -396,21 +398,14 @@ void AppshellCommandsController::openAccessibilityStatementPage()
 
 void AppshellCommandsController::openPreferencesDialog()
 {
-    const context::IPlaybackStatePtr state = globalContext()->playbackState();
-    if (state->isPlaying()) {
-        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
-
-        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
-        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
-            auto statusChangedMut = statusChanged;
-            statusChangedMut.disconnect(this);
+    if (!playbackState()->isPlaying()) {
+        doOpenPreferencesDialog();
+    } else {
+        commandDispatcher()->dispatch(STOP_COMMAND)
+        .onResolve(this, [this](const muse::rcommand::Response& ) {
             doOpenPreferencesDialog();
         });
-
-        return;
     }
-
-    doOpenPreferencesDialog();
 }
 
 void AppshellCommandsController::doOpenPreferencesDialog()
