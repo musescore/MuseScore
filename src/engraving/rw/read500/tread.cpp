@@ -4215,7 +4215,7 @@ bool TRead::readProperties(InstrumentLabel& item, XmlReader& xml)
     } else if (tag == "showNumberLong") {
         item.setShowNumberLong(xml.readBool());
     } else if (tag == "showNumberShort") {
-        item.setShowNumberLong(xml.readBool());
+        item.setShowNumberShort(xml.readBool());
     } else if (tag == "useCustomName") {
         item.setUseCustomName(xml.readBool());
     } else if (tag == "customNameLong") {
