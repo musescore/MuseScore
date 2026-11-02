@@ -2461,9 +2461,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         return;
     }
 
-    bool isSmallTie = (tieLength < 2.0 * spatium
-                       || (tieSegment->tie()->isLaissezVib() && muse::RealIsEqual(tieLength, 2.0 * spatium)))
-                      && tieHeight < 0.7 * spatium;
+    bool isSmallTie = tieLength < 2.0 * spatium && tieHeight < 0.7 * spatium;
     // For ties this small, try to fit them within a staff space before changing their arc
     if (isSmallTie) {
         Tie* tie2 = tieSegment->tie();
@@ -2508,7 +2506,10 @@ bool SlurTieLayout::hasEndPointAboveNote(TieSegment* tieSegment)
     Note* startNote = tieSegment->tie()->startNote();
     Note* endNote = tieSegment->tie()->endNote();
 
-    // Check whether moving this tie vertically towards its noteheads could cause a collision. We check each endpoint independently: the first check tests whether the start point lies before the start notehead's right edge; the second tests whether the end point lies after the end notehead's left edge. Note that while l.v. ties have no end note, their start point still needs to be checked.
+    // Check whether moving this tie vertically towards its noteheads could cause a collision.
+    // We check each endpoint independently: the first check tests whether the start point lies before the start notehead's right edge;
+    // the second tests whether the end point lies after the end notehead's left edge.
+    // Note that while l.v. ties have no end note, their start point still needs to be checked.
     if (tieSegment->isSingleBeginType() && startNote && !startNote->shouldHideFret()) {
         Chord* startChord = startNote->chord();
         PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
