@@ -143,6 +143,7 @@ public:
     Measure* findMeasure() const;
     MeasureBase* startMeasureBase() const;
     MeasureBase* endMeasureBase() const;
+    std::vector<MeasureBase*> measureBasesInSelection() const;
     std::vector<System*> selectedSystems() const;
     std::vector<Page*> pagesContainingSelection() const;
     void update();
