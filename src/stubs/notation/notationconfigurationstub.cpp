@@ -277,16 +277,16 @@ QList<int> NotationConfigurationStub::possibleZoomPercentageList() const
     return QList<int>();
 }
 
-engraving::AutomationType NotationConfigurationStub::currentAutomationType() const
+AutomationLane NotationConfigurationStub::currentAutomationLane() const
 {
-    return engraving::AutomationType::Dynamics;
+    return AutomationLane::Dynamics;
 }
 
-void NotationConfigurationStub::setCurrentAutomationType(engraving::AutomationType)
+void NotationConfigurationStub::setCurrentAutomationLane(AutomationLane)
 {
 }
 
-muse::async::Notification NotationConfigurationStub::currentAutomationTypeChanged() const
+muse::async::Notification NotationConfigurationStub::currentAutomationLaneChanged() const
 {
     static muse::async::Notification n;
     return n;

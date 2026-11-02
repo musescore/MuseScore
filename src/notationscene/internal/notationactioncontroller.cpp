@@ -2843,18 +2843,12 @@ void NotationActionController::toggleAutomation()
 
 muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::Params& params)
 {
-    const std::string type = params.at("type").toString();
-    mu::engraving::AutomationType automationType = mu::engraving::AutomationType::Dynamics;
-
-    if (type == "tempo") {
-        automationType = mu::engraving::AutomationType::Tempo;
-    } else if (type == "volume") {
-        automationType = mu::engraving::AutomationType::Volume;
-    } else if (type == "pan") {
-        automationType = mu::engraving::AutomationType::Pan;
+    const std::optional<AutomationLane> lane = automationLaneFromString(params.at("type").toString());
+    if (!lane) {
+        return muse::make_ret(Ret::Code::BadArgs);
     }
 
-    configuration()->setCurrentAutomationType(automationType);
+    configuration()->setCurrentAutomationLane(*lane);
 
     return muse::make_ok();
 }

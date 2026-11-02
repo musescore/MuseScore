@@ -367,6 +367,35 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
+ControlParams PlaybackController::currentTrackControlParams(const InstrumentTrackId& trackId) const
+{
+    IF_ASSERT_FAILED(audioSettings()) {
+        return {};
+    }
+
+    const AudioOutputParams& outParams = audioSettings()->trackOutputParams(trackId);
+    ControlParams control = outParams.control();
+    control.muted = resolveTrackMuted(trackId, outParams.muted);
+
+    const auto it = m_automationEnvelopesCache.find(trackId);
+    if (it != m_automationEnvelopesCache.end()) {
+        applyEnvelopes(it->second, control);
+    }
+
+    return control;
+}
+
+ControlParams PlaybackController::currentMasterControlParams() const
+{
+    IF_ASSERT_FAILED(audioSettings()) {
+        return {};
+    }
+
+    ControlParams control = audioSettings()->masterAudioOutputParams().control();
+    applyEnvelopes(m_masterAutomationEnvelopes, control);
+    return control;
+}
+
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, const PlayParams& params, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
@@ -1144,6 +1173,7 @@ void PlaybackController::resetPlayback()
     m_instrumentTrackIdMap.clear();
     m_auxTrackIdMap.clear();
     m_automationEnvelopesCache.clear();
+    m_masterAutomationEnvelopes = {};
 
     m_isRangeSelection = false;
 
@@ -1385,22 +1415,30 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
 
 AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId& instrumentTrackId) const
 {
-    IF_ASSERT_FAILED(audioSettings() && notationConfiguration() && notationPlayback()) {
+    IF_ASSERT_FAILED(audioSettings()) {
         return {};
     }
 
     AudioOutputParams result = audioSettings()->trackOutputParams(instrumentTrackId);
+    result.muted = resolveTrackMuted(instrumentTrackId, result.muted);
+    return result;
+}
+
+bool PlaybackController::resolveTrackMuted(const InstrumentTrackId& instrumentTrackId, bool savedMuted) const
+{
+    IF_ASSERT_FAILED(notationPlayback() && notationConfiguration()) {
+        return savedMuted;
+    }
 
     if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
-        result.muted = !notationConfiguration()->isMetronomeEnabled() && !notationConfiguration()->isCountInEnabled();
-        return result;
+        return !notationConfiguration()->isMetronomeEnabled() && !notationConfiguration()->isCountInEnabled();
     }
 
     if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
-        result.muted = !notationConfiguration()->isPlayChordSymbolsEnabled();
+        return !notationConfiguration()->isPlayChordSymbolsEnabled();
     }
 
-    return result;
+    return savedMuted;
 }
 
 ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& instrumentTrackId,
@@ -1425,25 +1463,12 @@ ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& in
         return control;
     }
 
-    auto buildEnvelope = [this, &automationData, &instrumentTrackId](AutomationType type) -> std::optional<AutomationEnvelope> {
-        const AutomationCurve& curve = automationData->curve(AutomationCurveKey::instrument(type, instrumentTrackId));
-        if (curve.empty()) {
-            return std::nullopt;
-        }
-
-        AutomationEnvelope envelope;
-        for (const auto& [tick, point] : curve) {
-            envelope.insert({ playedTickToSecs(tick), point.value });
-        }
-        return envelope;
-    };
-
     AutomationEnvelopes& envelopes = it->second;
     if (rebuildVolume) {
-        envelopes.volume = buildEnvelope(AutomationType::Volume);
+        envelopes.volume = buildAutomationEnvelope(AutomationCurveKey::instrument(AutomationType::Volume, instrumentTrackId));
     }
     if (rebuildPan) {
-        envelopes.pan = buildEnvelope(AutomationType::Pan);
+        envelopes.pan = buildAutomationEnvelope(AutomationCurveKey::instrument(AutomationType::Pan, instrumentTrackId));
     }
 
     if (!envelopes.volume && !envelopes.pan) {
@@ -1451,57 +1476,81 @@ ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& in
         return control;
     }
 
-    if (envelopes.volume) {
-        control.volume = *envelopes.volume;
-    }
-    if (envelopes.pan) {
-        control.balance = *envelopes.pan;
-    }
-
+    applyEnvelopes(envelopes, control);
     return control;
 }
 
 void PlaybackController::onAutomationDataChanged(const AutomationChanges& changes)
 {
     if (changes.isFullReset) {
-        resendAutomatedControlParams();
-        return;
-    }
-
-    // Envelopes are in seconds, so a tempo change moves them even if the total length doesn't change
-    if (muse::contains(changes.affectedKeys, TEMPO_KEY)) {
-        resendAutomationEnvelopes();
+        resendMasterControlParams();
+        resendTrackControlParams();
         return;
     }
 
     InstrumentTrackIdSet volumeTrackIds;
     InstrumentTrackIdSet panTrackIds;
+    bool rebuildMasterVolume = false;
+    bool rebuildMasterPan = false;
+
+    // Envelopes are in seconds, so a tempo change moves them even if the total length doesn't change
+    if (muse::contains(changes.affectedKeys, TEMPO_KEY)) {
+        rebuildMasterVolume = m_masterAutomationEnvelopes.volume.has_value();
+        rebuildMasterPan = m_masterAutomationEnvelopes.pan.has_value();
+        collectEnvelopeTrackIds(volumeTrackIds, panTrackIds);
+    }
 
     for (const AutomationCurveKey& key : changes.affectedKeys) {
-        const std::optional<InstrumentTrackId> trackId = key.trackId();
-        if (!trackId) {
-            continue;
-        }
-
-        if (key.type == AutomationType::Volume) {
-            volumeTrackIds.insert(*trackId);
-        } else if (key.type == AutomationType::Pan) {
-            panTrackIds.insert(*trackId);
+        switch (key.type) {
+        case AutomationType::Volume:
+            if (key.isGlobal()) {
+                rebuildMasterVolume = true;
+            } else if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+                volumeTrackIds.insert(*trackId);
+            }
+            break;
+        case AutomationType::Pan:
+            if (key.isGlobal()) {
+                rebuildMasterPan = true;
+            } else if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+                panTrackIds.insert(*trackId);
+            }
+            break;
+        default:
+            break;
         }
     }
+
+    if (rebuildMasterVolume || rebuildMasterPan) {
+        resendMasterControlParams(rebuildMasterVolume, rebuildMasterPan);
+    }
+
+    if (!volumeTrackIds.empty() || !panTrackIds.empty()) {
+        resendTrackControlParams(volumeTrackIds, panTrackIds);
+    }
+}
+
+void PlaybackController::resendAutomationEnvelopes()
+{
+    const bool masterVolume = m_masterAutomationEnvelopes.volume.has_value();
+    const bool masterPan = m_masterAutomationEnvelopes.pan.has_value();
+    if (masterVolume || masterPan) {
+        resendMasterControlParams(masterVolume, masterPan);
+    }
+
+    InstrumentTrackIdSet volumeTrackIds;
+    InstrumentTrackIdSet panTrackIds;
+    collectEnvelopeTrackIds(volumeTrackIds, panTrackIds);
 
     if (volumeTrackIds.empty() && panTrackIds.empty()) {
         return;
     }
 
-    resendAutomatedControlParams(volumeTrackIds, panTrackIds);
+    resendTrackControlParams(volumeTrackIds, panTrackIds);
 }
 
-void PlaybackController::resendAutomationEnvelopes()
+void PlaybackController::collectEnvelopeTrackIds(InstrumentTrackIdSet& volumeTrackIds, InstrumentTrackIdSet& panTrackIds) const
 {
-    InstrumentTrackIdSet volumeTrackIds;
-    InstrumentTrackIdSet panTrackIds;
-
     for (const auto& [trackId, envelopes] : m_automationEnvelopesCache) {
         if (envelopes.volume) {
             volumeTrackIds.insert(trackId);
@@ -1510,16 +1559,10 @@ void PlaybackController::resendAutomationEnvelopes()
             panTrackIds.insert(trackId);
         }
     }
-
-    if (volumeTrackIds.empty() && panTrackIds.empty()) {
-        return;
-    }
-
-    resendAutomatedControlParams(volumeTrackIds, panTrackIds);
 }
 
-void PlaybackController::resendAutomatedControlParams(std::optional<InstrumentTrackIdSet> volumeTrackIds,
-                                                      std::optional<InstrumentTrackIdSet> panTrackIds)
+void PlaybackController::resendTrackControlParams(std::optional<InstrumentTrackIdSet> volumeTrackIds,
+                                                  std::optional<InstrumentTrackIdSet> panTrackIds)
 {
     if (!playback()) {
         return;
@@ -1535,6 +1578,53 @@ void PlaybackController::resendAutomatedControlParams(std::optional<InstrumentTr
 
         const AudioOutputParams outParams = trackOutputParams(pair.first);
         playback()->setControlParams(pair.second, trackControlParams(pair.first, outParams, rebuildVolume, rebuildPan));
+    }
+}
+
+void PlaybackController::resendMasterControlParams(bool rebuildVolume, bool rebuildPan)
+{
+    if (!playback() || !audioSettings()) {
+        return;
+    }
+
+    if (rebuildVolume) {
+        m_masterAutomationEnvelopes.volume = buildAutomationEnvelope(AutomationCurveKey::global(AutomationType::Volume));
+    }
+    if (rebuildPan) {
+        m_masterAutomationEnvelopes.pan = buildAutomationEnvelope(AutomationCurveKey::global(AutomationType::Pan));
+    }
+
+    playback()->setMasterControlParams(currentMasterControlParams());
+}
+
+std::optional<AutomationEnvelope> PlaybackController::buildAutomationEnvelope(const AutomationCurveKey& key) const
+{
+    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
+    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
+    if (!automationData) {
+        return std::nullopt;
+    }
+
+    const AutomationCurve& curve = automationData->curve(key);
+    if (curve.empty()) {
+        return std::nullopt;
+    }
+
+    AutomationEnvelope envelope;
+    for (const auto& [tick, point] : curve) {
+        envelope.insert({ playedTickToSecs(tick), point.value });
+    }
+
+    return envelope;
+}
+
+void PlaybackController::applyEnvelopes(const AutomationEnvelopes& envelopes, ControlParams& control)
+{
+    if (envelopes.volume) {
+        control.volume = *envelopes.volume;
+    }
+    if (envelopes.pan) {
+        control.balance = *envelopes.pan;
     }
 }
 
@@ -1597,7 +1687,7 @@ void PlaybackController::setupPlayback()
     const AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->setMasterFxChainParams(masterOutputParams.fxChain);
     playback()->setMasterAuxSendsParams(masterOutputParams.auxSends);
-    playback()->setMasterControlParams(masterOutputParams.control());
+    resendMasterControlParams();
 
     subscribeOnAudioParamsChanges();
     setupTracks();
