@@ -735,7 +735,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {
-        handleRightClick(ctx);
+        handleRightClick();
     }
 }
 
@@ -979,16 +979,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     }
 }
 
-void NotationViewInputController::handleRightClick(const ClickContext& ctx)
+void NotationViewInputController::handleRightClick()
 {
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    UNUSED(ctx);
     // See also AbstractNotationPaintView::event for context menu event handling
-#else
-    m_view->showContextMenu(selectionType(), ctx.event->pos());
-#endif
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const
