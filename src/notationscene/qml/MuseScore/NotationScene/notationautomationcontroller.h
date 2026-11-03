@@ -49,6 +49,8 @@ struct ScoreChanges;
 }
 
 namespace mu::notation {
+struct DynamicsDisplayRange;
+
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
@@ -160,6 +162,12 @@ private:
     void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
 
     const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
+
+    const DynamicsDisplayRange& dynamicsDisplayRange(const mu::engraving::Staff* staff, int tick) const;
+    double automationValueToDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
+                                    muse::real_t value) const;
+    muse::real_t automationValueFromDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
+                                            double displayValue, std::optional<muse::real_t> existingValue = std::nullopt) const;
 
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
