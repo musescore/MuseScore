@@ -38,8 +38,8 @@
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
       <Staff>
-        <StaffType group="pitched">
-          <name>stdJianpu</name>
+        <StaffType group="jianpu">
+          <name>jianpu</name>
           <lines>0</lines>
           <jianpuTextStyle>jianpu_number</jianpuTextStyle>
           </StaffType>
@@ -111,15 +111,6 @@
             </Rest>
           <Chord>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -143,13 +134,6 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <pitch>77</pitch>
               <tpc>13</tpc>

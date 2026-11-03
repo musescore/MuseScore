@@ -56,6 +56,7 @@
                   "color": "#000000",
                   "dashPattern": [],
                   "joinStyle": 64,
+                  "miterLimit": 2,
                   "style": 0,
                   "width": 1
                 }
@@ -100,124 +101,32 @@
             "state": 2
           },
           {
-            "paths": [
+            "state": 3,
+            "texts": [
               {
-                "brush": {
-                  "color": "#000000",
-                  "style": 1
-                },
-                "mode": 2,
-                "path": {
-                  "elements": [
-                    [
-                      0,
-                      412749,
-                      -204318
-                    ],
-                    [
-                      2,
-                      492258,
-                      -278102
-                    ],
-                    [
-                      3,
-                      651276,
-                      -278102
-                    ],
-                    [
-                      3,
-                      730785,
-                      -204318
-                    ],
-                    [
-                      2,
-                      651276,
-                      -252152
-                    ],
-                    [
-                      3,
-                      492258,
-                      -252152
-                    ],
-                    [
-                      3,
-                      412749,
-                      -204318
-                    ]
-                  ],
-                  "fillRule": 0
-                },
-                "pen": {
-                  "capStyle": 32,
-                  "color": "#000000",
-                  "dashPattern": [],
-                  "joinStyle": 128,
-                  "style": 1,
-                  "width": 4.133858
-                }
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "3",
+                "textFlags": 0
               }
-            ],
-            "state": 3
+            ]
           },
           {
-            "paths": [
+            "state": 4,
+            "texts": [
               {
-                "brush": {
-                  "color": "#000000",
-                  "style": 1
-                },
-                "mode": 2,
-                "path": {
-                  "elements": [
-                    [
-                      0,
-                      1048821,
-                      -229122
-                    ],
-                    [
-                      2,
-                      1168085,
-                      -316824
-                    ],
-                    [
-                      3,
-                      1406612,
-                      -316824
-                    ],
-                    [
-                      3,
-                      1525876,
-                      -229122
-                    ],
-                    [
-                      2,
-                      1406612,
-                      -290368
-                    ],
-                    [
-                      3,
-                      1168085,
-                      -290368
-                    ],
-                    [
-                      3,
-                      1048821,
-                      -229122
-                    ]
-                  ],
-                  "fillRule": 0
-                },
-                "pen": {
-                  "capStyle": 32,
-                  "color": "#000000",
-                  "dashPattern": [],
-                  "joinStyle": 128,
-                  "style": 1,
-                  "width": 4.133858
-                }
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "7",
+                "textFlags": 0
               }
-            ],
-            "state": 4
+            ]
           },
           {
             "state": 5,
@@ -228,7 +137,7 @@
                   12050,
                   55500
                 ],
-                "text": "7",
+                "text": "3",
                 "textFlags": 0
               }
             ]
@@ -253,30 +162,16 @@
               {
                 "alignment": 0,
                 "point": [
-                  12050,
+                  0,
                   55500
                 ],
-                "text": "3",
+                "text": "1=C",
                 "textFlags": 0
               }
             ]
           },
           {
             "state": 8,
-            "texts": [
-              {
-                "alignment": 0,
-                "point": [
-                  12050,
-                  55500
-                ],
-                "text": "3",
-                "textFlags": 0
-              }
-            ]
-          },
-          {
-            "state": 9,
             "texts": [
               {
                 "alignment": 0,
@@ -290,7 +185,7 @@
             ]
           },
           {
-            "state": 10,
+            "state": 9,
             "texts": [
               {
                 "alignment": 0,
@@ -299,6 +194,20 @@
                   40852
                 ],
                 "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 10,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  55500
+                ],
+                "text": "0",
                 "textFlags": 0
               }
             ]
@@ -318,38 +227,24 @@
             ]
           },
           {
-            "state": 12,
-            "texts": [
-              {
-                "alignment": 0,
-                "point": [
-                  0,
-                  55500
-                ],
-                "text": "0",
-                "textFlags": 0
-              }
-            ]
-          },
-          {
             "polygons": [
               {
                 "mode": 0,
                 "polygon": [
                   [
-                    359003,
+                    708260,
                     34830
                   ],
                   [
-                    1102568,
+                    1381089,
                     34830
                   ],
                   [
-                    1102568,
+                    1381089,
                     43098
                   ],
                   [
-                    359003,
+                    708260,
                     43098
                   ]
                 ]
@@ -358,25 +253,25 @@
                 "mode": 0,
                 "polygon": [
                   [
-                    359003,
+                    708260,
                     59633
                   ],
                   [
-                    784531,
+                    1098421,
                     59633
                   ],
                   [
-                    784531,
+                    1098421,
                     67901
                   ],
                   [
-                    359003,
+                    708260,
                     67901
                   ]
                 ]
               }
             ],
-            "state": 13
+            "state": 12
           },
           {
             "polygons": [
@@ -384,22 +279,113 @@
                 "mode": 0,
                 "polygon": [
                   [
-                    1472130,
+                    1697600,
                     34830
                   ],
                   [
-                    2032575,
+                    2204993,
                     34830
                   ],
                   [
-                    2032575,
+                    2204993,
                     43098
                   ],
                   [
-                    1472130,
+                    1697600,
                     43098
                   ]
                 ]
+              }
+            ],
+            "state": 13
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "miterLimit": 2,
+                  "style": 1,
+                  "width": 1
+                }
               }
             ],
             "state": 14
@@ -487,6 +473,7 @@
                   "color": "#000000",
                   "dashPattern": [],
                   "joinStyle": 64,
+                  "miterLimit": 2,
                   "style": 1,
                   "width": 1
                 }
@@ -577,6 +564,7 @@
                   "color": "#000000",
                   "dashPattern": [],
                   "joinStyle": 64,
+                  "miterLimit": 2,
                   "style": 1,
                   "width": 1
                 }
@@ -667,102 +655,13 @@
                   "color": "#000000",
                   "dashPattern": [],
                   "joinStyle": 64,
+                  "miterLimit": 2,
                   "style": 1,
                   "width": 1
                 }
               }
             ],
             "state": 17
-          },
-          {
-            "paths": [
-              {
-                "brush": {
-                  "color": "#000000",
-                  "style": 1
-                },
-                "mode": 2,
-                "path": {
-                  "elements": [
-                    [
-                      0,
-                      62013,
-                      0
-                    ],
-                    [
-                      2,
-                      62013,
-                      4566
-                    ],
-                    [
-                      3,
-                      58312,
-                      8267
-                    ],
-                    [
-                      3,
-                      53746,
-                      8267
-                    ],
-                    [
-                      2,
-                      49179,
-                      8267
-                    ],
-                    [
-                      3,
-                      45478,
-                      4566
-                    ],
-                    [
-                      3,
-                      45478,
-                      0
-                    ],
-                    [
-                      2,
-                      45478,
-                      -4566
-                    ],
-                    [
-                      3,
-                      49179,
-                      -8267
-                    ],
-                    [
-                      3,
-                      53746,
-                      -8267
-                    ],
-                    [
-                      2,
-                      58312,
-                      -8267
-                    ],
-                    [
-                      3,
-                      62013,
-                      -4566
-                    ],
-                    [
-                      3,
-                      62013,
-                      0
-                    ]
-                  ],
-                  "fillRule": 0
-                },
-                "pen": {
-                  "capStyle": 16,
-                  "color": "#000000",
-                  "dashPattern": [],
-                  "joinStyle": 64,
-                  "style": 1,
-                  "width": 1
-                }
-              }
-            ],
-            "state": 18
           },
           {
             "polygons": [
@@ -780,7 +679,7 @@
                 ]
               }
             ],
-            "state": 19
+            "state": 18
           }
         ]
       }
@@ -795,12 +694,15 @@
       },
       "compositionMode": 0,
       "font": {
+        "bold": false,
         "family": "",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": -1,
+        "strike": false,
         "type": 0,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -809,6 +711,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 0,
         "width": 1
       },
@@ -831,12 +734,15 @@
       },
       "compositionMode": 0,
       "font": {
+        "bold": false,
         "family": "",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": -1,
+        "strike": false,
         "type": 0,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -845,6 +751,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 14.88189
       },
@@ -867,12 +774,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "Leland",
-        "hinting": 2,
+        "bold": false,
+        "family": "freesans",
+        "hinting": 0,
         "italic": false,
-        "no_merging": true,
-        "pointSize": 66.141732,
-        "type": 5,
+        "no_merging": false,
+        "pointSize": 30,
+        "strike": false,
+        "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -881,6 +791,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -891,8 +802,8 @@
         0,
         299,
         0,
-        42583,
-        201887,
+        664827,
+        189490,
         1000
       ]
     },
@@ -903,12 +814,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -917,6 +831,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -927,7 +842,7 @@
         0,
         299,
         0,
-        613101,
+        792028,
         189490,
         1000
       ]
@@ -939,12 +854,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -953,7 +871,8 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
-        "style": 1,
+        "miterLimit": 2,
+        "style": 0,
         "width": 1
       },
       "transform": [
@@ -963,8 +882,8 @@
         0,
         299,
         0,
-        756218,
-        189490,
+        28346,
+        201887,
         1000
       ]
     },
@@ -975,12 +894,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -989,6 +911,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 0,
         "width": 1
       },
@@ -1011,12 +934,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1025,7 +951,8 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
-        "style": 0,
+        "miterLimit": 2,
+        "style": 1,
         "width": 1
       },
       "transform": [
@@ -1035,8 +962,8 @@
         0,
         299,
         0,
-        28346,
-        201887,
+        240824,
+        165409,
         1000
       ]
     },
@@ -1047,12 +974,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1061,6 +991,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1071,8 +1002,8 @@
         0,
         299,
         0,
-        136047,
-        165409,
+        410425,
+        157971,
         1000
       ]
     },
@@ -1083,12 +1014,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1097,6 +1031,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1107,8 +1042,8 @@
         0,
         299,
         0,
-        326869,
-        157971,
+        410425,
+        165409,
         1000
       ]
     },
@@ -1119,12 +1054,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1133,6 +1071,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1143,8 +1082,8 @@
         0,
         299,
         0,
-        326869,
-        165409,
+        537626,
+        221009,
         1000
       ]
     },
@@ -1155,48 +1094,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
-        "weight": 50
-      },
-      "isAntialiasing": true,
-      "pen": {
-        "capStyle": 16,
-        "color": "#000000",
-        "dashPattern": [],
-        "joinStyle": 64,
-        "style": 1,
-        "width": 1
-      },
-      "transform": [
-        300,
-        0,
-        0,
-        0,
-        299,
-        0,
-        469985,
-        221009,
-        1000
-      ]
-    },
-    "19": {
-      "brush": {
-        "color": "#000000",
-        "style": 1
-      },
-      "compositionMode": 0,
-      "font": {
-        "family": "FreeSans",
-        "hinting": 0,
-        "italic": false,
-        "no_merging": false,
-        "pointSize": 30,
-        "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1205,6 +1111,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 8.267717
       },
@@ -1215,8 +1122,48 @@
         0,
         299,
         0,
-        786238,
+        822048,
         189490,
+        1000
+      ]
+    },
+    "19": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "bold": false,
+        "family": "freesans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "strike": false,
+        "type": 6,
+        "underline": false,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 0,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "miterLimit": 2,
+        "style": 1,
+        "width": 8.267717
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        0,
+        0,
         1000
       ]
     },
@@ -1227,12 +1174,15 @@
       },
       "compositionMode": 0,
       "font": {
+        "bold": false,
         "family": "",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": -1,
+        "strike": false,
         "type": 0,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1241,6 +1191,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 45.472441
       },
@@ -1256,42 +1207,6 @@
         1000
       ]
     },
-    "20": {
-      "brush": {
-        "color": "#000000",
-        "style": 1
-      },
-      "compositionMode": 0,
-      "font": {
-        "family": "FreeSans",
-        "hinting": 0,
-        "italic": false,
-        "no_merging": false,
-        "pointSize": 30,
-        "type": 6,
-        "weight": 50
-      },
-      "isAntialiasing": true,
-      "pen": {
-        "capStyle": 0,
-        "color": "#000000",
-        "dashPattern": [],
-        "joinStyle": 64,
-        "style": 1,
-        "width": 8.267717
-      },
-      "transform": [
-        300,
-        0,
-        0,
-        0,
-        299,
-        0,
-        0,
-        0,
-        1000
-      ]
-    },
     "3": {
       "brush": {
         "color": "#000000",
@@ -1299,84 +1214,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "",
-        "hinting": 0,
-        "italic": false,
-        "no_merging": false,
-        "pointSize": -1,
-        "type": 0,
-        "weight": 50
-      },
-      "isAntialiasing": true,
-      "pen": {
-        "capStyle": 32,
-        "color": "#000000",
-        "dashPattern": [],
-        "joinStyle": 128,
-        "style": 1,
-        "width": 4.133858
-      },
-      "transform": [
-        300,
-        0,
-        0,
-        0,
-        299,
-        0,
-        28346,
-        201887,
-        1000
-      ]
-    },
-    "4": {
-      "brush": {
-        "color": "#000000",
-        "style": 1
-      },
-      "compositionMode": 0,
-      "font": {
-        "family": "",
-        "hinting": 0,
-        "italic": false,
-        "no_merging": false,
-        "pointSize": -1,
-        "type": 0,
-        "weight": 50
-      },
-      "isAntialiasing": true,
-      "pen": {
-        "capStyle": 32,
-        "color": "#000000",
-        "dashPattern": [],
-        "joinStyle": 128,
-        "style": 1,
-        "width": 4.133858
-      },
-      "transform": [
-        300,
-        0,
-        0,
-        0,
-        299,
-        0,
-        28346,
-        201887,
-        1000
-      ]
-    },
-    "5": {
-      "brush": {
-        "color": "#000000",
-        "style": 1
-      },
-      "compositionMode": 0,
-      "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1385,6 +1231,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1395,7 +1242,87 @@
         0,
         299,
         0,
-        136047,
+        537626,
+        189490,
+        1000
+      ]
+    },
+    "4": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "bold": false,
+        "family": "freesans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "strike": false,
+        "type": 6,
+        "underline": false,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "miterLimit": 2,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        240824,
+        189490,
+        1000
+      ]
+    },
+    "5": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "bold": false,
+        "family": "freesans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "strike": false,
+        "type": 6,
+        "underline": false,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "miterLimit": 2,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        410425,
         189490,
         1000
       ]
@@ -1407,12 +1334,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1421,6 +1351,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1431,7 +1362,7 @@
         0,
         299,
         0,
-        231458,
+        325625,
         189490,
         1000
       ]
@@ -1443,12 +1374,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
+        "bold": false,
+        "family": "freesans",
         "hinting": 0,
         "italic": false,
         "no_merging": false,
         "pointSize": 30,
+        "strike": false,
         "type": 6,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1457,6 +1391,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1467,8 +1402,8 @@
         0,
         299,
         0,
-        326869,
-        189490,
+        40748,
+        201887,
         1000
       ]
     },
@@ -1479,12 +1414,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "FreeSans",
-        "hinting": 0,
+        "bold": false,
+        "family": "leland",
+        "hinting": 2,
         "italic": false,
-        "no_merging": false,
-        "pointSize": 30,
-        "type": 6,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "strike": false,
+        "type": 5,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1493,6 +1431,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1503,8 +1442,8 @@
         0,
         299,
         0,
-        469985,
-        189490,
+        147360,
+        201887,
         1000
       ]
     },
@@ -1515,12 +1454,15 @@
       },
       "compositionMode": 0,
       "font": {
-        "family": "Leland",
+        "bold": false,
+        "family": "leland",
         "hinting": 2,
         "italic": false,
         "no_merging": true,
         "pointSize": 66.141732,
+        "strike": false,
         "type": 5,
+        "underline": false,
         "weight": 50
       },
       "isAntialiasing": true,
@@ -1529,6 +1471,7 @@
         "color": "#000000",
         "dashPattern": [],
         "joinStyle": 64,
+        "miterLimit": 2,
         "style": 1,
         "width": 1
       },
@@ -1539,7 +1482,7 @@
         0,
         299,
         0,
-        42583,
+        147360,
         201887,
         1000
       ]

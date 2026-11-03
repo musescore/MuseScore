@@ -38,8 +38,8 @@
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
       <Staff>
-        <StaffType group="pitched">
-          <name>stdJianpu</name>
+        <StaffType group="jianpu">
+          <name>jianpu</name>
           <lines>0</lines>
           <jianpuTextStyle>jianpu_number</jianpuTextStyle>
           </StaffType>

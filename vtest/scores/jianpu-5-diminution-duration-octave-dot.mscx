@@ -38,8 +38,8 @@
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
       <Staff>
-        <StaffType group="pitched">
-          <name>stdJianpu</name>
+        <StaffType group="jianpu">
+          <name>jianpu</name>
           <lines>0</lines>
           <jianpuTextStyle>jianpu_number</jianpuTextStyle>
           </StaffType>
@@ -86,15 +86,6 @@
             </TimeSig>
           <Chord>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -102,13 +93,6 @@
             </Chord>
           <Chord>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -116,15 +100,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/8</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -132,13 +107,6 @@
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/8</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <pitch>40</pitch>
               <tpc>18</tpc>
