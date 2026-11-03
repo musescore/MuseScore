@@ -848,6 +848,10 @@ void NotationActionController::resetState()
     if (!interaction->selection()->isNone()) {
         interaction->clearSelection();
     }
+
+    if (automation()) {
+        automation()->resetEditStateRequested().notify();
+    }
 }
 
 bool NotationActionController::isNoteInputAllowed() const
@@ -2759,9 +2763,14 @@ bool NotationActionController::isTablatureStaff() const
     return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
 }
 
+INotationAutomationPtr NotationActionController::automation() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->automation() : nullptr;
+}
+
 bool NotationActionController::isAutomationModeEnabled() const
 {
-    return currentMasterNotation() ? currentMasterNotation()->automation()->isAutomationModeEnabled() : false;
+    return automation() ? automation()->isAutomationModeEnabled() : false;
 }
 
 muse::async::Notification NotationActionController::automationModeEnabledChanged() const

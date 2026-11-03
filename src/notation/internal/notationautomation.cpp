@@ -71,6 +71,11 @@ void NotationAutomation::editPoints(const AutomationCurveKey& key, AutomationPoi
     });
 }
 
+muse::async::Notification NotationAutomation::resetEditStateRequested() const
+{
+    return m_resetEditStateRequested;
+}
+
 void NotationAutomation::setMasterScore(engraving::MasterScore* masterScore)
 {
     m_masterScore = masterScore;
