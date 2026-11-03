@@ -41,6 +41,7 @@ public:
     MOCK_METHOD(const engraving::InstrumentTrackId&, metronomeTrackId, (), (const, override));
     MOCK_METHOD(engraving::InstrumentTrackId, chordSymbolsTrackId, (const muse::ID& partId), (const, override));
     MOCK_METHOD(bool, isChordSymbolsTrack, (const engraving::InstrumentTrackId& trackId), (const, override));
+    MOCK_METHOD(std::optional<std::string>, trackName, (const engraving::InstrumentTrackId& trackId), (const, override));
 
     MOCK_METHOD(const muse::mpe::PlaybackData&, trackPlaybackData, (const engraving::InstrumentTrackId& trackId), (const, override));
 

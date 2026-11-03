@@ -1186,33 +1186,9 @@ void PlaybackController::resetPlayback()
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, bool projectHadNoAudioSettings,
                                   const TrackAddFinished& onFinished)
 {
-    if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, muse::trc("playback", "Metronome"), projectHadNoAudioSettings, onFinished);
-        return;
-    }
-
-    const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
-    if (!part) {
-        return;
-    }
-
-    if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
-        const std::string trackName = muse::trc("playback", "Chords") + "." + part->partName().toStdString();
-        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
-        return;
-    }
-
-    const muse::String primaryInstrId = part->instrument()->id();
-    if (instrumentTrackId.instrumentId == primaryInstrId) {
-        const std::string trackName = part->partName().toStdString();
-        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
-        return;
-    }
-
-    const Instrument* instrument = part->instrumentById(instrumentTrackId.instrumentId);
-    if (instrument != nullptr) {
-        std::string trackName = "(" + instrument->trackName().toStdString() + ")";
-        doAddTrack(instrumentTrackId, trackName, projectHadNoAudioSettings, onFinished);
+    const std::optional<std::string> trackName = notationPlayback()->trackName(instrumentTrackId);
+    if (trackName) {
+        doAddTrack(instrumentTrackId, *trackName, projectHadNoAudioSettings, onFinished);
     }
 }
 

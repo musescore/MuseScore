@@ -69,6 +69,11 @@ bool NotationPlaybackStub::isChordSymbolsTrack(const engraving::InstrumentTrackI
     return false;
 }
 
+std::optional<std::string> NotationPlaybackStub::trackName(const engraving::InstrumentTrackId&) const
+{
+    return std::nullopt;
+}
+
 const muse::mpe::PlaybackData& NotationPlaybackStub::trackPlaybackData(const engraving::InstrumentTrackId&) const
 {
     static const muse::mpe::PlaybackData dummy;
