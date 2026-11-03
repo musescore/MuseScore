@@ -712,6 +712,12 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                 val = NoteHeadType::HEAD_AUTO;
             }
             note->setHeadType(val);
+        } else if (tag == "Symbol") {
+            // A note-attached legacy Symbol can contain an absolute <tick>.
+            // Its timestamp must not move the following chord/rest.
+            const Fraction chordTick = ctx.tick();
+            Read206::readNoteProperties206(note, e, ctx);
+            ctx.setTick(chordTick);
         } else if (Read206::readNoteProperties206(note, e, ctx)) {
         } else {
             e.unknown();
@@ -1915,17 +1921,22 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 cr->add(l);
             }
         } else if (tag == "Text") {
+            const Fraction musicTick = ctx.tick();
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
             readStaffText(t, e, ctx);
+            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
+            t->setOwnershipParent(segment);
             if (t->empty()) {
                 LOGD("reading empty text: deleted");
                 delete t;
             } else {
                 segment->add(t);
             }
+            ctx.setTick(musicTick);
         } else if (tag == "Dynamic") {
+            const Fraction musicTick = ctx.tick();
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
@@ -1941,18 +1952,27 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 dyn->setDynamicType(dyn->xmlText());
                 segment->add(dyn);
             }
+            ctx.setTick(musicTick);
         } else if (tag == "Tempo") {
+            const Fraction musicTick = ctx.tick();
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             TempoText* t = Factory::createTempoText(segment);
             t->setTrack(ctx.track());
             readTempoText(t, e, ctx);
+            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
+            t->setOwnershipParent(segment);
             segment->add(t);
+            ctx.setTick(musicTick);
         } else if (tag == "StaffText") {
+            const Fraction musicTick = ctx.tick();
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
             readStaffText(t, e, ctx);
+            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
+            t->setOwnershipParent(segment);
             segment->add(t);
+            ctx.setTick(musicTick);
         } else if (tag == "Harmony") {
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             Harmony* h = Factory::createHarmony(segment);
@@ -1975,9 +1995,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 el->setOwnershipParent(m);            // this will get reset when adding to segment
             }
             el->setTrack(ctx.track());
+            const Fraction musicTick = ctx.tick();
             read400::TRead::readItem(el, e, ctx);
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             segment->add(el);
+            ctx.setTick(musicTick);
         } else if (tag == "Jump") {
             Jump* j = Factory::createJump(m);
             j->setTrack(ctx.track());

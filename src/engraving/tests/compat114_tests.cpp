@@ -23,6 +23,9 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -170,4 +173,29 @@ TEST_F(Engraving_Compat114Tests, tuplets_1) {
 
 TEST_F(Engraving_Compat114Tests, tuplets_2) {
     compat("tuplets_2");
+}
+
+// Each hand-authored fixture contains four quarter notes, with one legacy
+// element carrying an independent absolute <tick> before or inside the notes.
+TEST_F(Engraving_Compat114Tests, legacy_element_ticks_do_not_move_music)
+{
+    for (const auto& filename : {
+        u"legacy_symbol_tick.mscx",
+        u"legacy_tempo_tick.mscx",
+        u"legacy_dynamic_tick.mscx",
+        u"legacy_staff_text_tick.mscx",
+        u"legacy_measure_symbol_tick.mscx"
+    }) {
+        MasterScore* score = ScoreRW::readScore(COMPAT114_DATA_DIR + filename);
+        ASSERT_TRUE(score);
+        Measure* measure = score->firstMeasure();
+        ASSERT_TRUE(measure);
+        const int pitches[] = { 60, 64, 67, 72 };
+        for (int i = 0; i < 4; ++i) {
+            Chord* chord = measure->findChord(Fraction(i, 4), 0);
+            ASSERT_TRUE(chord) << "Missing chord " << i;
+            EXPECT_EQ(chord->upNote()->pitch(), pitches[i]);
+        }
+        delete score;
+    }
 }
