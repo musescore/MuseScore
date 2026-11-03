@@ -109,12 +109,15 @@ jobs:
 
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*.framework/*' '*/hb-*' '*/Qt/*' '*/build.debug/*' '*/framework/testing/*' '*/devtools/*' --output-file filtered_coverage.info --ignore-errors unused
 
-        COVERAGE=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov | grep -oP 'lines\.+:\s+\K[0-9.]+')
+        SUMMARY=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov)
+        COVERAGE=$(echo "${SUMMARY}" | grep -oP 'lines\.+:\s+\K[0-9.]+')
+        FUNCTIONS_COVERAGE=$(echo "${SUMMARY}" | grep -oP 'functions\.+:\s+\K[0-9.]+' || echo "?")
         python3 muse/buildscripts/ci/linux/tools/lcov_badger.py "${COVERAGE}" coverage_badge.svg
 
-        echo "### Code coverage: ${COVERAGE}% of lines" | tee -a $GITHUB_STEP_SUMMARY
+        echo "### Code coverage: ${COVERAGE}% of lines, ${FUNCTIONS_COVERAGE}% of functions" | tee -a $GITHUB_STEP_SUMMARY
 
-        genhtml filtered_coverage.info --output-directory coverage_report --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,source || true
+        # Without per-file function pages and extra sorted index pages: they make up about a third of the report
+        genhtml filtered_coverage.info --output-directory coverage_report --no-function-coverage --no-sort --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,source || true
 
     - name: Upload coverage report
       if: github.event_name == 'schedule' || inputs.code_coverage
