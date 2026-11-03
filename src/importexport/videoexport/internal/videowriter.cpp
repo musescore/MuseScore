@@ -105,14 +105,19 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         return make_ret(muse::Ret::Code::InternalError);
     }
 
+    auto encoder = videoEncodeResolver()->currentVideoEncoder();
+    if (!encoder) {
+        LOGE() << "FFmpeg not found, video export is not available. "
+               << "Install FFmpeg or specify the path to its libraries in the preferences";
+        return make_ret(muse::Ret::Code::NotSupported);
+    }
+
     bool withAudio = muse::value(options, OptionKey::WITH_AUDIO, muse::Val(true)).toBool();
 
     Config cfg = makeConfig();
 
     muse::io::path_t finalPath(filePath);
     muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.aac";
-
-    auto encoder = videoEncodeResolver()->currentVideoEncoder();
 
     muse::media::IVideoEncoder::Options encoderOptions;
     encoderOptions.format = "mp4";
