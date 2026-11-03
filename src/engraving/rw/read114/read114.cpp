@@ -543,6 +543,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
 static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
 {
     bool hasAccidental = false; // used for userAccidental backward compatibility
+    int legacyVelocity = -1; // absent unless <velocity> is explicitly present
 
     note->setTpc1(Tpc::TPC_INVALID);
     note->setTpc2(Tpc::TPC_INVALID);
@@ -712,11 +713,27 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                 val = NoteHeadType::HEAD_AUTO;
             }
             note->setHeadType(val);
+        } else if (tag == "velocity") {
+            // In 1.x scores, USER velocities are absolute MIDI values.
+            // readNoteProperties206() ignores these pre-4.0 values.
+            legacyVelocity = e.readInt();
         } else if (Read206::readNoteProperties206(note, e, ctx)) {
         } else {
             e.unknown();
         }
     }
+
+    // Apply after <veloType> has been read, regardless of element order.
+    // OFFSET velocities have different semantics and are not converted here.
+    if (legacyVelocity >= 0 && legacyVelocity <= 127
+        && note->getProperty(Pid::VELO_TYPE).value<VeloType>() == VeloType::USER_VAL) {
+        if (legacyVelocity == 0) {
+            note->setPlay(false);
+        } else {
+            note->setUserVelocity(legacyVelocity);
+        }
+    }
+
     // ensure sane values:
     note->setPitch(clampPitch(note->pitch()));
 

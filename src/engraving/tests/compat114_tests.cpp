@@ -23,6 +23,9 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -170,4 +173,29 @@ TEST_F(Engraving_Compat114Tests, tuplets_1) {
 
 TEST_F(Engraving_Compat114Tests, tuplets_2) {
     compat("tuplets_2");
+}
+
+// Reproduces the loss of explicit USER MIDI velocities from 1.14 MSCX files.
+// The fixture is original, synthetic music with no third-party score content.
+TEST_F(Engraving_Compat114Tests, legacy_absolute_note_velocity)
+{
+    MasterScore* score = ScoreRW::readScore(COMPAT114_DATA_DIR + u"legacy_user_velocity.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+    Chord* first = measure->findChord(Fraction(0, 1), 0);
+    Chord* second = measure->findChord(Fraction(1, 4), 0);
+    Chord* silent = measure->findChord(Fraction(1, 2), 0);
+    Chord* offset = measure->findChord(Fraction(3, 4), 0);
+    ASSERT_TRUE(first && second && silent && offset);
+
+    EXPECT_EQ(first->upNote()->userVelocity(), 32);
+    EXPECT_EQ(second->upNote()->userVelocity(), 117);
+    EXPECT_FALSE(silent->upNote()->play());
+    EXPECT_TRUE(offset->upNote()->play());
+    // The fourth note has OFFSET rather than USER semantics. Do not
+    // reinterpret its legacy percentage as an absolute MIDI velocity.
+    EXPECT_EQ(offset->upNote()->userVelocity(), 0);
+    delete score;
 }
