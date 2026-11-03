@@ -48,12 +48,7 @@ BUILD_VST_MODULE=OFF
 
 if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then
     TESTS_ENABLE_CODE_COVERAGE=ON
-    TESTS_COMPILE_USE_UNITY=OFF
     BUILD_VST_MODULE=ON # all modules are built for coverage, see SetupConfigure.cmake
-else
-    TESTS_ENABLE_CODE_COVERAGE=OFF
-    TESTS_COMPILE_USE_UNITY=ON
-    BUILD_VST_MODULE=OFF
 fi
 
 echo "=== BUILD ==="
