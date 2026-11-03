@@ -54,6 +54,8 @@ void TupletDialog::componentComplete()
 
     numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
     bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
+    subdivision->setAccessibleName(useSelectedDurationAsLabel->text() + " " + subdivision->text());
+    tupletLength->setAccessibleName(useSelectedDurationAsLabel->text() + " " + tupletLength->text());
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
@@ -103,6 +105,15 @@ TupletBracketType TupletDialog::bracketType() const
     return TupletBracketType::AUTO_BRACKET;
 }
 
+TupletSelectedDuration TupletDialog::selectedDurationAs() const
+{
+    if (tupletLength->isChecked()) {
+        return TupletSelectedDuration::TUPLET_LENGTH;
+    }
+
+    return TupletSelectedDuration::SUBDIVISION;
+}
+
 void TupletDialog::showEvent(QShowEvent* event)
 {
     WidgetStateStore::restoreGeometry(this);
@@ -131,6 +142,7 @@ void TupletDialog::apply()
         { "ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()) },
         Contract<TupletNumberType>::param(numberType()),
         Contract<TupletBracketType>::param(bracketType()),
+        Contract<TupletSelectedDuration>::param(selectedDurationAs()),
     };
 
     dispatcher()->dispatch(ADD_TUPLET_COMMAND, params);

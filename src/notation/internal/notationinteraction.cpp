@@ -5705,8 +5705,20 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
         return;
     }
 
+    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
+        if (!EditTuplet::checkAddTupletsWithSelectedDurations(score(), options.ratio)) {
+            checkAndShowError();
+            return;
+        }
+    } else if (!canAddTupletToSelectedChordRests()) {
+        MScore::setError(MsError::TUPLET_NOTE_VALUE_TOO_SHORT);
+        checkAndShowError();
+        return;
+    }
+
     transaction(TranslatableString("undoableAction", "Add tuplet"), [&](mu::engraving::Transaction& tx) {
-        EditTuplet::addTuplets(tx, score(), options.ratio, options.numberType, options.bracketType, options.autoBaseLen);
+        EditTuplet::addTuplets(tx, score(), options.ratio, options.numberType, options.bracketType, options.autoBaseLen,
+                               options.selectedDurationAs);
     });
     notifyAboutNotationChanged();
 }

@@ -92,6 +92,15 @@ struct TupletBracketTypeContract {
     } };
 };
 
+struct TupletSelectedDurationContract {
+    static constexpr std::string_view key = "selected-duration-as";
+    static constexpr engraving::TupletSelectedDuration def = engraving::TupletSelectedDuration::TUPLET_LENGTH;
+    static constexpr Table<engraving::TupletSelectedDuration, 2> table { {
+        { "subdivision", engraving::TupletSelectedDuration::SUBDIVISION, "subdivision" },
+        { "tuplet-length", engraving::TupletSelectedDuration::TUPLET_LENGTH, "tuplet length" },
+    } };
+};
+
 struct SelectionTargetContract {
     static constexpr std::string_view key = "target";
     static constexpr SelectionTarget def = SelectionTarget::FirstItem;
@@ -146,6 +155,7 @@ DECLARE_CONTRACT(mu::notation::NoteInputMethod, mu::notation::NoteInputMethodCon
 DECLARE_CONTRACT(mu::notation::NoteAddingMode, mu::notation::NoteAddingModeContract);
 DECLARE_CONTRACT(mu::engraving::TupletNumberType, mu::notation::TupletNumberTypeContract);
 DECLARE_CONTRACT(mu::engraving::TupletBracketType, mu::notation::TupletBracketTypeContract);
+DECLARE_CONTRACT(mu::engraving::TupletSelectedDuration, mu::notation::TupletSelectedDurationContract);
 DECLARE_CONTRACT(mu::notation::SelectionTarget, mu::notation::SelectionTargetContract);
 DECLARE_CONTRACT(mu::notation::PlayMode, mu::notation::PlayModeContract);
 }

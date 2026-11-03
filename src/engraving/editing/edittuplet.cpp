@@ -23,11 +23,15 @@
 #include "edittuplet.h"
 
 #include <algorithm>
+#include <map>
+#include <set>
 #include <unordered_set>
 
 #include "../dom/chord.h"
 #include "../dom/chordrest.h"
+#include "../dom/durationtype.h"
 #include "../dom/input.h"
+#include "../dom/mscore.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/select.h"
@@ -73,6 +77,27 @@ static std::vector<ChordRest*> selectedTupletChordRests(const Score* score)
     return chordRests;
 }
 
+// The selected chords/rests that get a tuplet: one whose tuplet doesn't fit is left as it is (as is a measure rest,
+// which has no duration to use as the subdivision), and one that the tuplet before it in its track will replace gets none
+static std::vector<ChordRest*> tupletStarts(const Score* score, const Fraction& ratio)
+{
+    std::vector<ChordRest*> starts;
+    std::map<track_idx_t, Fraction> tupletEndTicks;
+    for (ChordRest* chordRest : selectedTupletChordRests(score)) {
+        const auto previous = tupletEndTicks.find(chordRest->track());
+        if (previous != tupletEndTicks.end() && chordRest->tick() < previous->second) {
+            continue;
+        }
+        if (!score->canAddTuplet(chordRest, ratio, chordRest->durationType())) {
+            continue;
+        }
+        tupletEndTicks[chordRest->track()] = score->tupletEndTick(chordRest, ratio, chordRest->durationType());
+        starts.push_back(chordRest);
+    }
+
+    return starts;
+}
+
 static void selectTupletStart(Score* score, const Tuplet* tuplet)
 {
     if (tuplet->elements().empty()) {
@@ -94,9 +119,20 @@ static void selectTupletStart(Score* score, const Tuplet* tuplet)
     }
 }
 
-std::vector<Tuplet*> EditTuplet::addTuplets(Transaction&, Score* score, const Fraction& ratio, TupletNumberType numberType,
-                                            TupletBracketType bracketType, bool autoBaseLen)
+bool EditTuplet::checkAddTupletsWithSelectedDurations(const Score* score, const Fraction& ratio)
 {
+    if (!selectedTupletChordRests(score).empty() && tupletStarts(score, ratio).empty()) {
+        MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
+        return false;
+    }
+
+    return true;
+}
+
+std::vector<Tuplet*> EditTuplet::addTuplets(Transaction&, Score* score, const Fraction& ratio, TupletNumberType numberType,
+                                            TupletBracketType bracketType, bool autoBaseLen, TupletSelectedDuration selectedDurationAs)
+{
+    const bool asSubdivision = selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
     Selection& selection = score->selection();
     const bool wasRangeSelection = selection.isRange();
     const Fraction startTick = selection.tickStart();
@@ -106,15 +142,37 @@ std::vector<Tuplet*> EditTuplet::addTuplets(Transaction&, Score* score, const Fr
     Box* startBox = selection.startBox();
     Box* endBox = selection.endBox();
 
+    // ticks taken before any tuplet is created
+    std::vector<std::pair<ChordRest*, Fraction> > starts;
+    for (ChordRest* chordRest : asSubdivision ? tupletStarts(score, ratio) : selectedTupletChordRests(score)) {
+        starts.emplace_back(chordRest, chordRest->tick());
+    }
+
     std::vector<Tuplet*> tuplets;
-    for (ChordRest* chordRest : selectedTupletChordRests(score)) {
-        if (Tuplet* tuplet = score->addTuplet(chordRest, dividingRatio(chordRest, ratio, autoBaseLen), numberType, bracketType)) {
+    // a subdivision tuplet can end after the range
+    Fraction rangeEndTick = endTick;
+    for (const auto& [chordRest, tick] : starts) {
+        // an earlier tuplet may have replaced it, e.g. on a linked staff
+        if (asSubdivision && score->findCR(tick, chordRest->track()) != chordRest) {
+            continue;
+        }
+
+        Tuplet* tuplet = nullptr;
+        if (asSubdivision) {
+            tuplet = score->addTuplet(chordRest, ratio, chordRest->durationType(), numberType, bracketType);
+            if (tuplet) {
+                rangeEndTick = std::max(rangeEndTick, tuplet->endTick());
+            }
+        } else {
+            tuplet = score->addTuplet(chordRest, dividingRatio(chordRest, ratio, autoBaseLen), numberType, bracketType);
+        }
+        if (tuplet) {
             tuplets.push_back(tuplet);
         }
     }
 
     if (wasRangeSelection) {
-        selection.setRangeTicks(startTick, endTick, startStaff, endStaff, startBox, endBox);
+        selection.setRangeTicks(startTick, rangeEndTick, startStaff, endStaff, startBox, endBox);
         selection.updateSelectedElements();
     } else if (!tuplets.empty()) {
         selectTupletStart(score, tuplets.front());
