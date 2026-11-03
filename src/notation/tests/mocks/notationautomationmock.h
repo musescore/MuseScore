@@ -36,5 +36,7 @@ public:
 
     MOCK_METHOD(AutomationDataConstPtr, automationData, (), (const, override));
     MOCK_METHOD(void, editPoints, (const AutomationCurveKey& key, AutomationPointEdits & edits), (override));
+
+    MOCK_METHOD(muse::async::Notification, resetEditStateRequested, (), (const, override));
 };
 }
