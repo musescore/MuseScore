@@ -102,7 +102,11 @@ jobs:
     - name: Code coverage
       if: github.event_name == 'schedule' || inputs.code_coverage
       run: |
-        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info --ignore-errors mismatch,inconsistent,gcov,negative
+        # Zero baseline from .gcno files, so that compiled code which no test runs is counted as uncovered
+        lcov --capture --initial --directory "$(pwd)/build.debug/" --output-file coverage_base.info --ignore-errors mismatch,inconsistent,gcov,negative
+        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage_tests.info --ignore-errors mismatch,inconsistent,gcov,negative
+        lcov --add-tracefile coverage_base.info --add-tracefile coverage_tests.info --output-file coverage.info --ignore-errors mismatch,inconsistent,negative
+
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*.framework/*' '*/hb-*' '*/Qt/*' '*/build.debug/*' '*/framework/testing/*' '*/devtools/*' --output-file filtered_coverage.info --ignore-errors unused
 
         COVERAGE=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov | grep -oP 'lines\.+:\s+\K[0-9.]+')
