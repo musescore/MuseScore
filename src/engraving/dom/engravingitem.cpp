@@ -2281,7 +2281,7 @@ bool EngravingItem::isUserModified() const
 
 void EngravingItem::triggerLayout() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayout(tick(), staffIdx(), this);
     }
 }
@@ -2296,14 +2296,14 @@ void EngravingItem::triggerLayout() const
 
 void EngravingItem::triggerLayoutAll() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayoutAll(staffIdx(), this);
     }
 }
 
 void EngravingItem::triggerLayoutToEnd() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayout(tick(), score()->endTick(), staffIdx(), staffIdx(), this);
     }
 }

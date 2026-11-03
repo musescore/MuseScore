@@ -289,6 +289,7 @@ public:
     Score* score() const;
     MasterScore* masterScore() const;
     bool onSameScore(const EngravingObject* other) const;
+    bool isInScoreTree() const;
     const MStyle& style() const;
 
     virtual EngravingObject* propertyDelegate(Pid) const { return nullptr; }
