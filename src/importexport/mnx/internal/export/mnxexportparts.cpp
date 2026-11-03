@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "mnxexporter.h"
+#include "internal/shared/mnxformattedtext.h"
 #include "internal/shared/mnxstaffconfig.h"
 #include "internal/shared/mnxtypesconv.h"
 #include "log.h"
@@ -28,6 +29,7 @@
 #include <optional>
 #include <string>
 #include <unordered_set>
+#include <variant>
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/chord.h"
@@ -52,6 +54,7 @@
 #include "engraving/dom/spannermap.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/textbase.h"
 #include "engraving/dom/volta.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/types/symnames.h"
@@ -795,47 +798,49 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
     }
 }
 
+/// Returns the content of chunks[index] and advances index if that chunk holds a T.
+template<typename T>
+static const T* takeChunkContent(const MnxTextChunks& chunks, size_t& index)
+{
+    if (index < chunks.size()) {
+        if (const T* content = std::get_if<T>(&chunks[index].content)) {
+            ++index;
+            return content;
+        }
+    }
+    return nullptr;
+}
+
 /// Splits a dynamic's text into leading text, SMuFL glyphs, and trailing text. Returns false,
 /// leaving all three empty, when the text interleaves glyphs and words in a way MNX cannot
 /// describe -- the caller must not export a partial reading of it.
 static bool splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector<SymId>& symIds, String& suffix)
 {
-    const auto engravingFonts = [&]() -> std::shared_ptr<mu::engraving::IEngravingFontsProvider> {
-        return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("engraving");
-    }();
+    prefix.clear();
+    symIds.clear();
+    suffix.clear();
 
-    bool gotGlyph{};
-    bool gotSuffix{};
-    for (const TextFragment& fragment : dynamic->fragmentList()) {
-        const CharFormat& format = fragment.format;
-        if (format.fontFamily() == u"ScoreText") {
-            if (gotSuffix) {
-                // Can't encode a dynamic with multiple glyph sequences separated by text.
-                // Clear everything so a partial reading cannot be mistaken for a whole one.
-                prefix.clear();
-                suffix.clear();
-                symIds.clear();
-                return false;
-            }
-            for (size_t i = 0; i < fragment.text.size(); ++i) {
-                const Char ch = fragment.text.at(i);
-                const SymId symId = engravingFonts->fallbackFont()->fromCode(ch.unicode());
-                if (symId != SymId::noSym) {
-                    gotGlyph = true;
-                    symIds.push_back(symId);
-                }
-            }
-        } else {
-            if (gotGlyph) {
-                suffix += fragment.text;
-                gotSuffix = true;
-            } else {
-                prefix += fragment.text;
-            }
-        }
+    // Adjacent runs of the same kind are already merged, so a dynamic MNX can describe is at
+    // most text, then glyphs, then text.
+    const MnxTextChunks chunks = textBaseToMnxTextChunks(dynamic);
+    size_t index = 0;
+    const String* leading = takeChunkContent<String>(chunks, index);
+    const MnxTextGlyphs* glyphs = takeChunkContent<MnxTextGlyphs>(chunks, index);
+    const String* trailing = glyphs ? takeChunkContent<String>(chunks, index) : nullptr;
+    if (index < chunks.size()) {
+        // Can't encode a dynamic with multiple glyph sequences separated by text.
+        return false;
     }
-    prefix = prefix.trimmed();
-    suffix = suffix.trimmed();
+
+    if (leading) {
+        prefix = leading->trimmed();
+    }
+    if (glyphs) {
+        symIds = *glyphs;
+    }
+    if (trailing) {
+        suffix = trailing->trimmed();
+    }
     return true;
 }
 
@@ -947,6 +952,42 @@ static void createDynamic(const Dynamic* dynamic, const Fraction& rTick, int mnx
 }
 
 //---------------------------------------------------------
+//   createPositionedText
+//   export staff or expression text as MNX general text
+//---------------------------------------------------------
+
+// MNX has only "general" text, so StaffText and Expression both export as that and import
+// back as StaffText. Telling them apart would need criteria that other MNX exporters would
+// not share. Lost on export: an Expression's voice assignment and snapping to dynamics, and
+// a StaffText's playback settings.
+static void createPositionedText(const TextBase* text, const Fraction& rTick, int mnxStaffNum, size_t partStaves,
+                                 mnx::part::Measure& mnxMeasure)
+{
+    IF_ASSERT_FAILED(text) {
+        return;
+    }
+
+    const MnxTextChunks chunks = textBaseToMnxTextChunks(text);
+    if (chunks.empty()) {
+        // e.g., a staff text that only carries a sound flag
+        return;
+    }
+
+    auto mnxText = mnxMeasure.ensure_text().append();
+    writeMnxFormattedText(chunks, mnxText.text());
+    if (rTick != Fraction(0, 1)) {
+        mnxText.ensure_position(toMnxFractionValue(rTick));
+    }
+    if (partStaves > 1) {
+        mnxText.set_staff(mnxStaffNum);
+    }
+    // Always write the resolved placement. StaffText and Expression default to opposite sides
+    // of the staff, so leaving it to the reader would move an Expression that comes back as
+    // StaffText.
+    mnxText.set_placement(toMnxPlacement(text->placement()));
+}
+
+//---------------------------------------------------------
 //   exportTextAnnotations
 //   export dynamics, staff text, etc. for a single measure
 //---------------------------------------------------------
@@ -968,7 +1009,10 @@ static void exportTextAnnotations(const Part* part, const Measure* measure, mnx:
                 case ElementType::DYNAMIC:
                     createDynamic(toDynamic(annotation), rTick, int(staffIdx) + 1, mnxMeasure);
                     break;
-                /// @todo other kinds of staff text when defined by MNX
+                case ElementType::STAFF_TEXT:
+                case ElementType::EXPRESSION:
+                    createPositionedText(toTextBase(annotation), rTick, int(staffIdx) + 1, staves, mnxMeasure);
+                    break;
                 default:
                     break;
                 }

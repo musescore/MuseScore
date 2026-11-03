@@ -1,0 +1,241 @@
+{
+    "mnx": {
+        "version": 1
+    },
+    "global": {
+        "measures": [
+            {
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {}
+        ]
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "name": "Piano",
+            "staves": 2,
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        },
+                        {
+                            "clef": {
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ],
+                    "text": [
+                        {
+                            "text": [
+                                {
+                                    "text": "Allegro "
+                                },
+                                {
+                                    "type": "smufl",
+                                    "glyphs": [
+                                        "metNoteQuarterUp"
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": " ca."
+                                }
+                            ]
+                        },
+                        {
+                            "placement": "above",
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    4
+                                ]
+                            },
+                            "text": [
+                                {
+                                    "text": "dolce & <espr.>"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "general",
+                            "staff": 2,
+                            "placement": "below",
+                            "position": {
+                                "fraction": [
+                                    3,
+                                    8
+                                ]
+                            },
+                            "text": [
+                                {
+                                    "text": "una corda"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "notes": [
+                                        {
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2
+                        }
+                    ],
+                    "text": [
+                        {
+                            "placement": "above",
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            },
+                            "text": [
+                                {
+                                    "type": "smufl",
+                                    "glyphs": [
+                                        "metNoteQuarterUp",
+                                        "metAugmentationDot"
+                                    ]
+                                },
+                                {
+                                    "text": " = 60"
+                                }
+                            ]
+                        },
+                        {
+                            "staff": 2,
+                            "placement": "below",
+                            "text": [
+                                {
+                                    "text": "Ped."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

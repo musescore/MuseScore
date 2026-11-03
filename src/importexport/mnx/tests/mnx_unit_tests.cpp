@@ -25,10 +25,13 @@
 #include <optional>
 #include <string>
 #include <utility>
+#include <variant>
 #include <vector>
 
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/expression.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/measure.h"
@@ -36,10 +39,12 @@
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/types/typesconv.h"
 
+#include "importexport/mnx/internal/shared/mnxformattedtext.h"
 #include "importexport/mnx/internal/shared/mnxtypesconv.h"
 #include "mnxtestutils.h"
 
@@ -913,4 +918,135 @@ TEST_F(Mnx_UnitTests, codaNavigationAndGlobalCaesuraRoundTrip)
     ASSERT_TRUE(result[3].coda());
     ASSERT_TRUE(result[3].caesura());
     EXPECT_EQ(result[3].caesura()->shape(), mnx::CaesuraShape::Curved);
+}
+
+//---------------------------------------------------------
+//   positioned text tests
+//---------------------------------------------------------
+
+namespace {
+//! The staff texts attached to a segment at the given tick of the first measure, in order.
+std::vector<const StaffText*> staffTextsAt(MasterScore* score, const Fraction& rTick)
+{
+    std::vector<const StaffText*> result;
+    const Measure* measure = score->firstMeasure();
+    for (const Segment* seg = measure->first(SegmentType::Duration); seg; seg = seg->next(SegmentType::Duration)) {
+        if (seg->rtick() != rTick) {
+            continue;
+        }
+        for (const EngravingItem* annotation : seg->annotations()) {
+            if (annotation->isStaffText()) {
+                result.push_back(toStaffText(annotation));
+            }
+        }
+    }
+    return result;
+}
+} // namespace
+
+TEST_F(Mnx_UnitTests, formattedTextChunksMergeAndConvert)
+{
+    MnxTextChunks chunks;
+    appendMnxTextChunk(chunks, u"dolce ");
+    appendMnxTextChunk(chunks, u"& <espr.> ");
+    appendMnxTextChunk(chunks, String());
+    appendMnxGlyphChunk(chunks, SymId::metNoteQuarterUp);
+    appendMnxGlyphChunk(chunks, SymId::noSym);
+    appendMnxGlyphChunk(chunks, SymId::metAugmentationDot);
+    appendMnxTextChunk(chunks, u" = 60");
+
+    // Adjacent runs of the same kind merge; empty text and noSym contribute nothing.
+    ASSERT_EQ(chunks.size(), size_t(3));
+    ASSERT_TRUE(std::holds_alternative<String>(chunks[0].content));
+    EXPECT_EQ(std::get<String>(chunks[0].content), String(u"dolce & <espr.> "));
+    ASSERT_TRUE(std::holds_alternative<MnxTextGlyphs>(chunks[1].content));
+    EXPECT_EQ(std::get<MnxTextGlyphs>(chunks[1].content), (MnxTextGlyphs { SymId::metNoteQuarterUp, SymId::metAugmentationDot }));
+    ASSERT_TRUE(std::holds_alternative<String>(chunks[2].content));
+    EXPECT_EQ(std::get<String>(chunks[2].content), String(u" = 60"));
+
+    EXPECT_EQ(mnxTextChunksToXmlText(chunks),
+              String(u"dolce &amp; &lt;espr.&gt; <sym>metNoteQuarterUp</sym><sym>metAugmentationDot</sym> = 60"));
+}
+
+TEST_F(Mnx_UnitTests, positionedTextImportsAsStaffText)
+{
+    const std::string sequence = R"([{"content":[{"duration":{"base":"whole"},"notes":[{"pitch":{"step":"C","octave":5}}]}]}])";
+    const std::string text
+        =
+            R"(, "text": [
+        { "text": [ { "text": "Allegro " }, { "type": "smufl", "glyphs": [ "metNoteQuarterUp", "notASmuflGlyph" ] } ] },
+        { "placement": "below", "position": { "fraction": [ 3, 8 ] }, "text": [ { "text": "dolce" } ] }
+    ])";
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequence }, { text }), u"<text>/import.mnx"));
+    ASSERT_TRUE(score);
+
+    const auto atStart = staffTextsAt(score.get(), Fraction(0, 1));
+    ASSERT_EQ(atStart.size(), size_t(1));
+    // The unknown glyph is skipped rather than dropping the whole text.
+    EXPECT_EQ(atStart[0]->xmlText(), String(u"Allegro <sym>metNoteQuarterUp</sym>"));
+    const EngravingItem* startText = atStart[0];
+    EXPECT_EQ(startText->placement(), startText->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
+
+    // No event starts at 3/8, so the text gets a segment of its own.
+    const auto midMeasure = staffTextsAt(score.get(), Fraction(3, 8));
+    ASSERT_EQ(midMeasure.size(), size_t(1));
+    EXPECT_EQ(midMeasure[0]->xmlText(), String(u"dolce"));
+    EXPECT_EQ(midMeasure[0]->placement(), PlacementV::BELOW);
+}
+
+TEST_F(Mnx_UnitTests, staffTextAndExpressionExportAsGeneralText)
+{
+    const std::string sequence = R"([{"content":[{"duration":{"base":"whole"},"notes":[{"pitch":{"step":"C","octave":5}}]}]}])";
+    std::unique_ptr<MasterScore> score(importMnxFromJson(singleStaffMnx({ sequence }), u"<text>/export.mnx"));
+    ASSERT_TRUE(score);
+
+    Segment* segment = score->firstMeasure()->first(SegmentType::ChordRest);
+    ASSERT_TRUE(segment);
+    StaffText* staffText = Factory::createStaffText(segment);
+    staffText->setTrack(0);
+    staffText->setXmlText(u"Allegro <sym>metNoteQuarterUp</sym> ca.");
+    segment->add(staffText);
+    Expression* expression = Factory::createExpression(segment);
+    expression->setTrack(0);
+    expression->setXmlText(u"dolce\nespr.");
+    segment->add(expression);
+    const PlacementV staffTextPlacement = staffText->placement();
+    const PlacementV expressionPlacement = expression->placement();
+    fixupAndLayoutScore(score.get());
+
+    const std::string json = exportMnxJson(score.get());
+    auto doc = mnx::Document::create(json.data(), json.size());
+    ASSERT_TRUE(mnx::validation::schemaValidate(doc));
+    const auto texts = doc.parts()[0].measures()[0].text();
+    ASSERT_TRUE(texts);
+    ASSERT_EQ(texts->size(), size_t(2));
+    for (const auto& mnxText : texts.value()) {
+        EXPECT_EQ(mnxText.type(), mnx::TextType::General);
+        EXPECT_FALSE(mnxText.position());
+        // Placement is always written, so an Expression keeps its side of the staff.
+        EXPECT_NE(mnxText.placement(), mnx::Placement::Auto);
+    }
+
+    const auto staffChunks = texts.value()[0].text();
+    ASSERT_EQ(staffChunks.size(), size_t(3));
+    EXPECT_EQ(staffChunks[0].get<mnx::text::Text>().text(), "Allegro ");
+    EXPECT_EQ(staffChunks[1].get<mnx::text::Smufl>().glyphs().toStdVector(), std::vector<std::string> { "metNoteQuarterUp" });
+    EXPECT_EQ(staffChunks[2].get<mnx::text::Text>().text(), " ca.");
+    EXPECT_EQ(texts.value()[0].placement(), toMnxPlacement(staffTextPlacement));
+
+    // A line break is written once, not once per fragment of the line.
+    const auto expressionChunks = texts.value()[1].text();
+    ASSERT_EQ(expressionChunks.size(), size_t(1));
+    EXPECT_EQ(expressionChunks[0].get<mnx::text::Text>().text(), "dolce\nespr.");
+    EXPECT_EQ(texts.value()[1].placement(), toMnxPlacement(expressionPlacement));
+
+    // Both come back as staff text on the side of the staff they were exported from.
+    std::unique_ptr<MasterScore> roundTrip(importMnxFromJson(json, u"<text>/roundtrip.mnx"));
+    ASSERT_TRUE(roundTrip);
+    const auto reimported = staffTextsAt(roundTrip.get(), Fraction(0, 1));
+    ASSERT_EQ(reimported.size(), size_t(2));
+    EXPECT_EQ(reimported[0]->xmlText(), String(u"Allegro <sym>metNoteQuarterUp</sym> ca."));
+    EXPECT_EQ(reimported[0]->placement(), staffTextPlacement);
+    EXPECT_EQ(reimported[1]->xmlText(), String(u"dolce\nespr."));
+    EXPECT_EQ(reimported[1]->placement(), expressionPlacement);
 }

@@ -323,6 +323,7 @@ const std::unordered_map<mnx::LayoutSymbol, BracketType> layoutSymbolTable = {
     { mnx::LayoutSymbol::NoSymbol,   BracketType::NO_BRACKET },
     { mnx::LayoutSymbol::Brace,      BracketType::BRACE },
     { mnx::LayoutSymbol::Bracket,    BracketType::NORMAL },
+    { mnx::LayoutSymbol::Square,     BracketType::SQUARE },
 };
 } // namespace
 

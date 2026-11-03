@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "mnximporter.h"
+#include "internal/shared/mnxformattedtext.h"
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/accidental.h"
@@ -57,6 +58,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/stem.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tiejumppointlist.h"
@@ -1444,6 +1446,64 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
 }
 
 //---------------------------------------------------------
+//   createPositionedTexts
+//   Create MuseScore staff text from MNX positioned text.
+//---------------------------------------------------------
+
+void MnxImporter::createPositionedTexts(const mnx::part::Measure& mnxMeasure, Measure* measure)
+{
+    const auto mnxTexts = mnxMeasure.text();
+    if (!mnxTexts) {
+        return;
+    }
+    const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
+    IF_ASSERT_FAILED(part) {
+        LOGE() << "part not found for measure " << mnxMeasure.pointer().to_string();
+        return;
+    }
+
+    for (const auto& mnxText : mnxTexts.value()) {
+        const int staffNum = mnxText.staff();
+        if (staffNum < 1 || staffNum > part->staves()) {
+            LOGW() << "text staff " << staffNum << " is out of range for " << mnxText.pointer().to_string();
+            continue;
+        }
+        const MnxTextChunks chunks = readMnxFormattedText(mnxText.text());
+        if (chunks.empty()) {
+            LOGI() << "text has no content that can be imported: " << mnxText.pointer().to_string();
+            continue;
+        }
+
+        const staff_idx_t staffIdx = mnxPartStaffToStaffIdx(part.value(), staffNum);
+        const Fraction rTick = mnxText.position() ? toMuseScoreFraction(mnxText.position()->fraction()) : Fraction(0, 1);
+        Segment* segment = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
+
+        TextBase* text = nullptr;
+        switch (mnxText.type()) {
+        case mnx::TextType::General:
+            /// @todo Once MNX chunks carry font styling, classify general text the way the
+            /// MusicXML importer does (see isExpressionText in importmusicxmlpass2.cpp): text
+            /// whose chunks are all italic and placed below a non-vocal staff becomes an
+            /// Expression. Placement alone is too weak a signal, and choosing Expression would
+            /// impose italic formatting the source never specified.
+            text = Factory::createStaffText(segment);
+            break;
+        }
+        if (!text) {
+            LOGW() << "unsupported text type for " << mnxText.pointer().to_string();
+            continue;
+        }
+
+        text->setTrack(staff2track(staffIdx));
+        text->setXmlText(mnxTextChunksToXmlText(chunks));
+        if (mnxText.placement() != mnx::Placement::Auto) {
+            setAndStyleProperty(text, Pid::PLACEMENT, toMuseScorePlacementV(mnxText.placement(), text));
+        }
+        segment->add(text);
+    }
+}
+
+//---------------------------------------------------------
 //   createOttavas
 //   Create MuseScore ottava spanners from MNX ottavas.
 //---------------------------------------------------------
@@ -1834,13 +1894,14 @@ void MnxImporter::importPartMeasures()
     for (const auto& mnxPart : mnxDocument().parts()) {
         createMeasureRepeats(mnxPart);
     }
-    // pass2: add accidentals, beams, dynamics, ottavas, slurs, and ties
+    // pass2: add accidentals, beams, dynamics, ottavas, text, slurs, and ties
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {
             Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex());
             createArpeggios(partMeasure);
             createDynamics(partMeasure, measure);
             createOttavas(partMeasure, measure);
+            createPositionedTexts(partMeasure, measure);
             createBeams(partMeasure);
             for (const auto& sequence : partMeasure.sequences()) {
                 processSequencePass2(sequence, measure);

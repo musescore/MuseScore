@@ -37,7 +37,7 @@ else()
     message(STATUS "Using muse_deps nlohmann_json from ${NLOHMANN_JSON_PREFIX}")
     message(STATUS "Using muse_deps json_schema_validator from ${JSON_SCHEMA_VALIDATOR_PREFIX}")
 
-    set(MNXDOM_GIT_TAG 46ef32449041bbc10254ced2170cf524440af3f3)
+    set(MNXDOM_GIT_TAG 233ffc43b7a9a7a20308fd43a306620a0b40826d)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
@@ -66,6 +66,8 @@ target_sources(iex_mnx PRIVATE
     internal/import/mnximporter.h
     internal/import/mnximportmarkings.cpp
     internal/import/mnximportpartmeasures.cpp
+    internal/shared/mnxformattedtext.cpp
+    internal/shared/mnxformattedtext.h
     internal/shared/mnxstaffconfig.cpp
     internal/shared/mnxstaffconfig.h
     internal/shared/mnxtypesconv.cpp

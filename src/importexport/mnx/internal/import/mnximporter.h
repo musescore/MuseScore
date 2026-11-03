@@ -137,6 +137,7 @@ private:
                        engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
     void createMeasureRepeats(const mnx::Part& mnxPart);
     void createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
+    void createPositionedTexts(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
 
     // markings
     engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,

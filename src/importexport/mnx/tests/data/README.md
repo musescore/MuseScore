@@ -123,5 +123,6 @@ All located in `project_examples/`.
 - `layoutBarlineStylesInstrument.mnx`: Hand-authored SATB mensurstrich choir layout (no bracket symbol) with separate piano accompaniment, to verify mensurstrich handling without bracket coupling.
 - `layoutBarlineStylesNested.mnx`: Hand-authored nested layout with conflicting group barline styles (`individual` outer, `unified` middle, `mensurstrich` inner) to verify nested export behavior.
 - `percussionKit.mnx`: Hand-authored percussion kit/kitNotes example (with sounds + ties) to exercise MNX percussion round-trip.
+- `positionedText.mnx`: Hand-authored grand staff with positioned text: text and SMuFL chunks with leading/trailing spaces, XML-special characters, a multi-glyph chunk, above/below/default placement, text at a mid-measure position with no event, and text on staff 2.
 - `restPosition.mnx`: export from MuseScore with "Export rest positions" enabled.
 - `staffLines.mnx`: Hand-authored staff configs and hidden clefs: a grand staff whose lower staff drops to one line and back to five, an upper staff whose clef is hidden at a barline, shown again, and hidden within a measure, and a one-line snare kit whose percussion clef is hidden.
