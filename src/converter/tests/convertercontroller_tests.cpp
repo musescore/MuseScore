@@ -237,6 +237,73 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_OutputDirIsCreated)
     EXPECT_EQ(readFile(out), "data");
 }
 
+TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_CreatedOutputDirIsRemoved)
+{
+    // [GIVEN] Output path in nested directories that do not exist
+    const path_t dir = filePath("faildir");
+    const path_t out = dir + "/sub/out.pdf";
+
+    // [GIVEN] Writer that fails
+    EXPECT_CALL(*m_writer, write(_, _, _))
+    .WillOnce(Return(make_ret(Ret::Code::UnknownError)));
+
+    // [WHEN] Convert the file
+    Ret ret = m_controller->fileConvert("in.mscz", out);
+
+    // [THEN] The convert fails and the created directories are removed
+    EXPECT_EQ(ret.code(), static_cast<int>(Err::OutFileFailedWrite));
+    EXPECT_FALSE(File::exists(out));
+    EXPECT_FALSE(Dir(dir).exists());
+}
+
+TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_ExistingOutputDirIsKept)
+{
+    // [GIVEN] Output path in a directory that already exists
+    const path_t dir = filePath("existingdir");
+    ASSERT_TRUE(Dir::mkpath(dir));
+    const path_t out = dir + "/out.pdf";
+
+    // [GIVEN] Writer that fails
+    EXPECT_CALL(*m_writer, write(_, _, _))
+    .WillOnce(Return(make_ret(Ret::Code::UnknownError)));
+
+    // [WHEN] Convert the file
+    Ret ret = m_controller->fileConvert("in.mscz", out);
+
+    // [THEN] The convert fails, the file is removed, but the existing directory is kept
+    EXPECT_EQ(ret.code(), static_cast<int>(Err::OutFileFailedWrite));
+    EXPECT_FALSE(File::exists(out));
+    EXPECT_TRUE(Dir(dir).exists());
+
+    Dir(dir).removeRecursively();
+}
+
+TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_OtherFilesInCreatedDirAreKept)
+{
+    // [GIVEN] Output path in nested directories that do not exist
+    const path_t dir = filePath("shareddir");
+    const path_t out = dir + "/sub/out.pdf";
+    const path_t otherFile = dir + "/other.txt";
+
+    // [GIVEN] Writer that fails, while another file appears in the created directory
+    EXPECT_CALL(*m_writer, write(_, _, _))
+    .WillOnce(Invoke([otherFile](INotationPtr, IODevice&, const Options&) {
+        File::writeFile(otherFile, ByteArray("other"));
+        return make_ret(Ret::Code::UnknownError);
+    }));
+
+    // [WHEN] Convert the file
+    Ret ret = m_controller->fileConvert("in.mscz", out);
+
+    // [THEN] The convert fails, only the output file and the empty directory are removed
+    EXPECT_EQ(ret.code(), static_cast<int>(Err::OutFileFailedWrite));
+    EXPECT_FALSE(File::exists(out));
+    EXPECT_FALSE(Dir(dir + "/sub").exists());
+    EXPECT_EQ(readFile(otherFile), "other");
+
+    Dir(dir).removeRecursively();
+}
+
 TEST_F(Converter_ConverterControllerTests, FileConvert_OutputFileCannotBeOpened)
 {
     // [GIVEN] Output path that is occupied by a directory

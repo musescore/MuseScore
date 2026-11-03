@@ -61,16 +61,48 @@ static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 static const std::string MP3_SUFFIX = "mp3";
 
-//! NOTE: Write directly to the file, some writers (e.g. video) write to the "file_path" themselves
-static Ret writeNotationToFile(INotationWriterPtr writer, INotationPtr notation, const path_t& filePath,
-                               const INotationWriter::Options& options = {}, const path_t& dirPath = {})
+//! NOTE: Returns the dirs of the path that don't exist yet, from the deepest one to the topmost one
+static paths_t missingDirs(const path_t& dirPath)
 {
-    const path_t outDir = io::dirpath(filePath);
+    paths_t missing;
+    path_t dir = dirPath;
+
+    while (!dir.empty() && !Dir(dir).exists()) {
+        missing.push_back(dir);
+
+        const path_t parent = io::absoluteDirpath(dir);
+        if (parent == dir) {
+            break;
+        }
+
+        dir = parent;
+    }
+
+    return missing;
+}
+
+//! NOTE: Write directly to the file, some writers (e.g. video) write to the "file_path" themselves
+Ret ConverterController::writeNotationToFile(INotationWriterPtr writer, INotationPtr notation, const path_t& filePath,
+                                             const INotationWriter::Options& options, const path_t& dirPath) const
+{
+    const path_t outDir = io::absoluteDirpath(filePath);
+    const paths_t createdDirs = missingDirs(outDir);
+
     Ret ret = Dir::mkpath(outDir);
     if (!ret) {
         LOGE() << "failed to create dir: " << outDir << ", err: " << ret.toString();
         return make_ret(Err::OutFileFailedOpen);
     }
+
+    //! NOTE: Don't leave behind the dirs created for the output file if the convert fails.
+    //!       Remove them bottom-up and only while they are empty, so that files written there by others are kept
+    auto removeCreatedDirs = [this, &createdDirs]() {
+        for (const path_t& dir : createdDirs) {
+            if (!fileSystem()->remove(dir, /*onlyIfEmpty*/ true)) {
+                break;
+            }
+        }
+    };
 
     FileStream outFile(filePath);
     outFile.setMeta("file_path", filePath.toStdString());
@@ -80,6 +112,7 @@ static Ret writeNotationToFile(INotationWriterPtr writer, INotationPtr notation,
 
     if (!outFile.open(IODevice::WriteOnly)) {
         LOGE() << "failed to open file: " << filePath;
+        removeCreatedDirs();
         return make_ret(Err::OutFileFailedOpen);
     }
 
@@ -89,6 +122,7 @@ static Ret writeNotationToFile(INotationWriterPtr writer, INotationPtr notation,
     if (!ret || outFile.hasError()) {
         LOGE() << "failed write, err: " << (ret ? outFile.errorString() : ret.toString()) << ", path: " << filePath;
         File::remove(filePath);
+        removeCreatedDirs();
         return make_ret(Err::OutFileFailedWrite);
     }
 
