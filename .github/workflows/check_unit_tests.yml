@@ -9,8 +9,8 @@ on:
         required: false
         type: boolean
         default: false
-      publish_coverage_badge:
-        description: 'Publish code coverage badge to S3 (main repository only)'
+      publish_coverage_report:
+        description: 'Publish code coverage report and badge to musescore/mss_code_coverage (main repository only)'
         required: false
         type: boolean
         default: false
@@ -115,6 +115,8 @@ jobs:
         python3 muse/buildscripts/ci/linux/tools/lcov_badger.py "${COVERAGE}" coverage_badge.svg
 
         echo "### Code coverage: ${COVERAGE}% of lines, ${FUNCTIONS_COVERAGE}% of functions" | tee -a $GITHUB_STEP_SUMMARY
+        echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
+        echo "FUNCTIONS_COVERAGE=${FUNCTIONS_COVERAGE}" >> $GITHUB_ENV
 
         # Without per-file function pages and extra sorted index pages: they make up about a third of the report
         genhtml filtered_coverage.info --output-directory coverage_report --no-function-coverage --no-sort --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,source || true
@@ -129,16 +131,27 @@ jobs:
           coverage_badge.svg
           coverage_report/
 
-    - name: Push to S3
-      if: github.repository == 'musescore/MuseScore' && ( github.event_name == 'schedule' || ( inputs.code_coverage && inputs.publish_coverage_badge ) )
+    - name: Publish coverage report
+      if: github.repository == 'musescore/MuseScore' && ( github.event_name == 'schedule' || ( inputs.code_coverage && inputs.publish_coverage_report ) )
+      env:
+        DEPLOY_KEY: ${{ secrets.CODE_COVERAGE_DEPLOY_KEY }}
       run: |
-        S3_URL='s3://extensions.musescore.org/test/code_coverage/coverage_badge.svg'
+        KEY_FILE="${RUNNER_TEMP}/code_coverage_deploy_key"
+        echo "${DEPLOY_KEY}" > "${KEY_FILE}"
+        chmod 600 "${KEY_FILE}"
+        export GIT_SSH_COMMAND="ssh -i ${KEY_FILE} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
-        bash ./muse/buildscripts/ci/tools/s3_push_file.sh \
-          --s3_key '${{ secrets.S3_KEY }}' \
-          --s3_secret '${{ secrets.S3_SECRET }}' \
-          --s3_url "${S3_URL}" \
-          --file_path "coverage_badge.svg"
+        bash ./muse/buildscripts/ci/tools/publish_code_coverage.sh \
+          --repo_url git@github.com:musescore/mss_code_coverage.git \
+          --branch main \
+          --report_dir coverage_report \
+          --badge coverage_badge.svg \
+          --lines "${COVERAGE}" \
+          --functions "${FUNCTIONS_COVERAGE}"
+
+        rm -f "${KEY_FILE}"
+
+        echo "Report: https://musescore.github.io/mss_code_coverage/" | tee -a $GITHUB_STEP_SUMMARY
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
