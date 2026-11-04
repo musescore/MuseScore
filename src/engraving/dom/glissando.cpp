@@ -80,7 +80,7 @@ GlissandoSegment::GlissandoSegment(Glissando* sp)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* GlissandoSegment::propertyDelegate(Pid pid) const
+PropertyDelegate GlissandoSegment::resolvePropertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::GLISS_TYPE:
@@ -94,9 +94,9 @@ EngravingObject* GlissandoSegment::propertyDelegate(Pid pid) const
     case Pid::FONT_SIZE:
     case Pid::FONT_STYLE:
     case Pid::LINE_WIDTH:
-        return glissando();
+        return PropertyDelegate(glissando());
     default:
-        return LineSegment::propertyDelegate(pid);
+        return LineSegment::resolvePropertyDelegate(pid);
     }
 }
 

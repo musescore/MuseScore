@@ -105,7 +105,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    virtual EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
     virtual void reset() override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     void move(const PointF& s) override;

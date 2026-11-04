@@ -195,18 +195,18 @@ void TextLineBase::reset()
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* TextLineBaseSegment::propertyDelegate(Pid pid) const
+PropertyDelegate TextLineBaseSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::TEXT_STYLE) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
 
     for (Pid id : TextLineBasePropertyId) {
         if (pid == id) {
-            return spanner();
+            return PropertyDelegate(spanner());
         }
     }
-    return LineSegment::propertyDelegate(pid);
+    return LineSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

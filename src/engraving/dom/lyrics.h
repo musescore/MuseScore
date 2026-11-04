@@ -192,7 +192,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    EngravingObject* propertyDelegate(Pid propertyId) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid propertyId) const override;
 
     bool allowTimeAnchor() const override { return false; }
 
@@ -275,6 +275,6 @@ public:
     Color color() const override { return lyricsLine()->color(); }
     double baseLineShift() const override;
 
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 };
 } // namespace mu::engraving
