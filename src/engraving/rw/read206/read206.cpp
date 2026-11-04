@@ -1414,6 +1414,8 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
             t->ryoffset() += .5 * ctx.spatium();           // HACK: bbox is different in 2.x
         }
         adjustPlacement(t);
+    } else if (tag == "subtype") {
+        e.skipCurrentElement();     // unused
     } else if (!read400::TRead::readTextProperties(t, e, ctx)) {
         return false;
     }
