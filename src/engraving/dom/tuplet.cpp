@@ -296,20 +296,14 @@ void Tuplet::scanElements(std::function<void(EngravingItem*)> func)
 
 void Tuplet::add(EngravingItem* e)
 {
-#ifndef NDEBUG
-    for (DurationElement* el : m_currentElements) {
-        if (el == e) {
-            LOGD("%p: %p %s already there", this, e, e->typeName());
-            return;
-        }
-    }
-#endif
-
     switch (e->type()) {
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::TUPLET: {
         DurationElement* de = toDurationElement(e);
+        IF_ASSERT_FAILED(!contains(de)) {
+            return;
+        }
         de->setTuplet(this);
 
         bool found = false;
