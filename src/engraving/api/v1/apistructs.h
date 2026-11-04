@@ -211,7 +211,7 @@ class IntervalWrapper : public QObject
     Q_PROPERTY(int diatonic READ diatonic)
     /// Chromatic steps
     Q_PROPERTY(int chromatic READ chromatic)
-    /// Whether this interval is perfect
+    /// Whether both the diatonic and chromatic steps are zero.
     Q_PROPERTY(bool isZero READ isZero)
 
     mu::engraving::Interval i;
