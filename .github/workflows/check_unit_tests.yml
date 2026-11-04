@@ -102,24 +102,8 @@ jobs:
     - name: Code coverage
       if: github.event_name == 'schedule' || inputs.code_coverage
       run: |
-        # Zero baseline from .gcno files, so that compiled code which no test runs is counted as uncovered
-        lcov --capture --initial --directory "$(pwd)/build.debug/" --output-file coverage_base.info --ignore-errors mismatch,inconsistent,gcov,negative
-        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage_tests.info --ignore-errors mismatch,inconsistent,gcov,negative
-        lcov --add-tracefile coverage_base.info --add-tracefile coverage_tests.info --output-file coverage.info --ignore-errors mismatch,inconsistent,negative
-
-        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*.framework/*' '*/hb-*' '*/Qt/*' '*/build.debug/*' '*/framework/testing/*' '*/devtools/*' --output-file filtered_coverage.info --ignore-errors unused
-
-        SUMMARY=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov)
-        COVERAGE=$(echo "${SUMMARY}" | grep -oP 'lines\.+:\s+\K[0-9.]+')
-        FUNCTIONS_COVERAGE=$(echo "${SUMMARY}" | grep -oP 'functions\.+:\s+\K[0-9.]+' || echo "?")
-        python3 muse/buildscripts/ci/linux/tools/lcov_badger.py "${COVERAGE}" coverage_badge.svg
-
-        echo "### Code coverage: ${COVERAGE}% of lines, ${FUNCTIONS_COVERAGE}% of functions" | tee -a $GITHUB_STEP_SUMMARY
-        echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
-        echo "FUNCTIONS_COVERAGE=${FUNCTIONS_COVERAGE}" >> $GITHUB_ENV
-
-        # Without per-file function pages and extra sorted index pages: they make up about a third of the report
-        genhtml filtered_coverage.info --output-directory coverage_report --no-function-coverage --no-sort --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,source || true
+        # Writes filtered_coverage.info, coverage_badge.svg, coverage_report/ and exports COVERAGE, FUNCTIONS_COVERAGE
+        cmake -P ./muse/buildscripts/ci/codecoverage/make_code_coverage.cmake --build_dir build.debug
 
     - name: Upload coverage report
       if: github.event_name == 'schedule' || inputs.code_coverage
@@ -141,7 +125,7 @@ jobs:
         chmod 600 "${KEY_FILE}"
         export GIT_SSH_COMMAND="ssh -i ${KEY_FILE} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
-        bash ./muse/buildscripts/ci/tools/publish_code_coverage.sh \
+        cmake -P ./muse/buildscripts/ci/codecoverage/publish_code_coverage.cmake \
           --repo_url git@github.com:musescore/mss_code_coverage.git \
           --branch main \
           --report_dir coverage_report \
