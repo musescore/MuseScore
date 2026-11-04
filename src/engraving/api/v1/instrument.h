@@ -28,6 +28,7 @@
 #include <QQmlListProperty>
 
 // api
+#include "apistructs.h"
 #include "scoreelement.h"
 
 #include "log.h"
@@ -391,6 +392,12 @@ class Instrument : public QObject
     /// The short name for this instrument.
     Q_PROPERTY(QString shortName READ shortName)
 
+    /// This instrument's written-to-sounding transposition, in diatonic steps
+    /// and chromatic semitones. Negative values indicate downward transposition.
+    /// \see apiv1::IntervalWrapper
+    /// \since MuseScore 5.0
+    Q_PROPERTY(apiv1::IntervalWrapper * transpose READ transpose)
+
     /// For fretted instruments, an information about this
     /// instrument's strings.
     Q_PROPERTY(apiv1::StringData * stringData READ stringData)
@@ -420,6 +427,7 @@ public:
     QString musicXmlId() const { return instrument()->musicXmlId(); }
     QString longName() const;
     QString shortName() const;
+    apiv1::IntervalWrapper* transpose() const;
 
     apiv1::StringData* stringData() { return customWrap<StringData>(instrument()->stringData()); }
 
