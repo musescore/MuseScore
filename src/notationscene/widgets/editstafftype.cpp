@@ -188,9 +188,11 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     bool bStandard    = !(instrument.drumset() != nullptr);
     bool bPerc        = (instrument.drumset() != nullptr);
     bool bTab = (instrument.stringData()->frettedStrings() > 0);
+    const bool enableJianpu = notationConfiguration()->enableJianpu();
     int idx           = 0;
     for (const mu::engraving::StaffType& t : mu::engraving::StaffType::presets()) {
-        if (((t.group() == mu::engraving::StaffGroup::STANDARD || t.group() == mu::engraving::StaffGroup::JIANPU) && bStandard)
+        if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
+            || (t.group() == mu::engraving::StaffGroup::JIANPU && bStandard && enableJianpu)
             || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
             || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.staffTypeName(), idx);

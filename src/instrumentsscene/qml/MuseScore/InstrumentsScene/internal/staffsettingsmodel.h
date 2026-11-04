@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "notation/inotationconfiguration.h"
 #include "notation/types/staffparttypes.h"
 
 namespace mu::instrumentsscene {
@@ -51,6 +52,7 @@ class StaffSettingsModel : public QObject, public muse::Contextable
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);
