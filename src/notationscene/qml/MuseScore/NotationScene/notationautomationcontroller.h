@@ -164,6 +164,8 @@ private:
 
     const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
 
+    void updateEditedPoint(muse::uicomponents::PolylinePlot* polyline, qreal x, qreal y);
+
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
     INotationPtr currentNotation() const;
