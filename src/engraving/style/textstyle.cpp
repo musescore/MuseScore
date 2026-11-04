@@ -1267,7 +1267,7 @@ const TextStyle bendTextStyle {
         { TextStylePropertyType::SizeSpatiumDependent, Sid::bendFontSpatiumDependent,               Pid::SIZE_SPATIUM_DEPENDENT },
         { TextStylePropertyType::FontStyle,            Sid::bendFontStyle,                          Pid::FONT_STYLE },
         { TextStylePropertyType::Color,                Sid::bendColor,                              Pid::COLOR },
-        { TextStylePropertyType::TextAlign,            Sid::bendAlign,                              Pid::BEGIN_TEXT_ALIGN },
+        { TextStylePropertyType::TextAlign,            Sid::bendAlign,                              Pid::ALIGN },
         { TextStylePropertyType::FrameType,            Sid::bendFrameType,                          Pid::FRAME_TYPE },
         { TextStylePropertyType::FramePadding,         Sid::bendFramePadding,                       Pid::FRAME_PADDING },
         { TextStylePropertyType::FrameWidth,           Sid::bendFrameWidth,                         Pid::FRAME_WIDTH },

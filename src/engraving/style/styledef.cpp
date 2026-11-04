@@ -1606,7 +1606,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(bendFontSpatiumDependent,                   true),
     styleDef(bendFontStyle,                              int(FontStyle::Normal)),
     styleDef(bendColor,                                  PropertyValue::fromValue(Color::BLACK)),
-    styleDef(bendAlign,                                  Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(bendAlign,                                  Align(AlignH::LEFT, AlignV::TOP)),
     styleDef(bendOffset,                                 PointF()),
     styleDef(bendFrameType,                              int(FrameType::NO_FRAME)),
     styleDef(bendFramePadding,                           0.2_sp),
