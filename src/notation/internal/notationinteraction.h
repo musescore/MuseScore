@@ -159,7 +159,7 @@ public:
     // Move
     void movePitch(MoveDirection d, PitchMode mode) override;
     void nudge(MoveDirection d, bool quickly) override;
-    void nudgeAnchors(MoveDirection) override;
+    void nudgeAnchors(MoveDirection d) override;
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
@@ -492,6 +492,11 @@ private:
 
     void resetGripEdit();
     void resetHitElementContext() override;
+
+    void doMovePitch(MoveDirection d, PitchMode mode, const std::vector<Rest*>& rests);
+    void doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
+    bool doNudgeAnchors(MoveDirection d);
+    void doMoveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements);
 
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);
