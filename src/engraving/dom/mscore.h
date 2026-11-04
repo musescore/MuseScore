@@ -157,6 +157,8 @@ enum class MsError : unsigned char {
     CANNOT_REPEAT_SELECTION,
     TRANSPOSE_NO_FRET_DIAGRAM,
     CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG,
+    NO_SPACE_FOR_TUPLET,
+    TUPLET_NOTE_VALUE_TOO_SHORT,
 };
 
 /// \cond PLUGIN_API \private \endcond

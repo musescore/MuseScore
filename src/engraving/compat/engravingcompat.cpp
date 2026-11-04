@@ -77,6 +77,10 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
         pre470TextCompat(score);
         migrateNoteParens(score);
     }
+
+    if (mscVersion < 500) {
+        resetIneffectiveCenterBetweenStaves(score);
+    }
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -169,6 +173,46 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
             Spanner* spanner = pair.second;
             if (spanner->isHairpin()) {
                 migrateVoiceAssignmentAndPosition(spanner);
+            }
+        }
+    }
+}
+
+void EngravingCompat::resetIneffectiveCenterBetweenStaves(MasterScore* masterScore)
+{
+    /* Before 5.0, dynamics and hairpins could only be centered between staves of their own part, but
+     * they could carry the property, e.g. if the item was copied from a piano part into a vocal part,
+     * even if it visually had no effect. Now it can also center between vocal staves, so we need to
+     * reset it to keep the old layout. */
+    auto resetIfIneffective = [](EngravingItem* item) {
+        const Part* part = item->part();
+        if (part && part->nstaves() <= 1
+            && item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+            item->resetProperty(Pid::CENTER_BETWEEN_STAVES);
+        }
+    };
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            for (Segment& segment : toMeasure(mb)->segments()) {
+                if (!segment.isChordRestType() && !segment.isTimeTickType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.annotations()) {
+                    if (item && (item->isDynamic() || item->isExpression())) {
+                        resetIfIneffective(item);
+                    }
+                }
+            }
+        }
+
+        for (auto pair : score->spanner()) {
+            Spanner* spanner = pair.second;
+            if (spanner->isHairpin()) {
+                resetIfIneffective(spanner);
             }
         }
     }

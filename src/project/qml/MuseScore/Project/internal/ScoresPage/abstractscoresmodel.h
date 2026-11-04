@@ -69,6 +69,7 @@ protected:
     static const QString PROCESSING_STATUS_KEY;
     static const QString CONVERT_ID_KEY;
     static const QString CONVERT_TYPE_KEY;
+    static const QString UPLOAD_ID_KEY;
     static const QString IS_CLOUD_KEY;
     static const QString CLOUD_SCORE_ID_KEY;
     static const QString CLOUD_VISIBILITY_KEY;

@@ -23,7 +23,7 @@
 #define MU_APPSHELL_MAINWINDOWTITLEPROVIDER_H
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "context/iprojectsession.h"
 
 namespace mu::appshell {
 class MainWindowTitleProvider : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -34,7 +34,7 @@ class MainWindowTitleProvider : public QObject, public muse::Contextable, public
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
     Q_PROPERTY(bool fileModified READ fileModified NOTIFY fileModifiedChanged)
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<context::IProjectSession> context = { this };
 
 public:
     explicit MainWindowTitleProvider(QObject* parent = nullptr);

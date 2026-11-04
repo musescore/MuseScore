@@ -32,7 +32,7 @@
 #include "rcommand/icommanddispatcher.h"
 #include "async/asyncable.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "ipaletteconfiguration.h"
 
 namespace mu::palette {
@@ -42,7 +42,7 @@ class PaletteActionsController : public IPaletteCommandsController, public muse:
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     PaletteActionsController(const muse::modularity::ContextPtr& iocCtx)

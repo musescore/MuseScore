@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "io/ifilesystem.h"
 #include "iprojectconfiguration.h"
 
@@ -38,7 +38,7 @@ class ProjectAutoSaver : public IProjectAutoSaver, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     ProjectAutoSaver(const muse::modularity::ContextPtr& iocCtx)

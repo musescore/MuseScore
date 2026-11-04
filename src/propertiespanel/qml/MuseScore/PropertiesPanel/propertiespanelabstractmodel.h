@@ -34,7 +34,7 @@
 
 #include "internal/ielementrepositoryservice.h"
 #include "notation/inotation.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 #include "propertyitem.h"
 #include "pointfpropertyitem.h"
@@ -64,7 +64,7 @@ class PropertiesPanelAbstractModel : public QObject, public muse::async::Asyncab
 
 public:
     muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
@@ -72,9 +72,9 @@ public:
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_MEASURES,
+        SECTION_NOTATION,
         SECTION_SYSTEM_PAGE_LAYOUT,
         SECTION_EMPTY_STAVES,
-        SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE,
@@ -173,7 +173,7 @@ public:
     static PropertiesPanelModelType modelTypeByElementKey(const ElementKey& elementKey);
     static std::set<PropertiesPanelModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static std::set<PropertiesPanelSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
-                                                                          const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
+                                                                          const QList<mu::engraving::EngravingItem*>& elementList = {});
     virtual bool isEmpty() const;
 
     virtual void createProperties() = 0;
@@ -271,7 +271,7 @@ protected slots:
     void updatemeasurementUnits();
 
 private:
-    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
+    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& elementList);
 
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
                                                                          const QVariant& newValue)> onPropertyChangedCallBack = nullptr,

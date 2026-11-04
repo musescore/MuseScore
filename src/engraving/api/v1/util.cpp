@@ -116,11 +116,11 @@ QString FileIO::pluginDirectoryPath()
 // Path of project file (ex: .../Desktop/project.mscz)
 QString FileIO::projectPath()
 {
-    if (!globalContext()) {
+    if (!projectSession()) {
         return QString();
     }
 
-    project::INotationProjectPtr project = globalContext()->currentProject();
+    project::INotationProjectPtr project = projectSession()->project();
     if (!project) {
         return QString();
     }

@@ -41,6 +41,7 @@ FocusScope {
     readonly property bool isProcessing: root.processingStatus !== undefined
     property int convertType: 0
     property int convertId: 0
+    property var uploadId: undefined
     property bool isCloud: false
     property int cloudScoreId: 0
     property bool showRemoveFromRecentFiles: false
@@ -51,8 +52,10 @@ FocusScope {
     signal revealInFileBrowserRequested(string scorePath)
     signal viewOnlineRequested(int scoreId)
     signal removeFromRecentFilesRequested(string scorePath)
+    signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
-    signal cancelRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
+    signal cancelConversionRequested(int convertType, int convertId)
 
     NavigationControl {
         id: navCtrl
@@ -216,13 +219,15 @@ FocusScope {
                 anchors.topMargin: 8
                 anchors.right: parent.right
                 anchors.rightMargin: 8
-                visible: menuModel.length > 0
-                         && (rootMouseArea.containsMouse
-                             || mouseArea.containsMouse
-                             || root.navigation.active
-                             || navigation.active
-                             || isMenuOpenedByButton)
-                transparent: !isMenuOpenedByButton && !rootMouseArea.containsMouse
+
+                readonly property bool isHovered: rootMouseArea.containsMouse
+                                                   || contextMenu.mouseArea.containsMouse
+                                                   || root.navigation.active
+                                                   || contextMenu.navigation.active
+                                                   || contextMenu.isMenuOpenedByButton
+
+                visible: contextMenu.menuModel.length > 0 && !root.isProcessing && contextMenu.isHovered
+                transparent: !contextMenu.isMenuOpenedByButton && !rootMouseArea.containsMouse
 
                 isCreateNew: root.isCreateNew
                 isNoResultsFound: root.isNoResultsFound
@@ -237,6 +242,7 @@ FocusScope {
                 onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
                 onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
                 onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
+                onDeleteScoreRequested: root.deleteScoreRequested(root.cloudScoreId, root.name)
             }
 
             Loader {
@@ -359,7 +365,13 @@ FocusScope {
             navigationColumn: root.navigation.column + 2
 
             onRetryRequested: root.retryRequested()
-            onCancelRequested: root.cancelRequested(root.convertType, root.convertId)
+            onCancelRequested: {
+                if (Boolean(root.uploadId)) {
+                    root.cancelUploadRequested(root.uploadId)
+                } else {
+                    root.cancelConversionRequested(root.convertType, root.convertId)
+                }
+            }
         }
     }
 

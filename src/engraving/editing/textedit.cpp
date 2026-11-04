@@ -362,6 +362,11 @@ bool TextBase::isEditAllowed(EditData& ed) const
             return true;
         }
         break;
+    case Key_Z:
+        if (ctrlPressed /* undo */ || (ctrlPressed && shiftPressed) /* redo */) {
+            return false;
+        }
+        break;
     // Several commands
     // TODO: looks like we're hard-coding keyboard shortcuts here, but what if user has edited those?
     case Key_B:
@@ -371,7 +376,6 @@ bool TextBase::isEditAllowed(EditData& ed) const
     case Key_V:
     case Key_X:
     case Key_Y:
-    case Key_Z:
         if (ctrlPressed && !shiftPressed) {
             return false; // handled at application level
         }
@@ -398,7 +402,6 @@ bool TextBase::isEditAllowed(EditData& ed) const
         case Key_P:
         case Key_S:
         case Key_R:
-        case Key_Z:
             return true;
         }
     }
@@ -677,6 +680,11 @@ bool TextBase::edit(EditData& ed)
                 notifyAboutTextCursorChanged();
             }
             break;
+        case Key_Z:
+            if (ctrlPressed /* undo */ || (ctrlPressed && shiftPressed) /* redo */) {
+                return false;
+            }
+            break;
         case Key_B:
         case Key_C:
         case Key_I:
@@ -684,7 +692,6 @@ bool TextBase::edit(EditData& ed)
         case Key_V:
         case Key_X:
         case Key_Y:
-        case Key_Z:
             if (ctrlPressed && !shiftPressed) {
                 return false; // handled at application level
             }

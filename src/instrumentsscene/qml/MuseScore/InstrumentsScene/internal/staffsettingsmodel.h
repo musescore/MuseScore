@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/types/staffparttypes.h"
 
@@ -51,7 +51,7 @@ class StaffSettingsModel : public QObject, public muse::Contextable
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
 public:

@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "async/asyncable.h"
 
@@ -45,7 +45,7 @@ class PercussionNotePopupContentModel : public QObject, public muse::Contextable
     Q_PROPERTY(QString percussionNoteName READ percussionNoteName NOTIFY percussionNoteNameChanged)
     Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
 
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     explicit PercussionNotePopupContentModel(QObject* parent = nullptr);

@@ -496,8 +496,9 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
         Segment* seg = score->setNoteRest(
             is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
             externalInputState);
-        if (seg) {
-            note = toChord(seg->element(track))->upNote();
+        EngravingItem* chordItem = seg ? seg->element(track) : nullptr;
+        if (chordItem && chordItem->isChord()) {
+            note = toChord(chordItem)->upNote();
         }
     }
 
@@ -1104,7 +1105,10 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
             if (s->isChordRestType()) {
                 for (EngravingItem* e : s->elist()) {
                     for (Tuplet* t = e ? toChordRest(e)->tuplet() : nullptr; t && t->tick() >= tick; t = t->tuplet()) {
-                        tuplets.insert(t);
+                        // shared tuplets follow their origin
+                        if (t->originItems().empty()) {
+                            tuplets.insert(t);
+                        }
                     }
                 }
             }

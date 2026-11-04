@@ -29,7 +29,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 #include "iselectinstrumentscenario.h"
 
@@ -40,7 +40,7 @@ class EditStaff : public muse::ui::WidgetDialog, private Ui::EditStaffBase, publ
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
 

@@ -80,7 +80,7 @@ bool AppMenuModel::isGlobalMenuAvailable()
 
 void AppMenuModel::setupConnections()
 {
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         auto stack = undoStack();
         if (stack) {
             stack->stackChanged().onNotify(this, [this]() {
@@ -147,7 +147,7 @@ MenuItem* AppMenuModel::makeEditMenu()
 
 mu::notation::INotationUndoStackPtr AppMenuModel::undoStack() const
 {
-    mu::notation::INotationPtr notation = globalContext()->currentNotation();
+    mu::notation::INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
 }
 

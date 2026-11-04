@@ -203,10 +203,10 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
         masterScore->doLayout();
     }
 
-    globalContext()->setCurrentProject(notationProject);
+    projectSession()->setProject(notationProject);
 
     DEFER {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setProject(nullptr);
     };
 
     // Check if this is a part conversion job
@@ -742,10 +742,10 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    globalContext()->setCurrentProject(notationProject);
+    projectSession()->setProject(notationProject);
 
     DEFER {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setProject(nullptr);
     };
 
     const INotationWriter::Options options {

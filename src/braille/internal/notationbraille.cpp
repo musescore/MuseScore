@@ -83,7 +83,7 @@ void NotationBraille::init()
         setIntervalDirection(direction);
     });
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         if (notation()) {
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
                 doBraille();
@@ -323,7 +323,7 @@ void NotationBraille::setCurrentItemPosition(const int start, const int end)
 
 INotationPtr NotationBraille::notation()
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationInteractionPtr NotationBraille::interaction()

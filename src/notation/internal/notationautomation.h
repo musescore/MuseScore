@@ -43,12 +43,16 @@ public:
     AutomationDataConstPtr automationData() const override;
     void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
+    muse::async::Notification resetEditStateRequested() const override;
+
     //! NOTE: called by MasterNotation whenever the underlying score changes
     void setMasterScore(engraving::MasterScore* masterScore);
 
 private:
     bool m_isAutomationModeEnabled = false;
     muse::async::Notification m_automationModeEnabledChanged;
+
+    muse::async::Notification m_resetEditStateRequested;
 
     engraving::MasterScore* m_masterScore = nullptr;
     const INotationUndoStackPtr m_undoStack;

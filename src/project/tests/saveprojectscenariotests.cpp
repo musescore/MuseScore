@@ -36,7 +36,6 @@
 #include "cloud/tests/mocks/audiocomservicemock.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
-#include "context/tests/mocks/globalcontextmock.h"
 #include "global/tests/mocks/filesystemmock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "interactive/tests/mocks/platforminteractivemock.h"
@@ -50,6 +49,7 @@
 #include "mocks/openprojectscenariomock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/recentfilescontrollermock.h"
+#include "mocks/projectsessionmock.h"
 #include "utils/promisetest.h"
 
 using ::testing::_;
@@ -79,7 +79,7 @@ protected:
         m_exportScenario = std::make_shared<NiceMock<ExportProjectScenarioMock> >();
         m_openScenario = std::make_shared<NiceMock<OpenProjectScenarioMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
-        m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
+        m_projectSession = std::make_shared<NiceMock<ProjectSessionMock> >();
 
         m_scenario->configuration.set(m_configuration);
         m_scenario->fileSystem.set(m_fileSystem);
@@ -91,14 +91,14 @@ protected:
         m_scenario->exportProjectScenario.set(m_exportScenario);
         m_scenario->openProjectScenario.set(m_openScenario);
         m_scenario->interactive.set(m_interactive);
-        m_scenario->globalContext.set(m_globalContext);
+        m_scenario->projectSession.set(m_projectSession);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_masterNotation = std::make_shared<NiceMock<notation::MasterNotationMock> >();
         m_notation = std::make_shared<NiceMock<notation::NotationMock> >();
         m_interaction = std::make_shared<NiceMock<notation::NotationInteractionMock> >();
 
-        ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
         ON_CALL(*m_project, masterNotation()).WillByDefault(Return(m_masterNotation));
         ON_CALL(*m_masterNotation, notation()).WillByDefault(Return(m_notation));
         ON_CALL(*m_notation, interaction()).WillByDefault(Return(m_interaction));
@@ -156,7 +156,7 @@ protected:
             QFile::remove(path);
         }
 
-        release(m_globalContext);
+        release(m_projectSession);
         release(m_project);
         release(m_masterNotation);
         release(m_notation);
@@ -331,7 +331,7 @@ protected:
     std::shared_ptr<ExportProjectScenarioMock> m_exportScenario;
     std::shared_ptr<OpenProjectScenarioMock> m_openScenario;
     std::shared_ptr<InteractiveMock> m_interactive;
-    std::shared_ptr<context::GlobalContextMock> m_globalContext;
+    std::shared_ptr<ProjectSessionMock> m_projectSession;
 
     std::shared_ptr<NotationProjectMock> m_project;
     std::shared_ptr<notation::MasterNotationMock> m_masterNotation;
@@ -532,7 +532,7 @@ TEST_F(SaveProjectScenarioTests, SaveProject_Forced_SkipsTheCanSaveCheck)
 TEST_F(SaveProjectScenarioTests, SaveProject_NoOpenScore_IsRefusedInsteadOfCrashing)
 {
     //! [GIVEN] No score open at all...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is written
     EXPECT_CALL(*m_interactive, selectSavingFile(_, _, _, _)).Times(0);
@@ -550,7 +550,7 @@ TEST_F(SaveProjectScenarioTests, ShareAudio_NoOpenScore_IsRefusedInsteadOfCrashi
     givenReachableCloud();
 
     //! [GIVEN] ...and no score open at all
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [THEN] Nothing is asked and nothing is uploaded
     EXPECT_CALL(*m_interactive, open(IsSaveToCloudDialog())).Times(0);

@@ -46,7 +46,7 @@ void AbstractSelectionFilterModel::load()
 
     onNotationChanged();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
 
@@ -146,7 +146,7 @@ bool AbstractSelectionFilterModel::isNoneSelected() const
 
 INotationPtr AbstractSelectionFilterModel::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 INotationInteractionPtr AbstractSelectionFilterModel::currentNotationInteraction() const

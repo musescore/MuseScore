@@ -47,7 +47,7 @@ void InstrumentsActionsController::init()
 
 void InstrumentsActionsController::selectInstruments()
 {
-    IMasterNotationPtr master = context()->currentMasterNotation();
+    IMasterNotationPtr master = context()->masterNotation();
     IF_ASSERT_FAILED(master) {
         return;
     }
@@ -60,7 +60,7 @@ void InstrumentsActionsController::selectInstruments()
 
 void InstrumentsActionsController::changeInstrument()
 {
-    IMasterNotationPtr master = context()->currentMasterNotation();
+    IMasterNotationPtr master = context()->masterNotation();
     IF_ASSERT_FAILED(master) {
         return;
     }

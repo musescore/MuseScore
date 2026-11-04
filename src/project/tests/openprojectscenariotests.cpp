@@ -33,11 +33,10 @@
 #include "engraving/engravingerrors.h"
 #include "cloud/tests/mocks/authorizationservicemock.h"
 #include "cloud/tests/mocks/musescorecomservicemock.h"
-#include "context/tests/mocks/globalcontextmock.h"
 #include "global/tests/mocks/filesystemmock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
-#include "musesounds/tests/mocks/musesamplercheckupdatescenariomock.h"
+#include "musesounds/tests/mocks/musesamplercheckstatusscenariomock.h"
 #include "musesounds/tests/mocks/musesoundscheckupdatescenariomock.h"
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
@@ -51,6 +50,7 @@
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/projectcreatormock.h"
 #include "mocks/recentfilescontrollermock.h"
+#include "mocks/projectsessionmock.h"
 #include "utils/promisetest.h"
 
 using ::testing::_;
@@ -79,9 +79,9 @@ protected:
         m_autoSaver = std::make_shared<NiceMock<ProjectAutoSaverMock> >();
         m_recentFiles = std::make_shared<NiceMock<RecentFilesControllerMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
-        m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
+        m_projectSession = std::make_shared<NiceMock<ProjectSessionMock> >();
         m_museSounds = std::make_shared<NiceMock<musesounds::MuseSoundsCheckUpdateScenarioMock> >();
-        m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckUpdateScenarioMock> >();
+        m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckStatusScenarioMock> >();
         m_mscMetaReader = std::make_shared<NiceMock<notation::MscMetaReaderMock> >();
         m_convertFileToScoreScenario = std::make_shared<NiceMock<ConvertFileToScoreScenarioMock> >();
 
@@ -94,9 +94,9 @@ protected:
         m_scenario->projectAutoSaver.set(m_autoSaver);
         m_scenario->recentFilesController.set(m_recentFiles);
         m_scenario->interactive.set(m_interactive);
-        m_scenario->globalContext.set(m_globalContext);
+        m_scenario->projectSession.set(m_projectSession);
         m_scenario->museSoundsCheckUpdateScenario.set(m_museSounds);
-        m_scenario->museSamplerCheckUpdateScenario.set(m_museSampler);
+        m_scenario->museSamplerCheckStatusScenario.set(m_museSampler);
         m_scenario->mscMetaReader.set(m_mscMetaReader);
         m_scenario->convertFileToScoreScenario.set(m_convertFileToScoreScenario);
 
@@ -109,7 +109,7 @@ protected:
         ON_CALL(*m_museScoreComService, authorization()).WillByDefault(Return(m_authorization));
 
         // Nothing open, nothing in another window, and paths are taken at face value.
-        ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
         ON_CALL(*m_multiwindows, isProjectAlreadyOpened(_)).WillByDefault(Return(false));
         ON_CALL(*m_fileSystem, absoluteFilePath(_))
         .WillByDefault([](const io::path_t& p) { return p; });
@@ -157,7 +157,7 @@ protected:
         // Let whatever the flow queued after its result run, so that nothing outlives the mocks
         drainDeferredCalls();
 
-        release(m_globalContext);
+        release(m_projectSession);
         release(m_project);
         release(m_masterNotation);
         release(m_notation);
@@ -251,9 +251,9 @@ protected:
     std::shared_ptr<ProjectAutoSaverMock> m_autoSaver;
     std::shared_ptr<RecentFilesControllerMock> m_recentFiles;
     std::shared_ptr<InteractiveMock> m_interactive;
-    std::shared_ptr<context::GlobalContextMock> m_globalContext;
+    std::shared_ptr<ProjectSessionMock> m_projectSession;
     std::shared_ptr<musesounds::MuseSoundsCheckUpdateScenarioMock> m_museSounds;
-    std::shared_ptr<musesounds::MuseSamplerCheckUpdateScenarioMock> m_museSampler;
+    std::shared_ptr<musesounds::MuseSamplerCheckStatusScenarioMock> m_museSampler;
     std::shared_ptr<notation::MscMetaReaderMock> m_mscMetaReader;
     std::shared_ptr<ConvertFileToScoreScenarioMock> m_convertFileToScoreScenario;
 
@@ -275,7 +275,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_LocalFileUrl_OpensThatFile)
 
     //! [THEN] It is loaded and becomes the current score
     EXPECT_CALL(*m_project, load(io::path_t("/score.mscz"), _, _)).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(1);
 
     //! [WHEN] Opening it...
     Ret ret = openProject(file);
@@ -355,7 +355,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileDialogCancelled_OpensNothing)
 TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenHere_JustShowsIt)
 {
     //! [GIVEN] The very score that is already open in this window...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("score.mscz")));
 
     //! [THEN] It is not loaded again and no second window is opened
@@ -386,12 +386,12 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpenElsewhere_RaisesThatWind
 TEST_F(OpenProjectScenarioTests, OpenProject_ThisWindowIsTaken_OpensANewWindow)
 {
     //! [GIVEN] A different score already open in this window...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The new score gets a window of its own, and this one is left alone
     EXPECT_CALL(*m_multiwindows, openNewWindow(QStringList { "score.mscz" })).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Opening it...
     Ret ret = openProject("score.mscz");
@@ -402,7 +402,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_ThisWindowIsTaken_OpensANewWindow)
 TEST_F(OpenProjectScenarioTests, OpenProject_NewWindowWithDisplayName_PassesTheNameAlong)
 {
     //! [GIVEN] A different score already open in this window...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The display name travels to the new window, so the title is not lost
@@ -432,7 +432,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_EmptyPath_IsRefused)
 TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NoCurrentProject_IsTheNotationPage)
 {
     //! [GIVEN] No project is current...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(nullptr));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(nullptr));
 
     //! [WHEN] Resolving which page to show...
     //! [THEN] It is the ordinary notation page
@@ -442,7 +442,7 @@ TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NoCurrentProject_IsTheNo
 TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NotACloudScore_IsTheNotationPage)
 {
     //! [GIVEN] A local score with no cloud info...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
 
     //! [WHEN] Resolving which page to show...
     //! [THEN] It is the ordinary notation page
@@ -452,7 +452,7 @@ TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_NotACloudScore_IsTheNota
 TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_CloudScoreNotAwaitingReview_IsTheNotationPage)
 {
     //! [GIVEN] A cloud score that is not a conversion awaiting review...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     m_cloudInfo.sourceUrl = QUrl("https://musescore.com/score/42");
     ON_CALL(*m_convertFileToScoreScenario, isAwaitingReview(42)).WillByDefault(Return(false));
 
@@ -464,7 +464,7 @@ TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_CloudScoreNotAwaitingRev
 TEST_F(OpenProjectScenarioTests, ResolveNotationPageUri_CloudScoreAwaitingReview_IsTheReviewPage)
 {
     //! [GIVEN] A converted cloud score still awaiting a quality review...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     m_cloudInfo.sourceUrl = QUrl("https://musescore.com/score/42");
     ON_CALL(*m_convertFileToScoreScenario, isAwaitingReview(42)).WillByDefault(Return(true));
 
@@ -574,7 +574,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_AlreadyOpening_RefusesToStartAgain)
 TEST_F(OpenProjectScenarioTests, OpenProject_FromCommandParams_UsesUrlAndDisplayName)
 {
     //! [GIVEN] An "open" command carrying a file url and a display name...
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     rcommand::Params params;
@@ -646,7 +646,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_LocalCopyIsUpToDate_SkipsThe
 
     //! [THEN] The copy on disk is opened as is, without going over the network again
     EXPECT_CALL(*m_museScoreComService, downloadScore(_, _, _, _)).Times(0);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(1);
 
     //! [WHEN] Opening it...
     downloadAndOpenCloudProject(42);
@@ -682,7 +682,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_DownloadFails_ReportsAndOpen
 
     //! [THEN] The user is told, and no score becomes current
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Opening it...
     Ret ret = downloadAndOpenCloudProject(42);
@@ -705,7 +705,7 @@ TEST_F(OpenProjectScenarioTests, DownloadCloudScore_DownloadSucceeds_OpensItWith
     //! [THEN] The score opens carrying the details the server gave, and is remembered
     EXPECT_CALL(*m_project, setCloudInfo(::testing::Field(&CloudProjectInfo::revisionId, 9))).Times(1);
     EXPECT_CALL(*m_recentFiles, prependRecentFile(_)).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(1);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(1);
 
     //! [WHEN] Opening it...
     Ret ret = downloadAndOpenCloudProject(42);
@@ -767,7 +767,7 @@ TEST_F(OpenProjectScenarioTests, OpenScoreUrl_WindowIsTaken_OpensANewWindowWithT
     remote.title = "Cloud title";
     ON_CALL(*m_museScoreComService, downloadScoreInfo(::testing::An<int>()))
     .WillByDefault([remote] { return resolvedPromise(RetVal<cloud::ScoreInfo>::make_ok(remote)); });
-    ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(m_project));
+    ON_CALL(*m_projectSession, project()).WillByDefault(Return(m_project));
     ON_CALL(*m_project, path()).WillByDefault(Return(io::path_t("other.mscz")));
 
     //! [THEN] The link and its title go to a new window
@@ -822,7 +822,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_FileFromAnOlderVersionAndUserDeclin
 
     //! [THEN] There is no second attempt, and no score becomes current
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Opening it...
     Ret ret = openProject("ancient.mscz");
@@ -884,7 +884,7 @@ TEST_F(OpenProjectScenarioTests, OpenProject_CriticallyCorruptedFile_IsNeverRetr
 
     //! [THEN] There is no second attempt, whatever the user answers
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
-    EXPECT_CALL(*m_globalContext, setCurrentProject(_)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
 
     //! [WHEN] Opening it...
     Ret ret = openProject("ruined.mscz");

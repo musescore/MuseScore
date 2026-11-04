@@ -32,7 +32,7 @@
 #include "notation/inotationconfiguration.h"
 #include "audio/main/iaudioconfiguration.h"
 #include "engraving/infrastructure/mscio.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::engraving::apiv1 {
 //---------------------------------------------------------
@@ -71,7 +71,7 @@ class FileIO : public QObject, public muse::Contextable
     muse::GlobalInject<mu::project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<mu::notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
 

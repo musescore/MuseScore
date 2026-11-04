@@ -1202,10 +1202,12 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
-            // Update numbering for existing parts
-            int instrumentNumber = resolveExistingInstrumentNumber(pi.partId, pi.instrumentTemplate);
-            if (Part* existingPart = score()->partById(pi.partId)) {
-                score()->undo(new mu::engraving::ChangeInstrumentNumber(Fraction(-1, 1), existingPart, instrumentNumber));
+            // Update numbering for existing parts of instruments being added
+            if (isNewInstrument(pi.instrumentTemplate, parts)) {
+                int instrumentNumber = resolveExistingInstrumentNumber(pi.partId, pi.instrumentTemplate);
+                if (Part* existingPart = score()->partById(pi.partId)) {
+                    score()->undo(new mu::engraving::ChangeInstrumentNumber(Fraction(-1, 1), existingPart, instrumentNumber));
+                }
             }
             ++partIdx;
             continue;
@@ -1293,6 +1295,17 @@ int NotationParts::countExistingInstruments(const InstrumentTemplate& instrument
     }
 
     return count;
+}
+
+bool NotationParts::isNewInstrument(const InstrumentTemplate& instrument, const PartInstrumentList& parts) const
+{
+    for (const PartInstrument& pi : parts) {
+        if (!pi.isExistingPart && pi.instrumentTemplate.id == instrument.id) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int NotationParts::resolveExistingInstrumentNumber(const muse::ID& partId, const InstrumentTemplate& instrument) const

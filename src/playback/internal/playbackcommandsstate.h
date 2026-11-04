@@ -29,7 +29,7 @@
 
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "../iplaybackcontroller.h"
 #include "rcommand/icommandsregister.h"
 #include "notation/inotationconfiguration.h"
@@ -42,7 +42,7 @@ class PlaybackCommandsState : public muse::rcommand::IModuleCommandsState, publi
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<IPlaybackConfiguration> playbackConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:

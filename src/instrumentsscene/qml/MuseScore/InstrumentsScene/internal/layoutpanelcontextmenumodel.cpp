@@ -30,7 +30,6 @@
 
 #include "log.h"
 
-using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
@@ -49,7 +48,7 @@ LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
 
 void LayoutPanelContextMenuModel::load()
 {
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         updateMenu();
     });
 
@@ -69,8 +68,8 @@ void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
 
 void LayoutPanelContextMenuModel::updateMenu()
 {
-    INotationPtr notation = globalContext()->currentNotation();
-    m_masterNotation = globalContext()->currentMasterNotation();
+    INotationPtr notation = projectSession()->currentNotation();
+    m_masterNotation = projectSession()->masterNotation();
 
     if (!m_masterNotation || !notation) {
         clear();

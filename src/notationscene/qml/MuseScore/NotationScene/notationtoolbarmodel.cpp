@@ -60,7 +60,7 @@ void NotationToolBarModel::load()
 
     setItems(items);
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->masterNotationChanged().onNotify(this, [this]() {
         load();
     });
 

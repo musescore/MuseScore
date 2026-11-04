@@ -30,7 +30,7 @@
 
 #include "rcommand/tests/mocks/commanddispatchermock.h"
 
-#include "context/tests/mocks/globalcontextmock.h"
+#include "project/tests/mocks/projectsessionmock.h"
 #include "project/tests/mocks/notationprojectmock.h"
 
 #include "mocks/playbackconfigurationmock.h"
@@ -52,7 +52,7 @@ protected:
     void SetUp() override
     {
         m_playback = std::make_shared<NiceMock<audio::PlaybackMock> >();
-        m_globalContext = std::make_shared<NiceMock<context::GlobalContextMock> >();
+        m_projectSession = std::make_shared<NiceMock<project::ProjectSessionMock> >();
         m_configuration = std::make_shared<NiceMock<PlaybackConfigurationMock> >();
         m_commandDispatcher = std::make_shared<NiceMock<rcommand::CommandDispatcherMock> >();
         m_project = std::make_shared<NiceMock<project::NotationProjectMock> >();
@@ -60,15 +60,15 @@ protected:
         m_iocCtx = std::make_shared<modularity::Context>(TEST_CONTEXT_ID);
 
         modularity::ioc(m_iocCtx)->registerExport<audio::IPlayback>(TEST_MODULE, m_playback);
-        modularity::ioc(m_iocCtx)->registerExport<context::IGlobalContext>(TEST_MODULE, m_globalContext);
+        modularity::ioc(m_iocCtx)->registerExport<project::IProjectSession>(TEST_MODULE, m_projectSession);
         modularity::ioc(m_iocCtx)->registerExport<rcommand::ICommandDispatcher>(TEST_MODULE, m_commandDispatcher);
 
         modularity::globalIoc()->registerExport<IPlaybackConfiguration>(TEST_MODULE, m_configuration);
 
-        ON_CALL(*m_globalContext, currentProjectChanged()).WillByDefault(Return(m_currentProjectChanged));
-        ON_CALL(*m_globalContext, currentNotationChanged()).WillByDefault(Return(m_currentNotationChanged));
-        ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(project::INotationProjectPtr()));
-        ON_CALL(*m_globalContext, currentNotation()).WillByDefault(Return(notation::INotationPtr()));
+        ON_CALL(*m_projectSession, projectChanged()).WillByDefault(Return(m_currentProjectChanged));
+        ON_CALL(*m_projectSession, currentNotationChanged()).WillByDefault(Return(m_currentNotationChanged));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr()));
+        ON_CALL(*m_projectSession, currentNotation()).WillByDefault(Return(notation::INotationPtr()));
 
         //! NOTE The audio context stays inited until a test resolves it, as it is in the app:
         //! init() is an RPC round trip to the audio engine
@@ -113,16 +113,16 @@ protected:
 
     void openProject()
     {
-        ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(project::INotationProjectPtr(m_project)));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr(m_project)));
 
-        //! NOTE GlobalContext::setCurrentProject notifies in this order
+        //! NOTE ProjectSession::setProject notifies in this order
         m_currentProjectChanged.notify();
         m_currentNotationChanged.notify();
     }
 
     void closeProject()
     {
-        ON_CALL(*m_globalContext, currentProject()).WillByDefault(Return(project::INotationProjectPtr()));
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(project::INotationProjectPtr()));
 
         m_currentProjectChanged.notify();
         m_currentNotationChanged.notify();
@@ -131,7 +131,7 @@ protected:
     std::shared_ptr<PlaybackController> m_controller;
 
     std::shared_ptr<NiceMock<audio::PlaybackMock> > m_playback;
-    std::shared_ptr<NiceMock<context::GlobalContextMock> > m_globalContext;
+    std::shared_ptr<NiceMock<project::ProjectSessionMock> > m_projectSession;
     std::shared_ptr<NiceMock<PlaybackConfigurationMock> > m_configuration;
     std::shared_ptr<NiceMock<rcommand::CommandDispatcherMock> > m_commandDispatcher;
     std::shared_ptr<NiceMock<project::NotationProjectMock> > m_project;

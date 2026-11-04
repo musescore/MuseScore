@@ -543,7 +543,7 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
                 }
             }
             if (timestampsUpdated) {
-                globalContext()->currentNotation()->notationChanged().send(muse::RectF());
+                projectSession()->currentNotation()->notationChanged().send(muse::RectF());
             }
         }
     } break;

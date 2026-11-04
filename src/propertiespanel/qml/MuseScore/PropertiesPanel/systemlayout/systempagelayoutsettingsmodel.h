@@ -25,6 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "propertiespanelabstractmodel.h"
+#include "notation/notationtypes.h"
 
 namespace mu::propertiespanel {
 class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
@@ -41,11 +42,15 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(QString shortcutTogglePageLock READ shortcutTogglePageLock CONSTANT)
     Q_PROPERTY(QString shortcutMakeIntoSystem READ shortcutMakeIntoSystem CONSTANT)
     Q_PROPERTY(QString shortcutMakeIntoPage READ shortcutMakeIntoPage CONSTANT)
+
     Q_PROPERTY(bool allSystemsAreLocked READ allSystemsAreLocked NOTIFY allSystemsAreLockedChanged)
     Q_PROPERTY(bool allPagesAreLocked READ allPagesAreLocked NOTIFY allPagesAreLockedChanged)
     Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
+    Q_PROPERTY(bool isBoxOnlySelection READ isBoxOnlySelection NOTIFY isBoxOnlySelectionChanged)
     Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
     Q_PROPERTY(bool isMakeIntoPageAvailable READ isMakeIntoPageAvailable NOTIFY isMakeIntoPageAvailableChanged)
+    Q_PROPERTY(bool isSystemTabAvailable READ isSystemTabAvailable NOTIFY isSystemTabAvailableChanged)
+
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
 
@@ -83,8 +88,10 @@ public:
     QString shortcutMakeIntoPage() const;
 
     bool scoreIsInPageView() const;
+    bool isBoxOnlySelection() const;
     bool isMakeIntoSystemAvailable() const;
     bool isMakeIntoPageAvailable() const;
+    bool isSystemTabAvailable() const;
 
     int systemCount() const;
     int pageCount() const;
@@ -96,8 +103,13 @@ private:
     void updateAllSystemsAreLocked();
     void updateAllPagesAreLocked();
     void updateScoreIsInPageView();
-    void updateIsMakeIntoSystemAvailable();
-    void updateIsMakeIntoPageAvailable();
+    void updateIsBoxOnlySelection(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsMakeIntoSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsMakeIntoPageAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsSystemTabAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+
+    QSet<mu::notation::BoxType> boxTypesInSelection() const;
+
     void updateSystemCount();
     void updatePageCount();
 
@@ -105,8 +117,10 @@ signals:
     void allSystemsAreLockedChanged(bool allLocked);
     void allPagesAreLockedChanged(bool allLocked);
     void scoreIsInPageViewChanged(bool isInPageView);
+    void isBoxOnlySelectionChanged(bool isBoxOnlySelection);
     void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
     void isMakeIntoPageAvailableChanged(bool isMakeIntoPageAvailable);
+    void isSystemTabAvailableChanged(bool isSystemTabAvailable);
     void systemCountChanged(int count);
     void pageCountChanged(int count);
 
@@ -114,8 +128,11 @@ private:
     bool m_allSystemsAreLocked = false;
     bool m_allPagesAreLocked = false;
     bool m_scoreIsInPageView = false;
+    bool m_isBoxOnlySelection = false;
     bool m_isMakeIntoSystemAvailable = false;
     bool m_isMakeIntoPageAvailable = false;
+    bool m_isSystemTabAvailable = false;
+
     size_t m_systemCount = 0;
     size_t m_pageCount = 0;
 };

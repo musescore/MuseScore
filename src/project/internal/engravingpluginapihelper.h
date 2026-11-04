@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "iexportprojectscenario.h"
 #include "inotationwritersregister.h"
 #include "iopenprojectscenario.h"
@@ -36,7 +36,7 @@ namespace mu::project {
 class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<INotationWritersRegister> writers;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<ICloseProjectScenario> closeProjectController = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };

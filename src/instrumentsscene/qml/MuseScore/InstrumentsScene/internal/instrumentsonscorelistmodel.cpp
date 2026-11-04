@@ -139,7 +139,7 @@ void InstrumentsOnScoreListModel::load()
 {
     TRACEFUNC;
 
-    IMasterNotationPtr master = context()->currentMasterNotation();
+    IMasterNotationPtr master = context()->masterNotation();
     auto parts = master ? master->parts()->partList() : NotifyList<const Part*>();
 
     ItemList instruments;

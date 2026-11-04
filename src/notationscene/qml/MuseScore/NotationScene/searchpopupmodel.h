@@ -27,7 +27,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::notation {
 class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::Contextable
@@ -36,7 +36,7 @@ class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::C
     Q_INTERFACES(QQmlParserStatus);
     QML_ELEMENT;
 
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     explicit SearchPopupModel(QObject* parent = nullptr);

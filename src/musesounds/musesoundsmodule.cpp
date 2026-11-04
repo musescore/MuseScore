@@ -29,8 +29,8 @@
 
 #include "internal/musesoundscheckupdatescenario.h"
 #include "internal/musesoundscheckupdateservice.h"
-#include "internal/musesamplercheckupdateservice.h"
-#include "internal/musesamplercheckupdatescenario.h"
+#include "internal/musesamplercheckstatusservice.h"
+#include "internal/musesamplercheckstatusscenario.h"
 
 using namespace mu::musesounds;
 using namespace muse;
@@ -50,7 +50,7 @@ void MuseSoundsModule::registerExports()
 
     globalIoc()->registerExport<IMuseSoundsConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IMuseSoundsRepository>(mname, m_repository);
-    globalIoc()->registerExport<IMuseSamplerCheckUpdateService>(mname, new MuseSamplerCheckUpdateService());
+    globalIoc()->registerExport<IMuseSamplerCheckStatusService>(mname, new MuseSamplerCheckStatusService());
     globalIoc()->registerExport<IMuseSoundsCheckUpdateService>(mname, new MuseSoundsCheckUpdateService());
 }
 
@@ -76,5 +76,5 @@ IContextSetup* MuseSoundsModule::newContext(const muse::modularity::ContextPtr& 
 void MuseSoundsModuleContext::registerExports()
 {
     ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(mname, new MuseSoundsCheckUpdateScenario(iocContext()));
-    ioc()->registerExport<IMuseSamplerCheckUpdateScenario>(mname, new MuseSamplerCheckUpdateScenario(iocContext()));
+    ioc()->registerExport<IMuseSamplerCheckStatusScenario>(mname, new MuseSamplerCheckStatusScenario(iocContext()));
 }

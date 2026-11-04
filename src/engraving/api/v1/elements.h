@@ -734,8 +734,10 @@ class EngravingItem : public apiv1::ScoreElement
     /// For time signatures:  The time signature type,
     /// one of PluginAPI::PluginAPI::TimeSigType values.
     API_PROPERTY_T(int, timesigType,      TIMESIG_TYPE)
+    /// For multimeasure rests: The vertical position of the number,
+    /// i.e. the style position plus mmRestNumberOffset.
     ///\since MuseScore 4.6
-    API_PROPERTY(mmRestNumberPos,         MMREST_NUMBER_POS)
+    Q_PROPERTY(QVariant mmRestNumberPos READ mmRestNumberPos WRITE setMmRestNumberPos RESET resetMmRestNumberPos)
     /// For multimeasure rests: The offset of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(mmRestNumberOffset,      MMREST_NUMBER_OFFSET)
@@ -743,9 +745,13 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, mmRestNumberVisible, MMREST_NUMBER_VISIBLE)
 
-    /// For measure repeats: The position of the number.
+    /// For measure repeats: The vertical position of the number,
+    /// i.e. the style position plus measureRepeatNumberOffset.
     ///\since MuseScore 4.6
-    API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
+    Q_PROPERTY(QVariant measureRepeatNumberPos READ measureRepeatNumberPos WRITE setMeasureRepeatNumberPos RESET resetMeasureRepeatNumberPos)
+    /// For measure repeats: The offset of the number.
+    ///\since MuseScore 5.0
+    API_PROPERTY(measureRepeatNumberOffset, MEASURE_REPEAT_NUMBER_OFFSET)
 
     /// For lyrics and lyrics lines: The verse they are assigned to.
     API_PROPERTY_T(int, verse,            VERSE)
@@ -1165,10 +1171,6 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, firstSystemIndentation, FIRST_SYSTEM_INDENTATION)
 
-    /// For chord lines: Their line path.
-    ///\since MuseScore 4.6
-    API_PROPERTY(path,                    PATH)
-
     /// For parts: Whether this part prefers sharps or flats,
     /// one of PluginAPI::PluginAPI::PreferSharpFlat values.
     ///\since MuseScore 4.6
@@ -1286,6 +1288,13 @@ class EngravingItem : public apiv1::ScoreElement
     qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
     void setOffsetX(qreal offX);
     void setOffsetY(qreal offY);
+
+    QVariant mmRestNumberPos() const;
+    void setMmRestNumberPos(const QVariant& pos);
+    void resetMmRestNumberPos();
+    QVariant measureRepeatNumberPos() const;
+    void setMeasureRepeatNumberPos(const QVariant& pos);
+    void resetMeasureRepeatNumberPos();
 
     qreal posX() const { return element()->pos().x() / element()->spatium(); }
     qreal posY() const { return element()->pos().y() / element()->spatium(); }
@@ -2522,16 +2531,16 @@ class SpannerSegment : public EngravingItem
     API_PROPERTY_T(QPointF, userOff2,     OFFSET2)
     /// For slur and tie segments:
     /// The manual offset applied to the first point.
-    API_PROPERTY_T(QPointF, slurUoff1,    SLUR_UOFF1)
+    API_PROPERTY_T(QPointF, slurUoff1,    BEZIER_OFFSET1)
     /// For slur and tie segments:
     /// The manual offset applied to the second point.
-    API_PROPERTY_T(QPointF, slurUoff2,    SLUR_UOFF2)
+    API_PROPERTY_T(QPointF, slurUoff2,    BEZIER_OFFSET2)
     /// For slur and tie segments:
     /// The manual offset applied to the third point.
-    API_PROPERTY_T(QPointF, slurUoff3,    SLUR_UOFF3)
+    API_PROPERTY_T(QPointF, slurUoff3,    BEZIER_OFFSET3)
     /// For slur and tie segments:
     /// The manual offset applied to the fourth point.
-    API_PROPERTY_T(QPointF, slurUoff4,    SLUR_UOFF4)
+    API_PROPERTY_T(QPointF, slurUoff4,    BEZIER_OFFSET4)
 
     /// \cond MS_INTERNAL
 

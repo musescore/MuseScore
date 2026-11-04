@@ -26,7 +26,7 @@
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
 
@@ -35,7 +35,7 @@ class WebApi : public muse::async::Asyncable
 {
     inline static muse::GlobalInject<muse::IInteractive> interactive;
     inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
-    inline static muse::GlobalInject<mu::context::IGlobalContext> globalContext;
+    inline static muse::GlobalInject<mu::project::IProjectSession> projectSession;
     inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
     inline static muse::GlobalInject<muse::audio::ISoundFontController> soundFontController;
 

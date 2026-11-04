@@ -118,6 +118,10 @@ DockPage {
 
         ScoresPage {
             subSection: root.subSection
+
+            onSubSectionApplied: {
+                root.subSection = ""
+            }
         }
     }
 

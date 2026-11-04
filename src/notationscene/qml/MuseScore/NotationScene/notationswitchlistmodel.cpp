@@ -46,7 +46,7 @@ void NotationSwitchListModel::load()
     TRACEFUNC;
 
     onCurrentProjectChanged();
-    context()->currentProjectChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
+    context()->projectChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentProjectChanged();
     });
 
@@ -62,7 +62,7 @@ void NotationSwitchListModel::onCurrentProjectChanged()
 
     loadNotations();
 
-    INotationProjectPtr project = context()->currentProject();
+    INotationProjectPtr project = context()->project();
     if (!project) {
         return;
     }
@@ -163,13 +163,13 @@ void NotationSwitchListModel::listenExcerptNotationTitleChanged(IExcerptNotation
 
 void NotationSwitchListModel::listenProjectSavingStatusChanged()
 {
-    INotationProjectPtr currentProject = context()->currentProject();
+    INotationProjectPtr currentProject = context()->project();
     if (!currentProject) {
         return;
     }
 
     currentProject->needSaveChanged().onNotify(this, [this]() {
-        INotationProjectPtr project = context()->currentProject();
+        INotationProjectPtr project = context()->project();
         if (!project) {
             return;
         }
@@ -180,7 +180,7 @@ void NotationSwitchListModel::listenProjectSavingStatusChanged()
     });
 
     currentProject->displayNameChanged().onNotify(this, [this]() {
-        INotationProjectPtr project = context()->currentProject();
+        INotationProjectPtr project = context()->project();
         if (!project) {
             return;
         }
@@ -198,7 +198,7 @@ INotationPtr NotationSwitchListModel::currentNotation() const
 
 IMasterNotationPtr NotationSwitchListModel::currentMasterNotation() const
 {
-    return context()->currentMasterNotation();
+    return context()->masterNotation();
 }
 
 QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
@@ -212,11 +212,11 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleTitle: return QVariant::fromValue(notation->name());
     case RoleNeedSave: {
-        bool needSave = context()->currentProject()->isNeedSave() && isMasterNotation(notation);
+        bool needSave = context()->project()->isNeedSave() && isMasterNotation(notation);
         return QVariant::fromValue(needSave);
     }
     case RoleIsCloud: {
-        bool isCloud = context()->currentProject()->isCloudProject() && isMasterNotation(notation);
+        bool isCloud = context()->project()->isCloudProject() && isMasterNotation(notation);
         return QVariant::fromValue(isCloud);
     }
     }

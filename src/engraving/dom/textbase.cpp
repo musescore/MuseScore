@@ -241,7 +241,7 @@ Char TextCursor::currentCharacter() const
     }
 
     const TextBlock& t = ldata->blocks.at(row());
-    String s = t.text(static_cast<int>(column()), 1);
+    String s = t.text(static_cast<int>(column()), 1, m_text);
     s = TextBase::unEscape(s);
     if (s.isEmpty()) {
         return Char();
@@ -722,16 +722,16 @@ String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) 
     const std::vector<TextBlock>& tb = ldata->blocks;
 
     if (r1 == r2) {
-        return tb.at(r1).text(c1, c2 - c1, withFormat);
+        return tb.at(r1).text(c1, c2 - c1, m_text, withFormat);
     }
 
-    String str = tb.at(r1).text(c1, -1, withFormat) + u"\n";
+    String str = tb.at(r1).text(c1, -1, m_text, withFormat) + u"\n";
 
     for (int r = r1 + 1; r < r2; ++r) {
-        str += tb.at(r).text(0, -1, withFormat) + u"\n";
+        str += tb.at(r).text(0, -1, m_text, withFormat) + u"\n";
     }
 
-    str += tb.at(r2).text(0, c2, withFormat);
+    str += tb.at(r2).text(0, c2, m_text, withFormat);
     return str;
 }
 
@@ -753,7 +753,7 @@ TextCursor::Range TextCursor::range(int start, int end) const
             }
 
             if (start < pos) {
-                result += t.text(static_cast<int>(j), 1);
+                result += t.text(static_cast<int>(j), 1, m_text);
             }
 
             pos++;
@@ -1496,11 +1496,14 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     return tl;
 }
 
-static String toSymbolXml(Char c)
+static String toSymbolXml(Char c, const TextBase* t)
 {
     static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
 
-    SymId symId = provider->fallbackFont()->fromCode(c.unicode());
+    SymId symId = t->score()->engravingFont()->fromCode(c.unicode());
+    if (symId == SymId::noSym) {
+        symId = provider->fallbackFont()->fromCode(c.unicode());
+    }
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
 }
 
@@ -1509,7 +1512,7 @@ static String toSymbolXml(Char c)
 //    extract text, symbols are marked with <sym>xxx</sym>
 //---------------------------------------------------------
 
-String TextBlock::text(int col1, int len, bool withFormat) const
+String TextBlock::text(int col1, int len, const TextBase* t, bool withFormat) const
 {
     String s;
     int col = 0;
@@ -1527,7 +1530,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
             Char c = f.text.at(i);
             if (col >= col1 && (len < 0 || ((col - col1) < len))) {
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
-                    s += toSymbolXml(c);
+                    s += toSymbolXml(c, t);
                 } else {
                     s += String::toXmlEscaped(c.unicode());
                 }
@@ -1748,9 +1751,11 @@ void TextBase::createBlocks(LayoutData* ldata) const
                     if (id != SymId::noSym) {
                         CharFormat fmt = *cursor.format(); // save format
 
-                        //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                        const std::shared_ptr<IEngravingFont> scoreFont = score()->engravingFont();
+                        char32_t code = static_cast<char32_t>(' ');
+                        if (id != SymId::space) {
+                            code = scoreFont->isValid(id) ? scoreFont->symCode(id) : score()->engravingFonts()->fallbackFont()->symCode(id);
+                        }
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -2122,7 +2127,7 @@ String TextBase::genText(const LayoutData* ldata) const
             }
             if (format.fontFamily() == u"ScoreText") {
                 for (size_t i = 0; i < f.text.size(); ++i) {
-                    text += toSymbolXml(f.text.at(i));
+                    text += toSymbolXml(f.text.at(i), this);
                 }
             } else {
                 text += XmlWriter::xmlString(f.text);

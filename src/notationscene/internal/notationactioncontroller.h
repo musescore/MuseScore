@@ -32,7 +32,7 @@
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -42,6 +42,7 @@
 #include "notation/notationtypes.h"
 
 #include "inotationviewcontroller.h"
+#include "notationcommands.h"
 
 namespace mu::notation {
 class NotationActionController : public INotationCommandsController, public muse::rcommand::Commandable, public muse::async::Asyncable,
@@ -52,7 +53,7 @@ class NotationActionController : public INotationCommandsController, public muse
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
@@ -67,6 +68,8 @@ public:
     INotationViewController* viewController() const override;
 
     bool hasSelection() const override;
+    bool isSingleSelection() const override;
+    bool isRangeSelection() const override;
     muse::async::Notification selectionChanged() const override;
     bool selectionHasTie() const override;
     bool selectionHasLaissezVib() const override;
@@ -108,6 +111,8 @@ public:
 
     bool isTablatureStaff() const override;
 
+    INotationAutomationPtr automation() const;
+
     bool isAutomationModeEnabled() const override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
@@ -133,8 +138,11 @@ private:
 
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
+    muse::RetVal<GetNoteInputStateCommand::Output> getNoteInputState() const;
 
-    muse::Ret addNote(const muse::rcommand::Params& params);
+    muse::Ret flipSelection();
+
+    muse::Ret addNote(const AddNoteCommand& command);
     void addNote(NoteName noteName, NoteAddingMode addingMode);
     muse::Ret addDrumNote(const muse::rcommand::Params& params);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
@@ -263,6 +271,15 @@ private:
     muse::Ret selectAutomationType(const muse::rcommand::Params& params);
 
     // commands
+    template<muse::rcommand::TypedCommand C>
+    void registerCommand(muse::Ret (NotationActionController::*)());
+    template<muse::rcommand::TypedCommand C>
+    void registerCommand(muse::Ret (NotationActionController::*)(const C&));
+    template<muse::rcommand::HasOutput C>
+    void registerGetCommand(muse::RetVal<typename C::Output>(NotationActionController::*)() const);
+    template<muse::rcommand::HasOutput C>
+    void registerGetCommand(muse::RetVal<typename C::Output>(NotationActionController::*)(const C&) const);
+
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
     void registerCommandWithParams(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::Params&)>);
@@ -278,6 +295,9 @@ private:
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
+
+    void registerGetCommand(const muse::rcommand::Command&, std::function<muse::RetVal<muse::rcommand::Params>()>);
+    void registerGetCommand(const muse::rcommand::Command&, muse::RetVal<muse::rcommand::Params>(NotationActionController::*)() const);
 
     muse::Ret select(const muse::rcommand::Params& params);
     void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
