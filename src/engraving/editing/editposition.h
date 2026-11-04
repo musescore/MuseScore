@@ -32,6 +32,5 @@ class EditPosition
 {
 public:
     static void freezeItemsPositions(Transaction& tx, const std::vector<EngravingItem*>& items);
-    static void freezeItemPosition(Transaction& tx, EngravingItem* item);
 };
 }

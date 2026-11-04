@@ -23,39 +23,49 @@
 #include "editposition.h"
 
 #include "../dom/engravingitem.h"
+#include "../dom/score.h"
 
 #include "../rendering/iscorerenderer.h"
 
 using namespace mu::engraving;
 
-void EditPosition::freezeItemsPositions(Transaction& tx, const std::vector<EngravingItem*>& items)
+void EditPosition::freezeItemsPositions(Transaction&, const std::vector<EngravingItem*>& items)
 {
-    for (EngravingItem* item : items) {
-        freezeItemPosition(tx, item);
+    if (items.empty()) {
+        return;
     }
-}
+    Score* score = items.front()->score();
 
-void EditPosition::freezeItemPosition(Transaction&, EngravingItem* item)
-{
-    if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace()) {
+    std::unordered_map<EngravingItem*, PointF> frozenItems;
+    for (EngravingItem* item : items) {
+        if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace()) {
+            continue;
+        }
+
+        frozenItems.emplace(item, item->pos());
+
+        PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
+        if (autoplacePf == PropertyFlags::STYLED) {
+            autoplacePf = PropertyFlags::UNSTYLED;
+        }
+
+        item->undoChangeProperty(Pid::AUTOPLACE, false, autoplacePf);
+
+        item->triggerLayout();
+    }
+
+    if (frozenItems.empty()) {
         return;
     }
 
-    PointF oldPos = item->pos();
+    score->update();
 
-    PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
-    if (autoplacePf == PropertyFlags::STYLED) {
-        autoplacePf = PropertyFlags::UNSTYLED;
+    for (auto& [item, oldPos] : frozenItems) {
+        PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
+        if (offsetPf == PropertyFlags::STYLED) {
+            offsetPf = PropertyFlags::UNSTYLED;
+        }
+
+        item->undoChangeProperty(Pid::OFFSET, oldPos - item->ldata()->pos(), offsetPf);
     }
-
-    item->undoChangeProperty(Pid::AUTOPLACE, false, autoplacePf);
-
-    item->renderer()->layoutItem(item);
-
-    PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
-    if (offsetPf == PropertyFlags::STYLED) {
-        offsetPf = PropertyFlags::UNSTYLED;
-    }
-
-    item->undoChangeProperty(Pid::OFFSET, oldPos - item->ldata()->pos(), offsetPf);
 }
