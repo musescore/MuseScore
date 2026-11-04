@@ -173,6 +173,9 @@ signals:
     void hideElementPopupRequested();
     void isPopupOpenChanged(bool isPopupOpen);
 
+    void showAutomationTooltipRequested(const QPointF& viewPos, const QString& val);
+    void hideAutomationTooltipRequested();
+
     void horizontalScrollChanged();
     void verticalScrollChanged();
 

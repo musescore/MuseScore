@@ -474,6 +474,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         };
 
         if (completed) {
+            m_editedPointDataChannel.send(QPointF(), QString());
             m_currentlyEditedPolyline = nullptr;
             if (!requestEditPoint(oldPointData, key, clampedX, y)) {
                 // Edit was rejected - snap the point back to where it actually is instead of
@@ -483,7 +484,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
             return;
         }
 
-        m_currentlyEditedPolyline = polyline;
+        updateEditedPoint(polyline, clampedX, y);
 
         // Live drag preview
         setPreviewPoint({ clampedX, y });
@@ -492,6 +493,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointAdded,
                      [this, key, polyline, system, staffCanvasRect](qreal x, qreal y, bool completed) {
         if (completed) {
+            m_editedPointDataChannel.send(QPointF(), QString());
             m_currentlyEditedPolyline = nullptr;
             requestAddPoint(key, x, y);
             return;
@@ -502,7 +504,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
             return;
         }
 
-        m_currentlyEditedPolyline = polyline;
+        updateEditedPoint(polyline, x, y);
 
         QVector<PointData>& pointsData = m_pointsDataByStaff[key];
         int insertIdx = 0;
@@ -526,6 +528,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end() && pointIdx >= 0 && pointIdx < pointsDataIt->second.size()) {
             return;
         }
+
         requestRemovePoint(pointsDataIt->second.at(pointIdx), key);
     });
 
@@ -918,7 +921,10 @@ void NotationAutomationController::processPendingChanges()
 
 void NotationAutomationController::rebuildAllPolylines()
 {
-    m_currentlyEditedPolyline = nullptr;
+    if (m_currentlyEditedPolyline) {
+        m_editedPointDataChannel.send(QPointF(), QString());
+        m_currentlyEditedPolyline = nullptr;
+    }
 
     // TODO: More efficient if we don't clear/recreate the polylines every time...
     for (const auto& [staff, polylines] : m_stavesToLinesMap) {
@@ -1240,6 +1246,26 @@ const mu::engraving::AutomationPoint* NotationAutomationController::automationPo
     }
 
     return &it->second;
+}
+
+void NotationAutomationController::updateEditedPoint(PolylinePlot* polyline, qreal x, qreal y)
+{
+    IF_ASSERT_FAILED(polyline && m_linesParent) {
+        return;
+    }
+
+    // x & y are normalized (0..1) relative to the polyline
+    const QPointF pointPos(x * polyline->width(), y * polyline->height());
+    const QPointF viewPos = polyline->mapToItem(m_linesParent, pointPos);
+    const QString val = QString::number(1.0 - y, 'f', 1); // TODO: Use the actual units of the edited parameter...
+
+    m_editedPointDataChannel.send(viewPos, val);
+    m_currentlyEditedPolyline = polyline;
+}
+
+muse::async::Channel<const QPointF&, const QString&> NotationAutomationController::editedPointDataChannel() const
+{
+    return m_editedPointDataChannel;
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const
