@@ -114,7 +114,7 @@ using namespace mu::engraving::compat;
 
 using mu::engraving::compat::TremoloCompat;
 
-using DeferredLegacyAnnotation = std::pair<Fraction, std::unique_ptr<EngravingItem>>;
+using DeferredLegacyAnnotation = std::pair<Fraction, std::unique_ptr<EngravingItem> >;
 
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
