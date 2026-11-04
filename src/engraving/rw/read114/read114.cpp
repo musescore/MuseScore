@@ -23,6 +23,9 @@
 #include "read114.h"
 
 #include <cmath>
+#include <memory>
+#include <utility>
+#include <vector>
 
 #include "global/defer.h"
 
@@ -110,6 +113,8 @@ using namespace mu::engraving::read206;
 using namespace mu::engraving::compat;
 
 using mu::engraving::compat::TremoloCompat;
+
+using DeferredLegacyAnnotation = std::pair<Fraction, std::unique_ptr<EngravingItem>>;
 
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
@@ -1485,7 +1490,8 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
 //   readMeasure
 //---------------------------------------------------------
 
-static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
+static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx,
+                        std::vector<DeferredLegacyAnnotation>& deferredAnnotations)
 {
     Segment* segment = 0;
 
@@ -1959,9 +1965,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             TempoText* t = Factory::createTempoText(segment);
             t->setTrack(ctx.track());
             readTempoText(t, e, ctx);
-            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-            t->setOwnershipParent(segment);
-            segment->add(t);
+            if (ctx.tick() >= m->tick() && ctx.tick() < m->endTick()) {
+                segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
+                t->setOwnershipParent(segment);
+                segment->add(t);
+            } else {
+                t->moveToDummy();
+                deferredAnnotations.emplace_back(ctx.tick(), std::unique_ptr<EngravingItem>(t));
+            }
             ctx.setTick(musicTick);
         } else if (tag == "StaffText") {
             const Fraction musicTick = ctx.tick();
@@ -1969,9 +1980,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             StaffText* t = Factory::createStaffText(segment);
             t->setTrack(ctx.track());
             readStaffText(t, e, ctx);
-            segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-            t->setOwnershipParent(segment);
-            segment->add(t);
+            if (ctx.tick() >= m->tick() && ctx.tick() < m->endTick()) {
+                segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
+                t->setOwnershipParent(segment);
+                segment->add(t);
+            } else {
+                t->moveToDummy();
+                deferredAnnotations.emplace_back(ctx.tick(), std::unique_ptr<EngravingItem>(t));
+            }
             ctx.setTick(musicTick);
         } else if (tag == "Harmony") {
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
@@ -2312,7 +2328,8 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 //   readStaffContent
 //---------------------------------------------------------
 
-static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
+static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx,
+                             std::vector<DeferredLegacyAnnotation>& deferredAnnotations)
 {
     int staff = e.intAttribute("id", 1) - 1;
     ctx.setTick(Fraction(0, 1));
@@ -2330,7 +2347,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->setTicks(ev.timesig());
                 measure->setTimesig(ev.nominal());
 
-                readMeasure(measure, staff, e, ctx);
+                readMeasure(measure, staff, e, ctx, deferredAnnotations);
                 measure->checkMeasure(staff);
 
                 if (!measure->isMMRest()) {
@@ -2356,7 +2373,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 }
                 ctx.setTick(measure->tick());
 
-                readMeasure(measure, staff, e, ctx);
+                readMeasure(measure, staff, e, ctx, deferredAnnotations);
                 measure->checkMeasure(staff);
 
                 if (measure->isMMRest()) {
@@ -2787,12 +2804,13 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     MasterScore* masterScore = static_cast<MasterScore*>(score);
 
+    std::vector<DeferredLegacyAnnotation> deferredAnnotations;
     std::map<int, double> tm;
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
-            readStaffContent(masterScore, e, ctx);
+            readStaffContent(masterScore, e, ctx, deferredAnnotations);
         } else if (tag == "KeySig") {                 // not supported
             KeySig* ks = Factory::createKeySig(masterScore->dummy());
             read400::TRead::read(ks, e, ctx);
@@ -2949,6 +2967,20 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     if (e.error() != muse::XmlStreamReader::NoError) {
         LOGD() << "XML read error at byte offset " << e.byteOffset() << ": " << e.errorString();
         return make_ret(Err::FileBadFormat, e.errorString());
+    }
+
+    // The first staff is read one measure at a time; a later target measure
+    // may not exist when a frontloaded legacy annotation is encountered.
+    for (auto& [tick, annotation] : deferredAnnotations) {
+        Measure* target = masterScore->tick2measure(tick);
+        if (!target || tick < target->tick() || tick >= target->endTick()) {
+            LOGW() << "read114: skipping annotation outside score at tick " << tick.ticks();
+            continue;
+        }
+        Segment* targetSegment = target->getSegment(SegmentType::ChordRest, tick);
+        annotation->setOwnershipParent(targetSegment);
+        targetSegment->add(annotation.get());
+        annotation.release();
     }
 
     setBarLineSpanToStaves(masterScore, ctx);

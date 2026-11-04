@@ -26,6 +26,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -198,4 +199,42 @@ TEST_F(Engraving_Compat114Tests, legacy_element_ticks_do_not_move_music)
         }
         delete score;
     }
+}
+
+// Frontloaded annotations may belong to another measure, including a future one.
+TEST_F(Engraving_Compat114Tests, legacy_annotations_across_measures)
+{
+    MasterScore* score = ScoreRW::readScore(COMPAT114_DATA_DIR + u"legacy_cross_measure_annotations.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* first = score->firstMeasure();
+    ASSERT_TRUE(first);
+    Measure* second = first->nextMeasure();
+    ASSERT_TRUE(second);
+    EXPECT_EQ(second->tick(), Fraction(1, 1));
+
+    const int pitches[2][4] = { { 60, 64, 67, 72 }, { 72, 74, 76, 79 } };
+    Measure* measures[] = { first, second };
+    for (int bar = 0; bar < 2; ++bar) {
+        for (int i = 0; i < 4; ++i) {
+            Chord* chord = measures[bar]->findChord(measures[bar]->tick() + Fraction(i, 4), 0);
+            ASSERT_TRUE(chord) << "Missing chord in bar " << bar << " at beat " << i;
+            EXPECT_EQ(chord->upNote()->pitch(), pitches[bar][i]);
+        }
+    }
+
+    const auto hasAnnotation = [](const Measure* measure, const Fraction& tick, ElementType type) {
+        Segment* segment = measure->findSegment(SegmentType::ChordRest, tick);
+        return segment && segment->findAnnotation(type, 0, 0) != nullptr;
+    };
+    EXPECT_TRUE(hasAnnotation(second, Fraction(1, 1), ElementType::TEMPO_TEXT));
+    EXPECT_TRUE(hasAnnotation(second, Fraction(5, 4), ElementType::STAFF_TEXT));
+    EXPECT_TRUE(hasAnnotation(first, Fraction(3, 4), ElementType::STAFF_TEXT));
+
+    EXPECT_EQ(first->findSegment(SegmentType::ChordRest, Fraction(1, 1)), nullptr);
+    EXPECT_EQ(first->findSegment(SegmentType::ChordRest, Fraction(5, 4)), nullptr);
+    EXPECT_EQ(second->findSegment(SegmentType::ChordRest, Fraction(3, 4)), nullptr);
+    EXPECT_EQ(second->findSegment(SegmentType::ChordRest, Fraction(2, 1)), nullptr);
+
+    delete score;
 }
