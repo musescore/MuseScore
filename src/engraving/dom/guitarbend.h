@@ -195,7 +195,7 @@ public:
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
-    EngravingObject* propertyDelegate(Pid id) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid id) const override;
 
     PointF vertexPointOff() const { return m_vertexPointOff; }
     void setVertexPointOff(PointF p) { m_vertexPointOff = p; }

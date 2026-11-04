@@ -782,8 +782,8 @@ void BarLine::remove(EngravingItem* e)
 
 PropertyValue BarLine::getProperty(Pid id) const
 {
-    if (EngravingObject* e = const_cast<BarLine*>(this)->propertyDelegate(id)) {
-        return e->getProperty(id);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        return d.delegate ? d.delegate->getProperty(id) : propertyDefault(id);
     }
 
     switch (id) {
@@ -809,8 +809,8 @@ PropertyValue BarLine::getProperty(Pid id) const
 
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
-    if (EngravingObject* e = propertyDelegate(id)) {
-        return e->setProperty(id, v);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        return d.delegate ? d.delegate->setProperty(id, v) : false;
     }
 
     switch (id) {
@@ -843,8 +843,10 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
-    if (EngravingObject* e = propertyDelegate(id)) {
-        e->undoChangeProperty(id, v, ps);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        if (d.delegate) {
+            d.delegate->undoChangeProperty(id, v, ps);
+        }
         return;
     }
 
@@ -855,15 +857,15 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
     }
 }
 
-EngravingObject* BarLine::propertyDelegate(Pid pid) const
+PropertyDelegate BarLine::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::REPEAT_COUNT) {
-        return measure();
+        return PropertyDelegate(measure());
     } else if (pid == Pid::PLAY_COUNT_TEXT || pid == Pid::PLAY_COUNT_TEXT_SETTING) {
-        return playCountText();
+        return PropertyDelegate(playCountText());
     }
 
-    return EngravingItem::propertyDelegate(pid);
+    return EngravingItem::resolvePropertyDelegate(pid);
 }
 
 PlayCountText* BarLine::playCountText() const
@@ -883,8 +885,8 @@ PlayCountText* BarLine::playCountText() const
 
 PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
-    if (EngravingObject* e = const_cast<BarLine*>(this)->propertyDelegate(propertyId)) {
-        return e->propertyDefault(propertyId);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyDefault(propertyId) : PropertyValue();
     }
 
     switch (propertyId) {

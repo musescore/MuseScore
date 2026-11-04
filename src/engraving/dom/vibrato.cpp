@@ -93,12 +93,12 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* VibratoSegment::propertyDelegate(Pid pid) const
+PropertyDelegate VibratoSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
-    return LineSegment::propertyDelegate(pid);
+    return LineSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

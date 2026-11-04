@@ -162,7 +162,7 @@ muse::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* SpannerSegment::propertyDelegate(Pid pid) const
+PropertyDelegate SpannerSegment::resolvePropertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::PLAY:
@@ -176,11 +176,11 @@ EngravingObject* SpannerSegment::propertyDelegate(Pid pid) const
     case Pid::SPANNER_TICK:
     case Pid::SPANNER_TICKS:
     case Pid::SPANNER_TRACK2:
-        return spanner();
+        return PropertyDelegate(spanner());
     default: break;
     }
 
-    return nullptr;
+    return PropertyDelegate();
 }
 
 //---------------------------------------------------------
@@ -189,8 +189,8 @@ EngravingObject* SpannerSegment::propertyDelegate(Pid pid) const
 
 engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 {
-    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
-        return e->getProperty(pid);
+    if (const PropertyDelegate d = resolvePropertyDelegate(pid); d.hasDelegate) {
+        return d.delegate ? d.delegate->getProperty(pid) : propertyDefault(pid);
     }
     switch (pid) {
     case Pid::OFFSET2:
@@ -206,8 +206,8 @@ engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 
 bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (EngravingObject* e = propertyDelegate(pid)) {
-        return e->setProperty(pid, v);
+    if (const PropertyDelegate d = resolvePropertyDelegate(pid); d.hasDelegate) {
+        return d.delegate ? d.delegate->setProperty(pid, v) : false;
     }
     switch (pid) {
     case Pid::OFFSET2:
@@ -226,8 +226,8 @@ bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 
 PropertyValue SpannerSegment::propertyDefault(Pid pid) const
 {
-    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
-        return e->propertyDefault(pid);
+    if (const PropertyDelegate d = resolvePropertyDelegate(pid); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyDefault(pid) : PropertyValue();
     }
     switch (pid) {
     case Pid::OFFSET2:
@@ -248,8 +248,8 @@ PointF SpannerSegment::defaultPos() const
 
 Sid SpannerSegment::getPropertyStyle(Pid pid) const
 {
-    if (EngravingObject* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
-        return e->getPropertyStyle(pid);
+    if (const PropertyDelegate d = resolvePropertyDelegate(pid); d.hasDelegate) {
+        return d.delegate ? d.delegate->getPropertyStyle(pid) : Sid::NOSTYLE;
     }
     return EngravingItem::getPropertyStyle(pid);
 }
@@ -260,8 +260,11 @@ Sid SpannerSegment::getPropertyStyle(Pid pid) const
 
 void SpannerSegment::resetProperty(Pid pid)
 {
-    if (EngravingObject* e = propertyDelegate(pid)) {
-        return e->resetProperty(pid);
+    if (const PropertyDelegate d = resolvePropertyDelegate(pid); d.hasDelegate) {
+        if (d.delegate) {
+            d.delegate->resetProperty(pid);
+        }
+        return;
     }
     return EngravingItem::resetProperty(pid);
 }

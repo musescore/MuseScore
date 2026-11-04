@@ -39,7 +39,7 @@ public:
 
     NoteLineSegment* clone() const override { return new NoteLineSegment(*this); }
 
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 };
 
 class NoteLine final : public TextLineBase
