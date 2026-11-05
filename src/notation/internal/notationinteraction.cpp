@@ -4053,27 +4053,11 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     // In a mixed list, only move the non-pitched items
     const bool hasNonPitchedItems = !lyrics.empty() || !nudgeable.empty() || gripEdit;
     const bool changePitch = (hasNotes || !rests.empty()) && !hasNonPitchedItems;
-    const int groupCount = int(!lyrics.empty()) + int(!nudgeable.empty()) + int(gripEdit) + int(changePitch);
-    if (groupCount == 0) {
+    if (lyrics.empty() && nudgeable.empty() && !gripEdit && !changePitch) {
         return false;
     }
 
-    TranslatableString actionName = TranslatableString("undoableAction", "Move items");
-    if (groupCount == 1) {
-        if (!lyrics.empty()) {
-            actionName = TranslatableString("undoableAction", "Move lyrics");
-        } else if (!nudgeable.empty()) {
-            actionName = TranslatableString("undoableAction", "Nudge element");
-        } else if (gripEdit) {
-            actionName = TranslatableString("undoableAction", "Nudge");
-        } else if (hasNotes) {
-            actionName = TranslatableString("undoableAction", "Change pitch");
-        } else {
-            actionName = TranslatableString("undoableAction", "Change vertical position");
-        }
-    }
-
-    transaction(actionName, [&](Transaction& tx) {
+    transaction(TranslatableString("undoableAction", "Move items"), [&](Transaction& tx) {
         if (!lyrics.empty()) {
             doMoveLyrics(tx, d, lyrics);
         }
