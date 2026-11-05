@@ -1732,7 +1732,8 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
         return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    const NoteInputState& state = interaction->noteInput()->state();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    const NoteInputState& state = noteInput->state();
     const bool previousSelectionExists = currentNotationScore() && currentNotationScore()->selection().currentCR();
     if (interaction->selection()->isNone() && previousSelectionExists && !state.beyondScore()) {
         // Try to restore the previous selection...
@@ -1741,36 +1742,15 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
         return muse::make_ok();
     }
 
-    const EngravingItem* selectedElement = interaction->selection()->element();
-    INotationNoteInputPtr noteInput = interaction->noteInput();
     bool playChord = false;
-
-    auto shouldNudge = [](const EngravingItem* selectedElement) -> bool {
-        if (!selectedElement) {
-            return false;
-        }
-        bool isText = selectedElement->isTextBase();
-        bool isArticulationFamily = selectedElement->isArticulationFamily();
-        bool isSymbol = selectedElement->isSymbol();
-        bool isTupletText = selectedElement->isTuplet() && !toTuplet(selectedElement)->hasBracket();
-        bool isFermataOrBreath = selectedElement->isFermata() || selectedElement->isBreath();
-
-        return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath;
-    };
 
     switch (direction) {
     case MoveDirection::Up:
     case MoveDirection::Down:
-        if (!quickly && selectedElement && selectedElement->isLyrics()) {
-            interaction->moveLyrics(direction);
-        } else if (shouldNudge(selectedElement)) {
-            interaction->nudge(direction, quickly);
-        } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
-            interaction->nudgeAnchors(direction);
-        } else if (state.isValid() && noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        if (state.isValid() && noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
             return muse::make_ok();
-        } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+        } else if (noteInput->isNoteInputMode() && state.staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
                 interaction->movePitch(direction, PitchMode::OCTAVE);
             }
@@ -1779,7 +1759,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
         } else if (interaction->selection()->isNone() && !state.beyondScore()) {
             interaction->select(SelectionTarget::FirstItem);
         } else {
-            interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
+            interaction->moveSelectedItems(direction, quickly);
         }
         break;
     case MoveDirection::Right:
@@ -1822,11 +1802,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
             return muse::make_ok();
         }
 
-        if (shouldNudge(selectedElement)) {
-            interaction->nudge(direction, quickly);
-        } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
-            interaction->nudgeAnchors(direction);
-        } else {
+        if (!interaction->moveSelectedItems(direction, quickly)) {
             if (interaction->selection()->isNone() && !state.beyondScore()) {
                 interaction->select(SelectionTarget::FirstItem);
             }

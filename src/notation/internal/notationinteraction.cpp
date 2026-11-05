@@ -3909,20 +3909,6 @@ void NotationInteraction::doMovePitch(MoveDirection d, PitchMode mode, const std
     EditNote::upDown(score(), MoveDirection::Up == d, mode);
 }
 
-void NotationInteraction::moveLyrics(MoveDirection d)
-{
-    EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el && el->isLyrics()) {
-        return;
-    }
-
-    startEdit(TranslatableString("undoableAction", "Move lyrics"));
-
-    doMoveLyrics(d, { el });
-
-    apply();
-}
-
 void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements)
 {
     for (EngravingItem* el : elements) {
@@ -3931,25 +3917,6 @@ void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<Engrav
         }
         score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
     }
-}
-
-void NotationInteraction::nudge(MoveDirection d, bool quickly)
-{
-    IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
-        return;
-    }
-
-    EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el) {
-        return;
-    }
-
-    startEdit(TranslatableString("undoableAction", "Nudge element"));
-
-    doNudge(d, quickly, { el });
-
-    apply();
-    notifyAboutDragChanged();
 }
 
 void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements)
@@ -3978,24 +3945,12 @@ void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vect
     }
 }
 
-void NotationInteraction::nudgeAnchors(MoveDirection d)
-{
-    startEdit(TranslatableString("undoableAction", "Nudge"));
-
-    if (!doNudgeAnchors(d)) {
-        rollback();
-        return;
-    }
-
-    apply();
-}
-
-bool NotationInteraction::doNudgeAnchors(MoveDirection d)
+void NotationInteraction::doNudgeAnchors(MoveDirection d)
 {
     // TODO: allow nudging a list of anchors
 
     IF_ASSERT_FAILED(m_editData.element) {
-        return false;
+        return;
     }
 
     double vRaster = getVRaster();
@@ -4014,8 +3969,9 @@ bool NotationInteraction::doNudgeAnchors(MoveDirection d)
     case MoveDirection::Down:
         m_editData.delta = PointF(0, nudgeDistance(m_editData, vRaster));
         break;
-    default:
-        return false;
+    case MoveDirection::Undefined:
+        UNREACHABLE;
+        return;
     }
 
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
@@ -4032,6 +3988,104 @@ bool NotationInteraction::doNudgeAnchors(MoveDirection d)
         m_editData.element->startDrag(m_editData);
         m_editData.element->drag(m_editData);
         m_editData.element->endDrag(m_editData);
+    }
+}
+
+static bool isNudgeable(const EngravingItem* item)
+{
+    return item->isTextBase()
+           || item->isArticulationFamily()
+           || item->isSymbol()
+           || (item->isTuplet() && !toTuplet(item)->hasBracket())
+           || item->isFermata()
+           || item->isBreath();
+}
+
+bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
+{
+    if (d == MoveDirection::Undefined) {
+        return false;
+    }
+
+    const bool vertical = d == MoveDirection::Up || d == MoveDirection::Down;
+    const PitchMode pitchMode = quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC;
+    const mu::engraving::Selection& selection = score()->selection();
+
+    // Range selections only transpose notes
+    if (selection.isRange()) {
+        if (!vertical || selection.uniqueNotes().empty()) {
+            return false;
+        }
+
+        startEdit(TranslatableString("undoableAction", "Change pitch"));
+        doMovePitch(d, pitchMode, {});
+        apply();
+
+        return true;
+    }
+
+    std::vector<EngravingItem*> lyrics;
+    std::vector<EngravingItem*> nudgeable;
+    std::vector<Rest*> rests;
+    bool gripEdit = false;
+    bool hasNotes = false;
+
+    for (EngravingItem* el : selection.elements()) {
+        if (vertical && !quickly && el->isLyrics()) {
+            lyrics.push_back(el);
+        } else if (isNudgeable(el)) {
+            nudgeable.push_back(el);
+        } else if (isGripEditStarted() && el == m_editData.element) {
+            gripEdit = true;
+        } else if (el->hasGrips()) {
+            nudgeable.push_back(el);
+        } else if (vertical && el->isRest()) {
+            rests.push_back(toRest(el));
+        } else if (vertical && el->isNote()) {
+            hasNotes = true;
+        }
+    }
+
+    const bool changePitch = hasNotes || !rests.empty();
+    const int groupCount = int(!lyrics.empty()) + int(!nudgeable.empty()) + int(gripEdit) + int(changePitch);
+    if (groupCount == 0) {
+        return false;
+    }
+
+    TranslatableString actionName = TranslatableString("undoableAction", "Move items");
+    if (groupCount == 1) {
+        if (!lyrics.empty()) {
+            actionName = TranslatableString("undoableAction", "Move lyrics");
+        } else if (!nudgeable.empty()) {
+            actionName = TranslatableString("undoableAction", "Nudge element");
+        } else if (gripEdit) {
+            actionName = TranslatableString("undoableAction", "Nudge");
+        } else if (hasNotes) {
+            actionName = TranslatableString("undoableAction", "Change pitch");
+        } else {
+            actionName = TranslatableString("undoableAction", "Change vertical position");
+        }
+    }
+
+    startEdit(actionName);
+
+    if (!lyrics.empty()) {
+        doMoveLyrics(d, lyrics);
+    }
+    if (!nudgeable.empty()) {
+        doNudge(d, quickly, nudgeable);
+    }
+    if (gripEdit) {
+        doNudgeAnchors(d);
+    }
+    if (changePitch) {
+        doMovePitch(d, pitchMode, rests);
+    }
+
+    apply();
+
+    if (!nudgeable.empty()) {
+        notifyAboutDragChanged();
     }
 
     return true;
