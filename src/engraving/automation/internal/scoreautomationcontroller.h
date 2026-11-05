@@ -102,6 +102,11 @@ private:
         std::optional<utick_t> nextMeasureUTick; // next measure in the same repeat pass, if any
     };
 
+    struct DynamicPointDestination {
+        AutomationCurve& curve;
+        std::map<utick_t, int>& priorities;
+    };
+
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
@@ -119,6 +124,7 @@ private:
         AutomationCurve noRepeatTempoCurve; // repeat-agnostic Tempo curve
         std::vector<std::pair<utick_t, int> > pendingTempoResets;
         BeatsPerSecond tempoMultiplier = 1.0;
+        bool hasTempoDependentDynamics = false;
     };
 
     struct DynamicInfo {
@@ -153,6 +159,7 @@ private:
 
     void update(const UpdateRequest& request, const AutomationCurveMap& curves);
     void fullRebuild(AutomationCurveMap& curves, bool includeTempo = true, bool includeDynamics = true);
+    int dynamicsRebuildStart(int tickFrom, const StaffRange& range) const;
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick, bool includeTempo,
                                      bool includeDynamics, AutomationCurveMap& destCurves);
@@ -182,10 +189,8 @@ private:
     static void resolvePendingTempoResets(UpdateContext& ctx);
     static void fixAnacrusisTempo(UpdateContext& ctx);
 
-    static bool tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
-                                   int priority);
-    static void addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick, const AutomationPoint& point,
-                                int priority);
+    static void addDynamicPoint(const AutomationPoint& point, int priority, const DynamicPointDestination& dest, utick_t tick,
+                                bool mergeSamePriority = false);
     static void setTempoPoint(utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
                               std::optional<EID> itemId = std::nullopt);
     //! NOTE: for callers that already know no point exists at tick (e.g. via lower_bound) - skips the redundant lookup
@@ -199,13 +204,13 @@ private:
 
     static void mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range, AutomationPointEdits& allEdits);
 
-    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, const AutomationPointEdit& localEdit,
-                                       AutomationPointEdits& allEdits);
+    static std::vector<MirrorRange> measureRepeatMirrorRanges(const RepeatSegment* seg, const StaffRange& range);
 
     Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
     TempoTimeline m_tempoTimeline;
     TempoTimeline m_flattenedTempoTimeline;
     std::optional<TempoTimeline> m_tempoTimelineOverride;
+    bool m_hasTempoDependentDynamics = false; // fp/pf, or a hairpin starting on one
 };
 }

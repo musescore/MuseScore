@@ -71,6 +71,8 @@ public:
     virtual muse::async::Channel<muse::audio::secs_t> totalPlayTimeChanged() const = 0;
 
     virtual muse::audio::secs_t playedTickToSec(muse::midi::tick_t tick) const = 0;
+    //! NOTE: utick is always in expanded repeat space (e.g. automation curves)
+    virtual muse::audio::secs_t utickToSec(muse::midi::tick_t utick) const = 0;
     virtual muse::midi::tick_t secToPlayedTick(muse::audio::secs_t sec) const = 0;
     virtual muse::midi::tick_t secToTick(muse::audio::secs_t sec) const = 0;
 

@@ -272,6 +272,16 @@ muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
     return sc->tempoTimeline(m_playbackModel.isPlayRepeatsEnabled()).utick2utime(tick);
 }
 
+muse::audio::secs_t NotationPlayback::utickToSec(tick_t utick) const
+{
+    const mu::engraving::Score* sc = score();
+    if (!sc) {
+        return 0;
+    }
+
+    return sc->utickToPlayedTime(utick, m_playbackModel.isPlayRepeatsEnabled());
+}
+
 tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 {
     const mu::engraving::Score* sc = score();
