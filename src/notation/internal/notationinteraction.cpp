@@ -4049,7 +4049,9 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
         }
     }
 
-    const bool changePitch = hasNotes || !rests.empty();
+    // In a mixed list, only move the non-pitched items
+    const bool hasNonPitchedItems = !lyrics.empty() || !nudgeable.empty() || gripEdit;
+    const bool changePitch = (hasNotes || !rests.empty()) && !hasNonPitchedItems;
     const int groupCount = int(!lyrics.empty()) + int(!nudgeable.empty()) + int(gripEdit) + int(changePitch);
     if (groupCount == 0) {
         return false;
