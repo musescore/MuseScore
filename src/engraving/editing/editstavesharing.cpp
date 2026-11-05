@@ -133,7 +133,7 @@ class AddStaveSharingChange : public EditStaveSharingState
     StaveSharingState m_staveSharingState = StaveSharingState();
 
 public:
-    AddStaveSharingChange(SharedPart* s, Fraction t, StaveSharingState m)
+    AddStaveSharingChange(SharedPart* s, const Fraction& t, const StaveSharingState& m)
         : EditStaveSharingState(s, t), m_staveSharingState(m) {}
 
     void undo() override
@@ -168,7 +168,7 @@ class ChangeStaveSharingState : public EditStaveSharingState
 
 public:
     // Only for ticks with an existing state - use AddStaveSharingChange otherwise
-    ChangeStaveSharingState(SharedPart* s, Fraction t, StaveSharingState m)
+    ChangeStaveSharingState(SharedPart* s, const Fraction& t, const StaveSharingState& m)
         : EditStaveSharingState(s, t), m_staveSharingState(m) {}
 
     UNDO_TYPE(CommandType::ChangeStaveSharingState)
@@ -195,7 +195,7 @@ class ChangeStaveSharingIsReset : public EditStaveSharingState
 
 public:
     // Only for ticks with an existing state
-    ChangeStaveSharingIsReset(SharedPart* s, Fraction t, bool r)
+    ChangeStaveSharingIsReset(SharedPart* s, const Fraction& t, bool r)
         : EditStaveSharingState(s, t), m_isReset(r) {}
 
     UNDO_TYPE(CommandType::ChangeStaveSharingIsReset)
@@ -209,7 +209,7 @@ class RemoveStaveSharingChange : public EditStaveSharingState
     StaveSharingState m_staveSharingState = StaveSharingState();
 
 public:
-    RemoveStaveSharingChange(SharedPart* s, Fraction t)
+    RemoveStaveSharingChange(SharedPart* s, const Fraction& t)
         : EditStaveSharingState(s, t) {}
 
     void undo() override
@@ -496,8 +496,7 @@ void EditStaveSharing::addStaveSharingChangeToRange(Transaction& tx, Segment* st
             const Fraction& endTick = endSeg->tick();
             if (prevStaveSharingState.isUserModified() && !prevStaveSharingState.isReset()) {
                 // Resume previous user sharing state
-                StaveSharingState nextState = prevStaveSharingState;
-                undoSetStaveSharingState(tx, sharedPart, endTick, nextState);
+                undoSetStaveSharingState(tx, sharedPart, endTick, prevStaveSharingState);
             } else if (!reset) {
                 // Create reset
                 StaveSharingState nextState = existingState ? existingState.value() : newStaveSharingState;
@@ -552,8 +551,8 @@ void EditStaveSharing::setIsReset(Transaction& tx, StaveSharingChange* staveShar
 
 void EditStaveSharing::removeStaveSharingChange(Transaction& tx, StaveSharingChange* staveSharingChange)
 {
-    Part* part = staveSharingChange->part();
-    IF_ASSERT_FAILED(part->isSharedPart()) {
+    Part* part = staveSharingChange ? staveSharingChange->part() : nullptr;
+    IF_ASSERT_FAILED(part && part->isSharedPart()) {
         return;
     }
 

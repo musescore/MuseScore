@@ -112,7 +112,7 @@ const StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tic
     static constexpr Fraction TICK_ZERO = Fraction(0, 1);
 
     IF_ASSERT_FAILED(m_staveSharingStateByTick.size() > 0) {
-        const_cast<SharedPart*>(this)->m_staveSharingStateByTick[TICK_ZERO] = SharedTrackMap();
+        const_cast<SharedPart*>(this)->m_staveSharingStateByTick[TICK_ZERO] = StaveSharingState();
         return m_staveSharingStateByTick.at(TICK_ZERO);
     }
 
@@ -162,12 +162,12 @@ void SharedPart::removeStaveSharingStateAtTick(const Fraction& tick)
 
 void SharedPart::removeStaveSharingStatesBetweenTicks(const Fraction& startTick, const Fraction& endTick, bool removeUserChanges)
 {
-    auto upperBound = m_staveSharingStateByTick.lower_bound(startTick);
-    if (upperBound == m_staveSharingStateByTick.end()) {
+    auto lowerBound = m_staveSharingStateByTick.lower_bound(startTick);
+    if (lowerBound == m_staveSharingStateByTick.end()) {
         return;
     }
 
-    for (auto iter = upperBound; iter != m_staveSharingStateByTick.end();) {
+    for (auto iter = lowerBound; iter != m_staveSharingStateByTick.end();) {
         if (iter->first >= endTick) {
             break;
         }

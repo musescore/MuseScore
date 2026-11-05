@@ -31,10 +31,6 @@ using SharedTrackMap = std::map<track_idx_t, track_idx_t>;
 std::string dump(const SharedTrackMap& map);
 
 struct StaveSharingState {
-    StaveSharingState() {}
-    StaveSharingState(SharedTrackMap trackMap)
-        : m_sharedTrackMap(trackMap) {}
-
     // User data
     const std::optional<SharedTrackMap>& userTrackMap() const { return m_userTrackMap; }
     void setUserTrackMap(std::optional<SharedTrackMap> map) { m_userTrackMap = map; }

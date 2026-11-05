@@ -40,11 +40,12 @@ StaveSharingChange::StaveSharingChange(DummyParentOr<Segment> parent)
 
 char16_t StaveSharingChange::iconCode() const
 {
-    if (staveSharingState() && staveSharingState()->isReset()) {
+    const StaveSharingState* state = staveSharingState();
+    if (state && state->isReset()) {
         return 0xEF19;
     }
 
-    if (staveSharingState() && !staveSharingState()->isUserMapValid()) {
+    if (state && !state->isUserMapValid()) {
         return 0xF3CE;
     }
 
@@ -65,7 +66,8 @@ const StaveSharingState* StaveSharingChange::staveSharingState() const
 
 String StaveSharingChange::accessibleInfo() const
 {
-    if (staveSharingState() && staveSharingState()->isReset()) {
+    const StaveSharingState* state = staveSharingState();
+    if (state && state->isReset()) {
         return TranslatableString("engraving", u"Reset stave sharing change(s)", nullptr, 1).translated();
     }
 

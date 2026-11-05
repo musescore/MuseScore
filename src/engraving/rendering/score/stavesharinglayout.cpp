@@ -1111,14 +1111,14 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
     // were added at the same time as the origin items
 
     for (Segment* seg : ctx.segmentsToUpdate) {
-        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
-        if (trackMap.empty()) {
-            continue;
-        }
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
             continue;
         }
         if (seg->isKeySigType() && !segHasLocalKeySig(seg, ctx.curSharedPart)) {
+            continue;
+        }
+        const SharedTrackMap& trackMap = ctx.curStaveSharingState(seg->tick()).sharedTrackMap();
+        if (trackMap.empty()) {
             continue;
         }
         for (const auto& [originTrack, sharedTrack] : trackMap) {
