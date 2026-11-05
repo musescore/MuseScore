@@ -56,6 +56,8 @@ qt_add_qml_module(notationscene_qml
         elementpopups/shadownotepopupmodel.h
         elementpopups/staffvisibilitypopupmodel.cpp
         elementpopups/staffvisibilitypopupmodel.h
+        elementpopups/stavesharingchangepopupmodel.cpp
+        elementpopups/stavesharingchangepopupmodel.h
         elementpopups/stringtuningssettingsmodel.cpp
         elementpopups/stringtuningssettingsmodel.h
         internal/undohistorymodel.cpp
@@ -178,6 +180,7 @@ qt_add_qml_module(notationscene_qml
         elementpopups/PercussionNotePopupContent.qml
         elementpopups/ShadowNotePopup.qml
         elementpopups/StaffVisibilityPopup.qml
+        elementpopups/StaveSharingChangePopup.qml
         elementpopups/StringTuningsPopup.qml
         internal/CustomiseControlPanel.qml
         internal/CustomiseView.qml

@@ -114,6 +114,7 @@
 #include "editstaff.h"
 #include "editstyle.h"
 #include "editsystemlocks.h"
+#include "editstavesharing.h"
 #include "edittimesig.h"
 #include "edittremolo.h"
 #include "inserttime.h"
@@ -1213,6 +1214,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
         case ElementType::LYRICSLINE_SEGMENT:
+        case ElementType::STAVE_SHARING_CHANGE:
             break;
         // All other types cannot be removed if generated
         default:
@@ -1722,6 +1724,9 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
+    case ElementType::STAVE_SHARING_CHANGE:
+        EditStaveSharing::removeStaveSharingChange(tx, toStaveSharingChange(el));
+        break;
     default:
         undoRemoveElement(el);
         break;
@@ -3274,60 +3279,93 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
     Segment* fs = m->first(SegmentType::ChordRest);
 
     for (size_t track = 0; track < m_staves.size() * VOICES; ++track) {
-        if (m->hasVoice(track)) {
-            for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
-                if (s->element(track)) {
-                    ChordRest* cr   = toChordRest(s->element(track));
-                    Fraction cetick = cr->rtick() + cr->actualTicks();
+        if (!m->hasVoice(track)) {
+            continue;
+        }
 
-                    if (cetick <= tick) {
-                        continue;
-                    }
-                    if (s->rtick() >= etick) {
-                        break;
-                    }
+        for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
+            if (!s->element(track)) {
+                continue;
+            }
+            ChordRest* cr   = toChordRest(s->element(track));
+            Fraction cetick = cr->rtick() + cr->actualTicks();
 
-                    if (cr->isFullMeasureRest()) {
-                        if (cr->rtick() >= tick) {
-                            // Move full-measure rest from the deleted area
-                            undoRemoveElement(cr);
-                            ChordRest* newCR = toChordRest(cr->clone());
-                            newCR->setTicks(cr->ticks() - f);
-                            undoAddCR(newCR, m, m->tick() + etick);
-                        } else {
-                            cr->undoChangeProperty(Pid::DURATION, cr->ticks() - f);
-                        }
-                    }
-                    // inside deleted area
-                    else if (s->rtick() >= tick && cetick <= etick) {
-                        // inside
-                        undoRemoveElement(cr);
-                    } else if (s->rtick() >= tick) {
-                        // running out
-                        Fraction ff = cetick - etick;
-                        undoRemoveElement(cr);
-                        createCRSequence(ff, cr, tick + len);
-                    } else if (s->rtick() < tick && cetick <= etick) {
-                        // running in
-                        Fraction f1 = tick - s->rtick();
-                        changeCRlen(cr, f1, false);
-                    } else {
-                        // running in/out
-                        Fraction f1 = cr->ticks() - f;
-                        changeCRlen(cr, f1, false);
-                    }
+            if (cetick <= tick) {
+                continue;
+            }
+            if (s->rtick() >= etick) {
+                break;
+            }
+
+            if (cr->isFullMeasureRest()) {
+                if (cr->rtick() >= tick) {
+                    // Move full-measure rest from the deleted area
+                    undoRemoveElement(cr);
+                    ChordRest* newCR = toChordRest(cr->clone());
+                    newCR->setTicks(cr->ticks() - f);
+                    undoAddCR(newCR, m, m->tick() + etick);
+                } else {
+                    cr->undoChangeProperty(Pid::DURATION, cr->ticks() - f);
                 }
+            }
+            // inside deleted area
+            else if (s->rtick() >= tick && cetick <= etick) {
+                // inside
+                undoRemoveElement(cr);
+            } else if (s->rtick() >= tick) {
+                // running out
+                Fraction ff = cetick - etick;
+                undoRemoveElement(cr);
+                createCRSequence(ff, cr, tick + len);
+            } else if (s->rtick() < tick && cetick <= etick) {
+                // running in
+                Fraction f1 = tick - s->rtick();
+                changeCRlen(cr, f1, false);
+            } else {
+                // running in/out
+                Fraction f1 = cr->ticks() - f;
+                changeCRlen(cr, f1, false);
             }
         }
     }
     const Fraction abstick = startSegment->tick();
-    undoInsertTime(abstick, -len);
 
-    std::vector<Segment*> emptySegments;
+    // Move the annotations left in the deleted range to the next segment, so the deleted segments are removed now
+    for (Score* score : masterScore()->scoreList()) {
+        Measure* localMeasure = score->tick2measure(abstick);
+
+        std::vector<Segment*> deletedSegments;
+        for (Segment* s = localMeasure->first(SegmentType::ChordRest); s && s->rtick() < etick; s = s->next(SegmentType::ChordRest)) {
+            if (s->rtick() >= tick) {
+                deletedSegments.push_back(s);
+            }
+        }
+
+        for (Segment* s : deletedSegments) {
+            Segment* ns = s->next1(SegmentType::ChordRest);
+            while (ns && ns->tick() < abstick + len) {
+                ns = ns->next1(SegmentType::ChordRest);
+            }
+
+            const std::vector<EngravingItem*> annotations = s->annotations(); // make a copy since we alter the list
+            for (EngravingItem* a : annotations) {
+                undoRemoveElement(a);
+                if (ns && !a->generated()) {
+                    EngravingItem* a1 = a->clone();
+                    a1->setOwnershipParent(ns);
+                    undoAddElement(a1);
+                }
+            }
+        }
+    }
+
+    undoInsertTime(abstick, -len);
 
     for (Score* score : masterScore()->scoreList()) {
         Measure* localMeasure = score->tick2measure(abstick);
 
+        EditStaveSharing::removeStaveSharingStatesOnRemoveTime(transactionManager()->currentOrDummyTransaction(), score, abstick,
+                                                               abstick + len);
         undo(new InsertTime(score, abstick, -len));
 
         Fraction updatedTick = tick;
@@ -3350,12 +3388,6 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
             }
             s->undoChangeProperty(Pid::TICK, updatedTick);
             updatedTick += s->ticks();
-
-            if (score->isMaster()) {
-                if (s->isChordRestType() && !s->hasElements()) {
-                    emptySegments.push_back(s);
-                }
-            }
         }
 
         for (Tuplet* t : tuplets) {
@@ -3363,21 +3395,6 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
         }
 
         undo(new ChangeMeasureLen(localMeasure, localMeasure->ticks() - f));
-    }
-
-    for (Segment* s : emptySegments) {
-        if (Segment* ns = s->next(SegmentType::ChordRest)) {
-            // Move annotations from the empty segment.
-            // TODO: do we need to preserve annotations at all?
-            // Maybe only some types (Tempo etc.)?
-            const auto annotations = s->annotations(); // make a copy since we alter the list
-            for (EngravingItem* a : annotations) {
-                EngravingItem* a1 = a->clone();
-                a1->setOwnershipParent(ns);
-                undoRemoveElement(a);
-                undoAddElement(a1);
-            }
-        }
     }
 }
 
@@ -5282,6 +5299,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
 
     EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
     EditPageLocks::removePageLocksOnRemoveMeasures(tx, this, m1, m2);
+    EditStaveSharing::removeStaveSharingStatesOnRemoveTime(tx, this, startTick, endTick);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }

@@ -24,15 +24,18 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/breath.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mmrest.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -974,4 +977,139 @@ TEST_F(Engraving_MeasureTests, mmrestTimeSigSaveReload)
         ASSERT_TRUE(reopenedTs);
         EXPECT_EQ(toTimeSig(reopenedTs)->sig(), Fraction(3, 4));
     }
+}
+
+/**
+ *  Deleting the time of a note at the start of a measure, then undoing it,
+ *  restores the measure's segments in their original order.
+ */
+TEST_F(Engraving_MeasureTests, timeDeleteNoteAtMeasureStartUndo)
+{
+    // [GIVEN] A 4/4 score of quarter notes on two staves
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx"));
+    ASSERT_TRUE(score);
+
+    // Layout may replace segments (e.g. end barlines), so compare type and tick rather than pointers
+    using SegmentInfo = std::pair<SegmentType, Fraction>;
+    auto collectSegments = [&score]() {
+        std::vector<SegmentInfo> segments;
+        for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
+            segments.emplace_back(s->segmentType(), s->tick());
+        }
+        return segments;
+    };
+
+    auto expectTicksInOrder = [](const std::vector<SegmentInfo>& segments) {
+        for (size_t i = 1; i < segments.size(); ++i) {
+            EXPECT_LE(segments[i - 1].second, segments[i].second);
+        }
+    };
+
+    const std::vector<SegmentInfo> segmentsBefore = collectSegments();
+    expectTicksInOrder(segmentsBefore);
+
+    // [WHEN] The first note of measure 2 is selected and its time is deleted
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2);
+    ChordRest* cr = m2->findChordRest(m2->tick(), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    score->select(toChord(cr)->upNote());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->cmdTimeDelete();
+    score->endCmd();
+    score->doLayout();
+
+    // [THEN] Measure 2 is shortened and the segment ticks are still in order
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    expectTicksInOrder(collectSegments());
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, 0);
+    score->doLayout();
+
+    // [THEN] The segments are back in their original order, with ticks in order
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4));
+    const std::vector<SegmentInfo> segmentsAfter = collectSegments();
+    EXPECT_EQ(segmentsAfter, segmentsBefore);
+    expectTicksInOrder(segmentsAfter);
+}
+
+/**
+ *  Deleting the time of a note with an annotation at the start of a measure moves the annotation to the
+ *  next segment instead of leaving it on an empty segment, and undo restores the original segments.
+ */
+TEST_F(Engraving_MeasureTests, timeDeleteNoteWithAnnotationUndo)
+{
+    // [GIVEN] A 4/4 score of quarter notes on two staves, with staff text on the first note of measure 2
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx"));
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2);
+    Segment* firstSeg = m2->findSegment(SegmentType::ChordRest, m2->tick());
+    ASSERT_TRUE(firstSeg);
+
+    StaffText* text = Factory::createStaffText(firstSeg);
+    text->setTrack(0);
+    text->setXmlText(u"Text");
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoAddElement(text);
+    score->endCmd();
+
+    using SegmentInfo = std::pair<SegmentType, Fraction>;
+    auto collectSegments = [m2]() {
+        std::vector<SegmentInfo> segments;
+        for (Segment* s = m2->first(); s; s = s->next()) {
+            segments.emplace_back(s->segmentType(), s->tick());
+        }
+        return segments;
+    };
+
+    auto staffTextTicks = [m2]() {
+        std::vector<Fraction> ticks;
+        for (Segment* s = m2->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* a : s->annotations()) {
+                if (a->isStaffText()) {
+                    ticks.push_back(s->tick());
+                }
+            }
+        }
+        return ticks;
+    };
+
+    const std::vector<SegmentInfo> segmentsBefore = collectSegments();
+
+    // [WHEN] The time of the first note of measure 2 is deleted
+    ChordRest* cr = m2->findChordRest(m2->tick(), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    score->select(toChord(cr)->upNote());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->cmdTimeDelete();
+    score->endCmd();
+    score->doLayout();
+
+    // [THEN] Measure 2 is shortened, and every ChordRest segment still has ChordRests
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    for (Segment* s = m2->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EXPECT_TRUE(s->hasElements()) << "Tick " << s->tick().toString().toStdString();
+    }
+
+    // [THEN] The staff text has moved to the next note, which is now at the start of measure 2
+    EXPECT_EQ(staffTextTicks(), std::vector<Fraction>({ m2->tick() }));
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, 0);
+    score->doLayout();
+
+    // [THEN] The segments are back in their original order, with the staff text back on the first note
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4));
+    EXPECT_EQ(collectSegments(), segmentsBefore);
+    EXPECT_EQ(staffTextTicks(), std::vector<Fraction>({ m2->tick() }));
+    const Segment* textSeg = m2->findSegment(SegmentType::ChordRest, m2->tick());
+    ASSERT_TRUE(textSeg);
+    EXPECT_TRUE(textSeg->element(0) && textSeg->element(0)->isChord());
 }

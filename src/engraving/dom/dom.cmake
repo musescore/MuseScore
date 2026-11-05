@@ -292,6 +292,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharingchange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharingchange.h
     ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.h
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.cpp
@@ -324,6 +326,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.h
+    ${CMAKE_CURRENT_LIST_DIR}/systemindicatoricon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/systemindicatoricon.h
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp

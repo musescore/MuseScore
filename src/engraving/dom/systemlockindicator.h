@@ -22,18 +22,19 @@
 
 #pragma once
 
-#include "indicatoricon.h"
+#include "systemindicatoricon.h"
 
 namespace mu::engraving {
 class RangeLock;
 
-class SystemLockIndicator : public IndicatorIcon
+class SystemLockIndicator : public SystemIndicatorIcon
 {
     OBJECT_ALLOCATOR(engraving, SystemLockIndicator)
     DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
 
 public:
     SystemLockIndicator(DummyParentOr<System> parent, const RangeLock* lock);
+    SystemLockIndicator* clone() const override { return new SystemLockIndicator(*this); }
 
     void setSelected(bool v) override;
 
