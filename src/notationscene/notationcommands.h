@@ -27,6 +27,7 @@
 
 namespace mu::notation {
 using muse::rcommand::Field;
+using muse::rcommand::Presence;
 using muse::MnemonicString;
 using muse::TranslatableString;
 // A few typed commands as an example. Eventually, all commands should be made typed.
@@ -51,7 +52,7 @@ struct AddNoteCommand {
 
     sce_auto input = std::tuple {
         Field{ "note", &AddNoteCommand::note, "Note name" },
-        Field{ "mode", &AddNoteCommand::mode, "Adding mode" },
+        Field{ "mode", &AddNoteCommand::mode, "Adding mode", Presence::Optional },
     };
 };
 
@@ -60,7 +61,8 @@ struct GetNoteInputStateCommand {
     sci_auto id = muse::rcommand::Command("command://notation/get-noteinput-state");
     sci_auto title = MnemonicString("action", "Get note input state");
     sci_auto description = TranslatableString("action", "Get note input state");
-    sci_auto availability = muse::rcommand::Availability::MCP;
+    sci_auto availabilities = muse::rcommand::Availability::MCP;
+    sci_auto annotations = muse::rcommand::Annotation::ReadOnly;
 
     struct Output {
         bool enabled = false;
