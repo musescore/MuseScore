@@ -115,5 +115,5 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
         });
 
         return Promise<PartInstrumentListScoreOrder>::dummy_result();
-    }, PromiseType::AsyncByBody);
+    });
 }

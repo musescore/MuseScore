@@ -131,7 +131,8 @@ protected:
             result = val;
             resolved = true;
         });
-        async::processMessages();
+        async::processMessages(); // selectInstruments() promise
+        async::processMessages(); // dialog
 
         EXPECT_TRUE(resolved);
         return result;
@@ -302,6 +303,7 @@ TEST_F(InstrumentsScene_SelectInstrumentsScenarioTests, SelectInstrument_Returns
         resolved = true;
     });
     async::processMessages(); // selectInstrument() promise
+    async::processMessages(); // selectInstruments() promise
     async::processMessages(); // dialog
 
     //! [THEN] Its template is returned
