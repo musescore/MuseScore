@@ -1257,10 +1257,15 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
-    for (const PartInstrument& pi: parts) {
-        Part* part = partModifiable(pi.partId);
+    const PartByIdMap partById = partsById();
 
-        if (pi.isExistingPart && (pi.isSoloist != part->soloist())) {
+    for (const PartInstrument& pi: parts) {
+        if (!pi.isExistingPart) {
+            continue;
+        }
+
+        Part* part = muse::value(partById, pi.partId.toUint64());
+        if (part && !part->isSharedPart() && (pi.isSoloist != part->soloist())) {
             score()->undo(new mu::engraving::SetSoloist(part, pi.isSoloist));
         }
     }
