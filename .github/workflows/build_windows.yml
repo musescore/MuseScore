@@ -189,18 +189,18 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - parallel:
-    #   - name: Restore ccache files
-    #     id: restore-ccache
-    #     uses: actions/cache/restore@v6
-    #     with:
-    #       path: ${{ github.workspace }}/.ccache
-    #       key: ${{runner.os}}-${{runner.arch}}-ccache-
-    #       restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    #   - name: Setup ccache
-    #     run: |
-    #       choco install -y ccache
-    #       bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-ccache-
+          restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+      - name: Setup ccache
+        run: |
+          choco install -y ccache
+          bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
 
     - parallel:
       - name: Install Qt
@@ -244,9 +244,11 @@ jobs:
         DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
         buildscripts\ci\windows\build.bat -n %BUILD_NUMBER% --crash_log_url "%SENTRY_URL%" --dockwidgets_v2 %DOCKWIDGETS_V2%
-    # - name: Show ccache stats
-    #   run: |
-    #     ccache -sv
+    - name: Show ccache stats
+      shell: bash
+      run: |
+        ccache -sv
+        echo "ccache: restored '${{ steps.restore-ccache.outputs.cache-matched-key || 'nothing' }}', $(ccache -s | grep -m1 -E '^ *Hits:' | sed -E 's/^ *Hits: *//')" | tee -a $GITHUB_STEP_SUMMARY
     - name: Upload debug files
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       shell: bash
@@ -289,19 +291,19 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
-    # - name: Prepare ccache files for saving
-    #   id: prepare-save-ccache
-    #   if: always()
-    #   shell: bash
-    #   run: |
-    #     ccache --recompress 10
-    #     echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
-    # - name: Save ccache files
-    #   if: always()
-    #   uses: actions/cache/save@v6
-    #   with:
-    #     key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
-    #     path: ${{ github.workspace }}/.ccache
+    - name: Prepare ccache files for saving
+      id: prepare-save-ccache
+      if: always() && github.event_name != 'pull_request' && env.DO_UPLOAD_SYMBOLS != 'true'
+      shell: bash
+      run: |
+        ccache --recompress 10
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+    - name: Save ccache files
+      if: always() && github.event_name != 'pull_request' && env.DO_UPLOAD_SYMBOLS != 'true'
+      uses: actions/cache/save@v6
+      with:
+        key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
+        path: ${{ github.workspace }}/.ccache
 
 
   windows_portable:
@@ -382,18 +384,18 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - parallel:
-    #   - name: Restore ccache files
-    #     id: restore-ccache
-    #     uses: actions/cache/restore@v6
-    #     with:
-    #       path: ${{ github.workspace }}/.ccache
-    #       key: ${{runner.os}}-${{runner.arch}}-ccache-
-    #       restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    #   - name: Setup ccache
-    #     run: |
-    #       choco install -y ccache
-    #       bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-ccache-
+          restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+      - name: Setup ccache
+        run: |
+          choco install -y ccache
+          bash ./muse/buildscripts/ci/tools/setup_ccache_config.sh
 
     - parallel:
       - name: Install Qt
@@ -439,9 +441,11 @@ jobs:
         DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
         buildscripts\ci\windows\build.bat --portable ON -n %BUILD_NUMBER% --dockwidgets_v2 %DOCKWIDGETS_V2%
-    # - name: Show ccache stats
-    #   run: |
-    #     ccache -sv
+    - name: Show ccache stats
+      shell: bash
+      run: |
+        ccache -sv
+        echo "ccache: restored '${{ steps.restore-ccache.outputs.cache-matched-key || 'nothing' }}', $(ccache -s | grep -m1 -E '^ *Hits:' | sed -E 's/^ *Hits: *//')" | tee -a $GITHUB_STEP_SUMMARY
     - name: Package
       shell: cmd
       env:
@@ -466,19 +470,7 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
-    # - name: Prepare ccache files for saving
-    #   id: prepare-save-ccache
-    #   if: always()
-    #   shell: bash
-    #   run: |
-    #     ccache --recompress 10
-    #     echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
-    # - name: Save ccache files
-    #   if: always()
-    #   uses: actions/cache/save@v6
-    #   with:
-    #     key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
-    #     path: ${{ github.workspace }}/.ccache
+    # The portable build only restores the cache of the regular build (almost the same build), it does not save its own
 
   # windows_sign_test:
   #   if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'sign_test')
