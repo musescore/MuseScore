@@ -3998,7 +3998,12 @@ static bool isNudgeable(const EngravingItem* item)
            || item->isSymbol()
            || (item->isTuplet() && !toTuplet(item)->hasBracket())
            || item->isFermata()
-           || item->isBreath();
+           || item->isBreath()
+           // Items whose default grip moves the whole item (rather than resizing or reshaping it) when they are edited on their own:
+           || item->isImage()
+           || item->isArpeggio()
+           || item->isLineSegment()
+           || item->isSlurTieSegment();
 }
 
 bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
@@ -4037,8 +4042,6 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
             nudgeable.push_back(el);
         } else if (isGripEditStarted() && el == m_editData.element) {
             gripEdit = true;
-        } else if (el->hasGrips()) {
-            nudgeable.push_back(el);
         } else if (vertical && el->isRest()) {
             rests.push_back(toRest(el));
         } else if (vertical && el->isNote()) {
