@@ -25,6 +25,7 @@
 #include <optional>
 
 #include <QObject>
+#include <QRect>
 #include <qqmlintegration.h>
 
 #include "appmenumodel.h"
