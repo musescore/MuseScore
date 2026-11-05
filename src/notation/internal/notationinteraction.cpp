@@ -3484,7 +3484,7 @@ double NotationInteraction::getHRaster() const
 {
     double hRaster = mu::engraving::MScore::hRaster();
 
-    if (m_editData.element->isBarLine()) {
+    if (m_editData.element->isBeam()) {
         // Always adjust by .25sp
         hRaster = 4.0;
     } else if (m_editData.element->isLyricsLineSegment()) {
@@ -3499,7 +3499,7 @@ double NotationInteraction::getVRaster() const
 {
     double vRaster = mu::engraving::MScore::vRaster();
 
-    if (m_editData.element->isBarLine()) {
+    if (m_editData.element->isBeam()) {
         // Always adjust by .25sp
         vRaster = 4.0;
     } else if (m_editData.element->isLyricsLineSegment()) {
@@ -4069,7 +4069,7 @@ void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vect
 
 void NotationInteraction::doNudgeAnchors(MoveDirection d)
 {
-    // TODO: allow nudging a list of anchors
+    // TODO: Refactor grip editing to allow multiple selection and nudging (without rebasing anchors)
 
     IF_ASSERT_FAILED(m_editData.element) {
         return;
@@ -4099,6 +4099,8 @@ void NotationInteraction::doNudgeAnchors(MoveDirection d)
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
+
+    m_editData.isEditMode = isEditingElement();
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
@@ -4154,7 +4156,6 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     std::vector<EngravingItem*> lyrics;
     std::vector<EngravingItem*> nudgeable;
     std::vector<Rest*> rests;
-    bool gripEdit = false;
     bool hasNotes = false;
 
     for (EngravingItem* el : selection.elements()) {
@@ -4162,8 +4163,6 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
             lyrics.push_back(el);
         } else if (isNudgeable(el)) {
             nudgeable.push_back(el);
-        } else if (isGripEditStarted() && el == m_editData.element) {
-            gripEdit = true;
         } else if (vertical && el->isRest()) {
             rests.push_back(toRest(el));
         } else if (vertical && el->isNote()) {
@@ -4172,9 +4171,9 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     }
 
     // In a mixed list, only move the non-pitched items
-    const bool hasNonPitchedItems = !lyrics.empty() || !nudgeable.empty() || gripEdit;
+    const bool hasNonPitchedItems = !lyrics.empty() || !nudgeable.empty();
     const bool changePitch = (hasNotes || !rests.empty()) && !hasNonPitchedItems;
-    if (lyrics.empty() && nudgeable.empty() && !gripEdit && !changePitch) {
+    if (lyrics.empty() && nudgeable.empty() && !changePitch) {
         return false;
     }
 
@@ -4185,9 +4184,6 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     }
     if (!nudgeable.empty()) {
         doNudge(d, quickly, nudgeable);
-    }
-    if (gripEdit) {
-        doNudgeAnchors(d);
     }
     if (changePitch) {
         doMovePitch(d, pitchMode, rests);
@@ -4341,8 +4337,7 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         return false;
     }
 
-    const double vRaster = editElem->isBeam() ? 4 : mu::engraving::MScore::vRaster();
-    const double hRaster = editElem->isBeam() ? 4 : mu::engraving::MScore::hRaster();
+    MoveDirection direction = MoveDirection::Undefined;
 
     switch (event->key()) {
     case Qt::Key_Tab:
@@ -4360,43 +4355,26 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         notifyAboutNotationChanged();
         return true;
     case Qt::Key_Left:
-        m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
+        direction = MoveDirection::Left;
         break;
     case Qt::Key_Right:
-        m_editData.delta = PointF(nudgeDistance(m_editData, hRaster), 0);
+        direction = MoveDirection::Right;
         break;
     case Qt::Key_Up:
-        m_editData.delta = PointF(0, -nudgeDistance(m_editData, vRaster));
+        direction = MoveDirection::Up;
         break;
     case Qt::Key_Down:
-        m_editData.delta = PointF(0, nudgeDistance(m_editData, vRaster));
+        direction = MoveDirection::Down;
         break;
     default:
         return false;
     }
 
-    m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
-    m_editData.hRaster = hRaster;
-    m_editData.vRaster = vRaster;
-
-    m_editData.isEditMode = isEditingElement();
-
     //: Means: an editing operation triggered by a keystroke
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
-
-    if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
-        m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
-
-        editElem->startDragGrip(m_editData);
-        editElem->dragGrip(m_editData);
-        editElem->endDragGrip(m_editData);
-    } else {
-        editElem->startDrag(m_editData);
-        editElem->drag(m_editData);
-        editElem->endDrag(m_editData);
-    }
-
+    doNudgeAnchors(direction);
     apply();
+
     return true;
 }
 
