@@ -21,6 +21,8 @@
  */
 #include "stafftreeitem.h"
 
+#include "engraving/dom/part.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -53,7 +55,9 @@ void StaffTreeItem::init(const Staff* masterStaff)
     }
 
     const Staff* staff = notation()->parts()->staff(masterStaff->id());
-    bool visible = staff && staff->show();
+
+    // Staff::show() would be false while the instrument is combined; the row is disabled instead (see PartTreeItem)
+    bool visible = staff && staff->visible() && staff->part()->isVisible();
 
     if (!staff) {
         staff = masterStaff;
