@@ -4033,11 +4033,33 @@ void NotationInteraction::doMovePitch(MoveDirection d, PitchMode mode, const std
 
 void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements)
 {
+    const bool up = d == MoveDirection::Up;
+
+    std::vector<Lyrics*> lyrics;
     for (EngravingItem* el : elements) {
         if (!el->isLyrics()) {
             continue;
         }
-        score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
+
+        Lyrics* l = toLyrics(el);
+
+        // Move the selected lyrics as a block: if one can't move up, don't move any
+        if (up && l->verse() == 0) {
+            return;
+        }
+
+        lyrics.push_back(l);
+    }
+
+    // Lyrics::undoChangeProperty swaps a lyric with the one already in its target verse,
+    // so we move the lyrics furthest in the direction of travel first. Otherwise, selected
+    // lyrics would swap with each other instead of moving together:
+    std::sort(lyrics.begin(), lyrics.end(), [up](const Lyrics* a, const Lyrics* b) {
+        return up ? a->verse() < b->verse() : a->verse() > b->verse();
+    });
+
+    for (Lyrics* l : lyrics) {
+        score()->cmdMoveLyrics(l, toDirection(d));
     }
 }
 
