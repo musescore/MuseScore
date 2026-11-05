@@ -157,11 +157,9 @@ public:
     void undoRedoToIndex(size_t idx) override;
 
     // Move
+    bool moveSelectedItems(MoveDirection d, bool quickly) override;
     void movePitch(MoveDirection d, PitchMode mode) override;
-    void nudge(MoveDirection d, bool quickly) override;
-    void nudgeAnchors(MoveDirection d) override;
     void moveChordRestToStaff(MoveDirection d) override;
-    void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
     void toggleSnapToPrevious() override;
     void toggleSnapToNext() override;
@@ -499,7 +497,7 @@ private:
 
     void doMovePitch(MoveDirection d, PitchMode mode, const std::vector<Rest*>& rests);
     void doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
-    bool doNudgeAnchors(MoveDirection d);
+    void doNudgeAnchors(MoveDirection d);
     void doMoveLyrics(engraving::Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements);
 
     template<typename P>

@@ -93,13 +93,10 @@ public:
     MOCK_METHOD(bool, moveSelectionAvailable, (MoveSelectionType), (const, override));
     MOCK_METHOD(void, moveSelectionDeprecated, (MoveDirection, MoveSelectionType), (override));
 
-    MOCK_METHOD(void, moveLyrics, (MoveDirection), (override));
-
     MOCK_METHOD(EngravingItem*, contextItem, (), (const, override));
 
+    MOCK_METHOD(bool, moveSelectedItems, (MoveDirection, bool), (override));
     MOCK_METHOD(void, movePitch, (MoveDirection, PitchMode), (override));
-    MOCK_METHOD(void, nudge, (MoveDirection, bool), (override));
-    MOCK_METHOD(void, nudgeAnchors, (MoveDirection), (override));
     MOCK_METHOD(void, moveChordRestToStaff, (MoveDirection), (override));
     MOCK_METHOD(void, swapChordRest, (MoveDirection), (override));
     MOCK_METHOD(void, toggleSnapToPrevious, (), (override));
