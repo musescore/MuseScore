@@ -103,46 +103,47 @@ void NotationActionController::init()
 
     // navigation and selection commands
 
-    registerCommandWithParams(SELECT_COMMAND, &Controller::select);
-    registerCommand(GOTO_FIRST_ELEMENT_COMMAND, [this]() { select(SelectionTarget::FirstItem, PlayMode::PlayChord); });
-    registerCommand(GOTO_LAST_ELEMENT_COMMAND, [this]() { select(SelectionTarget::LastItem, PlayMode::PlayChord); });
-    registerCommand(GOTO_NEXT_ELEMENT_COMMAND, [this]() { select(SelectionTarget::NextItem, PlayMode::PlayNote); });
-    registerCommand(GOTO_PREV_ELEMENT_COMMAND, [this]() { select(SelectionTarget::PrevItem, PlayMode::PlayNote); });
-    registerCommand(GOTO_NEXT_SEGMENT_ELEMENT_COMMAND, [this]() { select(SelectionTarget::NextSegmentItem, PlayMode::PlayNote); });
-    registerCommand(GOTO_PREV_SEGMENT_ELEMENT_COMMAND, [this]() { select(SelectionTarget::PrevSegmentItem, PlayMode::PlayNote); });
-    registerCommand(GOTO_NEXT_TRACK_COMMAND, [this]() { select(SelectionTarget::NextTrack, PlayMode::PlayChord); });
-    registerCommand(GOTO_PREV_TRACK_COMMAND, [this]() { select(SelectionTarget::PrevTrack, PlayMode::PlayChord); });
-    registerCommand(GOTO_NEXT_FRAME_COMMAND, [this]() { select(SelectionTarget::NextFrame); });
-    registerCommand(GOTO_PREV_FRAME_COMMAND, [this]() { select(SelectionTarget::PrevFrame); });
-    registerCommand(GOTO_NEXT_SYSTEM_COMMAND, [this]() { select(SelectionTarget::NextSystem); });
-    registerCommand(GOTO_PREV_SYSTEM_COMMAND, [this]() { select(SelectionTarget::PrevSystem); });
-    registerCommand(GOTO_UPNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::UpNoteInChord); });
-    registerCommand(GOTO_DOWNNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::DownNoteInChord); });
-    registerCommand(GOTO_TOPNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::TopNoteInChord); });
-    registerCommand(GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::BottomNoteInChord); });
-    registerCommand(GOTO_TOP_STAFF_COMMAND, [this]() { select(SelectionTarget::TopStaff, PlayMode::PlayChord); });
-    registerCommand(GOTO_EMPTY_TRAILING_MEASURE_COMMAND, [this]() { select(SelectionTarget::EmptyTrailingMeasure); });
-    registerCommand(SELECT_SIMILAR_COMMAND, [this]() { select(SelectionTarget::Similar); });
-    registerCommand(SELECT_SIMILAR_IN_STAFF_COMMAND, [this]() { select(SelectionTarget::SimilarInStaff); });
-    registerCommand(SELECT_SIMILAR_IN_RANGE_COMMAND, [this]() { select(SelectionTarget::SimilarInRange); });
-    registerCommand(SELECT_NOTES_IN_CHORD_COMMAND, [this]() { select(SelectionTarget::NotesInChord); });
-    registerCommand(SELECT_ALL_COMMAND, [this]() { select(SelectionTarget::All); });
-    registerCommand(SELECT_SECTION_COMMAND, [this]() { select(SelectionTarget::Section); });
+    registerCommand<SelectTargetCommand>(&Controller::select);
+    registerCommand<SelectFirstItemCommand>([this]() { return select(SelectionTarget::FirstItem, PlayMode::PlayChord); });
+    registerCommand<SelectLastItemCommand>([this]() { return select(SelectionTarget::LastItem, PlayMode::PlayChord); });
+    registerCommand<SelectNextItemCommand>([this]() { return select(SelectionTarget::NextItem, PlayMode::PlayNote); });
+    registerCommand<SelectPrevItemCommand>([this]() { return select(SelectionTarget::PrevItem, PlayMode::PlayNote); });
+    registerCommand<SelectNextSegmentCommand>([this]() { return select(SelectionTarget::NextSegment, PlayMode::PlayNote); });
+    registerCommand<SelectPrevSegmentCommand>([this]() { return select(SelectionTarget::PrevSegment, PlayMode::PlayNote); });
+    registerCommand<SelectNextTrackCommand>([this]() { return select(SelectionTarget::NextTrack, PlayMode::PlayChord); });
+    registerCommand<SelectPrevTrackCommand>([this]() { return select(SelectionTarget::PrevTrack, PlayMode::PlayChord); });
+    registerCommand<SelectNextFrameCommand>([this]() { return select(SelectionTarget::NextFrame); });
+    registerCommand<SelectPrevFrameCommand>([this]() { return select(SelectionTarget::PrevFrame); });
+    registerCommand<SelectNextSystemCommand>([this]() { return select(SelectionTarget::NextSystem); });
+    registerCommand<SelectPrevSystemCommand>([this]() { return select(SelectionTarget::PrevSystem); });
+    registerCommand<SelectUpNoteInChordCommand>([this]() { return select(SelectionTarget::UpNoteInChord); });
+    registerCommand<SelectDownNoteInChordCommand>([this]() { return select(SelectionTarget::DownNoteInChord); });
+    registerCommand<SelectTopNoteInChordCommand>([this]() { return select(SelectionTarget::TopNoteInChord); });
+    registerCommand<SelectBottomNoteInChordCommand>([this]() { return select(SelectionTarget::BottomNoteInChord); });
+    registerCommand<SelectTopStaffCommand>([this]() { return select(SelectionTarget::TopStaff, PlayMode::PlayChord); });
+    registerCommand<SelectEmptyTrailingMeasureCommand>([this]() { return select(SelectionTarget::EmptyTrailingMeasure); });
+    registerCommand<SelectSimilarCommand>([this]() { return select(SelectionTarget::Similar); });
+    registerCommand<SelectSimilarInStaffCommand>([this]() { return select(SelectionTarget::SimilarInStaff); });
+    registerCommand<SelectSimilarInRangeCommand>([this]() { return select(SelectionTarget::SimilarInRange); });
+    registerCommand<SelectNotesInChordCommand>([this]() { return select(SelectionTarget::NotesInChord); });
+    registerCommand<SelectAllCommand>([this]() { return select(SelectionTarget::All); });
+    registerCommand<SelectSectionCommand>([this]() { return select(SelectionTarget::Section); });
 
-    registerCommand(GET_LOCATION_COMMAND, &Interaction::getLocation);
-
-    registerCommand(ADD_TO_SELECTION_NEXT_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::NextChord);
-    registerCommand(ADD_TO_SELECTION_PREV_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::PrevChord);
-    registerCommand(ADD_TO_SELECTION_NEXT_MEASURE_COMMAND, &Interaction::addToSelection, SelectionTarget::NextMeasure);
-    registerCommand(ADD_TO_SELECTION_PREV_MEASURE_COMMAND, &Interaction::addToSelection, SelectionTarget::PrevMeasure);
-    registerCommand(ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, &Interaction::addToSelection, SelectionTarget::AboveStaff);
-    registerCommand(ADD_TO_SELECTION_BELOW_STAFF_COMMAND, &Interaction::addToSelection, SelectionTarget::BelowStaff);
-    registerCommand(ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::BeginSystem);
-    registerCommand(ADD_TO_SELECTION_END_SYSTEM_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::EndSystem);
-    registerCommand(ADD_TO_SELECTION_BEGIN_SCORE_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::BeginScore);
-    registerCommand(ADD_TO_SELECTION_END_SCORE_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::EndScore);
+    registerCommand<AddToSelectionTargetCommand>(&Controller::addToSelection);
+    registerCommand<AddToSelectionNextChordCommand>([this]() { return addToSelection(SelectionTarget::NextChord); });
+    registerCommand<AddToSelectionPrevChordCommand>([this]() { return addToSelection(SelectionTarget::PrevChord); });
+    registerCommand<AddToSelectionNextMeasureCommand>([this]() { return addToSelection(SelectionTarget::NextMeasure); });
+    registerCommand<AddToSelectionPrevMeasureCommand>([this]() { return addToSelection(SelectionTarget::PrevMeasure); });
+    registerCommand<AddToSelectionAboveStaffCommand>([this]() { return addToSelection(SelectionTarget::AboveStaff); });
+    registerCommand<AddToSelectionBelowStaffCommand>([this]() { return addToSelection(SelectionTarget::BelowStaff); });
+    registerCommand<AddToSelectionBeginSystemCommand>([this]() { return addToSelection(SelectionTarget::BeginSystem); });
+    registerCommand<AddToSelectionEndSystemCommand>([this]() { return addToSelection(SelectionTarget::EndSystem); });
+    registerCommand<AddToSelectionBeginScoreCommand>([this]() { return addToSelection(SelectionTarget::BeginScore); });
+    registerCommand<AddToSelectionEndScoreCommand>([this]() { return addToSelection(SelectionTarget::EndScore); });
 
     registerCommand(OPEN_SELECTION_OPTIONS_COMMAND, &Controller::openSelectionMoreOptions);
+
+    registerCommand(GET_LOCATION_COMMAND, &Interaction::getLocation);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -852,6 +853,46 @@ void NotationActionController::resetState()
     if (automation()) {
         automation()->resetEditStateRequested().notify();
     }
+}
+
+muse::Ret NotationActionController::select(const SelectTargetCommand& command)
+{
+    return select(command.target, command.playMode);
+}
+
+muse::Ret NotationActionController::select(SelectionTarget target, PlayMode playMode)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    Ret ret = interaction->select(target);
+    if (!ret) {
+        return ret;
+    }
+
+    seekSelectedElement();
+    if (playMode != PlayMode::NoPlay) {
+        playSelectedElement(playMode == PlayMode::PlayChord);
+    }
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addToSelection(const AddToSelectionTargetCommand& command)
+{
+    return addToSelection(command.target);
+}
+
+muse::Ret NotationActionController::addToSelection(SelectionTarget target)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    return interaction->addToSelection(target);
 }
 
 bool NotationActionController::isNoteInputAllowed() const
@@ -2862,35 +2903,18 @@ bool NotationActionController::isNoteInputActionAllowed() const
     return !isTablatureStaff();
 }
 
-muse::Ret NotationActionController::select(const muse::rcommand::Params& params)
-{
-    SelectionTarget target = EnumContract<SelectionTarget>::get(params);
-    if (target == SelectionTarget::Undefined) {
-        return muse::make_ret(Ret::Code::BadArgs);
-    }
-
-    PlayMode playMode = EnumContract<PlayMode>::get(params);
-
-    select(target, playMode);
-    return muse::make_ok();
-}
-
-void NotationActionController::select(SelectionTarget target, PlayMode playMode)
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    interaction->select(target);
-    seekSelectedElement();
-
-    if (playMode != PlayMode::NoPlay) {
-        playSelectedElement(playMode == PlayMode::PlayChord);
-    }
-}
-
 // COMMANDS
+template<muse::rcommand::TypedCommand C>
+void NotationActionController::registerCommand(std::function<muse::Ret()> handler)
+{
+    commandDispatcher()->onRequest<C>(this, [this, handler](const C&) {
+        if (!commandsState()->commandState(C::id).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+        return handler();
+    });
+}
+
 template<muse::rcommand::TypedCommand C>
 void NotationActionController::registerCommand(muse::Ret (NotationActionController::* handler)())
 {

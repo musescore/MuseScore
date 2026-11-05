@@ -117,8 +117,8 @@ enum class SelectionTarget : unsigned char
     LastItem,
     NextItem,
     PrevItem,
-    NextSegmentItem,
-    PrevSegmentItem,
+    NextSegment,
+    PrevSegment,
     NextChord,
     PrevChord,
     NextMeasure,
@@ -143,6 +143,11 @@ enum class SelectionTarget : unsigned char
     NotesInChord,
     All,
     Section,
+    // Expand to ...
+    BeginSystem,
+    EndSystem,
+    BeginScore,
+    EndScore,
 };
 
 enum PlayMode {
@@ -159,14 +164,6 @@ enum class MoveSelectionType : unsigned char
     Frame,
     System,
     String // TAB Staff
-};
-
-enum class ExpandSelectionMode : unsigned char
-{
-    BeginSystem,
-    EndSystem,
-    BeginScore,
-    EndScore,
 };
 
 enum class AddRemoveSystemLockType : signed char

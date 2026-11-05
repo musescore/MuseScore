@@ -973,7 +973,7 @@ void NotationInteraction::findAndSelectChordRest(const Fraction& tick)
     select(itemsToSelect, SelectType::REPLACE);
 }
 
-void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
+muse::Ret NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     if (needEndTextEditing(elements)) {
         endEditText();
@@ -981,17 +981,17 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
         endEditElement();
     }
 
-    m_selection->select(elements, type, staffIndex);
+    return m_selection->select(elements, type, staffIndex);
 }
 
-void NotationInteraction::select(SelectionTarget target)
+muse::Ret NotationInteraction::select(SelectionTarget target)
 {
-    m_selection->select(target);
+    return m_selection->select(target);
 }
 
-void NotationInteraction::addToSelection(SelectionTarget target)
+muse::Ret NotationInteraction::addToSelection(SelectionTarget target)
 {
-    m_selection->addToSelection(target);
+    return m_selection->addToSelection(target);
 }
 
 void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
@@ -3800,61 +3800,6 @@ void NotationInteraction::drawDrop(muse::draw::Painter* painter)
             painter->fillPath(path, fillColor);
             painter->drawPath(path);
         }
-    }
-}
-
-ChordRest* activeCr(mu::engraving::Score* score)
-{
-    ChordRest* cr = score->selection().activeCR();
-    if (!cr) {
-        cr = score->selection().lastChordRest();
-        if (!cr && score->noteEntryMode()) {
-            cr = score->inputState().cr();
-        }
-    }
-    return cr;
-}
-
-void NotationInteraction::expandSelection(ExpandSelectionMode mode)
-{
-    ChordRest* cr = activeCr(score());
-    if (!cr) {
-        return;
-    }
-    ChordRest* el = 0;
-    switch (mode) {
-    case ExpandSelectionMode::BeginSystem: {
-        Measure* measure = cr->segment()->measure()->system()->firstMeasure();
-        if (measure) {
-            el = measure->first()->nextChordRest(cr->track());
-        }
-        break;
-    }
-    case ExpandSelectionMode::EndSystem: {
-        Measure* measure = cr->segment()->measure()->system()->lastMeasure();
-        if (measure) {
-            el = measure->last()->nextChordRest(cr->track(), true);
-        }
-        break;
-    }
-    case ExpandSelectionMode::BeginScore: {
-        Measure* measure = score()->firstMeasureMM();
-        if (measure) {
-            el = measure->first()->nextChordRest(cr->track());
-        }
-        break;
-    }
-    case ExpandSelectionMode::EndScore: {
-        Measure* measure = score()->lastMeasureMM();
-        if (measure) {
-            el = measure->last()->nextChordRest(cr->track(), true);
-        }
-        break;
-    }
-    }
-
-    if (el) {
-        select({ el }, SelectType::RANGE, el->staffIdx());
     }
 }
 

@@ -87,9 +87,9 @@ public:
 
     bool elementsSelected(const mu::engraving::ElementTypeSet& types) const override;
 
-    void select(SelectionTarget target);
-    void addToSelection(SelectionTarget target);
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0);
+    muse::Ret select(SelectionTarget target);
+    muse::Ret addToSelection(SelectionTarget target);
+    muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0);
     void clearSelection();
     muse::async::Notification selectionChanged() const;
     void notifyAboutSelectionChangedIfNeed();
@@ -104,6 +104,7 @@ private:
     void selectFirstElement(bool frame = false);
     void selectLastElement();
     void addToSelection(MoveDirection d, MoveSelectionType type);
+    void expandSelection(SelectionTarget target);
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
     void moveSegmentSelection(MoveDirection d);

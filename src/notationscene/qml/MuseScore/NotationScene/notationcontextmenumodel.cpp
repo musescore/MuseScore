@@ -269,11 +269,11 @@ MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 MenuItemList NotationContextMenuModel::makeSelectItems()
 {
     if (isSingleSelection()) {
-        return MenuItemList { makeMenuItem(SELECT_SIMILAR_COMMAND),
-                              makeMenuItem(SELECT_SIMILAR_IN_STAFF_COMMAND),
+        return MenuItemList { makeMenuItem(SelectSimilarCommand::id),
+                              makeMenuItem(SelectSimilarInStaffCommand::id),
                               makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     } else if (canSelectSimilarInRange()) {
-        return MenuItemList { makeMenuItem(SELECT_SIMILAR_IN_RANGE_COMMAND), makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList { makeMenuItem(SelectSimilarInRangeCommand::id), makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     } else if (canSelectSimilar()) {
         return MenuItemList{ makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
     }
