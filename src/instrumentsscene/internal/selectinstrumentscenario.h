@@ -44,11 +44,13 @@ public:
     {
     }
 
-    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(
+        const notation::ScoreOrder& currentOrder) const override;
     muse::async::Promise<notation::InstrumentTemplate> selectInstrument(
         const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;
 
 private:
-    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(
+        const muse::ValMap& params, const notation::ScoreOrder& currentOrder) const;
 };
 }
