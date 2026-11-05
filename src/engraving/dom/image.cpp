@@ -347,7 +347,7 @@ std::vector<PointF> Image::gripsPositions(const EditData&) const
     return {
         PointF(r.x() + r.width(), r.y() + r.height() * .5),
         PointF(r.x() + r.width() * .5, r.y() + r.height()),
-        PointF(r.x() + r.width() * .5, r.y()),
+        r.center()
     };
 }
 
