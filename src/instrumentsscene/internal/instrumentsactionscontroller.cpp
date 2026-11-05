@@ -52,7 +52,8 @@ void InstrumentsActionsController::selectInstruments()
         return;
     }
 
-    async::Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
+    const ScoreOrder& currentOrder = master->parts()->scoreOrder();
+    async::Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments(currentOrder);
     selectedInstruments.onResolve(this, [master](const PartInstrumentListScoreOrder& sel) {
         master->parts()->setParts(sel.instruments, sel.scoreOrder);
     });
