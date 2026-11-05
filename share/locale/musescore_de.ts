@@ -7629,7 +7629,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1410"/>
         <source>Tempo &amp;marking</source>
-        <translation>Tempo&amp;markierung</translation>
+        <translation>Te&amp;mpoangabe</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1411"/>
@@ -26606,7 +26606,7 @@ Leerraum</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="50"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation>Systemmarkierungen (Tempo, Übungsmarken, etc.)</translation>
+        <translation>Systemmarkierungen (Tempoangaben, Übungsmarken, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="247"/>

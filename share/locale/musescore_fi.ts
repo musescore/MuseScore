@@ -9592,7 +9592,7 @@ jos perässä on tavuviivoja</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="38"/>
         <source>Open</source>
-        <translation>Avoin</translation>
+        <translation>Avaa</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="44"/>
@@ -35381,7 +35381,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="68"/>
         <source>Show in Explorer</source>
-        <translation>Näytä selaimessa</translation>
+        <translation>Näytä resurssienhallinnassa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="69"/>
@@ -35397,7 +35397,7 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="80"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1943"/>
         <source>Open</source>
-        <translation>Avoin</translation>
+        <translation>Avaa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="84"/>
@@ -35885,13 +35885,13 @@ avaaminen epäonnistui: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
         <source>Upload limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Latausraja saavutettu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
         <source>You’ve reached the limit for file conversions. Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Olet saavuttanut tiedostojen muunnosrajan. Yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
@@ -36328,13 +36328,13 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>Käyttöehdot</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hyväksyn %1 ja vahvistan, ettei käyttöni loukkaa kenenkään tekijänoikeuksia tai muita oikeuksia.</translation>
     </message>
 </context>
 <context>
