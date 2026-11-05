@@ -37,7 +37,10 @@
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
-#include "testflow/itestflow.h"
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/itestflowconfiguration.h"
+#endif
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -63,6 +66,9 @@ class MuseScoreConsoleApp : public muse::ConsoleApplication
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::GlobalInject<muse::testflow::ITestflowConfiguration> testflowConfiguration;
+#endif
 
 public:
     MuseScoreConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
@@ -75,7 +81,6 @@ private:
     int processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
     int processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
     int processAudioPluginRegistration(const MuseScoreCmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
-    void processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx);
 };
 }
 

@@ -27,6 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "global/iapplication.h"
 #include "interactive/iinteractive.h"
 #include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
@@ -42,6 +43,7 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::IApplication> application;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };

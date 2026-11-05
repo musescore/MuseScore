@@ -8,6 +8,11 @@
 #include "global/logger.h"
 #include "global/internal/cmdoptions.h"
 
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/testflowtypes.h"
+#endif
+
 namespace mu::app {
 enum class ConvertType {
     File,
@@ -112,13 +117,9 @@ struct MuseScoreCmdOptions : public muse::CmdOptions {
         QString output;
     } diagnostic;
 
-    struct Testflow {
-        QString testCaseNameOrFile;
-        QString testCaseContextNameOrFile;
-        QString testCaseContextValue;
-        QString testCaseFunc;
-        QString testCaseFuncArgs;
-    } testflow;
+#ifdef MUSE_MODULE_TESTFLOW
+    std::optional<muse::testflow::RunRequest> testflow;
+#endif
 
     struct AudioPluginRegistration {
         muse::io::path_t pluginPath;

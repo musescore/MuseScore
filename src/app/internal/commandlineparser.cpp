@@ -27,6 +27,11 @@
 #include "global/internal/baseapplication.h"
 
 #include "app_config.h"
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/testflowcmdline.h"
+#endif
 
 #include "log.h"
 
@@ -173,11 +178,9 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("diagnostic-drawdiff-to-png", "Convert draw diff to png"));
 
     // Testflow
-    m_parser.addOption(QCommandLineOption("test-case", "Run test case by name or file", "nameOrFile"));
-    m_parser.addOption(QCommandLineOption("test-case-context", "Set test case context by name or file", "nameOrFile"));
-    m_parser.addOption(QCommandLineOption("test-case-context-value", "Set test case context value", "value"));
-    m_parser.addOption(QCommandLineOption("test-case-func", "Call test case function", "name"));
-    m_parser.addOption(QCommandLineOption("test-case-func-args", "Call test case function args", "args"));
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::testflow::addCmdOptions(m_parser);
+#endif
 
     // Audio plugins
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
@@ -523,26 +526,9 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Testflow
-    if (m_parser.isSet("test-case")) {
-        m_options->runMode = IApplication::RunMode::ConsoleApp;
-        m_options->testflow.testCaseNameOrFile = fromUserInputPath(m_parser.value("test-case"));
-    }
-
-    if (m_parser.isSet("test-case-context")) {
-        m_options->testflow.testCaseContextNameOrFile = fromUserInputPath(m_parser.value("test-case-context"));
-    }
-
-    if (m_parser.isSet("test-case-context-value")) {
-        m_options->testflow.testCaseContextValue = m_parser.value("test-case-context-value");
-    }
-
-    if (m_parser.isSet("test-case-func")) {
-        m_options->testflow.testCaseFunc = m_parser.value("test-case-func");
-    }
-
-    if (m_parser.isSet("test-case-func-args")) {
-        m_options->testflow.testCaseFuncArgs = m_parser.value("test-case-func-args");
-    }
+#ifdef MUSE_MODULE_TESTFLOW
+    m_options->testflow = muse::testflow::parseCmdOptions(m_parser, m_options->runMode);
+#endif
 
     // Startup
     if (m_options->runMode == IApplication::RunMode::GuiApp) {

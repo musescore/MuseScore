@@ -94,6 +94,10 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
     notationConfiguration()->setTemplateModeEnabled(options->notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options->notation.testModeEnabled);
 
+#ifdef MUSE_MODULE_TESTFLOW
+    testflowConfiguration()->setRunRequest(options->testflow);
+#endif
+
     if (options->runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::Constants::MSC_VERSION;
@@ -158,9 +162,14 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
         // ====================================================
         // Process Testflow
         // ====================================================
-        MuseScoreCmdOptions::Testflow testflowOptions = options->testflow;
-        if (!testflowOptions.testCaseNameOrFile.isEmpty()) {
-            processTestflow(testflowOptions, ctxId);
+#ifdef MUSE_MODULE_TESTFLOW
+        const bool isTestflow = options->testflow.has_value();
+#else
+        const bool isTestflow = false;
+#endif
+        if (isTestflow) {
+            //! NOTE The testflow module runs the test case when the context is ready
+            setContextReady(ctxId);
         } else {
             // ====================================================
             // Process Diagnostic
@@ -336,34 +345,3 @@ int MuseScoreConsoleApp::processAudioPluginRegistration(const MuseScoreCmdOption
     return ret.code();
 }
 
-void MuseScoreConsoleApp::processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx)
-{
-    using namespace muse::testflow;
-    muse::ContextInject<ITestflow> testflow = { ctx };
-
-    muse::async::Channel<StepInfo, Ret> stepCh = testflow()->stepStatusChanged();
-    stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret) {
-        if (!ret) {
-            LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
-            qApp->exit(ret.code());
-        } else {
-            LOGI() << "success step: " << step.name << ", ret: " << ret.toString();
-        }
-    });
-
-    muse::async::Channel<muse::io::path_t, ITestflow::Status> statusCh = testflow()->statusChanged();
-    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, ITestflow::Status st) {
-        if (st == ITestflow::Status::Finished) {
-            LOGI() << "success finished, path: " << path;
-            qApp->exit(0);
-        }
-    });
-
-    ITestflow::Options opt;
-    opt.context = task.testCaseContextNameOrFile;
-    opt.contextVal = task.testCaseContextValue.toStdString();
-    opt.func = task.testCaseFunc.toStdString();
-    opt.funcArgs = task.testCaseFuncArgs.toStdString();
-
-    testflow()->execScript(task.testCaseNameOrFile, opt);
-}

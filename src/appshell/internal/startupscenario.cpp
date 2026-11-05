@@ -205,6 +205,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
+    application()->setContextReady(iocContext());
+
     m_activeUpdateCheckCount = 0;
 
     if (museSoundsUpdateScenario() && museSoundsUpdateScenario()->checkInProgress()) {

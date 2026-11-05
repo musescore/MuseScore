@@ -150,6 +150,10 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
         appshellConfiguration()->revertToFactorySettings(options->app.revertToFactorySettings.value());
     }
 
+#ifdef MUSE_MODULE_TESTFLOW
+    testflowConfiguration()->setRunRequest(options->testflow);
+#endif
+
     if (guitarProConfiguration()) {
         if (options->guitarPro.experimental) {
             guitarProConfiguration()->setExperimental(true);

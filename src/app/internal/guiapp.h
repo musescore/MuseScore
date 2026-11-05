@@ -11,6 +11,11 @@
 #include "appshell/iappshellconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/itestflowconfiguration.h"
+#endif
+
 #include "appshell/widgets/splashscreen/splashscreen.h"
 
 class QQuickWindow;
@@ -21,6 +26,9 @@ class MuseScoreGuiApp : public muse::ui::GuiApplication
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::GlobalInject<muse::testflow::ITestflowConfiguration> testflowConfiguration;
+#endif
 
 public:
     MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
