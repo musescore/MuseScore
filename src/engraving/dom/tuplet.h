@@ -187,7 +187,7 @@ private:
     Fraction m_tick;
 
     PointF m_p1, m_p2;
-    PointF m_userP1, m_userP2;      // user offset
+    PointF m_userP1, m_userP2; // user adjustments of the bracket start/end
 
     Text* m_number = nullptr;
 };

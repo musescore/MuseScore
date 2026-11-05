@@ -4120,10 +4120,10 @@ static bool isNudgeable(const EngravingItem* item)
     return item->isTextBase()
            || item->isArticulationFamily()
            || item->isSymbol()
-           || (item->isTuplet() && !toTuplet(item)->hasBracket())
            || item->isFermata()
            || item->isBreath()
-           // Items whose default grip moves the whole item (rather than resizing or reshaping it) when they are edited on their own:
+           // Items whose default grip moves the item's offset (rather than resizing or reshaping it) when they are edited on their own:
+           || item->isTuplet()
            || item->isImage()
            || item->isArpeggio()
            || item->isLineSegment()
