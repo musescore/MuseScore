@@ -242,8 +242,10 @@ jobs:
       shell: cmd
       env:
         DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
+        # Debug info is needed only for uploading symbols, without it the ccache is much smaller
+        DEBUG_INFO: ${{ env.DO_UPLOAD_SYMBOLS == 'true' && 'ON' || 'OFF' }}
       run: |
-        buildscripts\ci\windows\build.bat -n %BUILD_NUMBER% --crash_log_url "%SENTRY_URL%" --dockwidgets_v2 %DOCKWIDGETS_V2%
+        buildscripts\ci\windows\build.bat -n %BUILD_NUMBER% --crash_log_url "%SENTRY_URL%" --dockwidgets_v2 %DOCKWIDGETS_V2% --debug_info %DEBUG_INFO%
     - name: Show ccache stats
       shell: bash
       run: |
@@ -299,7 +301,7 @@ jobs:
         ccache --recompress 10
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
     - name: Save ccache files
-      if: always() && github.event_name != 'pull_request' && env.DO_UPLOAD_SYMBOLS != 'true'
+      if: always() && github.event_name != 'pull_request' && env.DO_UPLOAD_SYMBOLS != 'true' && steps.prepare-save-ccache.outcome == 'success'
       uses: actions/cache/save@v6
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
@@ -440,7 +442,7 @@ jobs:
       env:
         DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
-        buildscripts\ci\windows\build.bat --portable ON -n %BUILD_NUMBER% --dockwidgets_v2 %DOCKWIDGETS_V2%
+        buildscripts\ci\windows\build.bat --portable ON -n %BUILD_NUMBER% --dockwidgets_v2 %DOCKWIDGETS_V2% --debug_info OFF
     - name: Show ccache stats
       shell: bash
       run: |
