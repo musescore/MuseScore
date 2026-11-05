@@ -4760,7 +4760,7 @@ void NotationInteraction::startEditElement(EngravingItem* element)
 
     if (element->isTextBase()) {
         startEditText(element);
-    } else if (element->hasGrips() && !element->isImage()) {
+    } else if (element->hasGrips()) {
         startEditGrip(element, element->defaultGrip());
     } else {
         element->startEdit(m_editData);
