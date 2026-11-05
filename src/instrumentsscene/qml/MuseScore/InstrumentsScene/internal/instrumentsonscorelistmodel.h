@@ -36,6 +36,10 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
 
+    // Make soloist: available while instruments are selected; on while all of them are soloists
+    Q_PROPERTY(bool isSoloistAvailable READ isSoloistAvailable NOTIFY soloistStateChanged)
+    Q_PROPERTY(bool isSelectionSoloist READ isSelectionSoloist NOTIFY soloistStateChanged)
+
     QML_ELEMENT
 
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
@@ -51,8 +55,15 @@ public:
     QStringList orders() const;
     int currentOrderIndex() const;
 
+    bool isSoloistAvailable() const;
+    bool isSelectionSoloist() const;
+
+    // Makes all selected instruments soloists, or (if they all are already) none of them
+    Q_INVOKABLE void toggleSoloistForSelection();
+
     Q_INVOKABLE void load();
-    Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
+    // Returns the row of the first (topmost) instrument added, or -1 if none was
+    Q_INVOKABLE int addInstruments(const QStringList& instrumentIdList);
 
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
@@ -63,6 +74,7 @@ public slots:
 signals:
     void ordersChanged();
     void currentOrderChanged();
+    void soloistStateChanged();
 
 private:
     class InstrumentItem;
@@ -70,10 +82,28 @@ private:
     enum Roles {
         RoleName = SelectableItemListModel::UserRole + 1,
         RoleDescription,
-        RoleIsSoloist
+        RoleIsSoloist,
+        RoleSharedGroupRole,
+        RoleSharedGroupId,
+        RoleIsNew,
+        RoleTablatureOption
     };
 
     void loadOrders();
+
+    QList<InstrumentItem*> selectedInstruments() const;
+
+    // Shared-staves groups (shown while the score combines instruments onto shared staves) are a header row followed
+    // by their instruments' rows. A group always moves (and is sorted) as a whole; its instruments can't be moved
+    int sharedGroupRole(int row) const;
+    int lastRowOfBlock(int row) const;
+    int firstRowOfBlock(int row) const;
+    QList<ItemList> blocks(const ItemList& instruments) const;
+    int sortingIndex(const ItemList& block) const;
+
+    bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
+                  int destinationChild) override;
+    void onUpdateOperationsAvailability() override;
 
     int resolveInstrumentSequenceNumber(const muse::String& instrumentId) const;
     void updateInstrumentsOrder();

@@ -31,6 +31,7 @@
 #include "translation.h"
 #include "defer.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/sharedpart.h"
 
@@ -266,6 +267,10 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         }
 
         staffItem->init(m_masterNotation->parts()->staff(staff->id()));
+
+        if (auto part = dynamic_cast<PartTreeItem*>(partItem)) {
+            part->updateStaffLinks();
+        }
     }, Mode::SetReplace);
 
     notationStaves.onItemRemoved(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
@@ -285,6 +290,10 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         beginRemoveRows(partIndex, staffRow, staffRow);
         partItem->removeChildren(staffRow, 1, false);
         endRemoveRows();
+
+        if (auto part = dynamic_cast<PartTreeItem*>(partItem)) {
+            part->updateStaffLinks();
+        }
     }, Mode::SetReplace);
 
     notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, partId](const Staff* staff) {
@@ -310,6 +319,10 @@ void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
         beginInsertRows(partIndex, dstRow, dstRow);
         partItem->insertChild(staffItem, dstRow);
         endInsertRows();
+
+        if (auto part = dynamic_cast<PartTreeItem*>(partItem)) {
+            part->updateStaffLinks();
+        }
     }, Mode::SetReplace);
 }
 
@@ -1078,11 +1091,22 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         m_activeDragMoveParams = params;
     }
 
+    if (m_dragInProgress && m_activeDragItems.isEmpty()) {
+        for (int row = sourceFirstRow; row <= sourceLastRow; ++row) {
+            m_activeDragItems.push_back(sourceParentItem->childAtRow(row));
+        }
+    }
+
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress && !panelOnly);
     endMoveRows();
 
     updateEmptySharedGroupPositions();
+
+    // Moving staves within an instrument changes their numbering and the rows they're linked to
+    if (auto part = dynamic_cast<PartTreeItem*>(destinationParentItem)) {
+        part->updateStaffLinks();
+    }
 
     // The selection follows the moved rows, but the items' selected state must be brought in line
     syncItemsSelection();
@@ -1107,12 +1131,15 @@ void LayoutPanelTreeModel::cancelActiveDrag()
 {
     m_dragSourceParentItem = nullptr;
     m_activeDragMoveParams = MoveParams();
+    m_activeDragItems.clear();
     m_dragInProgress = false;
 }
 
 void LayoutPanelTreeModel::endActiveDragLeavingSharedGroup(const QString& partId)
 {
-    const MoveParams params = m_activeDragMoveParams;
+    ID destinationPartId;
+    INotationParts::InsertMode mode = INotationParts::InsertMode::After;
+    const bool moved = m_dragSourceParentItem == m_rootItem && findActiveDragDestination(destinationPartId, mode);
     cancelActiveDrag();
 
     INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
@@ -1120,27 +1147,223 @@ void LayoutPanelTreeModel::endActiveDragLeavingSharedGroup(const QString& partId
         return;
     }
 
-    const bool moved = params.isValid() && params.objectsType == LayoutPanelItemType::PART;
-
     keepEmptiedSharedGroups({ partId }, QString());
-    parts->removePartFromSharedPart(ID(partId), moved ? params.destinationObjectId : ID(), params.insertMode);
+    parts->removePartFromSharedPart(ID(partId), moved ? destinationPartId : ID(), mode);
 }
 
 void LayoutPanelTreeModel::endActiveDrag()
 {
     setLoadingBlocked(true);
 
-    if (m_dragSourceParentItem) {
+    if (m_dragSourceParentItem == m_rootItem) {
+        applyActiveDragToScore();
+    } else if (m_dragSourceParentItem) {
         m_dragSourceParentItem->moveChildrenOnScore(m_activeDragMoveParams);
     }
 
     m_dragSourceParentItem = nullptr;
     m_activeDragMoveParams = MoveParams();
+    m_activeDragItems.clear();
     m_dragInProgress = false;
 
     setLoadingBlocked(false);
 
     updateSystemObjectLayers();
+}
+
+void LayoutPanelTreeModel::applyActiveDragToScore()
+{
+    INotationPartsPtr parts = m_notation->parts();
+    INotationUndoStackPtr undoStack = m_notation->undoStack();
+    const size_t undoIdx = undoStack->currentStateIndex();
+
+    IDList partIds;
+    for (const AbstractLayoutPanelTreeItem* item : m_activeDragItems) {
+        if (parts->partExists(item->id())) {
+            partIds.push_back(item->id());
+        }
+    }
+
+    // Moving instruments leaves the system markings at the same staff positions, not on the same staves:
+    // so where each system markings row should go is worked out before, and the markings are moved there after
+    const std::vector<SystemObjectsTarget> systemObjectsTargets = systemObjectsTargetsFromPanel();
+
+    ID destinationPartId;
+    INotationParts::InsertMode mode = INotationParts::InsertMode::Before;
+    if (!partIds.empty() && !partsOrderMatchesScore() && findActiveDragDestination(destinationPartId, mode)) {
+        parts->moveParts(partIds, destinationPartId, mode);
+    }
+
+    moveSystemObjectsToTargets(systemObjectsTargets);
+
+    if (undoStack->currentStateIndex() > undoIdx + 1) {
+        undoStack->mergeTransactions(undoIdx);
+    }
+}
+
+bool LayoutPanelTreeModel::findActiveDragDestination(ID& destinationPartId, INotationParts::InsertMode& mode) const
+{
+    int firstRow = -1;
+    int lastRow = -1;
+    for (const AbstractLayoutPanelTreeItem* item : m_activeDragItems) {
+        if (item->parentItem() != m_rootItem) {
+            return false;
+        }
+
+        const int row = item->row();
+        firstRow = firstRow < 0 ? row : std::min(firstRow, row);
+        lastRow = std::max(lastRow, row);
+    }
+
+    if (firstRow < 0) {
+        return false;
+    }
+
+    INotationPartsPtr parts = m_notation->parts();
+    auto isScorePart = [this, parts](int row) {
+        const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtRow(row);
+        return item && item->type() == LayoutPanelItemType::PART && parts->partExists(item->id());
+    };
+
+    // Before the next instrument below, or else after the previous one above
+    for (int row = lastRow + 1; row < m_rootItem->childCount(); ++row) {
+        if (isScorePart(row)) {
+            destinationPartId = m_rootItem->childAtRow(row)->id();
+            mode = INotationParts::InsertMode::Before;
+            return true;
+        }
+    }
+
+    for (int row = firstRow - 1; row >= 0; --row) {
+        if (isScorePart(row)) {
+            destinationPartId = m_rootItem->childAtRow(row)->id();
+            mode = INotationParts::InsertMode::After;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool LayoutPanelTreeModel::partsOrderMatchesScore() const
+{
+    INotationPartsPtr parts = m_notation->parts();
+
+    IDList panelOrder;
+    for (int row = 0; row < m_rootItem->childCount(); ++row) {
+        const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtRow(row);
+        if (item->type() == LayoutPanelItemType::PART && parts->partExists(item->id())) {
+            panelOrder.push_back(item->id());
+        }
+    }
+
+    IDList scoreOrder;
+    for (const Part* part : parts->partList()) {
+        if (muse::contains(panelOrder, part->id())) {
+            scoreOrder.push_back(part->id());
+        }
+    }
+
+    return panelOrder == scoreOrder;
+}
+
+std::vector<LayoutPanelTreeModel::SystemObjectsTarget> LayoutPanelTreeModel::systemObjectsTargetsFromPanel() const
+{
+    std::vector<SystemObjectsTarget> targets;
+    if (!shouldShowSystemObjectLayers()) {
+        return targets;
+    }
+
+    const int rowCount = m_rootItem->childCount();
+
+    // Each system markings row goes on the instrument below it, or below the bottom staff if there is none.
+    // The first row's markings are always on the top staff, whichever instrument that is
+    const int firstRow = m_rootItem->childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER ? 1 : 0;
+    for (int row = firstRow; row < rowCount; ++row) {
+        if (m_rootItem->childType(row) != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            continue;
+        }
+
+        auto layer = static_cast<SystemObjectsLayerTreeItem*>(m_rootItem->childAtRow(row));
+        SystemObjectsTarget target { layer, layer->staff()->idx(), nullptr };
+
+        for (int next = row + 1; next < rowCount && !target.staff; ++next) {
+            const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtRow(next);
+            if (item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART) {
+                const Part* part = static_cast<const PartTreeItem*>(item)->part();
+                target.staff = part == layer->staff()->part() ? layer->staff() : part->staff(0);
+            }
+        }
+
+        targets.push_back(target);
+    }
+
+    return targets;
+}
+
+void LayoutPanelTreeModel::moveSystemObjectsToTargets(const std::vector<SystemObjectsTarget>& targets)
+{
+    if (targets.empty()) {
+        return;
+    }
+
+    INotationPartsPtr parts = m_masterNotation->notation()->parts();
+    const mu::engraving::Score* score = m_masterNotation->masterScore();
+    const Staff* bottomStaff = score->staves().back();
+
+    struct SystemObjectsMove {
+        SystemObjectsLayerTreeItem* layer = nullptr;
+        const Staff* from = nullptr;
+        const Staff* to = nullptr;
+    };
+
+    std::vector<SystemObjectsMove> moves;
+    bool belowBottomStaff = false;
+
+    for (const SystemObjectsTarget& target : targets) {
+        const Staff* from = target.staffIdx < score->nstaves() ? score->staves().at(target.staffIdx) : nullptr;
+        if (!from || !from->isSystemObjectStaff()) {
+            continue;
+        }
+
+        const Staff* to = target.staff ? target.staff : bottomStaff;
+        belowBottomStaff = belowBottomStaff || !target.staff;
+
+        target.layer->setStaff(from);
+        if (to != from) {
+            moves.push_back({ target.layer, from, to });
+        }
+    }
+
+    // Markings only move onto staves without any, so they never replace others' (which may be about to move away)
+    bool moved = true;
+    while (!moves.empty() && moved) {
+        moved = false;
+
+        for (auto it = moves.begin(); it != moves.end();) {
+            if (muse::contains(score->systemObjectStavesWithTopStaff(), const_cast<Staff*>(it->to))) {
+                ++it;
+                continue;
+            }
+
+            parts->moveSystemObjects(it->from->id(), it->to->id());
+            it->layer->setStaff(it->to);
+            it = moves.erase(it);
+            moved = true;
+        }
+    }
+
+    // Unless the bottom staff's markings couldn't move there (it already has markings above it)
+    belowBottomStaff = belowBottomStaff && bottomStaff->isSystemObjectStaff();
+    for (const SystemObjectsMove& move : moves) {
+        belowBottomStaff = belowBottomStaff && move.to != bottomStaff;
+    }
+
+    if (belowBottomStaff && !bottomStaff->hasSystemObjectsBelowBottomStaff()) {
+        parts->moveSystemObjectLayerBelowBottomStaff();
+    } else if (!belowBottomStaff && bottomStaff->hasSystemObjectsBelowBottomStaff()) {
+        parts->moveSystemObjectLayerAboveBottomStaff();
+    }
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
@@ -1692,6 +1915,7 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Par
 
     auto addStaffControlItem = buildAddStaffControlItem(partItem->id(), partItem);
     partItem->appendChild(addStaffControlItem);
+    partItem->updateStaffLinks();
 
     setupStavesConnections(partItem->id());
 

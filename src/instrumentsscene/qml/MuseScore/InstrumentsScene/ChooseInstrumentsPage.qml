@@ -36,6 +36,7 @@ Rectangle {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
+    property alias highlightsNewInstruments: instrumentsOnScoreView.highlightsNewInstruments
     property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
     readonly property bool hasSelectedInstruments: root.canSelectMultipleInstruments
@@ -83,9 +84,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            root.instrumentsOnScoreModel.addInstruments(instrumentsModel.selectedInstrumentIdList())
-
-            Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
+            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
         }
     }
 

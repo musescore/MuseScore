@@ -49,6 +49,7 @@ class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
+class SystemObjectsLayerTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
@@ -258,6 +259,20 @@ private:
     // Before instruments leave their groups: keeps the groups they'd leave without instruments, as empty groups
     void keepEmptiedSharedGroups(const QStringList& leavingPartIds, const QString& destinationGroupId);
 
+    // A drag moves rows one step at a time in the panel only: on drop, the score is brought in line with where the
+    // dragged rows (and the system markings rows they passed) now are, as one undoable step
+    void applyActiveDragToScore();
+    bool findActiveDragDestination(muse::ID& destinationPartId, mu::notation::INotationParts::InsertMode& mode) const;
+    bool partsOrderMatchesScore() const;
+
+    struct SystemObjectsTarget {
+        SystemObjectsLayerTreeItem* layer = nullptr;
+        size_t staffIdx = 0; // where the layer's markings are now
+        const mu::engraving::Staff* staff = nullptr; // where they should go (null: below the bottom staff)
+    };
+    std::vector<SystemObjectsTarget> systemObjectsTargetsFromPanel() const;
+    void moveSystemObjectsToTargets(const std::vector<SystemObjectsTarget>& targets);
+
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
     AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
@@ -275,6 +290,7 @@ private:
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
     MoveParams m_activeDragMoveParams;
+    QList<const AbstractLayoutPanelTreeItem*> m_activeDragItems;
 
     muse::ID m_systemStaffToSelect;
 };

@@ -81,6 +81,15 @@ FocusableControl {
     // Shifts the row's contents right, keeping its width (see Versions > Indentation in LayoutPanel.qml)
     property int contentIndent: 0
 
+    // Linked staves show a link icon. While one of them is hovered or selected, the staves it's linked to are shown
+    // connected to it by a vertical line, broken around their icons, which runs through any staves between them (whose
+    // icons are then hidden); other linked staves' icons are dimmed. activeLinkRows: the rows (in this row's instrument)
+    // of the staves linked together that are hovered or selected, if any
+    property var activeLinkRows: []
+
+    readonly property StaffTreeItem staffItem: root.type === LayoutPanelItemType.STAFF ? root.item as StaffTreeItem : null
+    readonly property bool isLinkedStaff: Boolean(staffItem) && staffItem.isLinked
+
     property alias isPopupOpened: popupLoader.isPopupOpened
 
     readonly property bool isCardTop: root.depth === 0
@@ -163,7 +172,7 @@ FocusableControl {
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: titleLabel.text
+    navigation.accessible.name: root.isLinkedStaff ? root.staffItem.accessibleTitle : titleLabel.text
 
     onNavigationTriggered: { root.clicked(null) }
 
@@ -557,6 +566,72 @@ FocusableControl {
                             root.treeView.collapse(root.modelIndex)
                         } else {
                             root.treeView.expand(root.modelIndex)
+                        }
+                    }
+                }
+
+                // Linked staves (see activeLinkRows)
+                Item {
+                    id: linkCell
+
+                    readonly property int ownRow: root.staffItem ? root.staffItem.staffRow : -1
+                    readonly property int firstRow: root.activeLinkRows.length ? Math.min.apply(null, root.activeLinkRows) : -1
+                    readonly property int lastRow: root.activeLinkRows.length ? Math.max.apply(null, root.activeLinkRows) : -1
+                    readonly property bool isConnected: root.activeLinkRows.indexOf(ownRow) >= 0
+                    readonly property bool lineUp: firstRow >= 0 && ownRow > firstRow && ownRow <= lastRow
+                    readonly property bool lineDown: firstRow >= 0 && ownRow >= firstRow && ownRow < lastRow
+                    // A staff between two connected ones (not connected itself): the line runs through it
+                    readonly property bool isPassedThrough: lineUp && lineDown && !isConnected
+                    readonly property bool showsIcon: root.isLinkedStaff && !isPassedThrough
+                    readonly property int iconGap: 10 // between the line and the middle of the icon
+
+                    anchors.fill: parent
+                    visible: root.depth > 0 && root.type === LayoutPanelItemType.STAFF
+
+                    Rectangle {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        y: 0
+                        width: 1
+                        height: parent.height / 2 - (linkCell.showsIcon ? linkCell.iconGap : 0)
+
+                        visible: linkCell.lineUp
+                        color: ui.theme.fontPrimaryColor
+                        opacity: 0.5
+                    }
+
+                    Rectangle {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        y: parent.height / 2 + (linkCell.showsIcon ? linkCell.iconGap : 0)
+                        width: 1
+                        height: parent.height - y
+
+                        visible: linkCell.lineDown
+                        color: ui.theme.fontPrimaryColor
+                        opacity: 0.5
+                    }
+
+                    FlatButton {
+                        id: linkButton
+
+                        anchors.fill: parent
+
+                        visible: linkCell.showsIcon
+                        opacity: root.activeLinkRows.length && !linkCell.isConnected ? 0.3 : 1
+
+                        objectName: "LinkBtn"
+                        navigation.panel: root.navigation.panel
+                        navigation.row: root.navigation.row
+                        navigation.column: 2
+
+                        transparent: true
+                        icon: IconCode.LINK
+
+                        toolTipTitle: qsTrc("layoutpanel", "Linked staff")
+                        toolTipDescription: root.isLinkedStaff ? root.staffItem.linkDescription : ""
+
+                        // The tooltip is shown on hover, and also on click (pressing hides it)
+                        onClicked: {
+                            ui.tooltip.show(linkButton, toolTipTitle, toolTipDescription)
                         }
                     }
                 }

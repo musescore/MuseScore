@@ -21,6 +21,9 @@
  */
 #include "selectinstrumentscenario.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -90,6 +93,9 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
                 pi.partId = ID(map["partId"].toString());
                 pi.isExistingPart = map["isExistingPart"].toBool();
                 pi.isSoloist = map["isSoloist"].toBool();
+                if (map.find("tablatureOption") != map.end()) {
+                    pi.tablatureOption = static_cast<TablatureOption>(map["tablatureOption"].toInt());
+                }
 
                 String instrumentId = String::fromStdString(map["instrumentId"].toString());
                 pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
@@ -98,7 +104,16 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
             }
 
             ValMap order = content["scoreOrder"].toMap();
-            result.scoreOrder = instrumentsRepository()->order(String::fromStdString(order["id"].toString()));
+            const String orderId = String::fromStdString(order["id"].toString());
+            result.scoreOrder = instrumentsRepository()->order(orderId);
+
+            // Orders that aren't built in (e.g. those that come with templates) are the score's own
+            if (result.scoreOrder.id != orderId) {
+                INotationPtr notation = context() ? context()->currentNotation() : nullptr;
+                if (notation && notation->parts()->scoreOrder().id == orderId) {
+                    result.scoreOrder = notation->parts()->scoreOrder();
+                }
+            }
             result.scoreOrder.customized = order["customized"].toBool();
 
             (void)resolve(result);

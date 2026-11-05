@@ -24,6 +24,10 @@
 
 #include "parttreeitem.h"
 
+namespace mu::engraving {
+class SharedPart;
+}
+
 namespace mu::instrumentsscene {
 class SharedPartTreeItem : public PartTreeItem
 {
@@ -49,6 +53,9 @@ public:
     void listenEnabledChanged();
 
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
+
+    // The group's name, e.g. "Trumpet 1–3" (or else the shared part's own name)
+    static QString groupTitle(const engraving::SharedPart* sharedPart);
 
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;

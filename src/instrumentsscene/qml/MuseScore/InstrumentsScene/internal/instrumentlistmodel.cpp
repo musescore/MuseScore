@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "engraving/dom/instrtemplate.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -133,6 +135,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     TRACEFUNC;
 
     m_selection->setSingleItemSelectionMode(!canSelectMultipleInstruments);
+    m_hidesTablatureVersions = canSelectMultipleInstruments;
 
     loadGenres();
     loadGroups();
@@ -498,6 +501,13 @@ void InstrumentListModel::updateStateBySearch()
 
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const
 {
+    if (m_hidesTablatureVersions && !instrument.initId.empty()) {
+        const InstrumentTemplate* tablatureVersion = mu::engraving::searchTablatureTemplate(instrument.initId);
+        if (tablatureVersion && tablatureVersion->id == instrument.id) {
+            return false;
+        }
+    }
+
     if (isSearching()) {
         return instrument.trackName.toQString().contains(m_searchText, Qt::CaseInsensitive);
     }

@@ -145,9 +145,8 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 
-    int countExistingInstruments(const InstrumentTemplate& instrument) const;
-    int resolveExistingInstrumentNumber(const muse::ID& partId, const InstrumentTemplate& instrument) const;
-    int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
+    std::vector<int> resolveInstrumentNumbers(const PartInstrumentList& parts) const;
+    void appendLinkedTablatureStaff(Part* part, TablatureOption option);
 
     void setBracketsAndBarlines();
 

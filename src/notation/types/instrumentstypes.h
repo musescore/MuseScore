@@ -120,6 +120,15 @@ inline QString formatInstrumentTitle(const QString& instrumentName, const Instru
     Q_UNREACHABLE();
 }
 
+// For new instruments that can be shown as notation and/or tablature (e.g. guitars): they get a notation staff and a
+// linked tablature staff, and this is which of them are shown (the other one is hidden)
+enum class TablatureOption {
+    None = -1, // just the instrument's own staves
+    Notation = 0,
+    Tablature,
+    TablatureAndNotation
+};
+
 struct PartInstrument
 {
     muse::ID partId;
@@ -127,6 +136,7 @@ struct PartInstrument
 
     bool isExistingPart = false;
     bool isSoloist = false;
+    TablatureOption tablatureOption = TablatureOption::None;
 };
 
 using PartInstrumentList = QList<PartInstrument>;

@@ -63,11 +63,19 @@ void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& sc)
 
 void SharedPartTreeItem::updateTitle()
 {
+    const engraving::SharedPart* sharedPart = part() ? engraving::toSharedPart(part()) : nullptr;
+    const QString title = sharedPart ? groupTitle(sharedPart) : QString();
+    if (!title.isEmpty()) {
+        setTitle(title);
+    }
+}
+
+QString SharedPartTreeItem::groupTitle(const engraving::SharedPart* sharedPart)
+{
     // The group is named after its instruments plus the range of their numbers, e.g. "Trumpet 1–3". The numbers come
     // from the instruments' numbering, or else from the end of their names (when the numbering is part of the name).
-    const engraving::SharedPart* sharedPart = part() ? engraving::toSharedPart(part()) : nullptr;
     if (!sharedPart || sharedPart->originParts().empty()) {
-        return;
+        return QString();
     }
 
     static const QRegularExpression trailingNumber(QStringLiteral("^(.*?)\\s*(\\d+)$"));
@@ -96,10 +104,10 @@ void SharedPartTreeItem::updateTitle()
     }
 
     if (baseName.isEmpty() || firstNumber >= lastNumber) {
-        return; // keep the shared part's own name
+        return sharedPart->partName().toQString(); // the shared part's own name
     }
 
-    setTitle(QString::fromUtf8("%1 %2\u2013%3").arg(baseName).arg(firstNumber).arg(lastNumber));
+    return QString::fromUtf8("%1 %2\u2013%3").arg(baseName).arg(firstNumber).arg(lastNumber);
 }
 
 MoveParams SharedPartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,

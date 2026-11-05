@@ -82,6 +82,7 @@ public:
     InstrumentTemplate& operator=(const InstrumentTemplate&);
 
     String id;
+    String initId;              ///< the template this one is based on (<init>), e.g. a guitar's for its tablature version
     String soundId;
     String trackName;
     InstrumentLabel instrumentName;
@@ -180,6 +181,8 @@ extern const InstrumentTemplate* combinedTemplateSearch(const Instrument& instru
 extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
 extern const InstrumentTemplate* searchTemplate(const String& name);
+// The tablature version of an instrument (e.g. "Electric Guitar (tablature)" for "Electric Guitar"), if it has one
+extern const InstrumentTemplate* searchTablatureTemplate(const String& notationTemplateId);
 extern const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
 extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset = false,
                                                                 bool caseSensitive = true);

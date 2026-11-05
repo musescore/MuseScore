@@ -60,6 +60,10 @@ public:
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
     Q_INVOKABLE QString instrumentId() const;
+
+    // After its staves are (re)built, changed, added, removed or moved: numbers staves of the same name, and updates
+    // which of them are linked to each other
+    void updateStaffLinks();
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();
 

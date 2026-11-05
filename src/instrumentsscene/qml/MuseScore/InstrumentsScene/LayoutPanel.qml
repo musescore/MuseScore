@@ -245,6 +245,13 @@ Item {
         // Interaction state of shared-staves group headers, which is shown on the whole group's background
         // Number of hovered rows per group (rows hand over hover in either order when moving between them)
         property var groupHoverCounts: ({})
+
+        // Linked staves shown connected (see LayoutPanelItemDelegate.activeLinkRows): those of the hovered linked
+        // staff, or else of the selected one. Each is { staffId, partId, staffItem }, or null; the rows are read from
+        // the staff item, so that they follow when staves are moved
+        property var hoveredLink: null
+        property var selectedLink: null
+        readonly property var activeLink: hoveredLink || selectedLink
         property string pressedGroupId: ""
 
         function setGroupRowHovered(groupId, hovered) {
@@ -907,6 +914,56 @@ Item {
                             groupHeight: dropArea.height - dropArea.metrics.gap
                             hideDisabledEyes: contextMenuModel.hideDisabledEyes
                             onlyShowSettingsOnHover: contextMenuModel.onlyShowSettingsOnHover
+
+                            activeLinkRows: {
+                                const link = prv.activeLink
+                                return link && link.staffItem && dropArea.parentRowItem && link.partId === dropArea.parentRowItem.id
+                                        ? link.staffItem.linkRows : []
+                            }
+
+                            function linkOfThisStaff() {
+                                return {
+                                    staffId: item.id,
+                                    partId: dropArea.parentRowItem ? dropArea.parentRowItem.id : "",
+                                    staffItem: staffItem
+                                }
+                            }
+
+                            function updateLinks() {
+                                const isOwnHoveredLink = Boolean(prv.hoveredLink) && Boolean(item) && prv.hoveredLink.staffId === item.id
+                                if (isLinkedStaff && isHovered) {
+                                    prv.hoveredLink = linkOfThisStaff()
+                                } else if (isOwnHoveredLink) {
+                                    prv.hoveredLink = null
+                                }
+
+                                const isOwnSelectedLink = Boolean(prv.selectedLink) && Boolean(item) && prv.selectedLink.staffId === item.id
+                                if (isLinkedStaff && isSelected) {
+                                    prv.selectedLink = linkOfThisStaff()
+                                } else if (isOwnSelectedLink) {
+                                    prv.selectedLink = null
+                                }
+                            }
+
+                            onIsHoveredChanged: updateLinks()
+                            onIsSelectedChanged: updateLinks()
+                            onIsLinkedStaffChanged: updateLinks()
+
+                            Connections {
+                                target: itemDelegate.staffItem
+                                function onLinksChanged() {
+                                    itemDelegate.updateLinks()
+                                }
+                            }
+
+                            Component.onDestruction: {
+                                if (prv.hoveredLink && item && prv.hoveredLink.staffId === item.id) {
+                                    prv.hoveredLink = null
+                                }
+                                if (prv.selectedLink && item && prv.selectedLink.staffId === item.id) {
+                                    prv.selectedLink = null
+                                }
+                            }
 
                             // Versions > Indentation: in combined groups, instruments' (and their staves') contents are indented.
                             // Full: their eyes line up with the group's expand button (30px eye + 2px gap);

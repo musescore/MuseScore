@@ -28,6 +28,10 @@
 #include "notation/inotation.h"
 #include "notation/inotationparts.h"
 
+#include "translation.h"
+
+#include "stafftreeitem.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -262,6 +266,67 @@ bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
     }
 
     return AbstractLayoutPanelTreeItem::canAcceptDrop(obj);
+}
+
+void PartTreeItem::updateStaffLinks()
+{
+    QList<StaffTreeItem*> staffItems;
+    for (int row = 0; row < childCount(); ++row) {
+        if (auto staffItem = dynamic_cast<StaffTreeItem*>(childAtRow(row))) {
+            staffItems << staffItem;
+        }
+    }
+
+    // Staves of the same name are numbered, e.g. "Tablature (1)" and "Tablature (2)", so that they can be told apart
+    QHash<QString, int> nameCounts;
+    for (const StaffTreeItem* staffItem : staffItems) {
+        ++nameCounts[staffItem->staffName()];
+    }
+
+    QHash<QString, int> nameOrdinals;
+    for (StaffTreeItem* staffItem : staffItems) {
+        const QString& name = staffItem->staffName();
+        staffItem->setTitle(nameCounts[name] > 1 ? QString("%1 (%2)").arg(name).arg(++nameOrdinals[name]) : name);
+    }
+
+    // Linked staves don't have to be next to each other, and an instrument can have several sets of them
+    for (int i = 0; i < staffItems.size(); ++i) {
+        StaffTreeItem* staffItem = staffItems[i];
+        const Staff* staff = notation()->parts()->staff(staffItem->id());
+
+        QVariantList linkedRows;
+        QStringList linkedNames;
+        QStringList accessibleLinkedNames;
+
+        for (int j = 0; j < staffItems.size(); ++j) {
+            const Staff* other = j != i ? notation()->parts()->staff(staffItems[j]->id()) : nullptr;
+            if (!staff || !other || !staff->isLinked(const_cast<Staff*>(other))) {
+                continue;
+            }
+
+            linkedRows << staffItems[j]->row();
+            //: The name of a staff that a linked staff is linked to, in the link icon's tooltip
+            linkedNames << muse::qtrc("layoutpanel", "‘%1’").arg(staffItems[j]->title());
+            //: A staff that a linked staff is linked to, for screen readers: its number in the instrument, and its name
+            accessibleLinkedNames << muse::qtrc("layoutpanel", "%1 (%2)").arg(j + 1).arg(staffItems[j]->title());
+        }
+
+        const bool isLinked = !linkedRows.isEmpty();
+        if (isLinked) {
+            linkedRows.prepend(staffItem->row());
+        }
+
+        //: Tooltip of a linked staff's link icon, e.g. "Linked to ‘Tablature (1)’"
+        const QString description = isLinked ? muse::qtrc("layoutpanel", "Linked to %1").arg(linkedNames.join(", ")) : QString();
+
+        //: Screen reader name of a linked staff, e.g. "2: Treble clef 8va bassa staff. Linked to 4 (Tablature), 5 (Tablature)."
+        const QString accessibleTitle = isLinked
+                                        ? muse::qtrc("layoutpanel", "%1: %2 staff. Linked to %3.").arg(i + 1)
+                                        .arg(staffItem->title(), accessibleLinkedNames.join(", "))
+                                        : QString();
+
+        staffItem->setLinks(staffItem->row(), linkedRows, description, accessibleTitle);
+    }
 }
 
 QString PartTreeItem::instrumentId() const
