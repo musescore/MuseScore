@@ -245,12 +245,12 @@ jobs:
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       run: |
         ccache --recompress 10
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
     - name: Save ccache files
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
