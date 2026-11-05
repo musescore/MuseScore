@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include "async/asyncable.h"
 #include "async/notifylist.h"
 
@@ -140,10 +142,10 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 
-    int countExistingInstruments(const InstrumentTemplate& instrument) const;
-    bool isNewInstrument(const InstrumentTemplate& instrument, const PartInstrumentList& parts) const;
-    int resolveExistingInstrumentNumber(const muse::ID& partId, const InstrumentTemplate& instrument) const;
-    int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
+    using PartByIdMap = std::unordered_map<uint64_t /*ID*/, Part*>;
+    PartByIdMap partsById() const;
+
+    std::vector<int> resolveInstrumentNumbers(const PartInstrumentList& parts, const PartByIdMap& existingParts) const;
 
     void setBracketsAndBarlines();
 
