@@ -1764,7 +1764,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
     bool isJianpu = staff->isJianpuStaff(tick);
     if (!isJianpu) {
         for (Note* note : item->notes()) {
-            note->resizeOctaveDotsTo(0);
+            note->setJianpuOctaveDotCount(0);
         }
         return;
     }
@@ -1790,7 +1790,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
                 offsetY += jianpuBeamOffset(item, PlacementV::BELOW, ctx);
             }
         } else {
-            note->resizeOctaveDotsTo(0);
+            note->setJianpuOctaveDotCount(0);
             continue;
         }
 
@@ -1798,7 +1798,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         double minX = note->bboxXShift();
         double maxX = minX + hw;
 
-        note->resizeOctaveDotsTo(dots);
+        note->setJianpuOctaveDotCount(dots);
         for (int i = 0; i < dots; ++i) {
             OctaveDot* dot = note->octaveDots()[i];
             dot->setOwnershipParent(note);

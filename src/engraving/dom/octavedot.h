@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_OCTAVEDOT_H
-#define MU_ENGRAVING_OCTAVEDOT_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -59,4 +58,3 @@ public:
     DECLARE_LAYOUTDATA_METHODS(OctaveDot);
 };
 } // namespace mu::engraving
-#endif

@@ -48,7 +48,7 @@ OctaveDot::OctaveDot(DummyParentOr<Note> parent)
 
 Note* OctaveDot::note() const
 {
-    auto* parent = ownershipParent();
+    EngravingObject* parent = ownershipParent();
     if (parent && parent->isNote()) {
         return toNote(parent);
     } else {

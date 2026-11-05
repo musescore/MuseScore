@@ -292,7 +292,9 @@ bool StaffType::isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) con
 
 void StaffType::styleChanged()
 {
-    setJianpuTextStyle(m_jianpuTextStyle);
+    if (m_group == StaffGroup::JIANPU) {
+        setJianpuTextStyle(m_jianpuTextStyle);
+    }
 
     if (!m_fretUseTextStyle) {
         return;
@@ -428,9 +430,15 @@ void StaffType::setFretPreset(const String& name)
 void StaffType::setScore(Score* score)
 {
     m_score = score;
-    if (m_score && m_group == StaffGroup::TAB) {
+    if (!m_score) {
+        return;
+    }
+
+    if (m_group == StaffGroup::TAB) {
         setDurationMetrics();
         setFretMetrics();
+    } else if (m_group == StaffGroup::JIANPU) {
+        setJianpuTextStyle(m_jianpuTextStyle);
     }
 }
 

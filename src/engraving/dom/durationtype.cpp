@@ -832,7 +832,7 @@ bool TDuration::isValid(Fraction f)
 //---------------------------------------------------------
 int TDuration::augmentationLines() const
 {
-    auto getLinesByDots = [this](int base){
+    const auto getLinesByDots = [this](int base){
         int lines = base - 1;
         int dots = this->dots();
         while (dots > 0)

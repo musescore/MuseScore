@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_DURATIONLINE_H
-#define MU_ENGRAVING_DURATIONLINE_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -58,4 +57,4 @@ public:
     DECLARE_LAYOUTDATA_METHODS(DurationLine);
 };
 } // namespace mu::engraving
-#endif
+

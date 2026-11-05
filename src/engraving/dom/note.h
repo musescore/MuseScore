@@ -462,7 +462,7 @@ public:
 
     const std::vector<OctaveDot*>& octaveDots() const { return m_octaveDots; }
     std::vector<OctaveDot*>& octaveDots() { return m_octaveDots; }
-    void resizeOctaveDotsTo(size_t newSize);
+    void setJianpuOctaveDotCount(size_t count);
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };

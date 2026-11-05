@@ -4272,15 +4272,15 @@ staff_idx_t Note::vStaffIdx() const
     return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
 }
 
-void Note::resizeOctaveDotsTo(size_t newSize)
+void Note::setJianpuOctaveDotCount(size_t count)
 {
-    while (m_octaveDots.size() < newSize) {
+    while (m_octaveDots.size() < count) {
         OctaveDot* dot = new OctaveDot(this);
         dot->setOwnershipParent(this);
         dot->setTrack(track());
         m_octaveDots.push_back(dot);
     }
-    while (m_octaveDots.size() > newSize) {
+    while (m_octaveDots.size() > count) {
         delete m_octaveDots.back();
         m_octaveDots.pop_back();
     }

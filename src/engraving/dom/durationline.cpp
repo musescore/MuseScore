@@ -49,16 +49,12 @@ DurationLine::DurationLine(DummyParentOr<ChordRest> parent)
 
 PointF DurationLine::pagePos() const
 {
-    if (ChordRest* chordRest = this->chordRest()) {
-        if (Measure* measure = chordRest->measure()) {
-            if (System* system = measure->system()) {
-                if (system->staves().size() > staffIdx()) {
-                    if (SysStaff* staff = system->staff(staffIdx())) {
-                        double yp = y() + staff->y() + system->y();
-                        return PointF(pageX(), yp);
-                    }
-                }
-            }
+    const Measure* measure = chordRest() ? chordRest()->measure() : nullptr;
+    const System* system = measure ? measure->system() : nullptr;
+    if (system && system->staves().size() > staffIdx()) {
+        if (const SysStaff* staff = system->staff(staffIdx())) {
+            const double yp = y() + staff->y() + system->y();
+            return PointF(pageX(), yp);
         }
     }
 
@@ -71,7 +67,7 @@ PointF DurationLine::pagePos() const
 
 double DurationLine::mag() const
 {
-    auto* parent = ownershipParent();
+    const EngravingObject* parent = ownershipParent();
     if (parent && parent->isRest()) {
         return toRest(parent)->mag();
     }
@@ -88,7 +84,7 @@ double DurationLine::mag() const
 
 ChordRest* DurationLine::chordRest() const
 {
-    auto* parent = ownershipParent();
+    EngravingObject* parent = ownershipParent();
     if (parent && parent->isChordRest()) {
         return toChordRest(parent);
     } else {
