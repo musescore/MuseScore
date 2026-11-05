@@ -1171,10 +1171,6 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, firstSystemIndentation, FIRST_SYSTEM_INDENTATION)
 
-    /// For chord lines: Their line path.
-    ///\since MuseScore 4.6
-    API_PROPERTY(path,                    PATH)
-
     /// For parts: Whether this part prefers sharps or flats,
     /// one of PluginAPI::PluginAPI::PreferSharpFlat values.
     ///\since MuseScore 4.6
@@ -2535,16 +2531,16 @@ class SpannerSegment : public EngravingItem
     API_PROPERTY_T(QPointF, userOff2,     OFFSET2)
     /// For slur and tie segments:
     /// The manual offset applied to the first point.
-    API_PROPERTY_T(QPointF, slurUoff1,    SLUR_UOFF1)
+    API_PROPERTY_T(QPointF, slurUoff1,    BEZIER_OFFSET1)
     /// For slur and tie segments:
     /// The manual offset applied to the second point.
-    API_PROPERTY_T(QPointF, slurUoff2,    SLUR_UOFF2)
+    API_PROPERTY_T(QPointF, slurUoff2,    BEZIER_OFFSET2)
     /// For slur and tie segments:
     /// The manual offset applied to the third point.
-    API_PROPERTY_T(QPointF, slurUoff3,    SLUR_UOFF3)
+    API_PROPERTY_T(QPointF, slurUoff3,    BEZIER_OFFSET3)
     /// For slur and tie segments:
     /// The manual offset applied to the fourth point.
-    API_PROPERTY_T(QPointF, slurUoff4,    SLUR_UOFF4)
+    API_PROPERTY_T(QPointF, slurUoff4,    BEZIER_OFFSET4)
 
     /// \cond MS_INTERNAL
 

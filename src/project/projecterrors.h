@@ -54,6 +54,7 @@ enum class Err {
     ConvertUnsupportedLink,
     ConvertProcessingFailed,
     ConvertUploadFailed,
+    ConvertRateLimited,
 };
 
 inline muse::Ret make_ret(Err e)

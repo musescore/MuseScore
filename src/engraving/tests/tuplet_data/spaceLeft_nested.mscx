@@ -81,6 +81,26 @@
           <endTuplet/>
         </voice>
       </Measure>
+      <Measure>
+        <voice>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>5</actualNotes><baseNote>quarter</baseNote><Number><style>tuplet</style><text>5</text></Number></Tuplet>
+          <Tuplet><normalNotes>2</normalNotes><actualNotes>3</actualNotes><baseNote>eighth</baseNote><Number><style>tuplet</style><text>3</text></Number></Tuplet>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Tuplet><normalNotes>2</normalNotes><actualNotes>3</actualNotes><baseNote>eighth</baseNote><Number><style>tuplet</style><text>3</text></Number></Tuplet>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>quarter</durationType></Rest>
+          <Rest><durationType>quarter</durationType></Rest>
+          <endTuplet/>
+        </voice>
+      </Measure>
     </Staff>
   </Score>
 </museScore>

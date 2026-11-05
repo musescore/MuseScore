@@ -49,7 +49,7 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     COPY_COMMAND,
     COPY_PASTE_SWAP_COMMAND,
     DELETE_COMMAND,
-    FLIP_COMMAND,
+    FlipCommand::id,
     FLIP_HORIZONTALLY_COMMAND,
     GOTO_NEXT_SEGMENT_ELEMENT_COMMAND,
     GOTO_PREV_SEGMENT_ELEMENT_COMMAND,
@@ -178,7 +178,7 @@ static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
 };
 
 static const std::vector<Command> NOTE_COMMANDS = {
-    ADD_NOTE_COMMAND,
+    AddNoteCommand::id,
     ENTER_NOTE_C_COMMAND,
     ENTER_NOTE_D_COMMAND,
     ENTER_NOTE_E_COMMAND,

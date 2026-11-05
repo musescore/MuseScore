@@ -82,6 +82,7 @@ qt_add_qml_module(project_qml
         internal/ConvertFileToScore/SelectFilePage.qml
         internal/ConvertFileToScore/SelectedFilesPage.qml
         internal/ConvertFileToScore/SingleFilePanel.qml
+        internal/ConvertFileToScore/TermsOfUseCheckBox.qml
         ExportDialog.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml

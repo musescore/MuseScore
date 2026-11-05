@@ -279,6 +279,23 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
     return addTuplet(destinationChordRest, _ratio, TDuration(fr), numberType, bracketType);
 }
 
+static bool isValidTuplet(const Fraction& ratio, const TDuration& baseLen)
+{
+    return baseLen.isValid() && !baseLen.isMeasure() && ratio.numerator() > 0 && ratio.denominator() > 0;
+}
+
+static Fraction tupletEnd(const Staff* staff, const Fraction& tick, Tuplet* parent, const Fraction& ratio, const TDuration& baseLen)
+{
+    const Fraction ticks = baseLen.fraction() * ratio.denominator();
+    return tick + actualTicks(ticks, parent, staff->timeStretch(tick));
+}
+
+// A tuplet must not cross a barline or the end of its parent tuplet
+static Fraction tupletLimit(const Tuplet* parent, const Measure* measure)
+{
+    return parent ? parent->tick() + parent->actualTicks() : measure->endTick();
+}
+
 //---------------------------------------------------------
 //   canAddTuplet
 //    Whether addTuplet() can create a tuplet with this ratio
@@ -287,7 +304,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
 bool Score::canAddTuplet(const ChordRest* chordRest, const Fraction& ratio, const TDuration& baseLen) const
 {
-    if (!chordRest || !baseLen.isValid() || baseLen.isMeasure() || ratio.numerator() <= 0 || ratio.denominator() <= 0) {
+    if (!chordRest || !isValidTuplet(ratio, baseLen)) {
         return false;
     }
 
@@ -297,18 +314,52 @@ bool Score::canAddTuplet(const ChordRest* chordRest, const Fraction& ratio, cons
     }
 
     // changeCRlen() can't change the length of a measure repeat
-    const Fraction ticks = baseLen.fraction() * ratio.denominator();
-    if (chordRest->isMeasureRepeat() && ticks != chordRest->ticks()) {
+    if (chordRest->isMeasureRepeat() && baseLen.fraction() * ratio.denominator() != chordRest->ticks()) {
         return false;
     }
 
-    // the tuplet must not cross a barline or the end of a parent tuplet
-    Tuplet* parent = chordRest->tuplet();
-    const Fraction timeStretch = chordRest->staff()->timeStretch(chordRest->tick());
-    const Fraction end = chordRest->tick() + actualTicks(ticks, parent, timeStretch);
-    const Fraction limit = parent ? parent->tick() + parent->actualTicks() : measure->endTick();
+    return tupletEndTick(chordRest, ratio, baseLen) <= tupletLimit(chordRest->tuplet(), measure);
+}
 
-    return end <= limit;
+//---------------------------------------------------------
+//   canAddTuplet
+//    The same at segment in track, where no chord/rest of
+//    the track may start: an empty voice, or inside a
+//    longer chord/rest
+//---------------------------------------------------------
+
+bool Score::canAddTuplet(const Segment* segment, track_idx_t track, const Fraction& ratio, const TDuration& baseLen) const
+{
+    if (!segment || track == muse::nidx) {
+        return false;
+    }
+
+    if (const ChordRest* chordRest = segment->cr(track)) {
+        return canAddTuplet(chordRest, ratio, baseLen);
+    }
+
+    const Measure* measure = segment->measure();
+    const Staff* staff = this->staff(track2staff(track));
+    if (!isValidTuplet(ratio, baseLen) || !measure || measure->isMMRest() || !staff) {
+        return false;
+    }
+
+    // inside a longer chord/rest, the tuplet would be in that chord/rest's tuplet
+    const ChordRest* previous = segment->nextChordRest(track, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+    Tuplet* parent = previous && previous->endTick() > segment->tick() ? previous->tuplet() : nullptr;
+
+    return tupletEnd(staff, segment->tick(), parent, ratio, baseLen) <= tupletLimit(parent, measure);
+}
+
+//---------------------------------------------------------
+//   tupletEndTick
+//    Where a tuplet of ratio.denominator() * baseLen that
+//    starts at chordRest ends
+//---------------------------------------------------------
+
+Fraction Score::tupletEndTick(const ChordRest* chordRest, const Fraction& ratio, const TDuration& baseLen) const
+{
+    return tupletEnd(chordRest->staff(), chordRest->tick(), chordRest->tuplet(), ratio, baseLen);
 }
 
 //---------------------------------------------------------

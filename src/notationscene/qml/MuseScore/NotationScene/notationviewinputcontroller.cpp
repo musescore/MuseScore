@@ -52,6 +52,7 @@
 
 #include "notationscene/notationcommands.h"
 
+using namespace muse::rcommand;
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -734,7 +735,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {
-        handleRightClick(ctx);
+        handleRightClick();
     }
 }
 
@@ -978,16 +979,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     }
 }
 
-void NotationViewInputController::handleRightClick(const ClickContext& ctx)
+void NotationViewInputController::handleRightClick()
 {
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    UNUSED(ctx);
     // See also AbstractNotationPaintView::event for context menu event handling
-#else
-    m_view->showContextMenu(selectionType(), ctx.event->pos());
-#endif
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const
@@ -1036,10 +1032,12 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
         return false;
     }
 
-    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
-    query.set("pitch", muse::Val(pitchToWrite));
-    query.set("mode", muse::Val(str_conv(addingMode)));
-    commandDispatcher()->dispatch(query);
+    muse::rcommand::Params params = {
+        { "pitch", muse::Val(pitchToWrite) },
+        Contract<NoteAddingMode>::param(addingMode)
+    };
+
+    commandDispatcher()->dispatch(ADD_DRUM_NOTE_COMMAND, params);
 
     return true;
 }

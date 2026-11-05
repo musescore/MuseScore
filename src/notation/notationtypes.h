@@ -145,76 +145,9 @@ enum class SelectionTarget : unsigned char
     Section,
 };
 
-static const std::map<std::string, SelectionTarget> STR_SELECTION_TARGET = {
-    { "first-item", SelectionTarget::FirstItem },
-    { "last-item", SelectionTarget::LastItem },
-    { "next-item", SelectionTarget::NextItem },
-    { "prev-item", SelectionTarget::PrevItem },
-    { "next-segment-item", SelectionTarget::NextSegmentItem },
-    { "prev-segment-item", SelectionTarget::PrevSegmentItem },
-    { "next-chord", SelectionTarget::NextChord },
-    { "prev-chord", SelectionTarget::PrevChord },
-    { "next-measure", SelectionTarget::NextMeasure },
-    { "prev-measure", SelectionTarget::PrevMeasure },
-    { "next-track", SelectionTarget::NextTrack },
-    { "prev-track", SelectionTarget::PrevTrack },
-    { "next-frame", SelectionTarget::NextFrame },
-    { "prev-frame", SelectionTarget::PrevFrame },
-    { "next-system", SelectionTarget::NextSystem },
-    { "prev-system", SelectionTarget::PrevSystem },
-    { "above-staff", SelectionTarget::AboveStaff },
-    { "below-staff", SelectionTarget::BelowStaff },
-    { "up-note-in-chord", SelectionTarget::UpNoteInChord },
-    { "down-note-in-chord", SelectionTarget::DownNoteInChord },
-    { "top-note-in-chord", SelectionTarget::TopNoteInChord },
-    { "bottom-note-in-chord", SelectionTarget::BottomNoteInChord },
-    { "top-staff", SelectionTarget::TopStaff },
-    { "notes-in-chord", SelectionTarget::NotesInChord },
-    { "empty-trailing-measure", SelectionTarget::EmptyTrailingMeasure },
-    { "similar", SelectionTarget::Similar },
-    { "similar-in-staff", SelectionTarget::SimilarInStaff },
-    { "similar-in-range", SelectionTarget::SimilarInRange },
-    { "all", SelectionTarget::All },
-    { "section", SelectionTarget::Section },
-};
-
-inline SelectionTarget str_conv(const std::string& str, SelectionTarget def)
-{
-    auto it = STR_SELECTION_TARGET.find(str);
-    if (it != STR_SELECTION_TARGET.end()) {
-        return it->second;
-    }
-    return def;
-}
-
-inline std::string str_conv(SelectionTarget target)
-{
-    for (const auto& [key, value] : STR_SELECTION_TARGET) {
-        if (value == target) {
-            return key;
-        }
-    }
-    return "";
-}
-
 enum PlayMode {
     NoPlay, PlayNote, PlayChord
 };
-
-inline static const std::map<std::string, PlayMode> STR_PLAY_MODE = {
-    { "none", PlayMode::NoPlay },
-    { "note", PlayMode::PlayNote },
-    { "chord", PlayMode::PlayChord },
-};
-
-inline PlayMode str_conv(const std::string& str, PlayMode def)
-{
-    auto it = STR_PLAY_MODE.find(str);
-    if (it != STR_PLAY_MODE.end()) {
-        return it->second;
-    }
-    return def;
-}
 
 enum class MoveSelectionType : unsigned char
 {
@@ -270,26 +203,6 @@ enum class NoteName : unsigned char
     A,
     B
 };
-
-static const std::map<std::string, NoteName> STR_NOTE_NAME = {
-    { "c", NoteName::C },
-    { "d", NoteName::D },
-    { "e", NoteName::E },
-    { "f", NoteName::F },
-    { "g", NoteName::G },
-    { "a", NoteName::A },
-    { "b", NoteName::B },
-};
-
-inline NoteName str_conv(const std::string& name, NoteName def)
-{
-    return muse::value(STR_NOTE_NAME, name, def);
-}
-
-inline std::string str_conv(NoteName name)
-{
-    return muse::key(STR_NOTE_NAME, name);
-}
 
 enum class PastingType : unsigned char {
     Default,

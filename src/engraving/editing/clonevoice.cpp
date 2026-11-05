@@ -108,13 +108,11 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                             nt2->setOwnershipParent(dm);
                             tupletMap.add(ot->tuplet(), nt2);
                         }
-                        nt2->add(nt1);
                         nt1->setTuplet(nt2);
                         ot = ot->tuplet();
                         nt1 = nt2;
                     }
                 }
-                nt->add(ncr);
                 ncr->setTuplet(nt);
             }
 

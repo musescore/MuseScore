@@ -146,6 +146,7 @@ private:
     void sortParts(const PartInstrumentList& parts);
 
     std::vector<int> resolveInstrumentNumbers(const PartInstrumentList& parts) const;
+    bool isNewInstrument(const InstrumentTemplate& instrument, const PartInstrumentList& parts) const;
     void appendLinkedTablatureStaff(Part* part, TablatureOption option);
 
     void setBracketsAndBarlines();

@@ -1091,7 +1091,9 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
 
                 EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
 
-                sharedTuplet->add(sharedDE);
+                if (!sharedTuplet->contains(sharedDE)) {
+                    sharedTuplet->add(sharedDE);
+                }
 
                 originDE = originTuplet;
                 sharedDE = sharedTuplet;

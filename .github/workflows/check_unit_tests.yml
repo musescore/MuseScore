@@ -9,6 +9,11 @@ on:
         required: false
         type: boolean
         default: false
+      publish_coverage_report:
+        description: 'Publish code coverage report and badge to musescore/mss_code_coverage (main repository only)'
+        required: false
+        type: boolean
+        default: false
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
@@ -95,24 +100,42 @@ jobs:
         ASAN_OPTIONS: "detect_leaks=0"
 
     - name: Code coverage
-      if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
+      if: github.event_name == 'schedule' || inputs.code_coverage
       run: |
-        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info --ignore-errors mismatch,inconsistent,gcov,negative
-        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*.framework/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info --ignore-errors unused
+        # Writes filtered_coverage.info, coverage_badge.svg, coverage_report/ and exports COVERAGE, FUNCTIONS_COVERAGE
+        cmake -P ./muse/buildscripts/ci/codecoverage/make_code_coverage.cmake --build_dir build.debug
 
-        COVERAGE=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov | grep -oP 'lines\.+:\s+\K[0-9.]+')
-        python3 muse/buildscripts/ci/linux/tools/lcov_badger.py "${COVERAGE}" coverage_badge.svg
+    - name: Upload coverage report
+      if: github.event_name == 'schedule' || inputs.code_coverage
+      uses: actions/upload-artifact@v7
+      with:
+        name: code_coverage_report
+        path: |
+          filtered_coverage.info
+          coverage_badge.svg
+          coverage_report/
 
-    - name: Push to S3
-      if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
+    - name: Publish coverage report
+      if: github.repository == 'musescore/MuseScore' && ( github.event_name == 'schedule' || ( inputs.code_coverage && inputs.publish_coverage_report ) )
+      env:
+        DEPLOY_KEY: ${{ secrets.CODE_COVERAGE_DEPLOY_KEY }}
       run: |
-        S3_URL='s3://extensions.musescore.org/test/code_coverage/coverage_badge.svg'
+        KEY_FILE="${RUNNER_TEMP}/code_coverage_deploy_key"
+        echo "${DEPLOY_KEY}" > "${KEY_FILE}"
+        chmod 600 "${KEY_FILE}"
+        export GIT_SSH_COMMAND="ssh -i ${KEY_FILE} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
-        bash ./muse/buildscripts/ci/tools/s3_push_file.sh \
-          --s3_key '${{ secrets.S3_KEY }}' \
-          --s3_secret '${{ secrets.S3_SECRET }}' \
-          --s3_url "${S3_URL}" \
-          --file_path "coverage_badge.svg"
+        cmake -P ./muse/buildscripts/ci/codecoverage/publish_code_coverage.cmake \
+          --repo_url git@github.com:musescore/mss_code_coverage.git \
+          --branch main \
+          --report_dir coverage_report \
+          --badge coverage_badge.svg \
+          --lines "${COVERAGE}" \
+          --functions "${FUNCTIONS_COVERAGE}"
+
+        rm -f "${KEY_FILE}"
+
+        echo "Report: https://musescore.github.io/mss_code_coverage/" | tee -a $GITHUB_STEP_SUMMARY
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache

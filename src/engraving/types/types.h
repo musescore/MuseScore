@@ -1580,6 +1580,19 @@ enum class ActionIconType : signed char {
     SYSTEM_LOCK,
     PAGE_LOCK
 };
+
+enum class TupletNumberType : unsigned char {
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT
+};
+
+enum class TupletBracketType : unsigned char {
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
+
+// what a tuplet command uses the selected duration as
+enum class TupletSelectedDuration : unsigned char {
+    SUBDIVISION, TUPLET_LENGTH
+};
 } // mu::engraving
 
 template<>

@@ -31,6 +31,8 @@ FocusScope {
 
     property string subSection: ""
 
+    signal subSectionApplied()
+
     QtObject {
         id: prv
 
@@ -43,7 +45,10 @@ FocusScope {
         switch (root.subSection) {
         case "newAndRecent": scoresPageModel.tabIndex = 0; break
         case "myOnlineScores": scoresPageModel.tabIndex = 1; break
+        default: return
         }
+
+        root.subSectionApplied()
     }
 
     NavigationSection {

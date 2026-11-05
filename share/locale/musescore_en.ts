@@ -6201,9 +6201,14 @@ followed by dashes</translation>
         <translation type="unfinished">Use voice 4</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
+        <location filename="src/notationscene/notationcommands.h" line="2"/>
         <source>Flip direction</source>
         <translation type="unfinished">Flip direction</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/notationcommands.h" line="2"/>
+        <source>Get note input state</source>
+        <translation type="unfinished">Get note input state</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
@@ -6211,7 +6216,7 @@ followed by dashes</translation>
         <translation type="unfinished">Flip horizontally</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
+        <location filename="src/notationscene/notationcommands.h" line="2"/>
         <source>Add note</source>
         <translation type="unfinished">Add note</translation>
     </message>
@@ -16924,6 +16929,11 @@ Fret %1 on strings %2</translation>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
         <source>vertical position of measure repeat number</source>
         <translation type="unfinished">vertical position of measure repeat number</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/dom/property.cpp" line="1"/>
+        <source>vertical offset of measure repeat number</source>
+        <translation type="unfinished">vertical offset of measure repeat number</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
@@ -34691,16 +34701,12 @@ failed.</translation>
         <translation type="unfinished">Align symbol with barline</translation>
     </message>
     <message>
-        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/measurerepeats/MeasureRepeatSettings.qml" line="1"/>
-        <source>Number position</source>
-        <translation type="unfinished">Number position</translation>
-    </message>
-    <message>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/mmrests/MMRestSettings.qml" line="1"/>
         <source>Show number</source>
         <translation type="unfinished">Show number</translation>
     </message>
     <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/measurerepeats/MeasureRepeatSettings.qml" line="1"/>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/mmrests/MMRestSettings.qml" line="1"/>
         <source>Number offset</source>
         <translation type="unfinished">Number offset</translation>
@@ -36401,6 +36407,21 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
+        <source>NOTATION: SELECTION</source>
+        <translation type="unfinished">NOTATION: SELECTION</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
+        <source>NOTATION: SINGLE SELECTION</source>
+        <translation type="unfinished">NOTATION: SINGLE SELECTION</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
+        <source>NOTATION: RANGE SELECTION</source>
+        <translation type="unfinished">NOTATION: RANGE SELECTION</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/internal/shortcutresolver.cpp" line="1"/>
         <source>NOTATION: NOTE INPUT</source>
         <translation type="unfinished">NOTATION: NOTE INPUT</translation>
     </message>
@@ -36468,7 +36489,7 @@ failed.</translation>
 <context>
     <name>staveSharingTest</name>
     <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="8"/>
+        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="9"/>
         <source>Enable stave sharing</source>
         <translation type="unfinished">Enable stave sharing</translation>
     </message>
@@ -36501,6 +36522,16 @@ failed.</translation>
         <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
         <source>Flip tie direction</source>
         <translation type="unfinished">Flip tie direction</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
+        <source>Insert note</source>
+        <translation type="unfinished">Insert note</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
+        <source>Remove time</source>
+        <translation type="unfinished">Remove time</translation>
     </message>
 </context>
 <context>

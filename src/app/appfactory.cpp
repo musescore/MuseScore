@@ -492,6 +492,8 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
     app->addModule(new muse::vst::VSTModule());
 #endif
 
+    app->addModule(new muse::media::MediaModule());
+
 #ifdef MUSE_MODULE_TESTFLOW
     app->addModule(new muse::testflow::TestflowModule());
 #endif

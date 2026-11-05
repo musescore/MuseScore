@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision>e8eabe1</programRevision>
+  <Score>
+    <eid>iwc9MOiANnI_Sv3OKolPOkD</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-10-16</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">musicxml</metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>yiICOmg+hZ_LQS/+hdPNNI</eid>
+      <Staff>
+        <eid>sF6FHb5ULfE_jSJ7ozBXdGM</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="flute">
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          </InstrumentLabel>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <controller ctrl="10" value="63"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <eid>2PNNhzwN2kC_E8G0z64CsvG</eid>
+      <Staff>
+        <eid>SN2y/onF0OM_SAQn5o2ZxYG</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="flute">
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          </InstrumentLabel>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <controller ctrl="10" value="63"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>kM3+yyUhkKP_1Ldrt9LM0XD</eid>
+        </VBox>
+      <Measure>
+        <eid>Vg//5DkiKlM_gBwSLbvvlOD</eid>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>bZmPh0Kqq4B_Wf6NvtrRdaM</eid>
+            </Clef>
+          <TimeSig>
+            <eid>la93Z8J1uQJ_fcLrShurx0N</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>U+q2np1DVbC_18AsE9EuIoE</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>POJfVyYg5nJ_RUDv4V8W3sM</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tuplet>
+            <eid>fLquteyRwCN_uqc/u2qfdCE</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>quarter</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Tuplet>
+            <eid>xPczr54c3AF_rVcqTW9VFHK</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>eighth</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Chord>
+            <eid>ge7Yrj6FghB_CtB/eV5W8eC</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>4Q+KTAJw0xE_hfdGhDKj2kC</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>BjuyqFQ6jRB_B/K6Irh2+VJ</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>5z9iP3Ko5UM_bdtlC7GuJ+K</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <endTuplet/>
+          <Rest>
+            <eid>DTPqGFsxQuE_RKNlgtpjjAJ</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>rUBii1bpazN_nzM4dh7wFFJ</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <endTuplet/>
+          <Chord>
+            <eid>OQKOM5OTQVO_8ljLwYzCAXD</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>RfsE5Fi1mOP_rXo0XADrH0H</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>VwR0sfPahvD_XzQbrs75XsF</eid>
+        <voice>
+          <Rest>
+            <eid>kh4aCIscWTF_k2LsqEw+QsB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>O/W/nNy9Tq_CEUqhz5X9uB</eid>
+        <voice>
+          <Rest>
+            <eid>Dt8D4vIAsUC_1lyiHmcMJg</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>5FaY9ug0+rG_d2dsYCrO+uG</eid>
+        <voice>
+          <Rest>
+            <eid>+iIgDMyvpDP_FI+u2pRcnk</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <eid>Aq+hR48CS7F_VhXsIsynMgH</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>R/JlgNWveYE_Zlj50nnRXbN</eid>
+            </Clef>
+          <TimeSig>
+            <eid>8AyAx6gh9O_C2gJGnVdEJP</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>NtQvFe7V2iP_zQP6hyNaabH</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>A17B/Z5k7nN_WXMDz3R3NSM</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tuplet>
+            <eid>EKYouLniU/K_bU2v/KGwxY</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>quarter</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Tuplet>
+            <eid>eJa/X5REniD_EerRc1r5baP</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>eighth</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Chord>
+            <eid>Od1W2HMyGbK_IS+lNMFXZME</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>RPZlgZq1sZM_GnuzpSIGI0</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>6MQeUGAU2p_kS0Q/uS4R7I</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>UlFMUnlPN7_PFk8qb5xbME</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <endTuplet/>
+          <Rest>
+            <eid>UwMy7QufV8K_uRbCXeV2JRP</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>daFF0ZXNv1N_SSZDcaYV68B</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <endTuplet/>
+          <Chord>
+            <eid>+7cbS8Ogm2O_f0JRGTjpfuM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>7eh7U03wQv_5Qp4UDnaa9C</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>NIVEHIHt1NP_jqMRgSE7I7D</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>Pw4K720DYwM_9eLUdlySdWE</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>Gxl/vKJZLuD_6xuiaaHpveN</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <eid>3+J1I2IPtCG_/xfGU3Jx9QG</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

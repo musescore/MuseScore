@@ -120,6 +120,7 @@
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
+#include "engraving/editing/edittuplet.h"
 #include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editposition.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -2877,16 +2878,16 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
             }
         }
 
-        if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
-            ChordRestNavigateOptions options;
-            options.disableOverRepeats = true;
-            secondItem = engraving::Navigation::nextChordRest(toChordRest(firstItem), options);
-        }
-
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
         bool secondCrTrill = secondItem && secondItem->isChord() && toChord(secondItem)->isTrillCueNote();
 
-        if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest()) && !(firstCrTrill || secondCrTrill)) {
+        if (firstItem && firstItem == secondItem) {
+            // A single chord is slurred as a single note is
+            if (firstItem->isChord() && !firstCrTrill) {
+                doAddSlur(firstItem, nullptr, slurTemplate);
+            }
+        } else if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest())
+                   && !(firstCrTrill || secondCrTrill)) {
             doAddSlur(firstItem, secondItem, slurTemplate);
         }
     }
@@ -4832,12 +4833,12 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
         updateDragAnchorLines();
+        score()->update();
     } else {
         score()->hideAnchors();
         resetAnchorLines();
     }
 
-    score()->update();
     notifyAboutNotationChanged();
 }
 
@@ -5704,70 +5705,22 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
         return;
     }
 
-    Selection& scoreSelection = score()->selection();
-    const bool wasRangeSelection = scoreSelection.isRange();
-    const Fraction startTick = scoreSelection.tickStart();
-    const Fraction endTick = scoreSelection.tickEnd();
-    const staff_idx_t startStaff = scoreSelection.staffStart();
-    const staff_idx_t endStaff = scoreSelection.staffEnd();
-    Box* startBox = scoreSelection.startBox();
-    Box* endBox = scoreSelection.endBox();
+    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
+        if (!EditTuplet::checkAddTupletsWithSelectedDurations(score(), options.ratio)) {
+            checkAndShowError();
+            return;
+        }
+    } else if (!canAddTupletToSelectedChordRests()) {
+        MScore::setError(MsError::TUPLET_NOTE_VALUE_TOO_SHORT);
+        checkAndShowError();
+        return;
+    }
 
-    // Score order, not pointer order
-    const std::set<ChordRest*> selectedChordRests = score()->getSelectedChordRests();
-    std::vector<ChordRest*> chordRests(selectedChordRests.begin(), selectedChordRests.end());
-    std::sort(chordRests.begin(), chordRests.end(), [](const ChordRest* a, const ChordRest* b) {
-        return a->tick() != b->tick() ? a->tick() < b->tick() : a->track() < b->track();
+    transaction(TranslatableString("undoableAction", "Add tuplet"), [&](mu::engraving::Transaction& tx) {
+        EditTuplet::addTuplets(tx, score(), options.ratio, options.numberType, options.bracketType, options.autoBaseLen,
+                               options.selectedDurationAs);
     });
-
-    startEdit(TranslatableString("undoableAction", "Add tuplet"));
-
-    Tuplet* firstTuplet = nullptr;
-
-    // Make sure each linked group is handled only once
-    std::unordered_set<const LinkedObjects*> handledLinks;
-
-    for (ChordRest* chordRest : chordRests) {
-        if (chordRest->links() && !handledLinks.insert(chordRest->links()).second) {
-            continue;
-        }
-
-        if (!chordRest->isGrace() && !(chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
-            Fraction ratio = options.ratio;
-            if (options.autoBaseLen) {
-                ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), chordRest->ticks()));
-            }
-            Tuplet* tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
-            if (!firstTuplet) {
-                firstTuplet = tuplet;
-            }
-        }
-    }
-
-    if (wasRangeSelection) {
-        scoreSelection.setRangeTicks(startTick, endTick, startStaff, endStaff, startBox, endBox);
-        scoreSelection.updateSelectedElements();
-    } else if (firstTuplet && !firstTuplet->elements().empty()) {
-        DurationElement* firstElement = firstTuplet->elements().front();
-        // SINGLE also moves the input position
-        if (firstElement->isChord()) {
-            const std::vector<Note*>& notes = toChord(firstElement)->notes();
-            IF_ASSERT_FAILED(!notes.empty()) {
-                score()->select(firstElement, SelectType::SINGLE);
-            } else {
-                score()->select(notes.front(), SelectType::SINGLE);
-                score()->select({ notes.begin() + 1, notes.end() }, SelectType::ADD);
-            }
-        } else {
-            score()->select(firstElement, SelectType::SINGLE);
-        }
-    }
-
-    if (firstTuplet) {
-        score()->inputState().setDuration(firstTuplet->baseLen());
-    }
-
-    apply();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)

@@ -135,6 +135,11 @@ QString ConvertFileToScoreModel::guidelinesUrl() const
     return configuration()->scoreUploadingGuidelinesUrl().toString();
 }
 
+QString ConvertFileToScoreModel::termsOfUseUrl() const
+{
+    return configuration()->termsOfUseUrl().toString();
+}
+
 int ConvertFileToScoreModel::convertType() const
 {
     return int(m_convertType);
