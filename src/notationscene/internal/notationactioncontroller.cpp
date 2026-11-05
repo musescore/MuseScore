@@ -972,7 +972,7 @@ muse::Ret NotationActionController::addDrumNote(const muse::rcommand::Params& pa
     TRACEFUNC;
 
     int pitch = params.at("pitch").toInt();
-    NoteAddingMode mode = Contract<NoteAddingMode>::get(params);
+    NoteAddingMode mode = EnumContract<NoteAddingMode>::get(params);
 
     NoteInputParams noteInputParams;
     noteInputParams.drumPitch = pitch;
@@ -1513,10 +1513,10 @@ muse::Ret NotationActionController::putTuplet(const muse::rcommand::Params& para
 {
     TupletOptions options;
     options.ratio = engraving::Fraction::fromString(muse::String::fromStdString(params.at("ratio").toString()));
-    options.numberType = Contract<TupletNumberType>::get(params);
-    options.bracketType = Contract<TupletBracketType>::get(params);
+    options.numberType = EnumContract<TupletNumberType>::get(params);
+    options.bracketType = EnumContract<TupletBracketType>::get(params);
     options.autoBaseLen = params.at("auto-baselen", Val(false)).toBool();
-    options.selectedDurationAs = Contract<TupletSelectedDuration>::get(params);
+    options.selectedDurationAs = EnumContract<TupletSelectedDuration>::get(params);
 
     putTuplet(options);
     return muse::make_ok();
@@ -2864,12 +2864,12 @@ bool NotationActionController::isNoteInputActionAllowed() const
 
 muse::Ret NotationActionController::select(const muse::rcommand::Params& params)
 {
-    SelectionTarget target = Contract<SelectionTarget>::get(params);
+    SelectionTarget target = EnumContract<SelectionTarget>::get(params);
     if (target == SelectionTarget::Undefined) {
         return muse::make_ret(Ret::Code::BadArgs);
     }
 
-    PlayMode playMode = Contract<PlayMode>::get(params);
+    PlayMode playMode = EnumContract<PlayMode>::get(params);
 
     select(target, playMode);
     return muse::make_ok();
