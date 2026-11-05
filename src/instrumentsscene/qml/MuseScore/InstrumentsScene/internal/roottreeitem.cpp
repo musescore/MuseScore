@@ -35,6 +35,11 @@ static inline bool isIndexInRange(int index, int start, int end)
     return start <= index && index < end;
 }
 
+static inline bool isPartItem(const AbstractLayoutPanelTreeItem* item)
+{
+    return item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART;
+}
+
 RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ROOT, masterNotation, notation, parent)
 {
@@ -116,7 +121,7 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
     for (int i = row; i < row + count; ++i) {
         const AbstractLayoutPanelTreeItem* child = childAtRow(i);
 
-        if (child->type() == LayoutPanelItemType::PART || child->type() == LayoutPanelItemType::SHARED_PART) {
+        if (isPartItem(child)) {
             partIds.push_back(child->id());
         } else if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             stavesIds.push_back(child->id());
@@ -178,7 +183,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
 
     auto resolveDstStaff = [](const AbstractLayoutPanelTreeItem* item) -> const Staff* {
         if (item) {
-            if (item->type() == LayoutPanelItemType::PART) {
+            if (isPartItem(item)) {
                 return static_cast<const PartTreeItem*>(item)->part()->staff(0);
             } else if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
                 return static_cast<const SystemObjectsLayerTreeItem*>(item)->staff();
@@ -215,7 +220,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
     bool moveUp = destinationRow < sourceRow;
     bool moveDown = destinationRow > sourceRow;
     bool sourceIsSystemObjectLayer = srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
-    bool sourceIsPartLayer = srcItem->type() == LayoutPanelItemType::PART;
+    bool sourceIsPartLayer = isPartItem(srcItem);
     if (srcStaff->hasSystemObjectsBelowBottomStaff()) {
         if ((sourceIsSystemObjectLayer && moveUp) || (sourceIsPartLayer && moveDown)) {
             moveParams.moveSysObjAboveBottomStaff = true;
