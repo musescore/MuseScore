@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// How long to wait for a control to appear (dialogs and lists are loaded asynchronously)
+const CONTROL_TIMEOUT_MSEC = 5000
+
 function doCheckControlIsActive(action)
 {
     if (api.navigation.activeControl() === "") {
@@ -65,7 +68,7 @@ module.exports = {
     },
     goToControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.goToControl(section, panel, controlNameOrIndex)) {
+        if (!api.navigation.goToControl(section, panel, controlNameOrIndex, CONTROL_TIMEOUT_MSEC)) {
             api.testflow.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
@@ -79,7 +82,7 @@ module.exports = {
     },
     triggerControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.triggerControl(section, panel, controlNameOrIndex)) {
+        if (!api.navigation.triggerControl(section, panel, controlNameOrIndex, CONTROL_TIMEOUT_MSEC)) {
             api.testflow.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
