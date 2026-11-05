@@ -25,13 +25,14 @@ var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
 var Instruments = require("steps/Instruments.js")
+var Project = require("steps/Project.js")
 
 var testCase = {
     name: "TC8: Engraving Text",
     description: "Let's check the functionality of the edit engraving text",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {

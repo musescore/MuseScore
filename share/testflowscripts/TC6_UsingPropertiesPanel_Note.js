@@ -24,13 +24,15 @@ var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var PropertiesPanel = require("steps/PropertiesPanel.js")
 var Score = require("steps/Score.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC6: Using properties panel: Note",
     description: "Let's check the functionality of the properties panel: Note",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -108,8 +110,8 @@ var testCase = {
 
             // Dotted note position
             Score.nextMeasure()
-            NoteInput.chooseNoteDuration("pad-note-8")
-            NoteInput.toggleDot("pad-dot")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
+            NoteInput.toggleDot(Commands.TOGGLE_DOT_COMMAND)
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
             api.navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteAuto")
@@ -144,7 +146,7 @@ var testCase = {
         {name: "Use Note Panel: Stem", skip: false, func: function() {
 
             Score.nextMeasure()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
             api.shortcuts.activate("C")
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
@@ -155,7 +157,7 @@ var testCase = {
             // Stem direction
             // Up
             Score.nextChord()
-            NoteInput.chooseNoteDuration("pad-note-4")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
             api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
@@ -188,15 +190,15 @@ var testCase = {
             // Flag style
             // Stem down
             Score.nextMeasure()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
             api.shortcuts.activate("C")
 
-            NoteInput.chooseNoteDuration("pad-note-16")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_16TH_COMMAND)
             Score.nextChord() // rest
             Score.nextChord()
             api.shortcuts.activate("C")
 
-            NoteInput.chooseNoteDuration("pad-note-32")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_32ND_COMMAND)
             Score.nextChord() // rest
             Score.nextChord()
             api.shortcuts.activate("C")
@@ -216,7 +218,7 @@ var testCase = {
         {name: "Use Note Panel: Beam", func: function() {
 
             Score.nextMeasure()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
 
             // Begin
             api.shortcuts.activate("C")
@@ -269,7 +271,7 @@ var testCase = {
             api.testflow.saveProject("TC6_UsingPropertiesPanel.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")

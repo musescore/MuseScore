@@ -23,6 +23,7 @@
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
 var Palette = require("steps/Palette.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC10: PlayToggle",
@@ -31,9 +32,9 @@ var testCase = {
         {name: "PlayToggle", func: function() {
             for (let i = 0; i < 1000; i++) {
                 if (i % 2 === 0) {
-                    api.dispatcher.dispatch("command://playback/play")
+                    api.dispatcher.dispatch(Commands.PLAY_COMMAND)
                 } else {
-                    api.dispatcher.dispatch("command://playback/pause")
+                    api.dispatcher.dispatch(Commands.PAUSE_COMMAND)
                 }
                 api.testflow.sleep(100)
             }

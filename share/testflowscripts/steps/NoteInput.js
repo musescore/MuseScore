@@ -21,10 +21,14 @@
  */
 
 
+var Navigation = require("Navigation.js")
+var Commands = require("Commands.js")
+
 function triggerNoteInputBtn(btn)
 {
-    api.navigation.triggerControl("NoteInputSection", "NoteInputBar", btn)
-    //! NOTE NoteInputBar buttons handlers are asynchronous, so we can wait some time until action is done.
+    Navigation.triggerControl("NoteInputSection", "NoteInputBar", btn)
+    //! NOTE NoteInputBar buttons handlers are asynchronous (Qt.callLater, which also merges calls
+    //! made before the next event loop iteration), so wait until the action is done.
     api.testflow.sleep(100)
 }
 
@@ -32,35 +36,27 @@ module.exports = {
 
     chooseDefaultMode: function()
     {
-        api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
-        api.testflow.waitPopup()
-        // First item become automatically current, so just trigger
-        api.navigation.trigger()
+        triggerNoteInputBtn(Commands.TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND)
     },
 
     turnoffDefaultMode: function()
     {
-        api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
-        api.testflow.waitPopup()
-        // First item become automatically current, so just trigger
-        api.navigation.trigger()
+        triggerNoteInputBtn(Commands.TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND)
     },
 
-    // "note-longa", "note-breve",
-    // "pad-note-1", "pad-note-2", "pad-note-4", "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-note-256", "pad-note-512", "pad-note-1024"
-    // "pad-dot", "pad-dotdot", "pad-dot3", "pad-dot4", "pad-rest"
+    // Commands.SET_DURATION_*_COMMAND, Commands.TOGGLE_REST_COMMAND
     chooseNoteDuration: function(mode)
     {
         triggerNoteInputBtn(mode)
     },
 
-    // "pad-dot", "pad-dot2", "pad-dot3", "pad-dot4"
+    // Commands.TOGGLE_DOT_COMMAND
     toggleDot: function(dot)
     {
         triggerNoteInputBtn(dot)
     },
 
-    // "flat2", "flat", "nat", "sharp", "sharp2"
+    // Commands.TOGGLE_FLAT2_COMMAND, ..._FLAT_, ..._NAT_, ..._SHARP_, ..._SHARP2_
     toggleAccidental: function(acc)
     {
         triggerNoteInputBtn(acc)
@@ -68,15 +64,15 @@ module.exports = {
 
     putTie: function()
     {
-        triggerNoteInputBtn("tie")
+        triggerNoteInputBtn(Commands.TOGGLE_TIE_COMMAND)
     },
 
     toggleSlur: function()
     {
-        triggerNoteInputBtn("add-slur")
+        triggerNoteInputBtn(Commands.ADD_SLUR_COMMAND)
     },
 
-    // "add-marcato", "add-sforzato", "add-tenuto", "add-staccato"
+    // Commands.TOGGLE_MARCATO_COMMAND, ..._SFORZATO_, ..._TENUTO_, ..._STACCATO_
     toggleArticulation: function(art)
     {
         triggerNoteInputBtn(art)
@@ -93,7 +89,7 @@ module.exports = {
         api.navigation.trigger()
     },
 
-    // "note-c", "note-d", "note-e", "note-f", "note-g", "note-a", "note-b"
+    // Commands.ENTER_NOTE_C_COMMAND ... Commands.ENTER_NOTE_B_COMMAND
     putNote: function(note)
     {
         api.dispatcher.dispatch(note)

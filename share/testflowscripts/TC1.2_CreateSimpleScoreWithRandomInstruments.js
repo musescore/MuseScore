@@ -21,14 +21,17 @@
  */
 
 var NewScore = require("steps/NewScore.js")
+var NoteInput = require("steps/NoteInput.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC1.2: Create Simple Score with Random Instruments",
     description: "Just create a simple two-instrument score, a few notes, play it and save the project",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -42,29 +45,23 @@ var testCase = {
             NewScore.done()
         }},
         {name: "Note input mode", func: function() {
-
-            api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
-            api.testflow.waitPopup()
-            // First item become automatically current, so just trigger
-            api.navigation.trigger()
-
-            // Select note
-            api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "pad-note-8")
+            NoteInput.chooseDefaultMode()
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
         }},
         {name: "Note input", func: function() {
-            api.dispatcher.dispatch("note-c")
-            api.dispatcher.dispatch("note-d")
-            api.dispatcher.dispatch("note-e")
-            api.dispatcher.dispatch("note-f")
-            api.dispatcher.dispatch("note-g")
-            api.dispatcher.dispatch("note-a")
-            api.dispatcher.dispatch("note-b")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_F_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_G_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC1.2_CreateSimpleScoreWithRandomInstruments.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
             api.testflow.seeChanges()
         }},
         {name: "Home", func: function() {

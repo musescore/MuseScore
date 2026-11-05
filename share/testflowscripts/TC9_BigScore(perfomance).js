@@ -23,13 +23,14 @@
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
 var Palette = require("steps/Palette.js")
+var Project = require("steps/Project.js")
 
 var testCase = {
     name: "TC9: Big Score (perfomance)",
     description: "Let's check perfomance",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open Big Score", func: function() {

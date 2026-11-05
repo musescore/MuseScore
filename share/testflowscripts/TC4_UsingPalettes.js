@@ -25,13 +25,15 @@ var NoteInput = require("steps/NoteInput.js")
 var Palette = require("steps/Palette.js")
 var Score = require("steps/Score.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC4: Using palettes",
     description: "Let's check the functionality of the palettes",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -138,7 +140,7 @@ var testCase = {
             api.testflow.saveProject("TC4_UsingPalettes.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             Home.goToHome()

@@ -22,13 +22,15 @@
 
 var NewScore = require("steps/NewScore.js")
 var Instruments = require("steps/Instruments.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC5: Using instruments",
     description: "Let's check the functionality of the instruments",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -85,7 +87,7 @@ var testCase = {
             api.testflow.saveProject("TC5_UsingInstruments.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
