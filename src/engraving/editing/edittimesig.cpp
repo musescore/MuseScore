@@ -551,98 +551,99 @@ TimeSig* EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, sta
                 }
             }
         }
+        delete ts;
+        return result;
+    }
+
+    Score* mScore = score->masterScore();
+    Measure* mf  = mScore->tick2measure(tick);
+
+    //
+    // rewrite all measures up to the next time signature
+    //
+    if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
+        // handle upbeat
+        mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
+        Measure* m = mf->nextMeasure();
+        Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
+        mf = s ? 0 : mf->nextMeasure();
     } else {
-        Score* mScore = score->masterScore();
-        Measure* mf  = mScore->tick2measure(tick);
-
-        //
-        // rewrite all measures up to the next time signature
-        //
-        if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
-            // handle upbeat
-            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
-            Measure* m = mf->nextMeasure();
-            Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
-            mf = s ? 0 : mf->nextMeasure();
-        } else {
-            if (score->sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
-                // no change to global time signature,
-                // but we need to rewrite any staves with local time signatures
-                for (size_t i = 0; i < score->nstaves(); ++i) {
-                    if (score->staff(i)->timeSig(tick) && score->staff(i)->timeSig(tick)->isLocal()) {
-                        if (!rewriteMeasures(tx, mScore, mf, ns, i)) {
-                            score->undoStack()->activeTransaction()->unwind();
-                            return nullptr;
-                        }
+        if (score->sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
+            // no change to global time signature,
+            // but we need to rewrite any staves with local time signatures
+            for (size_t i = 0; i < score->nstaves(); ++i) {
+                if (score->staff(i)->timeSig(tick) && score->staff(i)->timeSig(tick)->isLocal()) {
+                    if (!rewriteMeasures(tx, mScore, mf, ns, i)) {
+                        score->undoStack()->activeTransaction()->unwind();
+                        return nullptr;
                     }
                 }
-                mf = 0;
             }
+            mf = 0;
         }
+    }
 
-        // try to rewrite the measures first
-        // we will only add time signatures if this succeeds
-        // this means, however, that the rewrite cannot depend on the time signatures being in place
-        if (mf) {
-            auto staffIdxRangeOnMaster = getStaffIdxRange(mScore);
-            if (staffIdxRangeOnMaster.second != staffIdxRangeOnMaster.first
-                && !rewriteMeasures(tx, mScore, mf, ns, local ? staffIdxRangeOnMaster.first : muse::nidx)) {
-                score->undoStack()->activeTransaction()->unwind();
-                return nullptr;
-            }
+    // try to rewrite the measures first
+    // we will only add time signatures if this succeeds
+    // this means, however, that the rewrite cannot depend on the time signatures being in place
+    if (mf) {
+        auto staffIdxRangeOnMaster = getStaffIdxRange(mScore);
+        if (staffIdxRangeOnMaster.second != staffIdxRangeOnMaster.first
+            && !rewriteMeasures(tx, mScore, mf, ns, local ? staffIdxRangeOnMaster.first : muse::nidx)) {
+            score->undoStack()->activeTransaction()->unwind();
+            return nullptr;
         }
-        // add the time signatures
-        std::map<track_idx_t, TimeSig*> masterTimeSigs;
-        for (Score* lscore : score->scoreList()) {
-            Measure* nfm = lscore->tick2measure(tick);
-            seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
-            std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(lscore);
-            for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                if (fm->isMeasureRepeatGroup(si)) {
-                    score->deleteItem(fm->measureRepeatElement(si));
-                }
-                TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                if (nsig == 0) {
-                    nsig = Factory::copyTimeSig(*ts);
-                    nsig->setScore(lscore);
-                    nsig->setTrack(si * VOICES);
-                    nsig->setOwnershipParent(seg);
-                    nsig->styleChanged();
-                    score->undoAddElement(nsig);
-                    if (lscore->excerpt()) {
-                        const track_idx_t masterTrack = muse::key(lscore->excerpt()->tracksMapping(), nsig->track());
-                        TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
-                        if (masterTimeSig) {
-                            tx.push(new Link(masterTimeSig, nsig));
-                        }
+    }
+    // add the time signatures
+    std::map<track_idx_t, TimeSig*> masterTimeSigs;
+    for (Score* lscore : score->scoreList()) {
+        Measure* nfm = lscore->tick2measure(tick);
+        seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
+        std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(lscore);
+        for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
+            if (fm->isMeasureRepeatGroup(si)) {
+                score->deleteItem(fm->measureRepeatElement(si));
+            }
+            TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+            if (nsig == 0) {
+                nsig = Factory::copyTimeSig(*ts);
+                nsig->setScore(lscore);
+                nsig->setTrack(si * VOICES);
+                nsig->setOwnershipParent(seg);
+                nsig->styleChanged();
+                score->undoAddElement(nsig);
+                if (lscore->excerpt()) {
+                    const track_idx_t masterTrack = muse::key(lscore->excerpt()->tracksMapping(), nsig->track());
+                    TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
+                    if (masterTimeSig) {
+                        tx.push(new Link(masterTimeSig, nsig));
                     }
-                } else {
-                    nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
-                    nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
-                    nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-
-                    // HACK do it twice to accommodate undo
-                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
-                    nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
-                    nsig->setSelected(false);
-                    nsig->setDropTarget(false);                 // DEBUG
                 }
+            } else {
+                nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
+                nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
+                nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
 
-                if (lscore->isMaster()) {
-                    masterTimeSigs[nsig->track()] = nsig;
-                }
+                // HACK do it twice to accommodate undo
+                nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
+                nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
+                nsig->setSelected(false);
+                nsig->setDropTarget(false);                 // DEBUG
+            }
 
-                if (lscore == score && si == staffIdx) {
-                    result = nsig;
-                }
+            if (lscore->isMaster()) {
+                masterTimeSigs[nsig->track()] = nsig;
+            }
+
+            if (lscore == score && si == staffIdx) {
+                result = nsig;
             }
         }
     }
     delete ts;
-
     return result;
 }
 
