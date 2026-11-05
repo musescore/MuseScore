@@ -140,9 +140,9 @@ void TupletDialog::apply()
 {
     rcommand::Params params = {
         { "ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()) },
-        Contract<TupletNumberType>::param(numberType()),
-        Contract<TupletBracketType>::param(bracketType()),
-        Contract<TupletSelectedDuration>::param(selectedDurationAs()),
+        EnumContract<TupletNumberType>::param(numberType()),
+        EnumContract<TupletBracketType>::param(bracketType()),
+        EnumContract<TupletSelectedDuration>::param(selectedDurationAs()),
     };
 
     dispatcher()->dispatch(ADD_TUPLET_COMMAND, params);

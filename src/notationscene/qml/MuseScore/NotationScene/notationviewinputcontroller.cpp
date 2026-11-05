@@ -1034,7 +1034,7 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
 
     muse::rcommand::Params params = {
         { "pitch", muse::Val(pitchToWrite) },
-        Contract<NoteAddingMode>::param(addingMode)
+        EnumContract<NoteAddingMode>::param(addingMode)
     };
 
     commandDispatcher()->dispatch(ADD_DRUM_NOTE_COMMAND, params);
