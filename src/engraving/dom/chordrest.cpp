@@ -32,6 +32,7 @@
 #include "breath.h"
 #include "chord.h"
 #include "clef.h"
+#include "durationline.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"
@@ -135,6 +136,7 @@ ChordRest::~ChordRest()
 {
     muse::DeleteAll(m_lyrics);
     muse::DeleteAll(m_el);
+    muse::DeleteAll(m_durationLines);
     delete m_tabDur;
 
     if (m_beam) {
@@ -886,6 +888,9 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     for (EngravingItem* e : m_el) {
         func(e);
     }
+    for (DurationLine* dl : m_durationLines) {
+        func(dl);
+    }
 }
 
 //---------------------------------------------------------
@@ -1108,6 +1113,9 @@ void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
     }
     if (m_tabDur) {
         func(m_tabDur);
+    }
+    for (DurationLine* dl : m_durationLines) {
+        func(dl);
     }
 }
 
@@ -1375,5 +1383,20 @@ bool ChordRest::hasPrecedingJumpItem() const
     std::vector<Measure*> precedingRepeatMeasures = findPreviousRepeatMeasures(measure);
 
     return !precedingRepeatMeasures.empty();
+}
+
+void ChordRest::resizeDurationLinesTo(size_t newSize)
+{
+    while (m_durationLines.size() < newSize) {
+        DurationLine* dl = new DurationLine(this);
+        dl->setOwnershipParent(this);
+        dl->setTrack(track());
+        m_durationLines.push_back(dl);
+    }
+
+    while (m_durationLines.size() > newSize) {
+        delete m_durationLines.back();
+        m_durationLines.pop_back();
+    }
 }
 }

@@ -78,4 +78,70 @@ Column {
             { text: qsTrc("propertiespanel", "Locrian", "key signature mode"), value: KeySignatureTypes.MODE_LOCRIAN }
         ]
     }
+
+    DropdownPropertyView {
+        titleText: qsTrc("propertiespanel", "Jianpu numbering")
+        propertyItem: root.model ? root.model.jianpuNumbering : null
+        visible: root.model ? root.model.isJianpuStaff : false
+
+        navigationName: "JianpuNumbering"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 3
+
+        model: [
+            { text: qsTrc("propertiespanel", "Follow score key"), value: KeySignatureTypes.FOLLOW_SCORE_KEY },
+            { text: qsTrc("propertiespanel", "Custom"), value: KeySignatureTypes.CUSTOM }
+        ]
+    }
+
+    DropdownPropertyView {
+        titleText: qsTrc("propertiespanel", "Jianpu tonal center")
+        propertyItem: root.model ? root.model.jianpuTonicKey : null
+        visible: root.model ? root.model.isJianpuStaff : false
+
+        navigationName: "JianpuTonicKey"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 4
+
+        model: [
+            { text: "C♭", value: -7 },
+            { text: "G♭", value: -6 },
+            { text: "D♭", value: -5 },
+            { text: "A♭", value: -4 },
+            { text: "E♭", value: -3 },
+            { text: "B♭", value: -2 },
+            { text: "F", value: -1 },
+            { text: "C", value: 0 },
+            { text: "G", value: 1 },
+            { text: "D", value: 2 },
+            { text: "A", value: 3 },
+            { text: "E", value: 4 },
+            { text: "B", value: 5 },
+            { text: "F♯", value: 6 },
+            { text: "C♯", value: 7 }
+        ]
+    }
+
+    DropdownPropertyView {
+        //: Musical mode (major, minor, dorian, phrygian, lydian, etc.)
+        titleText: qsTrc("propertiespanel", "Jianpu scale mode")
+        propertyItem: root.model ? root.model.jianpuTonicMode : null
+        visible: root.model ? root.model.isJianpuStaff : false
+
+        navigationName: "JianpuTonicMode"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 5
+
+        model: [
+            //: mode of a key signature, not an interval; Ionian is an alternative name for this mode
+            { text: qsTrc("propertiespanel", "Major (Ionian)", "key signature mode"), value: KeySignatureTypes.MODE_MAJOR },
+            { text: qsTrc("propertiespanel", "Dorian", "key signature mode"), value: KeySignatureTypes.MODE_DORIAN },
+            { text: qsTrc("propertiespanel", "Phrygian", "key signature mode"), value: KeySignatureTypes.MODE_PHRYGIAN },
+            { text: qsTrc("propertiespanel", "Lydian", "key signature mode"), value: KeySignatureTypes.MODE_LYDIAN },
+            { text: qsTrc("propertiespanel", "Mixolydian", "key signature mode"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+            //: mode of a key signature, not an interval; Aeolian is an alternative name for this mode
+            { text: qsTrc("propertiespanel", "Minor (Aeolian)", "key signature mode"), value: KeySignatureTypes.MODE_MINOR },
+            { text: qsTrc("propertiespanel", "Locrian", "key signature mode"), value: KeySignatureTypes.MODE_LOCRIAN }
+        ]
+    }
 }

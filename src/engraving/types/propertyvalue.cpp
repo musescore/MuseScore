@@ -162,6 +162,8 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::LINE_TYPE:        return static_cast<int>(value<LineType>());
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
+    case P_TYPE::KEY:              return static_cast<int>(value<Key>());
+    case P_TYPE::JIANPU_NUMBERING: return static_cast<int>(value<JianpuNumbering>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
     case P_TYPE::PLAYTECH_TYPE:    return static_cast<int>(value<PlayingTechniqueType>());
     case P_TYPE::TEMPOCHANGE_TYPE: return static_cast<int>(value<GradualTempoChangeType>());
@@ -290,6 +292,8 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::LINE_TYPE:        return PropertyValue(LineType(v.toInt()));
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
+    case P_TYPE::KEY:              return PropertyValue(Key(v.toInt()));
+    case P_TYPE::JIANPU_NUMBERING: return PropertyValue(JianpuNumbering(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
     case P_TYPE::PLAYTECH_TYPE:    return PropertyValue(PlayingTechniqueType(v.toInt()));
     case P_TYPE::TEMPOCHANGE_TYPE: return PropertyValue(GradualTempoChangeType(v.toInt()));

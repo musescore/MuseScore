@@ -409,6 +409,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         }
         break;
         case StaffGroup::STANDARD:
+        case StaffGroup::JIANPU:
             ct = defaultClefType();
             break;
         case StaffGroup::PERCUSSION:
@@ -1695,6 +1696,15 @@ bool Staff::isDrumStaff(const Fraction& tick) const
 {
     //check for instrument instead of staffType (for pitched to unpitched instr. changes)
     return originPart(tick)->instrument(tick)->useDrumset();
+}
+
+//---------------------------------------------------------
+//   isJianpuStaff
+//---------------------------------------------------------
+
+bool Staff::isJianpuStaff(const Fraction& tick) const
+{
+    return staffType(tick)->type() == StaffTypes::JIANPU;
 }
 
 //---------------------------------------------------------

@@ -149,6 +149,7 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
 
     switch (staff->staffType(is.tick())->group()) {
     case StaffGroup::STANDARD:
+    case StaffGroup::JIANPU:
         break;
     case StaffGroup::TAB: {
         int strg = 0;                           // assume topmost string as current string

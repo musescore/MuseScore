@@ -83,6 +83,9 @@ public:
     Fraction fraction() const;
     static bool isValid(Fraction f);
 
+    int augmentationLines() const;
+    int diminutionLines() const;
+
 private:
     void shiftType(int nSteps, bool stepDotted = false);
     void truncateToFraction(const Fraction& l, int maxDots);
