@@ -427,7 +427,7 @@ void PluginAPI::cmd(const QString& s)
         { "paste", notation::PASTE_COMMAND },
         { "paste-half", notation::PASTE_HALF_COMMAND },
         { "paste-double", notation::PASTE_DOUBLE_COMMAND },
-        { "select-all", notation::SELECT_ALL_COMMAND },
+        { "select-all", notation::SelectAllCommand::id },
         { "delete", notation::DELETE_COMMAND },
         { "next-chord", notation::MOVE_RIGHT_COMMAND },
         { "prev-chord", notation::MOVE_LEFT_COMMAND },

@@ -136,6 +136,11 @@ private:
 
     mu::engraving::Score* currentNotationScore() const;
 
+    muse::Ret select(const SelectTargetCommand& command);
+    muse::Ret select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
+    muse::Ret addToSelection(const AddToSelectionTargetCommand& command);
+    muse::Ret addToSelection(SelectionTarget target);
+
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
     muse::RetVal<GetNoteInputStateCommand::Output> getNoteInputState() const;
@@ -272,6 +277,8 @@ private:
 
     // commands
     template<muse::rcommand::TypedCommand C>
+    void registerCommand(std::function<muse::Ret()>);
+    template<muse::rcommand::TypedCommand C>
     void registerCommand(muse::Ret (NotationActionController::*)());
     template<muse::rcommand::TypedCommand C>
     void registerCommand(muse::Ret (NotationActionController::*)(const C&));
@@ -298,9 +305,6 @@ private:
 
     void registerGetCommand(const muse::rcommand::Command&, std::function<muse::RetVal<muse::rcommand::Params>()>);
     void registerGetCommand(const muse::rcommand::Command&, muse::RetVal<muse::rcommand::Params>(NotationActionController::*)() const);
-
-    muse::Ret select(const muse::rcommand::Params& params);
-    void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
 
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)());
     template<typename P1>

@@ -528,7 +528,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
     .Times(1)
-    .WillOnce([newContext] { newContext.element->setSelected(true); });
+    .WillOnce([newContext] {
+        newContext.element->setSelected(true);
+        return muse::make_ok();
+    });
 
     //! [THEN] seek to the element before playing it
     {
@@ -754,7 +757,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
     .Times(1)
-    .WillOnce([newContext] { newContext.element->setSelected(true); });
+    .WillOnce([newContext] {
+        newContext.element->setSelected(true);
+        return muse::make_ok();
+    });
 
     //! [GIVEN] There is a range selection with two measures
     ON_CALL(*m_selection, isRange())
@@ -898,7 +904,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 
     std::vector<EngravingItem*> contextMenuSelectElements = { contextMenuOnMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(contextMenuSelectElements, _, _))
-    .WillOnce(Return());
+    .WillOnce(Return(muse::make_ok()));
 
     EXPECT_CALL(*m_selection, elements())
     .WillOnce(ReturnRef(selectElements))

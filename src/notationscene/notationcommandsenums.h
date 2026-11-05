@@ -104,13 +104,13 @@ struct TupletSelectedDurationContract {
 struct SelectionTargetContract {
     static constexpr std::string_view key = "target";
     static constexpr SelectionTarget def = SelectionTarget::FirstItem;
-    static constexpr EnumTable<SelectionTarget, 30> table { {
+    static constexpr EnumTable<SelectionTarget, 34> table { {
         { "first-item", SelectionTarget::FirstItem, "select first item" },
         { "last-item", SelectionTarget::LastItem, "select last item" },
         { "next-item", SelectionTarget::NextItem, "select next item" },
         { "prev-item", SelectionTarget::PrevItem, "select previous item" },
-        { "next-segment-item", SelectionTarget::NextSegmentItem, "select next segment item" },
-        { "prev-segment-item", SelectionTarget::PrevSegmentItem, "select previous segment item" },
+        { "next-segment", SelectionTarget::NextSegment, "select next segment" },
+        { "prev-segment", SelectionTarget::PrevSegment, "select previous segment" },
         { "next-chord", SelectionTarget::NextChord, "select next chord" },
         { "prev-chord", SelectionTarget::PrevChord, "select previous chord" },
         { "next-measure", SelectionTarget::NextMeasure, "select next measure" },
@@ -135,6 +135,10 @@ struct SelectionTargetContract {
         { "similar-in-range", SelectionTarget::SimilarInRange, "select similar in range" },
         { "all", SelectionTarget::All, "select all" },
         { "section", SelectionTarget::Section, "select section" },
+        { "begin-system", SelectionTarget::BeginSystem, "select begin system" },
+        { "end-system", SelectionTarget::EndSystem, "select end system" },
+        { "begin-score", SelectionTarget::BeginScore, "select begin score" },
+        { "end-score", SelectionTarget::EndScore, "select end score" },
     } };
 };
 

@@ -51,16 +51,16 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     DELETE_COMMAND,
     FlipCommand::id,
     FLIP_HORIZONTALLY_COMMAND,
-    GOTO_NEXT_SEGMENT_ELEMENT_COMMAND,
-    GOTO_PREV_SEGMENT_ELEMENT_COMMAND,
-    GOTO_UPNOTE_IN_CHORD_COMMAND,
-    GOTO_DOWNNOTE_IN_CHORD_COMMAND,
-    GOTO_TOPNOTE_IN_CHORD_COMMAND,
-    GOTO_BOTTOMNOTE_IN_CHORD_COMMAND,
-    SELECT_SIMILAR_COMMAND,
-    SELECT_SIMILAR_IN_STAFF_COMMAND,
-    SELECT_SIMILAR_IN_RANGE_COMMAND,
-    SELECT_NOTES_IN_CHORD_COMMAND,
+    SelectNextSegmentCommand::id,
+    SelectPrevSegmentCommand::id,
+    SelectUpNoteInChordCommand::id,
+    SelectDownNoteInChordCommand::id,
+    SelectTopNoteInChordCommand::id,
+    SelectBottomNoteInChordCommand::id,
+    SelectSimilarCommand::id,
+    SelectSimilarInStaffCommand::id,
+    SelectSimilarInRangeCommand::id,
+    SelectNotesInChordCommand::id,
     OPEN_SELECTION_OPTIONS_COMMAND,
     SET_DOUBLE_DURATION_COMMAND,
     SET_HALVE_DURATION_COMMAND,
@@ -220,16 +220,16 @@ static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
 };
 
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
-    { GOTO_FIRST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_LAST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track },
-    { GOTO_PREV_TRACK_COMMAND, MoveSelectionType::Track },
-    { GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame },
-    { GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame },
-    { GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System },
-    { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System }
+    { SelectFirstItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectLastItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectNextItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectPrevItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectNextTrackCommand::id, MoveSelectionType::Track },
+    { SelectPrevTrackCommand::id, MoveSelectionType::Track },
+    { SelectNextFrameCommand::id, MoveSelectionType::Frame },
+    { SelectPrevFrameCommand::id, MoveSelectionType::Frame },
+    { SelectNextSystemCommand::id, MoveSelectionType::System },
+    { SelectPrevSystemCommand::id, MoveSelectionType::System }
 };
 
 static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
