@@ -41,6 +41,13 @@ public:
     static void toggleStaveSharing(Transaction& tx, Score* score, bool on);
     static void handleRemovePart(Transaction& tx, Part* part);
 
+    // Creates a shared part just before `part` (with that part's instrument), and connects `part` to it
+    static SharedPart* cmdCreateSharedPartForPart(Transaction& tx, Score* score, Part* part);
+    // Connects `part` to `sharedPart` (disconnecting it from its current shared part, if any)
+    static void cmdAddPartToSharedPart(Transaction& tx, SharedPart* sharedPart, Part* part);
+    // Disconnects `part` from its shared part (removing the shared part if no instruments are left)
+    static void cmdRemovePartFromSharedPart(Transaction& tx, Part* part);
+
 private:
     static void cmdCreateSharedStaves(Transaction& tx, Score* score);
     static void cmdRemoveSharedStaves(Score* score);
@@ -52,5 +59,6 @@ private:
 
     static void connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
     static void disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
+    static void disconnectFromCurrentSharedPart(Transaction& tx, Part* part);
 };
 }

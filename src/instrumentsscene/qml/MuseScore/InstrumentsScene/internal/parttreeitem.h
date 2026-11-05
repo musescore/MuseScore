@@ -60,6 +60,10 @@ public:
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
     Q_INVOKABLE QString instrumentId() const;
+
+    // After its staves are (re)built, changed, added, removed or moved: numbers staves of the same name, and updates
+    // which of them are linked to each other
+    void updateStaffLinks();
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();
 
@@ -68,6 +72,8 @@ protected:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
 private:
+    bool isCombinedOntoSharedStaves(const notation::Part* part) const;
+
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;

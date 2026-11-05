@@ -69,6 +69,9 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool settingsAvailable READ settingsAvailable NOTIFY settingsAvailableChanged)
     Q_PROPERTY(bool settingsEnabled READ settingsEnabled NOTIFY settingsEnabledChanged)
+    Q_PROPERTY(int sharedGroupRole READ sharedGroupRole NOTIFY sharedGroupRoleChanged)
+    Q_PROPERTY(QString sharedGroupId READ sharedGroupId NOTIFY sharedGroupIdChanged)
+    Q_PROPERTY(bool existsInScore READ existsInScore NOTIFY existsInScoreChanged)
 
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
@@ -93,6 +96,16 @@ public:
 
     bool settingsAvailable() const;
     bool settingsEnabled() const;
+
+    int sharedGroupRole() const;
+    void setSharedGroupRole(int role);
+
+    QString sharedGroupId() const;
+    void setSharedGroupId(const QString& id);
+
+    // False for instruments of the main score that aren't in the current part
+    bool existsInScore() const;
+    void setExistsInScore(bool exists);
 
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
@@ -146,6 +159,9 @@ signals:
     void isSelectedChanged(bool isSelected);
     void settingsAvailableChanged(bool available);
     void settingsEnabledChanged(bool enabled);
+    void sharedGroupRoleChanged(int role);
+    void sharedGroupIdChanged();
+    void existsInScoreChanged();
 
 protected:
     notation::IMasterNotationPtr masterNotation() const;
@@ -168,6 +184,9 @@ private:
     bool m_isSelected = false;
     bool m_settingsAvailable = false;
     bool m_settingsEnabled = false;
+    int m_sharedGroupRole = LayoutPanelItemType::NOT_IN_GROUP;
+    QString m_sharedGroupId;
+    bool m_existsInScore = true;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     notation::INotationPtr m_notation = nullptr;

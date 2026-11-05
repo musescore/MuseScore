@@ -35,6 +35,14 @@ class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
+    // Prototype versions of the shared-staves groups UI, switchable from the menu
+    // Group style: 0 = filled, 1 = filled only when on (combined), 2 = outlined
+    Q_PROPERTY(int groupStyle READ groupStyle NOTIFY versionsChanged FINAL)
+    // How grouped instruments are indented: 0 = none, 1 = full, 2 = half
+    Q_PROPERTY(int groupIndentation READ groupIndentation NOTIFY versionsChanged FINAL)
+    Q_PROPERTY(bool hideDisabledEyes READ hideDisabledEyes NOTIFY versionsChanged FINAL)
+    Q_PROPERTY(bool onlyShowSettingsOnHover READ onlyShowSettingsOnHover NOTIFY versionsChanged FINAL)
+
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<project::IProjectSession> projectSession = { this };
 
@@ -44,8 +52,14 @@ public:
     Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
 
+    int groupStyle() const;
+    int groupIndentation() const;
+    bool hideDisabledEyes() const;
+    bool onlyShowSettingsOnHover() const;
+
 signals:
     void expandCollapseAllRequested(bool expand);
+    void versionsChanged();
 
 private:
     void updateMenu();
@@ -56,8 +70,14 @@ private:
 
     muse::uicomponents::MenuItem* createInstrumentsOrderingItem();
     muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
+    muse::uicomponents::MenuItem* createVersionsItem();
 
     notation::IMasterNotationPtr m_masterNotation;
     notation::ScoreOrderList m_orders;
+
+    int m_groupStyle = 0;
+    int m_groupIndentation = 2;
+    bool m_hideDisabledEyes = true;
+    bool m_onlyShowSettingsOnHover = true;
 };
 }

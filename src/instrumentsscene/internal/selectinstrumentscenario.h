@@ -27,6 +27,7 @@
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "notation/iinstrumentsrepository.h"
+#include "project/iprojectsession.h"
 
 #include "global/async/asyncable.h"
 #include "global/async/promise.h"
@@ -36,6 +37,7 @@ class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, p
 {
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
 

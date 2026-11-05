@@ -143,5 +143,9 @@ private:
     notation::InstrumentGroupList m_groups;
 
     bool m_instrumentsLoadingAllowed = false;
+
+    // While adding instruments, instruments with a tablature version are added with a choice of notation and/or
+    // tablature, so their separate tablature versions aren't listed
+    bool m_hidesTablatureVersions = false;
 };
 }

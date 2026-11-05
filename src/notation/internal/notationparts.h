@@ -95,6 +95,11 @@ public:
     void moveSystemObjectLayerAboveBottomStaff() override;
 
     void toggleStaveSharing(bool on) override;
+    muse::ID createSharedPart(const muse::IDList& partIds, const muse::ID& destinationPartId, InsertMode mode) override;
+    void addPartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) override;
+    void ungroupSharedPart(const muse::ID& sharedPartId) override;
+    void removePartFromSharedPart(const muse::ID& partId, const muse::ID& destinationPartId, InsertMode mode) override;
+    void duplicateParts(const muse::IDList& partIds) override;
 
     muse::async::Notification partsChanged() const override;
     muse::async::Notification scoreOrderChanged() const override;
@@ -140,10 +145,9 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 
-    int countExistingInstruments(const InstrumentTemplate& instrument) const;
+    std::vector<int> resolveInstrumentNumbers(const PartInstrumentList& parts) const;
     bool isNewInstrument(const InstrumentTemplate& instrument, const PartInstrumentList& parts) const;
-    int resolveExistingInstrumentNumber(const muse::ID& partId, const InstrumentTemplate& instrument) const;
-    int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
+    void appendLinkedTablatureStaff(Part* part, TablatureOption option);
 
     void setBracketsAndBarlines();
 

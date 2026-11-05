@@ -21,6 +21,8 @@
  */
 #include "stafftreeitem.h"
 
+#include "engraving/dom/part.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -53,7 +55,10 @@ void StaffTreeItem::init(const Staff* masterStaff)
     }
 
     const Staff* staff = notation()->parts()->staff(masterStaff->id());
-    bool visible = staff && staff->show();
+
+    // Not Staff::show(): that is also false while the instrument is combined onto shared staves,
+    // which the Layout panel shows on the group instead of on the instrument's own staves
+    bool visible = staff && staff->visible() && staff->part()->getProperty(mu::engraving::Pid::VISIBLE).toBool();
 
     if (!staff) {
         staff = masterStaff;
@@ -64,12 +69,60 @@ void StaffTreeItem::init(const Staff* masterStaff)
         staffName = staff->staffName();
     }
 
-    //: Prefix for the display name for a linked staff. Preferably, keep this short.
-    QString title = masterStaff->isLinked() ? muse::qtrc("layoutpanel", "[LINK] %1").arg(staffName) : staffName;
+    // Linked staves are shown with a link icon (see PartTreeItem::updateStaffLinks(), which also numbers staves of the
+    // same name)
+    m_staffName = staffName;
 
     setId(staff->id());
-    setTitle(title);
+    setTitle(staffName);
     setIsVisible(visible);
 
     m_isInited = true;
+}
+
+QString StaffTreeItem::staffName() const
+{
+    return m_staffName;
+}
+
+bool StaffTreeItem::isLinked() const
+{
+    return m_linkRows.size() > 1;
+}
+
+int StaffTreeItem::staffRow() const
+{
+    return m_staffRow;
+}
+
+QVariantList StaffTreeItem::linkRows() const
+{
+    return m_linkRows;
+}
+
+QString StaffTreeItem::linkDescription() const
+{
+    return m_linkDescription;
+}
+
+QString StaffTreeItem::accessibleTitle() const
+{
+    return m_accessibleTitle.isEmpty() ? title() : m_accessibleTitle;
+}
+
+void StaffTreeItem::setLinks(int staffRow, const QVariantList& linkRows, const QString& linkDescription,
+                             const QString& accessibleTitle)
+{
+    // Also when only this staff's own row changed (e.g. it was moved), so that its connector line follows
+    if (m_staffRow == staffRow && m_linkRows == linkRows && m_linkDescription == linkDescription
+        && m_accessibleTitle == accessibleTitle) {
+        return;
+    }
+
+    m_staffRow = staffRow;
+    m_linkRows = linkRows;
+    m_linkDescription = linkDescription;
+    m_accessibleTitle = accessibleTitle;
+
+    emit linksChanged();
 }

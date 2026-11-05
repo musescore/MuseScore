@@ -333,6 +333,51 @@ void AbstractLayoutPanelTreeItem::setSettingsAvailable(bool available)
     }
 }
 
+int AbstractLayoutPanelTreeItem::sharedGroupRole() const
+{
+    return m_sharedGroupRole;
+}
+
+void AbstractLayoutPanelTreeItem::setSharedGroupRole(int role)
+{
+    if (m_sharedGroupRole == role) {
+        return;
+    }
+
+    m_sharedGroupRole = role;
+    emit sharedGroupRoleChanged(role);
+}
+
+QString AbstractLayoutPanelTreeItem::sharedGroupId() const
+{
+    return m_sharedGroupId;
+}
+
+void AbstractLayoutPanelTreeItem::setSharedGroupId(const QString& id)
+{
+    if (m_sharedGroupId == id) {
+        return;
+    }
+
+    m_sharedGroupId = id;
+    emit sharedGroupIdChanged();
+}
+
+bool AbstractLayoutPanelTreeItem::existsInScore() const
+{
+    return m_existsInScore;
+}
+
+void AbstractLayoutPanelTreeItem::setExistsInScore(bool exists)
+{
+    if (m_existsInScore == exists) {
+        return;
+    }
+
+    m_existsInScore = exists;
+    emit existsInScoreChanged();
+}
+
 void AbstractLayoutPanelTreeItem::setSettingsEnabled(bool enabled)
 {
     if (m_settingsEnabled == enabled) {

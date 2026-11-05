@@ -31,8 +31,10 @@ MenuButton {
 
     signal addInstrumentRequested()
     signal addSystemMarkingsRequested()
+    signal addSharedStaveGroupRequested()
 
     property bool addSystemMarkingsAvailable: true
+    property bool addSharedStaveGroupAvailable: true
 
     //: Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)
     text: qsTrc("layoutpanel", "Add")
@@ -48,6 +50,7 @@ MenuButton {
         { id: "ADD_INSTRUMENT", title: qsTrc("layoutpanel", "New instrument")  },
         {},
         { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal marks, etc.)"), enabled: root.addSystemMarkingsAvailable },
+        { id: "ADD_SHARED_STAVE_GROUP", title: qsTrc("layoutpanel", "Shared stave group"), enabled: root.addSharedStaveGroupAvailable },
     ]
 
     onHandleMenuItem: function(itemId) {
@@ -57,6 +60,9 @@ MenuButton {
             break;
         case "ADD_SYSTEM_MARKINGS":
             root.addSystemMarkingsRequested()
+            break;
+        case "ADD_SHARED_STAVE_GROUP":
+            root.addSharedStaveGroupRequested()
             break;
         }
     }

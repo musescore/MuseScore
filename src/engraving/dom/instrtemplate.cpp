@@ -227,6 +227,7 @@ InstrumentTemplate::InstrumentTemplate(const InstrumentTemplate& t)
 void InstrumentTemplate::init(const InstrumentTemplate& t)
 {
     id = t.id;
+    initId = t.initId;
     soundId = t.soundId;
     trackName = t.trackName;
     instrumentName = t.instrumentName;
@@ -565,6 +566,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 String id_ = id;
                 init(*ttt);
                 id = id_;
+                initId = val;
             } else {
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
@@ -716,6 +718,22 @@ const InstrumentTemplate* searchTemplate(const String& name)
         }
     }
     return 0;
+}
+
+const InstrumentTemplate* searchTablatureTemplate(const String& notationTemplateId)
+{
+    if (notationTemplateId.empty()) {
+        return nullptr;
+    }
+
+    for (const InstrumentGroup* g : instrumentGroups) {
+        for (const InstrumentTemplate* it : g->instrumentTemplates) {
+            if (it->initId == notationTemplateId && it->staffTypePreset && it->staffTypePreset->isTabStaff()) {
+                return it;
+            }
+        }
+    }
+    return nullptr;
 }
 
 // Given an unknown instrument (i.e. one that lacks a valid MuseScore ID),
