@@ -133,6 +133,8 @@ FocusableControl {
 
         item: root.item
         isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
+        isHovered: root.mouseArea.containsMouse
+        isHighlighted: root.isSelected || root.isPressed || root.navigation.highlight
 
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
