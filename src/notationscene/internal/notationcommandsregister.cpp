@@ -141,6 +141,48 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::REDO)
     },
 
+    // navigation and selection commands
+
+    makeCommandInfo<SelectTargetCommand>(),
+    makeCommandInfo<SelectFirstItemCommand>(),
+    makeCommandInfo<SelectLastItemCommand>(),
+    makeCommandInfo<SelectNextItemCommand>(),
+    makeCommandInfo<SelectPrevItemCommand>(),
+    makeCommandInfo<SelectNextSegmentCommand>(),
+    makeCommandInfo<SelectPrevSegmentCommand>(),
+    makeCommandInfo<SelectNextTrackCommand>(),
+    makeCommandInfo<SelectPrevTrackCommand>(),
+    makeCommandInfo<SelectNextFrameCommand>(),
+    makeCommandInfo<SelectPrevFrameCommand>(),
+    makeCommandInfo<SelectNextSystemCommand>(),
+    makeCommandInfo<SelectPrevSystemCommand>(),
+    makeCommandInfo<SelectUpNoteInChordCommand>(),
+    makeCommandInfo<SelectDownNoteInChordCommand>(),
+    makeCommandInfo<SelectTopNoteInChordCommand>(),
+    makeCommandInfo<SelectBottomNoteInChordCommand>(),
+    makeCommandInfo<SelectTopStaffCommand>(),
+    makeCommandInfo<SelectEmptyTrailingMeasureCommand>(),
+    makeCommandInfo<SelectSimilarCommand>(),
+    makeCommandInfo<SelectSimilarInStaffCommand>(),
+    makeCommandInfo<SelectSimilarInRangeCommand>(),
+    makeCommandInfo<SelectNotesInChordCommand>(),
+    makeCommandInfo<SelectAllCommand>(),
+    makeCommandInfo<SelectSectionCommand>(),
+
+    makeCommandInfo<AddToSelectionTargetCommand>(),
+    makeCommandInfo<AddToSelectionNextChordCommand>(),
+    makeCommandInfo<AddToSelectionPrevChordCommand>(),
+    makeCommandInfo<AddToSelectionNextMeasureCommand>(),
+    makeCommandInfo<AddToSelectionPrevMeasureCommand>(),
+    makeCommandInfo<AddToSelectionAboveStaffCommand>(),
+    makeCommandInfo<AddToSelectionBelowStaffCommand>(),
+    makeCommandInfo<AddToSelectionBeginSystemCommand>(),
+    makeCommandInfo<AddToSelectionEndSystemCommand>(),
+    makeCommandInfo<AddToSelectionBeginScoreCommand>(),
+    makeCommandInfo<AddToSelectionEndScoreCommand>(),
+
+    makeCommandInfo<OpenSelectionOptionsCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -944,42 +986,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // navigation and selection commands
-
-    makeCommandInfo<SelectTargetCommand>(),
-    CommandInfo{
-        OPEN_SELECTION_OPTIONS_COMMAND,
-        TranslatableString("action", "Selection options"),
-        TranslatableString("action", "Open selection options"),
-        InputSchema(),
-        Decoration()
-    },
-    makeCommandInfo<SelectFirstItemCommand>(),
-    makeCommandInfo<SelectLastItemCommand>(),
-    makeCommandInfo<SelectNextItemCommand>(),
-    makeCommandInfo<SelectPrevItemCommand>(),
-    makeCommandInfo<SelectNextSegmentCommand>(),
-    makeCommandInfo<SelectPrevSegmentCommand>(),
-    makeCommandInfo<SelectNextTrackCommand>(),
-    makeCommandInfo<SelectPrevTrackCommand>(),
-    makeCommandInfo<SelectNextFrameCommand>(),
-    makeCommandInfo<SelectPrevFrameCommand>(),
-    makeCommandInfo<SelectNextSystemCommand>(),
-    makeCommandInfo<SelectPrevSystemCommand>(),
-    makeCommandInfo<SelectUpNoteInChordCommand>(),
-    makeCommandInfo<SelectDownNoteInChordCommand>(),
-    makeCommandInfo<SelectTopNoteInChordCommand>(),
-    makeCommandInfo<SelectBottomNoteInChordCommand>(),
-    makeCommandInfo<SelectTopStaffCommand>(),
-    makeCommandInfo<SelectEmptyTrailingMeasureCommand>(),
-
-    // selection commands
-    makeCommandInfo<SelectSimilarCommand>(),
-    makeCommandInfo<SelectSimilarInStaffCommand>(),
-    makeCommandInfo<SelectSimilarInRangeCommand>(),
-    makeCommandInfo<SelectNotesInChordCommand>(),
-    makeCommandInfo<SelectAllCommand>(),
-    makeCommandInfo<SelectSectionCommand>(),
     CommandInfo{
         GET_LOCATION_COMMAND,
         TranslatableString("action", "Get location"),
@@ -2082,18 +2088,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // add to selection commands
-    makeCommandInfo<AddToSelectionTargetCommand>(),
-    makeCommandInfo<AddToSelectionNextChordCommand>(),
-    makeCommandInfo<AddToSelectionPrevChordCommand>(),
-    makeCommandInfo<AddToSelectionNextMeasureCommand>(),
-    makeCommandInfo<AddToSelectionPrevMeasureCommand>(),
-    makeCommandInfo<AddToSelectionAboveStaffCommand>(),
-    makeCommandInfo<AddToSelectionBelowStaffCommand>(),
-    makeCommandInfo<AddToSelectionBeginSystemCommand>(),
-    makeCommandInfo<AddToSelectionEndSystemCommand>(),
-    makeCommandInfo<AddToSelectionBeginScoreCommand>(),
-    makeCommandInfo<AddToSelectionEndScoreCommand>(),
     CommandInfo{
         EXTEND_TO_NEXT_NOTE_COMMAND,
         TranslatableString("action", "Extend to next note"),

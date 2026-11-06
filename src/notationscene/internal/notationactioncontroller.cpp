@@ -141,7 +141,7 @@ void NotationActionController::init()
     registerCommand<AddToSelectionBeginScoreCommand>([this]() { return addToSelection(SelectionTarget::BeginScore); });
     registerCommand<AddToSelectionEndScoreCommand>([this]() { return addToSelection(SelectionTarget::EndScore); });
 
-    registerCommand(OPEN_SELECTION_OPTIONS_COMMAND, &Controller::openSelectionMoreOptions);
+    registerCommand<OpenSelectionOptionsCommand>(&Controller::openSelectionMoreOptions);
 
     registerCommand(GET_LOCATION_COMMAND, &Interaction::getLocation);
 
@@ -2088,16 +2088,16 @@ void NotationActionController::addFretboardDiagram()
     interaction->addFretboardDiagram();
 }
 
-void NotationActionController::openSelectionMoreOptions()
+muse::Ret NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     auto item = interaction->contextItem();
     if (!item) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     bool noteSelected = item->isNote();
@@ -2107,6 +2107,8 @@ void NotationActionController::openSelectionMoreOptions()
     } else {
         interactive()->open("musescore://notation/selectelement");
     }
+
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::startEditSelectedElement(const muse::rcommand::Params& params)
