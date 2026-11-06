@@ -125,6 +125,9 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
                                                                                      SoundSubCategory::Plucked } } },
         { "acoustic-bass", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                                             SoundSubCategory::Plucked } } },
+        { "acoustic-bass-guitar", { SoundId::BassGuitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                   SoundSubCategory::Plucked } } },
+        { "double-bass-plucked", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Plucked } } },
 
         { "banjo", { SoundId::Banjo, SoundCategory::Strings, { SoundSubCategory::Plucked } } },
         { "tenor-banjo", { SoundId::Banjo, SoundCategory::Strings, { SoundSubCategory::Tenor,

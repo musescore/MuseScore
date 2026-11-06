@@ -5819,7 +5819,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "slap", "fretless-electric-bass chan
 QT_TRANSLATE_NOOP3("engraving/instruments", "pop", "fretless-electric-bass channel"),
 
 //: description for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic bass guitar.", "acoustic-bass description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ambiguous. Either the acoustic bass guitar or the double bass.", "acoustic-bass description"),
 //: trackName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Bass", "acoustic-bass trackName"),
 //: longName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5827,15 +5827,47 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Bass", "acoustic-bass long
 //: shortName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass", "acoustic-bass shortName"),
 //: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "acoustic-bass channel"),
+//: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "slap", "acoustic-bass channel"),
 //: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "pop", "acoustic-bass channel"),
 //: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "acoustic-bass channel"),
-//: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "arco", "acoustic-bass channel"),
 //: channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "acoustic-bass channel"),
+
+//: description for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Hollow-bodied bass guitar, usually fretted. Most have electric pickups to amplify the naturally quiet sound.", "acoustic-bass-guitar description"),
+//: trackName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Bass Guitar", "acoustic-bass-guitar trackName"),
+//: longName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Bass Guitar", "acoustic-bass-guitar longName"),
+//: shortName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ac. B. Guit.", "acoustic-bass-guitar shortName"),
+//: channel for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "slap", "acoustic-bass-guitar channel"),
+//: channel for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "pop", "acoustic-bass-guitar channel"),
+
+//: description for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Orchestral contrabass but played pizzicato (plucked) as is common in jazz music. Fretless.", "double-bass-plucked description"),
+//: trackName for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Bass (plucked)", "double-bass-plucked trackName"),
+//: longName for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double Bass", "double-bass-plucked longName"),
+//: shortName for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "D. B.", "double-bass-plucked shortName"),
+//: channel for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "double-bass-plucked channel"),
+//: channel for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "slap", "double-bass-plucked channel"),
+//: channel for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "pop", "double-bass-plucked channel"),
+//: channel for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "arco", "double-bass-plucked channel"),
+//: channel for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "double-bass-plucked channel"),
 
 //: description for Bass Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass guitar (tablature).", "bass-guitar-tablature description"),
@@ -6532,7 +6564,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "pizzicato", "violoncellos channel")
 QT_TRANSLATE_NOOP3("engraving/instruments", "tremolo", "violoncellos channel"),
 
 //: description for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass (double bass).", "contrabass description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Double bass played arco (with a bow) unless a pizzicato marking is present. Lowest string is tuned to E, or to C if an extension is used.", "contrabass description"),
 //: trackName for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass", "contrabass trackName"),
 //: longName for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names

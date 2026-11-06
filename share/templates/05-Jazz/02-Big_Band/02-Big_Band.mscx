@@ -20,7 +20,7 @@
     <metaTag name="workTitle">Big Band</metaTag>
     <Order id="bigband">
       <name>Big Band</name>
-      <instrument id="acoustic-bass">
+      <instrument id="double-bass-plucked">
         <family id="bass-guitars">Bass Guitars</family>
         </instrument>
       <instrument id="alto-saxophone">
@@ -1245,11 +1245,11 @@
         <defaultConcertClef>F8vb</defaultConcertClef>
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
-      <trackName>Acoustic Bass</trackName>
-      <Instrument id="acoustic-bass">
-        <longName>Acoustic Bass</longName>
-        <shortName>Bass</shortName>
-        <trackName>Acoustic Bass</trackName>
+      <trackName>Double Bass (plucked)</trackName>
+      <Instrument id="double-bass-plucked">
+        <longName>Double Bass</longName>
+        <shortName>D. B.</shortName>
+        <trackName>Double Bass (plucked)</trackName>
         <minPitchP>28</minPitchP>
         <maxPitchP>67</maxPitchP>
         <minPitchA>28</minPitchA>
