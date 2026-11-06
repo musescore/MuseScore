@@ -48,6 +48,7 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
     Q_PROPERTY(bool isBoxOnlySelection READ isBoxOnlySelection NOTIFY isBoxOnlySelectionChanged)
     Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
+    Q_PROPERTY(bool isMoveNextPrevSystemAvailable READ isMoveNextPrevSystemAvailable NOTIFY isMoveNextPrevSystemAvailableChanged)
     Q_PROPERTY(bool isMakeIntoPageAvailable READ isMakeIntoPageAvailable NOTIFY isMakeIntoPageAvailableChanged)
     Q_PROPERTY(bool isSystemTabAvailable READ isSystemTabAvailable NOTIFY isSystemTabAvailableChanged)
 
@@ -90,6 +91,7 @@ public:
     bool scoreIsInPageView() const;
     bool isBoxOnlySelection() const;
     bool isMakeIntoSystemAvailable() const;
+    bool isMoveNextPrevSystemAvailable() const;
     bool isMakeIntoPageAvailable() const;
     bool isSystemTabAvailable() const;
 
@@ -105,6 +107,7 @@ private:
     void updateScoreIsInPageView();
     void updateIsBoxOnlySelection(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsMakeIntoSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
+    void updateIsMoveNextPrevSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsMakeIntoPageAvailable(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsSystemTabAvailable(const QSet<mu::notation::BoxType>& boxTypes);
 
@@ -119,6 +122,7 @@ signals:
     void scoreIsInPageViewChanged(bool isInPageView);
     void isBoxOnlySelectionChanged(bool isBoxOnlySelection);
     void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
+    void isMoveNextPrevSystemAvailableChanged(bool isMoveNextPrevSystemAvailable);
     void isMakeIntoPageAvailableChanged(bool isMakeIntoPageAvailable);
     void isSystemTabAvailableChanged(bool isSystemTabAvailable);
     void systemCountChanged(int count);
@@ -130,6 +134,7 @@ private:
     bool m_scoreIsInPageView = false;
     bool m_isBoxOnlySelection = false;
     bool m_isMakeIntoSystemAvailable = false;
+    bool m_isMoveNextPrevSystemAvailable = false;
     bool m_isMakeIntoPageAvailable = false;
     bool m_isSystemTabAvailable = false;
 

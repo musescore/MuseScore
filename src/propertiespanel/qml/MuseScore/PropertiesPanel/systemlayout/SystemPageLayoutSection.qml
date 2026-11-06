@@ -119,6 +119,7 @@ PropertiesPanelSection {
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
                 makeIntoNavigationName: "MakeSystem"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoSystemAvailable : false
+                isMoveNextPrevAvailable: root.model ? root.model.isMoveNextPrevSystemAvailable : false
 
                 controller: ({
                     movePrevious: () => root.model.moveMeasureUpSystem(),
