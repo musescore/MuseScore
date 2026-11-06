@@ -125,9 +125,9 @@ var testCase = {
         {name: "Add Arpeggios", skip: false, func: function() {
             Score.nextChord()
 
-            Palette.togglePalette("Arpeggios & glissandi") // open
+            Palette.togglePalette("Arpeggios & glissandos") // open
             applyArpeggios(6)
-            Palette.togglePalette("Arpeggios & glissandi") // close
+            Palette.togglePalette("Arpeggios & glissandos") // close
         }},
         {name: "Add Ornaments", skip: false, func: function() {
             Score.nextChord()
