@@ -4070,22 +4070,26 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
         }
     }
 
-    // In a mixed list, only move the non-pitched items
-    const bool hasNonPitchedItems = !lyrics.empty() || !nudgeable.empty();
-    const bool changePitch = (hasNotes || !rests.empty()) && !hasNonPitchedItems;
-    if (lyrics.empty() && nudgeable.empty() && !changePitch) {
+    const bool hasNotesOrRests = hasNotes || !rests.empty();
+
+    // Lyrics only change verse when no other items are being nudged: otherwise, they're nudged with them
+    if (!lyrics.empty() && !nudgeable.empty()) {
+        nudgeable.insert(nudgeable.end(), lyrics.begin(), lyrics.end());
+        lyrics.clear();
+    }
+
+    if (lyrics.empty() && nudgeable.empty() && !hasNotesOrRests) {
         return false;
     }
 
     startEdit(TranslatableString("undoableAction", "Move items"));
 
+    // In a mixed list, notes and rests stay where they are
     if (!lyrics.empty()) {
         doMoveLyrics(d, lyrics);
-    }
-    if (!nudgeable.empty()) {
+    } else if (!nudgeable.empty()) {
         doNudge(d, quickly, nudgeable);
-    }
-    if (changePitch) {
+    } else {
         doMovePitch(d, pitchMode, rests);
     }
 
