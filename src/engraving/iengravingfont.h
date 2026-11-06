@@ -33,6 +33,10 @@ public:
     virtual String toString(SymId id) const = 0;
 
     virtual std::unordered_map<Sid, PropertyValue> engravingDefaults() const = 0;
+    virtual bool hasOversizedNoteheadsSupport() const = 0;
+    virtual bool oversizedNoteheads() const = 0;
+    virtual void setOversizedNoteheads(bool enable) = 0;
+    virtual std::shared_ptr<IEngravingFont> clone() const = 0;
 
     // Metrics
     virtual double width(SymId id, double mag) const = 0;
