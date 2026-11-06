@@ -871,28 +871,28 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
             if (st->isTabStaff(cr->tick())) {            // TAB
                 // if a note on same string already exists, update to new pitch/fret
                 for (Note* note : toChord(cr)->notes()) {
-                    // if adding a new digit will keep fret number within fret limit,
-                    // add a digit to existing fret number
-                    if (stringData) {
-                        int fret = note->fret() * 10 + nval.fret;
-                        if (fret <= stringData->frets()) {
-                            nval.fret = fret;
-                            nval.pitch = stringData->getPitch(nval.string, nval.fret, st);
-                        } else {
-                            LOGD("can't increase fret to %d", fret);
+                    if (note->string() == nval.string) {                 // if string is the same
+                        // if adding a new digit will keep fret number within fret limit,
+                        // add a digit to existing fret number
+                        if (stringData) {
+                            int fret = note->fret() * 10 + nval.fret;
+                            if (fret <= stringData->frets()) {
+                                nval.fret = fret;
+                                nval.pitch = stringData->getPitch(nval.string, nval.fret, st);
+                            } else {
+                                LOGD("can't increase fret to %d", fret);
+                            }
                         }
-                    }
-                    for (Note* tiedNote : note->tiedNotes()) {
-                        if (tiedNote->string() == nval.string) {                 // if string is the same
+                        for (Note* tiedNote : note->tiedNotes()) {
                             // set fret number (original or combined) in all linked notes
                             int tpc1 = tiedNote->tpc1default(nval.pitch);
                             int tpc2 = tiedNote->tpc2default(nval.pitch);
                             EditNote::undoChangeFretting(score, tiedNote, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
-                            score->setPlayNote(true);
                         }
+                        score->setPlayNote(true);
+                        return muse::make_ok();
                     }
                 }
-                return muse::make_ok();
             } else {                            // not TAB
                 // if a note with the same pitch already exists in the chord, remove it
                 Chord* chord = toChord(cr);
