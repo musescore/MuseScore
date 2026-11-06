@@ -27,8 +27,8 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
-#include "engraving/dom/durationline.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/jianpudurationline.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -562,8 +562,8 @@ TEST_F(Engraving_NoteTests, jianpuDurationLinesReserveSpace)
     for (DurationType duration : { DurationType::V_HALF, DurationType::V_WHOLE, DurationType::V_BREVE }) {
         chord->setDurationType(TDuration(duration));
         score->doLayout();
-        ASSERT_FALSE(chord->durationLines().empty());
-        for (const DurationLine* line : chord->durationLines()) {
+        ASSERT_FALSE(chord->jianpuDurationLines().empty());
+        for (const JianpuDurationLine* line : chord->jianpuDurationLines()) {
             const double right = line->pos().x() + line->ldata()->bbox().right();
             const Shape chordShape = chord->shape();
             EXPECT_GE(chordShape.right(), right);

@@ -27,9 +27,9 @@
 #include "../dom/beam.h"
 #include "../dom/chordrest.h"
 #include "../dom/chord.h"
+#include "../dom/jianpuoctavedot.h"
 #include "../dom/measure.h"
 #include "../dom/note.h"
-#include "../dom/octavedot.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
 #include "../dom/stem.h"
@@ -676,7 +676,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
             int aboveDots = 0;
             const Chord* chord = chordRest->isChord() ? toChord(chordRest) : nullptr;
             if (chord) {
-                const std::vector<OctaveDot*>& dots = chord->upNote()->octaveDots();
+                const std::vector<JianpuOctaveDot*>& dots = chord->upNote()->jianpuOctaveDots();
                 if (!dots.empty() && dots.front()->ldata()->above) {
                     aboveDots = static_cast<int>(dots.size());
                 }

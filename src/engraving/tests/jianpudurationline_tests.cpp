@@ -27,8 +27,8 @@
 #include "types/translatablestring.h"
 
 #include "engraving/dom/chordrest.h"
-#include "engraving/dom/durationline.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/jianpudurationline.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/segment.h"
 
@@ -54,7 +54,7 @@ ChordRest* findJianpuChordRestWithDurationLines(MasterScore* score)
             }
 
             ChordRest* chordRest = toChordRest(item);
-            if (!chordRest->onJianpuStaff() || chordRest->durationLines().empty()) {
+            if (!chordRest->onJianpuStaff() || chordRest->jianpuDurationLines().empty()) {
                 continue;
             }
 
@@ -84,11 +84,11 @@ ChordRest* findChordRestByLocator(MasterScore* score, const ChordRestLocator& lo
     return nullptr;
 }
 
-void expectDurationLinesOwnedByChordRest(const ChordRest* chordRest)
+void expectJianpuDurationLinesOwnedByChordRest(const ChordRest* chordRest)
 {
-    ASSERT_FALSE(chordRest->durationLines().empty());
+    ASSERT_FALSE(chordRest->jianpuDurationLines().empty());
 
-    for (DurationLine* durationLine : chordRest->durationLines()) {
+    for (JianpuDurationLine* durationLine : chordRest->jianpuDurationLines()) {
         ASSERT_NE(durationLine, nullptr);
         EXPECT_EQ(durationLine->ownershipParent(), chordRest);
         EXPECT_EQ(durationLine->track(), chordRest->track());
@@ -96,32 +96,32 @@ void expectDurationLinesOwnedByChordRest(const ChordRest* chordRest)
 }
 }
 
-class Engraving_DurationLineTests : public ::testing::Test
+class Engraving_JianpuDurationLineTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_DurationLineTests, layoutDataStoresComputedLength)
+TEST_F(Engraving_JianpuDurationLineTests, layoutDataStoresComputedLength)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_DURATION_LINES_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
 
     ChordRest* chordRest = findJianpuChordRestWithDurationLines(score);
     ASSERT_TRUE(chordRest);
-    ASSERT_FALSE(chordRest->durationLines().empty());
+    ASSERT_FALSE(chordRest->jianpuDurationLines().empty());
 
-    DurationLine* durationLine = chordRest->durationLines().front();
+    JianpuDurationLine* durationLine = chordRest->jianpuDurationLines().front();
     ASSERT_TRUE(durationLine);
     EXPECT_EQ(durationLine->chordRest(), chordRest);
     EXPECT_DOUBLE_EQ(durationLine->mag(), chordRest->mag());
 
-    const DurationLine::LayoutData* ldata = durationLine->ldata();
+    const JianpuDurationLine::LayoutData* ldata = durationLine->ldata();
     EXPECT_GT(ldata->len, 0.0);
     EXPECT_DOUBLE_EQ(ldata->bbox().width(), ldata->len);
 
     delete score;
 }
 
-TEST_F(Engraving_DurationLineTests, detachedDurationLineUsesLocalPosition)
+TEST_F(Engraving_JianpuDurationLineTests, detachedJianpuDurationLineUsesLocalPosition)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_DURATION_LINES_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -132,7 +132,7 @@ TEST_F(Engraving_DurationLineTests, detachedDurationLineUsesLocalPosition)
     {
         // EngravingObject requires a non-null constructor parent, so detach it afterwards.
         // Scoped so it is destroyed (and unlinked from chordRest) before the score is deleted.
-        DurationLine durationLine(chordRest);
+        JianpuDurationLine durationLine(chordRest);
         durationLine.setOwnershipParent(nullptr);
         durationLine.setPos(PointF(2.0, 3.0));
 
@@ -142,14 +142,14 @@ TEST_F(Engraving_DurationLineTests, detachedDurationLineUsesLocalPosition)
     delete score;
 }
 
-TEST_F(Engraving_DurationLineTests, jianpuUndoRedoRemoveChordRestKeepsDurationLinesOwnership)
+TEST_F(Engraving_JianpuDurationLineTests, jianpuUndoRedoRemoveChordRestKeepsDurationLinesOwnership)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_DURATION_LINES_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
 
     ChordRest* original = findJianpuChordRestWithDurationLines(score);
     ASSERT_TRUE(original);
-    expectDurationLinesOwnedByChordRest(original);
+    expectJianpuDurationLinesOwnedByChordRest(original);
 
     const ChordRestLocator locator { original->tick(), original->track() };
 
@@ -163,7 +163,7 @@ TEST_F(Engraving_DurationLineTests, jianpuUndoRedoRemoveChordRestKeepsDurationLi
 
     ChordRest* restored = findChordRestByLocator(score, locator);
     ASSERT_TRUE(restored);
-    expectDurationLinesOwnedByChordRest(restored);
+    expectJianpuDurationLinesOwnedByChordRest(restored);
 
     score->undoRedo(false, nullptr);
     EXPECT_EQ(findChordRestByLocator(score, locator), nullptr);
@@ -171,35 +171,35 @@ TEST_F(Engraving_DurationLineTests, jianpuUndoRedoRemoveChordRestKeepsDurationLi
     delete score;
 }
 
-TEST_F(Engraving_DurationLineTests, jianpuCloneResizeDurationLinesUsesCloneAsOwner)
+TEST_F(Engraving_JianpuDurationLineTests, jianpuCloneResizeDurationLinesUsesCloneAsOwner)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_DURATION_LINES_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
 
     ChordRest* source = findJianpuChordRestWithDurationLines(score);
     ASSERT_TRUE(source);
-    ASSERT_FALSE(source->durationLines().empty());
+    ASSERT_FALSE(source->jianpuDurationLines().empty());
 
-    DurationLine* sourceDurationLine = source->durationLines().front();
+    JianpuDurationLine* sourceDurationLine = source->jianpuDurationLines().front();
 
     EngravingItem* clonedItem = source->clone();
     ASSERT_TRUE(clonedItem);
     ASSERT_TRUE(clonedItem->isChordRest());
 
     ChordRest* cloned = toChordRest(clonedItem);
-    const size_t lineCount = std::max<size_t>(1, source->durationLines().size());
-    cloned->resizeDurationLinesTo(lineCount);
-    expectDurationLinesOwnedByChordRest(cloned);
-    ASSERT_FALSE(cloned->durationLines().empty());
+    const size_t lineCount = std::max<size_t>(1, source->jianpuDurationLines().size());
+    cloned->setJianpuDurationLineCount(lineCount);
+    expectJianpuDurationLinesOwnedByChordRest(cloned);
+    ASSERT_FALSE(cloned->jianpuDurationLines().empty());
 
-    DurationLine* clonedDurationLine = cloned->durationLines().front();
+    JianpuDurationLine* clonedDurationLine = cloned->jianpuDurationLines().front();
     EXPECT_NE(clonedDurationLine, sourceDurationLine);
 
     delete cloned;
     delete score;
 }
 
-TEST_F(Engraving_DurationLineTests, jianpuSaveReloadKeepsDurationLinesOwnership)
+TEST_F(Engraving_JianpuDurationLineTests, jianpuSaveReloadKeepsDurationLinesOwnership)
 {
     String tempFile(u"jianpu-durationlines-save-reload-test.mscx");
 
@@ -208,7 +208,7 @@ TEST_F(Engraving_DurationLineTests, jianpuSaveReloadKeepsDurationLinesOwnership)
 
     ChordRest* beforeSave = findJianpuChordRestWithDurationLines(score);
     ASSERT_TRUE(beforeSave);
-    expectDurationLinesOwnedByChordRest(beforeSave);
+    expectJianpuDurationLinesOwnedByChordRest(beforeSave);
 
     const ChordRestLocator locator { beforeSave->tick(), beforeSave->track() };
 
@@ -220,7 +220,7 @@ TEST_F(Engraving_DurationLineTests, jianpuSaveReloadKeepsDurationLinesOwnership)
 
     ChordRest* afterReload = findChordRestByLocator(reloaded, locator);
     ASSERT_TRUE(afterReload);
-    expectDurationLinesOwnedByChordRest(afterReload);
+    expectJianpuDurationLinesOwnedByChordRest(afterReload);
 
     delete reloaded;
 }

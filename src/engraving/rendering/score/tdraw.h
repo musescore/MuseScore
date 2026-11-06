@@ -51,7 +51,6 @@ class Clef;
 class Capo;
 
 class DeadSlapped;
-class DurationLine;
 class Dynamic;
 
 class Expression;
@@ -82,6 +81,9 @@ class IndicatorIcon;
 class Image;
 class InstrumentChange;
 class InstrumentName;
+
+class JianpuDurationLine;
+class JianpuOctaveDot;
 class Jump;
 
 class KeySig;
@@ -108,7 +110,6 @@ class Note;
 class NoteDot;
 class NoteLineSegment;
 
-class OctaveDot;
 class Ornament;
 class Ottava;
 class OttavaSegment;
@@ -217,7 +218,6 @@ private:
     static void draw(const Capo* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const DeadSlapped* item, muse::draw::Painter* painter, const PaintOptions& opt);
-    static void draw(const DurationLine* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Dynamic* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const Expression* item, muse::draw::Painter* painter, const PaintOptions& opt);
@@ -245,6 +245,8 @@ private:
     static void draw(const InstrumentChange* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const InstrumentName* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
+    static void draw(const JianpuDurationLine* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const JianpuOctaveDot* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Jump* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const KeySig* item, muse::draw::Painter* painter, const PaintOptions& opt);
@@ -268,7 +270,6 @@ private:
     static void draw(const NoteHead* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const NoteLineSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
-    static void draw(const OctaveDot* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Ornament* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 

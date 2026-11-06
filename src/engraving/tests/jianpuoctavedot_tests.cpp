@@ -26,9 +26,9 @@
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/jianpuoctavedot.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
-#include "engraving/dom/octavedot.h"
 #include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
@@ -88,11 +88,11 @@ Note* findNoteByLocator(MasterScore* score, const NoteLocator& locator)
     return nullptr;
 }
 
-void expectOctaveDotsOwnedByNote(const Note* note)
+void expectJianpuOctaveDotsOwnedByNote(const Note* note)
 {
-    ASSERT_FALSE(note->octaveDots().empty());
+    ASSERT_FALSE(note->jianpuOctaveDots().empty());
 
-    for (OctaveDot* octaveDot : note->octaveDots()) {
+    for (JianpuOctaveDot* octaveDot : note->jianpuOctaveDots()) {
         ASSERT_NE(octaveDot, nullptr);
         EXPECT_EQ(octaveDot->ownershipParent(), note);
         EXPECT_EQ(octaveDot->track(), note->track());
@@ -100,11 +100,11 @@ void expectOctaveDotsOwnedByNote(const Note* note)
 }
 }
 
-class Engraving_OctaveDotTests : public ::testing::Test
+class Engraving_JianpuOctaveDotTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_OctaveDotTests, layoutDataStoresGeometry)
+TEST_F(Engraving_JianpuOctaveDotTests, layoutDataStoresGeometry)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -113,12 +113,12 @@ TEST_F(Engraving_OctaveDotTests, layoutDataStoresGeometry)
     ASSERT_TRUE(note);
 
     note->setJianpuOctaveDotCount(1);
-    ASSERT_FALSE(note->octaveDots().empty());
+    ASSERT_FALSE(note->jianpuOctaveDots().empty());
 
-    OctaveDot* octaveDot = note->octaveDots().front();
+    JianpuOctaveDot* octaveDot = note->jianpuOctaveDots().front();
     EXPECT_EQ(octaveDot->note(), note);
 
-    OctaveDot::LayoutData* ldata = octaveDot->mutldata();
+    JianpuOctaveDot::LayoutData* ldata = octaveDot->mutldata();
     ldata->len = 2.0;
     ldata->above = true;
     EXPECT_DOUBLE_EQ(ldata->len, 2.0);
@@ -127,7 +127,7 @@ TEST_F(Engraving_OctaveDotTests, layoutDataStoresGeometry)
     delete score;
 }
 
-TEST_F(Engraving_OctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOwnership)
+TEST_F(Engraving_JianpuOctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOwnership)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -139,7 +139,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOwnershi
 
     // Force octave dots to be allocated
     original->setJianpuOctaveDotCount(1);
-    expectOctaveDotsOwnedByNote(original);
+    expectJianpuOctaveDotsOwnedByNote(original);
 
     Chord* chord = original->chord();
     score->startCmd(muse::TranslatableString::untranslatable("Jianpu octave dots tests"));
@@ -152,7 +152,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOwnershi
 
     Note* restored = findNoteByLocator(score, locator);
     ASSERT_TRUE(restored);
-    expectOctaveDotsOwnedByNote(restored);
+    expectJianpuOctaveDotsOwnedByNote(restored);
 
     score->undoRedo(false, nullptr);
     EXPECT_EQ(findNoteByLocator(score, locator), nullptr);
@@ -160,7 +160,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOwnershi
     delete score;
 }
 
-TEST_F(Engraving_OctaveDotTests, jianpuCloneNoteKeepsOctaveDotsOwnership)
+TEST_F(Engraving_JianpuOctaveDotTests, jianpuCloneNoteKeepsOctaveDotsOwnership)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
     ASSERT_TRUE(score);
@@ -170,7 +170,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuCloneNoteKeepsOctaveDotsOwnership)
 
     // Force octave dots to be allocated on source
     source->setJianpuOctaveDotCount(1);
-    expectOctaveDotsOwnedByNote(source);
+    expectJianpuOctaveDotsOwnedByNote(source);
 
     EngravingItem* clonedItem = source->clone();
     ASSERT_TRUE(clonedItem);
@@ -178,16 +178,16 @@ TEST_F(Engraving_OctaveDotTests, jianpuCloneNoteKeepsOctaveDotsOwnership)
 
     Note* cloned = toNote(clonedItem);
     cloned->setJianpuOctaveDotCount(1);
-    expectOctaveDotsOwnedByNote(cloned);
+    expectJianpuOctaveDotsOwnedByNote(cloned);
 
-    OctaveDot* clonedOctaveDot = cloned->octaveDots().front();
-    EXPECT_NE(clonedOctaveDot, source->octaveDots().front());
+    JianpuOctaveDot* clonedOctaveDot = cloned->jianpuOctaveDots().front();
+    EXPECT_NE(clonedOctaveDot, source->jianpuOctaveDots().front());
 
     delete cloned;
     delete score;
 }
 
-TEST_F(Engraving_OctaveDotTests, jianpuSaveReloadKeepsOctaveDotsOwnership)
+TEST_F(Engraving_JianpuOctaveDotTests, jianpuSaveReloadKeepsOctaveDotsOwnership)
 {
     String tempFile(u"jianpu-octavedots-save-reload-test.mscx");
 
@@ -201,7 +201,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuSaveReloadKeepsOctaveDotsOwnership)
 
     // Force octave dots to be allocated
     beforeSave->setJianpuOctaveDotCount(1);
-    expectOctaveDotsOwnedByNote(beforeSave);
+    expectJianpuOctaveDotsOwnedByNote(beforeSave);
 
     ASSERT_TRUE(ScoreRW::saveScore(score, tempFile));
     delete score;
@@ -211,7 +211,7 @@ TEST_F(Engraving_OctaveDotTests, jianpuSaveReloadKeepsOctaveDotsOwnership)
 
     Note* afterReload = findNoteByLocator(reloaded, locator);
     ASSERT_TRUE(afterReload);
-    expectOctaveDotsOwnedByNote(afterReload);
+    expectJianpuOctaveDotsOwnedByNote(afterReload);
 
     delete reloaded;
 }

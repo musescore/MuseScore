@@ -27,7 +27,7 @@
 #include "tlayout.h"
 
 #include "dom/beam.h"
-#include "dom/durationline.h"
+#include "dom/jianpudurationline.h"
 #include "dom/measure.h"
 #include "dom/staff.h"
 #include "dom/system.h"
@@ -209,12 +209,12 @@ void RestLayout::layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, 
     ldata->setBbox(noteBBox);
     int lines = item->durationType().augmentationLines();
     if (lines == 0) {
-        muse::DeleteAll(item->durationLines());
-        const_cast<Rest*>(item)->durationLines().clear();
+        muse::DeleteAll(item->jianpuDurationLines());
+        const_cast<Rest*>(item)->jianpuDurationLines().clear();
     } else {
-        const_cast<Rest*>(item)->resizeDurationLinesTo(lines);
+        const_cast<Rest*>(item)->setJianpuDurationLineCount(lines);
         for (int i = 0; i < lines; ++i) {
-            DurationLine* dl = item->durationLines()[i];
+            JianpuDurationLine* dl = item->jianpuDurationLines()[i];
             dl->setOwnershipParent(const_cast<Rest*>(item));
             dl->setTrack(track);
             dl->setVisible(staffVisible);
@@ -222,8 +222,8 @@ void RestLayout::layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, 
             dl->setPos(hx + width * 1.2 * (i + 1), hy);
         }
 
-        for (DurationLine* dl : item->durationLines()) {
-            TLayout::layoutDurationLine(dl, ctx);
+        for (JianpuDurationLine* dl : item->jianpuDurationLines()) {
+            TLayout::layoutJianpuDurationLine(dl, ctx);
         }
     }
 }

@@ -54,7 +54,6 @@
 #include "dom/capo.h"
 
 #include "dom/deadslapped.h"
-#include "dom/durationline.h"
 #include "dom/dynamic.h"
 
 #include "dom/expression.h"
@@ -79,6 +78,8 @@
 #include "dom/instrchange.h"
 #include "dom/instrumentname.h"
 
+#include "dom/jianpudurationline.h"
+#include "dom/jianpuoctavedot.h"
 #include "dom/jump.h"
 
 #include "dom/keysig.h"
@@ -100,7 +101,6 @@
 #include "dom/notedot.h"
 #include "dom/noteline.h"
 
-#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -228,8 +228,6 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
 
     case ElementType::DEAD_SLAPPED: draw(item_cast<const DeadSlapped*>(item), painter, opt);
         break;
-    case ElementType::DURATION_LINE: draw(item_cast<const DurationLine*>(item), painter, opt);
-        break;
     case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter, opt);
         break;
 
@@ -280,6 +278,10 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::INSTRUMENT_NAME: draw(item_cast<const InstrumentName*>(item), painter, opt);
         break;
 
+    case ElementType::JIANPU_DURATION_LINE: draw(item_cast<const JianpuDurationLine*>(item), painter, opt);
+        break;
+    case ElementType::JIANPU_OCTAVE_DOT: draw(item_cast<const JianpuOctaveDot*>(item), painter, opt);
+        break;
     case ElementType::JUMP:         draw(item_cast<const Jump*>(item), painter, opt);
         break;
 
@@ -322,8 +324,6 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::NOTELINE_SEGMENT: draw(item_cast<const NoteLineSegment*>(item), painter, opt);
         break;
 
-    case ElementType::OCTAVE_DOT:   draw(item_cast<const OctaveDot*>(item), painter, opt);
-        break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter, opt);
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
@@ -1262,11 +1262,11 @@ void TDraw::draw(const Dynamic* item, Painter* painter, const PaintOptions& opt)
     drawTextBase(item, painter, opt);
 }
 
-void TDraw::draw(const DurationLine* item, Painter* painter, const PaintOptions& opt)
+void TDraw::draw(const JianpuDurationLine* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
-    const DurationLine::LayoutData* ldata = item->ldata();
+    const JianpuDurationLine::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -2516,11 +2516,11 @@ void TDraw::draw(const NoteLineSegment* item, Painter* painter, const PaintOptio
     drawTextLineBaseSegment(item, painter, opt);
 }
 
-void TDraw::draw(const OctaveDot* item, Painter* painter, const PaintOptions& opt)
+void TDraw::draw(const JianpuOctaveDot* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
 
-    const OctaveDot::LayoutData* ldata = item->ldata();
+    const JianpuOctaveDot::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }

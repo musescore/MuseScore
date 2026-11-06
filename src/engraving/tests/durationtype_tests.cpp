@@ -176,19 +176,19 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
 
 TEST_F(Engraving_DurationTypeTests, augmentationLines)
 {
-    auto durationLines = [](DurationType type, int dots) {
+    auto jianpuDurationLines = [](DurationType type, int dots) {
         TDuration duration(type);
         duration.setDots(dots);
         return duration.augmentationLines();
     };
 
-    EXPECT_EQ(durationLines(DurationType::V_HALF, 0), 1);
-    EXPECT_EQ(durationLines(DurationType::V_HALF, 1), 2);
-    EXPECT_EQ(durationLines(DurationType::V_HALF, 2), 2);
-    EXPECT_EQ(durationLines(DurationType::V_WHOLE, 0), 3);
-    EXPECT_EQ(durationLines(DurationType::V_WHOLE, 1), 5);
-    EXPECT_EQ(durationLines(DurationType::V_BREVE, 0), 7);
-    EXPECT_EQ(durationLines(DurationType::V_LONG, 0), 15);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 0), 1);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 1), 2);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 2), 2);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_WHOLE, 0), 3);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_WHOLE, 1), 5);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_BREVE, 0), 7);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_LONG, 0), 15);
 }
 
 TEST_F(Engraving_DurationTypeTests, diminutionLines)

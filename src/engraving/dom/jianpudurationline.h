@@ -26,7 +26,7 @@
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//    @@ DurationLine
+//    @@ JianpuDurationLine
 ///     Graphic representation of a duration line.
 //!
 //!    parent:     ChordRest
@@ -34,17 +34,17 @@ namespace mu::engraving {
 //!    y-origin:   SStaff
 //---------------------------------------------------------
 
-class DurationLine final : public EngravingItem
+class JianpuDurationLine final : public EngravingItem
 {
-    OBJECT_ALLOCATOR(engraving, DurationLine)
-    DECLARE_CLASSOF(ElementType::DURATION_LINE)
+    OBJECT_ALLOCATOR(engraving, JianpuDurationLine)
+    DECLARE_CLASSOF(ElementType::JIANPU_DURATION_LINE)
 
 public:
-    DurationLine(DummyParentOr<ChordRest>);
-    ~DurationLine() override = default;
-    DurationLine& operator=(const DurationLine&) = delete;
+    JianpuDurationLine(DummyParentOr<ChordRest>);
+    ~JianpuDurationLine() override = default;
+    JianpuDurationLine& operator=(const JianpuDurationLine&) = delete;
 
-    DurationLine* clone() const override { return new DurationLine(*this); }
+    JianpuDurationLine* clone() const override { return new JianpuDurationLine(*this); }
 
     PointF pagePos() const override;        ///< position in page coordinates
     ChordRest* chordRest() const;
@@ -54,7 +54,7 @@ public:
         double lineWidth = 0.0;
         double len = 0.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(DurationLine);
+    DECLARE_LAYOUTDATA_METHODS(JianpuDurationLine);
 };
 } // namespace mu::engraving
 

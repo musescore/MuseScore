@@ -56,7 +56,6 @@
 #include "dom/capo.h"
 
 #include "dom/deadslapped.h"
-#include "dom/durationline.h"
 #include "dom/dynamic.h"
 
 #include "dom/expression.h"
@@ -81,6 +80,8 @@
 #include "dom/instrchange.h"
 #include "dom/instrumentname.h"
 
+#include "dom/jianpudurationline.h"
+#include "dom/jianpuoctavedot.h"
 #include "dom/jump.h"
 
 #include "dom/keysig.h"
@@ -105,7 +106,6 @@
 #include "dom/notedot.h"
 #include "dom/noteline.h"
 
-#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -261,9 +261,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::DEAD_SLAPPED:
         layoutDeadSlapped(item_cast<const DeadSlapped*>(item), static_cast<DeadSlapped::LayoutData*>(ldata));
         break;
-    case ElementType::DURATION_LINE:
-        layoutDurationLine(item_cast<DurationLine*>(item), ctx);
-        break;
     case ElementType::DYNAMIC:
         layoutDynamic(item_cast<Dynamic*>(item), static_cast<Dynamic::LayoutData*>(ldata), ctx.conf());
         break;
@@ -326,6 +323,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::INSTRUMENT_NAME:
         layoutInstrumentName(item_cast<const InstrumentName*>(item), static_cast<InstrumentName::LayoutData*>(ldata));
         break;
+    case ElementType::JIANPU_DURATION_LINE:
+        layoutJianpuDurationLine(item_cast<JianpuDurationLine*>(item), ctx);
+        break;
+    case ElementType::JIANPU_OCTAVE_DOT:
+        layoutJianpuOctaveDot(item_cast<JianpuOctaveDot*>(item), ctx);
+        break;
     case ElementType::JUMP:
         layoutJump(item_cast<const Jump*>(item), static_cast<Jump::LayoutData*>(ldata));
         break;
@@ -386,8 +389,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
-        break;
-    case ElementType::OCTAVE_DOT:       layoutOctaveDot(item_cast<OctaveDot*>(item), ctx);
         break;
     case ElementType::OTTAVA:           layoutOttava(item_cast<Ottava*>(item), ctx);
         break;
@@ -1951,15 +1952,15 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
     }
 }
 
-void TLayout::layoutDurationLine(DurationLine* item, const LayoutContext& ctx)
+void TLayout::layoutJianpuDurationLine(JianpuDurationLine* item, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     double mag = item->mag();
-    DurationLine::LayoutData* ldata = item->mutldata();
+    JianpuDurationLine::LayoutData* ldata = item->mutldata();
     ldata->setMag(mag);
     ldata->lineWidth = ctx.conf().styleAbsolute(Sid::jianpuDurationLineThickness) * mag;
     if (item->staff()) {
-        const_cast<DurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
+        const_cast<JianpuDurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
     }
 
     double w2 = ldata->lineWidth * .5;
@@ -4316,7 +4317,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
         }
     }
 
-    for (OctaveDot* octaveDot : item->octaveDots()) {
+    for (JianpuOctaveDot* octaveDot : item->jianpuOctaveDots()) {
         shape.add(octaveDot->ldata()->bbox().translated(octaveDot->pos()), octaveDot);
     }
 
@@ -4335,10 +4336,10 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
     ldata->setBbox(item->symBbox(SymId::augmentationDot));
 }
 
-void TLayout::layoutOctaveDot(OctaveDot* item, LayoutContext& ctx)
+void TLayout::layoutJianpuOctaveDot(JianpuOctaveDot* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    OctaveDot::LayoutData* ldata = item->mutldata();
+    JianpuOctaveDot::LayoutData* ldata = item->mutldata();
 
     double mag = item->note()->mag();
     ldata->setMag(mag);

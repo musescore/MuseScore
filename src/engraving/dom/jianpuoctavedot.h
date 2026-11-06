@@ -20,39 +20,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "octavedot.h"
+#pragma once
 
-#include "chord.h"
-#include "measure.h"
-#include "note.h"
-#include "system.h"
-
-#include "log.h"
-
-using namespace mu;
+#include "engravingitem.h"
 
 namespace mu::engraving {
+class Chord;
+
 //---------------------------------------------------------
-//   OctaveDot
+//    @@ JianpuOctaveDot
+///     Graphic representation of a dot abover or under jianpu note.
+//!
+//!    parent:     Node
+//!    x-origin:   Chord
+//!    y-origin:   SStaff
 //---------------------------------------------------------
 
-OctaveDot::OctaveDot(DummyParentOr<Note> parent)
-    : EngravingItem(ElementType::OCTAVE_DOT, parent)
+class JianpuOctaveDot final : public EngravingItem
 {
-    setSelectable(false);
-}
+    OBJECT_ALLOCATOR(engraving, JianpuOctaveDot)
+    DECLARE_CLASSOF(ElementType::JIANPU_OCTAVE_DOT)
 
-//---------------------------------------------------------
-//   note
-//---------------------------------------------------------
+public:
+    JianpuOctaveDot(DummyParentOr<Note>);
+    ~JianpuOctaveDot() override = default;
+    JianpuOctaveDot& operator=(const JianpuOctaveDot&) = delete;
 
-Note* OctaveDot::note() const
-{
-    EngravingObject* parent = ownershipParent();
-    if (parent && parent->isNote()) {
-        return toNote(parent);
-    } else {
-        return nullptr;
-    }
-}
-}
+    JianpuOctaveDot* clone() const override { return new JianpuOctaveDot(*this); }
+
+    Note* note() const;
+
+    struct LayoutData : public EngravingItem::LayoutData {
+        double radius = 0.0;
+        double len = 0.0;
+        bool above = false;
+    };
+    DECLARE_LAYOUTDATA_METHODS(JianpuOctaveDot);
+};
+} // namespace mu::engraving

@@ -31,17 +31,17 @@
 #include "dom/chordbracket.h"
 #include "dom/beam.h"
 #include "dom/chord.h"
-#include "dom/durationline.h"
 #include "dom/factory.h"
 #include "dom/fingering.h"
 #include "dom/glissando.h"
 #include "dom/guitarbend.h"
 #include "dom/hook.h"
+#include "dom/jianpudurationline.h"
+#include "dom/jianpuoctavedot.h"
 #include "dom/ledgerline.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/note.h"
-#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
 #include "dom/parenthesis.h"
@@ -168,7 +168,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         TLayout::layoutNote(note, ldata);
 
         if (isJianpuStaff) {
-            const std::vector<OctaveDot*>& dots = note->octaveDots();
+            const std::vector<JianpuOctaveDot*>& dots = note->jianpuOctaveDots();
             // Jianpu spacing rules for octave dots, beams, and notes:
             // - Dot-to-note uses dot centerline to note boundary distance.
             // - Beam-to-note uses beam centerline to note boundary distance.
@@ -1700,7 +1700,7 @@ int ChordLayout::computeAutoStemDirection(const std::vector<int>& noteDistances)
     return 0;
 }
 
-void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
+void ChordLayout::layoutJianpuDurationLines(Chord* item, LayoutContext& ctx)
 {
     Segment* segment = item->segment();
     if (!segment) {
@@ -1714,19 +1714,19 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     bool isJianpu = staff->isJianpuStaff(tick);
 
     if (!isJianpu) {
-        muse::DeleteAll(item->durationLines());
-        item->durationLines().clear();
+        muse::DeleteAll(item->jianpuDurationLines());
+        item->jianpuDurationLines().clear();
         return;
     }
 
     int lines = item->durationType().augmentationLines();
     if (lines == 0) {
-        muse::DeleteAll(item->durationLines());
-        item->durationLines().clear();
+        muse::DeleteAll(item->jianpuDurationLines());
+        item->jianpuDurationLines().clear();
         return;
     }
 
-    item->resizeDurationLinesTo(lines);
+    item->setJianpuDurationLineCount(lines);
 
     const Note* note = item->upNote();
     if (!note) {
@@ -1737,7 +1737,7 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     double hx = note->pos().x() + note->bboxXShift();
     double lengtheningY = note->pos().y();
     for (int i = 0; i < lines; ++i) {
-        DurationLine* dl = item->durationLines()[i];
+        JianpuDurationLine* dl = item->jianpuDurationLines()[i];
         dl->setOwnershipParent(item);
         dl->setTrack(track);
         dl->setVisible(staffVisible);
@@ -1745,12 +1745,12 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         dl->setPos(hx + hw * 1.2 * (i + 1), lengtheningY);
     }
 
-    for (DurationLine* dl : item->durationLines()) {
-        TLayout::layoutDurationLine(dl, ctx);
+    for (JianpuDurationLine* dl : item->jianpuDurationLines()) {
+        TLayout::layoutJianpuDurationLine(dl, ctx);
     }
 }
 
-void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
+void ChordLayout::layoutJianpuOctaveDots(Chord* item, LayoutContext& ctx)
 {
     Segment* segment = item->segment();
     if (!segment) {
@@ -1800,7 +1800,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
 
         note->setJianpuOctaveDotCount(dots);
         for (int i = 0; i < dots; ++i) {
-            OctaveDot* dot = note->octaveDots()[i];
+            JianpuOctaveDot* dot = note->jianpuOctaveDots()[i];
             dot->setOwnershipParent(note);
             dot->setTrack(track);
             dot->setVisible(staffVisible);
@@ -1809,8 +1809,8 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
             dot->setPos(minX, offsetY + i * distance);
         }
 
-        for (OctaveDot* od : note->octaveDots()) {
-            TLayout::layoutOctaveDot(od, ctx);
+        for (JianpuOctaveDot* od : note->jianpuOctaveDots()) {
+            TLayout::layoutJianpuOctaveDot(od, ctx);
         }
     }
 }
@@ -1886,7 +1886,7 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
             for (Note* note : chord->notes()) {
                 const double y = note->ldata()->pos().y();
                 top = std::min(top, y + note->ldata()->bbox().top());
-                for (OctaveDot* dot : note->octaveDots()) {
+                for (JianpuOctaveDot* dot : note->jianpuOctaveDots()) {
                     if (dot->ldata()->above) {
                         top = std::min(top, y + dot->ldata()->pos().y() + dot->ldata()->bbox().top());
                     }
@@ -1907,7 +1907,7 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
             for (Note* note : chord->notes()) {
                 const double y = note->ldata()->pos().y();
                 bottom = std::max(bottom, y + note->ldata()->bbox().bottom());
-                for (OctaveDot* dot : note->octaveDots()) {
+                for (JianpuOctaveDot* dot : note->jianpuOctaveDots()) {
                     if (!dot->ldata()->above) {
                         bottom = std::max(bottom, y + dot->ldata()->pos().y() + dot->ldata()->bbox().bottom());
                         if (note == chord->upNote()) {
@@ -1918,7 +1918,7 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
             }
             includeSlurExtents(chord, top, bottom);
             // a diminution beam placed below the chord needs extra clearance beneath it, unless
-            // the upnote's below-dot is already positioned under the beam (see layoutOctaveDots)
+            // the upnote's below-dot is already positioned under the beam (see layoutJianpuOctaveDots)
             if (!upNoteHasBelowDot) {
                 bottom += jianpuBeamOffset(chord, PlacementV::BELOW, ctx);
             }
@@ -1958,14 +1958,14 @@ void ChordLayout::layoutVoiceOffsets(System* system, staff_idx_t staffIdx, Layou
             }
             // duration lines are positioned relative to the chord, not the note, so they
             // don't follow the note shift above and need to be moved explicitly
-            for (DurationLine* dl : chord->durationLines()) {
+            for (JianpuDurationLine* dl : chord->jianpuDurationLines()) {
                 dl->mutldata()->moveY(dy);
             }
             fillShape(chord, chord->mutldata());
         } else if (e->isRest()) {
             Rest* rest = toRest(e);
             rest->mutldata()->moveY(dy);
-            for (DurationLine* dl : rest->durationLines()) {
+            for (JianpuDurationLine* dl : rest->jianpuDurationLines()) {
                 dl->mutldata()->moveY(dy);
             }
         }
@@ -2723,10 +2723,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         for (Chord* chord : posInfo.chords) {
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
-                ChordLayout::layoutOctaveDots(grace, ctx);
+                ChordLayout::layoutJianpuOctaveDots(grace, ctx);
             }
-            ChordLayout::layoutDurationLines(chord, ctx);
-            ChordLayout::layoutOctaveDots(chord, ctx);
+            ChordLayout::layoutJianpuDurationLines(chord, ctx);
+            ChordLayout::layoutJianpuOctaveDots(chord, ctx);
         }
     }
 
@@ -3956,7 +3956,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(l->shape().translate(l->pos()));
     }
 
-    for (const DurationLine* line : item->durationLines()) {
+    for (const JianpuDurationLine* line : item->jianpuDurationLines()) {
         shape.add(line->shape().translate(line->pos()));
     }
 

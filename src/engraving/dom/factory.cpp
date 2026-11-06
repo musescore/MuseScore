@@ -42,7 +42,6 @@
 #include "chordbracket.h"
 #include "chordline.h"
 #include "deadslapped.h"
-#include "durationline.h"
 #include "dynamic.h"
 #include "expression.h"
 #include "fermata.h"
@@ -60,6 +59,8 @@
 #include "image.h"
 #include "instrchange.h"
 #include "instrumentname.h"
+#include "jianpudurationline.h"
+#include "jianpuoctavedot.h"
 #include "jump.h"
 #include "keysig.h"
 #include "laissezvib.h"
@@ -74,7 +75,6 @@
 #include "mmrestrange.h"
 #include "note.h"
 #include "noteline.h"
-#include "octavedot.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -267,8 +267,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, DummyParentOr<EngravingIt
     case ElementType::PARTIAL_TIE:       return new PartialTie(parentOfTypeOrDummy<Note>(parentItem, dummy));
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
-    case ElementType::DURATION_LINE:     return new DurationLine(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
-    case ElementType::OCTAVE_DOT:        return new OctaveDot(parentOfTypeOrDummy<Note>(parentItem, dummy));
+    case ElementType::JIANPU_DURATION_LINE: return new JianpuDurationLine(parentOfTypeOrDummy<ChordRest>(parentItem, dummy));
+    case ElementType::JIANPU_OCTAVE_DOT: return new JianpuOctaveDot(parentOfTypeOrDummy<Note>(parentItem, dummy));
 
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:

@@ -114,8 +114,8 @@ public:
 
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
 
-    static void layoutDurationLines(Chord* item, LayoutContext& ctx);
-    static void layoutOctaveDots(Chord* item, LayoutContext& ctx);
+    static void layoutJianpuDurationLines(Chord* item, LayoutContext& ctx);
+    static void layoutJianpuOctaveDots(Chord* item, LayoutContext& ctx);
     static void layoutVoiceOffsets(System* system, staff_idx_t staffIdx, LayoutContext& ctx);
 
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);

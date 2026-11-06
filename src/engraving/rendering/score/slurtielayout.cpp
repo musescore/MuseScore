@@ -41,7 +41,7 @@
 #include "dom/measure.h"
 #include "dom/guitarbend.h"
 #include "dom/laissezvib.h"
-#include "dom/octavedot.h"
+#include "dom/jianpuoctavedot.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 
@@ -1338,7 +1338,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         }
 
         // Ignore octave dots
-        if (item->isOctaveDot()) {
+        if (item->isJianpuOctaveDot()) {
             return true;
         }
 

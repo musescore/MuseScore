@@ -20,41 +20,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "jianpuoctavedot.h"
 
-#include "engravingitem.h"
+#include "chord.h"
+#include "measure.h"
+#include "note.h"
+#include "system.h"
+
+#include "log.h"
+
+using namespace mu;
 
 namespace mu::engraving {
-class Chord;
-
 //---------------------------------------------------------
-//    @@ OctaveDot
-///     Graphic representation of a dot abover or under jianpu note.
-//!
-//!    parent:     Node
-//!    x-origin:   Chord
-//!    y-origin:   SStaff
+//   JianpuOctaveDot
 //---------------------------------------------------------
 
-class OctaveDot final : public EngravingItem
+JianpuOctaveDot::JianpuOctaveDot(DummyParentOr<Note> parent)
+    : EngravingItem(ElementType::JIANPU_OCTAVE_DOT, parent)
 {
-    OBJECT_ALLOCATOR(engraving, OctaveDot)
-    DECLARE_CLASSOF(ElementType::OCTAVE_DOT)
+    setSelectable(false);
+}
 
-public:
-    OctaveDot(DummyParentOr<Note>);
-    ~OctaveDot() override = default;
-    OctaveDot& operator=(const OctaveDot&) = delete;
+//---------------------------------------------------------
+//   note
+//---------------------------------------------------------
 
-    OctaveDot* clone() const override { return new OctaveDot(*this); }
-
-    Note* note() const;
-
-    struct LayoutData : public EngravingItem::LayoutData {
-        double radius = 0.0;
-        double len = 0.0;
-        bool above = false;
-    };
-    DECLARE_LAYOUTDATA_METHODS(OctaveDot);
-};
-} // namespace mu::engraving
+Note* JianpuOctaveDot::note() const
+{
+    EngravingObject* parent = ownershipParent();
+    if (parent && parent->isNote()) {
+        return toNote(parent);
+    } else {
+        return nullptr;
+    }
+}
+}

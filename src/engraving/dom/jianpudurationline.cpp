@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "durationline.h"
+#include "jianpudurationline.h"
 
 #include "chord.h"
 #include "measure.h"
@@ -34,11 +34,11 @@ using namespace mu;
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   DurationLine
+//   JianpuDurationLine
 //---------------------------------------------------------
 
-DurationLine::DurationLine(DummyParentOr<ChordRest> parent)
-    : EngravingItem(ElementType::DURATION_LINE, parent)
+JianpuDurationLine::JianpuDurationLine(DummyParentOr<ChordRest> parent)
+    : EngravingItem(ElementType::JIANPU_DURATION_LINE, parent)
 {
     setSelectable(false);
 }
@@ -47,7 +47,7 @@ DurationLine::DurationLine(DummyParentOr<ChordRest> parent)
 //   pagePos
 //---------------------------------------------------------
 
-PointF DurationLine::pagePos() const
+PointF JianpuDurationLine::pagePos() const
 {
     const Measure* measure = chordRest() ? chordRest()->measure() : nullptr;
     const System* system = measure ? measure->system() : nullptr;
@@ -65,7 +65,7 @@ PointF DurationLine::pagePos() const
 //   mag
 //---------------------------------------------------------
 
-double DurationLine::mag() const
+double JianpuDurationLine::mag() const
 {
     const EngravingObject* parent = ownershipParent();
     if (parent && parent->isRest()) {
@@ -82,7 +82,7 @@ double DurationLine::mag() const
 //   chord
 //---------------------------------------------------------
 
-ChordRest* DurationLine::chordRest() const
+ChordRest* JianpuDurationLine::chordRest() const
 {
     EngravingObject* parent = ownershipParent();
     if (parent && parent->isChordRest()) {

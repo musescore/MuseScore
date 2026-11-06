@@ -32,13 +32,13 @@
 #include "breath.h"
 #include "chord.h"
 #include "clef.h"
-#include "durationline.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
+#include "jianpudurationline.h"
 #include "keysig.h"
 #include "lyrics.h"
 #include "marker.h"
@@ -135,7 +135,7 @@ ChordRest::~ChordRest()
 {
     muse::DeleteAll(m_lyrics);
     muse::DeleteAll(m_el);
-    muse::DeleteAll(m_durationLines);
+    muse::DeleteAll(m_jianpuDurationLines);
     delete m_tabDur;
 
     if (m_beam) {
@@ -878,7 +878,7 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     for (EngravingItem* e : m_el) {
         func(e);
     }
-    for (DurationLine* dl : m_durationLines) {
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
         func(dl);
     }
 }
@@ -1104,7 +1104,7 @@ void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
     if (m_tabDur) {
         func(m_tabDur);
     }
-    for (DurationLine* dl : m_durationLines) {
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
         func(dl);
     }
 }
@@ -1375,18 +1375,18 @@ bool ChordRest::hasPrecedingJumpItem() const
     return !precedingRepeatMeasures.empty();
 }
 
-void ChordRest::resizeDurationLinesTo(size_t newSize)
+void ChordRest::setJianpuDurationLineCount(size_t count)
 {
-    while (m_durationLines.size() < newSize) {
-        DurationLine* dl = new DurationLine(this);
+    while (m_jianpuDurationLines.size() < count) {
+        JianpuDurationLine* dl = new JianpuDurationLine(this);
         dl->setOwnershipParent(this);
         dl->setTrack(track());
-        m_durationLines.push_back(dl);
+        m_jianpuDurationLines.push_back(dl);
     }
 
-    while (m_durationLines.size() > newSize) {
-        delete m_durationLines.back();
-        m_durationLines.pop_back();
+    while (m_jianpuDurationLines.size() > count) {
+        delete m_jianpuDurationLines.back();
+        m_jianpuDurationLines.pop_back();
     }
 }
 }

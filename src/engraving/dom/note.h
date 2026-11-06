@@ -38,9 +38,9 @@ class Accidental;
 class AccidentalState;
 class Chord;
 class Factory;
+class JianpuOctaveDot;
 class NoteDot;
 class NoteEditData;
-class OctaveDot;
 class Score;
 class Spanner;
 class StaffType;
@@ -460,8 +460,8 @@ public:
 
     bool isExactUnison(Note* other);
 
-    const std::vector<OctaveDot*>& octaveDots() const { return m_octaveDots; }
-    std::vector<OctaveDot*>& octaveDots() { return m_octaveDots; }
+    const std::vector<JianpuOctaveDot*>& jianpuOctaveDots() const { return m_jianpuOctaveDots; }
+    std::vector<JianpuOctaveDot*>& jianpuOctaveDots() { return m_jianpuOctaveDots; }
     void setJianpuOctaveDotCount(size_t count);
 
     struct LayoutData : public EngravingItem::LayoutData {
@@ -570,7 +570,7 @@ private:
     String m_fretString;
     String m_jianpuDigit;
     String m_jianpuAccidental;
-    std::vector<OctaveDot*> m_octaveDots;
+    std::vector<JianpuOctaveDot*> m_jianpuOctaveDots;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
     TieJumpPointList m_jumpPoints { this };

@@ -82,8 +82,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dummyparent.h
     ${CMAKE_CURRENT_LIST_DIR}/durationelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationelement.h
-    ${CMAKE_CURRENT_LIST_DIR}/durationline.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/durationline.h
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamic.cpp
@@ -150,6 +148,10 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/interval.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interval.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.h
     ${CMAKE_CURRENT_LIST_DIR}/jump.cpp
     ${CMAKE_CURRENT_LIST_DIR}/jump.h
     ${CMAKE_CURRENT_LIST_DIR}/key.cpp
@@ -211,8 +213,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.h
-    ${CMAKE_CURRENT_LIST_DIR}/octavedot.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/octavedot.h
     ${CMAKE_CURRENT_LIST_DIR}/ornament.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ornament.h
     ${CMAKE_CURRENT_LIST_DIR}/ottava.cpp
