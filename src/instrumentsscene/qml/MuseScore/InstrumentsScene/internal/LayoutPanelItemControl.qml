@@ -33,6 +33,7 @@ ListItemBlank {
     required property int depth
     
     property int sideMargin: 12
+    property int cardRadius: 0
 
     normalColor: ui.theme.textFieldColor
     navigation.column: 0
@@ -48,6 +49,10 @@ ListItemBlank {
     implicitWidth: 248
 
     background.border.width: 0
+
+    // The bottom of the instrument's card
+    background.bottomLeftRadius: root.cardRadius
+    background.bottomRightRadius: root.cardRadius
 
     RowLayout {
         anchors.fill: parent
@@ -75,6 +80,4 @@ ListItemBlank {
             horizontalAlignment: Text.AlignLeft
         }
     }
-
-    SeparatorLine { anchors.bottom: parent.bottom; }
 }

@@ -49,6 +49,7 @@ FocusableControl {
     readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
 
     property int sideMargin: 0
+    property int cardRadius: 0
 
     readonly property alias isPopupOpened: row.isPopupOpened
 
@@ -66,7 +67,17 @@ FocusableControl {
     signal mousePressed()
     signal mouseReleased()
 
-    implicitHeight: 38
+    QtObject {
+        id: prv
+
+        readonly property bool isExpandedPart: root.isExpanded && root.type === LayoutPanelItemType.PART
+
+        readonly property bool isCardTop: root.depth === 0 || root.isDragged
+        readonly property bool isCardBottom: (root.depth === 0 && !prv.isExpandedPart) || root.isDragged
+        readonly property bool isInExpandedCard: root.depth > 0 || prv.isExpandedPart
+    }
+
+    implicitHeight: 30
     implicitWidth: 248
 
     navigation.name: "LayoutPanelItemDelegate"
@@ -87,6 +98,11 @@ FocusableControl {
     mouseArea.onReleased: { root.mouseReleased() }
     mouseArea.onCanceled: { root.mouseReleased() }
     mouseArea.enabled: root.isSelectable
+
+    background.topLeftRadius: prv.isCardTop ? root.cardRadius : 0
+    background.topRightRadius: prv.isCardTop ? root.cardRadius : 0
+    background.bottomLeftRadius: prv.isCardBottom ? root.cardRadius : 0
+    background.bottomRightRadius: prv.isCardBottom ? root.cardRadius : 0
 
     Keys.onShortcutOverride: function(event) {
         switch (event.key) {
@@ -218,22 +234,8 @@ FocusableControl {
         },
 
         State {
-            name: "PART_EXPANDED"
-            when: root.isExpanded && !root.isSelected &&
-                  root.type === LayoutPanelItemType.PART
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
-            }
-        },
-
-        State {
-            name: "PARENT_EXPANDED"
-            when: root.visible && !root.isSelected &&
-                  (root.type === LayoutPanelItemType.INSTRUMENT ||
-                   root.type === LayoutPanelItemType.STAFF)
+            name: "IN_EXPANDED_CARD"
+            when: prv.isInExpandedCard && !root.isSelected
 
             PropertyChanges {
                 target: root.background

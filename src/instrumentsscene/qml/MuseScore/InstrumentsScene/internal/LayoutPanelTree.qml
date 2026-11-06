@@ -61,6 +61,10 @@ Item {
         property string currentItemNavigationName: ""
         property bool isPopupOpened: false
 
+        readonly property int cardRadius: 3
+        readonly property int rowContentHeight: 30
+        readonly property int itemSpacing: 8
+
         property LayoutPanelItemDelegate pressedDelegate: null
 
         property AbstractLayoutPanelTreeItem draggedItem: null
@@ -230,7 +234,7 @@ Item {
             active: Boolean(prv.draggedItem)
 
             width: layoutPanelTreeView.width
-            height: 38
+            height: prv.rowContentHeight
             y: prv.dragStartY + rowDragHandler.centroid.position.y - rowDragHandler.centroid.pressPosition.y
             z: 2 // above the rows
 
@@ -249,6 +253,7 @@ Item {
                 isDragged: true
 
                 sideMargin: root.sideMargin
+                cardRadius: prv.cardRadius
 
                 navigation.enabled: false
             }
@@ -266,10 +271,15 @@ Item {
 
             readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
 
-            implicitHeight: 38
+            readonly property bool isCardBottom: dropArea.depth === 0
+                                                 ? !dropArea.expanded
+                                                 : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
+
+            implicitHeight: prv.rowContentHeight + (dropArea.isCardBottom ? prv.itemSpacing : 0)
 
             Loader {
-                anchors.fill: parent
+                width: parent.width
+                height: prv.rowContentHeight
 
                 opacity: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem ? 0 : 1
 
@@ -290,6 +300,7 @@ Item {
                         isExpanded: dropArea.expanded
 
                         sideMargin: root.sideMargin
+                        cardRadius: prv.cardRadius
 
                         navigation.name: itemDelegate.item?.title || "LayoutPanelItemDelegate"
                         navigation.panel: treeNavigationPanel
@@ -363,6 +374,7 @@ Item {
 
                         depth: dropArea.depth
                         sideMargin: root.sideMargin
+                        cardRadius: prv.cardRadius
 
                         onClicked: {
                             dropArea.item.appendNewItem()
