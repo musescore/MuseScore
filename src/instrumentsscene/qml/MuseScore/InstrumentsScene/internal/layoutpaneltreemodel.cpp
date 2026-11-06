@@ -29,8 +29,10 @@
 #include "translation.h"
 #include "defer.h"
 
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/score.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep
@@ -119,6 +121,7 @@ void LayoutPanelTreeModel::onNotationChanged()
 
     if (m_notation) {
         load();
+        setupExcerptNameConnection();
     } else {
         clear();
     }
@@ -322,6 +325,18 @@ void LayoutPanelTreeModel::setupNotationConnections()
     }, Mode::SetReplace /*because this channel is from MasterScore*/);
 }
 
+void LayoutPanelTreeModel::setupExcerptNameConnection()
+{
+    const engraving::Excerpt* excerpt = m_notation->elements()->msScore()->excerpt();
+    if (!excerpt) {
+        return;
+    }
+
+    excerpt->nameChanged().onNotify(m_partsNotifyReceiver.get(), [this]() {
+        emit scoreChanged();
+    });
+}
+
 void LayoutPanelTreeModel::updateSelectedRows()
 {
     if (!m_layoutPanelVisible || !m_notation) {
@@ -360,6 +375,7 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
     }
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
@@ -376,6 +392,9 @@ void LayoutPanelTreeModel::clear()
     deleteItems();
     endResetModel();
 
+    updateIsHideEmptyStavesEnabled();
+
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(false);
 }
@@ -443,7 +462,9 @@ void LayoutPanelTreeModel::load()
     updateIsAddingSystemMarkingsAvailable();
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
 }
@@ -452,6 +473,19 @@ void LayoutPanelTreeModel::toggleStaveSharing(bool on)
 {
     m_notation->parts()->toggleStaveSharing(on);
     updateIsStaveSharingEnabled();
+}
+
+void LayoutPanelTreeModel::toggleHideEmptyStaves(bool on)
+{
+    if (!m_notation || isHideEmptyStavesEnabled() == on) {
+        return;
+    }
+
+    m_notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Hide empty staves"));
+    m_notation->style()->setStyleValue(StyleId::hideEmptyStaves, on);
+    m_notation->undoStack()->commitChanges();
+
+    updateIsHideEmptyStavesEnabled();
 }
 
 void LayoutPanelTreeModel::sortParts(PartList& parts, const PartList& referenceParts)
@@ -847,6 +881,16 @@ bool LayoutPanelTreeModel::isStaveSharingEnabled() const
     return m_isStaveSharingEnabled;
 }
 
+bool LayoutPanelTreeModel::isHideEmptyStavesEnabled() const
+{
+    return m_isHideEmptyStavesEnabled;
+}
+
+QString LayoutPanelTreeModel::scoreName() const
+{
+    return m_notation ? m_notation->name() : QString();
+}
+
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
     muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
@@ -1049,6 +1093,17 @@ void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
 
     m_isStaveSharingEnabled = enabled;
     emit isStaveSharingEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
+{
+    bool enabled = m_notation && m_notation->style()->styleValue(StyleId::hideEmptyStaves).toBool();
+    if (enabled == m_isHideEmptyStavesEnabled) {
+        return;
+    }
+
+    m_isHideEmptyStavesEnabled = enabled;
+    emit isHideEmptyStavesEnabledChanged(enabled);
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)
