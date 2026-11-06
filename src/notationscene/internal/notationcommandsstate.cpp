@@ -61,7 +61,7 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SelectSimilarInStaffCommand::id,
     SelectSimilarInRangeCommand::id,
     SelectNotesInChordCommand::id,
-    OPEN_SELECTION_OPTIONS_COMMAND,
+    OpenSelectionOptionsCommand::id,
     SET_DOUBLE_DURATION_COMMAND,
     SET_HALVE_DURATION_COMMAND,
     SET_DOUBLE_DURATION_DOTTED_COMMAND,

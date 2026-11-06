@@ -140,6 +140,7 @@ private:
     muse::Ret select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
     muse::Ret addToSelection(const AddToSelectionTargetCommand& command);
     muse::Ret addToSelection(SelectionTarget target);
+    muse::Ret openSelectionMoreOptions();
 
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
@@ -190,8 +191,6 @@ private:
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
     void addFretboardDiagram();
-
-    void openSelectionMoreOptions();
 
     muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
     muse::Ret startEditSelectedText(const muse::rcommand::Params& params);

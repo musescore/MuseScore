@@ -269,13 +269,14 @@ MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 MenuItemList NotationContextMenuModel::makeSelectItems()
 {
     if (isSingleSelection()) {
-        return MenuItemList { makeMenuItem(SelectSimilarCommand::id),
-                              makeMenuItem(SelectSimilarInStaffCommand::id),
-                              makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList { makeMenuItem<SelectSimilarCommand>(),
+                              makeMenuItem<SelectSimilarInStaffCommand>(),
+                              makeMenuItem<OpenSelectionOptionsCommand>() };
     } else if (canSelectSimilarInRange()) {
-        return MenuItemList { makeMenuItem(SelectSimilarInRangeCommand::id), makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList { makeMenuItem<SelectSimilarInRangeCommand>(),
+                              makeMenuItem<OpenSelectionOptionsCommand>() };
     } else if (canSelectSimilar()) {
-        return MenuItemList{ makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList{ makeMenuItem<OpenSelectionOptionsCommand>() };
     }
 
     return MenuItemList();
