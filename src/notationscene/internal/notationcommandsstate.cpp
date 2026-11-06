@@ -219,6 +219,17 @@ static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_HAIRPIN_REVERSE_COMMAND
 };
 
+static const std::vector<Command> SYSTEM_SELECTED_COMMANDS = {
+    APPLY_SYSTEM_LOCK_COMMAND,
+    TOGGLE_SYSTEM_LOCK_COMMAND
+};
+
+// Commands that are disabled when a VBoxBase is present in the selection...
+static const std::vector<Command> NO_VBOXBASE_COMMANDS = {
+    MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+    MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND
+};
+
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
     { SelectFirstItemCommand::id, MoveSelectionType::EngravingItem },
     { SelectLastItemCommand::id, MoveSelectionType::EngravingItem },
@@ -328,6 +339,10 @@ void NotationCommandsState::init()
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(SYSTEM_SELECTED_COMMANDS);
+        updateCommandStates(NO_VBOXBASE_COMMANDS);
+        updateCommandStates({ MAKE_INTO_SYSTEM_COMMAND });
+        updateCommandStates({ MAKE_INTO_PAGE_COMMAND });
         updateCommandStates(TAB_COMMANDS);
     });
 
@@ -498,6 +513,23 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
+    }
+
+    if (muse::contains(SYSTEM_SELECTED_COMMANDS, command)) {
+        return CommandState(controller()->isSystemSelected(), false);
+    }
+
+    if (muse::contains(NO_VBOXBASE_COMMANDS, command)) {
+        const bool enabled = controller()->hasMeasureBasesInSelection() && !controller()->isVBoxBaseSelected();
+        return CommandState(enabled, false);
+    }
+
+    if (command == MAKE_INTO_SYSTEM_COMMAND) {
+        return CommandState(controller()->isMakeIntoSystemAvailable(), false);
+    }
+
+    if (command == MAKE_INTO_PAGE_COMMAND) {
+        return CommandState(controller()->isMeasureSelected(), false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {

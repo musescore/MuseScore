@@ -2750,14 +2750,64 @@ bool NotationActionController::isNoteOrRestSelected() const
         return true;
     }
 
-    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection = currentNotationSelection();
     return selection && selection->elementsSelected(NOTE_REST_TYPES);
 }
 
 bool NotationActionController::isHairpinSelected() const
 {
-    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection = currentNotationSelection();
     return selection && selection->element() && selection->element()->isHairpinSegment();
+}
+
+bool NotationActionController::isSystemSelected() const
+{
+    const INotationSelectionPtr selection = currentNotationSelection();
+    return selection && !selection->selectedSystems().empty();
+}
+
+bool NotationActionController::isMeasureSelected() const
+{
+    if (const INotationSelectionPtr selection = currentNotationSelection()) {
+        for (const MeasureBase* mb : selection->measureBasesInSelection()) {
+            if (mb->isMeasure()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool NotationActionController::hasMeasureBasesInSelection() const
+{
+    const INotationSelectionPtr selection = currentNotationSelection();
+    return selection && !selection->measureBasesInSelection().empty();
+}
+
+bool NotationActionController::isVBoxBaseSelected() const
+{
+    if (const INotationSelectionPtr selection = currentNotationSelection()) {
+        for (const MeasureBase* mb : selection->measureBasesInSelection()) {
+            if (mb->isVBoxBase()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool NotationActionController::isMakeIntoSystemAvailable() const
+{
+    if (!isMeasureSelected() || isVBoxBaseSelected()) {
+        return false;
+    }
+
+    const INotationSelectionPtr selection = currentNotationSelection();
+    const MeasureBase* startMB = selection->startMeasureBase();
+    const MeasureBase* endMB = selection->endMeasureBase();
+    const bool systemAlreadyExists = startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock()
+                                     && startMB->systemLock() == endMB->systemLock();
+    return !systemAlreadyExists;
 }
 
 const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const

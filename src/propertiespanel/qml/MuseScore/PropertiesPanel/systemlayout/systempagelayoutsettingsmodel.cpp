@@ -36,12 +36,36 @@ using namespace mu::propertiespanel;
 using namespace mu::notation;
 using namespace mu::engraving;
 
+static const std::vector<muse::rcommand::Command> SYSTEM_PAGE_COMMANDS = {
+    TOGGLE_SYSTEM_LOCK_COMMAND,
+    MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+    MAKE_INTO_SYSTEM_COMMAND,
+    TOGGLE_PAGE_LOCK_COMMAND,
+    MOVE_SYSTEM_TO_PREV_PAGE_COMMAND,
+    MAKE_INTO_PAGE_COMMAND
+};
+
 SystemPageLayoutSettingsModel::SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                              IElementRepositoryService* repository)
     : PropertiesPanelAbstractModel(parent, iocCtx, repository)
 {
     setSectionType(PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT);
     setTitle(muse::qtrc("propertiespanel", "System & page layout"));
+
+    for (const muse::rcommand::Command& command : SYSTEM_PAGE_COMMANDS) {
+        const bool enabled = commandsState()->commandState(command).enabled;
+        m_commandsEnabledMap.emplace(command, enabled);
+    }
+
+    commandsState()->commandStateChanged().onReceive(this, [this](const muse::rcommand::Command& command,
+                                                                  const muse::rcommand::CommandState& state) {
+        auto it = m_commandsEnabledMap.find(command);
+        if (it == m_commandsEnabledMap.end() || it->second == state.enabled) {
+            return;
+        }
+        it->second = state.enabled;
+        emit commandStatesChanged();
+    });
 }
 
 void SystemPageLayoutSettingsModel::loadProperties()
@@ -53,8 +77,6 @@ void SystemPageLayoutSettingsModel::loadProperties()
     const QSet<BoxType> boxTypes = boxTypesInSelection();
     updateIsBoxOnlySelection(boxTypes);
     updateIsSystemTabAvailable(boxTypes);
-    updateIsMakeIntoSystemAvailable(boxTypes);
-    updateIsMakeIntoPageAvailable(boxTypes);
 
     updateSystemCount();
     updatePageCount();
@@ -247,16 +269,6 @@ bool SystemPageLayoutSettingsModel::isBoxOnlySelection() const
     return m_isBoxOnlySelection;
 }
 
-bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
-{
-    return m_isMakeIntoSystemAvailable;
-}
-
-bool SystemPageLayoutSettingsModel::isMakeIntoPageAvailable() const
-{
-    return m_isMakeIntoPageAvailable;
-}
-
 bool SystemPageLayoutSettingsModel::isSystemTabAvailable() const
 {
     return m_isSystemTabAvailable;
@@ -270,6 +282,36 @@ int SystemPageLayoutSettingsModel::systemCount() const
 int SystemPageLayoutSettingsModel::pageCount() const
 {
     return static_cast<int>(m_pageCount);
+}
+
+bool SystemPageLayoutSettingsModel::isToggleSystemLockEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, TOGGLE_SYSTEM_LOCK_COMMAND);
+}
+
+bool SystemPageLayoutSettingsModel::isMoveNextPrevSystemEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND);
+}
+
+bool SystemPageLayoutSettingsModel::isMakeIntoSystemEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, MAKE_INTO_SYSTEM_COMMAND);
+}
+
+bool SystemPageLayoutSettingsModel::isTogglePageLockEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, TOGGLE_PAGE_LOCK_COMMAND);
+}
+
+bool SystemPageLayoutSettingsModel::isMoveNextPrevPageEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, MOVE_SYSTEM_TO_PREV_PAGE_COMMAND);
+}
+
+bool SystemPageLayoutSettingsModel::isMakeIntoPageEnabled() const
+{
+    return muse::value(m_commandsEnabledMap, MAKE_INTO_PAGE_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
@@ -292,40 +334,6 @@ void SystemPageLayoutSettingsModel::updateIsBoxOnlySelection(const QSet<BoxType>
     if (m_isBoxOnlySelection != boxOnlySelection) {
         m_isBoxOnlySelection = boxOnlySelection;
         emit isBoxOnlySelectionChanged(m_isBoxOnlySelection);
-    }
-}
-
-void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable(const QSet<BoxType>& boxTypes)
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    const MeasureBase* startMB = selection()->startMeasureBase();
-    const MeasureBase* endMB = selection()->endMeasureBase();
-    if (!startMB || !endMB) {
-        return;
-    }
-
-    const bool selectionHasMeasures = boxTypes.contains(BoxType::Measure);
-    const bool systemAlreadyExists = startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock()
-                                     && startMB->systemLock() == endMB->systemLock();
-
-    const bool available = selectionHasMeasures && !systemAlreadyExists;
-
-    if (m_isMakeIntoSystemAvailable != available) {
-        m_isMakeIntoSystemAvailable = available;
-        emit isMakeIntoSystemAvailableChanged(m_isMakeIntoSystemAvailable);
-    }
-}
-
-void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable(const QSet<BoxType>& boxTypes)
-{
-    const bool available = boxTypes.contains(BoxType::Measure);
-
-    if (m_isMakeIntoPageAvailable != available) {
-        m_isMakeIntoPageAvailable = available;
-        emit isMakeIntoPageAvailableChanged(m_isMakeIntoPageAvailable);
     }
 }
 
