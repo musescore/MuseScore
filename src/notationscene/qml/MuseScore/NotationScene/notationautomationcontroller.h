@@ -133,6 +133,7 @@ private:
                                          int endTick) const;
 
     mu::engraving::AutomationType currentAutomationType() const;
+    mu::engraving::AutomationCurveKey currentCurveKey(const mu::engraving::Staff* staff) const;
 
     void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
     void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;

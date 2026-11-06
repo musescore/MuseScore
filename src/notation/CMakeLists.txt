@@ -50,6 +50,7 @@ target_sources(notation PRIVATE
     iinstrumentsrepository.h
 
     notationtypes.h
+    types/automationlane.h
     types/instrumentstypes.h
     types/loopboundaries.h
     types/noteinputtypes.h

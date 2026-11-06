@@ -108,9 +108,9 @@ public:
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
 
-    MOCK_METHOD(engraving::AutomationType, currentAutomationType, (), (const, override));
-    MOCK_METHOD(void, setCurrentAutomationType, (engraving::AutomationType), (override));
-    MOCK_METHOD(muse::async::Notification, currentAutomationTypeChanged, (), (const, override));
+    MOCK_METHOD(AutomationLane, currentAutomationLane, (), (const, override));
+    MOCK_METHOD(void, setCurrentAutomationLane, (AutomationLane), (override));
+    MOCK_METHOD(muse::async::Notification, currentAutomationLaneChanged, (), (const, override));
 
     MOCK_METHOD(int, mouseZoomPrecision, (), (const, override));
     MOCK_METHOD(void, setMouseZoomPrecision, (int), (override));

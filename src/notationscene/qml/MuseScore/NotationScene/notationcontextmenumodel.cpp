@@ -57,7 +57,7 @@ void NotationContextMenuModel::loadItems(int elementType)
     const INotationAutomationPtr automation = this->automation();
     if (automation && automation->isAutomationModeEnabled()) {
         items << makeSeparator()
-              << makeMenu(TranslatableString::untranslatable("Automation type"), makeAutomationTypeItems());
+              << makeMenu(TranslatableString("notation/automation", "Automation type"), makeAutomationLaneItems());
     }
 
     setItems(items);
@@ -491,18 +491,21 @@ bool NotationContextMenuModel::isDrumsetStaff() const
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
 }
 
-MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
+MenuItemList NotationContextMenuModel::makeAutomationLaneItems()
 {
     return {
-        makeAutomationTypeItem(AutomationType::Dynamics, "dynamics", TranslatableString::untranslatable("Dynamics")),
-        makeAutomationTypeItem(AutomationType::Tempo, "tempo", TranslatableString::untranslatable("Tempo")),
-        makeAutomationTypeItem(AutomationType::Volume, "volume", TranslatableString::untranslatable("Volume")),
-        makeAutomationTypeItem(AutomationType::Pan, "pan", TranslatableString::untranslatable("Pan")),
+        makeAutomationLaneItem(AutomationLane::Dynamics, TranslatableString("notation/automation", "Dynamics")),
+        makeAutomationLaneItem(AutomationLane::Volume, TranslatableString("notation/automation", "Volume")),
+        makeAutomationLaneItem(AutomationLane::Pan, TranslatableString("notation/automation", "Pan")),
+        makeSeparator(),
+        makeAutomationLaneItem(AutomationLane::MasterVolume, TranslatableString("notation/automation", "Master volume")),
+        makeAutomationLaneItem(AutomationLane::MasterPan, TranslatableString("notation/automation", "Master pan")),
+        makeSeparator(),
+        makeAutomationLaneItem(AutomationLane::Tempo, TranslatableString("notation/automation", "Tempo")),
     };
 }
 
-MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
-                                                           const TranslatableString& title)
+MenuItem* NotationContextMenuModel::makeAutomationLaneItem(AutomationLane lane, const TranslatableString& title)
 {
     MenuItem* item = makeMenuItem(SELECT_AUTOMATION_TYPE_COMMAND, title);
     if (!item) {
@@ -510,10 +513,10 @@ MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, 
     }
 
     rcommand::CommandQuery query(SELECT_AUTOMATION_TYPE_COMMAND);
-    query.addParam("type", Val(queryTypeParam));
+    query.addParam("type", Val(std::string(automationLaneToString(lane))));
     item->setCommandQuery(query);
 
-    item->setChecked(notationConfiguration()->currentAutomationType() == type);
+    item->setChecked(notationConfiguration()->currentAutomationLane() == lane);
 
     return item;
 }
