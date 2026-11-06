@@ -14,11 +14,25 @@ on:
         required: false
         type: boolean
         default: false
+  workflow_call:
+    inputs:
+      code_coverage:
+        description: 'Enable code coverage'
+        required: false
+        type: boolean
+        default: false
+      publish_coverage_report:
+        description: 'Publish code coverage report and badge to musescore/mss_code_coverage (main repository only)'
+        required: false
+        type: boolean
+        default: false
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
 concurrency:
-  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }}
+  # If run via workflow_call, ${{ github.workflow }} is the root workflow's name (e.g. 'Build: All'),
+  # which is the same for all workflows called in that run, hence we must add a unique suffix here.
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }} utest
   cancel-in-progress: true
 
 jobs:

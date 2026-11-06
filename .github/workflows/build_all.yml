@@ -136,6 +136,18 @@ jobs:
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
       dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
+  utest:
+    name: Unit Tests
+    if: ${{ contains(inputs.platforms, 'utest') }}
+    uses: $/.github/workflows/check_unit_tests.yml
+    secrets: inherit
+
+  vtest:
+    name: Visual Tests
+    if: ${{ contains(inputs.platforms, 'vtest') }}
+    uses: $/.github/workflows/check_visual_tests.yml
+    secrets: inherit
+
   # Dummy build for testing purposes.
   dummy:
     if: ${{ contains(inputs.platforms, 'dummy') }}
