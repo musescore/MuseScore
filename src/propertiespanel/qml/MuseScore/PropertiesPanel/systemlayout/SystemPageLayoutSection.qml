@@ -118,8 +118,10 @@ PropertiesPanelSection {
                 makeIntoToolTipDescription: qsTrc("propertiespanel", "Create a system containing only the selected measure(s)")
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
                 makeIntoNavigationName: "MakeSystem"
-                isMakeIntoAvailable: root.model ? root.model.isMakeIntoSystemAvailable : false
-                isMoveNextPrevAvailable: root.model ? root.model.isMoveNextPrevSystemAvailable : false
+
+                isLockEnabled: root.model ? root.model.isToggleSystemLockEnabled : false
+                isMoveNextPrevEnabled: root.model ? root.model.isMoveNextPrevSystemEnabled : false
+                isMakeIntoEnabled: root.model ? root.model.isMakeIntoSystemEnabled : false
 
                 controller: ({
                     movePrevious: () => root.model.moveMeasureUpSystem(),
@@ -163,7 +165,10 @@ PropertiesPanelSection {
                 makeIntoToolTipDescription: qsTrc("propertiespanel", "Create a page containing only the selected measure(s)")
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoPage : ""
                 makeIntoNavigationName: "MakePage"
-                isMakeIntoAvailable: root.model ? root.model.isMakeIntoPageAvailable : false
+
+                isLockEnabled: root.model ? root.model.isTogglePageLockEnabled : false
+                isMoveNextPrevEnabled: root.model ? root.model.isMoveNextPrevPageEnabled : false
+                isMakeIntoEnabled: root.model ? root.model.isMakeIntoPageEnabled : false
 
                 controller: ({
                     movePrevious: () => root.model.moveSystemUpPage(),
