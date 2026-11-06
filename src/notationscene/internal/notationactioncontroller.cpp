@@ -2709,14 +2709,20 @@ bool NotationActionController::isNoteOrRestSelected() const
         return true;
     }
 
-    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection = currentNotationSelection();
     return selection && selection->elementsSelected(NOTE_REST_TYPES);
 }
 
 bool NotationActionController::isHairpinSelected() const
 {
-    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection = currentNotationSelection();
     return selection && selection->element() && selection->element()->isHairpinSegment();
+}
+
+bool NotationActionController::isSystemSelected() const
+{
+    const INotationSelectionPtr selection = currentNotationSelection();
+    return selection && !selection->selectedSystems().empty();
 }
 
 const mu::engraving::Harmony* NotationActionController::editedChordSymbol() const
