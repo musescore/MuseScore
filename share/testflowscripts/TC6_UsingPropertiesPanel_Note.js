@@ -49,11 +49,11 @@ var testCase = {
         }},
         {name: "Use General Panel", skip: false, func: function() {
             // Normal visible note
-            api.shortcuts.activate("C") // put note
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND) // put note
             seeChanges()
 
             // Unvisible note
-            api.shortcuts.activate("C") // put note
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND) // put note
             Score.prevChord() // select note (move back cursor)
             PropertiesPanel.goToSection("General")
             api.navigation.down() // go to visible
@@ -62,7 +62,7 @@ var testCase = {
 
             // Cue size note
             Score.nextChord()
-            api.shortcuts.activate("C") // put note
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND) // put note
             Score.prevChord() // select note (move back cursor)
             PropertiesPanel.goToSection("General")
             api.navigation.down() // go to visible
@@ -81,7 +81,7 @@ var testCase = {
 
             // Hide notehead
             Score.nextChord()
-            api.shortcuts.activate("C") // put note
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND) // put note
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "HeadTab")
             navigationDown(3) // got to Hide notehead
@@ -91,7 +91,7 @@ var testCase = {
             // Change notehead
             for (var nh = 0; nh < 3; ++nh) {
                 Score.nextChord()
-                api.shortcuts.activate("C") // put note
+                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND) // put note
                 Score.prevChord() // select note (move back cursor)
                 PropertiesPanel.goToSection("Note")
                 navigationDown(6 + nh) // got to notehead cell 2 + index
@@ -114,26 +114,26 @@ var testCase = {
             Score.nextMeasure()
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
             NoteInput.toggleDot(Commands.TOGGLE_DOT_COMMAND)
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteAuto")
             seeChanges()
 
             // Later we will reset this
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
             seeChanges()
 
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteDown")
             seeChanges()
 
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
             seeChanges()
@@ -149,18 +149,18 @@ var testCase = {
 
             Score.nextMeasure()
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            Navigation.triggerControl("NavigationLeftPanel", "Note", "HideStem") // hide stem
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "Stemless") // hide stem
             seeChanges()
 
             // Stem direction
             // Up
             Score.nextChord()
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
@@ -168,7 +168,7 @@ var testCase = {
 
             // Later we will reset this
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
@@ -176,7 +176,7 @@ var testCase = {
 
             // Down
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Score.pitchDown(3)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
@@ -193,17 +193,17 @@ var testCase = {
             // Stem down
             Score.nextMeasure()
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_16TH_COMMAND)
             Score.nextChord() // rest
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_32ND_COMMAND)
             Score.nextChord() // rest
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             seeChanges()
 
             Score.prevChord() // select note (move back cursor)
@@ -223,37 +223,37 @@ var testCase = {
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
 
             // Begin
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeBegin")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeBreak beam left")
             seeChanges()
 
             // Middle
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeMiddle")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeJoin beams")
             seeChanges()
 
             // None
             Score.nextChord()
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             seeChanges()
             Score.prevChord() // select note (move back cursor)
             Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeNone")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeNo beam")
             seeChanges()
 
             // Force Horizontal
             // Not horizontal
             Score.nextMeasure()
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Score.pitchDown(3)
             seeChanges()
@@ -261,8 +261,8 @@ var testCase = {
             // Horizontal
             Score.nextChord() // rest
             Score.nextChord()
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("C")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             Score.prevChord() // select note (move back cursor)
             Score.pitchDown(3)
             seeChanges()

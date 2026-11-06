@@ -22,9 +22,33 @@
 
 var Navigation = require("Navigation.js")
 
+function isLayoutPanelOpened()
+{
+    var panels = api.navigation.panels("NavigationLeftPanel")
+    for (var i = 0; i < panels.length; ++i) {
+        if (panels[i].name === "InstrumentsHeader") {
+            return panels[i].enabled
+        }
+    }
+    return false
+}
+
+//! NOTE Triggering the tab again while it is being opened hides the panel, so trigger only if needed
 function doOpenInstrumentsPanel()
 {
+    if (isLayoutPanelOpened()) {
+        return
+    }
+
     Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Layout")
+
+    for (var i = 0; i < 50 && !isLayoutPanelOpened(); ++i) {
+        api.testflow.sleep(100)
+    }
+
+    if (!isLayoutPanelOpened()) {
+        api.testflow.error("instruments: the Layout panel is not opened")
+    }
 }
 
 function doGoToInstrument(name)

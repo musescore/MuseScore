@@ -26,6 +26,7 @@ var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
 var Instruments = require("steps/Instruments.js")
 var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC8: Engraving Text",
@@ -45,17 +46,17 @@ var testCase = {
         }},
         {name: "Put notes", func: function() {
             NoteInput.chooseDefaultMode()
-            api.shortcuts.activate("A")
-            api.shortcuts.activate("B")
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("D")
-            api.shortcuts.activate("E")
-            api.shortcuts.activate("F")
-            api.shortcuts.activate("E")
-            api.shortcuts.activate("D")
-            api.shortcuts.activate("C")
-            api.shortcuts.activate("B")
-            api.shortcuts.activate("A")
+            NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_F_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
             NoteInput.turnoffDefaultMode()
         }},
         {name: "Add Lyrics", skip: false, func: function() {
