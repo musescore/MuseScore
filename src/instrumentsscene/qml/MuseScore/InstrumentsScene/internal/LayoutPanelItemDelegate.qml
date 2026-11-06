@@ -256,6 +256,11 @@ FocusableControl {
                 target: shadow
                 visible: true
             }
+
+            PropertyChanges {
+                target: root
+                opacity: 0.9
+            }
         }
     ]
 }

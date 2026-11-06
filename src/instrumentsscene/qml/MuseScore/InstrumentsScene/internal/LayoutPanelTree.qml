@@ -279,6 +279,7 @@ Item {
             required property AbstractLayoutPanelTreeItem item
 
             readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
+            readonly property bool isDragged: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem
 
             readonly property bool isCardBottom: dropArea.depth === 0
                                                  ? !dropArea.expanded
@@ -292,11 +293,24 @@ Item {
                 onClicked: root.model.clearSelection()
             }
 
+            // Where the dragged row will land; its slot follows the drag, as rows are moved live
+            Rectangle {
+                width: parent.width
+                height: prv.rowContentHeight
+
+                visible: dropArea.isDragged
+
+                radius: prv.cardRadius
+                color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
+                border.width: 1.5
+                border.color: ui.theme.accentColor
+            }
+
             Loader {
                 width: parent.width
                 height: prv.rowContentHeight
 
-                opacity: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem ? 0 : 1
+                opacity: dropArea.isDragged ? 0 : 1
 
                 sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
                                  ? addStaffButtonComponent : treeItemDelegateComponent
