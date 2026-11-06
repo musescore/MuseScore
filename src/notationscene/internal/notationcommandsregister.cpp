@@ -2781,7 +2781,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "pos_y", Arg(DataType::Float, u"Y cursor position") },
         }),
         Decoration(),
-        Availability::Dispatch  // only dispatch from view
+        Availability::Internal  // only dispatch from view
     },
 
     // view commands
