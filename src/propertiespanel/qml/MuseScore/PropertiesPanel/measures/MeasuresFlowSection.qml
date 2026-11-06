@@ -64,7 +64,8 @@ Column {
     property string makeIntoShortcut: ""
     property string makeIntoNavigationName: ""
 
-    property bool isMakeIntoAvailable: false
+    required property bool isMakeIntoAvailable
+    property bool isMoveNextPrevAvailable: true
 
     property var controller
 
@@ -107,6 +108,8 @@ Column {
             spacing: 4
 
             FlatButton {
+                enabled: root.isMoveNextPrevAvailable
+
                 width: (moveButtons.width - moveButtons.spacing) / 2
 
                 navigation.panel: root.navigationPanel
@@ -124,7 +127,8 @@ Column {
             }
 
             FlatButton {
-                id: moveNextButton
+                enabled: root.isMoveNextPrevAvailable
+
                 width: (moveButtons.width - moveButtons.spacing) / 2
 
                 navigation.panel: root.navigationPanel

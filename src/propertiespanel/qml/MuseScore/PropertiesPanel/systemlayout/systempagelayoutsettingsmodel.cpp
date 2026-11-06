@@ -54,6 +54,7 @@ void SystemPageLayoutSettingsModel::loadProperties()
     updateIsBoxOnlySelection(boxTypes);
     updateIsSystemTabAvailable(boxTypes);
     updateIsMakeIntoSystemAvailable(boxTypes);
+    updateIsMoveNextPrevSystemAvailable(boxTypes);
     updateIsMakeIntoPageAvailable(boxTypes);
 
     updateSystemCount();
@@ -252,6 +253,11 @@ bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
     return m_isMakeIntoSystemAvailable;
 }
 
+bool SystemPageLayoutSettingsModel::isMoveNextPrevSystemAvailable() const
+{
+    return m_isMoveNextPrevSystemAvailable;
+}
+
 bool SystemPageLayoutSettingsModel::isMakeIntoPageAvailable() const
 {
     return m_isMakeIntoPageAvailable;
@@ -308,14 +314,24 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable(const QSet<B
     }
 
     const bool selectionHasMeasures = boxTypes.contains(BoxType::Measure);
+    const bool selectionHasVBoxBase = boxTypes.contains(BoxType::Vertical);
     const bool systemAlreadyExists = startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock()
                                      && startMB->systemLock() == endMB->systemLock();
 
-    const bool available = selectionHasMeasures && !systemAlreadyExists;
+    const bool available = selectionHasMeasures && !selectionHasVBoxBase && !systemAlreadyExists;
 
     if (m_isMakeIntoSystemAvailable != available) {
         m_isMakeIntoSystemAvailable = available;
         emit isMakeIntoSystemAvailableChanged(m_isMakeIntoSystemAvailable);
+    }
+}
+
+void SystemPageLayoutSettingsModel::updateIsMoveNextPrevSystemAvailable(const QSet<BoxType>& boxTypes)
+{
+    const bool available = !isEmpty() && !boxTypes.contains(BoxType::Vertical);
+    if (m_isMoveNextPrevSystemAvailable != available) {
+        m_isMoveNextPrevSystemAvailable = available;
+        emit isMoveNextPrevSystemAvailableChanged(m_isMoveNextPrevSystemAvailable);
     }
 }
 
