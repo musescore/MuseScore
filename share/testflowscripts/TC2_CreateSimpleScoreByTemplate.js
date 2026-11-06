@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Home = require("steps/Home.js")
@@ -58,12 +59,12 @@ var testCase = {
             NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
         }},
         {name: "Play", func: function() {
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
         }},
         {name: "Stop", func: function() {
             // wait interval + 5 sec
             api.testflow.sleep(5000)
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC2_CreateSimpleScoreByTemplate.mscz")

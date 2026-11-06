@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var Instruments = require("steps/Instruments.js")
 var Project = require("steps/Project.js")
@@ -31,7 +32,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             Project.closeIfOpened()
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -90,10 +91,10 @@ var testCase = {
             api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
+            Navigation.goToControl("RecentScores", "RecentScores", "New score")
             api.navigation.right()
             api.navigation.trigger()
         }},

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var PropertiesPanel = require("steps/PropertiesPanel.js")
@@ -33,7 +34,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             Project.closeIfOpened()
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -81,7 +82,7 @@ var testCase = {
             Score.nextChord()
             api.shortcuts.activate("C") // put note
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "HeadTab")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "HeadTab")
             navigationDown(3) // got to Hide notehead
             api.navigation.trigger()
             seeChanges()
@@ -114,32 +115,32 @@ var testCase = {
             NoteInput.toggleDot(Commands.TOGGLE_DOT_COMMAND)
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteAuto")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteAuto")
             seeChanges()
 
             // Later we will reset this
             Score.nextChord()
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
             seeChanges()
 
             Score.nextChord()
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteDown")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteDown")
             seeChanges()
 
             Score.nextChord()
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "DottedNoteUp")
             seeChanges()
 
             // Reset
             Score.prevChord()
             Score.prevChord()
-            api.navigation.goToControl("NavigationLeftPanel", "Note", "DottedNoteReset")
+            Navigation.goToControl("NavigationLeftPanel", "Note", "DottedNoteReset")
             seeChangesLong()
             api.navigation.trigger()
         }},
@@ -150,8 +151,8 @@ var testCase = {
             api.shortcuts.activate("C")
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "HideStem") // hide stem
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "HideStem") // hide stem
             seeChanges()
 
             // Stem direction
@@ -160,16 +161,16 @@ var testCase = {
             NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
             seeChanges()
 
             // Later we will reset this
             Score.nextChord()
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionUp")
             seeChanges()
 
             // Down
@@ -177,15 +178,15 @@ var testCase = {
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
             Score.pitchDown(3)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionDown")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionDown")
             seeChanges()
 
             // Reset (change to Auto)
             Score.prevChord()
             Score.prevChord()
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionAuto")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemDirectionAuto")
 
             // Flag style
             // Stem down
@@ -205,14 +206,14 @@ var testCase = {
             seeChanges()
 
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleStraight")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "StemTab") // show Stem tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleStraight")
             seeChangesVeryLong()
 
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleTraditional")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleTraditional")
             seeChangesVeryLong()
 
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleStraight")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "FlagStyleStraight")
             seeChangesVeryLong()
         }},
         {name: "Use Note Panel: Beam", func: function() {
@@ -226,16 +227,16 @@ var testCase = {
             api.shortcuts.activate("C")
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeBegin")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeBegin")
             seeChanges()
 
             // Middle
             Score.nextChord()
             api.shortcuts.activate("C")
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeMiddle")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeMiddle")
             seeChanges()
 
             // None
@@ -243,8 +244,8 @@ var testCase = {
             api.shortcuts.activate("C")
             seeChanges()
             Score.prevChord() // select note (move back cursor)
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeNone")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTypeNone")
             seeChanges()
 
             // Force Horizontal
@@ -264,8 +265,8 @@ var testCase = {
             Score.prevChord() // select note (move back cursor)
             Score.pitchDown(3)
             seeChanges()
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
-            api.navigation.triggerControl("NavigationLeftPanel", "Note", "ForceHorizontal")
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "BeamTab") // show Beam tab
+            Navigation.triggerControl("NavigationLeftPanel", "Note", "ForceHorizontal")
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC6_UsingPropertiesPanel.mscz")
@@ -274,10 +275,10 @@ var testCase = {
             api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
+            Navigation.goToControl("RecentScores", "RecentScores", "New score")
             api.navigation.right()
             api.navigation.trigger()
         }}

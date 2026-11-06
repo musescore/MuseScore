@@ -80,7 +80,7 @@ module.exports = {
 
     putTuplet: function(count)
     {
-        api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "tuplet")
+        Navigation.triggerControl("NoteInputSection", "NoteInputBar", "tuplets-subitems")
         api.testflow.waitPopup()
         var steps = count - 2
         for (var i = 0; i < steps; i++) {

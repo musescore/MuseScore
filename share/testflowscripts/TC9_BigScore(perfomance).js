@@ -31,7 +31,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             Project.closeIfOpened()
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open Big Score", func: function() {
             api.testflow.openProject("Big_Score.mscz")

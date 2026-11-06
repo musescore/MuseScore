@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Palette = require("steps/Palette.js")
@@ -48,7 +49,7 @@ var testCase = {
         }},
         {name: "Change Clefs", skip: false, func: function() {
             //! NOTE First, we need to select the current Clef
-            api.navigation.goToControl("NotationView", "ScoreView", "Score")
+            Navigation.goToControl("NotationView", "ScoreView", "Score")
             Score.firstElement()
             api.shortcuts.activate("Alt+Right") // select Clef
             seeChanges()
@@ -60,7 +61,7 @@ var testCase = {
         }},
         {name: "Change Key signatures", skip: false, func: function() {
             //! NOTE To change Key sig, we need to select the first Chord on score
-            api.navigation.goToControl("NotationView", "ScoreView", "Score")
+            Navigation.goToControl("NotationView", "ScoreView", "Score")
             api.shortcuts.activate("Alt+Right") // select Time sig
             api.shortcuts.activate("Alt+Right") // select Rest
 

@@ -20,17 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("Navigation.js")
+
 function doGoToPalette(name, addPalette)
 {
+    //! NOTE Probe whether the palette is already added, a miss is expected here
     api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)
     var ok = api.navigation.activeControl() === name
     if (!ok && addPalette) {
-        api.navigation.triggerControl("NavigationLeftPanel", "PalettesHeader", "AddPalettesBtn")
+        Navigation.triggerControl("NavigationLeftPanel", "PalettesHeader", "AddPalettesBtn")
         api.testflow.waitPopup()
-        api.navigation.triggerControl("NavigationLeftPanel", "AddPalettesPopup", "Add"+name+"Palette")
+        Navigation.triggerControl("NavigationLeftPanel", "AddPalettesPopup", "Add"+name+"Palette")
         api.testflow.waitPopup() // wait close
 
-        api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)
+        Navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)
     }
 }
 

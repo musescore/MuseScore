@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("Navigation.js")
+
 function doFocusIn()
 {
     api.testflow.showMainWindowOnFront()
     api.testflow.sleep(100)
-    api.navigation.goToControl("NotationView", "ScoreView", "Score")
+    Navigation.goToControl("NotationView", "ScoreView", "Score")
 }
 
 module.exports = {

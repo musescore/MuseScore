@@ -69,7 +69,7 @@ module.exports = {
     goToControl: function(section, panel, controlNameOrIndex)
     {
         if (!api.navigation.goToControl(section, panel, controlNameOrIndex, CONTROL_TIMEOUT_MSEC)) {
-            api.testflow.error("navigation error: not found control: " + controlNameOrIndex)
+            api.testflow.error("navigation error: not found control: " + section + "/" + panel + "/" + controlNameOrIndex)
         }
     },
     trigger: function()
@@ -83,7 +83,7 @@ module.exports = {
     triggerControl: function(section, panel, controlNameOrIndex)
     {
         if (!api.navigation.triggerControl(section, panel, controlNameOrIndex, CONTROL_TIMEOUT_MSEC)) {
-            api.testflow.error("navigation error: not found control: " + controlNameOrIndex)
+            api.testflow.error("navigation error: not found control: " + section + "/" + panel + "/" + controlNameOrIndex)
         }
     },
     activeSection: api.navigation.activeSection,
