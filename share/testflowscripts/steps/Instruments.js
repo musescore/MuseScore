@@ -24,12 +24,12 @@ var Navigation = require("Navigation.js")
 
 function doOpenInstrumentsPanel()
 {
-    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Instruments")
+    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Layout")
 }
 
 function doGoToInstrument(name)
 {
-    Navigation.goToControl("NavigationLeftPanel", "InstrumentsTree", name)
+    Navigation.goToControl("NavigationLeftPanel", "LayoutPanelTree", name)
 }
 
 module.exports = {
@@ -38,8 +38,10 @@ module.exports = {
     openAddInstrumentsDialog: function()
     {
         doOpenInstrumentsPanel()
-        Navigation.goToControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
-        api.testflow.seeChanges()
+        //! NOTE "Add" opens a menu: new instrument or system markings
+        Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
+        Navigation.goToControlInPopup("StyledMenu", "ADD_INSTRUMENT")
+        //! NOTE The dialog is modal, so open it without waiting
         api.testflow.async(function() {
             api.navigation.trigger()
         })
@@ -47,14 +49,15 @@ module.exports = {
 
     chooseInstrument: function(family, instrument)
     {
-        Navigation.goToControl("DialogView", "FamilyView", family)
+        //! NOTE Only a triggered family switches the instruments list
+        Navigation.triggerControl("DialogView", "FamilyView", family)
         Navigation.goToControl("DialogView", "InstrumentsView", instrument)
         Navigation.trigger()
     },
 
     doneAddInstruments: function()
     {
-        Navigation.triggerControl("DialogView", "BottomPanel", "OK")
+        Navigation.triggerControl("DialogView", "ButtonBox", "OK")
     },
 
     goToInstrument: doGoToInstrument,
@@ -71,6 +74,12 @@ module.exports = {
         doGoToInstrument(instrument)
         Navigation.left()
         Navigation.trigger()
+        Navigation.popupOpened()
+    },
+
+    closeSettingsInstrument: function()
+    {
+        Navigation.closePopupIfOpened()
     },
 
     moveDownInstrument: function(instrument)

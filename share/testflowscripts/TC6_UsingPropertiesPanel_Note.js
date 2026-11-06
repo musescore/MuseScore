@@ -25,6 +25,7 @@ var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var PropertiesPanel = require("steps/PropertiesPanel.js")
 var Score = require("steps/Score.js")
+var Home = require("steps/Home.js")
 var Project = require("steps/Project.js")
 var Commands = require("steps/Commands.js")
 
@@ -278,9 +279,7 @@ var testCase = {
             Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {
-            Navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }}
     ]
 };

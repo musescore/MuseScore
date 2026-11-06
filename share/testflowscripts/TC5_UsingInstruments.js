@@ -23,6 +23,7 @@
 var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var Instruments = require("steps/Instruments.js")
+var Home = require("steps/Home.js")
 var Project = require("steps/Project.js")
 var Commands = require("steps/Commands.js")
 
@@ -67,17 +68,18 @@ var testCase = {
         }},
         {name: "Manually Edit Setting", func: function() {
             api.testflow.pause()
+            Instruments.closeSettingsInstrument()
         }},
-        {name: "Move Flute Down", func: function() {
-            Instruments.moveDownInstrument("Flute")
+        {name: "Move Flute 1 Down", func: function() {
+            Instruments.moveDownInstrument("Flute 1")
             seeChangesLong()
         }},
-        {name: "Move Flute Down Again", func: function() {
-            Instruments.moveDownInstrument("Flute")
+        {name: "Move Flute 1 Down Again", func: function() {
+            Instruments.moveDownInstrument("Flute 1")
             seeChangesLong()
         }},
-        {name: "Move Flute Up", func: function() {
-            Instruments.moveUpInstrument("Flute")
+        {name: "Move Flute 1 Up", func: function() {
+            Instruments.moveUpInstrument("Flute 1")
             seeChangesLong()
         }},
         {name: "Remove Piano", func: function() {
@@ -94,9 +96,7 @@ var testCase = {
             Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {
-            Navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }},
         {name: "Open Instruments panel", func: function() {
             Instruments.openInstrumentsPanel()

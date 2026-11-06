@@ -44,6 +44,7 @@ var testCase = {
             NewScore.done()
         }},
         {name: "Put notes", func: function() {
+            NoteInput.chooseDefaultMode()
             api.shortcuts.activate("A")
             api.shortcuts.activate("B")
             api.shortcuts.activate("C")
@@ -55,6 +56,7 @@ var testCase = {
             api.shortcuts.activate("C")
             api.shortcuts.activate("B")
             api.shortcuts.activate("A")
+            NoteInput.turnoffDefaultMode()
         }},
         {name: "Add Lyrics", skip: false, func: function() {
             Score.focusIn()
@@ -145,7 +147,8 @@ var testCase = {
             Instruments.doneAddInstruments()
         }},
         {name: "Add StaffText to Oboe", func: function() {
-            Score.focusIn()
+            //! NOTE Adding an instrument resets the selection, so start from the score beginning
+            Score.firstElement()
 
             //! NOTE Find Note
             for (var i = 0; i < 9; ++i) {
@@ -153,7 +156,7 @@ var testCase = {
                 if (name.startsWith("Note")) {
                     break;
                 }
-                api.shortcuts.activate("Alt+Left")
+                api.shortcuts.activate("Alt+Right")
             }
 
             item = api.accessibility.currentName()
