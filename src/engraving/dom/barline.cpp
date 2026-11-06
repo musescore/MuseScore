@@ -586,9 +586,14 @@ void BarLine::startEdit(EditData& ed)
     ed.addData(bed);
 }
 
+static bool isLocalSpanEdit(const BarLine& barline, const EditData& ed)
+{
+    return ed.control() || barline.segment()->isBarLineType() || !barline.spanStaffInherited();
+}
+
 bool BarLine::isEditAllowed(EditData& ed) const
 {
-    const bool local = ed.control() || segment()->isBarLineType();
+    const bool local = isLocalSpanEdit(*this, ed);
     const bool span = local ? spanStaff() : staff()->barLineSpan();
     return (ed.key == Key_Up && span) || (ed.key == Key_Down && !span)
            || EngravingItem::isEditAllowed(ed);
@@ -600,7 +605,7 @@ bool BarLine::edit(EditData& ed)
         return false;
     }
 
-    const bool local = ed.control() || segment()->isBarLineType();
+    const bool local = isLocalSpanEdit(*this, ed);
     const bool span = local ? spanStaff() : staff()->barLineSpan();
     if ((ed.key == Key_Up && span) || (ed.key == Key_Down && !span)) {
         if (local) {
@@ -695,8 +700,7 @@ void BarLine::endDragGrip(EditData& ed)
     int newSpanFrom = 0;
     int newSpanTo = 0;
 
-    bool localDrag = ed.control() || segment()->isBarLineType();
-    if (localDrag) {
+    if (isLocalSpanEdit(*this, ed)) {
         Segment* s = segment();
         bool breakLast = staffIdx1 == staffIdx2;
         for (staff_idx_t staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
@@ -880,8 +884,14 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
         return;
     }
 
-    if (id == Pid::BARLINE_SPAN && ps == PropertyFlags::STYLED && v != propertyDefault(id)) {
-        ps = PropertyFlags::UNSTYLED;
+    if (id == Pid::BARLINE_SPAN) {
+        const bool matchesDefault = v == propertyDefault(id);
+        if (!matchesDefault && ps == PropertyFlags::STYLED) {
+            ps = PropertyFlags::UNSTYLED;
+        } else if (matchesDefault && ps != PropertyFlags::STYLED && segment() && segment()->isEndBarLineType()) {
+            // Editing back to the default restores inheritance. An unchanged value keeps its flags.
+            ps = v == getProperty(id) ? propertyFlags(id) : PropertyFlags::STYLED;
+        }
     }
 
     if (id == Pid::BARLINE_TYPE && segment() && segment()->segmentType() != SegmentType::BarLine) {
