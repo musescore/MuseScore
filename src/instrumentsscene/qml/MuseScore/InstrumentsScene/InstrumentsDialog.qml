@@ -112,6 +112,7 @@ StyledDialogView {
 
                 FlatButton {
                     text: qsTrc("global", "OK")
+                    navigation.name: "OK"
                     buttonRole: ButtonBoxModel.AcceptRole
                     buttonId: ButtonBoxModel.Ok
                     enabled: instrumentsPage.hasSelectedInstruments
