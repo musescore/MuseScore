@@ -136,6 +136,13 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
     TRACEFUNC;
 
     PointF logicPos = toLogical(event->pos());
+
+    if (!notationContentRect().contains(logicPos)) {
+        m_pressOutsideContent = true;
+        return;
+    }
+    m_pressOutsideContent = false;
+
     m_startMove = logicPos;
     if (m_cursorRect.contains(logicPos)) {
         return;
@@ -150,6 +157,10 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 {
     TRACEFUNC;
+
+    if (m_pressOutsideContent) {
+        return;
+    }
 
     PointF logicPos = toLogical(event->pos());
     PointF delta = logicPos - m_startMove;
@@ -296,4 +307,10 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
         painter->drawText(page->ldata()->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->pageNumber() + 1));
         painter->translate(-page->pos().toQPointF());
     }
+}
+
+void NotationNavigator::mouseDoubleClickEvent(QMouseEvent*)
+{
+    // Navigator is a read-only overview; never forward to the input
+    // controller (it would enter note input on the selection).
 }
