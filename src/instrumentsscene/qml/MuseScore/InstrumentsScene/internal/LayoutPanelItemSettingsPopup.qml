@@ -34,6 +34,10 @@ Item {
 
     required property AbstractLayoutPanelTreeItem item
 
+    // Ends the popup's shadow padding before the button's right edge, so the visible popup sits flush with it
+    width: parent.width - (popupLoader.openedPopup ? popupLoader.openedPopup.padding : 0)
+    height: parent.height
+
     readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isOpened: Boolean(popupLoader.openedPopup) && popupLoader.openedPopup.isOpened
 
@@ -81,16 +85,30 @@ Item {
                 return
             }
 
-            popupLoader.openedPopup.parent = button
-            popupLoader.openedPopup.needActiveFirstItem = button.navigation.highlight
+            const popup = popupLoader.openedPopup
 
-            popupLoader.openedPopup.load(params)
+            popup.showArrow = false
+            popup.placementPolicies = PopupView.PreferRight
+            popup.parent = root
 
-            popupLoader.openedPopup.closed.connect(function() {
+            // Top-aligned with the button, moved up only as far as needed to stay within the window
+            const windowMargin = 8
+            popup.y = Qt.binding(function() {
+                const anchorTop = root.mapToItem(null, 0, 0).y
+                const visibleHeight = popup.height - popup.padding * 2
+                const overflow = anchorTop + visibleHeight - (root.Window.height - windowMargin)
+                return -Math.max(0, Math.min(overflow, anchorTop - windowMargin))
+            })
+
+            popup.needActiveFirstItem = button.navigation.highlight
+
+            popup.load(params)
+
+            popup.closed.connect(function() {
                 popupLoader.sourceComponent = null
             })
 
-            popupLoader.openedPopup.open()
+            popup.open()
         }
     }
 
