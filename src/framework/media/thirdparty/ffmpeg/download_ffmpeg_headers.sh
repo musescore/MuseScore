@@ -1,5 +1,5 @@
 #!/bin/bash
-# Download FFmpeg headers for MuseScore (versions 4, 5, 6, 7, 8)
+# Download FFmpeg headers for MuseScore (versions 4, 5, 6, 7, 8, 9)
 # Run from MuseScore repository root
 set -e
 
@@ -14,6 +14,7 @@ VERSIONS=(
   "6:n6.1"
   "7:n7.0"
   "8:n8.0"
+  "9:n9.0"
 )
 
 write_avconfig() {

@@ -37,6 +37,11 @@ target_sources(muse_media PRIVATE
     internal/ffmpegutils.cpp
     internal/ffmpegutils.h
 
+    internal/ffmpeg/v9/ffmpeglibhandler.cpp
+    internal/ffmpeg/v9/ffmpeglibhandler.h
+    internal/ffmpeg/v9/videoencoder.cpp
+    internal/ffmpeg/v9/videoencoder.h
+
     internal/ffmpeg/v8/ffmpeglibhandler.cpp
     internal/ffmpeg/v8/ffmpeglibhandler.h
     internal/ffmpeg/v8/videoencoder.cpp
@@ -61,6 +66,12 @@ target_sources(muse_media PRIVATE
     internal/ffmpeg/v4/ffmpeglibhandler.h
     internal/ffmpeg/v4/videoencoder.cpp
     internal/ffmpeg/v4/videoencoder.h
+)
+
+set_source_files_properties(
+    internal/ffmpeg/v9/ffmpeglibhandler.cpp
+    internal/ffmpeg/v9/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v9"
 )
 
 set_source_files_properties(
@@ -92,3 +103,7 @@ set_source_files_properties(
     internal/ffmpeg/v4/videoencoder.cpp
     PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v4"
 )
+
+if (MUSE_MODULE_MEDIA_TESTS)
+    add_subdirectory(tests)
+endif()
