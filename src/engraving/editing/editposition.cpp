@@ -58,14 +58,49 @@ void EditPosition::freezeItemsPositions(Transaction&, const std::vector<Engravin
         return;
     }
 
-    score->update();
+    // Some items are laid out relative to the positions (including offsets) of other items
+    // We can't know whether elements affect each other's position without performing another layout
+    // Setting one item's offset can therefore move another item's layout position, so lay out and update offsets
+    // until they stop changing. A chain of N dependent items needs roughly N + 1 passes.
+    std::unordered_map<EngravingItem*, PointF> originalOffsets;
+    for (const auto& [item, oldPos] : frozenItems) {
+        originalOffsets.emplace(item, item->offset());
+    }
 
-    for (auto& [item, oldPos] : frozenItems) {
+    constexpr size_t MAX_PASSES = 20;
+    bool converged = false;
+    for (size_t pass = 0; pass < MAX_PASSES && !converged; ++pass) {
+        score->update();
+
+        converged = true;
+        for (const auto& [item, oldPos] : frozenItems) {
+            const PointF newOffset = oldPos - item->ldata()->pos();
+            const PointF& currentOffset = item->offset();
+            if (newOffset == currentOffset) {
+                continue;
+            }
+
+            converged = false;
+            item->setOffset(newOffset);
+            item->triggerLayout();
+        }
+    }
+
+    if (!converged) {
+        LOGW() << "Frozen item offsets did not converge after " << MAX_PASSES << " layout passes";
+    }
+
+    // Make actual undoable change. Using setOffset above avoids having N + 1 commands for affected elements in the transaction
+    for (const auto& [item, originalOffset] : originalOffsets) {
+        const PointF frozenOffset = item->offset();
+        // Restore the original value so undoChangeProperty registers the change for undo
+        item->setOffset(originalOffset);
+
         PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
         if (offsetPf == PropertyFlags::STYLED) {
             offsetPf = PropertyFlags::UNSTYLED;
         }
 
-        item->undoChangeProperty(Pid::OFFSET, oldPos - item->ldata()->pos(), offsetPf);
+        item->undoChangeProperty(Pid::OFFSET, frozenOffset, offsetPf);
     }
 }
