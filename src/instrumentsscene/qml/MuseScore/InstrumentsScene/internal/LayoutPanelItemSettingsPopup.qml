@@ -37,6 +37,10 @@ Item {
     readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isOpened: Boolean(popupLoader.openedPopup) && popupLoader.openedPopup.isOpened
 
+    // System markings rows keep their cog enabled when there's nothing to configure yet: it then explains them
+    readonly property bool showsSystemObjectsHelp: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+                                                   && Boolean(root.item) && !root.item.settingsEnabled
+
     function toggle(button: FlatButton) {
         if (root.isOpened) {
             popupLoader.openedPopup.close()
@@ -55,6 +59,8 @@ Item {
             comp = staffSettingsComp
 
             params["id"] = root.item.id
+        } else if (root.showsSystemObjectsHelp) {
+            comp = systemObjectsLayerHelpComp
         } else if (root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
             comp = systemObjectsLayerSettingsComp
 
@@ -120,5 +126,12 @@ Item {
         id: systemObjectsLayerSettingsComp
 
         SystemObjectsLayerSettingsPopup {}
+    }
+
+    // Shown instead of the system markings settings while the score has no system markings to configure
+    Component {
+        id: systemObjectsLayerHelpComp
+
+        SystemObjectsLayerHelpPopup {}
     }
 }

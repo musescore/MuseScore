@@ -67,7 +67,7 @@ RowLayout {
         id: settingsButton
 
         visible: Boolean(root.item) && root.item.settingsAvailable
-        enabled: root.visible && Boolean(root.item) && root.item.settingsEnabled
+        enabled: root.visible && Boolean(root.item) && (root.item.settingsEnabled || settingsPopup.showsSystemObjectsHelp)
 
         // Transparent rather than hidden, to stay keyboard-accessible
         opacity: root.isHovered || root.isHighlighted || settingsPopup.isOpened || settingsButton.mouseArea.containsMouse
