@@ -203,7 +203,7 @@ static const std::vector<Command> NOTE_COMMANDS = {
     INSERT_NOTE_B_COMMAND
 };
 
-static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
+static const std::vector<Command> TUPLET_COMMANDS = {
     OPEN_TUPLET_CONFIGURE_COMMAND,
     ADD_TUPLET_COMMAND,
     ADD_DUPLET_COMMAND,
@@ -214,6 +214,9 @@ static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_SEPTUPLET_COMMAND,
     ADD_OCTUPLET_COMMAND,
     ADD_NONUPLET_COMMAND,
+};
+
+static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_DYNAMIC_COMMAND,
     ADD_HAIRPIN_COMMAND,
     ADD_HAIRPIN_REVERSE_COMMAND
@@ -326,6 +329,7 @@ void NotationCommandsState::init()
         updateCommandStates({ TOGGLE_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
         updateCommandStates(TAB_COMMANDS);
@@ -358,6 +362,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(TAB_COMMANDS);
     });
 
@@ -498,6 +503,12 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
+    }
+
+    if (muse::contains(TUPLET_COMMANDS, command)) {
+        // Re-pitch must not change durations
+        const bool isRepitch = controller()->isNoteInputMode() && controller()->noteInputMethod() == NoteInputMethod::REPITCH;
+        return CommandState(controller()->isNoteOrRestSelected() && !isRepitch, false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
