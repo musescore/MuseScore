@@ -228,6 +228,15 @@ Item {
             return layoutPanelTreeView.width
         }
 
+        // Blank space below the last row; sits behind the rows
+        MouseArea {
+            parent: layoutPanelTreeView
+            anchors.fill: parent
+            z: -0.5
+
+            onClicked: root.model.clearSelection()
+        }
+
         Loader {
             id: draggedItemLoader
 
@@ -276,6 +285,12 @@ Item {
                                                  : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
 
             implicitHeight: prv.rowContentHeight + (dropArea.isCardBottom ? prv.itemSpacing : 0)
+
+            // The gaps between cards; clicks on the cards are handled by the rows
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.model.clearSelection()
+            }
 
             Loader {
                 width: parent.width

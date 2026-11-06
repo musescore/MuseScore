@@ -50,8 +50,11 @@ Item {
         MouseArea {
             anchors.fill: parent
 
-            onClicked: {
-                treeModel.clearSelection()
+            // Only below the header: clicks on its (disabled) buttons and switches don't deselect
+            onClicked: function(mouse) {
+                if (mouse.y > headerDivider.mapToItem(background, 0, 0).y) {
+                    treeModel.clearSelection()
+                }
             }
         }
     }
@@ -155,7 +158,9 @@ Item {
             onToggled: treeModel.toggleStaveSharing(!checked)
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            id: headerDivider
+        }
 
         StyledTextLabel {
             Layout.fillWidth: true
