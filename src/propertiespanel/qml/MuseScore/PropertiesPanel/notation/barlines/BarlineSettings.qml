@@ -132,6 +132,7 @@ Column {
         id: spanStyleSection
         titleText: qsTrc("propertiespanel", "Span style")
         propertyItem: root.model ? root.model.spanStyle : null
+        visible: spanToNextStaffCheckBox.checked && propertyItem && propertyItem.isVisible
 
         navigationName: "SpanStyle"
         navigationPanel: root.navigationPanel
@@ -154,7 +155,7 @@ Column {
         width: parent.width
 
         navigation.panel: root.navigationPanel
-        navigation.row: spanStyleSection.navigationRowEnd + 1
+        navigation.row: (spanStyleSection.visible ? spanStyleSection.navigationRowEnd : spanToNextStaffCheckBox.navigation.row) + 1
 
         contentItemComponent: Column {
             height: implicitHeight
