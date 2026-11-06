@@ -64,7 +64,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "About MuseScore Studio"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_ABOUT_QT_COMMAND,
@@ -72,7 +72,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "About Qt"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_ABOUT_MUSICXML_COMMAND,
@@ -80,7 +80,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "About MusicXML"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_ONLINE_HANDBOOK_COMMAND,
@@ -88,7 +88,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Open online handbook"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_ASK_HELP_COMMAND,
@@ -96,7 +96,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Ask for help"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_ACCESSIBILITY_STATEMENT_COMMAND,
@@ -104,7 +104,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Accessibility statement"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_PREFERENCES_COMMAND,
@@ -120,7 +120,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Revert to factory settings"),
         InputSchema(),
         Decoration(),
-        Availability::Dispatch
+        Availability::Internal
         ),
     CommandInfo(
         APP_EXTENSIONS_COMMAND,

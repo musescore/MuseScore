@@ -48,7 +48,7 @@ struct SelectTargetCommand {
     sci_auto title = MnemonicString("action", "Select");
     sci_auto description = TranslatableString("action", "Select items by target");
     sci_auto availabilities = Availability::API;
-    sci_auto annotations = Annotation::Idempotent;
+    sci_auto annotations = Annotation::None;
 
     SelectionTarget target = SelectionTarget::FirstItem;
     PlayMode playMode = PlayMode::NoPlay;
@@ -81,6 +81,7 @@ struct SelectNextItemCommand {
     sci_auto title = MnemonicString("action", "Next element");
     sci_auto description = TranslatableString("action", "Select next element in score");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectPrevItemCommand {
@@ -88,6 +89,7 @@ struct SelectPrevItemCommand {
     sci_auto title = MnemonicString("action", "Previous element");
     sci_auto description = TranslatableString("action", "Select previous element in score");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectNextSegmentCommand {
@@ -95,6 +97,7 @@ struct SelectNextSegmentCommand {
     sci_auto title = MnemonicString("action", "Next segment element");
     sci_auto description = TranslatableString("action", "Select next segment element");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectPrevSegmentCommand {
@@ -102,6 +105,7 @@ struct SelectPrevSegmentCommand {
     sci_auto title = MnemonicString("action", "Previous segment element");
     sci_auto description = TranslatableString("action", "Select previous segment element");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectNextTrackCommand {
@@ -109,6 +113,7 @@ struct SelectNextTrackCommand {
     sci_auto title = MnemonicString("action", "Next staff or voice");
     sci_auto description = TranslatableString("action", "Go to next staff or voice");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectPrevTrackCommand {
@@ -116,6 +121,7 @@ struct SelectPrevTrackCommand {
     sci_auto title = MnemonicString("action", "Previous staff or voice");
     sci_auto description = TranslatableString("action", "Go to previous staff or voice");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectNextFrameCommand {
@@ -123,6 +129,7 @@ struct SelectNextFrameCommand {
     sci_auto title = MnemonicString("action", "Next frame");
     sci_auto description = TranslatableString("action", "Go to next frame");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectPrevFrameCommand {
@@ -130,6 +137,7 @@ struct SelectPrevFrameCommand {
     sci_auto title = MnemonicString("action", "Previous frame");
     sci_auto description = TranslatableString("action", "Go to previous frame");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectNextSystemCommand {
@@ -137,6 +145,7 @@ struct SelectNextSystemCommand {
     sci_auto title = MnemonicString("action", "Next system");
     sci_auto description = TranslatableString("action", "Go to next system");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectPrevSystemCommand {
@@ -144,6 +153,7 @@ struct SelectPrevSystemCommand {
     sci_auto title = MnemonicString("action", "Previous system");
     sci_auto description = TranslatableString("action", "Go to previous system");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectUpNoteInChordCommand {
@@ -151,6 +161,7 @@ struct SelectUpNoteInChordCommand {
     sci_auto title = MnemonicString("action", "Up note in chord");
     sci_auto description = TranslatableString("action", "Select note/rest above");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectDownNoteInChordCommand {
@@ -158,6 +169,7 @@ struct SelectDownNoteInChordCommand {
     sci_auto title = MnemonicString("action", "Down note in chord");
     sci_auto description = TranslatableString("action", "Select note/rest below");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectTopNoteInChordCommand {
@@ -165,7 +177,7 @@ struct SelectTopNoteInChordCommand {
     sci_auto title = MnemonicString("action", "Top note in chord");
     sci_auto description = TranslatableString("action", "Select top note in chord");
     sci_auto availabilities = Availability::UI;
-    sci_auto annotations = Annotation::Idempotent;
+    sci_auto annotations = Annotation::None;
 };
 
 struct SelectBottomNoteInChordCommand {
@@ -246,6 +258,7 @@ struct AddToSelectionTargetCommand {
     sci_auto title = MnemonicString("action", "Add to selection");
     sci_auto description = TranslatableString("action", "Add items to selection by target");
     sci_auto availabilities = Availability::API;
+    sci_auto annotations = Annotation::None;
 
     SelectionTarget target = SelectionTarget::BeginSystem;
 
@@ -259,6 +272,7 @@ struct AddToSelectionNextChordCommand {
     sci_auto title = MnemonicString("action", "Add next chord to selection");
     sci_auto description = TranslatableString("action", "Add to selection: next note/rest");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionPrevChordCommand {
@@ -266,6 +280,7 @@ struct AddToSelectionPrevChordCommand {
     sci_auto title = MnemonicString("action", "Add previous chord to selection");
     sci_auto description = TranslatableString("action", "Add to selection: previous note/rest");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionNextMeasureCommand {
@@ -273,6 +288,7 @@ struct AddToSelectionNextMeasureCommand {
     sci_auto title = MnemonicString("action", "Add next measure to selection");
     sci_auto description = TranslatableString("action", "Add to selection: next measure");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionPrevMeasureCommand {
@@ -280,6 +296,7 @@ struct AddToSelectionPrevMeasureCommand {
     sci_auto title = MnemonicString("action", "Add previous measure to selection");
     sci_auto description = TranslatableString("action", "Add to selection: previous measure");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionAboveStaffCommand {
@@ -287,6 +304,7 @@ struct AddToSelectionAboveStaffCommand {
     sci_auto title = MnemonicString("action", "Add staff above to selection");
     sci_auto description = TranslatableString("action", "Add to selection: staff above");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionBelowStaffCommand {
@@ -294,6 +312,7 @@ struct AddToSelectionBelowStaffCommand {
     sci_auto title = MnemonicString("action", "Add staff below to selection");
     sci_auto description = TranslatableString("action", "Add to selection: staff below");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionBeginSystemCommand {
@@ -301,6 +320,7 @@ struct AddToSelectionBeginSystemCommand {
     sci_auto title = MnemonicString("action", "Select to beginning of system");
     sci_auto description = TranslatableString("action", "Add to selection: beginning of system");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionEndSystemCommand {
@@ -308,6 +328,7 @@ struct AddToSelectionEndSystemCommand {
     sci_auto title = MnemonicString("action", "Select to end of system");
     sci_auto description = TranslatableString("action", "Add to selection: end of system");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionBeginScoreCommand {
@@ -315,6 +336,7 @@ struct AddToSelectionBeginScoreCommand {
     sci_auto title = MnemonicString("action", "Select to beginning of score");
     sci_auto description = TranslatableString("action", "Add to selection: beginning of score");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
 
 struct AddToSelectionEndScoreCommand {
@@ -322,18 +344,8 @@ struct AddToSelectionEndScoreCommand {
     sci_auto title = MnemonicString("action", "Select to end of score");
     sci_auto description = TranslatableString("action", "Add to selection: end of score");
     sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::None;
 };
-
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_CHORD_COMMAND("command://notation/add-to-selection-next-chord");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_CHORD_COMMAND("command://notation/add-to-selection-prev-chord");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_MEASURE_COMMAND("command://notation/add-to-selection-next-measure");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_MEASURE_COMMAND("command://notation/add-to-selection-prev-measure");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_ABOVE_STAFF_COMMAND("command://notation/add-to-selection-above-staff");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_BELOW_STAFF_COMMAND("command://notation/add-to-selection-below-staff");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND("command://notation/add-to-selection-begin-system");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SYSTEM_COMMAND("command://notation/add-to-selection-end-system");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SCORE_COMMAND("command://notation/add-to-selection-begin-score");
-//inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SCORE_COMMAND("command://notation/add-to-selection-end-score");
 
 struct FlipCommand {
     sci_auto id = Command("command://notation/flip");
