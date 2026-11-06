@@ -73,6 +73,7 @@ FocusableItem {
             id: stemDirectionGroup
 
             titleText: qsTrc("propertiespanel", "Stem direction")
+            navigationName: "StemDirection"
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
             navigationPanel: root.navigationPanel
