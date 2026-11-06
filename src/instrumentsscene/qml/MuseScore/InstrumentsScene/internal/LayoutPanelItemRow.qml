@@ -145,7 +145,6 @@ RowLayout {
                 Layout.preferredWidth: ui.theme.defaultButtonSize // same as the eye, so the titles line up
 
                 iconCode: IconCode.MINUS
-                opacity: root.isItemVisible ? 1 : 0.75
             }
 
             StyledTextLabel {
@@ -155,7 +154,6 @@ RowLayout {
 
                 text: root.title
                 horizontalAlignment: Text.AlignLeft
-                opacity: root.isItemVisible ? 1 : 0.75
             }
         }
     }
