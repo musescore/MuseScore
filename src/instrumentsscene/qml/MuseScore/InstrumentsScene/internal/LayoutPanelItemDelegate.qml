@@ -121,20 +121,19 @@ FocusableControl {
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
+        depth: root.depth
+        isExpanded: root.isExpanded
         isEnabled: root.isEnabled
 
-        isExpanded: root.isExpanded
-        expandableDepth: root.depth
-
-        onVisibilityButtonClicked: function(isVisible) {
+        onVisibilityToggled: function(visible) {
             if (root.isSelected) {
-                root.changeVisibilityOfSelectedRowsRequested(!isVisible)
+                root.changeVisibilityOfSelectedRowsRequested(visible)
             } else {
-                root.changeVisibilityRequested(root.modelIndex, !isVisible)
+                root.changeVisibilityRequested(root.modelIndex, visible)
             }
         }
 
-        onExpandButtonClicked: function(expand) {
+        onExpandToggled: function(expand) {
             root.expandRequested(expand)
         }
 

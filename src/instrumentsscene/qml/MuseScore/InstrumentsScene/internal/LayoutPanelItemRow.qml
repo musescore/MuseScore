@@ -23,32 +23,43 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 
 import MuseScore.InstrumentsScene
 
-VisibilityControls {
+RowLayout {
     id: root
 
     required property AbstractLayoutPanelTreeItem item
+    required property int depth
+    required property bool isExpanded
+    required property bool isEnabled
     required property bool isStaveSharingEnabled
 
+    required property NavigationPanel navigationPanel
+    required property int navigationRow
+
     readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
+    readonly property string title: root.item ? root.item.title : ""
+    readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
     readonly property alias isPopupOpened: settingsPopup.isOpened
 
+    signal visibilityToggled(bool visible)
+    signal expandToggled(bool expand)
     signal enabledToggled(bool enabled)
 
-    title: root.item ? root.item.title : ""
-    isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
+    spacing: 2
 
-    useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-    isVisible: Boolean(root.item) && root.item.isVisible
+    Loader {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-    showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-
-    isExpandable: Boolean(root.item) && root.item.isExpandable
+        sourceComponent: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? systemObjectsLayerTitleComp
+                                                                                : visibilityControlsComp
+    }
 
     FlatButton {
         id: settingsButton
@@ -86,6 +97,57 @@ VisibilityControls {
         checked: Boolean(root.item) && root.item.isEnabled
         onToggled: function() {
             root.enabledToggled(!sharedPartToggle.checked)
+        }
+    }
+
+    Component {
+        id: visibilityControlsComp
+
+        VisibilityControls {
+            navigationPanel: root.navigationPanel
+            navigationRow: root.navigationRow
+
+            title: root.title
+            isRootControl: root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART
+
+            isVisible: root.isItemVisible
+            onVisibilityButtonClicked: function(isVisible) {
+                root.visibilityToggled(!isVisible)
+            }
+
+            isEnabled: root.isEnabled
+
+            isExpandable: Boolean(root.item) && root.item.isExpandable
+            isExpanded: root.isExpanded
+            expandableDepth: root.depth
+            onExpandButtonClicked: function(expand) {
+                root.expandToggled(expand)
+            }
+        }
+    }
+
+    Component {
+        id: systemObjectsLayerTitleComp
+
+        RowLayout {
+            spacing: 2
+
+            StyledIconLabel {
+                Layout.preferredWidth: ui.theme.defaultButtonSize // same as the eye, so the titles line up
+
+                iconCode: IconCode.MINUS
+                opacity: root.isItemVisible ? 1 : 0.75
+            }
+
+            StyledTextLabel {
+                Layout.fillWidth: true
+                Layout.leftMargin: 4
+                Layout.rightMargin: 8
+
+                text: root.title
+                horizontalAlignment: Text.AlignLeft
+                opacity: root.isItemVisible ? 1 : 0.75
+            }
         }
     }
 }
