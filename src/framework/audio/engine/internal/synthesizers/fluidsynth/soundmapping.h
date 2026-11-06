@@ -177,6 +177,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                          mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 35) } },
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Acoustic,
                                          mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 32) } },
+        { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 32) } },
 
         { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 105) } },
         { { mpe::SoundId::Banjo,  { mpe::SoundSubCategory::Tenor,
