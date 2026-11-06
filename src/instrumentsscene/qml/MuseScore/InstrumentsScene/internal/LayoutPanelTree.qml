@@ -284,7 +284,7 @@ Item {
                 opacity: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem ? 0 : 1
 
                 sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
-                                 ? controlItemDelegateComponent : treeItemDelegateComponent
+                                 ? addStaffButtonComponent : treeItemDelegateComponent
 
                 Component {
                     id: treeItemDelegateComponent
@@ -363,11 +363,10 @@ Item {
                 }
 
                 Component {
-                    id: controlItemDelegateComponent
+                    id: addStaffButtonComponent
 
-                    LayoutPanelItemControl {
+                    LayoutPanelAddStaffButton {
                         title: dropArea.item?.title || ""
-                        isSelected: dropArea.item?.isSelected || false
 
                         navigation.panel: treeNavigationPanel
                         navigation.row: dropArea.row

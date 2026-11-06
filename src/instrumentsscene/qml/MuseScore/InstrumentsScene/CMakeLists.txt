@@ -63,7 +63,7 @@ qt_add_qml_module(instrumentsscene_qml
         internal/InstrumentsView.qml
         internal/LayoutControlPanel.qml
         internal/LayoutPanelAddButton.qml
-        internal/LayoutPanelItemControl.qml
+        internal/LayoutPanelAddStaffButton.qml
         internal/LayoutPanelItemDelegate.qml
         internal/LayoutPanelItemRow.qml
         internal/LayoutPanelItemSettingsPopup.qml
