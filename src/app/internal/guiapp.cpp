@@ -124,7 +124,7 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
 
     startupScenario->runOnSplashScreen();
 
-    QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario]() {
+    QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario, options]() {
 #ifdef MUE_ENABLE_SPLASHSCREEN
         if (m_splashScreen) {
             m_splashScreen->close();
@@ -133,7 +133,16 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         }
 #endif
 
-        startupScenario->runAfterSplashScreen();
+        muse::async::Promise<muse::Ret> startup = startupScenario->runAfterSplashScreen();
+
+#ifdef MUSE_MODULE_TESTFLOW
+        //! NOTE Run the test case requested from the command line when the startup page is opened
+        if (options->testflow.has_value()) {
+            startup.onResolve(this, [this, ctxId, options](const muse::Ret&) {
+                testflowCmdRunner()->run(ctxId, options->testflow.value());
+            });
+        }
+#endif
     }, Qt::QueuedConnection);
 }
 
@@ -149,10 +158,6 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
     if (options->app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options->app.revertToFactorySettings.value());
     }
-
-#ifdef MUSE_MODULE_TESTFLOW
-    testflowConfiguration()->setRunRequest(options->testflow);
-#endif
 
     if (guitarProConfiguration()) {
         if (options->guitarPro.experimental) {

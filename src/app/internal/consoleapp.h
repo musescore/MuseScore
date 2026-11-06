@@ -39,7 +39,7 @@
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "muse_framework_config.h"
 #ifdef MUSE_MODULE_TESTFLOW
-#include "testflow/itestflowconfiguration.h"
+#include "testflow/itestflowcmdrunner.h"
 #endif
 
 #include "ui/iuiconfiguration.h"
@@ -67,7 +67,7 @@ class MuseScoreConsoleApp : public muse::ConsoleApplication
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
 #ifdef MUSE_MODULE_TESTFLOW
-    muse::GlobalInject<muse::testflow::ITestflowConfiguration> testflowConfiguration;
+    muse::GlobalInject<muse::testflow::ITestflowCmdRunner> testflowCmdRunner;
 #endif
 
 public:

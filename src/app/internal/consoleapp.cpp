@@ -94,10 +94,6 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
     notationConfiguration()->setTemplateModeEnabled(options->notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options->notation.testModeEnabled);
 
-#ifdef MUSE_MODULE_TESTFLOW
-    testflowConfiguration()->setRunRequest(options->testflow);
-#endif
-
     if (options->runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::Constants::MSC_VERSION;
@@ -163,29 +159,26 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
         // Process Testflow
         // ====================================================
 #ifdef MUSE_MODULE_TESTFLOW
-        const bool isTestflow = options->testflow.has_value();
-#else
-        const bool isTestflow = false;
+        if (options->testflow.has_value()) {
+            testflowCmdRunner()->run(ctxId, options->testflow.value());
+            break;
+        }
 #endif
-        if (isTestflow) {
-            //! NOTE The testflow module runs the test case when the context is ready
-            setContextReady(ctxId);
+
+        // ====================================================
+        // Process Diagnostic
+        // ====================================================
+        MuseScoreCmdOptions::Diagnostic diagnostic = options->diagnostic;
+        if (diagnostic.type != DiagnosticType::Undefined) {
+            int code = processDiagnostic(diagnostic, ctxId);
+            qApp->exit(code);
         } else {
             // ====================================================
-            // Process Diagnostic
+            // Process Converter
             // ====================================================
-            MuseScoreCmdOptions::Diagnostic diagnostic = options->diagnostic;
-            if (diagnostic.type != DiagnosticType::Undefined) {
-                int code = processDiagnostic(diagnostic, ctxId);
-                qApp->exit(code);
-            } else {
-                // ====================================================
-                // Process Converter
-                // ====================================================
-                MuseScoreCmdOptions::ConverterTask task = options->converterTask;
-                int code = processConverter(task, ctxId);
-                qApp->exit(code);
-            }
+            MuseScoreCmdOptions::ConverterTask task = options->converterTask;
+            int code = processConverter(task, ctxId);
+            qApp->exit(code);
         }
     } break;
     case IApplication::RunMode::AudioPluginRegistration: {

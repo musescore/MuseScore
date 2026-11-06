@@ -27,7 +27,6 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "global/iapplication.h"
 #include "interactive/iinteractive.h"
 #include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
@@ -43,7 +42,6 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
 {
-    muse::GlobalInject<muse::IApplication> application;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
@@ -67,7 +65,7 @@ public:
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void runOnSplashScreen() override;
-    void runAfterSplashScreen() override;
+    muse::async::Promise<muse::Ret> runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:
