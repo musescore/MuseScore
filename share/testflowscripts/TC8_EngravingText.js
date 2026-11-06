@@ -28,6 +28,20 @@ var Instruments = require("steps/Instruments.js")
 var Project = require("steps/Project.js")
 var Commands = require("steps/Commands.js")
 
+const PITCH_E5 = 76
+
+//! NOTE The text edit starts asynchronously, the typed keys must come after it is started
+function waitTextEdit()
+{
+    api.testflow.sleep(300)
+}
+
+function startTextEdit(shortcut)
+{
+    api.shortcuts.activate(shortcut)
+    waitTextEdit()
+}
+
 var testCase = {
     name: "TC8: Engraving Text",
     description: "Let's check the functionality of the edit engraving text",
@@ -41,7 +55,7 @@ var testCase = {
         }},
         {name: "Create score with Flute", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.chooseInstrument("Free Reed", "Accordion")
+            NewScore.chooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
         {name: "Put notes", func: function() {
@@ -66,7 +80,7 @@ var testCase = {
             }
             seeChanges()
 
-            api.shortcuts.activate("Ctrl+L")
+            startTextEdit("Ctrl+L")
             api.keyboard.text("la")
             api.keyboard.key(" ")
             seeChangesFast()
@@ -99,37 +113,37 @@ var testCase = {
             seeChangesFast()
             api.keyboard.text("bim")
 
-            api.keyboard.key("Esc")
+            api.shortcuts.activate("Esc")
         }},
         {name: "Remove (change) Lyrics", skip: false, func: function() {
-            api.keyboard.key("Backspace")
+            //! NOTE Delete the selected lyric (outside of text editing it is a shortcut)
+            api.shortcuts.activate("Backspace")
             seeChanges()
 
-            api.shortcuts.activate("Ctrl+L")
+            startTextEdit("Ctrl+L")
             api.keyboard.text("bum")
 
-            api.keyboard.key("Esc")
+            api.shortcuts.activate("Esc")
         }},
         {name: "Add StaffText", skip: false, func: function() {
 
-            //! NOTE Find note E
-            for (var i = 0; i < 99; ++i) {
-                api.shortcuts.activate("Alt+Left")
-                seeChangesFast()
-                var name = api.accessibility.currentName()
-                if (name.startsWith("Note; Pitch: E5")) {
-                    break;
-                }
+            //! NOTE Ending the text edit clears the selection, so start from the score beginning
+            Score.firstElement()
+
+            //! NOTE Find note E5
+            if (!Score.findNote("Alt+Right", PITCH_E5, 99)) {
+                api.testflow.fatal("Note E5 is not found")
             }
 
             //! NOTE Add StaffText
-            api.shortcuts.activate("Ctrl+T")
+            startTextEdit("Ctrl+T")
             api.keyboard.text("This is Sparta")
-            api.keyboard.key("Esc") // end edit
+            api.shortcuts.activate("Esc") // end edit
         }},
         {name: "Edit StaffText", skip: false, func: function() {
 
             api.keyboard.key("Return") // begin edit
+            waitTextEdit()
             seeChanges()
             api.keyboard.key("End") // move cursor to end
             seeChanges()
@@ -137,7 +151,7 @@ var testCase = {
             seeChanges()
             api.keyboard.text("Flute") // add Flute
             seeChanges()
-            api.keyboard.key("Esc") // end edit
+            api.shortcuts.activate("Esc") // end edit
         }},
         {name: "Add Oboe Instrument", func: function() {
             Instruments.openInstrumentsPanel()
@@ -152,37 +166,23 @@ var testCase = {
             Score.firstElement()
 
             //! NOTE Find Note
-            for (var i = 0; i < 9; ++i) {
-                var name = api.accessibility.currentName()
-                if (name.startsWith("Note")) {
-                    break;
-                }
-                api.shortcuts.activate("Alt+Right")
-            }
-
-            item = api.accessibility.currentName()
-            if (!item.startsWith("Note")) {
+            if (!Score.findNote("Alt+Right", undefined, 9)) {
                 api.testflow.fatal("Current item should be Note")
             }
 
             api.shortcuts.activate("Alt+Down")
             seeChanges()
 
-            api.shortcuts.activate("Ctrl+T")
+            startTextEdit("Ctrl+T")
             api.keyboard.text("This is Oboe")
-            api.keyboard.key("Esc")
+            api.shortcuts.activate("Esc")
         }},
         {name: "Add System Text", func: function() {
             Score.focusIn()
             api.shortcuts.activate("Ctrl+Home")
             //! NOTE Find first Note
-            for (var i = 0; i < 99; ++i) {
-                api.shortcuts.activate("Alt+Right")
-                seeChangesFast()
-                var name = api.accessibility.currentName()
-                if (name.startsWith("Note")) {
-                    break;
-                }
+            if (!Score.findNote("Alt+Right", undefined, 99)) {
+                api.testflow.fatal("Note is not found")
             }
             for (var m = 0; m < 6; ++m) {
                 api.shortcuts.activate("Ctrl+Right")
@@ -190,9 +190,9 @@ var testCase = {
             }
 
             //! NOTE Add System Text
-            api.shortcuts.activate("Ctrl+Shift+T")
+            startTextEdit("Ctrl+Shift+T")
             api.keyboard.text("This is Flute and Oboe")
-            api.keyboard.key("Esc")
+            api.shortcuts.activate("Esc")
         }},
         {name: "Hide/Show Flute", func: function() {
             Instruments.openInstrumentsPanel()

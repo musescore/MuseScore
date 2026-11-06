@@ -40,6 +40,8 @@ function selectFamily(family)
 {
     // Navigation.goToControl("NewScoreDialog", "FamilyView", family)
     Navigation.triggerControl("NewScoreDialog", "FamilyView", family)
+    //! NOTE The instruments list is rebuilt asynchronously, an instrument triggered meanwhile is added twice
+    api.testflow.sleep(500)
 }
 
 function selectInstrument(instrument)

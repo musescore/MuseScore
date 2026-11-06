@@ -21,6 +21,7 @@
  */
 
 var Navigation = require("Navigation.js")
+var engraving = require("MuseApi.Engraving")
 
 function doFocusIn()
 {
@@ -29,13 +30,53 @@ function doFocusIn()
     Navigation.goToControl("NotationView", "ScoreView", "Score")
 }
 
+//! NOTE The single selected note or null
+function selectedNote()
+{
+    var score = engraving.curScore
+    if (!score) {
+        return null
+    }
+
+    var elements = score.selection.elements
+    if (elements.length !== 1 || elements[0].type !== engraving.Element.NOTE) {
+        return null
+    }
+
+    return elements[0]
+}
+
+//! NOTE Moves the selection by the shortcut until a note (with the pitch, if given) is selected
+function findNote(shortcut, pitch, maxSteps)
+{
+    for (var i = 0; i < maxSteps; ++i) {
+        var note = selectedNote()
+        if (note && (pitch === undefined || note.pitch === pitch)) {
+            return true
+        }
+
+        api.shortcuts.activate(shortcut)
+        api.testflow.sleep(50)
+    }
+
+    return selectedNote() !== null
+}
+
 module.exports = {
     focusIn: doFocusIn,
+    selectedNote: selectedNote,
+    findNote: findNote,
 
     firstElement: function()
     {
         doFocusIn()
         api.shortcuts.activate("Ctrl+Home")
+    },
+
+    lastElement: function()
+    {
+        doFocusIn()
+        api.shortcuts.activate("Ctrl+End")
     },
 
     nextChord: function()

@@ -75,8 +75,14 @@ module.exports = {
     {
         //! NOTE Only a triggered family switches the instruments list
         Navigation.triggerControl("DialogView", "FamilyView", family)
+        //! NOTE The instruments list is rebuilt asynchronously, an instrument triggered meanwhile is added twice
+        api.testflow.sleep(500)
         Navigation.goToControl("DialogView", "InstrumentsView", instrument)
         Navigation.trigger()
+        //! NOTE The instrument is added to the selected list asynchronously
+        if (!api.navigation.waitControl("DialogView", "ListView", instrument, 5000)) {
+            api.testflow.error("instruments: not added to the selected list: " + instrument)
+        }
     },
 
     doneAddInstruments: function()
