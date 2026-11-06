@@ -46,13 +46,11 @@ FocusableControl {
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool settingsAvailable: item && item.settingsAvailable
-    readonly property bool settingsEnabled: item && item.settingsEnabled
     readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
 
     property int sideMargin: 0
 
-    property alias isPopupOpened: popupLoader.isPopupOpened
+    readonly property alias isPopupOpened: row.isPopupOpened
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
@@ -75,7 +73,7 @@ FocusableControl {
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: visibilityControls.title
+    navigation.accessible.name: row.title
 
     onNavigationTriggered: { root.clicked(null) }
 
@@ -110,86 +108,24 @@ FocusableControl {
         z: -1
     }
 
-    Loader {
-        id: popupLoader
-
-        readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
-        readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
-
-        function openPopup(comp: Component, btn: FlatButton, item) {
-            popupLoader.sourceComponent = comp
-            if (!openedPopup) {
-                return
-            }
-
-            openedPopup.parent = btn
-            openedPopup.needActiveFirstItem = btn.navigation.highlight
-
-            openedPopup.load(item)
-
-            openedPopup.closed.connect(function() {
-                sourceComponent = null
-            })
-
-            openedPopup.open()
-        }
-
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                openedPopup.close()
-            }
-        }
-    }
-
-    Component {
-        id: instrumentSettingsComp
-
-        InstrumentSettingsPopup {
-            onReplaceInstrumentRequested: {
-                // The popup would close when the dialog to select the new
-                // instrument is shown; when it closes, it is unloaded, i.e.
-                // deleted, which means that it is deleted while a signal
-                // handler inside it is being executed. This causes a crash.
-                // To prevent that, let the popup close itself, and perform the
-                // actual operation "later", i.e. not (directly or indirectly)
-                // inside the signal handler in the popup.
-                Qt.callLater((root.item as PartTreeItem).replaceInstrument)
-            }
-
-            onResetAllFormattingRequested: {
-                // Same as above
-                Qt.callLater((root.item as PartTreeItem).resetAllFormatting)
-            }
-        }
-    }
-
-    Component {
-        id: staffSettingsComp
-
-        StaffSettingsPopup {}
-    }
-
-    Component {
-        id: systemObjectsLayerSettingsComp
-
-        SystemObjectsLayerSettingsPopup {}
-    }
-
-    VisibilityControls {
-        id: visibilityControls
+    LayoutPanelItemRow {
+        id: row
 
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
         anchors.rightMargin: root.sideMargin
 
+        item: root.item
+        isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
+
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
-        title: root.item ? root.item.title : ""
-        isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
+        isEnabled: root.isEnabled
 
-        useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-        isVisible: Boolean(root.item) && root.item.isVisible
+        isExpanded: root.isExpanded
+        expandableDepth: root.depth
+
         onVisibilityButtonClicked: function(isVisible) {
             if (root.isSelected) {
                 root.changeVisibilityOfSelectedRowsRequested(!isVisible)
@@ -198,74 +134,15 @@ FocusableControl {
             }
         }
 
-        showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-
-        isEnabled: root.isEnabled
-
-        isExpandable: root.isExpandable
-        isExpanded: root.isExpanded
-        expandableDepth: root.depth
         onExpandButtonClicked: function(expand) {
             root.expandRequested(expand)
         }
 
-        FlatButton {
-            id: settingsButton
-
-            visible: root.settingsAvailable
-            enabled: root.visible && root.settingsEnabled
-
-            objectName: "SettingsBtn"
-            navigation.panel: visibilityControls.navigationPanel
-            navigation.row: visibilityControls.navigationRow
-            navigation.column: 3
-            navigation.accessible.name: qsTrc("layoutpanel", "Settings")
-
-            icon: IconCode.SETTINGS_COG
-
-            onClicked: {
-                if (popupLoader.isPopupOpened) {
-                    popupLoader.closeOpenedPopup()
-                    return
-                }
-
-                let comp = null
-                let item = {}
-
-                if (root.type === LayoutPanelItemType.PART) {
-                    comp = instrumentSettingsComp
-
-                    item["partId"] = root.item.id
-                    item["instrumentId"] = (root.item as PartTreeItem).instrumentId()
-                } else if (root.type === LayoutPanelItemType.STAFF) {
-                    comp = staffSettingsComp
-
-                    item["id"] = root.item.id
-                } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
-                    comp = systemObjectsLayerSettingsComp
-
-                    item["staffId"] = (root.item as SystemObjectsLayerTreeItem).staffId()
-                }
-
-                popupLoader.openPopup(comp, this, item)
-            }
-
-            Behavior on opacity {
-                NumberAnimation { duration: 150 }
-            }
-        }
-
-        ToggleButton {
-            id: sharedPartToggle
-            visible: root.type === LayoutPanelItemType.SHARED_PART
-            enabled: root.treeView.model.isStaveSharingEnabled
-            checked: root.item && root.item.isEnabled
-            onToggled: function() {
-                if (root.isSelected) {
-                    root.changeEnabledOfSelectedRowsRequested(!checked)
-                } else {
-                    root.changeEnabledRequested(root.modelIndex, !checked)
-                }
+        onEnabledToggled: function(enabled) {
+            if (root.isSelected) {
+                root.changeEnabledOfSelectedRowsRequested(enabled)
+            } else {
+                root.changeEnabledRequested(root.modelIndex, enabled)
             }
         }
     }
