@@ -42,6 +42,11 @@
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
+
+#include "audio/common/audiotypes.h"
+
 #include "global/async/async.h"
 #include "global/containers.h"
 #include "global/realfn.h"
@@ -74,10 +79,50 @@ static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx
     return pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size());
 }
 
-// Rescale between the common dynamic value range [PPPP, FFFF] and the full [0, 1] display range
-// (the staff box), so those points fill the staff
-static const muse::real_t DYNAMICS_DISPLAY_RANGE_MIN = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPPP);
-static const muse::real_t DYNAMICS_DISPLAY_RANGE_MAX = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFFF);
+namespace mu::notation {
+struct DynamicsDisplayRange {
+    muse::real_t minSounding = 0.0;
+    muse::real_t maxSounding = 0.0;
+    double fadeOutHeight = 0.0;
+};
+}
+
+// Only the levels a sound source plays differently get their own height on the lane
+static const DynamicsDisplayRange MUSE_SAMPLER_DYNAMICS_RANGE {
+    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPPPP),
+    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFF),
+    0.01
+};
+static const DynamicsDisplayRange DEFAULT_DYNAMICS_RANGE {
+    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPP),
+    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFF)
+};
+
+static double dynamicsValueToDisplay(muse::real_t value, const DynamicsDisplayRange& range)
+{
+    if (value <= range.minSounding) {
+        if (muse::RealIsNull(range.fadeOutHeight)) {
+            return 0.0;
+        }
+        return std::max(muse::real_t(0.0), value / range.minSounding * range.fadeOutHeight);
+    }
+
+    const double t = (value - range.minSounding) / (range.maxSounding - range.minSounding);
+    return std::min(1.0, range.fadeOutHeight + t * (1.0 - range.fadeOutHeight));
+}
+
+static muse::real_t dynamicsValueFromDisplay(double displayValue, const DynamicsDisplayRange& range)
+{
+    if (displayValue <= range.fadeOutHeight) {
+        if (muse::RealIsNull(range.fadeOutHeight)) {
+            return range.minSounding;
+        }
+        return muse::real_t(std::max(0.0, displayValue) / range.fadeOutHeight * range.minSounding);
+    }
+
+    const double t = (displayValue - range.fadeOutHeight) / (1.0 - range.fadeOutHeight);
+    return muse::real_t(range.minSounding + t * (range.maxSounding - range.minSounding));
+}
 
 // Must match muse::audio::VOLUME_DB_MIN/MAX
 static constexpr double VOLUME_RANGE_MIN_DB = -60.0;
@@ -146,62 +191,6 @@ static double tempoLocalBpmToLogicalBpm(double localBpm)
 
     const double diff = TEMPO_LOCAL_CENTER_BPM - localBpm;
     return TEMPO_LOGICAL_CENTER_BPM - diff / TEMPO_LOW_ACCURACY_STEP;
-}
-
-// Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
-// Volume and Tempo additionally apply a fader curve, other types map 1:1 onto the display range
-static double automationValueToDisplay(AutomationType type, muse::real_t value)
-{
-    if (type == AutomationType::Dynamics) {
-        const double display = (value - DYNAMICS_DISPLAY_RANGE_MIN) / (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
-        return std::clamp(display, 0.0, 1.0);
-    }
-
-    if (type == AutomationType::Volume) {
-        const double logicalDb = VOLUME_RANGE_MIN_DB + static_cast<double>(value) * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        const double localDb = volumeLogicalDbToLocalDb(logicalDb);
-        const double display = (localDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        return std::clamp(display, 0.0, 1.0);
-    }
-
-    if (type == AutomationType::Tempo) {
-        const double logicalBpm = mu::engraving::denormalizeTempo(value).toBPM().val;
-        const double localBpm = tempoLogicalBpmToLocalBpm(logicalBpm);
-        const double display = localBpm / TEMPO_RANGE_MAX_BPM;
-        return std::clamp(display, 0.0, 1.0);
-    }
-
-    return std::clamp(static_cast<double>(value), 0.0, 1.0);
-}
-
-// existingValue preserves Tempo values above the display cap when the drag lands back at the same clamped edge
-static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue,
-                                               std::optional<muse::real_t> existingValue = std::nullopt)
-{
-    if (type == AutomationType::Dynamics) {
-        return DYNAMICS_DISPLAY_RANGE_MIN + displayValue * (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
-    }
-
-    if (type == AutomationType::Volume) {
-        const double localDb = VOLUME_RANGE_MIN_DB + displayValue * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        const double logicalDb = volumeLocalDbToLogicalDb(localDb);
-        const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        return muse::real_t(normalized);
-    }
-
-    if (type == AutomationType::Tempo) {
-        if (existingValue && muse::RealIsEqualOrMore(displayValue, 1.0)
-            && muse::RealIsEqualOrMore(automationValueToDisplay(type, *existingValue), 1.0)) {
-            return *existingValue;
-        }
-
-        const double localBpm = displayValue * TEMPO_RANGE_MAX_BPM;
-        const double logicalBpm = tempoLocalBpmToLogicalBpm(localBpm);
-        const muse::real_t normalized = mu::engraving::normalizeTempo(mu::engraving::BeatsPerSecond::fromBPM(logicalBpm));
-        return std::clamp(normalized, mu::engraving::MIN_NORMALIZED_TEMPO, mu::engraving::MAX_NORMALIZED_TEMPO);
-    }
-
-    return muse::real_t(displayValue);
 }
 
 static const Segment* lastSegmentOfSystem(const System* system)
@@ -574,13 +563,13 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
         const mu::engraving::AutomationPoint& autoPoint = it->second;
         const mu::engraving::real_t resolvedIn = mu::engraving::resolveInValue(curve, it);
         if (resolvedIn == autoPoint.value.outValue) {
-            const QPointF qpf(pointXInStaff, 1.0 - automationValueToDisplay(type, resolvedIn));
+            const QPointF qpf(pointXInStaff, 1.0 - automationValueToDisplay(type, staff, tick, resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
         } else {
-            const QPointF qpfIn(pointXInStaff, 1.0 - automationValueToDisplay(type, resolvedIn));
+            const QPointF qpfIn(pointXInStaff, 1.0 - automationValueToDisplay(type, staff, tick, resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
 
-            const QPointF qpfOut(pointXInStaff, 1.0 - automationValueToDisplay(type, autoPoint.value.outValue));
+            const QPointF qpfOut(pointXInStaff, 1.0 - automationValueToDisplay(type, staff, tick, autoPoint.value.outValue));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
         }
 
@@ -815,6 +804,19 @@ void NotationAutomationController::onCurrentNotationChanged()
     if (currentNotation()) {
         currentNotation()->viewModeChanged().onNotify(this, [this]() {
             rebuildAllPolylines();
+        }, Asyncable::Mode::SetReplace /* FIXME */);
+    }
+
+    const project::INotationProjectPtr notationProject = projectSession()->project();
+    if (const project::IProjectAudioSettingsPtr settings = notationProject ? notationProject->audioSettings() : nullptr) {
+        // The Dynamics display range depends on the track's sound
+        settings->trackInputParamsChanged().onReceive(this, [this](const InstrumentTrackId&) {
+            if (currentAutomationType() != AutomationType::Dynamics) {
+                return;
+            }
+            m_pendingScoreState.hasChanges = true;
+            m_pendingScoreState.structural = true;
+            scheduleUpdate();
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
 }
@@ -1091,7 +1093,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
     const mu::engraving::real_t referenceValue = pointType == PointData::PointType::IN ? existingInValue : existingPoint.value.outValue;
-    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y, referenceValue);
+    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), staff, newTick, 1.0 - y, referenceValue);
 
     // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 
@@ -1171,7 +1173,7 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     }
 
     mu::engraving::AutomationPoint newPoint;
-    newPoint.value.outValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y);
+    newPoint.value.outValue = automationValueFromDisplay(currentAutomationType(), staff, *newTick, 1.0 - y);
     newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue,
                                                                                mu::engraving::AutomationPoint::Ease::none() };
     newPoint.generated = false;
@@ -1240,6 +1242,89 @@ const mu::engraving::AutomationPoint* NotationAutomationController::automationPo
     }
 
     return &it->second;
+}
+
+const DynamicsDisplayRange& NotationAutomationController::dynamicsDisplayRange(const Staff* staff, int tick) const
+{
+    const project::INotationProjectPtr notationProject = projectSession()->project();
+    const project::IProjectAudioSettingsPtr settings = notationProject ? notationProject->audioSettings() : nullptr;
+    const Part* part = staff ? staff->part() : nullptr;
+    if (!settings || !part) {
+        return DEFAULT_DYNAMICS_RANGE;
+    }
+
+    const InstrumentTrackId trackId { part->id(), part->instrumentId(Fraction::fromTicks(tick)) };
+    const bool isMuseSampler = muse::audio::isResourceType(settings->trackInputParams(trackId).resourceMeta,
+                                                           muse::audio::AudioResourceType::MuseSamplerSoundPack);
+
+    return isMuseSampler ? MUSE_SAMPLER_DYNAMICS_RANGE : DEFAULT_DYNAMICS_RANGE;
+}
+
+// Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
+// Volume and Tempo additionally apply a fader curve, other types map 1:1 onto the display range
+double NotationAutomationController::automationValueToDisplay(AutomationType type, const Staff* staff, int tick,
+                                                              muse::real_t value) const
+{
+    if (type == AutomationType::Dynamics) {
+        return dynamicsValueToDisplay(value, dynamicsDisplayRange(staff, tick));
+    }
+
+    if (type == AutomationType::Volume) {
+        const double logicalDb = VOLUME_RANGE_MIN_DB + static_cast<double>(value) * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        const double localDb = volumeLogicalDbToLocalDb(logicalDb);
+        const double display = (localDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        return std::clamp(display, 0.0, 1.0);
+    }
+
+    if (type == AutomationType::Tempo) {
+        const double logicalBpm = mu::engraving::denormalizeTempo(value).toBPM().val;
+        const double localBpm = tempoLogicalBpmToLocalBpm(logicalBpm);
+        const double display = localBpm / TEMPO_RANGE_MAX_BPM;
+        return std::clamp(display, 0.0, 1.0);
+    }
+
+    return std::clamp(static_cast<double>(value), 0.0, 1.0);
+}
+
+// existingValue preserves values beyond the display range when the drag lands back at the same clamped edge
+muse::real_t NotationAutomationController::automationValueFromDisplay(AutomationType type, const Staff* staff, int tick,
+                                                                      double displayValue,
+                                                                      std::optional<muse::real_t> existingValue) const
+{
+    if (type == AutomationType::Dynamics) {
+        const DynamicsDisplayRange& dynamicsRange = dynamicsDisplayRange(staff, tick);
+        if (existingValue) {
+            const double existingDisplay = dynamicsValueToDisplay(*existingValue, dynamicsRange);
+            const bool atTop = muse::RealIsEqualOrMore(displayValue, 1.0) && muse::RealIsEqualOrMore(existingDisplay, 1.0);
+            const bool atBottom = muse::RealIsEqualOrLess(displayValue, 0.0) && muse::RealIsEqualOrLess(existingDisplay, 0.0);
+            if (atTop || atBottom) {
+                return *existingValue;
+            }
+        }
+
+        return dynamicsValueFromDisplay(displayValue, dynamicsRange);
+    }
+
+    if (type == AutomationType::Volume) {
+        const double localDb = VOLUME_RANGE_MIN_DB + displayValue * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        const double logicalDb = volumeLocalDbToLogicalDb(localDb);
+        const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        return muse::real_t(normalized);
+    }
+
+    if (type == AutomationType::Tempo) {
+        if (existingValue && muse::RealIsEqualOrMore(displayValue, 1.0)
+            && muse::RealIsEqualOrMore(automationValueToDisplay(type, staff, tick, *existingValue), 1.0)) {
+            return *existingValue;
+        }
+
+        const double localBpm = displayValue * TEMPO_RANGE_MAX_BPM;
+        const double logicalBpm = tempoLocalBpmToLogicalBpm(localBpm);
+        const muse::real_t normalized = mu::engraving::normalizeTempo(mu::engraving::BeatsPerSecond::fromBPM(logicalBpm));
+        return std::clamp(normalized, mu::engraving::MIN_NORMALIZED_TEMPO, mu::engraving::MAX_NORMALIZED_TEMPO);
+    }
+
+    return muse::real_t(displayValue);
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const
