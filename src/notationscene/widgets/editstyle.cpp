@@ -609,6 +609,7 @@ void EditStyle::classBegin()
         // { StyleId::chordsXmlFile,            false, chordsXmlFile,                0 },
         { StyleId::dotMag,                   true,  dotMag,                       0 },
         { StyleId::articulationMag,          true,  articulationMag,              resetArticulationMag },
+        { StyleId::oversizedNoteheads,       false, oversizedNoteheads,           0 },
         { StyleId::shortenStem,              false, shortenStem,                  0 },
         { StyleId::showHeader,               false, showHeader,                   0 },
         { StyleId::headerFirstPage,          false, showHeaderFirstPage,          0 },
@@ -2112,6 +2113,7 @@ void EditStyle::setValues()
     for (const auto& i : engravingFonts()->fonts()) {
         if (QString::fromStdString(i->name()).toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
+            oversizedNoteheads->setVisible(i->hasOversizedNoteheadsSupport());
         }
         if (QString::fromStdString(i->name()).toLower() == dynFont.toLower()) {
             dynamicsFont->setCurrentIndex(idx);
@@ -2382,8 +2384,11 @@ void EditStyle::valueChanged(int i)
         if (!overrideDynamicsFont) {
             setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font
         }
+        IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
+        if (scoreFont) {
+            oversizedNoteheads->setVisible(scoreFont->hasOversizedNoteheadsSupport());
+        }
         if (optimizeStyleCheckbox->isChecked()) {
-            IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
             if (scoreFont) {
                 for (auto j : scoreFont->engravingDefaults()) {
                     setStyleValue(j.first, j.second);

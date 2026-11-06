@@ -4742,6 +4742,12 @@ enum class SymId {
     accidentalSharpParens = int(mu::engraving::SymId::accidentalSharpParens),
     accidentalDoubleSharpParens = int(mu::engraving::SymId::accidentalDoubleSharpParens),
 
+    noteheadBlackOversized = int(mu::engraving::SymId::noteheadBlackOversized),
+    noteheadHalfOversized = int(mu::engraving::SymId::noteheadHalfOversized),
+    noteheadWholeOversized = int(mu::engraving::SymId::noteheadWholeOversized),
+    noteheadDoubleWholeOversized = int(mu::engraving::SymId::noteheadDoubleWholeOversized),
+    noteheadDoubleWholeSquareOversized = int(mu::engraving::SymId::noteheadDoubleWholeSquareOversized),
+
     noteLongaUp = int(mu::engraving::SymId::noteLongaUp),
     noteLongaDown = int(mu::engraving::SymId::noteLongaDown),
     noteLongaSquareUp = int(mu::engraving::SymId::noteLongaSquareUp),
