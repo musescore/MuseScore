@@ -87,6 +87,17 @@ void PauseMap::calculate(const Score* s)
                 }
             }
         }
+        if (!RealIsNull(rs->pause)) {
+            int utick = rs->utick + rs->len();
+
+            Fraction timeSig(sigmap->timesig(endTick).timesig());
+            double quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
+            int ticksPerMeasure = quarterNotesPerMeasure * Constants::DIVISION;
+
+            m_tempomapWithPauses->setTempo(this->tickWithPauses(utick), quarterNotesPerMeasure / rs->pause);
+            this->insert(std::pair<const int, int>(utick, ticksPerMeasure + this->offsetAtUTick(utick)));
+            m_tempomapWithPauses->setTempo(this->tickWithPauses(utick), tempomap->tempo(endTick));
+        }
     }
 }
 
