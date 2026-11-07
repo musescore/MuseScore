@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mei_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mei_microtonal_tests.cpp
 )
 
 set(MODULE_TEST_LINK
@@ -38,3 +39,8 @@ set(MODULE_TEST_LINK
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(SetupGTest)
+
+target_include_directories(${MODULE_TEST} PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/importexport/mei
+    ${_pugixml_src}/pugixml/src
+)
