@@ -2690,19 +2690,14 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
     removeChordRest(ocr, false);
 
     ChordRest* cr;
-    if (ocr->isChord()) {
-        cr = Factory::createChord(this->dummy());
-        toChord(cr)->setStemDirection(toChord(ocr)->stemDirection());
-        for (Note* oldNote : toChord(ocr)->notes()) {
-            Note* note = Factory::createNote(toChord(cr));
-            note->setPitch(oldNote->pitch());
-            note->setTpc1(oldNote->tpc1());
-            note->setTpc2(oldNote->tpc2());
-            cr->add(note);
-        }
+    if (ocr->isMeasureRepeat()) {
+        cr = Factory::copyRest(*toRest(ocr));
+        toRest(cr)->hack_toRestType();
     } else {
-        cr = Factory::createRest(this->dummy());
+        cr = toChordRest(ocr->clone());
     }
+    cr->mutldata()->setPosX(0.0);
+    cr->setSelected(false);
 
     int actualNotes = an.numerator() / an.denominator();
 
