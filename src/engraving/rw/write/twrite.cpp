@@ -531,7 +531,7 @@ void TWrite::writeScoreSpanners(const Score* score, XmlWriter& xml, WriteContext
         }
         if (s->links()) {
             // The reader resolves linkedTo immediately, so write the eligible main first.
-            Spanner* main = toSpanner(s->links()->mainElement());
+            Spanner* main = toSpanner(s->links()->mainElement(ctx.linkRootScore()));
             if (pending.erase(main)) {
                 TWrite::writeItem(main, xml, ctx);
             }
@@ -606,7 +606,7 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
         return;
     }
 
-    EngravingItem* mainElement = static_cast<EngravingItem*>(item->links()->mainElement());
+    EngravingObject* mainElement = item->links()->mainElement(ctx.linkRootScore());
     if (mainElement != item) {
         EID eidOfMainElement = mainElement->eid();
         DO_ASSERT(eidOfMainElement.isValid());

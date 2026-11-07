@@ -41,12 +41,12 @@ bool LinkedObjects::contains(const EngravingObject* o) const
 //    be written to the file prior to others.
 //---------------------------------------------------------
 
-EngravingObject* LinkedObjects::mainElement()
+EngravingObject* LinkedObjects::mainElement(const Score* preferredScore)
 {
     if (empty()) {
         return nullptr;
     }
-    MasterScore* ms = front()->score()->masterScore();
+    const Score* ms = preferredScore ? preferredScore : front()->score()->masterScore();
     const bool elements = front()->isEngravingItem();
     const bool staves = front()->isStaff();
     return *std::min_element(begin(), end(), [ms, elements, staves](EngravingObject* s1, EngravingObject* s2) {
