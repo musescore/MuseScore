@@ -23,6 +23,7 @@
 #include "musesoundsdevtoolsmodel.h"
 
 #include <QFile>
+#include <QJsonArray>
 
 #include "global/translation.h"
 #include "global/log.h"
