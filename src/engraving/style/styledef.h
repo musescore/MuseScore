@@ -2278,6 +2278,7 @@ enum class Sid : short {
     palmMuteBeginFilledArrowWidth,
     palmMuteEndFilledArrowHeight,
     palmMuteEndFilledArrowWidth,
+    oversizedNoteheads,
 
     STYLES
 };
