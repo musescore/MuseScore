@@ -28,6 +28,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -35,13 +36,16 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/tremolosinglechord.h"
 
+#include "engraving/editing/editkeysig.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
 
+#include "engraving/types/types.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -57,6 +61,49 @@ static ChordRest* chordRestAtTick(Score* score, const Fraction& tick, track_idx_
 {
     Segment* segment = score->tick2segment(tick, false, SegmentType::ChordRest);
     return segment ? toChordRest(segment->element(track)) : nullptr;
+}
+
+static track_idx_t findTabTrack(Score* score, const Fraction& tick, voice_idx_t voice = 0)
+{
+    track_idx_t track = 0;
+
+    for (staff_idx_t i = 0; i < score->nstaves(); i++) {
+        if (score->staff(i)->isTabStaff(tick)) {
+            track = i * VOICES + voice;
+        }
+    }
+
+    return track;
+}
+
+// returns nullptr if note wasn't found
+static Note* firstNoteAtTick(Score* score, const Fraction& tick, track_idx_t track)
+{
+    ChordRest* cr = chordRestAtTick(score, tick, track);
+    if (cr != nullptr && cr->isChord()) {
+        Chord* chord = toChord(cr);
+        if (chord->notes().empty()) {
+            ADD_FAILURE() << "Chord at tick " << tick.toString().toStdString() << " doesn't have any notes";
+            return nullptr;
+        }
+
+        Note* note = chord->notes()[0];
+
+        return note;
+    }
+    ADD_FAILURE() << "No chord at tick " << tick.toString().toStdString();
+    return nullptr;
+}
+
+static void setInputStateForFretEntry(Score* score, Note* note)
+{
+    track_idx_t track = note->track();
+
+    score->inputState().setTrack(track);
+    score->inputState().setSegment(note->chord()->segment());
+    score->inputState().setString(note->string());
+    score->inputState().setDuration(note->chord()->durationType());
+    score->inputState().setNoteEntryMode(true);
 }
 
 //---------------------------------------------------------
@@ -862,6 +909,165 @@ TEST_F(Engraving_NoteTests, RepitchInVoiceTwoDoesNotAffectVoiceOneLyrics)
     EXPECT_EQ(voice1Cr->lyrics().front()->xmlText(), u"solo");
     EXPECT_EQ(toChord(voice2Cr)->upNote()->pitch(), 57);
     EXPECT_TRUE(voice2Cr->lyrics().empty());
+
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, TabChangePitchFirstTiedNote)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"TabChangePitchTiedNotes.mscx");
+    ASSERT_TRUE(score);
+
+    Fraction tick(1, 2);
+    track_idx_t track = findTabTrack(score, tick);
+
+    Note* note = firstNoteAtTick(score, tick, track);
+    ASSERT_TRUE(note);
+
+    setInputStateForFretEntry(score, note);
+
+    // change fret selected from 5 to 3
+    NoteInput::addFret(score->transactionManager()->currentOrDummyTransaction(), score, 3);
+
+    Note* linkedNote = nullptr;
+
+    for (EngravingObject* e : note->linkList()) {
+        if (e->isNote()) {
+            Note* en = (Note*)e;
+            if (en->staffIdx() != note->staffIdx()) {
+                linkedNote = en;
+            }
+        }
+    }
+    ASSERT_TRUE(linkedNote);
+
+    score->doLayout();
+
+    // changing string 3 from fret 5 to 3, where pitch is 55 and 53 respectively
+    for (Note* n : note->tiedNotes()) {
+        EXPECT_EQ(n->fret(), 3);
+        EXPECT_EQ(n->pitch(), 53);
+    }
+    for (Note* n : linkedNote->tiedNotes()) {
+        EXPECT_EQ(n->fret(), 3);
+        EXPECT_EQ(n->pitch(), 53);
+    }
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, TabChangePitchLastTiedNote)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"TabChangePitchTiedNotes.mscx");
+    ASSERT_TRUE(score);
+
+    Fraction tick(1, 1);
+    track_idx_t track = findTabTrack(score, tick);
+
+    Note* note = firstNoteAtTick(score, tick, track);
+    ASSERT_TRUE(note);
+
+    setInputStateForFretEntry(score, note);
+
+    // change fret selected from 5 to 3
+    NoteInput::addFret(score->transactionManager()->currentOrDummyTransaction(), score, 3);
+
+    Note* linkedNote = nullptr;
+
+    for (EngravingObject* e : note->linkList()) {
+        if (e->isNote()) {
+            Note* en = (Note*)e;
+            if (en->staffIdx() != note->staffIdx()) {
+                linkedNote = en;
+            }
+        }
+    }
+    ASSERT_TRUE(linkedNote);
+
+    score->doLayout();
+
+    // changing string 3 from fret 5 to 3, where pitch is 55 and 53 respectively
+    for (Note* n : note->tiedNotes()) {
+        EXPECT_EQ(n->fret(), 3);
+        EXPECT_EQ(n->pitch(), 53);
+    }
+    for (Note* n : linkedNote->tiedNotes()) {
+        EXPECT_EQ(n->fret(), 3);
+        EXPECT_EQ(n->pitch(), 53);
+    }
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, StandardChangePitchTiedNotesUpdatesTab)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"TabChangePitchTiedNotes.mscx");
+    ASSERT_TRUE(score);
+
+    Fraction tick(1, 2);
+
+    // staff 0 is the standard staff in this score
+    Note* standardNote = firstNoteAtTick(score, tick, 0);
+    ASSERT_TRUE(standardNote);
+
+    Note* tabNote = firstNoteAtTick(score, tick, findTabTrack(score, tick));
+    ASSERT_TRUE(tabNote);
+
+    // move the standard staff note down a semitone: pitch 55 -> 54
+    score->select(standardNote);
+    EditNote::upDown(score, false, UpDownMode::CHROMATIC);
+    score->doLayout();
+
+    for (Note* n : standardNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 54);
+    }
+    for (Note* n : tabNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 54);
+        EXPECT_EQ(n->fret(), 4);
+    }
+
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, TabChangePitchTiedNotesAcrossKeyChangeKeepsSpelling)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"TabChangePitchTiedNotes.mscx");
+    ASSERT_TRUE(score);
+
+    // add key-change to existing score's first and second measures
+    KeySigEvent sharps;
+    sharps.setConcertKey(Key::A);
+    KeySigEvent flats;
+    flats.setConcertKey(Key::A_B);
+    score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), Fraction(0, 1), sharps);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), Fraction(1, 1), flats);
+    score->endCmd();
+
+    Fraction tick(1, 2);
+
+    // staff 0 is the standard staff in this score
+    Note* standardNote = firstNoteAtTick(score, tick, 0);
+    ASSERT_TRUE(standardNote);
+
+    Note* tabNote = firstNoteAtTick(score, tick, findTabTrack(score, tick));
+    ASSERT_TRUE(tabNote);
+
+    setInputStateForFretEntry(score, tabNote);
+
+    // string 3 fret 6 is pitch 56: G# in A major, but Ab in Ab major
+    NoteInput::addFret(score->transactionManager()->currentOrDummyTransaction(), score, 6);
+    score->doLayout();
+
+    // every note in the tie chain, on both staves, must be spelled the same
+    for (Note* n : standardNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 56);
+        EXPECT_EQ(n->tpc1(), standardNote->tpc1());
+        EXPECT_EQ(n->tpc2(), standardNote->tpc2());
+    }
+    for (Note* n : tabNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 56);
+        EXPECT_EQ(n->tpc1(), standardNote->tpc1());
+        EXPECT_EQ(n->tpc2(), standardNote->tpc2());
+    }
 
     delete score;
 }
