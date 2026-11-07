@@ -22,10 +22,11 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/tests/utils/scorecomp.h"
 #include "engraving/tests/utils/scorerw.h"
-
-#include "engraving/dom/stafftext.h"
 
 #include "importexport/tabledit/internal/tableditreader.h"
 
@@ -33,11 +34,15 @@ using namespace mu::engraving;
 
 static const muse::String TABLEDIT_DIR("data/");
 
+//! NOTE Temporary for testing
+static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+
 class TablEdit_Tests : public ::testing::Test
 {
 public:
     void tefReadTest(const char* file);
     MasterScore* tefRead(const char* file, Err& err);
+    void tefReadBadFormat(const char* file, const char* message);
 };
 
 //---------------------------------------------------------
@@ -59,6 +64,26 @@ void TablEdit_Tests::tefReadTest(const char* file)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", TABLEDIT_DIR + fileName + u".mscx"));
     delete score;
+}
+
+//---------------------------------------------------------
+//   tefReadBadFormat
+//   read a TablEdit file with an invalid header,
+//   verify Err::FileBadFormat and correct the error message are returned
+//---------------------------------------------------------
+
+void TablEdit_Tests::tefReadBadFormat(const char* name, const char* message)
+{
+    const muse::modularity::ContextPtr iocCtx = utestCtx;
+    muse::io::path_t path = ScoreRW::rootPath() + u"/" + TABLEDIT_DIR + name + u".tef";
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(iocCtx);
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+
+    mu::iex::tabledit::TablEditReader tablEditReader;
+    muse::Ret ret { tablEditReader.read(score, path) };
+
+    EXPECT_TRUE(ret.code() == static_cast<int>(Err::FileBadFormat));
+    EXPECT_TRUE(ret.text() == message);
 }
 
 //---------------------------------------------------------
@@ -157,6 +182,14 @@ TEST_F(TablEdit_Tests, tef_guitar_drop_D) {
 
 TEST_F(TablEdit_Tests, tef_guitar_new_standard_tuning) {
     tefReadTest("guitar_new_standard_tuning");
+}
+
+TEST_F(TablEdit_Tests, tef_header_signature_1) {
+    tefReadTest("header_signature_1");
+}
+
+TEST_F(TablEdit_Tests, tef_header_signature_2) {
+    tefReadTest("header_signature_2");
 }
 
 TEST_F(TablEdit_Tests, tef_key_signatures) {
@@ -304,6 +337,32 @@ TEST_F(TablEdit_Tests, tef_voices) {
 
 TEST_F(TablEdit_Tests, tef_voices_multi_part) {
     tefReadTest("voices_multi_part");
+}
+
+//---------------------------------------------------------
+//   invalid header and protected file tests
+//---------------------------------------------------------
+
+TEST_F(TablEdit_Tests, tef_file_protected) {
+    tefReadBadFormat("file_protected", "The file is protected.");
+}
+
+TEST_F(TablEdit_Tests, tef_header_incorrect_signature) {
+    tefReadBadFormat("header_incorrect_signature", "The file signature is incorrect (1952605541).");
+}
+
+TEST_F(TablEdit_Tests, tef_header_invalid_format_v09) {
+    tefReadBadFormat("header_invalid_format_v09",
+                     "The file is in an older TablEdit format (version 9). The importer does not support this version.");
+}
+
+TEST_F(TablEdit_Tests, tef_header_invalid_format_v11) {
+    tefReadBadFormat("header_invalid_format_v11",
+                     "The file is in a newer TablEdit format (version 11). The importer does not support this version.");
+}
+
+TEST_F(TablEdit_Tests, tef_header_invalid_too_small) {
+    tefReadBadFormat("header_invalid_too_small", "The file size is too small (255 bytes).");
 }
 
 //---------------------------------------------------------

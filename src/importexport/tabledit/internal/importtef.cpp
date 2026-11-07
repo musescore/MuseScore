@@ -49,6 +49,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/volta.h"
+#include "io/file.h"
 #include "log.h"
 
 using namespace mu::engraving;
@@ -1445,8 +1446,26 @@ void TablEdit::readTefTexts()
     }
 }
 
-void TablEdit::readTefHeader()
+//---------------------------------------------------------
+//   readTefHeader - read the header of a TablEdit format v3 file
+//   preconditions:
+//   - file has been opened and is readable
+//   - file size is at least the header size
+//   - file has correct v3 wFormat and signature
+//   first check if the file is protected (meaning import is not allowed)
+//   in that case, immediately return with FileBadFormat
+//---------------------------------------------------------
+
+mu::engraving::Err TablEdit::readTefHeader()
 {
+    _file->seek(OFFSET_SECURITYCODE);
+    tefHeader.securityCode = readUInt32();
+    tefHeader.securityFlags = readUInt32();
+    if (tefHeader.securityCode != 0) {
+        _errorMessage = muse::mtrc("iex_tabledit", "The file is protected.");
+        return Err::FileBadFormat;
+    }
+    _file->seek(0);
     readUInt16(); // skip private01
     tefHeader.version = readUInt16();
     tefHeader.subVersion = readUInt16();
@@ -1455,8 +1474,6 @@ void TablEdit::readTefHeader()
     tefHeader.reverb = readUInt16();
     readUInt16(); // todo syncope (is signed)
     readUInt16(); // skip private02
-    tefHeader.securityCode = readUInt32();
-    tefHeader.securityFlags = readUInt32();
     _file->seek(OFFSET_TBED);
     tefHeader.tbed = readUInt32();
     readUInt32(); // skip contents
@@ -1472,21 +1489,82 @@ void TablEdit::readTefHeader()
     _file->seek(OFFSET_OLDNUM);
     tefHeader.wOldNum = readUInt16();
     tefHeader.wFormat = readUInt16();
+    return Err::NoError;
+}
+
+uint32_t TablEdit::readSignature()
+{
+    _file->seek(OFFSET_TBED);
+    return readUInt32();
+}
+
+uint16_t TablEdit::readWFormat()
+{
+    _file->seek(OFFSET_WFORMAT);
+    return readUInt16();
 }
 
 //---------------------------------------------------------
 //   import
-//
-//   see src/importexport/guitarpro/internal/importgtp.cpp createLinkedTabs()
-//   for linked staves
 //---------------------------------------------------------
 
-Err TablEdit::import()
+Err TablEdit::import(const muse::io::path_t& path)
 {
-    readTefHeader();
+    muse::io::File tefFile(path);
+    if (!tefFile.exists()) {
+        LOGN("file '%s' not found", path.toStdString().c_str());
+        return Err::FileNotFound;
+    }
+
+    if (!tefFile.open(muse::io::IODevice::ReadOnly)) {
+        LOGN("file '%s' not accessible", path.toStdString().c_str());
+        return Err::FileOpenError;
+    }
+
+    // do checks to verify this is a file type and version we can handle
+    const size_t fileSize { tefFile.size() };
+    if (fileSize < HEADER_SIZE) {
+        // a TablEdit file cannot be smaller than HEADER_SIZE
+        _errorMessage = muse::mtrc("iex_tabledit", "The file size is too small (%1 bytes).").arg(fileSize);
+        return Err::FileBadFormat;
+    }
+
+    _file = &tefFile;   // all TablEdit's file handling functions depend on _file
+
+    const int wFormatHiByte { readWFormat() >> 8 };
+    if (wFormatHiByte < 10) {
+        _errorMessage = muse::mtrc("iex_tabledit", "The file is in an older TablEdit format (version %1)."
+                                                   " The importer does not support this version.").arg(wFormatHiByte);
+        return Err::FileBadFormat;
+    }
+    if (wFormatHiByte > 10) {
+        _errorMessage = muse::mtrc("iex_tabledit", "The file is in a newer TablEdit format (version %1)."
+                                                   " The importer does not support this version.").arg(wFormatHiByte);
+        return Err::FileBadFormat;
+    }
+
+    // Format v10 files contain either "debt" or "tbed" in ASCII as signature, imported as a 32-bit integer
+    const int64_t actualSignature { readSignature() }; // String::arg() does not support uit32_t
+    const int signature1 { 0x64656274 };
+    const int signature2 { 0x74626564 };
+    if (actualSignature != signature1 && actualSignature != signature2) {
+        _errorMessage = muse::mtrc("iex_tabledit", "The file signature is incorrect (%1).").arg(actualSignature);
+        return Err::FileBadFormat;
+    }
+
+    // do actual import
+    const Err err { readTefHeader() };
+    if (err == Err::FileBadFormat) {
+        _errorMessage = muse::mtrc("iex_tabledit", "The file is protected.");
+        return err;
+    } else if (err != Err::NoError) {
+        _errorMessage = muse::mtrc("iex_tabledit", "Unexpected error reading header.");
+        return err;
+    }
     LOGN("version %d subversion %d", tefHeader.version, tefHeader.subVersion);
     LOGN("tempo %d chorus %d reverb %d", tefHeader.tempo, tefHeader.chorus, tefHeader.reverb);
     LOGN("securityCode %d securityFlags %d", tefHeader.securityCode, tefHeader.securityFlags);
+    LOGN("tbed %d", tefHeader.tbed);
     LOGN("title '%s'", tefHeader.title.c_str());
     LOGN("subTitle '%s'", tefHeader.subTitle.c_str());
     LOGN("comment '%s'", tefHeader.comment.c_str());
@@ -1494,17 +1572,6 @@ Err TablEdit::import()
     LOGN("internetLink '%s'", tefHeader.internetLink.c_str());
     LOGN("copyright '%s'", tefHeader.copyright.c_str());
     LOGN("tbed %d wOldNum %d wFormat %d", tefHeader.tbed, tefHeader.wOldNum, tefHeader.wFormat);
-    if ((tefHeader.wFormat >> 8) < 10) {
-        return Err::FileBadFormat;
-        //return Err::FileTooOld; // TODO: message is too specific for MuseScore format
-    }
-    if ((tefHeader.wFormat >> 8) > 10) {
-        return Err::FileBadFormat;
-        //return Err::FileTooNew;
-    }
-    if (tefHeader.securityCode != 0) {
-        return Err::FileBadFormat; // todo "file is protected" message ?
-    }
     readTefTexts();
     for (const auto& text : tefTexts) {
         LOGN("text: '%s'", text.c_str());
