@@ -801,7 +801,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 chord->add(note);
                 note->setPitch(clampPitch(pitch));
                 note->setHeadGroup(NoteHeadGroup(n.headGroup));
-                // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
                     Tie* tie = Factory::createTie(note);
@@ -982,6 +981,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
         }
     }
     Fraction endTick = tick;
+    score->spell(); // Call respell-pitches to correct accidentals
 
     //
     // pass II
@@ -1392,6 +1392,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         systemTick = mtick;
     }
+    score->spell(); // Call respell-pitches to correct accidentals
 
     //
     // fill empty measures with rests
