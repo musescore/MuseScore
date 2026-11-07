@@ -104,7 +104,9 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         { "f-quena", { SoundId::Quena, SoundCategory::Winds } },
         { "d-quena", { SoundId::Quena, SoundCategory::Winds } },
 
+        { "f-castilian-dulzaina", { SoundId::Dulzaina, SoundCategory::Winds, { SoundSubCategory::Castilian } } },
         { "fs-castilian-dulzaina", { SoundId::Dulzaina, SoundCategory::Winds, { SoundSubCategory::Castilian } } },
+        { "g-castilian-dulzaina", { SoundId::Dulzaina, SoundCategory::Winds, { SoundSubCategory::Castilian } } },
 
         { "piccolo-heckelphone", { SoundId::Heckelphone, SoundCategory::Winds } },
         { "heckelphone", { SoundId::Heckelphone, SoundCategory::Winds } },
