@@ -171,7 +171,7 @@
         <lyric number="1" default-x="6.5" default-y="-44.42" relative-y="-30">
           <syllabic>single</syllabic>
           <text>ce</text>
-          <elision smufl="lyricsElisionNarrow"/>
+          <elision smufl="lyricsHyphenBaseline"/>
           <text>e</text>
           <elision smufl="lyricsElision"/>
           <text>in</text>
@@ -181,7 +181,7 @@
           <text>ce</text>
           <elision smufl="lyricsElisionNarrow"/>
           <text>e</text>
-          <elision smufl="lyricsElision"/>
+          <elision smufl="lyricsHyphenBaseline"/>
           <text>in</text>
           </lyric>
         </note>

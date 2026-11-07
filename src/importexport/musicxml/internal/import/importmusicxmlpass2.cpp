@@ -8268,8 +8268,8 @@ void MusicXmlParserLyric::skipLogCurrElem()
 
 void MusicXmlParserLyric::readElision(String& formattedText)
 {
-    const String text = m_e.readText();
     const String smufl = m_e.attribute("smufl");
+    const String text = m_e.readText();
     if (!text.empty()) {
         formattedText += text;
     } else if (!smufl.empty()) {

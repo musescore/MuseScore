@@ -188,12 +188,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <eid>T_T</eid>
-              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
+              <text>ce<sym>lyricsHyphenBaseline</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <eid>U_U</eid>
-              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
+              <text>ce<sym>lyricsElisionNarrow</sym>e<sym>lyricsHyphenBaseline</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
@@ -207,12 +207,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <eid>X_X</eid>
-              <text>ce<sym>lyricsElision</sym>e‿in</text>
+              <text>ce<sym>lyricsElisionWide</sym>e‿in</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <eid>Y_Y</eid>
-              <text>ce<sym>lyricsElision</sym>e‿in</text>
+              <text>ce<sym>lyricsElisionWide</sym>e‿in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
