@@ -23,7 +23,10 @@
 #ifndef MU_ENGRAVING_STAFFTYPECHANGE_H
 #define MU_ENGRAVING_STAFFTYPECHANGE_H
 
+#include <optional>
+
 #include "engravingitem.h"
+#include "stafftype.h"
 
 namespace mu::engraving {
 class StaffType;
@@ -45,6 +48,18 @@ public:
     const StaffType* staffType() const { return m_staffType; }
     void setStaffType(StaffType* st, bool owned);
 
+    //! Returns the staff baseline saved before this marker overrides the first measure.
+    const StaffType* initialStaffType() const { return m_initialStaffType ? &*m_initialStaffType : nullptr; }
+    //! Saves the baseline independently of the active first-measure staff type.
+    void setInitialStaffType(const StaffType& type) { m_initialStaffType = type; }
+
+    void startDrag(EditData&) override;
+    RectF drag(EditData&) override;
+    void endDrag(EditData&) override;
+    std::vector<LineF> dragAnchorLines() const override;
+    //! Exposes the prospective measure for the notation layer's drag highlight.
+    Measure* dragTargetMeasure() const { return m_dragTarget; }
+
     double lw() const { return m_lw; }
 
     Measure* measure() const { return toMeasure(ownershipParent()); }
@@ -62,8 +77,11 @@ private:
     void spatiumChanged(double oldValue, double newValue) override;
 
     StaffType* m_staffType = nullptr;
+    std::optional<StaffType> m_initialStaffType;
     bool m_ownsStaffType = false;
     double m_lw = 0.0;
+    Measure* m_dragTarget = nullptr;
+    PointF m_dragOffset;
 };
 } // namespace mu::engraving
 
