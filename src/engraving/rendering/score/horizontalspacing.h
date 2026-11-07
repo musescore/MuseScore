@@ -46,16 +46,17 @@ class HorizontalSpacing
 public:
 
     static double computeSpacingForFullSystem(System* system, double stretchReduction = 1.0, double squeezeFactor = 1.0,
-                                              bool overrideMinMeasureWidth = false);
+                                              bool overrideMinMeasureWidth = false, bool useActualRestShapes = false);
     static double updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion = false);
-    static void squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth);
+    static void squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth, bool useActualRestShapes = false);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
 
-    static double minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor = 1.0);
+    static double minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor = 1.0,
+                                        bool useActualRestShapes = false);
     //! NOTE Temporary solution
     static double shapeSpatium(const Shape& s);
 
-    static double minHorizontalDistance(const Segment* f, const Segment* ns, double squeezeFactor);
+    static double minHorizontalDistance(const Segment* f, const Segment* ns, double squeezeFactor, bool useActualRestShapes = false);
     static double minLeft(const Segment* seg, const Shape& ls);
 
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
@@ -74,6 +75,7 @@ private:
         double squeezeFactor = 1.0;
         double spacingDensity = 1.0;
         bool overrideMinMeasureWidth = false;
+        bool useActualRestShapes = false;
     };
 
     struct SegmentPosition {
