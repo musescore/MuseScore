@@ -55,6 +55,7 @@ void BarlineSettingsModel::createProperties()
     m_playCountText = buildPropertyItem(Pid::PLAY_COUNT_TEXT);
     m_playCountTextSetting = buildPropertyItem(Pid::PLAY_COUNT_TEXT_SETTING);
     m_isSpanToNextStaff = buildPropertyItem(Pid::BARLINE_SPAN);
+    m_spanStyle = buildPropertyItem(Pid::BARLINE_SPAN_STYLE);
     m_spanFrom = buildPropertyItem(Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Pid::BARLINE_SPAN_TO);
     m_hasToShowTips = buildPropertyItem(Pid::BARLINE_SHOW_TIPS);
@@ -85,6 +86,7 @@ void BarlineSettingsModel::loadProperties()
         Pid::PLAY_COUNT_TEXT,
         Pid::PLAY_COUNT_TEXT_SETTING,
         Pid::BARLINE_SPAN,
+        Pid::BARLINE_SPAN_STYLE,
         Pid::BARLINE_SPAN_FROM,
         Pid::BARLINE_SPAN_TO,
         Pid::BARLINE_SHOW_TIPS,
@@ -127,6 +129,10 @@ void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
         loadPropertyItem(m_isSpanToNextStaff, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toBool();
         });
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_STYLE)) {
+        loadPropertyItem(m_spanStyle);
     }
 
     if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_FROM)) {
@@ -250,7 +256,12 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
             staves.push_back(staff);
         }
 
-        if (barline->barLineType() == mu::engraving::BarLineType::NORMAL) {
+        barline->undoResetProperty(Pid::BARLINE_SPAN);
+        barline->undoResetProperty(Pid::BARLINE_SPAN_FROM);
+        barline->undoResetProperty(Pid::BARLINE_SPAN_TO);
+
+        if (barline->barLineType() == mu::engraving::BarLineType::NORMAL
+            && barline->spanStyle() == mu::engraving::BarLineSpanStyle::DEFAULT) {
             barline->setGenerated(true);
         }
     }
@@ -282,6 +293,11 @@ PropertyItem* BarlineSettingsModel::playCountTextSetting() const
 PropertyItem* BarlineSettingsModel::isSpanToNextStaff() const
 {
     return m_isSpanToNextStaff;
+}
+
+PropertyItem* BarlineSettingsModel::spanStyle() const
+{
+    return m_spanStyle;
 }
 
 PropertyItem* BarlineSettingsModel::spanFrom() const

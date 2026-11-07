@@ -103,6 +103,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BARLINE_SPAN,                        P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "span",                            QT_TRANSLATE_NOOP("engraving/propertyName", "span") },
     { Pid::BARLINE_SPAN_FROM,                   P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "spanFromOffset",                  QT_TRANSLATE_NOOP("engraving/propertyName", "span from") },
     { Pid::BARLINE_SPAN_TO,                     P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "spanToOffset",                    QT_TRANSLATE_NOOP("engraving/propertyName", "span to") },
+    { Pid::BARLINE_SPAN_STYLE,                  P_TYPE::BARLINE_SPAN_STYLE,        PropertyGroup::APPEARANCE, false, "spanStyle",                       QT_TRANSLATE_NOOP("engraving/propertyName", "span style") },
     { Pid::BARLINE_SHOW_TIPS,                   P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "showTips",                        QT_TRANSLATE_NOOP("engraving/propertyName", "show tips") },
 
     { Pid::OFFSET,                              P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "offset",                          QT_TRANSLATE_NOOP("engraving/propertyName", "offset") },
