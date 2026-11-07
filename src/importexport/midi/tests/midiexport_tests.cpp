@@ -21,6 +21,7 @@
  */
 
 #include <memory>
+#include <set>
 #include <string>
 #include <string_view>
 
@@ -42,6 +43,7 @@
 #include "engraving/tests/utils/scorerw.h"
 
 #include "importexport/midi/internal/midiexport/exportmidi.h"
+#include "importexport/midi/internal/midishared/midifile.h"
 
 #include "utils/smfyamlserializer.h"
 
@@ -212,6 +214,60 @@ TEST_F(MidiExportTests, midiArpeggio) {
 
 TEST_F(MidiExportTests, midiMutedUnison) {
     exportAndCompareWithRef("testMutedUnison");
+}
+
+static void checkLyricsSitOnNoteOnsets(const String& name, const std::set<int>& expected)
+{
+    const std::string midiFileName = name.toStdString() + ".mid";
+
+    {
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/" + name + u".mscx"));
+        ASSERT_TRUE(score);
+        score->doLayout();
+        score->rebuildMidiMapping();
+
+        ASSERT_PRED2(saveMidi, score.get(), midiFileName);
+    }
+
+    QFile file(QString::fromStdString(midiFileName));
+    ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+
+    MidiFile midiFile;
+    ASSERT_TRUE(midiFile.read(&file));
+    file.close();
+
+    std::set<int> noteOnTicks;
+    std::set<int> lyricTicks;
+
+    for (const MidiTrack& track : midiFile.tracks()) {
+        for (auto iter = track.events().begin(); iter != track.events().end(); ++iter) {
+            const MidiEvent& event = iter->second;
+            if (event.type() == ME_NOTEON && event.velo() > 0) {
+                noteOnTicks.insert(iter->first);
+            } else if (event.type() == ME_META && event.metaType() == META_LYRIC) {
+                lyricTicks.insert(iter->first);
+            }
+        }
+    }
+
+    EXPECT_EQ(noteOnTicks, expected);
+    EXPECT_EQ(lyricTicks, expected);
+}
+
+TEST_F(MidiExportTests, midiSwingLyrics)
+{
+    checkLyricsSitOnNoteOnsets(u"testSwingLyrics", { 0, 336, 480, 816, 960, 1296, 1440, 1776 });
+}
+
+TEST_F(MidiExportTests, midiSwingLyricsUserEvents)
+{
+    checkLyricsSitOnNoteOnsets(u"testSwingLyricsUserEvents", { 0, 240, 480, 720, 960, 1200, 1440, 1680 });
+}
+
+TEST_F(MidiExportTests, midiSwingLyricsRepeat)
+{
+    checkLyricsSitOnNoteOnsets(u"testSwingLyricsRepeat", { 0, 336, 480, 816, 960, 1296, 1440, 1776,
+                                                           1920, 2256, 2400, 2736, 2880, 3216, 3360, 3696 });
 }
 
 TEST_F(MidiExportTests, midiMeasureRepeats) {
