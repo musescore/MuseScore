@@ -750,9 +750,11 @@ class TransposeHarmony : public UndoableCommand
 public:
     TransposeHarmony(Harmony* harmony, Interval interval, bool useDoubleSharpsFlats)
         : m_harmony(harmony)
-        , m_interval(interval)
-        , m_useDoubleSharpsFlats(useDoubleSharpsFlats)
     {
+        for (HarmonyInfo* info : harmony->chords()) {
+            m_tpcs.push_back({ Transpose::transposeTpc(info->rootTpc(), interval, useDoubleSharpsFlats),
+                               Transpose::transposeTpc(info->bassTpc(), interval, useDoubleSharpsFlats) });
+        }
     }
 
     UNDO_TYPE(CommandType::TransposeHarmony)
@@ -764,15 +766,35 @@ private:
 
     Harmony* m_harmony = nullptr;
 
-    Interval m_interval = Interval(0, 0);
-    bool m_useDoubleSharpsFlats = false;
+    struct HarmonyTpcs {
+        int root;
+        int bass;
+    };
+
+    std::vector<HarmonyTpcs> m_tpcs;
 };
 }
 
 void TransposeHarmony::flip()
 {
-    Transpose::doUndoTransposeHarmony(m_harmony, m_interval, m_useDoubleSharpsFlats);
-    m_interval.flip();
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    int i = 0;
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        int currentRoot = info->rootTpc();
+        int currentBass = info->bassTpc();
+
+        info->setRootTpc(m_tpcs[i].root);
+        info->setBassTpc(m_tpcs[i].bass);
+
+        m_tpcs[i].root = currentRoot;
+        m_tpcs[i].bass = currentBass;
+
+        i++;
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->triggerLayout();
 }
 
 void Transpose::undoTransposeHarmony(Transaction& tx, Harmony* harmony, Interval interval, bool doubleSharpFlat)
