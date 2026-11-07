@@ -416,7 +416,7 @@ EngravingItem* Arpeggio::drop(Transaction&, EditData& data)
             score()->undoRemoveElement(this);
         }
         a->setTrack(track());
-        a->setOwnershipParent(ownershipParent());
+        a->setOwnershipParent(parentOrDummy(chord(), score()->dummy()));
         score()->undoAddElement(a);
     }
         return e;

@@ -49,6 +49,7 @@ class ChordLine final : public EngravingItem
 public:
 
     ChordLine* clone() const override { return new ChordLine(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Chord* chord() const { return (Chord*)(ownershipParent()); }
 

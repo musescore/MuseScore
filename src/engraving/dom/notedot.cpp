@@ -36,13 +36,7 @@ namespace mu::engraving {
 //   NoteDot
 //---------------------------------------------------------
 
-NoteDot::NoteDot(DummyParentOr<Note> parent)
-    : EngravingItem(ElementType::NOTEDOT, parent)
-{
-    setFlag(ElementFlag::MOVABLE, false);
-}
-
-NoteDot::NoteDot(Rest* parent)
+NoteDot::NoteDot(DummyParentOr<Note, Rest> parent)
     : EngravingItem(ElementType::NOTEDOT, parent)
 {
     setFlag(ElementFlag::MOVABLE, false);

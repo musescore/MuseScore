@@ -112,6 +112,7 @@ public:
     Articulation& operator=(const Articulation&) = delete;
 
     virtual Articulation* clone() const override { return new Articulation(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest, BarLine> parent) { EngravingItem::setOwnershipParent(parent); }
 
     virtual double mag() const override;
 
@@ -208,7 +209,7 @@ public:
 
 protected:
     friend class mu::engraving::Factory;
-    Articulation(DummyParentOr<ChordRest> parent, ElementType type = ElementType::ARTICULATION);
+    Articulation(DummyParentOr<ChordRest, BarLine> parent, ElementType type = ElementType::ARTICULATION);
 
 private:
 

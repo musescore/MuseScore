@@ -24,7 +24,10 @@
 
 #include "engraving/tests/utils/scorerw.h"
 
+#include "engraving/dom/chord.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -100,6 +103,60 @@ TEST_F(Ove_Tests, oveCondBarNumber) {
     EXPECT_EQ(err, engraving::Err::NoError);
     EXPECT_GT(score->nstaves(), 0u);
     EXPECT_TRUE(score->firstMeasure());
+}
+
+// Each glissando is kept by the note it starts on and ends on the note the file names, also
+// when that note is in a later measure.
+TEST_F(Ove_Tests, oveGlissando) {
+    engraving::Err err = engraving::Err::UnknownError;
+    MasterScore* score = oveRead("glissando", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, engraving::Err::NoError);
+
+    struct Expected {
+        Fraction tick;
+        int pitch;
+        Fraction tick2;
+        int pitch2;
+    };
+    const std::vector<Expected> expected = {
+        { Fraction(1, 4), 60, Fraction(3, 4), 84 },
+        { Fraction(1, 1), 64, Fraction(5, 2), 86 },
+        { Fraction(2, 1), 72, Fraction(11, 4), 84 },
+    };
+
+    std::vector<Glissando*> glissandos;
+    for (EngravingItem* e : collect(score, ElementType::CHORD)) {
+        for (Note* note : toChord(e)->notes()) {
+            for (Spanner* sp : note->spannerFor()) {
+                if (sp->isGlissando()) {
+                    glissandos.push_back(toGlissando(sp));
+                }
+            }
+        }
+    }
+    ASSERT_EQ(glissandos.size(), expected.size());
+
+    for (size_t i = 0; i < expected.size(); ++i) {
+        Glissando* g = glissandos[i];
+        ASSERT_TRUE(g->startElement() && g->startElement()->isNote());
+        ASSERT_TRUE(g->endElement() && g->endElement()->isNote());
+        const Note* startNote = toNote(g->startElement());
+        const Note* endNote = toNote(g->endElement());
+
+        EXPECT_EQ(g->ownershipParent(), startNote);
+        EXPECT_TRUE(muse::contains(endNote->spannerBack(), static_cast<Spanner*>(g)));
+
+        EXPECT_EQ(g->tick(), expected[i].tick);
+        EXPECT_EQ(startNote->pitch(), expected[i].pitch);
+        EXPECT_EQ(g->tick2(), expected[i].tick2);
+        EXPECT_EQ(endNote->pitch(), expected[i].pitch2);
+        EXPECT_EQ(g->track(), startNote->track());
+        EXPECT_EQ(g->track2(), endNote->track());
+
+        EXPECT_EQ(g->glissandoType(), GlissandoType::STRAIGHT);
+        EXPECT_EQ(g->text(), u"gliss.");
+    }
 }
 
 //---------------------------------------------------------

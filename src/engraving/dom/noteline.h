@@ -48,11 +48,12 @@ class NoteLine final : public TextLineBase
     DECLARE_CLASSOF(ElementType::NOTELINE)
 
 public:
-    NoteLine(EngravingObject* parent);
+    NoteLine(DummyParentOr<Note> parent);
     NoteLine(const NoteLine&);
     ~NoteLine() {}
 
     NoteLine* clone() const override { return new NoteLine(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Anchor anchor() const override { return Anchor::NOTE; }
 

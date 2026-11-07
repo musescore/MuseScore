@@ -44,6 +44,7 @@ public:
     Fingering(DummyParentOr<Note> parent, ElementFlags ef = ElementFlag::ON_STAFF);
 
     Fingering* clone() const override { return new Fingering(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Note* note() const { return toNote(ownershipParent()); }
     ElementType layoutType() const;

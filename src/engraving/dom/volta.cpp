@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "barline.h"
+#include "dummyparent.h"
 #include "keysig.h"
 #include "measure.h"
 #include "score.h"
@@ -100,7 +101,7 @@ EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
 //   Volta
 //---------------------------------------------------------
 
-Volta::Volta(DummyParentOr<EngravingItem> parent)
+Volta::Volta(DummyParent* parent)
     : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
     setPlacement(PlacementV::ABOVE);

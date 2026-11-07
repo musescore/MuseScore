@@ -51,6 +51,7 @@ class Breath final : public EngravingItem
 public:
 
     Breath* clone() const override { return new Breath(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     double mag() const override;
 

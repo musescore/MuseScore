@@ -42,6 +42,7 @@ class StaffLines final : public EngravingItem
 public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
+    void setOwnershipParent(DummyParentOr<Measure> parent) { EngravingItem::setOwnershipParent(parent); }
 
     PointF pagePos() const override;      ///< position in page coordinates
     PointF canvasPos() const override;    ///< position in page coordinates

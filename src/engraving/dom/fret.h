@@ -145,6 +145,7 @@ public:
 
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
+    void setOwnershipParent(DummyParentOr<Segment, FBox> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Segment* segment() const;
 
@@ -269,7 +270,7 @@ public:
 private:
     friend class Factory;
 
-    FretDiagram(DummyParentOr<Segment> parent);
+    FretDiagram(DummyParentOr<Segment, FBox> parent);
     FretDiagram(const FretDiagram&);
 
     void readHarmonyToDiagramFile(const muse::io::path_t& filePath) const;

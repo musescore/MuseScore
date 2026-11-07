@@ -40,12 +40,13 @@ class InstrumentChange final : public TextBase
     DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
 public:
-    InstrumentChange(EngravingObject* parent);
-    InstrumentChange(const Instrument&, EngravingObject* parent);
+    InstrumentChange(DummyParentOr<Segment> parent);
+    InstrumentChange(const Instrument&, DummyParentOr<Segment> parent);
     InstrumentChange(const InstrumentChange&);
     ~InstrumentChange();
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Instrument* instrument() const { return m_instrument; }
     void setInstrument(Instrument* i) { m_instrument = i; }

@@ -40,6 +40,7 @@ class KeySig final : public EngravingItem
 public:
 
     KeySig* clone() const override { return new KeySig(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;

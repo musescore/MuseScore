@@ -43,6 +43,7 @@ public:
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     SystemDividerType dividerType() const { return m_dividerType; }
     void setDividerType(SystemDividerType v);

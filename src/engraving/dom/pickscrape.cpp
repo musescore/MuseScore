@@ -22,6 +22,7 @@
 
 #include "pickscrape.h"
 
+#include "dummyparent.h"
 #include "score.h"
 #include "system.h"
 #include "text.h"
@@ -74,7 +75,7 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp)
 //   PickScrape
 //---------------------------------------------------------
 
-PickScrape::PickScrape(DummyParentOr<EngravingItem> parent)
+PickScrape::PickScrape(DummyParent* parent)
     : ChordTextLineBase(ElementType::PICK_SCRAPE, parent)
 {
     initElementStyle(&pickScrapeStyle);

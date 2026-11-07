@@ -25,6 +25,7 @@
 #include "types/translatablestring.h"
 
 #include "chordrest.h"
+#include "dummyparent.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -227,7 +228,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 //   Ottava
 //---------------------------------------------------------
 
-Ottava::Ottava(DummyParentOr<EngravingItem> parent)
+Ottava::Ottava(DummyParent* parent)
     : TextLineBase(ElementType::OTTAVA, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     m_ottavaType  = OttavaType::OTTAVA_8VA;

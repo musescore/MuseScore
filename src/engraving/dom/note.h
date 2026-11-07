@@ -88,6 +88,7 @@ public:
     NoteHead(const NoteHead&) = default;
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     NoteHeadGroup headGroup() const;
 };

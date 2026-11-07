@@ -47,6 +47,7 @@ public:
     TabDurationSymbol(DummyParentOr<ChordRest> parent, const StaffType* tab, DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
+    void setOwnershipParent(DummyParentOr<ChordRest> parent) { EngravingItem::setOwnershipParent(parent); }
 
     bool isEditable() const override { return false; }
 

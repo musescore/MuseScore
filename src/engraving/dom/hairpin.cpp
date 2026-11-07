@@ -29,6 +29,7 @@
 #include "../editing/elementeditdata.h"
 #include "types/typesconv.h"
 
+#include "dummyparent.h"
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
 #include "measure.h"
@@ -503,7 +504,7 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
 //   Hairpin
 //---------------------------------------------------------
 
-Hairpin::Hairpin(DummyParentOr<EngravingItem> parent)
+Hairpin::Hairpin(DummyParent* parent)
     : TextLineBase(ElementType::HAIRPIN, parent)
 {
     initElementStyle(&hairpinStyle);

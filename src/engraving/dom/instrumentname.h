@@ -49,6 +49,7 @@ public:
     InstrumentName(DummyParentOr<System>);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     InstrumentNameType instrumentNameType() const { return m_instrumentNameType; }
     void setInstrumentNameType(InstrumentNameType v);

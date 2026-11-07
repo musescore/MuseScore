@@ -32,6 +32,7 @@ class PlayCountText final : public TextBase
 
 public:
     PlayCountText* clone() const override { return new PlayCountText(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Segment* segment() const { return toSegment(ownershipParent()); }
     BarLine* barline() const;

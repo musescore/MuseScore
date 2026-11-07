@@ -76,7 +76,7 @@ class Slur : public SlurTie
     DECLARE_CLASSOF(ElementType::SLUR)
 
 public:
-    Slur(DummyParentOr<EngravingItem> parent, ElementType type = ElementType::SLUR);
+    Slur(DummyParent* parent);
     Slur(const Slur&);
 
     Anchor anchor() const override { return Anchor::CHORDREST; }
@@ -101,6 +101,7 @@ public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     void setTrack(track_idx_t val) override;
 
@@ -132,6 +133,9 @@ public:
     bool isOutgoing() const;
 
     void undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr);
+
+protected:
+    Slur(const ElementType& type, EngravingObject* parent);
 
 private:
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)

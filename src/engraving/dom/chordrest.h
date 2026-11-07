@@ -60,10 +60,11 @@ class ChordRest : public DurationElement
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
 
 public:
-    ChordRest(const ElementType& type, DummyParentOr<Segment> parent);
+    ChordRest(const ElementType& type, DummyParentOr<Segment, Chord> parent);
     ChordRest(const ChordRest&, bool link = false);
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
+    void setOwnershipParent(DummyParentOr<Segment, Chord> parent) { EngravingItem::setOwnershipParent(parent); }
 
     virtual void scanElements(std::function<void(EngravingItem*)> func) override;
 

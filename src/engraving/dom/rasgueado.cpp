@@ -22,6 +22,7 @@
 
 #include "rasgueado.h"
 
+#include "dummyparent.h"
 #include "score.h"
 #include "system.h"
 #include "text.h"
@@ -74,7 +75,7 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp)
 //   Rasgueado
 //---------------------------------------------------------
 
-Rasgueado::Rasgueado(DummyParentOr<EngravingItem> parent)
+Rasgueado::Rasgueado(DummyParent* parent)
     : ChordTextLineBase(ElementType::RASGUEADO, parent)
 {
     initElementStyle(&rasgueadoStyle);
