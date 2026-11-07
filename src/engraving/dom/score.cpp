@@ -4613,8 +4613,8 @@ PropertyValue Score::getProperty(Pid /*id*/) const
 
 bool Score::setProperty(Pid /*id*/, const PropertyValue& /*v*/)
 {
+    UNREACHABLE;
     LOGD("Score::setProperty: unhandled id");
-    setLayoutAll();
     return true;
 }
 

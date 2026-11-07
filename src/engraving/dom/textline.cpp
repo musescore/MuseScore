@@ -140,12 +140,12 @@ TextLineSegment::TextLineSegment(TextLine* sp, bool system)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* TextLineSegment::propertyDelegate(Pid pid) const
+PropertyDelegate TextLineSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::SYSTEM_FLAG) {
-        return static_cast<TextLine*>(spanner());
+        return PropertyDelegate(static_cast<TextLine*>(spanner()));
     }
-    return TextLineBaseSegment::propertyDelegate(pid);
+    return TextLineBaseSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

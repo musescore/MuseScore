@@ -92,12 +92,12 @@ OttavaSegment::OttavaSegment(Ottava* sp)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* OttavaSegment::propertyDelegate(Pid pid) const
+PropertyDelegate OttavaSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
-    return TextLineBaseSegment::propertyDelegate(pid);
+    return TextLineBaseSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

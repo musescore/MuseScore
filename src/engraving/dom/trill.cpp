@@ -146,12 +146,12 @@ void TrillSegment::scanElements(std::function<void(EngravingItem*)> func)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* TrillSegment::propertyDelegate(Pid pid) const
+PropertyDelegate TrillSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
-    return LineSegment::propertyDelegate(pid);
+    return LineSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

@@ -185,8 +185,8 @@ double LyricsLineSegment::baseLineShift() const
 
 PropertyValue LyricsLineSegment::getProperty(Pid propertyId) const
 {
-    if (EngravingObject* delegate = propertyDelegate(propertyId)) {
-        return delegate->getProperty(propertyId);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->getProperty(propertyId) : propertyDefault(propertyId);
     }
 
     return LineSegment::getProperty(propertyId);
@@ -194,8 +194,8 @@ PropertyValue LyricsLineSegment::getProperty(Pid propertyId) const
 
 bool LyricsLineSegment::setProperty(Pid propertyId, const PropertyValue& val)
 {
-    if (EngravingObject* delegate = propertyDelegate(propertyId)) {
-        return delegate->setProperty(propertyId, val);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->setProperty(propertyId, val) : false;
     }
 
     return LineSegment::setProperty(propertyId, val);
@@ -203,20 +203,20 @@ bool LyricsLineSegment::setProperty(Pid propertyId, const PropertyValue& val)
 
 PropertyValue LyricsLineSegment::propertyDefault(Pid propertyId) const
 {
-    if (EngravingObject* delegate = propertyDelegate(propertyId)) {
-        return delegate->propertyDefault(propertyId);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyDefault(propertyId) : PropertyValue();
     }
 
     return LineSegment::propertyDefault(propertyId);
 }
 
-EngravingObject* LyricsLineSegment::propertyDelegate(Pid propertyId) const
+PropertyDelegate LyricsLineSegment::resolvePropertyDelegate(Pid propertyId) const
 {
     if (propertyId == Pid::GENERATED) {
-        return lyricsLine();
+        return PropertyDelegate(lyricsLine());
     }
 
-    return LineSegment::propertyDelegate(propertyId);
+    return LineSegment::resolvePropertyDelegate(propertyId);
 }
 
 //=========================================================
@@ -382,14 +382,14 @@ double PartialLyricsLineSegment::baseLineShift() const
     return -style().styleD(Sid::lyricsDashYposRatio) * lyrics->fontMetrics().xHeight();
 }
 
-EngravingObject* PartialLyricsLineSegment::propertyDelegate(Pid pid) const
+PropertyDelegate PartialLyricsLineSegment::resolvePropertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::VERSE:
     case Pid::CENTER_BETWEEN_STAVES:
-        return lyricsLine();
+        return PropertyDelegate(lyricsLine());
     default:
-        return LyricsLineSegment::propertyDelegate(pid);
+        return LyricsLineSegment::resolvePropertyDelegate(pid);
     }
 }
 

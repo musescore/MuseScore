@@ -967,7 +967,7 @@ PropertyValue GuitarBendSegment::propertyDefault(Pid id) const
     }
 }
 
-EngravingObject* GuitarBendSegment::propertyDelegate(Pid id) const
+PropertyDelegate GuitarBendSegment::resolvePropertyDelegate(Pid id) const
 {
     switch (id) {
     case Pid::DIRECTION:
@@ -976,9 +976,9 @@ EngravingObject* GuitarBendSegment::propertyDelegate(Pid id) const
     case Pid::APPEARANCE_LINKED_TO_MASTER:
     case Pid::GUITAR_DIVE_TAB_POS:
     case Pid::VIBRATO_LINE_TYPE:
-        return guitarBend();
+        return PropertyDelegate(guitarBend());
     default:
-        return LineSegment::propertyDelegate(id);
+        return LineSegment::resolvePropertyDelegate(id);
     }
 }
 

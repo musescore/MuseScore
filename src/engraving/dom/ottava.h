@@ -92,7 +92,7 @@ public:
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
 
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 

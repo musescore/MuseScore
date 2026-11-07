@@ -220,6 +220,7 @@ const TextStyle tabFretNumberTextStyle {
         { TextStylePropertyType::FrameFillColor,       Sid::tabFretNumberFrameBgColor,            Pid::FRAME_BG_COLOR },
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::tabFretNumberMusicalSymbolSize,       Pid::MUSIC_SYMBOL_SIZE },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,             Pid::MUSICAL_SYMBOLS_SCALE },
+        { TextStylePropertyType::Position,             Sid::defaultPosition,                      Pid::POSITION },
     } },
     { Sid::tabFretNumberOffset, Sid::tabFretNumberOffset }
 };
@@ -287,6 +288,7 @@ const TextStyle hammerOnPullOffTextStyle {
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::hammerOnPullOffTappingMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,
           Pid::MUSICAL_SYMBOLS_SCALE },
+        { TextStylePropertyType::Position,             Sid::hammerOnPullOffTappingPosition,                      Pid::POSITION },
     } },
     { Sid::hammerOnPullOffTappingOffset, Sid::hammerOnPullOffTappingOffset }
 };
@@ -331,6 +333,7 @@ const TextStyle stringTuningsStyle {
         { TextStylePropertyType::FrameFillColor,       Sid::staffTextFrameBgColor,                  Pid::FRAME_BG_COLOR },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::stringTuningsMusicalSymbolSize,         Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::staffTextPosition,                      Pid::POSITION },
     } },
     { Sid::staffTextPosAbove, Sid::staffTextPosBelow }
 };
@@ -377,6 +380,7 @@ const TextStyle fretDiagramFretNumberStyle {
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,
           Pid::MUSICAL_SYMBOLS_SCALE },
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::fretDiagramFretNumberMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::fretDiagramFretNumberPosition,                      Pid::POSITION },
     } },
     { Sid::fretDiagramFretNumberPosAbove, Sid::fretDiagramFretNumberPosAbove }
 };
@@ -420,6 +424,7 @@ const TextStyle articulationTextStyle {
         { TextStylePropertyType::FrameFillColor,       Sid::articulationFrameBgColor,                  Pid::FRAME_BG_COLOR },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                  Pid::MUSICAL_SYMBOLS_SCALE },
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::articulationMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::articulationPosition,                      Pid::POSITION },
     } },
     { Sid::articulationOffset, Sid::articulationOffset }
 };
@@ -640,6 +645,7 @@ const TextStyle metronomeTextStyle {
         { TextStylePropertyType::FrameFillColor,       Sid::metronomeFrameBgColor,                  Pid::FRAME_BG_COLOR },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
         { TextStylePropertyType::MusicalSymbolsSize,   Sid::metronomeMusicalSymbolSize,             Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::metronomePosition,                      Pid::POSITION },
     } },
     { Sid::metronomeOffset, Sid::metronomeOffset }
 };
@@ -692,6 +698,7 @@ const TextStyle mmRestRangeTextStyle {
     { {
         { TextStylePropertyType::FontFace,             Sid::mmRestRangeFontFace,                    Pid::FONT_FACE },
         { TextStylePropertyType::FontSize,             Sid::mmRestRangeFontSize,                    Pid::FONT_SIZE },
+        { TextStylePropertyType::LineSpacing,          Sid::defaultLineSpacing,                     Pid::TEXT_LINE_SPACING },
         { TextStylePropertyType::SizeSpatiumDependent, Sid::mmRestRangeFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
         { TextStylePropertyType::FontStyle,            Sid::mmRestRangeFontStyle,                   Pid::FONT_STYLE },
         { TextStylePropertyType::Color,                Sid::mmRestRangeColor,                       Pid::COLOR },
@@ -1267,7 +1274,7 @@ const TextStyle bendTextStyle {
         { TextStylePropertyType::SizeSpatiumDependent, Sid::bendFontSpatiumDependent,               Pid::SIZE_SPATIUM_DEPENDENT },
         { TextStylePropertyType::FontStyle,            Sid::bendFontStyle,                          Pid::FONT_STYLE },
         { TextStylePropertyType::Color,                Sid::bendColor,                              Pid::COLOR },
-        { TextStylePropertyType::TextAlign,            Sid::bendAlign,                              Pid::BEGIN_TEXT_ALIGN },
+        { TextStylePropertyType::TextAlign,            Sid::bendAlign,                              Pid::ALIGN },
         { TextStylePropertyType::FrameType,            Sid::bendFrameType,                          Pid::FRAME_TYPE },
         { TextStylePropertyType::FramePadding,         Sid::bendFramePadding,                       Pid::FRAME_PADDING },
         { TextStylePropertyType::FrameWidth,           Sid::bendFrameWidth,                         Pid::FRAME_WIDTH },
