@@ -23,39 +23,119 @@
 #include "editposition.h"
 
 #include "../dom/engravingitem.h"
+#include "../dom/score.h"
+#include "../dom/spanner.h"
 
 #include "../rendering/iscorerenderer.h"
 
 using namespace mu::engraving;
 
-void EditPosition::freezeItemsPositions(Transaction& tx, const std::vector<EngravingItem*>& items)
+void EditPosition::freezeItemsPositions(Transaction&, const std::vector<EngravingItem*>& items)
 {
-    for (EngravingItem* item : items) {
-        freezeItemPosition(tx, item);
+    if (items.empty()) {
+        return;
     }
-}
+    Score* score = items.front()->score();
 
-void EditPosition::freezeItemPosition(Transaction&, EngravingItem* item)
-{
-    if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace()) {
+    std::unordered_map<EngravingItem*, PointF> frozenItems;
+    // Spanner segments also need their end point (pos2, relative to pos) kept in place
+    std::unordered_map<SpannerSegment*, PointF> frozenSpannerEnds;
+    for (EngravingItem* item : items) {
+        if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace()) {
+            continue;
+        }
+
+        frozenItems.emplace(item, item->pos());
+        if (item->isSpannerSegment()) {
+            SpannerSegment* spannerSegment = toSpannerSegment(item);
+            frozenSpannerEnds.emplace(spannerSegment, spannerSegment->pos2());
+        }
+
+        PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
+        if (autoplacePf == PropertyFlags::STYLED) {
+            autoplacePf = PropertyFlags::UNSTYLED;
+        }
+
+        item->undoChangeProperty(Pid::AUTOPLACE, false, autoplacePf);
+
+        item->triggerLayout();
+    }
+
+    if (frozenItems.empty()) {
         return;
     }
 
-    PointF oldPos = item->pos();
-
-    PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
-    if (autoplacePf == PropertyFlags::STYLED) {
-        autoplacePf = PropertyFlags::UNSTYLED;
+    // Some items are laid out relative to the positions (including offsets) of other items
+    // Setting one item's offset can move another item's layout position, so lay out and update offsets
+    // until they stop changing. A chain of N dependent items needs roughly N + 1 passes.
+    // We can't know whether elements affect each other's position without performing another layout
+    // This is currently limited to N + 3 passes to protect against (possible) circular layout dependencies
+    std::unordered_map<EngravingItem*, PointF> originalOffsets;
+    for (const auto& [item, oldPos] : frozenItems) {
+        originalOffsets.emplace(item, item->offset());
+    }
+    std::unordered_map<SpannerSegment*, PointF> originalOffset2s;
+    for (const auto& [spannerSegment, oldPos2] : frozenSpannerEnds) {
+        originalOffset2s.emplace(spannerSegment, spannerSegment->userOff2());
     }
 
-    item->undoChangeProperty(Pid::AUTOPLACE, false, autoplacePf);
+    const size_t maxPasses = frozenItems.size() + 3;
+    bool converged = false;
+    for (size_t pass = 0; pass < maxPasses && !converged; ++pass) {
+        score->update();
 
-    item->renderer()->layoutItem(item);
+        converged = true;
+        for (const auto& [item, oldPos] : frozenItems) {
+            const PointF newOffset = oldPos - item->ldata()->pos();
+            const PointF& currentOffset = item->offset();
+            if (newOffset == currentOffset) {
+                continue;
+            }
 
-    PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
-    if (offsetPf == PropertyFlags::STYLED) {
-        offsetPf = PropertyFlags::UNSTYLED;
+            converged = false;
+            item->setOffset(newOffset);
+            item->triggerLayout();
+        }
+
+        for (const auto& [spannerSegment, oldPos2] : frozenSpannerEnds) {
+            const PointF newOffset2 = oldPos2 - spannerSegment->ipos2();
+            if (newOffset2 == spannerSegment->userOff2()) {
+                continue;
+            }
+
+            converged = false;
+            spannerSegment->setUserOff2(newOffset2);
+            spannerSegment->triggerLayout();
+        }
+
+        // We know we only need 1 layout when freezing a single item
+        if (frozenItems.size() == 1) {
+            converged = true;
+            break;
+        }
     }
 
-    item->undoChangeProperty(Pid::OFFSET, oldPos - item->ldata()->pos(), offsetPf);
+    IF_ASSERT_FAILED(converged) {
+        LOGW() << "Frozen item offsets did not converge after " << maxPasses << " layout passes";
+    }
+
+    // Make actual undoable change. Using setOffset above avoids having N + 1 commands for affected elements in the transaction
+    for (const auto& [item, originalOffset] : originalOffsets) {
+        const PointF frozenOffset = item->offset();
+        // Restore the original value so undoChangeProperty registers the change for undo
+        item->setOffset(originalOffset);
+
+        PropertyFlags offsetPf = item->propertyFlags(Pid::OFFSET);
+        if (offsetPf == PropertyFlags::STYLED) {
+            offsetPf = PropertyFlags::UNSTYLED;
+        }
+
+        item->undoChangeProperty(Pid::OFFSET, frozenOffset, offsetPf);
+    }
+
+    for (const auto& [spannerSegment, originalOffset2] : originalOffset2s) {
+        const PointF frozenOffset2 = spannerSegment->userOff2();
+        spannerSegment->setUserOff2(originalOffset2);
+        spannerSegment->undoChangeProperty(Pid::OFFSET2, frozenOffset2);
+    }
 }
