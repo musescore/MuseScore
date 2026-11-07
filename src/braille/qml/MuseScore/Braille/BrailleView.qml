@@ -178,6 +178,7 @@ StyledFlickable {
             accessible.selectionStart: brailleTextArea.selectionStart
             accessible.selectionEnd: brailleTextArea.selectionEnd
             accessible.cursorPosition: brailleTextArea.cursorPosition
+            accessible.textItem: brailleTextArea
 
             onActiveChanged: {
                 if (fakeNavCtrl.active) {
