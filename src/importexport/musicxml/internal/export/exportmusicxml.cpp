@@ -2560,6 +2560,7 @@ static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
     { ClefType::TAB4,       "TAB", 0 },
     { ClefType::TAB_SERIF,  "TAB", 0 },
     { ClefType::TAB4_SERIF, "TAB", 0 },
+    { ClefType::TAB_STRING_NAMES, "TAB", 0 },
 
     { ClefType::C4_8VB,     "C", -1 },
     { ClefType::G8_VB_C,    "G", -1 },
@@ -4591,7 +4592,8 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     // Determine y position, but leave at zero in case of tablature staff
     // as no display-step or display-octave should be written for a tablature staff,
 
-    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
+    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF
+        && clef != ClefType::TAB_STRING_NAMES) {
         double yOffsSp = -2 * rest->offset().y() / rest->spatium();              // positive = up, one spatium is two pitches
         yOffsSt = int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5);            // same rounded to int
 
