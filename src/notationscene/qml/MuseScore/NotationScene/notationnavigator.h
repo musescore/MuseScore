@@ -95,12 +95,15 @@ private:
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
     void paintPageNumbers(QPainter* painter);
 
     bool moveCanvasToRect(const muse::RectF& viewRect);
 
     bool isVerticalOrientation() const;
+
+    bool m_pressOutsideContent = false;
 
     const PageList& pages() const;
 
