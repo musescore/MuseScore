@@ -117,6 +117,7 @@
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
+#include "engraving/editing/editslur.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
@@ -1964,7 +1965,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         EngravingItem* el = dropTarget(edd.ed);
         mu::engraving::Slur* dropElement = toSlur(edd.ed.dropElement);
         if (toNote(el)->chord()) {
-            doAddSlur(toNote(el)->chord(), nullptr, dropElement);
+            doAddSlur(tx, toNote(el)->chord(), nullptr, dropElement);
             accepted = true;
         }
     }
@@ -2374,7 +2375,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
     }
 
     if (element->isSlur()) {
-        doAddSlur(toSlur(element));
+        doAddSlur(tx, toSlur(element));
         return;
     }
 
@@ -2563,7 +2564,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     }
 
     if (element->isSlur()) {
-        doAddSlur(toSlur(element));
+        doAddSlur(tx, toSlur(element));
         return;
     }
 
@@ -2815,155 +2816,36 @@ void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* n
     }
 }
 
-//! NOTE Copied from ScoreView::cmdAddSlur
-void NotationInteraction::doAddSlur(const Slur* slurTemplate)
+void NotationInteraction::doAddSlur(Transaction& tx, const Slur* slurTemplate)
 {
-    startEdit(TranslatableString("undoableAction", "Add slur"));
-    m_notifyAboutDropChanged = true;
+    endEditSlurToReplace(slurTemplate);
 
-    ChordRest* firstChordRest = nullptr;
-    ChordRest* secondChordRest = nullptr;
-    const auto& sel = score()->selection();
-    auto el = sel.uniqueElements();
-
-    if (sel.isRange()) {
-        track_idx_t startTrack = staff2track(sel.staffStart());
-        track_idx_t endTrack = staff2track(sel.staffEnd());
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            firstChordRest = nullptr;
-            secondChordRest = nullptr;
-            for (EngravingItem* e : el) {
-                if (e->track() != track) {
-                    continue;
-                }
-                if (e->isNote()) {
-                    e = toNote(e)->chord();
-                }
-                if (!e->isChord()) {
-                    continue;
-                }
-                ChordRest* cr = toChordRest(e);
-                if (!firstChordRest || firstChordRest->tick() > cr->tick()) {
-                    firstChordRest = cr;
-                }
-                if (!secondChordRest || secondChordRest->tick() < cr->tick()) {
-                    secondChordRest = cr;
-                }
-            }
-
-            bool firstCrTrill = firstChordRest && firstChordRest->isChord() && toChord(firstChordRest)->isTrillCueNote();
-            bool secondCrTrill = secondChordRest && secondChordRest->isChord() && toChord(secondChordRest)->isTrillCueNote();
-
-            if (firstChordRest && (firstChordRest != secondChordRest)
-                && !(firstCrTrill || secondCrTrill)) {
-                doAddSlur(firstChordRest, secondChordRest, slurTemplate);
-            }
-        }
-    } else if (sel.isSingle()) {
-        if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
-            doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
-        } else if (sel.element()->isSlurSegment() && slurTemplate && slurTemplate->isHammerOnPullOff()) {
-            Slur* slur = toSlurSegment(sel.element())->slur();
-            doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
-        }
-    } else {
-        EngravingItem* firstItem = nullptr;
-        EngravingItem* secondItem = nullptr;
-        for (EngravingItem* e : el) {
-            if (e->isNote()) {
-                e = toNote(e)->chord();
-            }
-
-            Measure* meas = e->findMeasure();
-            bool header = meas && meas->header() && e->tick() == meas->tick();
-
-            if (!e->isChord() && !e->isBarLine() && !header) {
-                continue;
-            }
-
-            if (!firstItem || e->isBefore(firstItem)) {
-                firstItem = e;
-            }
-            if (!secondItem || secondItem->isBefore(e)) {
-                secondItem = e;
-            }
-        }
-
-        bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
-        bool secondCrTrill = secondItem && secondItem->isChord() && toChord(secondItem)->isTrillCueNote();
-
-        if (firstItem && firstItem == secondItem) {
-            // A single chord is slurred as a single note is
-            if (firstItem->isChord() && !firstCrTrill) {
-                doAddSlur(firstItem, nullptr, slurTemplate);
-            }
-        } else if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest())
-                   && !(firstCrTrill || secondCrTrill)) {
-            doAddSlur(firstItem, secondItem, slurTemplate);
-        }
+    for (const EditSlur::AddedSlur& added : EditSlur::addSlurs(tx, score(), slurTemplate)) {
+        selectAddedSlur(added.slur, added.replacedSlur, added.toNextChord);
     }
-
-    apply();
 }
 
-void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* secondItem, const Slur* slurTemplate)
+void NotationInteraction::doAddSlur(Transaction& tx, EngravingItem* firstItem, EngravingItem* secondItem, const Slur* slurTemplate)
 {
-    ChordRest* firstChordRest = nullptr;
-    ChordRest* secondChordRest = nullptr;
+    endEditSlurToReplace(slurTemplate);
 
-    Measure* meas = firstItem ? firstItem->findMeasure() : nullptr;
-    bool header = meas && meas->header() && firstItem->tick() == meas->tick() && !firstItem->isChordRest();
-
-    if (firstItem && secondItem
-        && ((firstItem->isBarLine() != secondItem->isBarLine()) || (header && secondItem->isChordRest()))) {
-        const bool outgoing = firstItem->isChordRest();
-        const EngravingItem* otherElement = outgoing ? secondItem : firstItem;
-        ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
-
-        // Check that cr and otherElement are part of the same repeat section
-        Segment* seg1 = toSegment(firstItem->findAncestor(ElementType::SEGMENT));
-        Segment* seg2 = toSegment(secondItem->findAncestor(ElementType::SEGMENT));
-
-        bool differentRepeatSegments = segmentsAreInDifferentRepeatSegments(seg1, seg2);
-        bool validBarline = isValidBarLineForRepeatSection(seg1, seg2);
-
-        if (!cr || (!header && (differentRepeatSegments && !validBarline))) {
-            return;
-        }
-
-        Slur* partialSlur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(score()->dummy());
-        if (outgoing) {
-            partialSlur->undoSetOutgoing(true);
-            firstChordRest = toChordRest(cr);
-            const Measure* endMeas = otherElement->findMeasure();
-            ChordRest* endCr = endMeas->lastChordRest(otherElement->track());
-            secondChordRest = endCr;
-        } else {
-            partialSlur->undoSetIncoming(true);
-            secondChordRest = toChordRest(cr);
-            const Measure* startMeas = otherElement->findMeasure();
-            if (otherElement->isBarLine()) {
-                if (toBarLine(otherElement)->barLineType() == BarLineType::END_REPEAT) {
-                    startMeas = startMeas->nextMeasure();
-                }
-            }
-            ChordRest* startCr = startMeas->firstChordRest(otherElement->track());
-            firstChordRest = startCr;
-        }
-        slurTemplate = partialSlur;
-    } else {
-        firstChordRest = toChordRest(firstItem);
-        secondChordRest = toChordRest(secondItem);
+    const EditSlur::AddedSlur added = EditSlur::addSlur(tx, score(), firstItem, secondItem, slurTemplate);
+    if (added.slur) {
+        selectAddedSlur(added.slur, added.replacedSlur, added.toNextChord);
     }
+}
 
-    Slur* slur = firstChordRest->slur(secondChordRest);
-    if (!slur || slur->slurDirection() != DirectionV::AUTO) {
-        slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
-    } else if (slurTemplate && slurTemplate->isHammerOnPullOff()) {
-        // Replace existing slur with HOPO
+// A hammer-on/pull-off can replace the slur being edited
+void NotationInteraction::endEditSlurToReplace(const Slur* slurTemplate)
+{
+    if (slurTemplate && slurTemplate->isHammerOnPullOff() && m_editData.element && m_editData.element->isSlurSegment()) {
         endEditElement();
-        score()->undoRemoveElement(slur);
-        slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+    }
+}
+
+void NotationInteraction::selectAddedSlur(Slur* slur, bool replacedSlur, bool toNextChord)
+{
+    if (replacedSlur || (toNextChord && !m_noteInput->isNoteInputMode())) {
         SlurSegment* segment = slur->frontSegment();
         select({ segment }, SelectType::SINGLE);
         startEditGrip(segment, Grip::END);
@@ -2971,10 +2853,6 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
 
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->addSlur(slur);
-    } else if (!secondItem) {
-        SlurSegment* segment = slur->frontSegment();
-        select({ segment }, SelectType::SINGLE);
-        startEditGrip(segment, Grip::END);
     }
 }
 
@@ -5400,8 +5278,10 @@ void NotationInteraction::addSlurToSelection()
         return;
     }
 
-    // Calls `startEdit` internally
-    doAddSlur();
+    transaction(TranslatableString("undoableAction", "Add slur"), [&](Transaction& tx) {
+        doAddSlur(tx);
+    });
+    notifyAboutDropChanged();
     m_selection->selectionChanged().notify();
 }
 
@@ -5412,8 +5292,10 @@ void NotationInteraction::addHammerOnPullOffToSelection()
     }
 
     HammerOnPullOff* hopo = Factory::createHammerOnPullOff(score()->dummy());
-    // Calls `startEdit` internally
-    doAddSlur(hopo);
+    transaction(TranslatableString("undoableAction", "Add slur"), [&](Transaction& tx) {
+        doAddSlur(tx, hopo);
+    });
+    notifyAboutDropChanged();
 }
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
