@@ -72,6 +72,7 @@ StyledDialogView {
             Layout.fillHeight: true
 
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
+            markNewInstruments: true
             currentInstrumentId: root.currentInstrumentId
 
             navigationSection: root.navigationSection

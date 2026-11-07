@@ -33,6 +33,7 @@ Item {
     id: root
 
     required property InstrumentsOnScoreListModel instrumentsOnScoreModel
+    property bool markNewInstruments: false
 
     property alias navigation: instrumentsView.navigation
 
@@ -119,13 +120,17 @@ Item {
             required property string name
             required property string description
             required property bool isSoloist
+            required property bool isExistingPart
             required property int index
-            
+
+            readonly property bool isMarkedNew: root.markNewInstruments && !isExistingPart
+
             navigation.name: name
             navigation.panel: instrumentsView.navigation
             navigation.row: 1 + index
             navigation.column: 0
-            navigation.accessible.name: itemTitleLabel.text
+            //: Accessibility name for an instrument being added in the "Add or remove instruments" dialog. %1 is the instrument name.
+            navigation.accessible.name: item.isMarkedNew ? qsTrc("instruments", "%1 (new)").arg(itemTitleLabel.text) : itemTitleLabel.text
             navigation.accessible.description: description
             navigation.accessible.row: index
 
@@ -139,7 +144,7 @@ Item {
 
                 horizontalAlignment: Text.AlignLeft
                 text:  item.isSoloist ? qsTrc("instruments", "Soloist:") + " " + item.name : item.name
-                font: ui.theme.bodyBoldFont
+                font: item.isMarkedNew ? Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { italic: true })) : ui.theme.bodyBoldFont
             }
 
             FlatButton {

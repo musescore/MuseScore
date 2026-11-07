@@ -74,6 +74,8 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
         return instrument->instrumentTemplate.description.toQString();
     case RoleIsSoloist:
         return instrument->isSoloist;
+    case RoleIsExistingPart:
+        return instrument->isExistingPart;
     default:
         break;
     }
@@ -101,6 +103,7 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
         return true;
     case RoleName:
     case RoleDescription:
+    case RoleIsExistingPart:
         break;
     default:
         return SelectableItemListModel::setData(index, role);
@@ -115,6 +118,7 @@ QHash<int, QByteArray> InstrumentsOnScoreListModel::roleNames() const
     roles[RoleName] = "name";
     roles[RoleDescription] = "description";
     roles[RoleIsSoloist] = "isSoloist";
+    roles[RoleIsExistingPart] = "isExistingPart";
 
     return roles;
 }
