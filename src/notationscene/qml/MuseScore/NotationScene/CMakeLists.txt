@@ -60,6 +60,8 @@ qt_add_qml_module(notationscene_qml
         elementpopups/stavesharingchangepopupmodel.h
         elementpopups/stringtuningssettingsmodel.cpp
         elementpopups/stringtuningssettingsmodel.h
+        elementpopups/stringtuningsutils.cpp
+        elementpopups/stringtuningsutils.h
         internal/undohistorymodel.cpp
         internal/undohistorymodel.h
         internal/undoredotoolbarmodel.cpp
