@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "project/iprojectsession.h"
 #include "rcommand/icommanddispatcher.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::engraving {
 enum class TupletNumberType : unsigned char;
@@ -42,6 +43,7 @@ class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
 
     muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;

@@ -148,6 +148,8 @@ public:
     bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
 
     static int computeTupletDenominator(int numerator, Fraction totalDuration);
+    // The number of normal notes for numerator notes, as in 2:3, 3:2, 4:3, 5:4, 6:4, 7:4, 8:6 and 9:8
+    static int conventionalTupletDenominator(int numerator);
 
     PointF bracketL[4];
     PointF bracketR[3];
