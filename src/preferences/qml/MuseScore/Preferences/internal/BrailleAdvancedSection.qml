@@ -34,8 +34,12 @@ BaseSection {
     property var directions: null
     property int intervalDirection: -1
 
+    property var voiceOrders: null
+    property int voiceOrder: -1
+
     signal brailleTableChangeRequested(string table)
     signal intervalDirectionChangeRequested(int direction)
+    signal voiceOrderChangeRequested(int order)
 
     ComboBoxWithTitle {
         title: qsTrc("preferences", "Braille table for lyrics")
@@ -66,6 +70,22 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.intervalDirectionChangeRequested(newValue);
+        }
+    }
+
+    ComboBoxWithTitle {
+        title: qsTrc("preferences", "Voice order")
+        columnWidth: root.columnWidth
+
+        currentIndex: indexOfValue(root.voiceOrder)
+        model: root.voiceOrders
+
+        navigationName: "VoiceOrderBox"
+        navigationPanel: root.navigation
+        navigationRow: 3
+
+        onValueEdited: function(newIndex, newValue) {
+            root.voiceOrderChangeRequested(newValue);
         }
     }
 }
