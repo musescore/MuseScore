@@ -22,6 +22,7 @@
 
 #include "importgtp.h"
 
+#include <algorithm>
 #include <cmath>
 
 #include "importptb.h"
@@ -204,6 +205,38 @@ uint8_t GuitarPro::readUInt8()
 }
 
 //---------------------------------------------------------
+//   decodeString
+//    Guitar Pro 3-5 files do not record the encoding of their text: Guitar Pro
+//    writes the system's code page, usually Windows-1252, and other programs
+//    write UTF-8. Read UTF-8 when the bytes are valid UTF-8, else Windows-1252.
+//    The text ends at the first NUL byte.
+//---------------------------------------------------------
+
+static String decodeString(const char* data, size_t size)
+{
+    size = std::find(data, data + size, '\0') - data;
+    std::string_view sw(data, size);
+    if (UtfCodec::isValidUtf8(sw)) {
+        return String::fromUtf8(sw);
+    }
+
+    // Windows-1252 differs from Latin-1 in 0x80-0x9F; its five unassigned bytes keep their Latin-1 value
+    static constexpr char16_t WINDOWS_1252[32] = {
+        0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
+        0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0x008D, 0x017D, 0x008F,
+        0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
+        0x02DC, 0x2122, 0x0161, 0x203A, 0x0153, 0x009D, 0x017E, 0x0178
+    };
+    String str;
+    str.reserve(size);
+    for (size_t i = 0; i < size; ++i) {
+        const unsigned char c = static_cast<unsigned char>(data[i]);
+        str.append(Char(c >= 0x80 && c < 0xA0 ? WINDOWS_1252[c - 0x80] : static_cast<char16_t>(c)));
+    }
+    return str;
+}
+
+//---------------------------------------------------------
 //   readPascalString
 //---------------------------------------------------------
 
@@ -216,11 +249,7 @@ String GuitarPro::readPascalString(int n)
     if (n - l > 0) {
         skip(n - l);
     }
-    std::string_view sw(&s[0], l);
-    if (UtfCodec::isValidUtf8(sw)) {
-        return String::fromUtf8(&s[0]);
-    }
-    return String::fromAscii(&s[0], l);
+    return decodeString(&s[0], l);
 }
 
 //---------------------------------------------------------
@@ -233,11 +262,7 @@ String GuitarPro::readWordPascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    std::string_view sw(&c[0], l);
-    if (UtfCodec::isValidUtf8(sw)) {
-        return String::fromUtf8(&c[0]);
-    }
-    return String::fromAscii(&c[0], l);
+    return decodeString(&c[0], l);
 }
 
 //---------------------------------------------------------
@@ -250,11 +275,7 @@ String GuitarPro::readBytePascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    std::string_view sw(&c[0], l);
-    if (UtfCodec::isValidUtf8(sw)) {
-        return String::fromUtf8(&c[0]);
-    }
-    return String::fromAscii(&c[0], l);
+    return decodeString(&c[0], l);
 }
 
 //---------------------------------------------------------
@@ -272,7 +293,7 @@ String GuitarPro::readDelphiString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    return String::fromAscii(&c[0]);
+    return decodeString(&c[0], l);
 }
 
 //---------------------------------------------------------
