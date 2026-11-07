@@ -28,6 +28,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -38,6 +39,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tremolosinglechord.h"
 
+#include "engraving/editing/editkeysig.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
@@ -1020,6 +1022,51 @@ TEST_F(Engraving_NoteTests, StandardChangePitchTiedNotesUpdatesTab)
     for (Note* n : tabNote->tiedNotes()) {
         EXPECT_EQ(n->pitch(), 54);
         EXPECT_EQ(n->fret(), 4);
+    }
+
+    delete score;
+}
+
+TEST_F(Engraving_NoteTests, TabChangePitchTiedNotesAcrossKeyChangeKeepsSpelling)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"TabChangePitchTiedNotes.mscx");
+    ASSERT_TRUE(score);
+
+    // add key-change to existing score's first and second measures
+    KeySigEvent sharps;
+    sharps.setConcertKey(Key::A);
+    KeySigEvent flats;
+    flats.setConcertKey(Key::A_B);
+    score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), Fraction(0, 1), sharps);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), Fraction(1, 1), flats);
+    score->endCmd();
+
+    Fraction tick(1, 2);
+
+    // staff 0 is the standard staff in this score
+    Note* standardNote = firstNoteAtTick(score, tick, 0);
+    ASSERT_TRUE(standardNote);
+
+    Note* tabNote = firstNoteAtTick(score, tick, findTabTrack(score, tick));
+    ASSERT_TRUE(tabNote);
+
+    setInputStateForFretEntry(score, tabNote);
+
+    // string 3 fret 6 is pitch 56: G# in A major, but Ab in Ab major
+    NoteInput::addFret(score->transactionManager()->currentOrDummyTransaction(), score, 6);
+    score->doLayout();
+
+    // every note in the tie chain, on both staves, must be spelled the same
+    for (Note* n : standardNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 56);
+        EXPECT_EQ(n->tpc1(), standardNote->tpc1());
+        EXPECT_EQ(n->tpc2(), standardNote->tpc2());
+    }
+    for (Note* n : tabNote->tiedNotes()) {
+        EXPECT_EQ(n->pitch(), 56);
+        EXPECT_EQ(n->tpc1(), standardNote->tpc1());
+        EXPECT_EQ(n->tpc2(), standardNote->tpc2());
     }
 
     delete score;

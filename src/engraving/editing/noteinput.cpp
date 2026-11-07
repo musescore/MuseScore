@@ -883,10 +883,10 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
                                 LOGD("can't increase fret to %d", fret);
                             }
                         }
+                        int tpc1 = note->tpc1default(nval.pitch);
+                        int tpc2 = note->tpc2default(nval.pitch);
                         for (Note* tiedNote : note->tiedNotes()) {
                             // set fret number (original or combined) in all linked notes
-                            int tpc1 = tiedNote->tpc1default(nval.pitch);
-                            int tpc2 = tiedNote->tpc2default(nval.pitch);
                             EditNote::undoChangeFretting(score, tiedNote, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                         }
                         score->setPlayNote(true);
