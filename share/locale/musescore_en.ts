@@ -4901,6 +4901,21 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/widgets/tupletdialog.ui" line="1"/>
+        <source>Use selected duration as:</source>
+        <translation type="unfinished">Use selected duration as:</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/tupletdialog.ui" line="1"/>
+        <source>Subdivision</source>
+        <translation type="unfinished">Subdivision</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/tupletdialog.ui" line="1"/>
+        <source>Tuplet length</source>
+        <translation type="unfinished">Tuplet length</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/widgets/tupletdialog.ui" line="1"/>
         <source>Format</source>
         <translation type="unfinished">Format</translation>
     </message>
@@ -5405,82 +5420,82 @@ followed by dashes</translation>
         <translation type="unfinished">Remove note</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Next element</source>
         <translation type="unfinished">Next element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select next element in score</source>
         <translation type="unfinished">Select next element in score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Previous element</source>
         <translation type="unfinished">Previous element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select previous element in score</source>
         <translation type="unfinished">Select previous element in score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Up note in chord</source>
         <translation type="unfinished">Up note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select note/rest above</source>
         <translation type="unfinished">Select note/rest above</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Down note in chord</source>
         <translation type="unfinished">Down note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select note/rest below</source>
         <translation type="unfinished">Select note/rest below</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Top note in chord</source>
         <translation type="unfinished">Top note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select top note in chord</source>
         <translation type="unfinished">Select top note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Bottom note in chord</source>
         <translation type="unfinished">Bottom note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select bottom note in chord</source>
         <translation type="unfinished">Select bottom note in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>First element</source>
         <translation type="unfinished">First element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to first element in score</source>
         <translation type="unfinished">Go to first element in score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Last element</source>
         <translation type="unfinished">Last element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to last element in score</source>
         <translation type="unfinished">Go to last element in score</translation>
     </message>
@@ -5505,62 +5520,62 @@ followed by dashes</translation>
         <translation type="unfinished">Move selected note/rest to staff below</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Next staff or voice</source>
         <translation type="unfinished">Next staff or voice</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to next staff or voice</source>
         <translation type="unfinished">Go to next staff or voice</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Previous staff or voice</source>
         <translation type="unfinished">Previous staff or voice</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to previous staff or voice</source>
         <translation type="unfinished">Go to previous staff or voice</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Next frame</source>
         <translation type="unfinished">Next frame</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to next frame</source>
         <translation type="unfinished">Go to next frame</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Previous frame</source>
         <translation type="unfinished">Previous frame</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to previous frame</source>
         <translation type="unfinished">Go to previous frame</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Next system</source>
         <translation type="unfinished">Next system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to next system</source>
         <translation type="unfinished">Go to next system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Previous system</source>
         <translation type="unfinished">Previous system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Go to previous system</source>
         <translation type="unfinished">Go to previous system</translation>
     </message>
@@ -5611,22 +5626,22 @@ followed by dashes</translation>
         <translation type="unfinished">Toggle superscript</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add next chord to selection</source>
         <translation type="unfinished">Add next chord to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: next note/rest</source>
         <translation type="unfinished">Add to selection: next note/rest</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add previous chord to selection</source>
         <translation type="unfinished">Add previous chord to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: previous note/rest</source>
         <translation type="unfinished">Add to selection: previous note/rest</translation>
     </message>
@@ -5741,27 +5756,27 @@ followed by dashes</translation>
         <translation type="unfinished">Toggle visibility of elements</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select &amp;all</source>
         <translation type="unfinished">Select &amp;all</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select all</source>
         <translation type="unfinished">Select all</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select sectio&amp;n</source>
         <translation type="unfinished">Select sectio&amp;n</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select section</source>
         <translation type="unfinished">Select section</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Similar</source>
         <translation type="unfinished">Similar</translation>
     </message>
@@ -6276,12 +6291,12 @@ followed by dashes</translation>
         <translation type="unfinished">Nonuplet</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select</source>
         <translation type="unfinished">Select</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select items by target</source>
         <translation type="unfinished">Select items by target</translation>
     </message>
@@ -6296,57 +6311,57 @@ followed by dashes</translation>
         <translation type="unfinished">Open selection options</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Next segment element</source>
         <translation type="unfinished">Next segment element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select next segment element</source>
         <translation type="unfinished">Select next segment element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Previous segment element</source>
         <translation type="unfinished">Previous segment element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select previous segment element</source>
         <translation type="unfinished">Select previous segment element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select similar elements</source>
         <translation type="unfinished">Select similar elements</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Similar on this staff</source>
         <translation type="unfinished">Similar on this staff</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select similar elements on the same staff</source>
         <translation type="unfinished">Select similar elements on the same staff</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Similar in this range</source>
         <translation type="unfinished">Similar in this range</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select similar elements in the selected range</source>
         <translation type="unfinished">Select similar elements in the selected range</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Notes in chord</source>
         <translation type="unfinished">Notes in chord</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select notes in chord</source>
         <translation type="unfinished">Select notes in chord</translation>
     </message>
@@ -6386,27 +6401,27 @@ followed by dashes</translation>
         <translation type="unfinished">Turn off auto-place and freeze the selection’s current position</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select to beginning of system</source>
         <translation type="unfinished">Select to beginning of system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: beginning of system</source>
         <translation type="unfinished">Add to selection: beginning of system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select to end of system</source>
         <translation type="unfinished">Select to end of system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: end of system</source>
         <translation type="unfinished">Add to selection: end of system</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: end of score</source>
         <translation type="unfinished">Add to selection: end of score</translation>
     </message>
@@ -6414,6 +6429,16 @@ followed by dashes</translation>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
         <source>Edit text</source>
         <translation type="unfinished">Edit text</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <source>Edit current element</source>
+        <translation type="unfinished">Edit current element</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <source>Edit screen element</source>
+        <translation type="unfinished">Edit screen element</translation>
     </message>
     <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
@@ -7912,57 +7937,67 @@ followed by dashes</translation>
         <translation type="unfinished">Edit element</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select to beginning of score</source>
         <translation type="unfinished">Select to beginning of score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: beginning of score</source>
         <translation type="unfinished">Add to selection: beginning of score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Select to end of score</source>
         <translation type="unfinished">Select to end of score</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add staff above to selection</source>
         <translation type="unfinished">Add staff above to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
+        <source>Add to selection</source>
+        <translation type="unfinished">Add to selection</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
+        <source>Add items to selection by target</source>
+        <translation type="unfinished">Add items to selection by target</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add next measure to selection</source>
         <translation type="unfinished">Add next measure to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: next measure</source>
         <translation type="unfinished">Add to selection: next measure</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add previous measure to selection</source>
         <translation type="unfinished">Add previous measure to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: previous measure</source>
         <translation type="unfinished">Add to selection: previous measure</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: staff above</source>
         <translation type="unfinished">Add to selection: staff above</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add staff below to selection</source>
         <translation type="unfinished">Add staff below to selection</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
+        <location filename="src/notationscene/notationcommands.h" line="1"/>
         <source>Add to selection: staff below</source>
         <translation type="unfinished">Add to selection: staff below</translation>
     </message>
@@ -8203,12 +8238,12 @@ followed by dashes</translation>
         <translation type="unfinished">Move pitch down diatonically</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
+        <location filename="src/notationscene/notationcommands.h" line="2"/>
         <source>Go to top staff</source>
         <translation type="unfinished">Go to top staff</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="2"/>
+        <location filename="src/notationscene/notationcommands.h" line="2"/>
         <source>Go to first empty trailing measure</source>
         <translation type="unfinished">Go to first empty trailing measure</translation>
     </message>
@@ -8851,6 +8886,16 @@ followed by dashes</translation>
         <translation type="unfinished">Scoop</translation>
     </message>
     <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Add stave sharing change</source>
+        <translation type="unfinished">Add stave sharing change</translation>
+    </message>
+    <message>
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Add stave sharing reset</source>
+        <translation type="unfinished">Add stave sharing reset</translation>
+    </message>
+    <message>
         <location filename="src/notationscene/internal/notationcommandsregister.cpp" line="1"/>
         <source>Hammer-on/pull-off</source>
         <translation type="unfinished">Hammer-on/pull-off</translation>
@@ -9291,13 +9336,18 @@ This action cannot be undone.</translation>
     </message>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="1"/>
-        <source>Version:</source>
-        <translation type="unfinished">Version:</translation>
+        <source>Version: %1</source>
+        <translation type="unfinished">Version: %1</translation>
     </message>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="1"/>
-        <source>Revision:</source>
-        <translation type="unfinished">Revision:</translation>
+        <source>Revision: %1</source>
+        <translation type="unfinished">Revision: %1</translation>
+    </message>
+    <message>
+        <location filename="src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="1"/>
+        <source>Build date: %1</source>
+        <translation type="unfinished">Build date: %1</translation>
     </message>
     <message>
         <location filename="src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="1"/>
@@ -11433,6 +11483,22 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">
             <numerusform>Staff text(s)</numerusform>
             <numerusform>Staff text(s)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>stave sharing change(s)</source>
+        <translation type="unfinished">
+            <numerusform>stave sharing change(s)</numerusform>
+            <numerusform>stave sharing change(s)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="src/engraving/types/typesconv.cpp" line="1"/>
+        <source>Stave sharing change(s)</source>
+        <translation type="unfinished">
+            <numerusform>Stave sharing change(s)</numerusform>
+            <numerusform>Stave sharing change(s)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -13860,6 +13926,14 @@ Fret %1 on strings %2</translation>
         <source>in</source>
         <extracomment>For instrument transposition, e.g. Horn in F</extracomment>
         <translation type="unfinished">in</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="src/engraving/dom/stavesharingchange.cpp" line="1"/>
+        <source>Reset stave sharing change(s)</source>
+        <translation type="unfinished">
+            <numerusform>Reset stave sharing change(s)</numerusform>
+            <numerusform>Reset stave sharing change(s)</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -16962,13 +17036,13 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
-        <source>left shoulder offset</source>
-        <translation type="unfinished">left shoulder offset</translation>
+        <source>first control point offset</source>
+        <translation type="unfinished">first control point offset</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
-        <source>right shoulder offset</source>
-        <translation type="unfinished">right shoulder offset</translation>
+        <source>second control point offset</source>
+        <translation type="unfinished">second control point offset</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
@@ -17819,11 +17893,6 @@ Fret %1 on strings %2</translation>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
         <source>first system indentation</source>
         <translation type="unfinished">first system indentation</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/dom/property.cpp" line="1"/>
-        <source>path</source>
-        <translation type="unfinished">path</translation>
     </message>
     <message>
         <location filename="src/engraving/dom/property.cpp" line="1"/>
@@ -20641,7 +20710,6 @@ Fret %1 on strings %2</translation>
 <context>
     <name>global</name>
     <message>
-        <location filename="src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="1"/>
         <location filename="src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="1"/>
         <location filename="src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="1"/>
         <location filename="src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="1"/>
@@ -20684,6 +20752,8 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresListView.qml" line="1"/>
         <location filename="src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="1"/>
+        <location filename="src/appshell/qml/MuseScore/AppShell/aboutmodel.cpp" line="1"/>
+        <location filename="src/project/qml/MuseScore/Project/internal/Properties/projectpropertiesmodel.cpp" line="1"/>
         <source>Unknown</source>
         <translation type="unfinished">Unknown</translation>
     </message>
@@ -23266,12 +23336,17 @@ If the issue persists, follow the steps at the troubleshooting link below.</tran
         <translation type="unfinished">Staff %1</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationactioncontroller.cpp" line="1"/>
+        <location filename="src/notation/internal/mscoreerrorscontroller.cpp" line="2"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished">Cannot create tuplet</translation>
     </message>
     <message>
-        <location filename="src/notationscene/internal/notationactioncontroller.cpp" line="1"/>
+        <location filename="src/notation/internal/mscoreerrorscontroller.cpp" line="1"/>
+        <source>There isn’t enough space for the tuplet before the end of the measure (or of the tuplet it would be nested in).</source>
+        <translation type="unfinished">There isn’t enough space for the tuplet before the end of the measure (or of the tuplet it would be nested in).</translation>
+    </message>
+    <message>
+        <location filename="src/notation/internal/mscoreerrorscontroller.cpp" line="1"/>
         <source>Note value is too short</source>
         <translation type="unfinished">Note value is too short</translation>
     </message>
@@ -23873,6 +23948,21 @@ If the issue persists, follow the steps at the troubleshooting link below.</tran
         <extracomment>For instrument transposition, e.g. Horn in F</extracomment>
         <translation type="unfinished">in</translation>
     </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaveSharingChangePopup.qml" line="2"/>
+        <source>Stave sharing change</source>
+        <translation type="unfinished">Stave sharing change</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaveSharingChangePopup.qml" line="1"/>
+        <source>This stave configuration is invalid</source>
+        <translation type="unfinished">This stave configuration is invalid</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaveSharingChangePopup.qml" line="1"/>
+        <source>Reset to default</source>
+        <translation type="unfinished">Reset to default</translation>
+    </message>
 </context>
 <context>
     <name>notation/add-remove-system-breaks</name>
@@ -23881,6 +23971,44 @@ If the issue persists, follow the steps at the troubleshooting link below.</tran
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
         <translation type="unfinished">Lock layout with %1 measure(s) per system</translation>
+    </message>
+</context>
+<context>
+    <name>notation/automation</name>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Automation type</source>
+        <translation type="unfinished">Automation type</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Dynamics</source>
+        <translation type="unfinished">Dynamics</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Volume</source>
+        <translation type="unfinished">Volume</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Pan</source>
+        <translation type="unfinished">Pan</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Master volume</source>
+        <translation type="unfinished">Master volume</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Master pan</source>
+        <translation type="unfinished">Master pan</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="1"/>
+        <source>Tempo</source>
+        <translation type="unfinished">Tempo</translation>
     </message>
 </context>
 <context>
@@ -28847,12 +28975,12 @@ failed.</translation>
         <translation type="unfinished">Aux %1</translation>
     </message>
     <message>
-        <location filename="src/playback/internal/playbackcontroller.cpp" line="1"/>
+        <location filename="src/notation/internal/notationplayback.cpp" line="1"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronome</translation>
     </message>
     <message>
-        <location filename="src/playback/internal/playbackcontroller.cpp" line="1"/>
+        <location filename="src/notation/internal/notationplayback.cpp" line="1"/>
         <source>Chords</source>
         <translation type="unfinished">Chords</translation>
     </message>
@@ -31488,6 +31616,18 @@ failed.</translation>
     <message>
         <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
         <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>Upload limit reached</source>
+        <translation type="unfinished">Upload limit reached</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
+        <source>You’ve reached the limit for file conversions. Please try again later.</source>
+        <translation type="unfinished">You’ve reached the limit for file conversions. Please try again later.</translation>
+    </message>
+    <message>
+        <location filename="src/project/internal/convertfiletoscorescenario.cpp" line="1"/>
+        <location filename="src/project/tests/convertfiletoscorescenario_tests.cpp" line="1"/>
         <source>‘%1’ has finished processing and is ready to open.</source>
         <translation type="unfinished">‘%1’ has finished processing and is ready to open.</translation>
     </message>
@@ -31684,6 +31824,17 @@ failed.</translation>
         <source>%1/%2 used</source>
         <extracomment>%1 and %2 are pre-formatted file sizes including units, e.g. &quot;15 MB/20 MB used&quot;</extracomment>
         <translation type="unfinished">%1/%2 used</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="1"/>
+        <source>Terms of Use</source>
+        <translation type="unfinished">Terms of Use</translation>
+    </message>
+    <message>
+        <location filename="src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="1"/>
+        <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
+        <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
+        <translation type="unfinished">I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</translation>
     </message>
 </context>
 <context>
@@ -33485,9 +33636,34 @@ failed.</translation>
         </translation>
     </message>
     <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="2"/>
+        <source>Move to</source>
+        <translation type="unfinished">Move to</translation>
+    </message>
+    <message>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
         <source>Move measures across systems</source>
         <translation type="unfinished">Move measures across systems</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Previous system</source>
+        <translation type="unfinished">Previous system</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Next system</source>
+        <translation type="unfinished">Next system</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Move to previous system</source>
+        <translation type="unfinished">Move to previous system</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Move to next system</source>
+        <translation type="unfinished">Move to next system</translation>
     </message>
     <message>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
@@ -33532,8 +33708,28 @@ failed.</translation>
     </message>
     <message>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Previous page</source>
+        <translation type="unfinished">Previous page</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Next page</source>
+        <translation type="unfinished">Next page</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Move to previous page</source>
+        <translation type="unfinished">Move to previous page</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
         <source>Move system(s) to previous page</source>
         <translation type="unfinished">Move system(s) to previous page</translation>
+    </message>
+    <message>
+        <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
+        <source>Move to next page</source>
+        <translation type="unfinished">Move to next page</translation>
     </message>
     <message>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/systemlayout/SystemPageLayoutSection.qml" line="1"/>
@@ -36489,39 +36685,9 @@ failed.</translation>
 <context>
     <name>staveSharingTest</name>
     <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="9"/>
+        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
         <source>Enable stave sharing</source>
         <translation type="unfinished">Enable stave sharing</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
-        <source>Remove shared part</source>
-        <translation type="unfinished">Remove shared part</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="2"/>
-        <source>Remove origin part</source>
-        <translation type="unfinished">Remove origin part</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="3"/>
-        <source>Disable stave sharing</source>
-        <translation type="unfinished">Disable stave sharing</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
-        <source>Change rest duration</source>
-        <translation type="unfinished">Change rest duration</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
-        <source>Change chord duration</source>
-        <translation type="unfinished">Change chord duration</translation>
-    </message>
-    <message>
-        <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
-        <source>Flip tie direction</source>
-        <translation type="unfinished">Flip tie direction</translation>
     </message>
     <message>
         <location filename="src/engraving/tests/stavesharing_tests.cpp" line="1"/>
@@ -36664,7 +36830,6 @@ failed.</translation>
         <translation type="unfinished">Corrupt score</translation>
     </message>
     <message>
-        <location filename="src/engraving/tests/voiceswitching_tests.cpp" line="1"/>
         <location filename="src/notation/internal/notationinteraction.cpp" line="1"/>
         <location filename="src/propertiespanel/qml/MuseScore/PropertiesPanel/modelwithvoiceandpositionoptions.cpp" line="1"/>
         <source>Change voice</source>
@@ -37802,6 +37967,16 @@ failed.</translation>
         <location filename="src/engraving/dom/harmony.cpp" line="1"/>
         <source>Transpose harmony</source>
         <translation type="unfinished">Transpose harmony</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/elementpopups/stavesharingchangepopupmodel.cpp" line="1"/>
+        <source>Reset stave sharing change</source>
+        <translation type="unfinished">Reset stave sharing change</translation>
+    </message>
+    <message>
+        <location filename="src/notationscene/qml/MuseScore/NotationScene/elementpopups/stavesharingchangepopupmodel.cpp" line="1"/>
+        <source>Change stave sharing mapping</source>
+        <translation type="unfinished">Change stave sharing mapping</translation>
     </message>
 </context>
 <context>
