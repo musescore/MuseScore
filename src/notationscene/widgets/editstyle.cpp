@@ -1326,7 +1326,7 @@ void EditStyle::classBegin()
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
     int lastSubPage = notation->viewState()->styleDialogLastSubPageIndex();
-    if (QListWidgetItem* item = textStyles->item(lastSubPage); item && item->isHidden()) {
+    if (QListWidgetItem* item = textStyles->item(lastSubPage); item&& item->isHidden()) {
         lastSubPage = 0;
     }
     textStyles->setCurrentRow(lastSubPage);
@@ -1334,7 +1334,7 @@ void EditStyle::classBegin()
     connect(pageList, &QListWidget::currentRowChanged, pageStack, &QStackedWidget::setCurrentIndex);
     connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::on_pageRowSelectionChanged);
     int lastPage = notation->viewState()->styleDialogLastPageIndex();
-    if (QListWidgetItem* item = pageList->item(lastPage); item && item->isHidden()) {
+    if (QListWidgetItem* item = pageList->item(lastPage); item&& item->isHidden()) {
         lastPage = 0;
     }
     pageList->setCurrentRow(lastPage);

@@ -823,5 +823,4 @@ bool TDuration::isValid(Fraction f)
     t.truncateToFraction(f, 4);
     return t.isValid() && (t.fraction() - f).numerator() == 0;
 }
-
 }

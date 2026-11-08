@@ -57,4 +57,3 @@ public:
     DECLARE_LAYOUTDATA_METHODS(JianpuDurationLine);
 };
 } // namespace mu::engraving
-
