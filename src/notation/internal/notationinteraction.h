@@ -102,9 +102,9 @@ public:
     // Select
     INotationSelectionPtr selection() const override;
     muse::async::Notification selectionChanged() const override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
-    void select(SelectionTarget target) override;
-    void addToSelection(SelectionTarget target) override;
+    muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0) override;
+    muse::Ret select(SelectionTarget target) override;
+    muse::Ret addToSelection(SelectionTarget target) override;
 
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
 
@@ -115,7 +115,6 @@ public:
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) override;
-    void expandSelection(ExpandSelectionMode mode) override;
 
     EngravingItem* contextItem() const override;
 
@@ -465,7 +464,7 @@ private:
     bool prepareDropMeasureBaseAnchorElement(const muse::PointF& pos);
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     std::vector<muse::RectF> dropHighlightRects(const mu::engraving::EngravingItem* dropElem,
-                                                const mu::engraving::MeasureBase* targetMeasureBase, const muse::RectF& staffRect,
+                                                const mu::engraving::EngravingItem* targetElem,
                                                 mu::engraving::KeyboardModifiers modifiers) const;
     bool dropCanvas(EngravingItem* e);
     void resetDropData();

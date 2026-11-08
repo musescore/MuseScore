@@ -3,9 +3,24 @@ name: 'Check: Visual Tests (vtest)'
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      reference_ref:
+        description: 'Reference ref to compare with (default: the same commit)'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
+    inputs:
+      reference_ref:
+        description: 'Reference ref to compare with (default: the same commit)'
+        required: false
+        type: string
+        default: ''
 
 concurrency:
-  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }}
+  # If run via workflow_call, ${{ github.workflow }} is the root workflow's name (e.g. 'Build: All'),
+  # which is the same for all workflows called in that run, hence we must add a unique suffix here.
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }} vtest
   cancel-in-progress: true
 
 jobs:
@@ -50,6 +65,14 @@ jobs:
         fi
         echo "REFERENCE_REF=$REFERENCE_REF" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+        echo "PR_INFO=" >> $GITHUB_ENV
+    - name: Get reference commit for manual run
+      if: github.event_name != 'pull_request' && github.event_name != 'push'
+      env:
+        REFERENCE_REF: ${{ inputs.reference_ref || github.sha }}
+      run: |
+        echo "REFERENCE_REF=$REFERENCE_REF" >> $GITHUB_ENV
+        echo "DO_RUN=true" >> $GITHUB_ENV
         echo "PR_INFO=" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
@@ -113,12 +136,13 @@ jobs:
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       run: |
         ccache --recompress 10
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+
     - name: Save ccache files
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       uses: actions/cache/save@v6
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
@@ -179,12 +203,13 @@ jobs:
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       run: |
         ccache --recompress 10
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+
     - name: Save ccache files
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       uses: actions/cache/save@v6
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}

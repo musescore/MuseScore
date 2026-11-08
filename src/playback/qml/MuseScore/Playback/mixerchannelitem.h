@@ -36,6 +36,7 @@
 #include "ui/qml/Muse/Ui/navigationpanel.h"
 
 #include "audio/common/audiotypes.h"
+#include "notation/inotationautomation.h"
 #include "project/iprojectaudiosettings.h"
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
@@ -209,6 +210,9 @@ protected:
     void closeEditor(AbstractAudioResourceItem* item);
 
     bool askAboutChangingSound();
+
+    std::optional<notation::AutomationCurveKey> automationCurveKey(notation::AutomationType type) const;
+    bool hasAutomationCurve(notation::AutomationType type) const;
 
     void setDisplayedVolumeLevel(float volumeLevel);
     void setDisplayedBalance(int balance);

@@ -23,6 +23,7 @@
 #include "lrcwriter.h"
 
 #include <QBuffer>
+#include <QRegularExpression>
 
 #include "global/io/buffer.h"
 #include "global/io/file.h"

@@ -88,6 +88,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(sharedOnStaffNumeralsHyphenThreshold,           1),
     styleDef(staveSharingInstrChangePlayerNum,               true),
 
+    styleDef(staveSharingChangeMinDistance,              0.5_sp),
+
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),
     styleDef(stringsNameByGroup,                         false),

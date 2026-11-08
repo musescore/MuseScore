@@ -119,6 +119,9 @@ public:
     const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
 
+    muse::audio::ControlParams currentTrackControlParams(const engraving::InstrumentTrackId& trackId) const override;
+    muse::audio::ControlParams currentMasterControlParams() const override;
+
     void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;
     void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
@@ -228,16 +231,30 @@ private:
     void addAuxTrack(muse::audio::aux_channel_idx_t index, bool projectHadNoAudioSettings, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
-    project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
 
+    project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    bool resolveTrackMuted(const engraving::InstrumentTrackId& instrumentTrackId, bool savedMuted) const;
     muse::audio::ControlParams trackControlParams(const engraving::InstrumentTrackId& instrumentTrackId,
                                                   const project::AudioOutputParams& outParams, bool rebuildVolume = true,
                                                   bool rebuildPan = true);
+
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
+    struct AutomationEnvelopes {
+        std::optional<muse::audio::AutomationEnvelope> volume;
+        std::optional<muse::audio::AutomationEnvelope> pan;
+    };
+
     void onAutomationDataChanged(const notation::AutomationChanges& changes);
-    void resendAutomatedControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
-                                      std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
+
+    void resendAutomationEnvelopes();
+    void collectEnvelopeTrackIds(engraving::InstrumentTrackIdSet& volumeTrackIds, engraving::InstrumentTrackIdSet& panTrackIds) const;
+    void resendTrackControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
+                                  std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
+    void resendMasterControlParams(bool rebuildVolume = true, bool rebuildPan = true);
+
+    std::optional<muse::audio::AutomationEnvelope> buildAutomationEnvelope(const notation::AutomationCurveKey& key) const;
+    static void applyEnvelopes(const AutomationEnvelopes& envelopes, muse::audio::ControlParams& control);
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
@@ -270,7 +287,8 @@ private:
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;
 
-    std::unordered_map<engraving::InstrumentTrackId, muse::audio::ControlParams> m_automatedControlParamsCache;
+    std::unordered_map<engraving::InstrumentTrackId, AutomationEnvelopes> m_automationEnvelopesCache; // only tracks with automation
+    AutomationEnvelopes m_masterAutomationEnvelopes;
 
     muse::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;

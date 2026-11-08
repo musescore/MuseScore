@@ -30,6 +30,8 @@
 #include "../types/fraction.h"
 #include "../types/types.h"
 
+#include "sharedpart.h"
+
 namespace mu::engraving {
 class EngravingItem;
 class Measure;
@@ -174,6 +176,11 @@ private:
     void deleteJumpsAndMarkers();
 
     void restoreVolta(Score* score, const Fraction& tick, Volta* v) const;
+
+    StaveSharingStatesByPart m_staveSharingStates;
+
+    void backupStaveSharingStates(Segment* first, Segment* last);
+    void restoreStaveSharingStates(Score* score) const;
 
     friend class TrackList;
 

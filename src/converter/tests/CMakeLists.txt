@@ -26,6 +26,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreelementsscanner_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/convertercontroller_tests.cpp
 )
 
 set(MODULE_TEST_LINK

@@ -26,16 +26,317 @@
 #include "notationcommandsenums.h" // IWYU pragma: export
 
 namespace mu::notation {
-using muse::rcommand::Field;
 using muse::MnemonicString;
 using muse::TranslatableString;
+using muse::rcommand::Command;
+using muse::rcommand::DataType;
+using muse::rcommand::FieldsScheme;
+using muse::rcommand::Field;
+using muse::rcommand::Presence;
+using muse::rcommand::Availability;
+using muse::rcommand::Annotation;
+using muse::rcommand::Decoration;
+
 // A few typed commands as an example. Eventually, all commands should be made typed.
 
 #define sci_auto static const inline auto
 #define sce_auto static constexpr auto
 
+// select commands
+struct SelectTargetCommand {
+    sci_auto id = Command("command://notation/select/target");
+    sci_auto title = MnemonicString("action", "Select");
+    sci_auto description = TranslatableString("action", "Select items by target");
+    sci_auto availabilities = Availability::API;
+    sci_auto annotations = Annotation::Idempotent;
+
+    SelectionTarget target = SelectionTarget::FirstItem;
+    PlayMode playMode = PlayMode::NoPlay;
+
+    sce_auto input = FieldsScheme {
+        Field{ "target", &SelectTargetCommand::target, "Selection target" },
+        Field{ "play-mode", &SelectTargetCommand::playMode, "Play mode", Presence::Optional },
+    };
+};
+
+// aliases for select command
+struct SelectFirstItemCommand {
+    sci_auto id = Command("command://notation/select/first-item");
+    sci_auto title = MnemonicString("action", "First element");
+    sci_auto description = TranslatableString("action", "Go to first element in score");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectLastItemCommand {
+    sci_auto id = Command("command://notation/select/last-item");
+    sci_auto title = MnemonicString("action", "Last element");
+    sci_auto description = TranslatableString("action", "Go to last element in score");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectNextItemCommand {
+    sci_auto id = Command("command://notation/select/next-item");
+    sci_auto title = MnemonicString("action", "Next element");
+    sci_auto description = TranslatableString("action", "Select next element in score");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectPrevItemCommand {
+    sci_auto id = Command("command://notation/select/prev-item");
+    sci_auto title = MnemonicString("action", "Previous element");
+    sci_auto description = TranslatableString("action", "Select previous element in score");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectNextSegmentCommand {
+    sci_auto id = Command("command://notation/select/next-segment");
+    sci_auto title = MnemonicString("action", "Next segment element");
+    sci_auto description = TranslatableString("action", "Select next segment element");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectPrevSegmentCommand {
+    sci_auto id = Command("command://notation/select/prev-segment");
+    sci_auto title = MnemonicString("action", "Previous segment element");
+    sci_auto description = TranslatableString("action", "Select previous segment element");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectNextTrackCommand {
+    sci_auto id = Command("command://notation/select/next-track");
+    sci_auto title = MnemonicString("action", "Next staff or voice");
+    sci_auto description = TranslatableString("action", "Go to next staff or voice");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectPrevTrackCommand {
+    sci_auto id = Command("command://notation/select/prev-track");
+    sci_auto title = MnemonicString("action", "Previous staff or voice");
+    sci_auto description = TranslatableString("action", "Go to previous staff or voice");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectNextFrameCommand {
+    sci_auto id = Command("command://notation/select/next-frame");
+    sci_auto title = MnemonicString("action", "Next frame");
+    sci_auto description = TranslatableString("action", "Go to next frame");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectPrevFrameCommand {
+    sci_auto id = Command("command://notation/select/prev-frame");
+    sci_auto title = MnemonicString("action", "Previous frame");
+    sci_auto description = TranslatableString("action", "Go to previous frame");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectNextSystemCommand {
+    sci_auto id = Command("command://notation/select/next-system");
+    sci_auto title = MnemonicString("action", "Next system");
+    sci_auto description = TranslatableString("action", "Go to next system");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectPrevSystemCommand {
+    sci_auto id = Command("command://notation/select/prev-system");
+    sci_auto title = MnemonicString("action", "Previous system");
+    sci_auto description = TranslatableString("action", "Go to previous system");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectUpNoteInChordCommand {
+    sci_auto id = Command("command://notation/select/up-note-in-chord");
+    sci_auto title = MnemonicString("action", "Up note in chord");
+    sci_auto description = TranslatableString("action", "Select note/rest above");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectDownNoteInChordCommand {
+    sci_auto id = Command("command://notation/select/down-note-in-chord");
+    sci_auto title = MnemonicString("action", "Down note in chord");
+    sci_auto description = TranslatableString("action", "Select note/rest below");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct SelectTopNoteInChordCommand {
+    sci_auto id = Command("command://notation/select/top-note-in-chord");
+    sci_auto title = MnemonicString("action", "Top note in chord");
+    sci_auto description = TranslatableString("action", "Select top note in chord");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectBottomNoteInChordCommand {
+    sci_auto id = Command("command://notation/select/bottom-note-in-chord");
+    sci_auto title = MnemonicString("action", "Bottom note in chord");
+    sci_auto description = TranslatableString("action", "Select bottom note in chord");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectTopStaffCommand {
+    sci_auto id = Command("command://notation/select/top-staff");
+    sci_auto title = MnemonicString("action", "Go to top staff");
+    sci_auto description = TranslatableString("action", "Go to top staff");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectEmptyTrailingMeasureCommand {
+    sci_auto id = Command("command://notation/select/empty-trailing-measure");
+    sci_auto title = MnemonicString("action", "Go to first empty trailing measure");
+    sci_auto description = TranslatableString("action", "Go to first empty trailing measure");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectSimilarCommand {
+    sci_auto id = Command("command://notation/select/similar");
+    sci_auto title = MnemonicString("action", "Similar");
+    sci_auto description = TranslatableString("action", "Select similar elements");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectSimilarInStaffCommand {
+    sci_auto id = Command("command://notation/select/similar-in-staff");
+    sci_auto title = MnemonicString("action", "Similar on this staff");
+    sci_auto description = TranslatableString("action", "Select similar elements on the same staff");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectSimilarInRangeCommand {
+    sci_auto id = Command("command://notation/select/similar-in-range");
+    sci_auto title = MnemonicString("action", "Similar in this range");
+    sci_auto description = TranslatableString("action", "Select similar elements in the selected range");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectNotesInChordCommand {
+    sci_auto id = Command("command://notation/select/notes-in-chord");
+    sci_auto title = MnemonicString("action", "Notes in chord");
+    sci_auto description = TranslatableString("action", "Select notes in chord");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectAllCommand {
+    sci_auto id = Command("command://notation/select/all");
+    sci_auto title = MnemonicString("action", "Select &all");
+    sci_auto description = TranslatableString("action", "Select all");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+struct SelectSectionCommand {
+    sci_auto id = Command("command://notation/select/section");
+    sci_auto title = MnemonicString("action", "Select sectio&n");
+    sci_auto description = TranslatableString("action", "Select section");
+    sci_auto availabilities = Availability::UI;
+    sci_auto annotations = Annotation::Idempotent;
+};
+
+// aliases for add to selection command
+struct AddToSelectionTargetCommand {
+    sci_auto id = Command("command://notation/add-to-selection/target");
+    sci_auto title = MnemonicString("action", "Add to selection");
+    sci_auto description = TranslatableString("action", "Add items to selection by target");
+    sci_auto availabilities = Availability::API;
+
+    SelectionTarget target = SelectionTarget::BeginSystem;
+
+    sce_auto input = FieldsScheme {
+        Field{ "target", &AddToSelectionTargetCommand::target, "Selection target" },
+    };
+};
+
+struct AddToSelectionNextChordCommand {
+    sci_auto id = Command("command://notation/add-to-selection/next-chord");
+    sci_auto title = MnemonicString("action", "Add next chord to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: next note/rest");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionPrevChordCommand {
+    sci_auto id = Command("command://notation/add-to-selection/prev-chord");
+    sci_auto title = MnemonicString("action", "Add previous chord to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: previous note/rest");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionNextMeasureCommand {
+    sci_auto id = Command("command://notation/add-to-selection/next-measure");
+    sci_auto title = MnemonicString("action", "Add next measure to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: next measure");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionPrevMeasureCommand {
+    sci_auto id = Command("command://notation/add-to-selection/prev-measure");
+    sci_auto title = MnemonicString("action", "Add previous measure to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: previous measure");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionAboveStaffCommand {
+    sci_auto id = Command("command://notation/add-to-selection/above-staff");
+    sci_auto title = MnemonicString("action", "Add staff above to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: staff above");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionBelowStaffCommand {
+    sci_auto id = Command("command://notation/add-to-selection/below-staff");
+    sci_auto title = MnemonicString("action", "Add staff below to selection");
+    sci_auto description = TranslatableString("action", "Add to selection: staff below");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionBeginSystemCommand {
+    sci_auto id = Command("command://notation/add-to-selection/begin-system");
+    sci_auto title = MnemonicString("action", "Select to beginning of system");
+    sci_auto description = TranslatableString("action", "Add to selection: beginning of system");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionEndSystemCommand {
+    sci_auto id = Command("command://notation/add-to-selection/end-system");
+    sci_auto title = MnemonicString("action", "Select to end of system");
+    sci_auto description = TranslatableString("action", "Add to selection: end of system");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionBeginScoreCommand {
+    sci_auto id = Command("command://notation/add-to-selection/begin-score");
+    sci_auto title = MnemonicString("action", "Select to beginning of score");
+    sci_auto description = TranslatableString("action", "Add to selection: beginning of score");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct AddToSelectionEndScoreCommand {
+    sci_auto id = Command("command://notation/add-to-selection/end-score");
+    sci_auto title = MnemonicString("action", "Select to end of score");
+    sci_auto description = TranslatableString("action", "Add to selection: end of score");
+    sci_auto availabilities = Availability::UI;
+};
+
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_CHORD_COMMAND("command://notation/add-to-selection-next-chord");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_CHORD_COMMAND("command://notation/add-to-selection-prev-chord");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_MEASURE_COMMAND("command://notation/add-to-selection-next-measure");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_MEASURE_COMMAND("command://notation/add-to-selection-prev-measure");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_ABOVE_STAFF_COMMAND("command://notation/add-to-selection-above-staff");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_BELOW_STAFF_COMMAND("command://notation/add-to-selection-below-staff");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND("command://notation/add-to-selection-begin-system");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SYSTEM_COMMAND("command://notation/add-to-selection-end-system");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SCORE_COMMAND("command://notation/add-to-selection-begin-score");
+//inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SCORE_COMMAND("command://notation/add-to-selection-end-score");
+
 struct FlipCommand {
-    sci_auto id = muse::rcommand::Command("command://notation/flip");
+    sci_auto id = Command("command://notation/flip");
     sci_auto title = MnemonicString("action", "Flip direction");
     sci_auto description = TranslatableString("action", "Flip direction");
     sci_auto decoration = muse::rcommand::Decoration(muse::ui::IconCode::Code::NOTE_FLIP);
@@ -51,7 +352,7 @@ struct AddNoteCommand {
 
     sce_auto input = std::tuple {
         Field{ "note", &AddNoteCommand::note, "Note name" },
-        Field{ "mode", &AddNoteCommand::mode, "Adding mode" },
+        Field{ "mode", &AddNoteCommand::mode, "Adding mode", Presence::Optional },
     };
 };
 
@@ -60,7 +361,8 @@ struct GetNoteInputStateCommand {
     sci_auto id = muse::rcommand::Command("command://notation/get-noteinput-state");
     sci_auto title = MnemonicString("action", "Get note input state");
     sci_auto description = TranslatableString("action", "Get note input state");
-    sci_auto availability = muse::rcommand::Availability::MCP;
+    sci_auto availabilities = muse::rcommand::Availability::MCP;
+    sci_auto annotations = muse::rcommand::Annotation::ReadOnly;
 
     struct Output {
         bool enabled = false;
@@ -85,46 +387,11 @@ inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/und
 inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
 
 // navigation and selection commands
-inline static const muse::rcommand::Command SELECT_COMMAND("command://notation/select"); // with params
+
 inline static const muse::rcommand::Command OPEN_SELECTION_OPTIONS_COMMAND("command://notation/open-selection-options");
-// aliases for select command
-inline static const muse::rcommand::Command GOTO_FIRST_ELEMENT_COMMAND("command://notation/goto-first-element");
-inline static const muse::rcommand::Command GOTO_LAST_ELEMENT_COMMAND("command://notation/goto-last-element");
-inline static const muse::rcommand::Command GOTO_NEXT_ELEMENT_COMMAND("command://notation/goto-next-element");
-inline static const muse::rcommand::Command GOTO_PREV_ELEMENT_COMMAND("command://notation/goto-prev-element");
-inline static const muse::rcommand::Command GOTO_NEXT_SEGMENT_ELEMENT_COMMAND("command://notation/goto-next-segment-element");
-inline static const muse::rcommand::Command GOTO_PREV_SEGMENT_ELEMENT_COMMAND("command://notation/goto-prev-segment-element");
-inline static const muse::rcommand::Command GOTO_NEXT_TRACK_COMMAND("command://notation/goto-next-track");
-inline static const muse::rcommand::Command GOTO_PREV_TRACK_COMMAND("command://notation/goto-prev-track");
-inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://notation/goto-next-frame");
-inline static const muse::rcommand::Command GOTO_PREV_FRAME_COMMAND("command://notation/goto-prev-frame");
-inline static const muse::rcommand::Command GOTO_NEXT_SYSTEM_COMMAND("command://notation/goto-next-system");
-inline static const muse::rcommand::Command GOTO_PREV_SYSTEM_COMMAND("command://notation/goto-prev-system");
-inline static const muse::rcommand::Command GOTO_UPNOTE_IN_CHORD_COMMAND("command://notation/goto-upnote-in-chord");
-inline static const muse::rcommand::Command GOTO_DOWNNOTE_IN_CHORD_COMMAND("command://notation/goto-downnote-in-chord");
-inline static const muse::rcommand::Command GOTO_TOPNOTE_IN_CHORD_COMMAND("command://notation/goto-topnote-in-chord");
-inline static const muse::rcommand::Command GOTO_BOTTOMNOTE_IN_CHORD_COMMAND("command://notation/goto-bottomnote-in-chord");
-inline static const muse::rcommand::Command GOTO_TOP_STAFF_COMMAND("command://notation/goto-top-staff");
-inline static const muse::rcommand::Command GOTO_EMPTY_TRAILING_MEASURE_COMMAND("command://notation/goto-empty-trailing-measure");
-inline static const muse::rcommand::Command SELECT_SIMILAR_COMMAND("command://notation/select-similar");
-inline static const muse::rcommand::Command SELECT_SIMILAR_IN_STAFF_COMMAND("command://notation/select-similar-in-staff");
-inline static const muse::rcommand::Command SELECT_SIMILAR_IN_RANGE_COMMAND("command://notation/select-similar-in-range");
-inline static const muse::rcommand::Command SELECT_NOTES_IN_CHORD_COMMAND("command://notation/select-notes-in-chord");
-inline static const muse::rcommand::Command SELECT_ALL_COMMAND("command://notation/select-all");
-inline static const muse::rcommand::Command SELECT_SECTION_COMMAND("command://notation/select-section");
+
 // ------------------------------------------------------------
 inline static const muse::rcommand::Command GET_LOCATION_COMMAND("command://notation/get-location");
-
-inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_CHORD_COMMAND("command://notation/add-to-selection-next-chord");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_CHORD_COMMAND("command://notation/add-to-selection-prev-chord");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_NEXT_MEASURE_COMMAND("command://notation/add-to-selection-next-measure");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_PREV_MEASURE_COMMAND("command://notation/add-to-selection-prev-measure");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_ABOVE_STAFF_COMMAND("command://notation/add-to-selection-above-staff");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_BELOW_STAFF_COMMAND("command://notation/add-to-selection-below-staff");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND("command://notation/add-to-selection-begin-system");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SYSTEM_COMMAND("command://notation/add-to-selection-end-system");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_BEGIN_SCORE_COMMAND("command://notation/add-to-selection-begin-score");
-inline static const muse::rcommand::Command ADD_TO_SELECTION_END_SCORE_COMMAND("command://notation/add-to-selection-end-score");
 
 // text navigation commands
 inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");

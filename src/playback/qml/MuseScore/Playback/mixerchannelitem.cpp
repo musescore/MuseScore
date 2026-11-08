@@ -27,7 +27,6 @@
 #include "log.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
-#include "notation/inotationautomation.h"
 #include "notation/inotationplayback.h"
 
 #include "project/inotationproject.h"
@@ -547,21 +546,39 @@ mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
     return project ? project->masterNotation()->playback() : nullptr;
 }
 
+std::optional<notation::AutomationCurveKey> MixerChannelItem::automationCurveKey(notation::AutomationType type) const
+{
+    if (m_type == Type::Master) {
+        return notation::AutomationCurveKey::global(type);
+    }
+
+    if (m_instrumentTrackId.isValid()) {
+        return notation::AutomationCurveKey::instrument(type, m_instrumentTrackId);
+    }
+
+    return std::nullopt;
+}
+
+bool MixerChannelItem::hasAutomationCurve(notation::AutomationType type) const
+{
+    const std::optional<notation::AutomationCurveKey> key = automationCurveKey(type);
+    if (!key) {
+        return false;
+    }
+
+    const INotationProjectPtr project = context()->project();
+    if (!project) {
+        return false;
+    }
+
+    const notation::AutomationDataConstPtr automationData = project->masterNotation()->automation()->automationData();
+    return automationData && !automationData->curve(*key).empty();
+}
+
 void MixerChannelItem::updateHasAutomationFlags()
 {
-    bool hasVolumeAutomation = false;
-    bool hasBalanceAutomation = false;
-
-    INotationProjectPtr project = context()->project();
-    const notation::AutomationDataConstPtr automationData
-        = (project && m_instrumentTrackId.isValid()) ? project->masterNotation()->automation()->automationData() : nullptr;
-
-    if (automationData) {
-        hasVolumeAutomation = !automationData->curve(
-            notation::AutomationCurveKey::instrument(notation::AutomationType::Volume, m_instrumentTrackId)).empty();
-        hasBalanceAutomation = !automationData->curve(
-            notation::AutomationCurveKey::instrument(notation::AutomationType::Pan, m_instrumentTrackId)).empty();
-    }
+    const bool hasVolumeAutomation = hasAutomationCurve(notation::AutomationType::Volume);
+    const bool hasBalanceAutomation = hasAutomationCurve(notation::AutomationType::Pan);
 
     if (m_hasVolumeAutomation != hasVolumeAutomation) {
         m_hasVolumeAutomation = hasVolumeAutomation;

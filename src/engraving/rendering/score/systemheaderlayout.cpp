@@ -1434,7 +1434,7 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
     const Instrument* instr = sharedPart->instrument();
     bool useGroup = useGroupNames(instr->group(), ctx) && sharedPart->isSameInstrumentsAtTick(tick);
 
-    const SharedTrackMap& trackMap = sharedPart->trackMapAtTick(tick);
+    const SharedTrackMap& trackMap = sharedPart->staveSharingStateAtTick(tick).sharedTrackMap();
     const std::vector<Part*> originParts = sharedPart->originParts();
 
     // If using group names, assign normal PART name (one name covers all shared staves). Obtains the style

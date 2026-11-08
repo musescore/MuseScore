@@ -33,8 +33,7 @@
 
 #include "types/noteinputtypes.h"
 #include "types/zoomtype.h"
-
-#include "engraving/automation/automationtypes.h"
+#include "types/automationlane.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
@@ -124,9 +123,9 @@ public:
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
-    virtual mu::engraving::AutomationType currentAutomationType() const = 0;
-    virtual void setCurrentAutomationType(mu::engraving::AutomationType type) = 0;
-    virtual muse::async::Notification currentAutomationTypeChanged() const = 0;
+    virtual AutomationLane currentAutomationLane() const = 0;
+    virtual void setCurrentAutomationLane(AutomationLane lane) = 0;
+    virtual muse::async::Notification currentAutomationLaneChanged() const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;

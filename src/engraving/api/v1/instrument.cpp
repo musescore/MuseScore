@@ -229,6 +229,11 @@ QString Instrument::shortName() const
     return instrument()->shortName().toQString();
 }
 
+IntervalWrapper* Instrument::transpose() const
+{
+    return wrap(instrument()->transpose());
+}
+
 //---------------------------------------------------------
 //   Instrument::channels
 //---------------------------------------------------------

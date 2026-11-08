@@ -278,7 +278,7 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
         SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
         lockIndicator->setTrack(0);
         system->addSystemLockIndicator(lockIndicator);
-        TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+        TLayout::layoutSystemIndicatorIcon(lockIndicator, lockIndicator->mutldata());
     }
 }
 

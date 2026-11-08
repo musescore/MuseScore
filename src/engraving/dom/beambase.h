@@ -42,8 +42,8 @@ enum class BeamType : unsigned char {
 //---------------------------------------------------------
 
 struct BeamFragment {
-    double py1[2];
-    double py2[2];
+    double py1[2] = { 0.0, 0.0 };
+    double py2[2] = { 0.0, 0.0 };
 };
 
 enum class ChordBeamAnchorType : unsigned char {

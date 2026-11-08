@@ -118,6 +118,9 @@ public:
     virtual const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) = 0;
 
+    virtual muse::audio::ControlParams currentTrackControlParams(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual muse::audio::ControlParams currentMasterControlParams() const = 0;
+
     struct PlayParams {
         PlayParams() {}
 

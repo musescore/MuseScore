@@ -24,9 +24,13 @@
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/durationtype.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/utils.h"
 
 #include "engraving/editing/editduration.h"
@@ -47,6 +51,7 @@ private slots:
     void doubleDuration();
     void decDurationDotted();
     void incDurationDotted();
+    void halfDoubleDurationLinkedStaves();
     void augmentationLines();
     void diminutionLines();
 };
@@ -171,6 +176,65 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
             EXPECT_EQ(c->ticks(), Fraction(i, 64));
         }
     });
+
+    delete score;
+}
+
+// "half-duration" and "double-duration" on a note selected together with its linked copy
+// should change the duration only once.
+TEST_F(Engraving_DurationTypeTests, halfDoubleDurationLinkedStaves)
+{
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    score->inputState().setDuration(DurationType::V_QUARTER);
+    score->inputState().setNoteEntryMode(true);
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Linked staves duration tests"), [&](Transaction&) {
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
+
+        Staff* staff = score->staff(0);
+        Staff* linkedStaff = Factory::createStaff(staff->part());
+        linkedStaff->setPart(staff->part());
+        score->undoInsertStaff(linkedStaff, 1, false);
+        Excerpt::cloneStaff(staff, linkedStaff);
+    });
+
+    score->inputState().setNoteEntryMode(false);
+
+    auto applyToBothCopies = [score](void (*func)(Transaction&, Score*)) {
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        Chord* linkedChord = score->firstMeasure()->findChord(Fraction(0, 1), VOICES);
+        ASSERT_TRUE(c);
+        ASSERT_TRUE(linkedChord);
+        EXPECT_TRUE(c->isLinked(linkedChord));
+
+        score->select(c->upNote(), SelectType::SINGLE);
+        score->select(linkedChord->upNote(), SelectType::ADD);
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Linked staves duration tests"), [&](Transaction& tx) {
+            func(tx, score);
+        });
+    };
+
+    auto expectTicks = [score](const Fraction& ticks) {
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        Chord* linkedChord = score->firstMeasure()->findChord(Fraction(0, 1), VOICES);
+        ASSERT_TRUE(c);
+        ASSERT_TRUE(linkedChord);
+        EXPECT_EQ(c->ticks(), ticks);
+        EXPECT_EQ(linkedChord->ticks(), ticks);
+    };
+
+    applyToBothCopies(EditDuration::doubleDuration);
+    expectTicks(Fraction(1, 2));
+
+    score->undoRedo(true, nullptr);
+    expectTicks(Fraction(1, 4));
+
+    applyToBothCopies(EditDuration::halfDuration);
+    expectTicks(Fraction(1, 8));
 
     delete score;
 }

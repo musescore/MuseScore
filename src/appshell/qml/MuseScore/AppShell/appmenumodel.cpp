@@ -238,8 +238,8 @@ MenuItem* AppMenuModel::makeEditMenu()
         makeMenuItem(COPY_PASTE_SWAP_COMMAND),
         makeMenuItem(DELETE_COMMAND),
         makeSeparator(),
-        makeMenuItem(SELECT_ALL_COMMAND),
-        makeMenuItem(SELECT_SECTION_COMMAND),
+        makeMenuItem(SelectAllCommand::id),
+        makeMenuItem(SelectSectionCommand::id),
         makeMenuItem(SHOW_SEARCH_COMMAND),
         makeSeparator(),
         makeMenuItem(APP_PREFERENCES_COMMAND, MenuItemRole::PreferencesRole)

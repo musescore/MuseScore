@@ -315,6 +315,16 @@ bool EngravingObject::onSameScore(const EngravingObject* other) const
     return this->score() == other->score();
 }
 
+bool EngravingObject::isInScoreTree() const
+{
+    for (const EngravingObject* parent = ownershipParent(); parent; parent = parent->ownershipParent()) {
+        if (parent->isScore()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const MStyle& EngravingObject::style() const
 {
     return score()->style();

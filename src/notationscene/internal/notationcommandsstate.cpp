@@ -51,16 +51,16 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     DELETE_COMMAND,
     FlipCommand::id,
     FLIP_HORIZONTALLY_COMMAND,
-    GOTO_NEXT_SEGMENT_ELEMENT_COMMAND,
-    GOTO_PREV_SEGMENT_ELEMENT_COMMAND,
-    GOTO_UPNOTE_IN_CHORD_COMMAND,
-    GOTO_DOWNNOTE_IN_CHORD_COMMAND,
-    GOTO_TOPNOTE_IN_CHORD_COMMAND,
-    GOTO_BOTTOMNOTE_IN_CHORD_COMMAND,
-    SELECT_SIMILAR_COMMAND,
-    SELECT_SIMILAR_IN_STAFF_COMMAND,
-    SELECT_SIMILAR_IN_RANGE_COMMAND,
-    SELECT_NOTES_IN_CHORD_COMMAND,
+    SelectNextSegmentCommand::id,
+    SelectPrevSegmentCommand::id,
+    SelectUpNoteInChordCommand::id,
+    SelectDownNoteInChordCommand::id,
+    SelectTopNoteInChordCommand::id,
+    SelectBottomNoteInChordCommand::id,
+    SelectSimilarCommand::id,
+    SelectSimilarInStaffCommand::id,
+    SelectSimilarInRangeCommand::id,
+    SelectNotesInChordCommand::id,
     OPEN_SELECTION_OPTIONS_COMMAND,
     SET_DOUBLE_DURATION_COMMAND,
     SET_HALVE_DURATION_COMMAND,
@@ -203,7 +203,7 @@ static const std::vector<Command> NOTE_COMMANDS = {
     INSERT_NOTE_B_COMMAND
 };
 
-static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
+static const std::vector<Command> TUPLET_COMMANDS = {
     OPEN_TUPLET_CONFIGURE_COMMAND,
     ADD_TUPLET_COMMAND,
     ADD_DUPLET_COMMAND,
@@ -214,22 +214,25 @@ static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_SEPTUPLET_COMMAND,
     ADD_OCTUPLET_COMMAND,
     ADD_NONUPLET_COMMAND,
+};
+
+static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_DYNAMIC_COMMAND,
     ADD_HAIRPIN_COMMAND,
     ADD_HAIRPIN_REVERSE_COMMAND
 };
 
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
-    { GOTO_FIRST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_LAST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
-    { GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track },
-    { GOTO_PREV_TRACK_COMMAND, MoveSelectionType::Track },
-    { GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame },
-    { GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame },
-    { GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System },
-    { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System }
+    { SelectFirstItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectLastItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectNextItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectPrevItemCommand::id, MoveSelectionType::EngravingItem },
+    { SelectNextTrackCommand::id, MoveSelectionType::Track },
+    { SelectPrevTrackCommand::id, MoveSelectionType::Track },
+    { SelectNextFrameCommand::id, MoveSelectionType::Frame },
+    { SelectPrevFrameCommand::id, MoveSelectionType::Frame },
+    { SelectNextSystemCommand::id, MoveSelectionType::System },
+    { SelectPrevSystemCommand::id, MoveSelectionType::System }
 };
 
 static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
@@ -326,6 +329,7 @@ void NotationCommandsState::init()
         updateCommandStates({ TOGGLE_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
         updateCommandStates(TAB_COMMANDS);
@@ -358,6 +362,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(TAB_COMMANDS);
     });
 
@@ -498,6 +503,12 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
+    }
+
+    if (muse::contains(TUPLET_COMMANDS, command)) {
+        // Re-pitch must not change durations
+        const bool isRepitch = controller()->isNoteInputMode() && controller()->noteInputMethod() == NoteInputMethod::REPITCH;
+        return CommandState(controller()->isNoteOrRestSelected() && !isRepitch, false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {

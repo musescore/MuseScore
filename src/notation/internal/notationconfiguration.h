@@ -124,9 +124,9 @@ public:
 
     QList<int> possibleZoomPercentageList() const override;
 
-    mu::engraving::AutomationType currentAutomationType() const override;
-    void setCurrentAutomationType(mu::engraving::AutomationType type) override;
-    muse::async::Notification currentAutomationTypeChanged() const override;
+    AutomationLane currentAutomationLane() const override;
+    void setCurrentAutomationLane(AutomationLane lane) override;
+    muse::async::Notification currentAutomationLaneChanged() const override;
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
@@ -262,7 +262,7 @@ private:
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;
-    muse::async::Notification m_currentAutomationTypeChanged;
+    muse::async::Notification m_currentAutomationLaneChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;

@@ -69,7 +69,7 @@ static const Settings::Key DEFAULT_ZOOM(module_name, "ui/canvas/zoomDefaultLevel
 static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionKeyboard");
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
-static const Settings::Key CURRENT_AUTOMATION_TYPE(module_name, "notation/automation/currentType");
+static const Settings::Key CURRENT_AUTOMATION_LANE(module_name, "notation/automation/currentLane");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
@@ -235,9 +235,9 @@ void NotationConfiguration::init()
         m_mouseZoomPrecisionChanged.notify();
     });
 
-    settings()->setDefaultValue(CURRENT_AUTOMATION_TYPE, Val(engraving::AutomationType::Dynamics));
-    settings()->valueChanged(CURRENT_AUTOMATION_TYPE).onReceive(this, [this](const Val&) {
-        m_currentAutomationTypeChanged.notify();
+    settings()->setDefaultValue(CURRENT_AUTOMATION_LANE, Val(AutomationLane::Dynamics));
+    settings()->valueChanged(CURRENT_AUTOMATION_LANE).onReceive(this, [this](const Val&) {
+        m_currentAutomationLaneChanged.notify();
     });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
@@ -721,19 +721,19 @@ QList<int> NotationConfiguration::possibleZoomPercentageList() const
     };
 }
 
-engraving::AutomationType NotationConfiguration::currentAutomationType() const
+AutomationLane NotationConfiguration::currentAutomationLane() const
 {
-    return settings()->value(CURRENT_AUTOMATION_TYPE).toEnum<engraving::AutomationType>();
+    return settings()->value(CURRENT_AUTOMATION_LANE).toEnum<AutomationLane>();
 }
 
-void NotationConfiguration::setCurrentAutomationType(engraving::AutomationType type)
+void NotationConfiguration::setCurrentAutomationLane(AutomationLane lane)
 {
-    settings()->setSharedValue(CURRENT_AUTOMATION_TYPE, Val(type));
+    settings()->setSharedValue(CURRENT_AUTOMATION_LANE, Val(lane));
 }
 
-Notification NotationConfiguration::currentAutomationTypeChanged() const
+Notification NotationConfiguration::currentAutomationLaneChanged() const
 {
-    return m_currentAutomationTypeChanged;
+    return m_currentAutomationLaneChanged;
 }
 
 int NotationConfiguration::mouseZoomPrecision() const

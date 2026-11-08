@@ -207,6 +207,16 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
+muse::audio::ControlParams PlaybackControllerStub::currentTrackControlParams(const engraving::InstrumentTrackId&) const
+{
+    return {};
+}
+
+muse::audio::ControlParams PlaybackControllerStub::currentMasterControlParams() const
+{
+    return {};
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)
 {
 }

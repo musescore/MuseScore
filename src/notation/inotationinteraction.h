@@ -86,10 +86,9 @@ public:
     // Select
     virtual INotationSelectionPtr selection() const = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
-    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) = 0;
-    virtual void select(SelectionTarget target) = 0;
-    virtual void addToSelection(SelectionTarget target) = 0;
-    virtual void expandSelection(ExpandSelectionMode mode) = 0;
+    virtual muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0) = 0;
+    virtual muse::Ret select(SelectionTarget target) = 0;
+    virtual muse::Ret addToSelection(SelectionTarget target) = 0;
     virtual void clearSelection() = 0;
 
     virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
