@@ -1719,7 +1719,7 @@ void ChordLayout::layoutJianpuDurationLines(Chord* item, LayoutContext& ctx)
         return;
     }
 
-    int lines = item->durationType().augmentationLines();
+    int lines = jianpuAugmentationLinesForDuration(item->durationType());
     if (lines == 0) {
         muse::DeleteAll(item->jianpuDurationLines());
         item->jianpuDurationLines().clear();

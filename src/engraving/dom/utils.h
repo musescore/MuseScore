@@ -46,6 +46,7 @@ class Selection;
 class Spanner;
 class Staff;
 class System;
+class TDuration;
 class Tuplet;
 class Volta;
 struct NoteVal;
@@ -132,4 +133,7 @@ extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, En
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
 extern bool noteIsBefore(const Note* n1, const Note* n2);
 extern void updatePercussionNotes(Chord* c, const Drumset* drumset);
+
+extern int jianpuAugmentationLinesForDuration(const TDuration& duration);
+extern int jianpuDiminutionLinesForDuration(const TDuration& duration);
 } // namespace mu::engraving

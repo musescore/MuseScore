@@ -31,6 +31,7 @@
 #include "dom/measure.h"
 #include "dom/staff.h"
 #include "dom/system.h"
+#include "dom/utils.h"
 
 using namespace muse;
 using namespace mu::engraving;
@@ -207,7 +208,7 @@ void RestLayout::layoutRestForJianpu(const Rest* item, Rest::LayoutData* ldata, 
 
     RectF noteBBox = RectF(0, -height * .5, width, height);
     ldata->setBbox(noteBBox);
-    int lines = item->durationType().augmentationLines();
+    int lines = jianpuAugmentationLinesForDuration(item->durationType());
     if (lines == 0) {
         muse::DeleteAll(item->jianpuDurationLines());
         const_cast<Rest*>(item)->jianpuDurationLines().clear();

@@ -4906,7 +4906,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         }
 
         // jianpu diminution line
-        int lines = item->duration().diminutionLines();
+        int lines = jianpuDiminutionLinesForDuration(item->duration());
         item->setJianpuDiminutionLines(lines);
 
         // jianpu octave dots
