@@ -66,7 +66,7 @@ void KeySignatureSettingsModel::loadProperties()
     bool enableCourtesy = true;
 
     for (const mu::engraving::EngravingItem* element : m_elementList) {
-        if (toKeySig(element)->isCourtesy()) {
+        if (element->generated() || toKeySig(element)->isCourtesy()) {
             enableMode = false;
         }
 

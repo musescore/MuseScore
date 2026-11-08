@@ -23,7 +23,9 @@
 #include <gtest/gtest.h>
 #include <memory>
 
+#include "engraving/dom/factory.h"
 #include "engraving/dom/keysig.h"
+#include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
@@ -370,10 +372,6 @@ TEST_F(Engraving_KeySigTests, jianpuKeyLabel)
     EXPECT_EQ(jianpuKeyLabel(custom), u"1=C");
 }
 
-//---------------------------------------------------------
-//   The three new Jianpu Pids must round-trip through KeySig::setProperty /
-//   getProperty and report the documented defaults via propertyDefault.
-//---------------------------------------------------------
 TEST_F(Engraving_KeySigTests, jianpuEnumXmlConversions)
 {
     for (JianpuNumbering numbering : { JianpuNumbering::FOLLOW_SCORE_KEY, JianpuNumbering::CUSTOM }) {
@@ -390,10 +388,15 @@ TEST_F(Engraving_KeySigTests, jianpuEnumXmlConversions)
 
 TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
 {
-    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx");
-    EXPECT_TRUE(score);
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(KEYSIG_DATA_DIR + u"keysigMode.mscx"));
+    ASSERT_TRUE(score);
     Measure* m1 = score->firstMeasure();
-    KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
+    ASSERT_TRUE(m1);
+    Segment* segment = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ASSERT_TRUE(segment);
+    KeySig* ke = toKeySig(segment->element(0));
+    ASSERT_TRUE(ke);
+    ASSERT_FALSE(ke->generated());
 
     EXPECT_EQ(propertyType(Pid::JIANPU_NUMBERING), P_TYPE::JIANPU_NUMBERING);
     EXPECT_EQ(propertyType(Pid::JIANPU_TONIC_KEY), P_TYPE::KEY);
@@ -403,9 +406,10 @@ TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
 
     EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).value<JianpuNumbering>(), JianpuNumbering::FOLLOW_SCORE_KEY);
 
-    ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM);
-    ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::E_B);
-    ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::PHRYGIAN);
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM));
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::E_B));
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::PHRYGIAN));
+    EXPECT_EQ(ke->staff()->keySigEvent(ke->tick()), ke->keySigEvent());
 
     EXPECT_EQ(ke->getProperty(Pid::JIANPU_NUMBERING).type(), P_TYPE::JIANPU_NUMBERING);
     EXPECT_EQ(ke->getProperty(Pid::JIANPU_TONIC_KEY).type(), P_TYPE::KEY);
@@ -423,9 +427,6 @@ TEST_F(Engraving_KeySigTests, jianpuKeySigProperties)
     EXPECT_EQ(restored->jianpuNumbering(), JianpuNumbering::CUSTOM);
     EXPECT_EQ(restored->jianpuTonicKey(), Key::E_B);
     EXPECT_EQ(restored->jianpuTonicMode(), KeyMode::PHRYGIAN);
-
-    restored.reset();
-    delete score;
 }
 
 TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
@@ -440,6 +441,7 @@ TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
     KeySig* linked = toKeySig(segment->element(4));
     ASSERT_TRUE(source);
     ASSERT_TRUE(linked);
+    ASSERT_FALSE(source->generated());
     linked->linkTo(source);
 
     const Pid properties[] = { Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY, Pid::JIANPU_TONIC_MODE };
@@ -469,12 +471,94 @@ TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
         EXPECT_EQ(source->getProperty(properties[index]), originalValues[index]);
         EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
     }
+    EXPECT_EQ(source->staff()->keySigEvent(source->tick()), source->keySigEvent());
 
     score->transactionManager()->undoRedo(false, &editData);
     for (size_t index = 0; index < 3; ++index) {
         EXPECT_EQ(source->getProperty(properties[index]), values[index]);
         EXPECT_EQ(linked->getProperty(properties[index]), originalValues[index]);
     }
+    EXPECT_EQ(source->staff()->keySigEvent(source->tick()), source->keySigEvent());
+}
+
+TEST_F(Engraving_KeySigTests, jianpuGeneratedKeySigProperties)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"beam_data/jianpuBeam.mscx"));
+    ASSERT_TRUE(score);
+    Measure* first = score->firstMeasure();
+    ASSERT_TRUE(first);
+    Measure* second = first->nextMeasure();
+    ASSERT_TRUE(second);
+    Staff* staff = score->staff(0);
+    ASSERT_TRUE(staff);
+    ASSERT_TRUE(staff->isJianpuStaff(first->tick()));
+
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditKeySig::undoChangeKeySig(tx, score.get(), staff, first->tick(), staff->keySigEvent(first->tick()));
+
+    LayoutBreak* lineBreak = Factory::createLayoutBreak(first);
+    lineBreak->setLayoutBreakType(LayoutBreakType::LINE);
+    lineBreak->setTrack(0);
+    score->undoAddElement(lineBreak);
+    score->doLayout();
+
+    Segment* firstSegment = first->findSegment(SegmentType::KeySig, first->tick());
+    Segment* secondSegment = second->findSegment(SegmentType::KeySig, second->tick());
+    ASSERT_TRUE(firstSegment);
+    ASSERT_TRUE(secondSegment);
+    KeySig* initial = toKeySig(firstSegment->element(0));
+    KeySig* continuation = toKeySig(secondSegment->element(0));
+    ASSERT_TRUE(initial);
+    ASSERT_TRUE(continuation);
+    ASSERT_FALSE(initial->generated());
+    ASSERT_TRUE(continuation->generated());
+
+    const Pid properties[] = { Pid::KEYSIG_MODE, Pid::JIANPU_NUMBERING, Pid::JIANPU_TONIC_KEY, Pid::JIANPU_TONIC_MODE };
+    const PropertyValue values[] = { KeyMode::DORIAN, JianpuNumbering::CUSTOM, Key::E_B, KeyMode::PHRYGIAN };
+    const KeySigEvent originalEvent = staff->keySigEvent(second->tick());
+    const Fraction originalKeyTick = staff->currentKeyTick(second->tick());
+    for (size_t i = 0; i < 4; ++i) {
+        SCOPED_TRACE(i);
+        const PropertyValue originalValue = continuation->getProperty(properties[i]);
+        EXPECT_FALSE(continuation->setProperty(properties[i], values[i]));
+        EXPECT_EQ(continuation->getProperty(properties[i]), originalValue);
+        EXPECT_EQ(staff->keySigEvent(second->tick()), originalEvent);
+        EXPECT_EQ(staff->currentKeyTick(second->tick()), originalKeyTick);
+        EXPECT_TRUE(continuation->generated());
+    }
+
+    PropertyValue originalValues[4];
+    score->startCmd(TranslatableString::untranslatable("Change Jianpu key signature"));
+    for (size_t i = 0; i < 4; ++i) {
+        SCOPED_TRACE(i);
+        originalValues[i] = initial->getProperty(properties[i]);
+        initial->undoChangeProperty(properties[i], values[i]);
+        EXPECT_EQ(initial->getProperty(properties[i]), values[i]);
+        EXPECT_EQ(staff->keySigEvent(first->tick()), initial->keySigEvent());
+    }
+    score->endCmd();
+
+    EditData editData;
+    score->transactionManager()->undoRedo(true, &editData);
+    for (size_t i = 0; i < 4; ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ(initial->getProperty(properties[i]), originalValues[i]);
+    }
+    EXPECT_EQ(staff->keySigEvent(first->tick()), initial->keySigEvent());
+
+    score->transactionManager()->undoRedo(false, &editData);
+    for (size_t i = 0; i < 4; ++i) {
+        SCOPED_TRACE(i);
+        EXPECT_EQ(initial->getProperty(properties[i]), values[i]);
+    }
+    EXPECT_EQ(staff->keySigEvent(first->tick()), initial->keySigEvent());
+    score->doLayout();
+    secondSegment = second->findSegment(SegmentType::KeySig, second->tick());
+    ASSERT_TRUE(secondSegment);
+    continuation = toKeySig(secondSegment->element(0));
+    ASSERT_TRUE(continuation);
+    EXPECT_TRUE(continuation->generated());
+    EXPECT_EQ(continuation->keySigEvent(), staff->keySigEvent(second->tick()));
 }
 
 //---------------------------------------------------------
@@ -485,33 +569,39 @@ TEST_F(Engraving_KeySigTests, jianpuLinkedKeySigProperties)
 //---------------------------------------------------------
 TEST_F(Engraving_KeySigTests, jianpuKeyLabelLayout)
 {
-    MasterScore* score = ScoreRW::readScore(u"beam_data/jianpuBeam.mscx");
-    EXPECT_TRUE(score);
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"beam_data/jianpuBeam.mscx"));
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
     Segment* keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
-    EXPECT_TRUE(keySigSeg);
+    ASSERT_TRUE(keySigSeg);
     KeySig* ke = toKeySig(keySigSeg->element(0));
-    EXPECT_TRUE(ke);
-    EXPECT_TRUE(ke->staff()->isJianpuStaff(ke->tick()));
+    ASSERT_TRUE(ke);
+    ASSERT_TRUE(ke->staff()->isJianpuStaff(ke->tick()));
 
     // Untouched header key sig: mode defaults to UNKNOWN, falls back to major
     EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=C");
 
-    ke->setProperty(Pid::KEYSIG_MODE, KeyMode::MAJOR);
+    Staff* staff = ke->staff();
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditKeySig::undoChangeKeySig(tx, score.get(), staff, m1->tick(), staff->keySigEvent(m1->tick()));
+    ASSERT_FALSE(ke->generated());
+    EXPECT_TRUE(ke->setProperty(Pid::KEYSIG_MODE, KeyMode::MAJOR));
     score->doLayout();
     keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ASSERT_TRUE(keySigSeg);
     ke = toKeySig(keySigSeg->element(0));
+    ASSERT_TRUE(ke);
     EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=C");
 
-    ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM);
-    ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::D);
-    ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::MAJOR);
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_NUMBERING, JianpuNumbering::CUSTOM));
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_TONIC_KEY, Key::D));
+    EXPECT_TRUE(ke->setProperty(Pid::JIANPU_TONIC_MODE, KeyMode::MAJOR));
     score->doLayout();
     keySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ASSERT_TRUE(keySigSeg);
     ke = toKeySig(keySigSeg->element(0));
+    ASSERT_TRUE(ke);
     EXPECT_EQ(ke->ldata()->jianpuLabel, u"1=D");
-
-    delete score;
 }

@@ -273,21 +273,30 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         setShowCourtesy(v.toBool());
         break;
     case Pid::KEYSIG_MODE:
-        // Editable even when generated (e.g. a natural key signature with no visible
-        // accidentals): the mode is stored in the staff's persistent key map, not
-        // in a drawn symbol, so there is nothing unsafe about setting it here.
+        if (generated()) {
+            return false;
+        }
         setMode(v.value<KeyMode>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_NUMBERING:
+        if (generated()) {
+            return false;
+        }
         setJianpuNumbering(v.value<JianpuNumbering>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_TONIC_KEY:
+        if (generated()) {
+            return false;
+        }
         setJianpuTonicKey(v.value<Key>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::JIANPU_TONIC_MODE:
+        if (generated()) {
+            return false;
+        }
         setJianpuTonicMode(v.value<KeyMode>());
         staff()->setKey(tick(), keySigEvent());
         break;
