@@ -320,6 +320,13 @@ struct OpenSelectionOptionsCommand {
     sci_auto availabilities = Availability::UI;
 };
 
+struct ShowSelectionCommand {
+    sci_auto id = Command("command://notation/show-selection");
+    sci_auto title = MnemonicString("action", "Show selection");
+    sci_auto description = TranslatableString("action", "Show selection");
+    sci_auto availabilities = Availability::UI;
+};
+
 struct FlipCommand {
     sci_auto id = Command("command://notation/flip");
     sci_auto title = MnemonicString("action", "Flip direction");
@@ -372,7 +379,6 @@ inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/und
 inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
 
 // ------------------------------------------------------------
-inline static const muse::rcommand::Command GET_LOCATION_COMMAND("command://notation/get-location");
 
 // text navigation commands
 inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
