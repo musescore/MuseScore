@@ -25,6 +25,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/slur.h"
 
 #include "engraving/editing/editposition.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -214,4 +215,88 @@ TEST_F(Engraving_FreezeTests, freezeDynamicAndHairpin)
     EXPECT_EQ(hairpinSegment->pos2(), hairpinPos2Before);
 
     delete score;
+}
+
+static constexpr std::array<Grip, 4> SLUR_GRIPS { Grip::START, Grip::BEZIER1, Grip::BEZIER2, Grip::END };
+
+static void expectSlurGripsAt(const SlurSegment* slurSegment, const std::vector<PointF>& expectedPagePositions)
+{
+    const PointF segmentPagePos = slurSegment->pagePos();
+    for (size_t i = 0; i < SLUR_GRIPS.size(); ++i) {
+        SCOPED_TRACE("grip " + std::to_string(int(SLUR_GRIPS.at(i))));
+        const PointF gripPagePos = segmentPagePos + slurSegment->ups(SLUR_GRIPS.at(i)).pos();
+        EXPECT_TRUE(muse::RealIsEqual(gripPagePos.x(), expectedPagePositions.at(i).x()));
+        EXPECT_TRUE(muse::RealIsEqual(gripPagePos.y(), expectedPagePositions.at(i).y()));
+    }
+}
+
+static void freezeSlurAndCheckPositions(const String& fileName)
+{
+    SCOPED_TRACE(fileName.toStdString());
+
+    MasterScore* score = ScoreRW::readScore(FREEZE_DATA_DIR + fileName);
+    ASSERT_TRUE(score);
+    score->doLayout();
+
+    Slur* slur = nullptr;
+    for (const auto& [tick, spanner] : score->spannerMap().map()) {
+        if (spanner->isSlur()) {
+            slur = toSlur(spanner);
+            break;
+        }
+    }
+    ASSERT_TRUE(slur);
+    ASSERT_FALSE(slur->spannerSegments().empty());
+    SlurSegment* slurSegment = slur->frontSegment();
+
+    const PointF slurPosBefore = slurSegment->pagePos();
+    const PointF slurOffsetBefore = slurSegment->offset();
+    std::vector<PointF> gripPagePositionsBefore;
+    std::vector<PointF> gripOffsetsBefore;
+    for (Grip grip : SLUR_GRIPS) {
+        gripPagePositionsBefore.push_back(slurPosBefore + slurSegment->ups(grip).pos());
+        gripOffsetsBefore.push_back(slurSegment->ups(grip).off);
+    }
+
+    score->select(slurSegment, SelectType::SINGLE);
+
+    const std::vector<EngravingItem*> selected = score->selection().elements();
+    ASSERT_EQ(selected.size(), 1);
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving freeze tests"), [&](Transaction& transaction) {
+        EditPosition::freezeItemsPositions(transaction, selected);
+    });
+
+    ASSERT_FALSE(slur->spannerSegments().empty());
+    slurSegment = slur->frontSegment();
+
+    EXPECT_FALSE(slurSegment->autoplace());
+    EXPECT_EQ(slurSegment->pagePos(), slurPosBefore);
+    expectSlurGripsAt(slurSegment, gripPagePositionsBefore);
+
+    EditData ed;
+    score->undoRedo(true, &ed);
+
+    ASSERT_FALSE(slur->spannerSegments().empty());
+    slurSegment = slur->frontSegment();
+
+    EXPECT_TRUE(slurSegment->autoplace());
+    EXPECT_EQ(slurSegment->offset(), slurOffsetBefore);
+    EXPECT_EQ(slurSegment->pagePos(), slurPosBefore);
+    for (size_t i = 0; i < SLUR_GRIPS.size(); ++i) {
+        EXPECT_EQ(slurSegment->ups(SLUR_GRIPS.at(i)).off, gripOffsetsBefore.at(i));
+    }
+    expectSlurGripsAt(slurSegment, gripPagePositionsBefore);
+
+    delete score;
+}
+
+TEST_F(Engraving_FreezeTests, freezeSlur)
+{
+    freezeSlurAndCheckPositions(u"slur.mscx");
+}
+
+TEST_F(Engraving_FreezeTests, freezeSlur2)
+{
+    freezeSlurAndCheckPositions(u"slur2.mscx");
 }
