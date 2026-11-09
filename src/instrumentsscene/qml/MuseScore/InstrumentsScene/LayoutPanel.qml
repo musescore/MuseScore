@@ -56,77 +56,20 @@ Item {
         }
     }
 
+    LayoutPanelTreeModel {
+        id: treeModel
+    }
+
     LayoutPanelContextMenuModel {
         id: contextMenuModel
 
         onExpandCollapseAllRequested: function(expand) {
-            layoutPanelTreeView.expandCollapseAll(expand)
+            tree.expandCollapseAll(expand)
         }
     }
 
     Component.onCompleted: {
         contextMenuModel.load()
-    }
-
-    QtObject {
-        id: prv
-
-        property string currentItemNavigationName: ""
-        property bool isPopupOpened: false
-
-        property LayoutPanelItemDelegate pressedDelegate: null
-
-        property AbstractLayoutPanelTreeItem draggedItem: null
-        property var draggedIndex: null
-        property int draggedDepth: 0
-        property real dragStartY: 0
-
-        function releasePressedDelegate() {
-            if (!rowDragHandler.active) {
-                prv.pressedDelegate = null
-            }
-        }
-
-        function startDrag() {
-            const delegate = prv.pressedDelegate
-            if (!delegate) {
-                return
-            }
-
-            prv.draggedIndex = delegate.modelIndex
-            prv.draggedDepth = delegate.depth
-            prv.dragStartY = delegate.mapToItem(layoutPanelTreeView.contentItem, 0, 0).y
-            prv.draggedItem = delegate.item
-
-            treeModel.startActiveDrag()
-
-            if (delegate.isExpanded) {
-                layoutPanelTreeView.collapse(delegate.row)
-            }
-        }
-
-        function endDrag() {
-            const wasDragging = Boolean(prv.draggedItem)
-
-            prv.draggedItem = null
-            prv.draggedIndex = null
-            prv.pressedDelegate = null
-
-            if (wasDragging) {
-                treeModel.endActiveDrag()
-            }
-        }
-
-        function moveDraggedItem(targetIndex) {
-            const sourceIndex = prv.draggedIndex
-            if (!sourceIndex || sourceIndex.row < 0 || targetIndex.row < 0) {
-                return
-            }
-
-            if (treeModel.moveRows(sourceIndex.parent, sourceIndex.row, 1, targetIndex.parent, targetIndex.row)) {
-                prv.draggedIndex = treeModel.index(targetIndex.row, 0, targetIndex.parent)
-            }
-        }
     }
 
     ColumnLayout {
@@ -209,238 +152,20 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        Item {
+        LayoutPanelTree {
+            id: tree
+
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             visible: !treeModel.isEmpty
 
-            //! NOTE Outside the rows, so the drag survives row rebuilds
-            DragHandler {
-                id: rowDragHandler
+            model: treeModel
 
-                target: null
-                xAxis.enabled: false
-                yAxis.enabled: Boolean(prv.pressedDelegate)
+            navigationSection: root.navigationSection
+            navigationOrder: controlPanel.navigation.order + 1
 
-                onActiveChanged: {
-                    if (rowDragHandler.active) {
-                        prv.startDrag()
-                    } else {
-                        prv.endDrag()
-                    }
-                }
-            }
-
-            StyledTreeView {
-                id: layoutPanelTreeView
-
-                anchors.fill: parent
-
-                interactive: !prv.pressedDelegate && !rowDragHandler.active && !prv.isPopupOpened
-
-                model: LayoutPanelTreeModel {
-                    id: treeModel
-                }
-
-                columnWidthProvider: function(column) {
-                    return layoutPanelTreeView.width
-                }
-
-                Loader {
-                    id: draggedItemLoader
-
-                    active: Boolean(prv.draggedItem)
-
-                    width: layoutPanelTreeView.width
-                    height: 38
-                    y: prv.dragStartY + rowDragHandler.centroid.position.y - rowDragHandler.centroid.pressPosition.y
-                    z: 2 // above the rows
-
-                    Drag.active: rowDragHandler.active
-                    Drag.source: draggedItemLoader
-                    Drag.hotSpot.x: draggedItemLoader.width / 2
-                    Drag.hotSpot.y: draggedItemLoader.height / 2
-
-                    sourceComponent: LayoutPanelItemDelegate {
-                        treeView: layoutPanelTreeView
-                        item: prv.draggedItem
-                        modelIndex: prv.draggedIndex
-                        row: -1
-                        depth: prv.draggedDepth
-                        isExpanded: false
-                        isDragged: true
-
-                        sideMargin: contentColumn.sideMargin
-
-                        navigation.enabled: false
-                    }
-                }
-
-                function expandCollapseAll(expand) {
-                    for (let i = 0; i < treeModel.rowCount(); ++i) {
-                        const modelIndex = treeModel.index(i, 0)
-                        if (!treeModel.modelIndexToItem(modelIndex).isExpandable) {
-                            continue
-                        }
-
-                        const row = layoutPanelTreeView.rowAtIndex(modelIndex)
-                        if (expand) {
-                            layoutPanelTreeView.expand(row)
-                        } else {
-                            layoutPanelTreeView.collapse(row)
-                        }
-                    }
-                }
-
-                property NavigationPanel navigationTreePanel : NavigationPanel {
-                    name: "LayoutPanelTree"
-                    section: root.navigationSection
-                    direction: NavigationPanel.Both
-                    enabled: layoutPanelTreeView.enabled && layoutPanelTreeView.visible
-                    order: controlPanel.navigation.order + 1
-
-                    onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlName", prv.currentItemNavigationName)
-                        }
-                    }
-                }
-
-                function isControl(itemType) {
-                    return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF
-                }
-
-                delegate: DropArea {
-                    id: dropArea
-
-                    required property TreeView treeView
-                    required property int row
-                    required property int column
-                    required property int depth
-                    required property bool expanded
-                    required property AbstractLayoutPanelTreeItem item
-
-                    readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
-
-                    implicitHeight: 38
-
-                    Loader {
-                        id: treeItemDelegateLoader
-
-                        property int delegateType: dropArea.item ? dropArea.item.type : LayoutPanelItemType.UNDEFINED
-
-                        anchors.fill: parent
-
-                        opacity: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem ? 0 : 1
-
-                        sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
-                                             controlItemDelegateComponent : treeItemDelegateComponent
-
-                        Component {
-                            id: treeItemDelegateComponent
-
-                            LayoutPanelItemDelegate {
-                                id: itemDelegate
-
-                                treeView: layoutPanelTreeView
-                                item: dropArea.item
-                                modelIndex: dropArea.modelIndex
-                                row: dropArea.row
-                                depth: dropArea.depth
-                                isExpanded: dropArea.expanded
-
-                                sideMargin: contentColumn.sideMargin
-
-                                navigation.name: item?.title || "LayoutPanelItemDelegate"
-                                navigation.panel: layoutPanelTreeView.navigationTreePanel
-                                navigation.row: dropArea.row
-                                navigation.onActiveChanged: {
-                                    if (navigation.active) {
-                                        prv.currentItemNavigationName = navigation.name
-                                        layoutPanelTreeView.positionViewAtRow(dropArea.row, TableView.Contain)
-                                    }
-                                }
-
-                                onClicked: {
-                                    if (itemDelegate.isSelectable) {
-                                        treeModel.selectRow(dropArea.modelIndex)
-                                    }
-                                }
-
-                                onDoubleClicked: {
-                                    if (itemDelegate.isExpandable) {
-                                        layoutPanelTreeView.toggleExpanded(dropArea.row)
-                                    }
-                                }
-
-                                onRemoveSelectionRequested: {
-                                    treeModel.removeSelectedRows()
-                                }
-
-                                onChangeVisibilityOfSelectedRowsRequested: function(visible) {
-                                    treeModel.changeVisibilityOfSelectedRows(visible);
-                                }
-
-                                onChangeVisibilityRequested: function(modelIndex, visible) {
-                                    treeModel.changeVisibility(modelIndex, visible)
-                                }
-
-                                onChangeEnabledOfSelectedRowsRequested: function(enabled) {
-                                    treeModel.changeEnabledOfSelectedRows(enabled);
-                                }
-
-                                onChangeEnabledRequested: function(modelIndex, enabled) {
-                                    treeModel.changeEnabled(modelIndex, enabled)
-                                }
-
-                                onMousePressed: {
-                                    prv.pressedDelegate = itemDelegate
-                                }
-
-                                onMouseReleased: {
-                                    Qt.callLater(prv.releasePressedDelegate)
-                                }
-
-                                onIsPopupOpenedChanged: {
-                                    prv.isPopupOpened = itemDelegate.isPopupOpened
-                                }
-                            }
-                        }
-
-                        Component {
-                            id: controlItemDelegateComponent
-
-                            LayoutPanelItemControl {
-                                title: dropArea.item?.title || ""
-                                isSelected: dropArea.item?.isSelected || false
-
-                                navigation.panel: layoutPanelTreeView.navigationTreePanel
-                                navigation.row: dropArea.row
-
-                                depth: dropArea.depth
-                                sideMargin: contentColumn.sideMargin
-
-                                onClicked: {
-                                    dropArea.item.appendNewItem()
-                                }
-                            }
-                        }
-                    }
-
-                    onEntered: function(drag) {
-                        if (!prv.draggedItem || !dropArea.item) {
-                            return
-                        }
-
-                        if (dropArea.item === prv.draggedItem || !dropArea.item.canAcceptDrop(prv.draggedItem)) {
-                            return
-                        }
-
-                        Qt.callLater(prv.moveDraggedItem, dropArea.modelIndex)
-                    }
-                }
-            }
+            sideMargin: contentColumn.sideMargin
         }
     }
 }
