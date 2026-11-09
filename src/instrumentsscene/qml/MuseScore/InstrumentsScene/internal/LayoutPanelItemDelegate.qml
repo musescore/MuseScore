@@ -38,7 +38,7 @@ FocusableControl {
     required property int row
     required property int depth
     required property bool isExpanded
-    property string filterKey
+    property bool isDragged: false
 
     property bool isEnabled: item && item.isEnabled
 
@@ -48,6 +48,7 @@ FocusableControl {
     readonly property bool isExpandable: item && item.isExpandable
     readonly property bool settingsAvailable: item && item.settingsAvailable
     readonly property bool settingsEnabled: item && item.settingsEnabled
+    readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
 
     property int sideMargin: 0
 
@@ -62,40 +63,11 @@ FocusableControl {
     signal changeEnabledOfSelectedRowsRequested(bool enable)
     signal changeEnabledRequested(var modelIndex, bool enable)
 
-    signal dragStarted()
-    signal dropped()
-
-    QtObject {
-        id: prv
-
-        property bool dragged: root.mouseArea.drag.active && root.mouseArea.pressed
-
-        onDraggedChanged: {
-            if (dragged) {
-                root.dragStarted()
-                if (root.isExpanded) {
-                    root.treeView.collapse(root.row)
-                }
-            } else {
-                root.dropped()
-            }
-        }
-    }
-
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
+    signal mousePressed()
+    signal mouseReleased()
 
     implicitHeight: 38
     implicitWidth: 248
-
-    Drag.keys: [ root.filterKey ]
-    Drag.active: prv.dragged && root.isSelectable
-    Drag.source: root
-    Drag.hotSpot.x: width / 2
-    Drag.hotSpot.y: height / 2
 
     navigation.name: "LayoutPanelItemDelegate"
     navigation.column: 0
@@ -105,17 +77,16 @@ FocusableControl {
 
     onNavigationTriggered: { root.clicked(null) }
 
-    mouseArea.preventStealing: true
     mouseArea.propagateComposedEvents: true
 
     mouseArea.hoverEnabled: root.visible
 
     mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.onPressed: { root.mousePressed() }
+    mouseArea.onReleased: { root.mouseReleased() }
+    mouseArea.onCanceled: { root.mouseReleased() }
     mouseArea.enabled: root.isSelectable
-
-    mouseArea.drag.target: root
-    mouseArea.drag.axis: Drag.YAxis
 
     Keys.onShortcutOverride: function(event) {
         switch (event.key) {
@@ -319,7 +290,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.mouseArea.containsMouse && !root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.mouseArea.containsMouse && !root.isPressed && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -330,7 +301,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.mouseArea.pressed && !root.isSelected && !root.isDragged
 
             PropertyChanges {
                 target: root.background
@@ -341,7 +312,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: root.isSelected && !root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.isSelected && !root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -352,7 +323,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.isSelected && root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.isSelected && root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -363,7 +334,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: root.isSelected && root.mouseArea.pressed
+            when: root.isSelected && root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -400,25 +371,12 @@ FocusableControl {
 
     states: [
         State {
-            when: prv.dragged
+            when: root.isDragged
             name: "DRAGGED"
-
-            ParentChange {
-                target: root
-                parent: root.treeView.contentItem
-            }
 
             PropertyChanges {
                 target: shadow
                 visible: true
-            }
-
-            AnchorChanges {
-                target: root
-                anchors {
-                    verticalCenter: undefined
-                    horizontalCenter: undefined
-                }
             }
         }
     ]
