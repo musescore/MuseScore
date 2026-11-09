@@ -164,7 +164,8 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
         // ====================================================
 #ifdef MUSE_MODULE_TESTFLOW
         if (options->testflow.has_value()) {
-            testflowCmdRunner()->run(ctxId, options->testflow.value());
+            testflowCmdRunner()->prepare(ctxId, options->testflow.value());
+            testflowCmdRunner()->run(ctxId);
             break;
         }
 #endif

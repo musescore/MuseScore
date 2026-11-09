@@ -122,6 +122,13 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         startupScenario->setStartupScoreFile(file);
     }
 
+#ifdef MUSE_MODULE_TESTFLOW
+    //! NOTE Nobody answers dialogs during a test case run, they are skipped from the startup
+    if (options->testflow.has_value()) {
+        testflowCmdRunner()->prepare(ctxId, options->testflow.value());
+    }
+#endif
+
     startupScenario->runOnSplashScreen();
 
     QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario, options]() {
@@ -138,8 +145,8 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
 #ifdef MUSE_MODULE_TESTFLOW
         //! NOTE Run the test case requested from the command line when the startup page is opened
         if (options->testflow.has_value()) {
-            startup.onResolve(this, [this, ctxId, options](const muse::Ret&) {
-                testflowCmdRunner()->run(ctxId, options->testflow.value());
+            startup.onResolve(this, [this, ctxId](const muse::Ret&) {
+                testflowCmdRunner()->run(ctxId);
             });
         }
 #endif
