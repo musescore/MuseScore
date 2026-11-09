@@ -60,7 +60,7 @@ class UIDRegister;
 struct ControlElementPosition {
     engraving::Measure* measure = nullptr;
     engraving::Fraction tick;
-    int track = 0;
+    engraving::track_idx_t track = 0;
     engraving::ChordRest* chordRest = nullptr;
 };
 
