@@ -3151,12 +3151,15 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
         ldata->connectItemSnappedAfter(possibleSnapAfterElement);
     }
 
-    // In case of dynamics/expressions before or after, make space for them horizontally
+    if (!item->autoplace()) {
+        return;
+    }
+
     double mag = item->staff()->staffMag(item);
     double hairpinDistToDynOrExpr = ctx.conf().style().styleAbsolute(Sid::autoplaceHairpinDynamicsDistance) * mag;
 
-    bool makeSpaceBefore = (doSnapBefore && possibleSnapBeforeElement->isTextBase())
-                           || (possibleSnapBeforeElement && possibleSnapBeforeElement->isDynamic());
+    bool makeSpaceBefore = possibleSnapBeforeElement && possibleSnapBeforeElement->isTextBase()
+                           && possibleSnapBeforeElement->autoplace();
 
     if (makeSpaceBefore && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()) {
         double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
@@ -3169,8 +3172,8 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
         }
     }
 
-    bool makeSpaceAfter = (doSnapAfter && possibleSnapAfterElement->isTextBase())
-                          || (possibleSnapAfterElement && possibleSnapAfterElement->isDynamic());
+    bool makeSpaceAfter = possibleSnapAfterElement && possibleSnapAfterElement->isTextBase()
+                          && possibleSnapAfterElement->autoplace();
 
     if (makeSpaceAfter && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()) {
         double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
