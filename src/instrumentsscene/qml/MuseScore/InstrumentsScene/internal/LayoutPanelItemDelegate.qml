@@ -26,7 +26,6 @@ import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.UiComponents.LegacyTreeView
 
 import MuseScore.InstrumentsScene
 
@@ -34,8 +33,9 @@ FocusableControl {
     id: root
 
     required property AbstractLayoutPanelTreeItem item
-    required property LegacyTreeView treeView
+    required property TreeView treeView
     required property var modelIndex
+    required property int row
     required property int depth
     required property bool isExpanded
     property string filterKey
@@ -74,7 +74,7 @@ FocusableControl {
             if (dragged) {
                 root.dragStarted()
                 if (root.isExpanded) {
-                    root.treeView.collapse(root.modelIndex)
+                    root.treeView.collapse(root.row)
                 }
             } else {
                 root.dropped()
@@ -234,9 +234,9 @@ FocusableControl {
         expandableDepth: root.depth
         onExpandButtonClicked: function(expand) {
             if (expand) {
-                root.treeView.expand(root.modelIndex)
+                root.treeView.expand(root.row)
             } else {
-                root.treeView.collapse(root.modelIndex)
+                root.treeView.collapse(root.row)
             }
         }
 

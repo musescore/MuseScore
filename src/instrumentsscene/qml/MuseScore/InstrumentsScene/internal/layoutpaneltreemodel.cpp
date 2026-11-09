@@ -713,11 +713,6 @@ void LayoutPanelTreeModel::changeEnabled(const QModelIndex& index, bool enable)
     setLoadingBlocked(false);
 }
 
-QItemSelectionModel* LayoutPanelTreeModel::selectionModel() const
-{
-    return m_selectionModel;
-}
-
 QModelIndex LayoutPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {

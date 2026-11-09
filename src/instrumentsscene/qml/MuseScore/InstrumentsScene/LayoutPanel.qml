@@ -24,7 +24,6 @@ import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.UiComponents.LegacyTreeView
 import MuseScore.InstrumentsScene
 
 import "internal"
@@ -155,10 +154,8 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        LegacyTreeView {
+        StyledTreeView {
             id: layoutPanelTreeView
-
-            readonly property real delegateHeight: 38
 
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -169,34 +166,23 @@ Item {
                 id: treeModel
             }
 
-            selection: treeModel ? treeModel.selectionModel() : null
-
-            alternatingRowColors: false
-            headerVisible: false
-
-            function expandCollapseAll(expand) {
-                for (let row = 0; row < layoutPanelTreeView.model.rowCount(); ++row) {
-                    const modelIndex = layoutPanelTreeView.model.index(row, 0);
-                    const item = layoutPanelTreeView.model.modelIndexToItem(modelIndex);
-                    if (item.isExpandable){
-                        if (expand) {
-                            layoutPanelTreeView.expand(modelIndex)
-                        } else {
-                            layoutPanelTreeView.collapse(modelIndex)
-                        }
-                    }
-                }
-                flickableItem.returnToBounds();
+            columnWidthProvider: function(column) {
+                return layoutPanelTreeView.width
             }
 
-            function scrollToFocusedItem(focusedIndex) {
-                let targetScrollPosition = focusedIndex * layoutPanelTreeView.delegateHeight
-                let visibleAreaEnd = flickableItem.contentY + flickableItem.height
+            function expandCollapseAll(expand) {
+                for (let i = 0; i < treeModel.rowCount(); ++i) {
+                    const modelIndex = treeModel.index(i, 0)
+                    if (!treeModel.modelIndexToItem(modelIndex).isExpandable) {
+                        continue
+                    }
 
-                if (targetScrollPosition + layoutPanelTreeView.delegateHeight > visibleAreaEnd) {
-                    flickableItem.contentY = Math.min(targetScrollPosition + layoutPanelTreeView.delegateHeight - flickableItem.height, flickableItem.contentHeight - flickableItem.height)
-                } else if (targetScrollPosition < flickableItem.contentY) {
-                    flickableItem.contentY = Math.max(targetScrollPosition, 0)
+                    const row = layoutPanelTreeView.rowAtIndex(modelIndex)
+                    if (expand) {
+                        layoutPanelTreeView.expand(row)
+                    } else {
+                        layoutPanelTreeView.collapse(row)
+                    }
                 }
             }
 
@@ -214,35 +200,31 @@ Item {
                 }
             }
 
-            TableViewColumn {
-                role: "item"
-            }
-
             function isControl(itemType) {
                 return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF
             }
 
-            style: LegacyTreeViewStyle {
-                indentation: 0
-                branchDelegate: null
-                backgroundColor: "transparent"
-
-                rowDelegate: Item {
-                    height: layoutPanelTreeView.delegateHeight
-                    width: parent.width
-                }
-            }
-
-            itemDelegate: DropArea {
+            delegate: DropArea {
                 id: dropArea
+
+                required property TreeView treeView
+                required property int row
+                required property int column
+                required property int depth
+                required property bool expanded
+                required property var model
+
+                readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
+                readonly property AbstractLayoutPanelTreeItem item: dropArea.model.item ?? null
+
+                implicitHeight: 38
 
                 Loader {
                     id: treeItemDelegateLoader
 
-                    property int delegateType: model ? model.item.type : LayoutPanelItemType.UNDEFINED
+                    property int delegateType: dropArea.item ? dropArea.item.type : LayoutPanelItemType.UNDEFINED
 
-                    height: parent.height
-                    width: parent.width
+                    anchors.fill: parent
 
                     sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
                                          controlItemDelegateComponent : treeItemDelegateComponent
@@ -254,38 +236,33 @@ Item {
                             id: itemDelegate
 
                             treeView: layoutPanelTreeView
-                            item: model?.item ?? null
-                            modelIndex: styleData.index
-                            depth: styleData.depth
-                            isExpanded: styleData.isExpanded
+                            item: dropArea.item
+                            modelIndex: dropArea.modelIndex
+                            row: dropArea.row
+                            depth: dropArea.depth
+                            isExpanded: dropArea.expanded
 
                             sideMargin: contentColumn.sideMargin
 
                             navigation.name: item?.title || "LayoutPanelItemDelegate"
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model?.index ?? 0
+                            navigation.row: dropArea.row
                             navigation.onActiveChanged: {
                                 if (navigation.active) {
                                     prv.currentItemNavigationName = navigation.name
-                                    layoutPanelTreeView.scrollToFocusedItem(model.index)
+                                    layoutPanelTreeView.positionViewAtRow(dropArea.row, TableView.Contain)
                                 }
                             }
 
                             onClicked: {
                                 if (itemDelegate.isSelectable) {
-                                    treeModel.selectRow(styleData.index)
+                                    treeModel.selectRow(dropArea.modelIndex)
                                 }
                             }
 
                             onDoubleClicked: {
-                                if (!isExpandable) {
-                                    return
-                                }
-
-                                if (!styleData.isExpanded) {
-                                    layoutPanelTreeView.expand(styleData.index)
-                                } else {
-                                    layoutPanelTreeView.collapse(styleData.index)
+                                if (itemDelegate.isExpandable) {
+                                    layoutPanelTreeView.toggleExpanded(dropArea.row)
                                 }
                             }
 
@@ -318,7 +295,7 @@ Item {
                             }
 
                             onIsPopupOpenedChanged: {
-                                layoutPanelTreeView.flickableItem.interactive = !itemDelegate.isPopupOpened
+                                layoutPanelTreeView.interactive = !itemDelegate.isPopupOpened
                             }
                         }
                     }
@@ -327,17 +304,17 @@ Item {
                         id: controlItemDelegateComponent
 
                         LayoutPanelItemControl {
-                            title: model?.item?.title || ""
-                            isSelected: model?.item?.isSelected || false
+                            title: dropArea.item?.title || ""
+                            isSelected: dropArea.item?.isSelected || false
 
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model?.index || 0
+                            navigation.row: dropArea.row
 
-                            depth: styleData.depth
+                            depth: dropArea.depth
                             sideMargin: contentColumn.sideMargin
 
                             onClicked: {
-                                styleData.value.appendNewItem()
+                                dropArea.item.appendNewItem()
                             }
                         }
                     }
@@ -349,11 +326,11 @@ Item {
                         return
                     }
 
-                    if (styleData.index === draggedItem.modelIndex || !styleData.value.canAcceptDrop(draggedItem.item)) {
+                    if (dropArea.modelIndex === draggedItem.modelIndex || !dropArea.item.canAcceptDrop(draggedItem.item)) {
                         return
                     }
 
-                    if (draggedItem.modelIndex.row < 0 || styleData.index.row < 0) {
+                    if (draggedItem.modelIndex.row < 0 || dropArea.modelIndex.row < 0) {
                         return;
                     }
 
@@ -361,8 +338,8 @@ Item {
                                  draggedItem.modelIndex.parent,
                                  draggedItem.modelIndex.row,
                                  1,
-                                 styleData.index.parent,
-                                 styleData.index.row)
+                                 dropArea.modelIndex.parent,
+                                 dropArea.modelIndex.row)
                 }
             }
         }
