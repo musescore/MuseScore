@@ -868,7 +868,7 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::BARLINE_TYPE);
     if (item->segment() && item->segment()->isBarLineType()) {
         // Preserve local mid-measure values even if legacy initialization marked them styled.
-        if (item->spanStaff() != item->propertyDefault(Pid::BARLINE_SPAN).toBool()) {
+        if (ctx.clipboardmode() || item->spanStaff() != item->propertyDefault(Pid::BARLINE_SPAN).toBool()) {
             xml.tag("span", item->spanStaff());
         }
     } else {

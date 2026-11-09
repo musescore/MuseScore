@@ -40,6 +40,7 @@
 #include "marker.h"
 #include "volta.h"
 
+#include "../editing/editproperty.h"
 #include "../editing/editstavesharing.h"
 #include "../editing/transaction/transaction.h"
 
@@ -1102,6 +1103,21 @@ void ScoreRange::backupBarLines(Segment* first, Segment* last)
     }
 }
 
+static void undoRestoreBarlineSpan(BarLine* barline, bool span, PropertyFlags flags)
+{
+    if (flags == PropertyFlags::STYLED) {
+        span = barline->propertyDefault(Pid::BARLINE_SPAN).toBool();
+    }
+    Score* score = barline->score();
+    if (barline->generated()) {
+        // Restore the generated state after the span is undone.
+        score->undo(new ChangeProperty(barline, Pid::GENERATED, false));
+    }
+    if (barline->spanStaff() != span || barline->propertyFlags(Pid::BARLINE_SPAN) != flags) {
+        score->undo(new ChangeProperty(barline, Pid::BARLINE_SPAN, span, flags));
+    }
+}
+
 //---------------------------------------------------------
 //   insertBarLine
 //---------------------------------------------------------
@@ -1116,6 +1132,8 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
         Segment* seg = m->undoGetSegment(st, pos);
         if (seg) {
             BarLineType blt = bl->barLineType();
+            const bool span = !middle && bl->spanStaff();
+            const PropertyFlags spanFlags = middle ? PropertyFlags::UNSTYLED : bl->propertyFlags(Pid::BARLINE_SPAN);
             // get existing bar line if it does exist
             BarLine* nbl = toBarLine(seg->element(bl->track()));
             if (!nbl) {
@@ -1124,15 +1142,15 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                 nbl->setOwnershipParent(seg);
                 nbl->setTrack(bl->track());
                 m->score()->addElement(nbl);
+                nbl->setSpanStaff(span);
+                nbl->setPropertyFlags(Pid::BARLINE_SPAN, spanFlags);
             } else {
+                undoRestoreBarlineSpan(nbl, span, spanFlags);
                 // We change BarLineType if necessary to keep END_START repeats if in the middle of a meassure
                 if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT) && middle) {
                     blt = BarLineType::END_START_REPEAT;
                 }
             }
-            // Restore connection overrides even when the destination barline already exists.
-            nbl->setSpanStaff(middle ? false : bl->spanStaff());
-            nbl->setPropertyFlags(Pid::BARLINE_SPAN, middle ? PropertyFlags::UNSTYLED : bl->propertyFlags(Pid::BARLINE_SPAN));
             nbl->setGenerated(false);
             nbl->setBarLineType(blt);
             nbl->setVisible(bl->visible());
@@ -1161,8 +1179,10 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                     // Set Spanstaff to true if not in the middle and there is the same BL across staves
                     for (size_t i = 0; i < (m->score()->nstaves() - 1); ++i) {
                         BarLine* sbl = toBarLine(seg->element(staff2track(i)));
-                        if (sbl) {
-                            sbl->setSpanStaff(middle ? false : true);
+                        if (sbl && sbl->spanStaffInherited() && !sbl->spanStaff()) {
+                            const PropertyFlags flags = sbl->propertyDefault(Pid::BARLINE_SPAN).toBool()
+                                                        ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+                            undoRestoreBarlineSpan(sbl, true, flags);
                         }
                     }
                 }
