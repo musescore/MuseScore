@@ -182,6 +182,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddToSelectionEndScoreCommand>(),
 
     makeCommandInfo<OpenSelectionOptionsCommand>(),
+    makeCommandInfo<ShowSelectionCommand>(),
 
     // navigation
     CommandInfo{
@@ -982,14 +983,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         ADD_NONUPLET_COMMAND,
         TranslatableString("action", "Nonuplet"),
         TranslatableString("action", "Enter tuplet: nonuplet"),
-        InputSchema(),
-        Decoration()
-    },
-
-    CommandInfo{
-        GET_LOCATION_COMMAND,
-        TranslatableString("action", "Get location"),
-        TranslatableString("action", "Get location"),
         InputSchema(),
         Decoration()
     },

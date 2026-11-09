@@ -142,8 +142,7 @@ void NotationActionController::init()
     registerCommand<AddToSelectionEndScoreCommand>([this]() { return addToSelection(SelectionTarget::EndScore); });
 
     registerCommand<OpenSelectionOptionsCommand>(&Controller::openSelectionMoreOptions);
-
-    registerCommand(GET_LOCATION_COMMAND, &Interaction::getLocation);
+    registerCommand<ShowSelectionCommand>(&Controller::showSelection);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -2108,6 +2107,17 @@ muse::Ret NotationActionController::openSelectionMoreOptions()
         interactive()->open("musescore://notation/selectelement");
     }
 
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::showSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->showSelection();
     return muse::make_ok();
 }
 
