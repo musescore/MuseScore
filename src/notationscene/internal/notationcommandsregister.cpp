@@ -34,26 +34,6 @@ using namespace mu::notation;
 
 // //: This is comment for translator
 
-//: Note
-static const TranslatableString noteC = TranslatableString("action", "C");
-//: Note
-static const TranslatableString noteD = TranslatableString("action", "D");
-//: Note
-static const TranslatableString noteE = TranslatableString("action", "E");
-//: Note
-static const TranslatableString noteF = TranslatableString("action", "F");
-//: Note
-static const TranslatableString noteG = TranslatableString("action", "G");
-//: Note
-static const TranslatableString noteA = TranslatableString("action", "A");
-//: Note
-static const TranslatableString noteB = TranslatableString("action", "B");
-
-static const TranslatableString Enter_note_X = TranslatableString("action", "Enter note %1");
-static const TranslatableString Add_X_to_chord = TranslatableString("action", "Add %1 to chord");
-static const TranslatableString Add_note_X_to_chord = TranslatableString("action", "Add note %1 to chord");
-static const TranslatableString Insert_X = TranslatableString("action", "Insert %1");
-
 //: Addition to the name of an action to indicate that this action only applies to tablature notation.
 //: '%1' is the name of the action.
 static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)");
@@ -195,7 +175,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ToggleNoteInputRealtimeManualCommand>(),
     makeCommandInfo<ToggleNoteInputTimewiseCommand>(),
     makeCommandInfo<ToggleInsertModeCommand>(),
-    makeCommandInfo<RequestNoteInputStateCommand>(),
 
     makeCommandInfo<SetDurationCommand>(),
     makeCommandInfo<SetDurationLongaCommand>(),
@@ -211,6 +190,44 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<SetDuration256thCommand>(),
     makeCommandInfo<SetDuration512thCommand>(),
     makeCommandInfo<SetDuration1024thCommand>(),
+    makeCommandInfo<ChangeDurationCommand>(),
+    makeCommandInfo<ChangeDurationDoubleCommand>(),
+    makeCommandInfo<ChangeDurationHalveCommand>(),
+    makeCommandInfo<ChangeDurationDoubleDottedCommand>(),
+    makeCommandInfo<ChangeDurationHalveDottedCommand>(),
+    makeCommandInfo<ToggleDotsCommand>(),
+    makeCommandInfo<ToggleDotCommand>(),
+    makeCommandInfo<ToggleDot2Command>(),
+    makeCommandInfo<ToggleDot3Command>(),
+    makeCommandInfo<ToggleDot4Command>(),
+
+    makeCommandInfo<ToggleRestCommand>(),
+
+    makeCommandInfo<RequestNoteInputStateCommand>(),
+
+    // note operation
+    makeCommandInfo<AddNoteCommand>(),
+    makeCommandInfo<AddNoteC_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteD_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteE_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteF_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteG_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteA_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteB_ToNextChordCommand>(),
+    makeCommandInfo<AddNoteC_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteD_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteE_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteF_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteG_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteA_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteB_ToCurrentChordCommand>(),
+    makeCommandInfo<AddNoteC_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteD_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteE_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteF_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteG_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteA_ToInsertChordCommand>(),
+    makeCommandInfo<AddNoteB_ToInsertChordCommand>(),
 
     // navigation
     CommandInfo{
@@ -335,23 +352,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME)
     },
 
-    makeCommandInfo<ChangeDurationCommand>(),
-    makeCommandInfo<ChangeDurationDoubleCommand>(),
-    makeCommandInfo<ChangeDurationHalveCommand>(),
-    makeCommandInfo<ChangeDurationDoubleDottedCommand>(),
-    makeCommandInfo<ChangeDurationHalveDottedCommand>(),
-    makeCommandInfo<ToggleDotsCommand>(),
-    makeCommandInfo<ToggleDotCommand>(),
-    makeCommandInfo<ToggleDot2Command>(),
-    makeCommandInfo<ToggleDot3Command>(),
-    makeCommandInfo<ToggleDot4Command>(),
-    CommandInfo{
-        TOGGLE_REST_COMMAND,
-        TranslatableString("action", "Rest"),
-        TranslatableString("action", "Toggle rest"),
-        InputSchema(),
-        Decoration(IconCode::Code::REST)
-    },
     CommandInfo{
         TOGGLE_FLAT2_COMMAND,
         TranslatableString("action", "Toggle double-flat"),
@@ -567,9 +567,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // note operation
-    makeCommandInfo<AddNoteCommand>(),
-
     CommandInfo{
         ADD_DRUM_NOTE_COMMAND,
         TranslatableString("action", "Add drum note"),
@@ -578,153 +575,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "pitch", Arg(DataType::Int, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
             { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
         }),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_C_COMMAND,
-        noteC,
-        Enter_note_X.arg(noteC),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_D_COMMAND,
-        noteD,
-        Enter_note_X.arg(noteD),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_E_COMMAND,
-        noteE,
-        Enter_note_X.arg(noteE),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_F_COMMAND,
-        noteF,
-        Enter_note_X.arg(noteF),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_G_COMMAND,
-        noteG,
-        Enter_note_X.arg(noteG),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_A_COMMAND,
-        noteA,
-        Enter_note_X.arg(noteA),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENTER_NOTE_B_COMMAND,
-        noteB,
-        Enter_note_X.arg(noteB),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_C_COMMAND,
-        Add_X_to_chord.arg(noteC),
-        Add_note_X_to_chord.arg(noteC),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_D_COMMAND,
-        Add_X_to_chord.arg(noteD),
-        Add_note_X_to_chord.arg(noteD),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_E_COMMAND,
-        Add_X_to_chord.arg(noteE),
-        Add_note_X_to_chord.arg(noteE),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_F_COMMAND,
-        Add_X_to_chord.arg(noteF),
-        Add_note_X_to_chord.arg(noteF),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_G_COMMAND,
-        Add_X_to_chord.arg(noteG),
-        Add_note_X_to_chord.arg(noteG),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_A_COMMAND,
-        Add_X_to_chord.arg(noteA),
-        Add_note_X_to_chord.arg(noteA),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NOTE_B_COMMAND,
-        Add_X_to_chord.arg(noteB),
-        Add_note_X_to_chord.arg(noteB),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_C_COMMAND,
-        Insert_X.arg(noteC),
-        Insert_X.arg(noteC),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_D_COMMAND,
-        Insert_X.arg(noteD),
-        Insert_X.arg(noteD),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_E_COMMAND,
-        Insert_X.arg(noteE),
-        Insert_X.arg(noteE),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_F_COMMAND,
-        Insert_X.arg(noteF),
-        Insert_X.arg(noteF),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_G_COMMAND,
-        Insert_X.arg(noteG),
-        Insert_X.arg(noteG),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_A_COMMAND,
-        Insert_X.arg(noteA),
-        Insert_X.arg(noteA),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_NOTE_B_COMMAND,
-        Insert_X.arg(noteB),
-        Insert_X.arg(noteB),
-        InputSchema(),
         Decoration()
     },
 

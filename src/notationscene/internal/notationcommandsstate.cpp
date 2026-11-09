@@ -180,28 +180,28 @@ static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
 
 static const std::vector<Command> NOTE_COMMANDS = {
     AddNoteCommand::id,
-    ENTER_NOTE_C_COMMAND,
-    ENTER_NOTE_D_COMMAND,
-    ENTER_NOTE_E_COMMAND,
-    ENTER_NOTE_F_COMMAND,
-    ENTER_NOTE_G_COMMAND,
-    ENTER_NOTE_A_COMMAND,
-    ENTER_NOTE_B_COMMAND,
+    AddNoteC_ToNextChordCommand::id,
+    AddNoteD_ToNextChordCommand::id,
+    AddNoteE_ToNextChordCommand::id,
+    AddNoteF_ToNextChordCommand::id,
+    AddNoteG_ToNextChordCommand::id,
+    AddNoteA_ToNextChordCommand::id,
+    AddNoteB_ToNextChordCommand::id,
     ENTER_REST_COMMAND,
-    ADD_NOTE_C_COMMAND,
-    ADD_NOTE_D_COMMAND,
-    ADD_NOTE_E_COMMAND,
-    ADD_NOTE_F_COMMAND,
-    ADD_NOTE_G_COMMAND,
-    ADD_NOTE_A_COMMAND,
-    ADD_NOTE_B_COMMAND,
-    INSERT_NOTE_C_COMMAND,
-    INSERT_NOTE_D_COMMAND,
-    INSERT_NOTE_E_COMMAND,
-    INSERT_NOTE_F_COMMAND,
-    INSERT_NOTE_G_COMMAND,
-    INSERT_NOTE_A_COMMAND,
-    INSERT_NOTE_B_COMMAND
+    AddNoteC_ToCurrentChordCommand::id,
+    AddNoteD_ToCurrentChordCommand::id,
+    AddNoteE_ToCurrentChordCommand::id,
+    AddNoteF_ToCurrentChordCommand::id,
+    AddNoteG_ToCurrentChordCommand::id,
+    AddNoteA_ToCurrentChordCommand::id,
+    AddNoteB_ToCurrentChordCommand::id,
+    AddNoteC_ToInsertChordCommand::id,
+    AddNoteD_ToInsertChordCommand::id,
+    AddNoteE_ToInsertChordCommand::id,
+    AddNoteF_ToInsertChordCommand::id,
+    AddNoteG_ToInsertChordCommand::id,
+    AddNoteA_ToInsertChordCommand::id,
+    AddNoteB_ToInsertChordCommand::id
 };
 
 static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
@@ -324,7 +324,7 @@ void NotationCommandsState::init()
     controller()->selectionChanged().onNotify(this, [this]() {
         updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
         updateCommandStates(ADD_COMMANDS);
-        updateCommandStates({ TOGGLE_REST_COMMAND });
+        updateCommandStates({ ToggleRestCommand::id });
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
@@ -351,7 +351,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(NOTE_INPUT_COMMANDS));
         updateCommandStates(commands(DURATION_COMMANDS));
         updateCommandStates(commands(DOT_COUNT_COMMANDS));
-        updateCommandStates({ TOGGLE_REST_COMMAND });
+        updateCommandStates({ ToggleRestCommand::id });
         updateCommandStates(commands(ACCIDENTAL_COMMANDS));
         updateCommandStates({ REALTIME_ADVANCE_COMMAND });
         updateCommandStates(ADD_COMMANDS);
@@ -467,7 +467,7 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentDotCount() == DOT_COUNT_COMMANDS.at(command));
     }
 
-    if (command == TOGGLE_REST_COMMAND) {
+    if (command == ToggleRestCommand::id) {
         return CommandState(true, controller()->currentIsRest());
     }
 

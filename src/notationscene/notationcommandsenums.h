@@ -98,9 +98,9 @@ struct NoteAddingModeContract {
     static constexpr std::string_view key = "mode";
     static constexpr NoteAddingMode def = NoteAddingMode::CurrentChord;
     static constexpr EnumTable<NoteAddingMode, 3> table { {
-        { "current", NoteAddingMode::CurrentChord, "add to current chord" },
-        { "next", NoteAddingMode::NextChord, "add to next chord" },
-        { "insert", NoteAddingMode::InsertChord, "insert to chord" },
+        { "to-current-chord", NoteAddingMode::CurrentChord, "add to current chord" },
+        { "to-next-chord", NoteAddingMode::NextChord, "add to next chord" },
+        { "insert-to-chord", NoteAddingMode::InsertChord, "insert to chord" },
     } };
 };
 
