@@ -144,7 +144,7 @@ RectF SystemCursor::resolveCursorRectByTick(int newTick) const
             m_cache.segmentEndTick.ticks(),
             m_cache.segmentStartX,
             m_cache.segmentEndX
-        );
+            );
 
         return calculateRect(x, score, m_cache.system, m_cache.systemBottomY);
     }
@@ -218,7 +218,7 @@ RectF SystemCursor::resolveCursorRectByTick(int newTick) const
             segmentEndTick.ticks(),
             segmentStartX,
             segmentEndX
-        );
+            );
 
         return calculateRect(x, score, system, m_cache.systemBottomY);
     }

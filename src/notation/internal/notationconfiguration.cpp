@@ -391,14 +391,14 @@ void NotationConfiguration::init()
         m_showPlaybackCursorInNormalModeChanged.send(val.toBool());
     });
 
-    settings()->setDefaultValue(PLAYBACK_CUE_COLOR, Val(QColor(255, 187, 0, 128) /* translucent orange */ ));
+    settings()->setDefaultValue(PLAYBACK_CUE_COLOR, Val(QColor(255, 187, 0, 128) /* translucent orange */));
     settings()->setCanBeManuallyEdited(PLAYBACK_CUE_COLOR, true);
     settings()->setDescription(PLAYBACK_CUE_COLOR, muse::trc("notation", "Playback cue color"));
     settings()->valueChanged(PLAYBACK_CUE_COLOR).onReceive(this, [this](const Val&) {
         m_playbackCueColorChanged.notify();
     });
 
-    settings()->setDefaultValue(PLAYBACK_CURSOR_COLOR, Val(QColor(0, 153, 221, 128) /* translucent light blue */ ));
+    settings()->setDefaultValue(PLAYBACK_CURSOR_COLOR, Val(QColor(0, 153, 221, 128) /* translucent light blue */));
     settings()->setCanBeManuallyEdited(PLAYBACK_CURSOR_COLOR, true);
     settings()->setDescription(PLAYBACK_CURSOR_COLOR, muse::trc("notation", "Playback cursor color"));
     settings()->valueChanged(PLAYBACK_CURSOR_COLOR).onReceive(this, [this](const Val&) {

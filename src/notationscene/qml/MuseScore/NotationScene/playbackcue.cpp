@@ -31,4 +31,3 @@ bool PlaybackCue::isShownInNormalMode() const
 {
     return configuration()->showPlaybackCueInNormalMode();
 }
-

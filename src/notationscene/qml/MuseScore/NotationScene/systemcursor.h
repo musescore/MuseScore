@@ -36,12 +36,11 @@
 class QColor;
 
 namespace mu::notation {
-
 class SystemCursor : public muse::Contextable, public muse::async::Asyncable
 {
 protected:
     explicit SystemCursor(const muse::modularity::ContextPtr& iocCtx)
-      : muse::Contextable(iocCtx)
+        : muse::Contextable(iocCtx)
     {}
 
 public:
@@ -93,6 +92,5 @@ private:
 
     INotationPtr m_notation;
 };
-
 } // namespace mu::notation
 #endif

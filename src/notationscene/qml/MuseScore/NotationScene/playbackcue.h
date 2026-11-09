@@ -30,18 +30,16 @@
 class QColor;
 
 namespace mu::notation {
-
 class PlaybackCue : public SystemCursor
 {
 public:
     explicit PlaybackCue(const muse::modularity::ContextPtr& iocCtx)
-      : SystemCursor(iocCtx)
+        : SystemCursor(iocCtx)
     {}
 
 protected:
     QColor color() const override;
     bool isShownInNormalMode() const override;
 };
-
 } // namespace mu::notation
 #endif
