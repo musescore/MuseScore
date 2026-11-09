@@ -141,7 +141,7 @@ private:
     muse::Ret addToSelection(const AddToSelectionCommand& command);
     muse::Ret addToSelection(SelectionTarget target);
     muse::Ret openSelectionMoreOptions();
-    muse::Ret showSelection();
+    muse::Ret showLocation();
 
     muse::Ret toggleNoteInput(const ToggleNoteInputCommand& command);
     muse::Ret toggleNoteInput(NoteInputMethod method);

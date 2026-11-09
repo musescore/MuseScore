@@ -89,7 +89,7 @@ public:
     virtual muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0) = 0;
     virtual muse::Ret select(SelectionTarget target) = 0;
     virtual muse::Ret addToSelection(SelectionTarget target) = 0;
-    virtual void showSelection() = 0;
+    virtual void showLocation() = 0;
     virtual void clearSelection() = 0;
 
     virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;

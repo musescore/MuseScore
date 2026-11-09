@@ -344,7 +344,7 @@ public:
     void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
-    void showSelection() override;
+    void showLocation() override;
     void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;

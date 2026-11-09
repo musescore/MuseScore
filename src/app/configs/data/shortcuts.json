@@ -119,7 +119,7 @@
         {"command": "command://notation/pitch-up",  "sequences": ["Up"]},
         {"command": "command://notation/pitch-up-diatonic",  "sequences": ["Alt+Shift+Up"]},
         {"command": "command://notation/pitch-up-octave",  "sequences": ["Ctrl+Up"]},
-        {"command": "command://notation/show-selection",  "sequences": ["Shift+L"]},
+        {"command": "command://notation/show-location",  "sequences": ["Shift+L"]},
         {"command": "command://notation/move-up",  "sequences": ["Ctrl+Shift+Up"]},
         {"command": "command://notation/pitch-down",  "sequences": ["Down"]},
         {"command": "command://notation/pitch-down-diatonic",  "sequences": ["Alt+Shift+Down"]},
@@ -179,7 +179,7 @@
         {"command": "command://notation/make-into-system",  "sequences": ["Alt+S"]},
         {"command": "command://notation/add-parentheses",  "sequences": ["("]},
         {"command": "command://notation/toggle-mmrest",  "sequences": ["Ctrl+Shift+M"], "autorepeat": false},
-        {"command": "command://notation/toggle-insert-mode",  "sequences": ["Ctrl+I"]},
+        {"command": "command://notation/toggle-note-input/toggle-insert-mode",  "sequences": ["Ctrl+I"]},
         {"command": "command://notation/view/context-menu-of-selection",  "sequences": ["Shift+F10","Ctrl+Shift+F10"]},
         {"command": "command://notation/add-standard-bend",  "sequences": ["Alt+B"]},
         {"command": "command://notation/add-grace-note-bend",  "sequences": ["Ctrl+Alt+B"]}
