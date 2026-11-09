@@ -781,36 +781,53 @@ void MuseScoreComService::doDownloadScoreInfo(int scoreId, std::function<void(co
 Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPerBatch, int batchNumber)
 {
     return Promise<ScoresList>([this, scoresPerBatch, batchNumber](auto resolve, auto reject) {
+        auto list = std::make_shared<ScoresList>();
+
+        executeAsyncRequest([this, scoresPerBatch, batchNumber, list]() {
+            return doDownloadScoresList(scoresPerBatch, batchNumber, list);
+        }).onResolve(this, [list, resolve, reject](const Ret& ret) {
+            if (ret) {
+                (void)resolve(*list);
+            } else {
+                (void)reject(ret.code(), ret.toString());
+            }
+        });
+
+        return Promise<ScoresList>::dummy_result();
+    });
+}
+
+Promise<Ret> MuseScoreComService::doDownloadScoresList(int scoresPerBatch, int batchNumber, std::shared_ptr<ScoresList> list)
+{
+    return Promise<Ret>([this, scoresPerBatch, batchNumber, list](auto resolve, auto) {
         QVariantMap params;
         params["per-page"] = scoresPerBatch;
         params["page"] = batchNumber;
 
         RetVal<QUrl> scoresListUrl = prepareUrlForRequest(MUSESCORECOM_SCORES_LIST_API_URL, params);
         if (!scoresListUrl.ret) {
-            return reject(scoresListUrl.ret.code(), scoresListUrl.ret.toString());
+            return resolve(scoresListUrl.ret);
         }
 
         auto receivedData = std::make_shared<QBuffer>();
         RetVal<Progress> progress = m_networkManager->get(scoresListUrl.val, receivedData, headers());
         if (!progress.ret) {
-            return reject(progress.ret.code(), progress.ret.toString());
+            return resolve(progress.ret);
         }
 
-        progress.val.finished().onReceive(this, [batchNumber, receivedData, resolve, reject](const ProgressResult& res) {
+        progress.val.finished().onReceive(this, [this, batchNumber, receivedData, list, resolve](const ProgressResult& res) {
             if (!res.ret) {
-                (void)reject(res.ret.code(), res.ret.toString());
+                printServerReply(*receivedData);
+                (void)resolve(res.ret);
                 return;
             }
 
-            RetVal<ScoresList> list = parseScoreList(receivedData->data(), batchNumber);
-            if (list.ret) {
-                (void)resolve(list.val);
-            } else {
-                (void)reject(list.ret.code(), list.ret.toString());
-            }
+            RetVal<ScoresList> parsed = parseScoreList(receivedData->data(), batchNumber);
+            *list = parsed.val;
+            (void)resolve(parsed.ret);
         });
 
-        return Promise<ScoresList>::dummy_result();
+        return Promise<Ret>::dummy_result();
     });
 }
 

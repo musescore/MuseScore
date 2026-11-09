@@ -892,6 +892,39 @@ TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoresList_NoAccessToken_Rejects)
     EXPECT_EQ(*rejectCode, code(cloud::Err::AccessTokenIsEmpty));
 }
 
+TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoresList_TokenExpired_RefreshesTokensAndRetries)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    willReply(REFRESH_TOKENS_PATH, NEW_TOKENS_JSON);
+    willReply(SCORES_LIST_PATH, SCORES_LIST_JSON);
+
+    // [WHEN] Download the scores
+    std::optional<ScoresList> list;
+    watch(m_service->downloadScoresList(10, 1), list);
+    processMessages();
+
+    EXPECT_EQ(queryValue(pendingRequest(SCORES_LIST_PATH).url, "access_token"), ACCESS_TOKEN);
+
+    // [WHEN] The access token has expired
+    finishRequest(SCORES_LIST_PATH, TOKEN_EXPIRED_RET);
+
+    // [THEN] The tokens are refreshed
+    finishRequest(REFRESH_TOKENS_PATH);
+
+    // [THEN] The list is requested again with the new access token
+    EXPECT_EQ(queryValue(pendingRequest(SCORES_LIST_PATH).url, "access_token"), NEW_ACCESS_TOKEN);
+    EXPECT_FALSE(list.has_value());
+
+    // [WHEN] The retried request succeeds
+    finishRequest(SCORES_LIST_PATH);
+
+    // [THEN] The scores are received
+    ASSERT_TRUE(list.has_value());
+    EXPECT_EQ(list->items.size(), 2);
+}
+
 // =============================================
 // Score downloading
 // =============================================
