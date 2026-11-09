@@ -35884,13 +35884,13 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
         <source>Upload limit reached</source>
-        <translation type="unfinished"/>
+        <translation>アップロードの上限に達しました</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
         <source>You’ve reached the limit for file conversions. Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>ファイル変換の上限に達しました。しばらくしてからもう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
@@ -36327,13 +36327,13 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>利用規約</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 に同意し、本利用が他者の著作権その他の権利を侵害しないことを確認します。</translation>
     </message>
 </context>
 <context>

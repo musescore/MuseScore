@@ -10818,25 +10818,25 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="190"/>
         <source>&lt;b&gt;Corrupted measure&lt;/b&gt;: %1, measure %2, staff %3.</source>
-        <translation>&lt;b&gt;错乱小节&lt;/b&gt;：%3谱表，%2节，%1。</translation>
+        <translation>&lt;b&gt;错乱小节&lt;/b&gt;：%3 谱表，第 %2 小节，%1。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="198"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;不完整小节&lt;/b&gt;：%3谱表，%2节，%1。理应：%5，实际：%4。</translation>
+        <translation>&lt;b&gt;不完整小节&lt;/b&gt;：%3 谱表，第 %2 小节，%1。预期为 %5，实际为 %4。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="212"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;声部过长&lt;/b&gt;：%3谱表，%2节，%1，%4声部。理应：%6，实际：%5。</translation>
+        <translation>&lt;b&gt;声部过长&lt;/b&gt;：%4 声部，%3 谱表，第 %2 小节，%1。预期为 %6，实际为 %5。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="223"/>
         <source>&lt;b&gt;Element outside measure&lt;/b&gt;: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;小节外元素&lt;/b&gt;：谱表 %3，小节 %2，%1。预期位于 0 到 %5 之间，实际位于 %4。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
@@ -26908,7 +26908,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>MuseSampler library could not be initialized, version %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler 库无法初始化，版本为 %1。</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -35900,7 +35900,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1185"/>
         <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
-        <translation type="unfinished"/>
+        <translation>我们无法上传 ‘%1’。请检查您的互联网连接后重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="606"/>
@@ -36302,7 +36302,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
         <source>%1/%2 characters</source>
         <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1/%2 个字符</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
@@ -36332,7 +36332,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation>我同意 %1 并确认我的使用不会侵犯到任何人的版权或其他所有权。</translation>
+        <translation>我同意 %1 并确认我的使用不会侵犯到任何人的版权或其他权利。</translation>
     </message>
 </context>
 <context>
@@ -37942,7 +37942,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="98"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"/>
+        <translation>%2 中的 %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
