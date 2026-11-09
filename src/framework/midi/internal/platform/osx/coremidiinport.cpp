@@ -206,6 +206,12 @@ void CoreMidiInPort::initCore()
 
                     LOG_MIDI_D() << "Receiving midi message with " << messageWordCount << " words";
                     Event e = Event::fromMidi20Words(&packet->words[pos], messageWordCount);
+
+                    if (e.messageType() == Event::MessageType::ChannelVoice10
+                        && e.opcode() == Event::Opcode::NoteOn && e.velocity7() == 0) {
+                        e = e.toMIDI20();
+                    }
+
                     if (e) {
                         LOG_MIDI_D() << "Received midi message: " << e.to_string();
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
