@@ -751,6 +751,7 @@ bool GuitarPro4::read(IODevice* io)
         instr->setSingleNoteDynamics(false);
         part->setPartName(name);
         part->setPlainLongName(name);
+        part->setCapoFret(capo);
 
         //
         // determine clef

@@ -603,6 +603,7 @@ bool GuitarPro5::readTracks()
         instr->setSingleNoteDynamics(false);
         part->setPartName(name);
         part->setPlainLongName(name);
+        part->setCapoFret(capo);
 
         //
         // determine clef
