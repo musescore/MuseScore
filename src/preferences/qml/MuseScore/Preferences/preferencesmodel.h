@@ -23,7 +23,7 @@
 
 #include <qqmlintegration.h>
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 
 #include "async/asyncable.h"
 #include "ui/view/iconcodes.h"
@@ -35,7 +35,7 @@
 #include "preferencepageitem.h"
 
 namespace mu::preferences {
-class PreferencesModel : public QAbstractItemModel, public muse::Contextable, public muse::async::Asyncable
+class PreferencesModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -49,10 +49,7 @@ public:
     explicit PreferencesModel(QObject* parent = nullptr);
     ~PreferencesModel();
 
-    QModelIndex index(int row, int column, const QModelIndex& parent) const override;
-    QModelIndex parent(const QModelIndex& child) const override;
-    int rowCount(const QModelIndex& parent) const override;
-    int columnCount(const QModelIndex& parent) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
@@ -63,7 +60,7 @@ public:
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE void apply();
     Q_INVOKABLE void cancel();
-    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
+    Q_INVOKABLE void selectRow(int row);
 
     Q_INVOKABLE QVariantList availablePages() const;
 
@@ -80,12 +77,9 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
-    PreferencePageItem* makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE,
-                                 const QString& path = "", const QList<PreferencePageItem*>& children = {}) const;
+    PreferencePageItem* makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon, const QString& path);
 
-    PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;
-
-    PreferencePageItem* m_rootItem = nullptr;
+    QList<PreferencePageItem*> m_items;
     QString m_currentPageId;
 };
 }

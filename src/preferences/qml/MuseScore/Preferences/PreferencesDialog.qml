@@ -61,6 +61,10 @@ StyledDialogView {
         prv.updateStackCurrentIndex()
     }
 
+    onNavigationActivateRequested: {
+        menu.focusOnCurrentPage()
+    }
+
     function initPagesObjects() {
         var pages = preferencesModel.availablePages()
         for (var i in pages) {

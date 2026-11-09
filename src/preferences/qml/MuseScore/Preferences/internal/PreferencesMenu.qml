@@ -20,16 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 
+import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.UiComponents.LegacyTreeView
+
+import MuseScore.Preferences
 
 Item {
     id: root
 
-    property alias model: treeView.model
+    property PreferencesModel model: null
 
     property NavigationPanel navigation: NavigationPanel {
         name: "PreferencesMenuPanel"
@@ -52,6 +53,18 @@ Item {
         id: prv
 
         property var currentItemNavigationIndex: []
+
+        // the dialog activates the first item on open, which must not switch the page
+        property bool selectOnNavigation: false
+    }
+
+    function focusOnCurrentPage() {
+        const item = prv.currentItemNavigationIndex.length > 0 ? listView.itemAtIndex(prv.currentItemNavigationIndex[0]) : null
+        if (item) {
+            item.navigation.requestActive()
+        }
+
+        prv.selectOnNavigation = true
     }
 
     Rectangle {
@@ -60,91 +73,68 @@ Item {
         color: ui.theme.backgroundPrimaryColor
     }
 
-    LegacyTreeView {
-        id: treeView
+    StyledListView {
+        id: listView
 
         anchors.fill: parent
         anchors.topMargin: 12
 
-        alternatingRowColors: false
-        headerVisible: false
+        model: root.model
 
-        TableViewColumn {
-            role: "item"
-        }
+        delegate: PageTabButton {
+            id: pageButton
 
-        style: LegacyTreeViewStyle {
-            indentation: 0
-            branchDelegate: null
-            backgroundColor: background.color
+            required property PreferencePageItem item
+            required property int index
 
-            rowDelegate: Item {
-                id: rowTreeDelegate
-
-                height: 36
-                width: parent.width
-            }
-        }
-
-        itemDelegate: PageTabButton {
-            property bool expanded: Boolean(model) ? model.item.expanded : false
-            property int navigationRow: styleData.index.row
-            property int navigationColumn: styleData.depth
+            width: listView.width
+            height: 36
 
             orientation: Qt.Horizontal
 
             spacing: 16
-            leftPadding: spacing * (styleData.depth + 1)
+            leftPadding: pageButton.spacing
 
             normalStateFont: ui.theme.bodyFont
             selectedStateFont: ui.theme.bodyBoldFont
 
-            title: Boolean(model) ? model.item.title : ""
-            checked: Boolean(model) && Boolean(model.item) ? model.item.id === treeView.model.currentPageId : false
-            enabled: visible
+            title: pageButton.item ? pageButton.item.title : ""
+            checked: Boolean(pageButton.item) && pageButton.item.id === root.model.currentPageId
 
             navigation.name: "PreferencesMenuItem"
             navigation.panel: root.navigation
-            navigation.row: navigationRow
-            navigation.column: navigationColumn
-            navigation.accessible.name: title
+            navigation.row: pageButton.index
+            navigation.column: 0
+            navigation.accessible.name: pageButton.title
             navigation.accessible.role: MUAccessible.ListItem
             navigation.onActiveChanged: {
-                if (navigation.active) {
-                    treeView.model.selectRow(styleData.index)
-                }
-            }
-
-            Component.onCompleted: {
-                updateExpandedState()
-            }
-
-            onExpandedChanged: {
-                updateExpandedState()
-            }
-
-            function updateExpandedState() {
-                if (expanded) {
-                    treeView.expand(styleData.index)
-                } else {
-                    treeView.collapse(styleData.index)
+                if (pageButton.navigation.active && prv.selectOnNavigation) {
+                    root.model.selectRow(pageButton.index)
                 }
             }
 
             iconComponent: StyledIconLabel {
                 width: 24
                 height: width
-                iconCode: Boolean(model) ? model.item.icon : IconCode.NONE
+                iconCode: pageButton.item ? pageButton.item.icon : IconCode.NONE
             }
 
-            onCheckedChanged: {
-                if (checked) {
-                    prv.currentItemNavigationIndex = [navigationRow, navigationColumn]
+            function updateNavigationIndex() {
+                if (pageButton.checked) {
+                    prv.currentItemNavigationIndex = [pageButton.index, 0]
                 }
             }
 
+            Component.onCompleted: {
+                pageButton.updateNavigationIndex()
+            }
+
+            onCheckedChanged: {
+                pageButton.updateNavigationIndex()
+            }
+
             onClicked: {
-                treeView.model.selectRow(styleData.index)
+                root.model.selectRow(pageButton.index)
             }
         }
     }
