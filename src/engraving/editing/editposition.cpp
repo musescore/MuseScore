@@ -23,6 +23,7 @@
 #include "editposition.h"
 
 #include "../dom/engravingitem.h"
+#include "../dom/hairpin.h"
 #include "../dom/score.h"
 #include "../dom/spanner.h"
 
@@ -49,6 +50,13 @@ void EditPosition::freezeItemsPositions(Transaction&, const std::vector<Engravin
         if (item->isSpannerSegment()) {
             SpannerSegment* spannerSegment = toSpannerSegment(item);
             frozenSpannerEnds.emplace(spannerSegment, spannerSegment->pos2());
+        }
+
+        if (item->isHairpinSegment()) {
+            HairpinSegment* hpSeg = toHairpinSegment(item);
+            Hairpin* hairpin = hpSeg->hairpin();
+            hairpin->undoChangeProperty(Pid::SNAP_BEFORE, false);
+            hairpin->undoChangeProperty(Pid::SNAP_AFTER, false);
         }
 
         PropertyFlags autoplacePf = item->propertyFlags(Pid::AUTOPLACE);
