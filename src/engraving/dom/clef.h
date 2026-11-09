@@ -93,6 +93,7 @@ class Clef final : public EngravingItem
 public:
 
     Clef* clone() const override { return new Clef(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
     double mag() const override;
 
     Segment* segment() const { return (Segment*)ownershipParent(); }

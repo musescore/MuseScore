@@ -57,9 +57,10 @@ class PickScrape final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::PICK_SCRAPE)
 
 public:
-    PickScrape(DummyParentOr<EngravingItem> parent);
+    PickScrape(DummyParent* parent);
 
     PickScrape* clone() const override { return new PickScrape(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

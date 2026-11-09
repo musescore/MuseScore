@@ -66,10 +66,11 @@ class Vibrato final : public SLine
     DECLARE_CLASSOF(ElementType::VIBRATO)
 
 public:
-    Vibrato(DummyParentOr<EngravingItem> parent);
+    Vibrato(DummyParent* parent);
     ~Vibrato();
 
     Vibrato* clone() const override { return new Vibrato(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

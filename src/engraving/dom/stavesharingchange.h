@@ -35,6 +35,7 @@ class StaveSharingChange final : public IndicatorIcon
 public:
     StaveSharingChange(DummyParentOr<Segment> parent);
     StaveSharingChange* clone() const override { return new StaveSharingChange(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     char16_t iconCode() const override;
 

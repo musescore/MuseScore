@@ -22,6 +22,7 @@
 
 #include "harmonicmark.h"
 
+#include "dummyparent.h"
 #include "score.h"
 #include "system.h"
 #include "text.h"
@@ -75,7 +76,7 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp)
 //   HarmonicMark
 //---------------------------------------------------------
 
-HarmonicMark::HarmonicMark(DummyParentOr<EngravingItem> parent)
+HarmonicMark::HarmonicMark(DummyParent* parent)
     : ChordTextLineBase(ElementType::HARMONIC_MARK, parent)
 {
     initElementStyle(&harmonicMarkStyle);

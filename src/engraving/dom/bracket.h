@@ -46,6 +46,7 @@ public:
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
@@ -127,7 +128,7 @@ public:
 private:
     friend class Factory;
 
-    Bracket(DummyParentOr<EngravingItem> parent);
+    Bracket(DummyParentOr<System> parent);
 
     BracketItem* m_bi = nullptr;
     double m_ay1 = 0.0;

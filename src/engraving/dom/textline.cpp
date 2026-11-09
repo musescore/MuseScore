@@ -152,7 +152,7 @@ EngravingObject* TextLineSegment::propertyDelegate(Pid pid) const
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(DummyParentOr<EngravingItem> parent, bool system)
+TextLine::TextLine(DummyParentOr<Note> parent, bool system)
     : TextLineBase(ElementType::TEXTLINE, parent)
 {
     setSystemFlag(system);

@@ -37,7 +37,7 @@ namespace mu::engraving {
 //   StaffState
 //---------------------------------------------------------
 
-StaffState::StaffState(DummyParentOr<EngravingItem> parent)
+StaffState::StaffState(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::STAFF_STATE, parent)
 {
     m_staffStateType = StaffStateType::INSTRUMENT;

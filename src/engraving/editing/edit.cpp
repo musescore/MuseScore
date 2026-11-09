@@ -896,20 +896,24 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
     case TextStyleType::HARMONY_ROMAN:
     case TextStyleType::HARMONY_NASHVILLE: {
         track_idx_t track = muse::nidx;
-        EngravingItem* newParent = nullptr;
+        DummyParentOr<Segment, FretDiagram> newParent = dummy();
         if (destinationElement && destinationElement->isFretDiagram()) {
             FretDiagram* fretDiagram = toFretDiagram(destinationElement);
             track = fretDiagram->track();
-            newParent = fretDiagram->harmony() ? toEngravingItem(fretDiagram->segment()) : toEngravingItem(fretDiagram);
+            if (fretDiagram->harmony()) {
+                newParent = parentOrDummy(fretDiagram->segment(), dummy());
+            } else {
+                newParent = fretDiagram;
+            }
         } else {
             ChordRest* chordRest = chordOrRest(destinationElement);
             if (chordRest) {
                 track = chordRest->track();
-                newParent = chordRest->segment();
+                newParent = parentOrDummy(chordRest->segment(), dummy());
             }
         }
 
-        if (track == muse::nidx || !newParent) {
+        if (track == muse::nidx || newParent == dummy()) {
             break;
         }
 

@@ -62,6 +62,7 @@ public:
     Dynamic(DummyParentOr<Segment> parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
     Segment* segment() const { return (Segment*)ownershipParent(); }
     Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 

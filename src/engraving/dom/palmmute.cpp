@@ -23,6 +23,7 @@
 #include "palmmute.h"
 
 #include "chordrest.h"
+#include "dummyparent.h"
 #include "part.h"
 #include "score.h"
 #include "staff.h"
@@ -88,7 +89,7 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp)
 //   PalmMute
 //---------------------------------------------------------
 
-PalmMute::PalmMute(DummyParentOr<EngravingItem> parent)
+PalmMute::PalmMute(DummyParent* parent)
     : ChordTextLineBase(ElementType::PALM_MUTE, parent)
 {
     initElementStyle(&palmMuteStyle);

@@ -24,6 +24,8 @@
 
 #include "types/typesconv.h"
 
+#include "dummyparent.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -41,6 +43,11 @@ const BagpipeNoteInfo BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[] = {
     { "HG", -1,  77 },
     { "HA", -2,  79 }
 };
+
+BagpipeEmbellishment::BagpipeEmbellishment(DummyParent* parent)
+    : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), m_embelType(EmbellishmentType(0))
+{
+}
 
 //---------------------------------------------------------
 //   resolveNoteList

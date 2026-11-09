@@ -268,6 +268,7 @@ public:
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 

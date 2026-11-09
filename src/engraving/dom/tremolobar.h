@@ -52,6 +52,7 @@ class TremoloBar final : public EngravingItem
 public:
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     PitchValues& points() { return m_points; }
     const PitchValues& points() const { return m_points; }
@@ -78,7 +79,7 @@ public:
 private:
 
     friend class Factory;
-    TremoloBar(DummyParentOr<EngravingItem> parent);
+    TremoloBar(DummyParentOr<Segment> parent);
 
     TremoloBarType parseTremoloBarTypeFromCurve(const PitchValues& curve) const;
     void updatePointsByTremoloBarType(const TremoloBarType type);

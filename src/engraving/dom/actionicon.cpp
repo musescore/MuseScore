@@ -22,6 +22,7 @@
 
 #include "actionicon.h"
 
+#include "dummyparent.h"
 #include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "mscore.h"
@@ -32,7 +33,7 @@ using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-ActionIcon::ActionIcon(DummyParentOr<EngravingItem> parent)
+ActionIcon::ActionIcon(DummyParent* parent)
     : EngravingItem(ElementType::ACTION_ICON, parent)
 {
     m_iconFont = Font(configuration()->iconsFontFamily(), Font::Type::Icon);

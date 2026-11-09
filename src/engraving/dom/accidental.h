@@ -237,6 +237,10 @@ class Accidental final : public EngravingItem
 public:
 
     Accidental* clone() const override { return new Accidental(*this); }
+    void setOwnershipParent(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent)
+    {
+        EngravingItem::setOwnershipParent(parent);
+    }
 
     Note* note() const;
 
@@ -315,7 +319,7 @@ private:
 
     friend class Factory;
 
-    Accidental(DummyParentOr<EngravingItem> parent);
+    Accidental(DummyParentOr<Note, Ambitus, Ornament, Trill, TrillSegment> parent);
 
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;

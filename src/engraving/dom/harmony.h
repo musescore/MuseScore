@@ -215,11 +215,12 @@ class Harmony final : public TextBase
     DECLARE_CLASSOF(ElementType::HARMONY)
 
 public:
-    Harmony(EngravingObject* parent = 0); // Segment or FretDiagram
+    Harmony(DummyParentOr<Segment, FretDiagram> parent);
     Harmony(const Harmony&);
     ~Harmony();
 
     Harmony* clone() const override { return new Harmony(*this); }
+    void setOwnershipParent(DummyParentOr<Segment, FretDiagram> parent) { EngravingItem::setOwnershipParent(parent); }
 
     int id() const; // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
 

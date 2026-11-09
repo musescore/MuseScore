@@ -43,6 +43,7 @@ public:
     double mag() const override { return layoutParent()->mag(); }
 
     StemSlash* clone() const override { return new StemSlash(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Chord* chord() const { return (Chord*)ownershipParent(); }
 

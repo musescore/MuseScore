@@ -130,7 +130,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         }
 
         Articulation* oldOrnament = toArticulation(item);
-        Ornament* newOrnament = Factory::createOrnament((ChordRest*)(paletteScore->dummy()));
+        Ornament* newOrnament = Factory::createOrnament(paletteScore->dummy());
         newOrnament->setSymId(oldOrnament->symId());
         cell->element.reset(newOrnament);
         return;

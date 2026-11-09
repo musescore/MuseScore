@@ -88,10 +88,11 @@ class Tie : public SlurTie
     DECLARE_CLASSOF(ElementType::TIE)
 
 public:
-    Tie(EngravingObject* parent = 0);
+    Tie(DummyParentOr<Note> parent);
     Tie(const Tie& t);
 
     Tie* clone() const override { return new Tie(*this); }
+    void setOwnershipParent(DummyParentOr<Note> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Anchor anchor() const override { return Anchor::NOTE; }
 
@@ -143,7 +144,7 @@ public:
     static void changeTieType(Tie* oldTie, Note* endNote = nullptr);
 
 protected:
-    Tie(const ElementType& type, EngravingObject* parent = nullptr);
+    Tie(const ElementType& type, DummyParentOr<Note> parent);
 
     bool isInSpannerMap() const override { return false; }
 

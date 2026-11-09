@@ -57,9 +57,10 @@ class HarmonicMark final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::HARMONIC_MARK)
 
 public:
-    HarmonicMark(DummyParentOr<EngravingItem> parent);
+    HarmonicMark(DummyParent* parent);
 
     HarmonicMark* clone() const override { return new HarmonicMark(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 

@@ -104,7 +104,7 @@ EngravingObject* GlissandoSegment::propertyDelegate(Pid pid) const
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(DummyParentOr<EngravingItem> parent)
+Glissando::Glissando(DummyParentOr<Note> parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&glissandoElementStyle);

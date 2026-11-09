@@ -65,9 +65,10 @@ public:
         OPEN, CLOSED
     };
 
-    Volta(DummyParentOr<EngravingItem> parent);
+    Volta(DummyParent* parent);
 
     Volta* clone() const override { return new Volta(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
     Anchor anchor() const override { return Anchor::MEASURE; }
 

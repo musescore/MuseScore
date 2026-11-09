@@ -25,6 +25,7 @@
 
 #include "types/typesconv.h"
 
+#include "dummyparent.h"
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -112,7 +113,7 @@ static const ElementStyle vibratoStyle {
 //   Vibrato
 //---------------------------------------------------------
 
-Vibrato::Vibrato(DummyParentOr<EngravingItem> parent)
+Vibrato::Vibrato(DummyParent* parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);

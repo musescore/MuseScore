@@ -22,6 +22,7 @@
 
 #include "letring.h"
 
+#include "dummyparent.h"
 #include "score.h"
 #include "system.h"
 #include "text.h"
@@ -76,7 +77,7 @@ LetRingSegment::LetRingSegment(LetRing* sp)
 //   LetRing
 //---------------------------------------------------------
 
-LetRing::LetRing(DummyParentOr<EngravingItem> parent)
+LetRing::LetRing(DummyParent* parent)
     : ChordTextLineBase(ElementType::LET_RING, parent)
 {
     initElementStyle(&letRingStyle);

@@ -1072,7 +1072,6 @@ bool GuitarPro4::read(IODevice* io)
                 if (slide != 2) {
                     if (hasSlur && (slurs[staffIdx] == 0)) {
                         Slur* slur = Factory::createSlur(score->dummy());
-                        slur->setOwnershipParent(0);
                         slur->setTrack(track);
                         slur->setTrack2(track);
                         slur->setTick(cr->tick());

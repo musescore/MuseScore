@@ -39,6 +39,7 @@ public:
     bool isEditAllowed(EditData&) const override;
 
     Expression* clone() const override { return new Expression(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Segment* segment() const { return toSegment(ownershipParent()); }
 

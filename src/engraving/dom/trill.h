@@ -75,10 +75,11 @@ class Trill final : public SLine
     DECLARE_CLASSOF(ElementType::TRILL)
 
 public:
-    Trill(DummyParentOr<EngravingItem> parent);
+    Trill(DummyParent* parent);
     Trill(const Trill& t);
 
     Trill* clone() const override { return new Trill(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
     EngravingItem* linkedClone() override;
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
