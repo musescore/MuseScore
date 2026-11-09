@@ -376,15 +376,29 @@ const AccountInfo& AbstractCloudService::accountInfo() const
 
 Ret AbstractCloudService::checkCloudIsAvailable() const
 {
+    //! NOTE: must not depend on async messages - may be called while they are being processed
+    RetVal<Progress> progress = m_networkManager->get(m_serverConfig.serverAvailabilityUrl, nullptr, m_serverConfig.headers);
+    if (!progress.ret) {
+        return progress.ret;
+    }
+
     Ret ret = make_ok();
     QEventLoop loop;
 
-    checkCloudIsAvailableAsync().onResolve(this, [&ret, &loop](const Ret& r) {
-        ret = r;
+    progress.val.finished().onReceive(this, [&ret, &loop](const ProgressResult& res) {
+        ret = res.ret;
         loop.quit();
     });
 
+    QTimer timer;
+    timer.setSingleShot(true);
+    QObject::connect(&timer, &QTimer::timeout, [&progress]() {
+        progress.val.cancel();
+    });
+    timer.start(5000);
+
     loop.exec();
+    timer.stop();
 
     return ret;
 }

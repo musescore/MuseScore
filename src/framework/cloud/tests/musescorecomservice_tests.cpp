@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QUrlQuery>
 
+#include "async/async.h"
 #include "async/asyncable.h"
 #include "async/promise.h"
 #include "async/processevents.h"
@@ -66,7 +67,9 @@ const std::string DELETE_("DELETE");
 
 const QString HOST("desktop.musescore.com");
 const QString ACCOUNT_INFO_PATH("/editor/v1/me");
+const QString HEALTHCHECK_PATH("/editor/v1/system/healthcheck");
 const QString REFRESH_TOKENS_PATH("/editor/v1/oauth/refresh");
+const QString LOGOUT_PATH("/editor/v1/oauth/logout");
 const QString SCORE_INFO_PATH("/editor/v1/score/info");
 const QString SCORES_LIST_PATH("/editor/v2/collection/scores");
 const QString SCORE_DOWNLOAD_PATH("/editor/v1/score/download");
@@ -81,7 +84,9 @@ const QString CONVERT_REVIEW_PATH("/editor/v1/score/convert/review");
 const QString CONVERT_COMMENT_PATH("/editor/v1/score/convert/comment");
 
 const std::string CLIENT_ID("client-id");
+const std::string TOKENS_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 const QString ACCESS_TOKEN("access-token");
+const QString REFRESH_TOKEN("refresh-token");
 const QString NEW_ACCESS_TOKEN("new-access-token");
 const QString NEW_REFRESH_TOKEN("new-refresh-token");
 
@@ -452,6 +457,12 @@ protected:
 
 TEST_F(Cloud_MuseScoreComServiceTest, Init_DownloadsAccountInfo)
 {
+    // [GIVEN] Subscribed to the authorization state
+    std::vector<bool> notified;
+    m_service->userAuthorized().ch.onReceive(this, [&notified](bool authorized) {
+        notified.push_back(authorized);
+    });
+
     // [WHEN] The service is initialized
     m_service->init();
     processMessages();
@@ -471,6 +482,7 @@ TEST_F(Cloud_MuseScoreComServiceTest, Init_DownloadsAccountInfo)
 
     // [THEN] The user is authorized
     EXPECT_TRUE(m_service->userAuthorized().val);
+    EXPECT_EQ(notified, std::vector<bool>({ true }));
 
     const AccountInfo& info = m_service->accountInfo();
     EXPECT_EQ(info.id, QString::number(ACCOUNT_ID));
@@ -495,12 +507,36 @@ TEST_F(Cloud_MuseScoreComServiceTest, Init_InvalidAccountInfo_NotAuthorized)
     // [GIVEN] The server replies with an account without a name
     willReply(ACCOUNT_INFO_PATH, R"({ "id": 7 })");
 
+    // [GIVEN] Subscribed to the authorization state
+    std::vector<bool> notified;
+    m_service->userAuthorized().ch.onReceive(this, [&notified](bool authorized) {
+        notified.push_back(authorized);
+    });
+
     // [WHEN] The service is initialized
     m_service->init();
     processMessages();
     finishRequest(ACCOUNT_INFO_PATH);
 
     // [THEN] The user is not authorized
+    EXPECT_FALSE(m_service->userAuthorized().val);
+
+    // [THEN] Nothing is notified, since the state hasn't changed
+    EXPECT_TRUE(notified.empty());
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, Init_CorruptTokensFile_NotAuthorized)
+{
+    // [GIVEN] The tokens file can't be parsed
+    ON_CALL(*m_fileSystem, readFile(_))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(ByteArray("not a json"))));
+
+    // [WHEN] The service is initialized
+    m_service->init();
+    processMessages();
+
+    // [THEN] Nothing is requested, the user is not authorized
+    EXPECT_TRUE(m_pendingRequests.empty());
     EXPECT_FALSE(m_service->userAuthorized().val);
 }
 
@@ -545,8 +581,124 @@ TEST_F(Cloud_MuseScoreComServiceTest, Init_TokenExpired_RefreshesTokensAndRetrie
 }
 
 // =============================================
+// Cloud availability
+// =============================================
+
+TEST_F(Cloud_MuseScoreComServiceTest, CheckCloudIsAvailableAsync_Available_ResolvesOk)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    // [WHEN] Check whether the cloud is available
+    std::optional<Ret> ret;
+    watch(m_service->checkCloudIsAvailableAsync(), ret);
+    processMessages();
+
+    // [THEN] The healthcheck is requested without the access token
+    const Request& request = pendingRequest(HEALTHCHECK_PATH);
+    EXPECT_EQ(request.verb, GET);
+    EXPECT_EQ(request.url.host(), HOST);
+    EXPECT_TRUE(queryValue(request.url, "access_token").isEmpty());
+    EXPECT_FALSE(ret.has_value());
+
+    // [WHEN] The server replies
+    finishRequest(HEALTHCHECK_PATH);
+
+    // [THEN] The cloud is available
+    ASSERT_TRUE(ret.has_value());
+    EXPECT_TRUE(*ret);
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, CheckCloudIsAvailableAsync_NotAvailable_ResolvesWithError)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    // [WHEN] Check whether the cloud is available, the request fails
+    std::optional<Ret> ret;
+    watch(m_service->checkCloudIsAvailableAsync(), ret);
+    processMessages();
+
+    const Ret error = muse::network::make_ret(muse::network::Err::NetworkError);
+    finishRequest(HEALTHCHECK_PATH, error);
+
+    // [THEN] The error is returned
+    ASSERT_TRUE(ret.has_value());
+    EXPECT_EQ(ret->code(), error.code());
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, CheckCloudIsAvailable_CalledFromAsyncMessage_DoesNotHang)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    //! NOTE: fires inside the nested event loop of checkCloudIsAvailable
+    QTimer::singleShot(0, [this]() {
+        finishRequest(HEALTHCHECK_PATH);
+    });
+
+    // [WHEN] Check whether the cloud is available while async messages are being processed
+    std::optional<Ret> ret;
+    async::Async::call(this, [this, &ret]() {
+        ret = m_service->checkCloudIsAvailable();
+    });
+    processMessages();
+
+    // [THEN] The cloud is available
+    ASSERT_TRUE(ret.has_value());
+    EXPECT_TRUE(*ret);
+}
+
+// =============================================
 // Tokens refreshing
 // =============================================
+
+TEST_F(Cloud_MuseScoreComServiceTest, TokenExpired_RetryAlsoUnauthorized_NoSecondRefresh)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    willReply(REFRESH_TOKENS_PATH, NEW_TOKENS_JSON);
+
+    // [GIVEN] The access token has expired
+    std::optional<Ret> ret;
+    watch(m_service->deleteScore(SCORE_ID), ret);
+    processMessages();
+    finishRequest(SCORE_DELETE_PATH, TOKEN_EXPIRED_RET);
+    finishRequest(REFRESH_TOKENS_PATH);
+
+    // [WHEN] The retried request is unauthorized too
+    finishRequest(SCORE_DELETE_PATH, TOKEN_EXPIRED_RET);
+
+    // [THEN] The tokens are not refreshed again
+    EXPECT_TRUE(m_pendingRequests.empty());
+
+    // [THEN] The error is returned
+    ASSERT_TRUE(ret.has_value());
+    EXPECT_EQ(ret->code(), code(cloud::Err::Status401_AuthorizationRequired));
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, TokensChangedInAnotherInstance_NextRequestUsesNewToken)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    // [GIVEN] Another instance has saved new tokens
+    ON_CALL(*m_fileSystem, readFile(_))
+    .WillByDefault(Return(RetVal<ByteArray>::make_ok(ByteArray::fromQByteArray(NEW_TOKENS_JSON))));
+
+    // [WHEN] The tokens resource is reported as changed
+    m_resourceChanged.send(TOKENS_RESOURCE_NAME);
+    processMessages();
+
+    // [WHEN] Delete a score
+    std::optional<Ret> ret;
+    watch(m_service->deleteScore(SCORE_ID), ret);
+    processMessages();
+
+    // [THEN] The new access token is used
+    EXPECT_EQ(queryValue(pendingRequest(SCORE_DELETE_PATH).url, "access_token"), NEW_ACCESS_TOKEN);
+}
 
 TEST_F(Cloud_MuseScoreComServiceTest, UploadAudio_TokenExpired_RefreshesTokensAndRetries)
 {
@@ -661,6 +813,79 @@ TEST_F(Cloud_MuseScoreComServiceTest, UploadAudio_OtherError_NoTokensRefresh)
     // [THEN] The upload fails, the tokens are not refreshed
     EXPECT_TRUE(m_pendingRequests.empty());
     EXPECT_FALSE(progressResult().ret);
+}
+
+// =============================================
+// Signing out
+// =============================================
+
+TEST_F(Cloud_MuseScoreComServiceTest, SignOut_RequestsLogoutAndRemovesTokens)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    // [GIVEN] Subscribed to the authorization state
+    std::vector<bool> notified;
+    m_service->userAuthorized().ch.onReceive(this, [&notified](bool authorized) {
+        notified.push_back(authorized);
+    });
+
+    // [WHEN] Sign out
+    m_service->signOut();
+
+    // [THEN] The logout is requested with the refresh token
+    const Request& request = pendingRequest(LOGOUT_PATH);
+    EXPECT_EQ(request.verb, GET);
+    EXPECT_EQ(queryValue(request.url, "access_token"), ACCESS_TOKEN);
+    EXPECT_EQ(queryValue(request.url, "refresh_token"), REFRESH_TOKEN);
+
+    // [THEN] The tokens are removed once the logout is finished
+    EXPECT_CALL(*m_fileSystem, remove(_, _))
+    .WillOnce(Return(muse::make_ok()));
+
+    // [WHEN] The logout is finished
+    finishRequest(LOGOUT_PATH);
+
+    // [THEN] The user is not authorized
+    EXPECT_FALSE(m_service->userAuthorized().val);
+    EXPECT_FALSE(m_service->accountInfo().isValid());
+
+    // [THEN] The change is notified
+    EXPECT_EQ(notified, std::vector<bool>({ false }));
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, SignOut_LogoutFailed_StillRemovesTokens)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    // [THEN] The tokens are removed
+    EXPECT_CALL(*m_fileSystem, remove(_, _))
+    .WillOnce(Return(muse::make_ok()));
+
+    // [WHEN] Sign out, the logout request fails
+    m_service->signOut();
+    finishRequest(LOGOUT_PATH, statusRet(500));
+
+    // [THEN] The user is not authorized
+    EXPECT_FALSE(m_service->userAuthorized().val);
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, SignOut_NotAuthorized_NoRequest)
+{
+    // [GIVEN] The service is initialized without the tokens file
+    initServiceWithoutTokens();
+
+    // [THEN] Nothing is removed
+    EXPECT_CALL(*m_fileSystem, remove(_, _))
+    .Times(0);
+
+    // [WHEN] Sign out
+    m_service->signOut();
+    processMessages();
+
+    // [THEN] Nothing is requested
+    EXPECT_TRUE(m_pendingRequests.empty());
 }
 
 // =============================================
@@ -890,6 +1115,39 @@ TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoresList_NoAccessToken_Rejects)
     EXPECT_TRUE(m_pendingRequests.empty());
     ASSERT_TRUE(rejectCode.has_value());
     EXPECT_EQ(*rejectCode, code(cloud::Err::AccessTokenIsEmpty));
+}
+
+TEST_F(Cloud_MuseScoreComServiceTest, DownloadScoresList_TokenExpired_RefreshesTokensAndRetries)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    willReply(REFRESH_TOKENS_PATH, NEW_TOKENS_JSON);
+    willReply(SCORES_LIST_PATH, SCORES_LIST_JSON);
+
+    // [WHEN] Download the scores
+    std::optional<ScoresList> list;
+    watch(m_service->downloadScoresList(10, 1), list);
+    processMessages();
+
+    EXPECT_EQ(queryValue(pendingRequest(SCORES_LIST_PATH).url, "access_token"), ACCESS_TOKEN);
+
+    // [WHEN] The access token has expired
+    finishRequest(SCORES_LIST_PATH, TOKEN_EXPIRED_RET);
+
+    // [THEN] The tokens are refreshed
+    finishRequest(REFRESH_TOKENS_PATH);
+
+    // [THEN] The list is requested again with the new access token
+    EXPECT_EQ(queryValue(pendingRequest(SCORES_LIST_PATH).url, "access_token"), NEW_ACCESS_TOKEN);
+    EXPECT_FALSE(list.has_value());
+
+    // [WHEN] The retried request succeeds
+    finishRequest(SCORES_LIST_PATH);
+
+    // [THEN] The scores are received
+    ASSERT_TRUE(list.has_value());
+    EXPECT_EQ(list->items.size(), 2);
 }
 
 // =============================================

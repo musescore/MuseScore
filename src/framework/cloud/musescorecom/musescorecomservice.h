@@ -86,6 +86,8 @@ private:
 
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 
+    async::Promise<Ret> doDownloadScoresList(int scoresPerBatch, int batchNumber, std::shared_ptr<ScoresList> list);
+
     async::Promise<Ret> doDownloadScore(int scoreId, DevicePtr scoreData, const QString& hash, const QString& secret, ProgressPtr progress);
 
     async::Promise<Ret> doDeleteScore(int scoreId);
