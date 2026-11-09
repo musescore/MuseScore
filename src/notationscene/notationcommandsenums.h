@@ -83,6 +83,17 @@ struct DurationTypeContract {
     } };
 };
 
+struct ChangeDurationModeContract {
+    static constexpr std::string_view key = "mode";
+    static constexpr ChangeDurationMode def = ChangeDurationMode::Double;
+    static constexpr EnumTable<ChangeDurationMode, 4> table { {
+        { "double", ChangeDurationMode::Double, "double" },
+        { "halve", ChangeDurationMode::Halve, "halve" },
+        { "double-dotted", ChangeDurationMode::DoubleDotted, "double dotted" },
+        { "halve-dotted", ChangeDurationMode::HalveDotted, "halve dotted" },
+    } };
+};
+
 struct NoteAddingModeContract {
     static constexpr std::string_view key = "mode";
     static constexpr NoteAddingMode def = NoteAddingMode::CurrentChord;
@@ -178,6 +189,7 @@ namespace muse::rcommand {
 DECLARE_ENUM_CONTRACT(mu::notation::NoteName, mu::notation::NoteNameContract);
 DECLARE_ENUM_CONTRACT(mu::notation::NoteInputMethod, mu::notation::NoteInputMethodContract);
 DECLARE_ENUM_CONTRACT(mu::engraving::DurationType, mu::notation::DurationTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ChangeDurationMode, mu::notation::ChangeDurationModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::NoteAddingMode, mu::notation::NoteAddingModeContract);
 DECLARE_ENUM_CONTRACT(mu::engraving::TupletNumberType, mu::notation::TupletNumberTypeContract);
 DECLARE_ENUM_CONTRACT(mu::engraving::TupletBracketType, mu::notation::TupletBracketTypeContract);

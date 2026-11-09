@@ -251,6 +251,14 @@ struct TransposeOptions
     bool needTransposeDoubleSharpsFlats = false;
 };
 
+enum class ChangeDurationMode : unsigned char
+{
+    Double,
+    Halve,
+    DoubleDotted,
+    HalveDotted,
+};
+
 enum class ScoreConfigType : unsigned char
 {
     ShowInvisibleElements,

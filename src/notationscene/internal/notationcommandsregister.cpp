@@ -335,62 +335,16 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME)
     },
 
-    CommandInfo{
-        SET_DOUBLE_DURATION_COMMAND,
-        TranslatableString("action", "Double duration"),
-        TranslatableString("action", "Double selected duration"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SET_HALVE_DURATION_COMMAND,
-        TranslatableString("action", "Halve duration"),
-        TranslatableString("action", "Halve selected duration"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SET_DOUBLE_DURATION_DOTTED_COMMAND,
-        TranslatableString("action", "Double selected duration (dotted)"),
-        TranslatableString("action", "Double selected duration (includes dotted values)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SET_HALVE_DURATION_DOTTED_COMMAND,
-        TranslatableString("action", "Halve selected duration (dotted)"),
-        TranslatableString("action", "Halve selected duration (includes dotted values)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_DOT_COMMAND,
-        TranslatableString("action", "Augmentation dot"),
-        TranslatableString("action", "Toggle duration dot"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_DOTTED)
-    },
-    CommandInfo{
-        TOGGLE_DOT2_COMMAND,
-        TranslatableString("action", "Double augmentation dot"),
-        TranslatableString("action", "Toggle duration dot: double"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_DOTTED_2)
-    },
-    CommandInfo{
-        TOGGLE_DOT3_COMMAND,
-        TranslatableString("action", "Triple augmentation dot"),
-        TranslatableString("action", "Toggle duration dot: triple"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_DOTTED_3)
-    },
-    CommandInfo{
-        TOGGLE_DOT4_COMMAND,
-        TranslatableString("action", "Quadruple augmentation dot"),
-        TranslatableString("action", "Toggle duration dot: quadruple"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_DOTTED_4)
-    },
+    makeCommandInfo<ChangeDurationCommand>(),
+    makeCommandInfo<ChangeDurationDoubleCommand>(),
+    makeCommandInfo<ChangeDurationHalveCommand>(),
+    makeCommandInfo<ChangeDurationDoubleDottedCommand>(),
+    makeCommandInfo<ChangeDurationHalveDottedCommand>(),
+    makeCommandInfo<ToggleDotsCommand>(),
+    makeCommandInfo<ToggleDotCommand>(),
+    makeCommandInfo<ToggleDot2Command>(),
+    makeCommandInfo<ToggleDot3Command>(),
+    makeCommandInfo<ToggleDot4Command>(),
     CommandInfo{
         TOGGLE_REST_COMMAND,
         TranslatableString("action", "Rest"),

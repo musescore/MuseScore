@@ -173,6 +173,18 @@ void NotationActionController::init()
 
     registerRequestCommand<RequestNoteInputStateCommand>(&Controller::requestNoteInputState);
 
+    registerCommand<ChangeDurationCommand>(&Controller::changeDuration);
+    registerCommand<ChangeDurationDoubleCommand>([this]() { return changeDuration(ChangeDurationMode::Double); });
+    registerCommand<ChangeDurationHalveCommand>([this]() { return changeDuration(ChangeDurationMode::Halve); });
+    registerCommand<ChangeDurationDoubleDottedCommand>([this]() { return changeDuration(ChangeDurationMode::DoubleDotted); });
+    registerCommand<ChangeDurationHalveDottedCommand>([this]() { return changeDuration(ChangeDurationMode::HalveDotted); });
+
+    registerCommand<ToggleDotsCommand>(&Controller::toggleDots);
+    registerCommand<ToggleDotCommand>([this]() { return toggleDots(1); });
+    registerCommand<ToggleDot2Command>([this]() { return toggleDots(2); });
+    registerCommand<ToggleDot3Command>([this]() { return toggleDots(3); });
+    registerCommand<ToggleDot4Command>([this]() { return toggleDots(4); });
+
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -207,17 +219,7 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
-    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
-    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
-    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
-    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
-
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
-
-    registerCommand(TOGGLE_DOT_COMMAND, [this]() { toggleDots(1); });
-    registerCommand(TOGGLE_DOT2_COMMAND, [this]() { toggleDots(2); });
-    registerCommand(TOGGLE_DOT3_COMMAND, [this]() { toggleDots(3); });
-    registerCommand(TOGGLE_DOT4_COMMAND, [this]() { toggleDots(4); });
 
     registerCommand(TOGGLE_REST_COMMAND, [this]() { toggleRest(); });
 
@@ -1123,19 +1125,28 @@ void NotationActionController::toggleRest()
     }
 }
 
-void NotationActionController::toggleDots(int dots)
+muse::Ret NotationActionController::toggleDots(const ToggleDotsCommand& command)
+{
+    return toggleDots(command.dots);
+}
+
+muse::Ret NotationActionController::toggleDots(uint dots)
 {
     TRACEFUNC;
 
+    if (dots > engraving::MAX_DOTS) {
+        return muse::make_ret(Ret::Code::BadArgs);
+    }
+
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
     if (interaction->selection()->isNone()) {
         if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
-            return;
+            return muse::make_ret(Ret::Code::NotAllowed);
         }
 
         startNoteInput();
@@ -1143,7 +1154,7 @@ void NotationActionController::toggleDots(int dots)
 
     if (!noteInput->isNoteInputMode() || !configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
         interaction->toggleDotsForSelection(dots);
-        return;
+        return muse::make_ok();
     }
 
     noteInput->toggleDots(dots);
@@ -1152,6 +1163,8 @@ void NotationActionController::toggleDots(int dots)
         || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
         seekAndPlaySelectedElement();
     }
+
+    return muse::make_ok();
 }
 
 DurationType NotationActionController::currentDurationType() const
@@ -1618,26 +1631,51 @@ void NotationActionController::putTuplet(int tupletCount)
     putTuplet(options);
 }
 
-void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDots)
+muse::Ret NotationActionController::changeDuration(const ChangeDurationCommand& command)
+{
+    return changeDuration(command.mode);
+}
+
+muse::Ret NotationActionController::changeDuration(ChangeDurationMode mode)
 {
     TRACEFUNC;
 
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
 
     if (noteInput->isNoteInputMode()) {
-        if (steps > 0) {
-            noteInput->halveNoteInputDuration();
-        } else {
+        switch (mode) {
+        case ChangeDurationMode::Double:
+        case ChangeDurationMode::DoubleDotted:
             noteInput->doubleNoteInputDuration();
+            break;
+        case ChangeDurationMode::Halve:
+        case ChangeDurationMode::HalveDotted:
+            noteInput->halveNoteInputDuration();
+            break;
         }
     } else {
-        interaction->increaseDecreaseDuration(steps, stepByDots);
+        switch (mode) {
+        case ChangeDurationMode::Double:
+            interaction->increaseDecreaseDuration(-1, false);
+            break;
+        case ChangeDurationMode::Halve:
+            interaction->increaseDecreaseDuration(1, false);
+            break;
+        case ChangeDurationMode::DoubleDotted:
+            interaction->increaseDecreaseDuration(-1, true);
+            break;
+        case ChangeDurationMode::HalveDotted:
+            interaction->increaseDecreaseDuration(1, true);
+            break;
+        }
     }
+
+    return muse::make_ok();
 }
 
 void NotationActionController::realtimeAdvance()
