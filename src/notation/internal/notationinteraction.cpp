@@ -8416,7 +8416,7 @@ void NotationInteraction::transposeDiatonicAlterations(mu::engraving::TransposeD
     });
 }
 
-void NotationInteraction::showSelection()
+void NotationInteraction::showLocation()
 {
     auto* e = score()->selection().element();
     if (!e) {

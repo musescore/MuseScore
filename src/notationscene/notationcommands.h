@@ -321,10 +321,10 @@ struct OpenSelectionOptionsCommand {
     sci_auto availabilities = Availability::UI;
 };
 
-struct ShowSelectionCommand {
-    sci_auto id = Command("command://notation/show-selection");
-    sci_auto title = MnemonicString("action", "Show selection");
-    sci_auto description = TranslatableString("action", "Show selection");
+struct ShowLocationCommand {
+    sci_auto id = Command("command://notation/show-location");
+    sci_auto title = MnemonicString("action", "Show location");
+    sci_auto description = TranslatableString("action", "Show current location in score");
     sci_auto availabilities = Availability::UI;
 };
 

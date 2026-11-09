@@ -116,7 +116,20 @@ static const std::vector<Command> NOT_TEXT_EDITING_COMMANDS = {
     TOGGLE_MMREST_COMMAND,
 };
 
-static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
+static const std::vector<Command> NOTE_INPUT_COMMANDS = {
+    ToggleNoteInputCommand::id,
+    ToggleNoteInputDefaultCommand::id,
+    ToggleNoteInputByNameCommand::id,
+    ToggleNoteInputByDurationCommand::id,
+    ToggleNoteInputRhythmCommand::id,
+    ToggleNoteInputRepitchCommand::id,
+    ToggleNoteInputRealtimeAutoCommand::id,
+    ToggleNoteInputRealtimeManualCommand::id,
+    ToggleNoteInputTimewiseCommand::id,
+    ToggleInsertModeCommand::id
+};
+
+static const std::map<Command, NoteInputMethod> NOTE_INPUT_METHODS = {
     { ToggleNoteInputDefaultCommand::id, NoteInputMethod::DEFAULT },
     { ToggleNoteInputByNameCommand::id, NoteInputMethod::BY_NOTE_NAME },
     { ToggleNoteInputByDurationCommand::id, NoteInputMethod::BY_DURATION },
@@ -344,11 +357,11 @@ void NotationCommandsState::init()
     });
 
     controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
-        updateCommandStates(commands(NOTE_INPUT_COMMANDS));
+        updateCommandStates(NOTE_INPUT_COMMANDS);
     });
 
     controller()->noteInputStateChanged().onNotify(this, [this]() {
-        updateCommandStates(commands(NOTE_INPUT_COMMANDS));
+        updateCommandStates(NOTE_INPUT_COMMANDS);
         updateCommandStates(commands(DURATION_COMMANDS));
         updateCommandStates(commands(DOT_COUNT_COMMANDS));
         updateCommandStates({ ToggleRestCommand::id });
@@ -453,10 +466,13 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
     }
 
     if (muse::contains(NOTE_INPUT_COMMANDS, command)) {
-        return CommandState(controller()->isNoteInputAllowed(),
-                            controller()->isNoteInputMode() && controller()->noteInputMethod() == NOTE_INPUT_COMMANDS.at(command));
-    } else if (command == REALTIME_ADVANCE_COMMAND) {
-        return CommandState(controller()->isNoteInputMode(), false);
+        if (muse::contains(NOTE_INPUT_METHODS, command)) {
+            return CommandState(controller()->isNoteInputAllowed(),
+                                controller()->isNoteInputMode()
+                                && controller()->noteInputMethod() == NOTE_INPUT_METHODS.at(command));
+        } else {
+            return CommandState(controller()->isNoteInputMode(), false);
+        }
     }
 
     if (muse::contains(DURATION_COMMANDS, command)) {

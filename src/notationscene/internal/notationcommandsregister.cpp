@@ -162,7 +162,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddToSelectionEndScoreCommand>(),
 
     makeCommandInfo<OpenSelectionOptionsCommand>(),
-    makeCommandInfo<ShowSelectionCommand>(),
+    makeCommandInfo<ShowLocationCommand>(),
 
     // note input
     makeCommandInfo<ToggleNoteInputCommand>(),
