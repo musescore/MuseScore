@@ -100,7 +100,10 @@ static JsonObject toObj(const Font& font)
     obj["type"] = static_cast<int>(font.type());
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
+    obj["bold"] = font.bold();
     obj["italic"] = font.italic();
+    obj["underline"] = font.underline();
+    obj["strike"] = font.strike();
     obj["hinting"] = static_cast<int>(font.hinting());
     obj["no_merging"] = font.noFontMerging();
     return obj;
@@ -111,7 +114,10 @@ static void fromObj(const JsonObject& obj, Font& font)
     font.setFamily(obj.value("family").toString(), static_cast<Font::Type>(obj.value("type").toInt()));
     font.setPointSizeF(obj.value("pointSize").toDouble());
     font.setWeight(static_cast<Font::Weight>(obj.value("weight").toInt()));
+    font.setBold(obj.value("bold").toBool());
     font.setItalic(obj.value("italic").toBool());
+    font.setUnderline(obj.value("underline").toBool());
+    font.setStrike(obj.value("strike").toBool());
     font.setHinting(static_cast<Font::Hinting>(obj.value("hinting").toInt()));
     font.setNoFontMerging(obj.value("no_merging").toBool());
 }
