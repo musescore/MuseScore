@@ -32,6 +32,7 @@
 #include "../inotationconfiguration.h"
 
 namespace mu::notation {
+
 class NotationConfiguration : public INotationConfiguration, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
@@ -312,4 +313,5 @@ private:
     muse::async::Notification m_playbackCueColorChanged;
     muse::async::Notification m_playbackCursorColorChanged;
 };
-}
+
+} // namespace mu::notation

@@ -280,8 +280,8 @@ private:
 
     void onPlayingChanged();
     void updatePlaybackCursorInterpolated();
-    void movePlaybackCue(muse::midi::tick_t tick);
-    void movePlaybackCursor(muse::midi::tick_t tick);
+    void movePlaybackCue(muse::midi::tick_t newTick);
+    void movePlaybackCursor(muse::midi::tick_t newTick);
 
     void updatePlaybackCursorsVisibility();
     void updatePlaybackCue();

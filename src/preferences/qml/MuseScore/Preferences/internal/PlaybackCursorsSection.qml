@@ -34,10 +34,10 @@ BaseSection {
     property alias playbackCueColor: playbackCueColorPicker.color
     property alias playbackCursorColor: playbackCursorColorPicker.color
 
-    signal showPlaybackCueInNormalModeChangeRequested(show)
-    signal showPlaybackCursorInNormalModeChangeRequested(show)
-    signal playbackCueColorChangeRequested(newColor)
-    signal playbackCursorColorChangeRequested(newColor)
+    signal showPlaybackCueInNormalModeChangeRequested(bool show)
+    signal showPlaybackCursorInNormalModeChangeRequested(bool show)
+    signal playbackCueColorChangeRequested(color newColor)
+    signal playbackCursorColorChangeRequested(color newColor)
 
     navigation.direction: NavigationPanel.Both
 
@@ -96,7 +96,7 @@ BaseSection {
 
             allowAlpha: true
 
-            onNewColorSelected: function(newColor) {
+            onNewColorSelected: function(newColor: color) {
                 root.playbackCueColorChangeRequested(newColor)
             }
         }
@@ -119,7 +119,7 @@ BaseSection {
 
             allowAlpha: true
 
-            onNewColorSelected: function(newColor) {
+            onNewColorSelected: function(newColor: color) {
                 root.playbackCursorColorChangeRequested(newColor)
             }
         }

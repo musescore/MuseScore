@@ -1705,24 +1705,24 @@ void AbstractNotationPaintView::updatePlaybackCursorInterpolated()
     movePlaybackCursor(estimatedTick);
 }
 
-void AbstractNotationPaintView::movePlaybackCue(muse::midi::tick_t tick)
+void AbstractNotationPaintView::movePlaybackCue(midi::tick_t newTick)
 {
     TRACEFUNC;
 
     RectF oldCursorRect = m_playbackCue->rect();
-    m_playbackCue->move(tick);
+    m_playbackCue->move(newTick);
 
     if (m_playbackCue->rect() != oldCursorRect) {
         onPlaybackCueRectChanged();
     }
 }
 
-void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
+void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t newTick)
 {
     TRACEFUNC;
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    m_playbackCursor->move(newTick);
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (newCursorRect != oldCursorRect) {

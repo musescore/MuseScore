@@ -22,8 +22,6 @@
 
 #include "playbackcue.h"
 
-using namespace mu::notation;
-
 QColor PlaybackCue::color() const
 {
     return configuration()->playbackCueColor();
@@ -33,3 +31,4 @@ bool PlaybackCue::isShownInNormalMode() const
 {
     return configuration()->showPlaybackCueInNormalMode();
 }
+

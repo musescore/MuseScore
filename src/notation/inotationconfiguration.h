@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <QColor>
 #include <optional>
 
 #include "modularity/imoduleinterface.h"
@@ -35,7 +34,10 @@
 #include "types/zoomtype.h"
 #include "types/automationlane.h"
 
+class QColor;
+
 namespace mu::notation {
+
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(INotationConfiguration)
@@ -266,4 +268,5 @@ public:
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<std::string> styleFileImportPathChanged() const = 0;
 };
-}
+
+} // namespace mu::notation

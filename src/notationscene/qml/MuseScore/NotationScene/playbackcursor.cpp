@@ -22,8 +22,6 @@
 
 #include "playbackcursor.h"
 
-using namespace mu::notation;
-
 QColor PlaybackCursor::color() const
 {
     return configuration()->playbackCursorColor();

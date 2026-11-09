@@ -40,7 +40,7 @@ namespace mu::notation {
 class SystemCursor : public muse::Contextable, public muse::async::Asyncable
 {
 protected:
-    explicit SystemCursor(muse::modularity::ContextPtr const& iocCtx)
+    explicit SystemCursor(const muse::modularity::ContextPtr& iocCtx)
       : muse::Contextable(iocCtx)
     {}
 
@@ -50,7 +50,7 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
+    void move(muse::midi::tick_t newTick);
 
     //! Re-resolves the rect for the current tick (e.g. after a relayout)
     void refresh();
@@ -68,7 +68,7 @@ protected:
     virtual QColor color() const = 0;
     virtual bool isShownInNormalMode() const = 0;
 
-    muse::RectF resolveCursorRectByTick(int tick) const;
+    muse::RectF resolveCursorRectByTick(int newTick) const;
 
     struct PlaybackCursorCache
     {
@@ -91,7 +91,7 @@ private:
     muse::midi::tick_t m_tick = 0;
     muse::RectF m_rect;
 
-    mu::notation::INotationPtr m_notation;
+    INotationPtr m_notation;
 };
 
 } // namespace mu::notation

@@ -36,12 +36,13 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace muse;
 
-static double systemBottomY(Score const* score, System const* system)
+static double systemBottomY(const Score* score, const System* system)
 {
     double bottomY = 0.0;
 
     for (size_t i = 0; i < score->nstaves(); ++i) {
         const SysStaff* ss = system->staff(i);
+
         if (!ss->show() || !score->staff(i)->show()) {
             continue;
         }
@@ -64,12 +65,12 @@ static RectF calculateRect(double x, const Score* score, const System* system, d
     };
 }
 
-static double interpolateXByTicks(int tick, int startTick, int endTick, double segmentStartX, double segmentEndX)
+static double interpolateXByTicks(int targetTick, int startTick, int endTick, double segmentStartX, double segmentEndX)
 {
-    int const durationTicks = endTick - startTick;
+    const int durationTicks = endTick - startTick;
 
     if (durationTicks > 0) {
-        return segmentStartX + (segmentEndX - segmentStartX) * double(tick - startTick) / double(durationTicks);
+        return segmentStartX + (segmentEndX - segmentStartX) * double(targetTick - startTick) / double(durationTicks);
     } else {
         return segmentStartX;
     }
@@ -109,10 +110,10 @@ void SystemCursor::setNotation(INotationPtr notation)
     m_cache.clear();
 }
 
-void SystemCursor::move(midi::tick_t _tick)
+void SystemCursor::move(midi::tick_t newTick)
 {
-    m_tick = _tick;
-    m_rect = resolveCursorRectByTick(_tick);
+    m_tick = newTick;
+    m_rect = resolveCursorRectByTick(newTick);
 }
 
 void SystemCursor::refresh()
@@ -126,19 +127,22 @@ midi::tick_t SystemCursor::tick() const
     return m_tick;
 }
 
-RectF SystemCursor::resolveCursorRectByTick(int _tick) const
+RectF SystemCursor::resolveCursorRectByTick(int newTick) const
 {
-    Score const* score = m_notation ? m_notation->elements()->msScore() : nullptr;
+    const Score* score = m_notation ? m_notation->elements()->msScore() : nullptr;
 
     if (!score) {
         return RectF();
     }
 
-    const Fraction f_tick = Fraction::fromTicks(_tick);
+    const Fraction fracTick = Fraction::fromTicks(newTick);
 
-    if (m_cache.segment && m_cache.segmentStartTick <= f_tick && f_tick < m_cache.segmentEndTick) {
-        double const x = interpolateXByTicks(
-            _tick, m_cache.segmentStartTick.ticks(), m_cache.segmentEndTick.ticks(), m_cache.segmentStartX,
+    if (m_cache.segment && m_cache.segmentStartTick <= fracTick && fracTick < m_cache.segmentEndTick) {
+        const double x = interpolateXByTicks(
+            newTick,
+            m_cache.segmentStartTick.ticks(),
+            m_cache.segmentEndTick.ticks(),
+            m_cache.segmentStartX,
             m_cache.segmentEndX
         );
 
@@ -148,11 +152,11 @@ RectF SystemCursor::resolveCursorRectByTick(int _tick) const
     const Measure* measure = nullptr;
     const System* system = nullptr;
 
-    if (m_cache.measure && m_cache.measure->tick() <= f_tick && f_tick < m_cache.measure->endTick()) {
+    if (m_cache.measure && m_cache.measure->tick() <= fracTick && fracTick < m_cache.measure->endTick()) {
         measure = m_cache.measure;
         system = m_cache.system;
     } else {
-        measure = score->tick2measureMM(f_tick);
+        measure = score->tick2measureMM(fracTick);
 
         if (!measure) {
             m_cache.clear();
@@ -167,11 +171,11 @@ RectF SystemCursor::resolveCursorRectByTick(int _tick) const
         }
     }
 
-    for (const Segment* s = measure->first(SegmentType::ChordRest); s;) {
-        const Fraction segmentStartTick = s->tick();
-        const double segmentStartX = s->canvasPos().x();
+    for (const Segment* currentSegment = measure->first(SegmentType::ChordRest); currentSegment;) {
+        const Fraction segmentStartTick = currentSegment->tick();
+        const double segmentStartX = currentSegment->canvasPos().x();
 
-        Segment const* nextSegment = s->next(SegmentType::ChordRest);
+        const Segment* nextSegment = currentSegment->next(SegmentType::ChordRest);
 
         while (nextSegment && !nextSegment->visible()) {
             nextSegment = nextSegment->next(SegmentType::ChordRest);
@@ -191,8 +195,8 @@ RectF SystemCursor::resolveCursorRectByTick(int _tick) const
             segmentEndX = endBar ? endBar->canvasPos().x() : measure->canvasPos().x() + measure->width();
         }
 
-        if (f_tick < segmentStartTick || f_tick >= segmentEndTick) {
-            s = nextSegment;
+        if (fracTick < segmentStartTick || fracTick >= segmentEndTick) {
+            currentSegment = nextSegment;
             continue;
         }
 
@@ -202,14 +206,18 @@ RectF SystemCursor::resolveCursorRectByTick(int _tick) const
         }
 
         m_cache.measure = measure;
-        m_cache.segment = s;
+        m_cache.segment = currentSegment;
         m_cache.segmentStartTick = segmentStartTick;
         m_cache.segmentEndTick = segmentEndTick;
         m_cache.segmentStartX = segmentStartX;
         m_cache.segmentEndX = segmentEndX;
 
-        double const x = interpolateXByTicks(
-            _tick, segmentStartTick.ticks(), segmentEndTick.ticks(), segmentStartX, segmentEndX
+        const double x = interpolateXByTicks(
+            newTick,
+            segmentStartTick.ticks(),
+            segmentEndTick.ticks(),
+            segmentStartX,
+            segmentEndX
         );
 
         return calculateRect(x, score, system, m_cache.systemBottomY);
@@ -229,7 +237,7 @@ void SystemCursor::setVisible(bool isVisible)
     m_visible = isVisible;
 }
 
-RectF const& SystemCursor::rect() const
+const RectF& SystemCursor::rect() const
 {
     return m_rect;
 }

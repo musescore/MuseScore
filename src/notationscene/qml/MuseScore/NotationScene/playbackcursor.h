@@ -24,22 +24,24 @@
 #ifndef PLAYBACK_CURSOR_H
 #define PLAYBACK_CURSOR_H
 
-#include "modularity/ioc.h"
 #include "systemcursor.h"
+#include "modularity/ioc.h"
 
 class QColor;
 
 namespace mu::notation {
+
 class PlaybackCursor : public SystemCursor
 {
 public:
-    explicit PlaybackCursor(muse::modularity::ContextPtr const& iocCtx)
+    explicit PlaybackCursor(const muse::modularity::ContextPtr& iocCtx)
       : SystemCursor(iocCtx)
     {}
 
 protected:
     QColor color() const override;
-    bool   isShownInNormalMode() const override;
+    bool isShownInNormalMode() const override;
 };
+
 } // namespace mu::notation
 #endif

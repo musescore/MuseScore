@@ -24,16 +24,17 @@
 #ifndef PLAYBACK_CUE_H
 #define PLAYBACK_CUE_H
 
-#include "modularity/ioc.h"
 #include "systemcursor.h"
+#include "modularity/ioc.h"
 
 class QColor;
 
 namespace mu::notation {
+
 class PlaybackCue : public SystemCursor
 {
 public:
-    explicit PlaybackCue(muse::modularity::ContextPtr const& iocCtx)
+    explicit PlaybackCue(const muse::modularity::ContextPtr& iocCtx)
       : SystemCursor(iocCtx)
     {}
 
@@ -41,5 +42,6 @@ protected:
     QColor color() const override;
     bool isShownInNormalMode() const override;
 };
+
 } // namespace mu::notation
 #endif
