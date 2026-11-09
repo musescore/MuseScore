@@ -86,17 +86,40 @@ function findInTree(name)
     return walkTree(api.navigation.down, name)
 }
 
-function doGoToPalette(name, addPalette)
+//! NOTE The add palettes popup lists only the palettes that are not in the tree,
+//! so it is a quick check instead of walking the whole tree. Returns false if the palette is in the tree
+function addPaletteIfAbsent(name)
 {
-    var ok = findInTree(name)
-    if (!ok && addPalette) {
-        Navigation.triggerControl("NavigationLeftPanel", "PalettesHeader", "AddPalettesBtn")
-        Navigation.triggerControlInPopup("AddPalettesPopup", "Add"+name+"Palette")
+    Navigation.triggerControl("NavigationLeftPanel", "PalettesHeader", "AddPalettesBtn")
+    var section = Navigation.popupOpened("AddPalettesPopup")
 
-        ok = findInTree(name)
+    var control = "Add" + name + "Palette"
+    if (!Navigation.hasControl(section, "AddPalettesPopup", control)) {
+        Navigation.closePopupIfOpened()
+        return false
     }
 
-    if (!ok) {
+    Navigation.goToControl(section, "AddPalettesPopup", control)
+    api.navigation.trigger()
+    Navigation.closePopupIfOpened()
+    return true
+}
+
+function doGoToPalette(name, addPalette)
+{
+    //! NOTE A miss is expected here, the palette may not be added or may be scrolled out of view
+    if (api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)) {
+        return
+    }
+
+    if (addPalette && addPaletteIfAbsent(name)) {
+        //! NOTE The added palette is scrolled into view
+        if (api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name, 2000)) {
+            return
+        }
+    }
+
+    if (!findInTree(name)) {
         api.testflow.error("palette error: not found palette: " + name)
     }
 }

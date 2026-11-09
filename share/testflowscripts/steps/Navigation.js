@@ -23,6 +23,10 @@
 // How long to wait for a control to appear (dialogs and lists are loaded asynchronously)
 const CONTROL_TIMEOUT_MSEC = 5000
 
+// How long to wait for a popup to open or close, and how often to check it
+const POPUP_TIMEOUT_MSEC = 5000
+const POPUP_CHECK_MSEC = 50
+
 //! NOTE The navigation section of the last opened popup
 var openedPopupSection = ""
 
@@ -48,10 +52,21 @@ function notFoundError(section, panel, controlNameOrIndex)
     api.testflow.error(msg)
 }
 
-//! NOTE Call after an action that opens a popup, returns its navigation section
-function popupOpened()
+//! NOTE Call after an action that opens a popup, returns its navigation section.
+//! With the panel it waits until the popup with the panel is opened, otherwise just some time
+function popupOpened(panel)
 {
-    api.testflow.waitPopup()
+    if (!panel) {
+        api.testflow.waitPopup()
+    } else {
+        for (var t = 0; t < POPUP_TIMEOUT_MSEC; t += POPUP_CHECK_MSEC) {
+            if (api.navigation.controls(api.navigation.activeSection(), panel).length > 0) {
+                break
+            }
+            api.testflow.sleep(POPUP_CHECK_MSEC)
+        }
+    }
+
     openedPopupSection = api.navigation.activeSection()
     return openedPopupSection
 }
@@ -61,16 +76,30 @@ function closePopupIfOpened()
     api.testflow.sleep(100) // a popup can be closed asynchronously
     if (openedPopupSection !== "" && api.navigation.activeSection() === openedPopupSection) {
         api.navigation.escape()
-        api.testflow.waitPopup()
+        for (var t = 0; t < POPUP_TIMEOUT_MSEC && api.navigation.activeSection() === openedPopupSection; t += POPUP_CHECK_MSEC) {
+            api.testflow.sleep(POPUP_CHECK_MSEC)
+        }
     }
     openedPopupSection = ""
+}
+
+//! NOTE Without waiting, for checking what is there
+function hasControl(section, panel, controlName)
+{
+    var controls = api.navigation.controls(section, panel)
+    for (var c = 0; c < controls.length; ++c) {
+        if (controls[c].name === controlName) {
+            return true
+        }
+    }
+    return false
 }
 
 //! NOTE A popup (menu, dropdown) has its own navigation section,
 //! which becomes active when the popup is opened
 function goToControlInPopup(panel, controlNameOrIndex)
 {
-    var section = popupOpened()
+    var section = popupOpened(panel)
     if (!api.navigation.goToControl(section, panel, controlNameOrIndex, CONTROL_TIMEOUT_MSEC)) {
         notFoundError(section, panel, controlNameOrIndex)
     }
@@ -151,6 +180,7 @@ module.exports = {
     triggerControlInPopup: triggerControlInPopup,
     popupOpened: popupOpened,
     closePopupIfOpened: closePopupIfOpened,
+    hasControl: hasControl,
     activeSection: api.navigation.activeSection,
     activePanel: api.navigation.activePanel,
     activeControl: api.navigation.activeControl,
