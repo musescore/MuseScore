@@ -26,6 +26,7 @@
 #include "io/path.h"
 #include "log.h"
 
+#include "internal/ffmpeg/v9/videoencoder.h"
 #include "internal/ffmpeg/v8/videoencoder.h"
 #include "internal/ffmpeg/v7/videoencoder.h"
 #include "internal/ffmpeg/v6/videoencoder.h"
@@ -38,13 +39,13 @@ using namespace muse::media;
 
 void VideoEncoderResolver::init()
 {
-    loadFFmpeg(configuration()->ffmpegLibsDir());
+    loadFFmpeg(configuration()->ffmpegLibsDir(), false);
 
     //! NOTE: We need to search for and reload the FFmpeg libraries with a delay,
     //!       because this is a resource-intensive operation.
     m_reloadFfmpegTimer = std::make_shared<Timer>(std::chrono::seconds(1));
     m_reloadFfmpegTimer->onTimeout(this, [this](){
-        loadFFmpeg(configuration()->ffmpegLibsDir());
+        loadFFmpeg(configuration()->ffmpegLibsDir(), false);
 
         m_reloadFfmpegTimer->stop();
     });
@@ -67,24 +68,37 @@ void VideoEncoderResolver::deinit()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
-    const FFmpegLibPaths paths = findLibraryPaths(ffmpegLibsDir);
-    if (paths.avFormatPath.empty()) {
-        resetFFmpegSettings();
+    loadFFmpeg(ffmpegLibsDir, true);
+}
+
+void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir, bool persistRequestedPath)
+{
+    const FFmpegLibPathsList libraryPaths = findLibraryPaths(ffmpegLibsDir);
+    for (const FFmpegLibPaths& paths : libraryPaths) {
+        EncoderInfo encoderInfo = makeEncoder(paths);
+        if (!encoderInfo.encoder) {
+            continue;
+        }
+
+        setCurrentVideoEncoder(encoderInfo.encoder);
+        m_loadedFFmpegDir = encoderInfo.ffmpegLibsDir;
+        m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
+
+        if (persistRequestedPath) {
+            const std::optional<io::path_t> pathToPersist = configuredPathToPersist(ffmpegLibsDir, paths);
+            if (pathToPersist.has_value()) {
+                configuration()->setFFmpegLibsDir(pathToPersist.value());
+            }
+        }
+
+        m_loadedFFmpegChanged.notify();
         return;
     }
 
-    EncoderInfo encoderInfo = makeEncoder(paths);
-    if (!encoderInfo.encoder) {
-        resetFFmpegSettings();
-        return;
+    if (persistRequestedPath && ffmpegLibsDir.empty()) {
+        configuration()->setFFmpegLibsDir({});
     }
-
-    setCurrentVideoEncoder(encoderInfo.encoder);
-
-    configuration()->setFFmpegLibsDir(encoderInfo.ffmpegLibsDir);
-
-    m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
-    m_loadedFFmpegChanged.notify();
+    resetFFmpegSettings();
 }
 
 void VideoEncoderResolver::setIsSettingMode(bool arg)
@@ -112,7 +126,7 @@ void VideoEncoderResolver::startWatchingFfmpegsDirs()
 
 muse::io::path_t VideoEncoderResolver::loadedFFmpegDir() const
 {
-    return configuration()->ffmpegLibsDir();
+    return m_loadedFFmpegDir;
 }
 
 FFmpegVersion VideoEncoderResolver::loadedFFmpegVersion() const
@@ -137,8 +151,9 @@ void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
 
 void VideoEncoderResolver::resetFFmpegSettings()
 {
+    setCurrentVideoEncoder(nullptr);
     m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
-    configuration()->setFFmpegLibsDir({});
+    m_loadedFFmpegDir = io::path_t();
 
     m_loadedFFmpegChanged.notify();
 }
@@ -157,8 +172,11 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
 {
     EncoderInfo result;
 
-    const FFmpegVersion version = versionFromAVFormatPath(ffmpegLibsPaths.avFormatPath);
+    const FFmpegVersion version = ffmpegLibsPaths.ffmpegVersion;
     switch (version) {
+    case FFMPEG_V9:
+        result.encoder = tryCreateEncoder<ffmpeg::v9::VideoEncoder>(ffmpegLibsPaths);
+        break;
     case FFMPEG_V8:
         result.encoder = tryCreateEncoder<ffmpeg::v8::VideoEncoder>(ffmpegLibsPaths);
         break;
@@ -179,7 +197,7 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     }
 
     if (result.encoder) {
-        result.ffmpegLibsDir = io::dirpath(ffmpegLibsPaths.avFormatPath);
+        result.ffmpegLibsDir = ffmpegLibsPaths.searchDir;
         result.ffmpegVersion = version;
 
         LOGD() << "FFmpeg loaded, version: " << version;
