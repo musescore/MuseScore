@@ -257,9 +257,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             if (barLine) {
                 segment = measure->getSegmentR(st, t);
                 segment->add(barLine);
-                if (st == SegmentType::BarLine) {
-                    barLine->setPropertyFlags(Pid::BARLINE_SPAN, PropertyFlags::UNSTYLED);
-                }
             }
             if (fermata) {
                 segment->add(fermata);

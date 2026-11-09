@@ -94,7 +94,6 @@ BarLine::BarLine(const BarLine& bl)
     : EngravingItem(bl)
 {
     m_spanStaff   = bl.m_spanStaff;
-    m_spanStaffFlags = bl.m_spanStaffFlags;
     m_spanFrom    = bl.m_spanFrom;
     m_spanTo      = bl.m_spanTo;
     m_spanStyle   = bl.m_spanStyle;
@@ -586,16 +585,9 @@ void BarLine::startEdit(EditData& ed)
     ed.addData(bed);
 }
 
-static bool isLocalSpanEdit(const BarLine& barline, const EditData& ed)
-{
-    return ed.control() || barline.segment()->isBarLineType() || !barline.spanStaffInherited();
-}
-
 bool BarLine::isEditAllowed(EditData& ed) const
 {
-    const bool local = isLocalSpanEdit(*this, ed);
-    const bool span = local ? spanStaff() : staff()->barLineSpan();
-    return (ed.key == Key_Up && span) || (ed.key == Key_Down && !span)
+    return (ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())
            || EngravingItem::isEditAllowed(ed);
 }
 
@@ -605,16 +597,15 @@ bool BarLine::edit(EditData& ed)
         return false;
     }
 
-    const bool local = isLocalSpanEdit(*this, ed);
-    const bool span = local ? spanStaff() : staff()->barLineSpan();
-    if ((ed.key == Key_Up && span) || (ed.key == Key_Down && !span)) {
+    bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
+    if ((ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())) {
         if (local) {
             BarLine* b = toBarLine(segment()->element(staffIdx() * VOICES));
             if (b) {
-                b->undoChangeProperty(Pid::BARLINE_SPAN, !span);
+                b->undoChangeProperty(Pid::BARLINE_SPAN, !spanStaff());
             }
         } else {
-            score()->staff(staffIdx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, !span);
+            score()->staff(staffIdx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, !spanStaff());
         }
         return true;
     }
@@ -700,7 +691,8 @@ void BarLine::endDragGrip(EditData& ed)
     int newSpanFrom = 0;
     int newSpanTo = 0;
 
-    if (isLocalSpanEdit(*this, ed)) {
+    bool localDrag = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
+    if (localDrag) {
         Segment* s = segment();
         bool breakLast = staffIdx1 == staffIdx2;
         for (staff_idx_t staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
@@ -851,7 +843,6 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BARLINE_SPAN:
         setSpanStaff(v.toBool());
-        m_spanStaffFlags = PropertyFlags::UNSTYLED;
         break;
     case Pid::BARLINE_SPAN_FROM:
         setSpanFrom(v.toInt());
@@ -882,16 +873,6 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
     if (EngravingObject* e = propertyDelegate(id)) {
         e->undoChangeProperty(id, v, ps);
         return;
-    }
-
-    if (id == Pid::BARLINE_SPAN) {
-        const bool matchesDefault = v == propertyDefault(id);
-        if (!matchesDefault && ps == PropertyFlags::STYLED) {
-            ps = PropertyFlags::UNSTYLED;
-        } else if (matchesDefault && ps != PropertyFlags::STYLED && segment() && segment()->isEndBarLineType()) {
-            // Editing back to the default restores inheritance. An unchanged value keeps its flags.
-            ps = v == getProperty(id) ? propertyFlags(id) : PropertyFlags::STYLED;
-        }
     }
 
     if (id == Pid::BARLINE_TYPE && segment() && segment()->segmentType() != SegmentType::BarLine) {
@@ -960,32 +941,6 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
         break;
     }
     return EngravingItem::propertyDefault(propertyId);
-}
-
-PropertyFlags BarLine::propertyFlags(Pid id) const
-{
-    return id == Pid::BARLINE_SPAN ? m_spanStaffFlags : EngravingItem::propertyFlags(id);
-}
-
-void BarLine::setSpanStaff(bool val)
-{
-    m_spanStaff = val;
-    // Matching initialization inherits the staff default without clearing an existing override.
-    if (val != propertyDefault(Pid::BARLINE_SPAN).toBool()) {
-        m_spanStaffFlags = PropertyFlags::UNSTYLED;
-    }
-}
-
-void BarLine::setPropertyFlags(Pid id, PropertyFlags flags)
-{
-    if (id == Pid::BARLINE_SPAN) {
-        m_spanStaffFlags = flags == PropertyFlags::STYLED ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
-        if (spanStaffInherited()) {
-            m_spanStaff = propertyDefault(id).toBool();
-        }
-    } else {
-        EngravingItem::setPropertyFlags(id, flags);
-    }
 }
 
 //---------------------------------------------------------

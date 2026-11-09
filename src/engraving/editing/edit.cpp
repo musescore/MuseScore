@@ -3580,7 +3580,7 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         lbl = Factory::createBarLine(lsegment);
                         lbl->setOwnershipParent(lsegment);
                         lbl->setTrack(ltrack);
-                        lbl->setSpanStaffDefault(lstaff->barLineSpan());
+                        lbl->setSpanStaff(lstaff->barLineSpan());
                         lbl->setSpanFrom(lstaff->barLineFrom());
                         lbl->setSpanTo(lstaff->barLineTo());
                         lbl->setBarLineType(barType);
