@@ -37,15 +37,16 @@
 #include "ui/iuiconfiguration.h"
 #include "playback/iplaybackcontroller.h"
 
+#include "abstractelementpopupmodel.h"
+#include "continuouspanel.h"
+#include "loopmarker.h"
+#include "notationautomationcontroller.h"
+#include "notationruler.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
-#include "notationautomationcontroller.h"
 #include "noteinputcursor.h"
-#include "notationruler.h"
 #include "playbackcursor.h"
-#include "loopmarker.h"
-#include "continuouspanel.h"
-#include "abstractelementpopupmodel.h"
+#include "playbackcue.h"
 
 namespace mu::notation {
 class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Contextable,
@@ -69,6 +70,9 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
     Q_PROPERTY(bool readOnly READ readonly WRITE setReadonly NOTIFY readonlyChanged)
+
+    Q_PROPERTY(bool showPlaybackCueInNormalMode READ showPlaybackCueInNormalMode NOTIFY showPlaybackCueInNormalModeChanged)
+    Q_PROPERTY(bool showPlaybackCursorInNormalMode READ showPlaybackCursorInNormalMode NOTIFY showPlaybackCursorInNormalModeChanged)
 
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationSceneConfiguration> configuration;
@@ -98,6 +102,7 @@ public:
     Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
     Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
 
+    Q_INVOKABLE void setPlaybackCueItem(QQuickItem* cursor);
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
 
     qreal width() const override;
@@ -163,6 +168,9 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
+    bool showPlaybackCueInNormalMode() const;
+    bool showPlaybackCursorInNormalMode() const;
+
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
@@ -187,6 +195,9 @@ signals:
     void isMainViewChanged(bool isMainView);
 
     void readonlyChanged();
+
+    void showPlaybackCueInNormalModeChanged();
+    void showPlaybackCursorInNormalModeChanged();
 
 protected:
     INotationPtr notation() const;
@@ -269,10 +280,19 @@ private:
 
     void onPlayingChanged();
     void updatePlaybackCursorInterpolated();
+    void movePlaybackCue(muse::midi::tick_t tick);
     void movePlaybackCursor(muse::midi::tick_t tick);
+
+    void updatePlaybackCursorsVisibility();
+    void updatePlaybackCue();
+    void refreshPlaybackCursors();
+
     bool shouldAdjustCanvasVerticallyDuringPlayback(const muse::RectF& cursorRect);
 
+    void onPlaybackCueRectChanged();
     void onPlaybackCursorRectChanged();
+    QRectF cursorViewRect(const SystemCursor* cursor) const;
+    void updatePlaybackCursorItemsGeometry();
 
     void updateLoopMarkers();
     void updateShadowNoteVisibility();
@@ -292,7 +312,10 @@ private:
     std::unique_ptr<NotationViewInputController> m_inputController;
     QQuickItem* m_automationLinesContainer = nullptr;
     std::unique_ptr<NotationAutomationController> m_notationAutomationController;
+
+    std::unique_ptr<PlaybackCue> m_playbackCue;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
+
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;
     std::unique_ptr<LoopMarker> m_loopInMarker;
@@ -328,6 +351,7 @@ private:
         }
     } mutable m_pageCache;
 
+    QQuickItem* m_playbackCueItem = nullptr;
     QQuickItem* m_playbackCursorItem = nullptr;
 
     muse::secs_t m_lastPlaybackPosition = 0.;

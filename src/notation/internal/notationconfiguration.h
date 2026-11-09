@@ -92,7 +92,24 @@ public:
     QColor borderColor() const override;
     int borderWidth() const override;
 
+    QColor playbackCueColor() const override;
+    void setPlaybackCueColor(const QColor& color) override;
+    muse::async::Notification playbackCueColorChanged() const override;
+
+    bool showPlaybackCueInNormalMode() const override;
+    void setShowPlaybackCueInNormalMode(bool show) override;
+
+    muse::async::Channel<bool> showPlaybackCueInNormalModeChanged() const override;
+
     QColor playbackCursorColor() const override;
+    void setPlaybackCursorColor(const QColor& color) override;
+    muse::async::Notification playbackCursorColorChanged() const override;
+
+    bool showPlaybackCursorInNormalMode() const override;
+    void setShowPlaybackCursorInNormalMode(bool show) override;
+
+    muse::async::Channel<bool> showPlaybackCursorInNormalModeChanged() const override;
+
     QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
@@ -289,5 +306,10 @@ private:
 
     muse::async::Notification m_isAutomaticallyPanEnabledChanged;
     muse::async::Notification m_isCountInEnabledChanged;
+
+    muse::async::Channel<bool> m_showPlaybackCueInNormalModeChanged;
+    muse::async::Channel<bool> m_showPlaybackCursorInNormalModeChanged;
+    muse::async::Notification m_playbackCueColorChanged;
+    muse::async::Notification m_playbackCursorColorChanged;
 };
 }

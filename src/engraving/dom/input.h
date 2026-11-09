@@ -119,6 +119,10 @@ public:
     void setNoteEntryMethod(NoteEntryMethod m) { m_noteEntryMethod = m; }
     bool usingNoteEntryMethod(NoteEntryMethod m) const { return m == noteEntryMethod(); }
 
+    bool isNormalMode() { return usingNoteEntryMethod(NoteEntryMethod::UNKNOWN); }
+
+    bool isANoteEntryMode() { return !isNormalMode(); }
+
     AccidentalType accidentalType() const { return m_accidentalType; }
     void setAccidentalType(AccidentalType val) { m_accidentalType = val; }
 

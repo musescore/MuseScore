@@ -21,63 +21,25 @@
  */
 
 #pragma once
+#ifndef PLAYBACK_CURSOR_H
+#define PLAYBACK_CURSOR_H
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
-
-#include "notation/inotationconfiguration.h"
-#include "draw/types/geometry.h"
-#include "midi/miditypes.h"
-
-#include "notation/inotation_fwd.h"
+#include "systemcursor.h"
 
 class QColor;
 
 namespace mu::notation {
-class PlaybackCursor : public muse::Contextable, public muse::async::Asyncable
+class PlaybackCursor : public SystemCursor
 {
-    muse::GlobalInject<INotationConfiguration> configuration;
-
 public:
-    PlaybackCursor(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    explicit PlaybackCursor(muse::modularity::ContextPtr const& iocCtx)
+      : SystemCursor(iocCtx)
+    {}
 
-    void paint(muse::draw::Painter* painter);
-
-    void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
-
-    bool visible() const;
-    void setVisible(bool arg);
-
-    const muse::RectF& rect() const;
-
-private:
-    QColor color() const;
-
-    muse::RectF resolveCursorRectByTick(int tick) const;
-
-    struct PlaybackCursorCache {
-        const engraving::System* system = nullptr;
-        const engraving::Measure* measure = nullptr;
-        const engraving::Segment* segment = nullptr;
-
-        engraving::Fraction segmentStartTick;
-        engraving::Fraction segmentEndTick;
-
-        double segmentStartX = 0.0;
-        double segmentEndX = 0.0;
-        double systemBottomY = 0.0;
-
-        void clear()
-        {
-            *this = PlaybackCursorCache();
-        }
-    } mutable m_cache;
-
-    bool m_visible = false;
-    muse::RectF m_rect;
-
-    mu::notation::INotationPtr m_notation;
+protected:
+    QColor color() const override;
+    bool   isShownInNormalMode() const override;
 };
-}
+} // namespace mu::notation
+#endif

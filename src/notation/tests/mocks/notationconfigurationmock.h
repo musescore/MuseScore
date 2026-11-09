@@ -78,7 +78,21 @@ public:
     MOCK_METHOD(QColor, borderColor, (), (const, override));
     MOCK_METHOD(int, borderWidth, (), (const, override));
 
+    MOCK_METHOD(QColor, playbackCueColor, (), (const, override));
+    MOCK_METHOD(void, setPlaybackCueColor, (const QColor&), (override));
+    MOCK_METHOD(muse::async::Notification, playbackCueColorChanged, (), (const, override));
+
+    MOCK_METHOD(bool, showPlaybackCueInNormalMode, (), (const, override));
+    MOCK_METHOD(void, setShowPlaybackCueInNormalMode, (bool), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, showPlaybackCueInNormalModeChanged, (), (const, override));
+
     MOCK_METHOD(QColor, playbackCursorColor, (), (const, override));
+    MOCK_METHOD(void, setPlaybackCursorColor, (const QColor&), (override));
+    MOCK_METHOD(muse::async::Notification, playbackCursorColorChanged, (), (const, override));
+
+    MOCK_METHOD(bool, showPlaybackCursorInNormalMode, (), (const, override));
+    MOCK_METHOD(void, setShowPlaybackCursorInNormalMode, (bool), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, showPlaybackCursorInNormalModeChanged, (), (const, override));
     MOCK_METHOD(QColor, loopMarkerColor, (), (const, override));
     MOCK_METHOD(int, cursorOpacity, (), (const, override));
 

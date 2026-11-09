@@ -91,7 +91,22 @@ public:
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
 
+    virtual QColor playbackCueColor() const = 0;
+    virtual void setPlaybackCueColor(const QColor& color) = 0;
+    virtual muse::async::Notification playbackCueColorChanged() const = 0;
+
+    virtual bool showPlaybackCueInNormalMode() const = 0;
+    virtual void setShowPlaybackCueInNormalMode(bool show) = 0;
+    virtual muse::async::Channel<bool> showPlaybackCueInNormalModeChanged() const = 0;
+
     virtual QColor playbackCursorColor() const = 0;
+    virtual void setPlaybackCursorColor(const QColor& color) = 0;
+    virtual muse::async::Notification playbackCursorColorChanged() const = 0;
+
+    virtual bool showPlaybackCursorInNormalMode() const = 0;
+    virtual void setShowPlaybackCursorInNormalMode(bool show) = 0;
+    virtual muse::async::Channel<bool> showPlaybackCursorInNormalModeChanged() const = 0;
+
     virtual QColor loopMarkerColor() const = 0;
     virtual int cursorOpacity() const = 0;
 

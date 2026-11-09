@@ -178,9 +178,60 @@ int NotationConfigurationStub::borderWidth() const
     return 1;
 }
 
+QColor NotationConfigurationStub::playbackCueColor() const
+{
+    return QColor();
+}
+
+void NotationConfigurationStub::setPlaybackCueColor(const QColor&)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::playbackCueColorChanged() const
+{
+    return {};
+}
+
+bool NotationConfigurationStub::showPlaybackCueInNormalMode() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setShowPlaybackCueInNormalMode(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::showPlaybackCueInNormalModeChanged() const
+{
+    return {};
+}
+
 QColor NotationConfigurationStub::playbackCursorColor() const
 {
     return QColor();
+}
+
+void NotationConfigurationStub::setPlaybackCursorColor(const QColor&)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::playbackCursorColorChanged() const
+{
+    return {};
+}
+
+bool NotationConfigurationStub::showPlaybackCursorInNormalMode() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setShowPlaybackCursorInNormalMode(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::showPlaybackCursorInNormalModeChanged() const
+{
+    return {};
 }
 
 QColor NotationConfigurationStub::loopMarkerColor() const

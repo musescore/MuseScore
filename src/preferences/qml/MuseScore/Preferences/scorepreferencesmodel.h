@@ -30,6 +30,8 @@
 
 #include "notation/inotationconfiguration.h"
 
+class QColor;
+
 namespace mu::preferences {
 class ScorePreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
@@ -38,6 +40,10 @@ class ScorePreferencesModel : public QObject, public muse::Contextable, public m
 
     Q_PROPERTY(QString defaultStylePath READ defaultStylePath WRITE setDefaultStylePath NOTIFY defaultStylePathChanged)
     Q_PROPERTY(QString defaultPartStylePath READ defaultPartStylePath WRITE setDefaultPartStylePath NOTIFY defaultPartStylePathChanged)
+    Q_PROPERTY(bool showPlaybackCueInNormalMode READ showPlaybackCueInNormalMode WRITE setShowPlaybackCueInNormalMode NOTIFY showPlaybackCueInNormalModeChanged)
+    Q_PROPERTY(bool showPlaybackCursorInNormalMode READ showPlaybackCursorInNormalMode WRITE setShowPlaybackCursorInNormalMode NOTIFY showPlaybackCursorInNormalModeChanged)
+    Q_PROPERTY(QColor playbackCueColor READ playbackCueColor WRITE setPlaybackCueColor NOTIFY playbackCueColorChanged)
+    Q_PROPERTY(QColor playbackCursorColor READ playbackCursorColor WRITE setPlaybackCursorColor NOTIFY playbackCursorColorChanged)
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
@@ -52,8 +58,24 @@ public:
     QString defaultPartStylePath() const;
     void setDefaultPartStylePath(const QString& path);
 
+    bool showPlaybackCueInNormalMode() const;
+    void setShowPlaybackCueInNormalMode(bool show);
+
+    bool showPlaybackCursorInNormalMode() const;
+    void setShowPlaybackCursorInNormalMode(bool show);
+
+    QColor playbackCueColor() const;
+    void setPlaybackCueColor(const QColor& color);
+
+    QColor playbackCursorColor() const;
+    void setPlaybackCursorColor(const QColor& color);
+
 signals:
     void defaultStylePathChanged();
     void defaultPartStylePathChanged();
+    void showPlaybackCueInNormalModeChanged(bool show);
+    void showPlaybackCursorInNormalModeChanged(bool show);
+    void playbackCueColorChanged();
+    void playbackCursorColorChanged();
 };
 }

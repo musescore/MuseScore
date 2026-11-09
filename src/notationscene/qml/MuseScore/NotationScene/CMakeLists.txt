@@ -109,6 +109,8 @@ qt_add_qml_module(notationscene_qml
         pianokeyboard/pianokeyboardview.h
         playbackcursor.cpp
         playbackcursor.h
+        playbackcue.cpp
+        playbackcue.h
         searchpopupmodel.cpp
         searchpopupmodel.h
         selectionfilter/abstractselectionfiltermodel.cpp
@@ -163,6 +165,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/tupletcenteringselectormodel.h
         styledialog/voltaspagemodel.cpp
         styledialog/voltaspagemodel.h
+        systemcursor.cpp
+        systemcursor.h
         timelineview.cpp
         timelineview.h
 

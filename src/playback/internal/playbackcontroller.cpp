@@ -763,6 +763,28 @@ muse::Ret PlaybackController::playFromSelection(bool showErrors)
         return make_ret(Ret::Code::NotSupported);
     }
 
+    const RetVal<midi::tick_t> retval = notationPlayback()->playPositionTickByRawTick(playFromSelectionStartTick());
+    if (!retval.ret) {
+        return retval.ret;
+    }
+
+    seek(playedTickToSecs(retval.val));
+
+    if (isPaused()) {
+        doResume();
+    } else if (!isPlaying()) {
+        doPlay();
+    }
+
+    return make_ok();
+}
+
+int PlaybackController::playFromSelectionStartTick() const
+{
+    if (!m_notation) {
+        return 0;
+    }
+
     int startTick = 0;
 
     if (!selection()->isNone()) {
@@ -784,20 +806,7 @@ muse::Ret PlaybackController::playFromSelection(bool showErrors)
         }
     }
 
-    const RetVal<midi::tick_t> retval = notationPlayback()->playPositionTickByRawTick(startTick);
-    if (!retval.ret) {
-        return retval.ret;
-    }
-
-    seek(playedTickToSecs(retval.val));
-
-    if (isPaused()) {
-        doResume();
-    } else if (!isPlaying()) {
-        doPlay();
-    }
-
-    return make_ok();
+    return startTick;
 }
 
 void PlaybackController::doPlay()
