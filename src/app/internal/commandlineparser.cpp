@@ -533,7 +533,7 @@ void CommandLineParser::parse(int argc, char** argv)
 
     // Testflow
 #ifdef MUSE_MODULE_TESTFLOW
-    m_options->testflow = muse::testflow::parseCmdOptions(m_parser, m_options->runMode);
+    m_options->testflow = muse::testflow::parseCmdOptions(m_parser, *m_options);
 #endif
 
     // Startup
