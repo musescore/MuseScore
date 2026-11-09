@@ -91,6 +91,10 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
 
     uiConfiguration()->setCustomPhysicalDotsPerInch(options->ui.physicalDotsPerInch);
 
+    if (options->network.offline) {
+        networkConfiguration()->setOffline(options->network.offline.value());
+    }
+
     notationConfiguration()->setTemplateModeEnabled(options->notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options->notation.testModeEnabled);
 

@@ -155,6 +155,10 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
         return;
     }
 
+    if (options->network.offline) {
+        networkConfiguration()->setOffline(options->network.offline.value());
+    }
+
     if (options->app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options->app.revertToFactorySettings.value());
     }
