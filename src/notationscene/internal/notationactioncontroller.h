@@ -146,24 +146,24 @@ private:
     muse::Ret toggleNoteInput(const ToggleNoteInputCommand& command);
     muse::Ret toggleNoteInput(NoteInputMethod method);
     muse::Ret toggleNoteInputInsert();
+
     muse::Ret setDuration(const SetDurationCommand& command);
     muse::Ret setDuration(engraving::DurationType duration);
-    muse::RetVal<RequestNoteInputStateCommand::Output> requestNoteInputState() const;
-
     muse::Ret changeDuration(const ChangeDurationCommand& command);
     muse::Ret changeDuration(ChangeDurationMode mode);
-
     muse::Ret toggleDots(const ToggleDotsCommand& command);
     muse::Ret toggleDots(uint dots);
 
-    muse::Ret flipSelection();
+    muse::Ret toggleRest();
+
+    muse::RetVal<RequestNoteInputStateCommand::Output> requestNoteInputState() const;
 
     muse::Ret addNote(const AddNoteCommand& command);
-    void addNote(NoteName noteName, NoteAddingMode addingMode);
+    muse::Ret addNote(NoteName noteName, NoteAddingMode addingMode);
     muse::Ret addDrumNote(const muse::rcommand::Params& params);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
 
-    void toggleRest();
+    muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);
     muse::Ret removeNote(const muse::rcommand::Params& params);
@@ -308,7 +308,6 @@ private:
     template<typename P1>
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
                          bool (NotationActionController::*)() const = nullptr);
-    void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
     void registerGetCommand(const muse::rcommand::Command&, std::function<muse::RetVal<muse::rcommand::Params>()>);

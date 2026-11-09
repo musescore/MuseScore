@@ -298,21 +298,21 @@ MenuItemList AppMenuModel::makeNotesItems()
     MenuItemList items {
         makeMenuItem("command://notation/toggle-note-input"),
         makeSeparator(),
-        makeMenuItem("command://notation/enter-note-c"),
-        makeMenuItem("command://notation/enter-note-d"),
-        makeMenuItem("command://notation/enter-note-e"),
-        makeMenuItem("command://notation/enter-note-f"),
-        makeMenuItem("command://notation/enter-note-g"),
-        makeMenuItem("command://notation/enter-note-a"),
-        makeMenuItem("command://notation/enter-note-b"),
+        makeMenuItem(mu::notation::AddNoteC_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteD_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteE_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteF_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteG_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteA_ToNextChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteB_ToNextChordCommand::id),
         makeSeparator(),
-        makeMenuItem("command://notation/add-note-c"),
-        makeMenuItem("command://notation/add-note-d"),
-        makeMenuItem("command://notation/add-note-e"),
-        makeMenuItem("command://notation/add-note-f"),
-        makeMenuItem("command://notation/add-note-g"),
-        makeMenuItem("command://notation/add-note-a"),
-        makeMenuItem("command://notation/add-note-b")
+        makeMenuItem(mu::notation::AddNoteC_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteD_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteE_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteF_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteG_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteA_ToCurrentChordCommand::id),
+        makeMenuItem(mu::notation::AddNoteB_ToCurrentChordCommand::id)
     };
 
     return items;
