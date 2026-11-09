@@ -210,6 +210,7 @@ void Transform::setMatrix(double m11, double m12, double m13,
     m_affine.m_dx = m31;
     m_affine.m_dy = m32;
     m_33 = m33;
+    m_dirty = TransformationType::Project;
 }
 
 void Transform::reset()
