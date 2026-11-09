@@ -98,6 +98,8 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
+    m_parser.addOption(QCommandLineOption("user-data-dir",
+                                          "Use the given directory for all user data (settings, logs, session, scores, ...)", "dir"));
     m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
     m_parser.addOption(QCommandLineOption({ "P", "export-score-parts" }, "Use with '-o <file>.pdf', export score and parts"));
     m_parser.addOption(QCommandLineOption({ "f", "force" },
@@ -252,6 +254,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("d")) {
         m_options->global.loggerLevel = logger::Level::Debug;
+    }
+
+    if (m_parser.isSet("user-data-dir")) {
+        m_options->global.userDataDir = QDir(m_parser.value("user-data-dir")).absolutePath();
     }
 
     if (m_parser.isSet("D")) {
