@@ -160,9 +160,15 @@ void PreferencesModel::askForConfirmationOfPreferencesReset()
 
 void PreferencesModel::resetFactorySettings()
 {
-    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     QGuiApplication::processEvents();
+
+    commandShortcutsRegister()->resetShortcuts();
+#ifdef MUSE_MODULE_MIDIREMOTE
+    midiRemote()->resetMidiMappings();
+#endif
+
+    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
 
     // Unreset the "First Launch Completed" setting so the first-time launch wizard does not appear.

@@ -31,6 +31,8 @@
 #include "modularity/ioc.h"
 #include "appshell/iappshellconfiguration.h"
 #include "interactive/iinteractive.h"
+#include "shortcuts_v2/icommandshortcutsregister.h"
+#include "midiremote/imidiremote.h"
 
 #include "preferencepageitem.h"
 
@@ -43,7 +45,9 @@ class PreferencesModel : public QAbstractListModel, public muse::Contextable, pu
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
     muse::GlobalInject<appshell::IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::midiremote::IMidiRemote> midiRemote = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);

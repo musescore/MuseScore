@@ -41,88 +41,40 @@ StyledDialogView {
     property var params: null
 
     property QtObject prv: QtObject {
-        property var pagesObjects: (new Map())
+        property var pages: []
 
-        function resolveStackCurrentIndex() {
-            var keys = Object.keys(root.prv.pagesObjects)
-            return keys.indexOf(preferencesModel.currentPageId)
+        function pageIndex(pageId) {
+            return root.prv.pages.findIndex(page => page.id === pageId)
         }
 
-        function updateStackCurrentIndex() {
-            stack.currentIndex = resolveStackCurrentIndex()
+        function loadedPages() {
+            const result = []
+            for (let i = 0; i < pagesRepeater.count; ++i) {
+                const loader = pagesRepeater.itemAt(i)
+                if (loader && loader.item) {
+                    result.push(loader.item)
+                }
+            }
+
+            return result
         }
     }
 
     Component.onCompleted: {
         preferencesModel.load(root.currentPageId)
-
-        initPagesObjects()
-
-        prv.updateStackCurrentIndex()
+        root.prv.pages = preferencesModel.availablePages()
     }
 
     onNavigationActivateRequested: {
         menu.focusOnCurrentPage()
     }
 
-    function initPagesObjects() {
-        var pages = preferencesModel.availablePages()
-        for (var i in pages) {
-            var pageInfo = pages[i]
-
-            if (!Boolean(pageInfo.path)) {
-                continue
-            }
-
-            var pageComponent = Qt.createComponent("../" + pageInfo.path)
-            if (pageComponent.status === Component.Error) {
-                console.error("Failed to load preferences page component:", pageComponent.errorString())
-                continue
-            }
-
-            var properties = {
-                navigationSection: root.navigationSection,
-                navigationOrderStart: (i + 1) * 100
-            }
-
-            if (root.currentPageId === pageInfo.id) {
-                var params = root.params
-                for (var key in params) {
-                    var value = params[key]
-                    properties[key] = value
-                }
-            }
-
-            var obj = pageComponent.createObject(stack, properties)
-
-            if (!Boolean(obj)) {
-                continue
-            }
-
-            obj.hideRequested.connect(function() {
-                root.hide()
-            })
-
-            root.prv.pagesObjects[pageInfo.id] = obj
-        }
-    }
-
     PreferencesModel {
         id: preferencesModel
 
-        onCurrentPageIdChanged: function(currentPageId) {
-            prv.updateStackCurrentIndex()
-        }
-
         onUserAgreesToResetPreferences: {
-            var pages = preferencesModel.availablePages()
-
-            for (var i in pages) {
-                var page = pages[i]
-                var obj = root.prv.pagesObjects[page.id]
-                if (obj) {
-                    obj.reset()
-                }
+            for (const page of root.prv.loadedPages()) {
+                page.reset()
             }
 
             Qt.callLater(preferencesModel.resetFactorySettings)
@@ -156,6 +108,59 @@ StyledDialogView {
 
             StackLayout {
                 id: stack
+
+                currentIndex: root.prv.pageIndex(preferencesModel.currentPageId)
+
+                Repeater {
+                    id: pagesRepeater
+
+                    model: root.prv.pages
+
+                    Loader {
+                        id: pageLoader
+
+                        required property var modelData
+                        required property int index
+
+                        readonly property bool isCurrent: pageLoader.modelData.id === preferencesModel.currentPageId
+
+                        function loadIfCurrent() {
+                            if (!pageLoader.isCurrent || pageLoader.item || !pageLoader.modelData.path) {
+                                return
+                            }
+
+                            const properties = {
+                                navigationSection: root.navigationSection,
+                                navigationOrderStart: (pageLoader.index + 1) * 100
+                            }
+
+                            if (root.currentPageId === pageLoader.modelData.id) {
+                                for (const key in root.params) {
+                                    properties[key] = root.params[key]
+                                }
+                            }
+
+                            pageLoader.setSource("../" + pageLoader.modelData.path, properties)
+                        }
+
+                        onIsCurrentChanged: {
+                            pageLoader.loadIfCurrent()
+                        }
+
+                        Component.onCompleted: {
+                            pageLoader.loadIfCurrent()
+                        }
+
+                        Connections {
+                            target: pageLoader.item
+                            ignoreUnknownSignals: true
+
+                            function onHideRequested() {
+                                root.hide()
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -182,15 +187,9 @@ StyledDialogView {
             onApplyRequested: {
                 preferencesModel.apply()
 
-                var ok = true
-                var pages = preferencesModel.availablePages()
-
-                for (var i in pages) {
-                    var page = pages[i]
-                    var obj = root.prv.pagesObjects[page.id]
-                    if (obj) {
-                        ok &= obj.apply()
-                    }
+                let ok = true
+                for (const page of root.prv.loadedPages()) {
+                    ok &= page.apply()
                 }
 
                 if (ok) {
