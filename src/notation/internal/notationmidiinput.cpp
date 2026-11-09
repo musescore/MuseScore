@@ -244,7 +244,7 @@ void NotationMidiInput::startNoteInputIfNeed()
 
     if (configuration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
         if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES) && containsNoteOn()) {
-            commandsDispatcher()->dispatch(TOGGLE_NOTE_INPUT_COMMAND);
+            commandsDispatcher()->dispatch(ToggleNoteInputDefaultCommand {});
         }
     }
 }

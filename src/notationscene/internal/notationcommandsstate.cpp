@@ -116,30 +116,30 @@ static const std::vector<Command> NOT_TEXT_EDITING_COMMANDS = {
 };
 
 static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
-    { TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN },
-    { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, NoteInputMethod::BY_NOTE_NAME },
-    { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, NoteInputMethod::BY_DURATION },
-    { TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, NoteInputMethod::RHYTHM },
-    { TOGGLE_NOTE_INPUT_REPITCH_COMMAND, NoteInputMethod::REPITCH },
-    { TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, NoteInputMethod::REALTIME_AUTO },
-    { TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, NoteInputMethod::REALTIME_MANUAL },
-    { TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, NoteInputMethod::TIMEWISE }
+    { ToggleNoteInputDefaultCommand::id, NoteInputMethod::DEFAULT },
+    { ToggleNoteInputByNameCommand::id, NoteInputMethod::BY_NOTE_NAME },
+    { ToggleNoteInputByDurationCommand::id, NoteInputMethod::BY_DURATION },
+    { ToggleNoteInputRhythmCommand::id, NoteInputMethod::RHYTHM },
+    { ToggleNoteInputRepitchCommand::id, NoteInputMethod::REPITCH },
+    { ToggleNoteInputRealtimeAutoCommand::id, NoteInputMethod::REALTIME_AUTO },
+    { ToggleNoteInputRealtimeManualCommand::id, NoteInputMethod::REALTIME_MANUAL },
+    { ToggleNoteInputTimewiseCommand::id, NoteInputMethod::TIMEWISE }
 };
 
 static const std::map<Command, DurationType> DURATION_COMMANDS = {
-    { SET_DURATION_LONGA_COMMAND, DurationType::V_LONG },
-    { SET_DURATION_BREVE_COMMAND, DurationType::V_BREVE },
-    { SET_DURATION_WHOLE_COMMAND, DurationType::V_WHOLE },
-    { SET_DURATION_HALF_COMMAND, DurationType::V_HALF },
-    { SET_DURATION_QUARTER_COMMAND, DurationType::V_QUARTER },
-    { SET_DURATION_EIGHTH_COMMAND, DurationType::V_EIGHTH },
-    { SET_DURATION_16TH_COMMAND, DurationType::V_16TH },
-    { SET_DURATION_32ND_COMMAND, DurationType::V_32ND },
-    { SET_DURATION_64TH_COMMAND, DurationType::V_64TH },
-    { SET_DURATION_128TH_COMMAND, DurationType::V_128TH },
-    { SET_DURATION_256TH_COMMAND, DurationType::V_256TH },
-    { SET_DURATION_512TH_COMMAND, DurationType::V_512TH },
-    { SET_DURATION_1024TH_COMMAND, DurationType::V_1024TH }
+    { SetDurationLongaCommand::id, DurationType::V_LONG },
+    { SetDurationBreveCommand::id, DurationType::V_BREVE },
+    { SetDurationWholeCommand::id, DurationType::V_WHOLE },
+    { SetDurationHalfCommand::id, DurationType::V_HALF },
+    { SetDurationQuarterCommand::id, DurationType::V_QUARTER },
+    { SetDurationEighthCommand::id, DurationType::V_EIGHTH },
+    { SetDuration16thCommand::id, DurationType::V_16TH },
+    { SetDuration32ndCommand::id, DurationType::V_32ND },
+    { SetDuration64thCommand::id, DurationType::V_64TH },
+    { SetDuration128thCommand::id, DurationType::V_128TH },
+    { SetDuration256thCommand::id, DurationType::V_256TH },
+    { SetDuration512thCommand::id, DurationType::V_512TH },
+    { SetDuration1024thCommand::id, DurationType::V_1024TH }
 };
 
 static const std::map<Command, int> DOT_COUNT_COMMANDS = {

@@ -1364,7 +1364,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         if (modifiers != Qt::NoModifier) {
             break;     // Doesn't support modifiers...
         }
-        commandDispatcher()->dispatch(TOGGLE_NOTE_INPUT_COMMAND);
+        commandDispatcher()->dispatch(ToggleNoteInputDefaultCommand {});
         break;
     }
     case ElementType::NOTE: {

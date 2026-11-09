@@ -51,7 +51,8 @@ struct NoteNameContract {
 struct NoteInputMethodContract {
     static constexpr std::string_view key = "method";
     static constexpr NoteInputMethod def = NoteInputMethod::BY_NOTE_NAME;
-    static constexpr EnumTable<NoteInputMethod, 7 > table { {
+    static constexpr EnumTable<NoteInputMethod, 8 > table { {
+        { "default", NoteInputMethod::DEFAULT, "default note input method" },
         { "by-note-name", NoteInputMethod::BY_NOTE_NAME, "input by note name" },
         { "by-duration", NoteInputMethod::BY_DURATION, "input by duration" },
         { "repitch", NoteInputMethod::REPITCH, "repitch" },
@@ -59,6 +60,26 @@ struct NoteInputMethodContract {
         { "realtime-auto", NoteInputMethod::REALTIME_AUTO, "realtime auto" },
         { "realtime-manual", NoteInputMethod::REALTIME_MANUAL, "realtime manual" },
         { "timewise", NoteInputMethod::TIMEWISE, "timewise" },
+    } };
+};
+
+struct DurationTypeContract {
+    static constexpr std::string_view key = "duration";
+    static constexpr DurationType def = DurationType::V_QUARTER;
+    static constexpr EnumTable<DurationType, 13> table { {
+        { "longa", DurationType::V_LONG, "longa" },
+        { "breve", DurationType::V_BREVE, "breve" },
+        { "whole", DurationType::V_WHOLE, "whole" },
+        { "half", DurationType::V_HALF, "half" },
+        { "quarter", DurationType::V_QUARTER, "quarter" },
+        { "eighth", DurationType::V_EIGHTH, "eighth" },
+        { "16th", DurationType::V_16TH, "16th" },
+        { "32nd", DurationType::V_32ND, "32nd" },
+        { "64th", DurationType::V_64TH, "64th" },
+        { "128th", DurationType::V_128TH, "128th" },
+        { "256th", DurationType::V_256TH, "256th" },
+        { "512th", DurationType::V_512TH, "512th" },
+        { "1024th", DurationType::V_1024TH, "1024th" },
     } };
 };
 
@@ -156,6 +177,7 @@ struct PlayModeContract {
 namespace muse::rcommand {
 DECLARE_ENUM_CONTRACT(mu::notation::NoteName, mu::notation::NoteNameContract);
 DECLARE_ENUM_CONTRACT(mu::notation::NoteInputMethod, mu::notation::NoteInputMethodContract);
+DECLARE_ENUM_CONTRACT(mu::engraving::DurationType, mu::notation::DurationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::NoteAddingMode, mu::notation::NoteAddingModeContract);
 DECLARE_ENUM_CONTRACT(mu::engraving::TupletNumberType, mu::notation::TupletNumberTypeContract);
 DECLARE_ENUM_CONTRACT(mu::engraving::TupletBracketType, mu::notation::TupletBracketTypeContract);

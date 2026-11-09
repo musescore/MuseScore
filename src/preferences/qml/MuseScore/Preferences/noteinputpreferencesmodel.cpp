@@ -116,8 +116,8 @@ QVariantList NoteInputPreferencesModel::noteInputMethods() const
     using Method = mu::notation::NoteInputMethod;
 
     std::vector<std::pair<muse::rcommand::Command, Method > > noteInputCommands {
-        { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, Method::BY_NOTE_NAME },
-        { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, Method::BY_DURATION },
+        { ToggleNoteInputByNameCommand::id, Method::BY_NOTE_NAME },
+        { ToggleNoteInputByDurationCommand::id, Method::BY_DURATION },
     };
 
     QVariantList methods;

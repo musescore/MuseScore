@@ -53,6 +53,7 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
 {
     switch (method) {
     case NoteInputMethod::UNKNOWN:          break;
+    case NoteInputMethod::DEFAULT:          return TranslatableString("noteInputMethod", "Input by default mode");
     case NoteInputMethod::BY_NOTE_NAME:     return TranslatableString("noteInputMethod", "Input by note name mode");
     case NoteInputMethod::BY_DURATION:      return TranslatableString("noteInputMethod", "Input by duration mode");
     case NoteInputMethod::REPITCH:          return TranslatableString("noteInputMethod", "Re-pitch existing notes mode");
