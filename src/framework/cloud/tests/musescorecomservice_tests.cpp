@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QUrlQuery>
 
+#include "async/async.h"
 #include "async/asyncable.h"
 #include "async/promise.h"
 #include "async/processevents.h"
@@ -66,6 +67,7 @@ const std::string DELETE_("DELETE");
 
 const QString HOST("desktop.musescore.com");
 const QString ACCOUNT_INFO_PATH("/editor/v1/me");
+const QString HEALTHCHECK_PATH("/editor/v1/system/healthcheck");
 const QString REFRESH_TOKENS_PATH("/editor/v1/oauth/refresh");
 const QString SCORE_INFO_PATH("/editor/v1/score/info");
 const QString SCORES_LIST_PATH("/editor/v2/collection/scores");
@@ -542,6 +544,32 @@ TEST_F(Cloud_MuseScoreComServiceTest, Init_TokenExpired_RefreshesTokensAndRetrie
 
     // [THEN] The user is authorized
     EXPECT_TRUE(m_service->userAuthorized().val);
+}
+
+// =============================================
+// Cloud availability
+// =============================================
+
+TEST_F(Cloud_MuseScoreComServiceTest, CheckCloudIsAvailable_CalledFromAsyncMessage_DoesNotHang)
+{
+    // [GIVEN] The service is initialized
+    initService();
+
+    //! NOTE: fires inside the nested event loop of checkCloudIsAvailable
+    QTimer::singleShot(0, [this]() {
+        finishRequest(HEALTHCHECK_PATH);
+    });
+
+    // [WHEN] Check whether the cloud is available while async messages are being processed
+    std::optional<Ret> ret;
+    async::Async::call(this, [this, &ret]() {
+        ret = m_service->checkCloudIsAvailable();
+    });
+    processMessages();
+
+    // [THEN] The cloud is available
+    ASSERT_TRUE(ret.has_value());
+    EXPECT_TRUE(*ret);
 }
 
 // =============================================
