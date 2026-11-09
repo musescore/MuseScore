@@ -62,10 +62,11 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SelectSimilarInRangeCommand::id,
     SelectNotesInChordCommand::id,
     OpenSelectionOptionsCommand::id,
-    SET_DOUBLE_DURATION_COMMAND,
-    SET_HALVE_DURATION_COMMAND,
-    SET_DOUBLE_DURATION_DOTTED_COMMAND,
-    SET_HALVE_DURATION_DOTTED_COMMAND,
+    ChangeDurationCommand::id,
+    ChangeDurationDoubleCommand::id,
+    ChangeDurationHalveCommand::id,
+    ChangeDurationDoubleDottedCommand::id,
+    ChangeDurationHalveDottedCommand::id,
     TOGGLE_SNAP_TO_PREV_COMMAND,
     TOGGLE_SNAP_TO_NEXT_COMMAND,
     MIRROR_NOTEHEAD_COMMAND,
@@ -143,10 +144,10 @@ static const std::map<Command, DurationType> DURATION_COMMANDS = {
 };
 
 static const std::map<Command, int> DOT_COUNT_COMMANDS = {
-    { TOGGLE_DOT_COMMAND, 1 },
-    { TOGGLE_DOT2_COMMAND, 2 },
-    { TOGGLE_DOT3_COMMAND, 3 },
-    { TOGGLE_DOT4_COMMAND, 4 }
+    { ToggleDotCommand::id, 1 },
+    { ToggleDot2Command::id, 2 },
+    { ToggleDot3Command::id, 3 },
+    { ToggleDot4Command::id, 4 }
 };
 
 static const std::map<Command, AccidentalType> ACCIDENTAL_COMMANDS = {

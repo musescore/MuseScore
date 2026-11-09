@@ -533,20 +533,99 @@ struct SetDuration1024thCommand {
     sci_auto availabilities = Availability::UI;
 };
 
-//inline static const muse::rcommand::Command SET_DURATION_LONGA_COMMAND("command://notation/set-duration-longa");
-//inline static const muse::rcommand::Command SET_DURATION_BREVE_COMMAND("command://notation/set-duration-breve");
-//inline static const muse::rcommand::Command SET_DURATION_WHOLE_COMMAND("command://notation/set-duration-whole");
-//inline static const muse::rcommand::Command SET_DURATION_HALF_COMMAND("command://notation/set-duration-half");
-//inline static const muse::rcommand::Command SET_DURATION_QUARTER_COMMAND("command://notation/set-duration-quarter");
-//inline static const muse::rcommand::Command SET_DURATION_EIGHTH_COMMAND("command://notation/set-duration-eighth");
-//inline static const muse::rcommand::Command SET_DURATION_16TH_COMMAND("command://notation/set-duration-16th");
-//inline static const muse::rcommand::Command SET_DURATION_32ND_COMMAND("command://notation/set-duration-32nd");
-//inline static const muse::rcommand::Command SET_DURATION_64TH_COMMAND("command://notation/set-duration-64th");
-//inline static const muse::rcommand::Command SET_DURATION_128TH_COMMAND("command://notation/set-duration-128th");
-//inline static const muse::rcommand::Command SET_DURATION_256TH_COMMAND("command://notation/set-duration-256th");
-//inline static const muse::rcommand::Command SET_DURATION_512TH_COMMAND("command://notation/set-duration-512th");
-//inline static const muse::rcommand::Command SET_DURATION_1024TH_COMMAND("command://notation/set-duration-1024th");
+// increase/decrease duration commands
+struct ChangeDurationCommand {
+    sci_auto id = Command("command://notation/change-duration");
+    sci_auto title = MnemonicString("action", "Change duration");
+    sci_auto description = TranslatableString("action", "Change duration");
+    sci_auto availabilities = Availability::API;
 
+    ChangeDurationMode mode = ChangeDurationMode::Double;
+
+    sce_auto input = FieldsScheme {
+        Field{ "mode", &ChangeDurationCommand::mode, "Change duration mode" },
+    };
+};
+
+// aliases for change duration command
+struct ChangeDurationDoubleCommand {
+    sci_auto id = Command("command://notation/change-duration/double");
+    sci_auto title = MnemonicString("action", "Double duration");
+    sci_auto description = TranslatableString("action", "Double selected duration");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ChangeDurationHalveCommand {
+    sci_auto id = Command("command://notation/change-duration/halve");
+    sci_auto title = MnemonicString("action", "Halve duration");
+    sci_auto description = TranslatableString("action", "Halve selected duration");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ChangeDurationDoubleDottedCommand {
+    sci_auto id = Command("command://notation/change-duration/double-dotted");
+    sci_auto title = MnemonicString("action", "Double selected duration (dotted)");
+    sci_auto description = TranslatableString("action", "Double selected duration (includes dotted values)");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ChangeDurationHalveDottedCommand {
+    sci_auto id = Command("command://notation/change-duration/halve-dotted");
+    sci_auto title = MnemonicString("action", "Halve selected duration (dotted)");
+    sci_auto description = TranslatableString("action", "Halve selected duration (includes dotted values)");
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ToggleDotsCommand {
+    sci_auto id = Command("command://notation/toggle-dots");
+    sci_auto title = MnemonicString("action", "Toggle dots");
+    sci_auto description = TranslatableString("action", "Toggle dots");
+    sci_auto availabilities = Availability::API;
+
+    int dots = 1;
+
+    sce_auto input = FieldsScheme {
+        Field{ "dots", &ToggleDotsCommand::dots, "Number of dots", 1, engraving::MAX_DOTS },
+    };
+};
+
+// aliases for toggle dots command
+struct ToggleDotCommand {
+    sci_auto id = Command("command://notation/toggle-dots/1");
+    sci_auto title = MnemonicString("action", "Augmentation dot");
+    sci_auto description = TranslatableString("action", "Toggle duration dot");
+    sci_auto decoration = Decoration(muse::ui::IconCode::Code::NOTE_DOTTED);
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ToggleDot2Command {
+    sci_auto id = Command("command://notation/toggle-dots/2");
+    sci_auto title = MnemonicString("action", "Double augmentation dot");
+    sci_auto description = TranslatableString("action", "Toggle duration dot: double");
+    sci_auto decoration = Decoration(muse::ui::IconCode::Code::NOTE_DOTTED_2);
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ToggleDot3Command {
+    sci_auto id = Command("command://notation/toggle-dots/3");
+    sci_auto title = MnemonicString("action", "Triple augmentation dot");
+    sci_auto description = TranslatableString("action", "Toggle duration dot: triple");
+    sci_auto decoration = Decoration(muse::ui::IconCode::Code::NOTE_DOTTED_3);
+    sci_auto availabilities = Availability::UI;
+};
+
+struct ToggleDot4Command {
+    sci_auto id = Command("command://notation/toggle-dots/4");
+    sci_auto title = MnemonicString("action", "Quadruple augmentation dot");
+    sci_auto description = TranslatableString("action", "Toggle duration dot: quadruple");
+    sci_auto decoration = Decoration(muse::ui::IconCode::Code::NOTE_DOTTED_4);
+    sci_auto availabilities = Availability::UI;
+};
+
+//inline static const muse::rcommand::Command TOGGLE_DOT_COMMAND("command://notation/toggle-dot");
+//inline static const muse::rcommand::Command TOGGLE_DOT2_COMMAND("command://notation/toggle-dot2");
+//inline static const muse::rcommand::Command TOGGLE_DOT3_COMMAND("command://notation/toggle-dot3");
+//inline static const muse::rcommand::Command TOGGLE_DOT4_COMMAND("command://notation/toggle-dot4");
 
 struct RequestNoteInputStateCommand {
     sci_auto id = Command("command://notation/request-noteinput-state");
@@ -636,17 +715,7 @@ inline static const muse::rcommand::Command EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND(
 
 inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
 
-inline static const muse::rcommand::Command SET_DOUBLE_DURATION_COMMAND("command://notation/set-double-duration");
-inline static const muse::rcommand::Command SET_HALVE_DURATION_COMMAND("command://notation/set-halve-duration");
-inline static const muse::rcommand::Command SET_DOUBLE_DURATION_DOTTED_COMMAND("command://notation/set-double-duration-dotted");
-inline static const muse::rcommand::Command SET_HALVE_DURATION_DOTTED_COMMAND("command://notation/set-halve-duration-dotted");
-
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
-
-inline static const muse::rcommand::Command TOGGLE_DOT_COMMAND("command://notation/toggle-dot");
-inline static const muse::rcommand::Command TOGGLE_DOT2_COMMAND("command://notation/toggle-dot2");
-inline static const muse::rcommand::Command TOGGLE_DOT3_COMMAND("command://notation/toggle-dot3");
-inline static const muse::rcommand::Command TOGGLE_DOT4_COMMAND("command://notation/toggle-dot4");
 
 inline static const muse::rcommand::Command TOGGLE_REST_COMMAND("command://notation/toggle-rest");
 

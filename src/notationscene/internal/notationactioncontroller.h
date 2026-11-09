@@ -150,6 +150,12 @@ private:
     muse::Ret setDuration(engraving::DurationType duration);
     muse::RetVal<RequestNoteInputStateCommand::Output> requestNoteInputState() const;
 
+    muse::Ret changeDuration(const ChangeDurationCommand& command);
+    muse::Ret changeDuration(ChangeDurationMode mode);
+
+    muse::Ret toggleDots(const ToggleDotsCommand& command);
+    muse::Ret toggleDots(uint dots);
+
     muse::Ret flipSelection();
 
     muse::Ret addNote(const AddNoteCommand& command);
@@ -158,10 +164,10 @@ private:
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
 
     void toggleRest();
-    void toggleDots(int dots);
+
     muse::Ret putNote(const muse::rcommand::Params& params);
     muse::Ret removeNote(const muse::rcommand::Params& params);
-    void increaseDecreaseDuration(int steps, bool stepByDots);
+
     void realtimeAdvance();
 
     void toggleAccidental(engraving::AccidentalType type);
