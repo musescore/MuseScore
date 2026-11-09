@@ -143,7 +143,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
 
     // navigation and selection commands
 
-    makeCommandInfo<SelectTargetCommand>(),
+    makeCommandInfo<SelectCommand>(),
     makeCommandInfo<SelectFirstItemCommand>(),
     makeCommandInfo<SelectLastItemCommand>(),
     makeCommandInfo<SelectNextItemCommand>(),
@@ -169,7 +169,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<SelectAllCommand>(),
     makeCommandInfo<SelectSectionCommand>(),
 
-    makeCommandInfo<AddToSelectionTargetCommand>(),
+    makeCommandInfo<AddToSelectionCommand>(),
     makeCommandInfo<AddToSelectionNextChordCommand>(),
     makeCommandInfo<AddToSelectionPrevChordCommand>(),
     makeCommandInfo<AddToSelectionNextMeasureCommand>(),
@@ -183,6 +183,34 @@ static const std::vector<CommandInfo> s_commandInfos = {
 
     makeCommandInfo<OpenSelectionOptionsCommand>(),
     makeCommandInfo<ShowSelectionCommand>(),
+
+    // note input
+    makeCommandInfo<ToggleNoteInputCommand>(),
+    makeCommandInfo<ToggleNoteInputDefaultCommand>(),
+    makeCommandInfo<ToggleNoteInputByNameCommand>(),
+    makeCommandInfo<ToggleNoteInputByDurationCommand>(),
+    makeCommandInfo<ToggleNoteInputRhythmCommand>(),
+    makeCommandInfo<ToggleNoteInputRepitchCommand>(),
+    makeCommandInfo<ToggleNoteInputRealtimeAutoCommand>(),
+    makeCommandInfo<ToggleNoteInputRealtimeManualCommand>(),
+    makeCommandInfo<ToggleNoteInputTimewiseCommand>(),
+    makeCommandInfo<ToggleInsertModeCommand>(),
+    makeCommandInfo<RequestNoteInputStateCommand>(),
+
+    makeCommandInfo<SetDurationCommand>(),
+    makeCommandInfo<SetDurationLongaCommand>(),
+    makeCommandInfo<SetDurationBreveCommand>(),
+    makeCommandInfo<SetDurationWholeCommand>(),
+    makeCommandInfo<SetDurationHalfCommand>(),
+    makeCommandInfo<SetDurationQuarterCommand>(),
+    makeCommandInfo<SetDurationEighthCommand>(),
+    makeCommandInfo<SetDuration16thCommand>(),
+    makeCommandInfo<SetDuration32ndCommand>(),
+    makeCommandInfo<SetDuration64thCommand>(),
+    makeCommandInfo<SetDuration128thCommand>(),
+    makeCommandInfo<SetDuration256thCommand>(),
+    makeCommandInfo<SetDuration512thCommand>(),
+    makeCommandInfo<SetDuration1024thCommand>(),
 
     // navigation
     CommandInfo{
@@ -299,167 +327,12 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // note input
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_COMMAND,
-        TranslatableString("action", "Note input"),
-        TranslatableString("action", "Toggle note input mode"),
-        InputSchema(),
-        Decoration(IconCode::Code::EDIT, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND,
-        TranslatableString("action", "Note input by note name"),
-        TranslatableString("action", "Toggle note input mode by note name"),
-        InputSchema(),
-        Decoration(IconCode::Code::EDIT, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND,
-        TranslatableString("action", "Note input by duration"),
-        TranslatableString("action", "Toggle note input mode by duration"),
-        InputSchema(),
-        Decoration(IconCode::Code::DURATION_CURSOR, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_RHYTHM_COMMAND,
-        TranslatableString("action", "Rhythm only (not pitch)"),
-        TranslatableString("action", "Toggle note input mode: rhythm only (not pitch)"),
-        InputSchema(),
-        Decoration(IconCode::Code::RHYTHM_ONLY, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_REPITCH_COMMAND,
-        TranslatableString("action", "Re-pitch existing notes"),
-        TranslatableString("action", "Toggle note input mode: re-pitch existing notes"),
-        InputSchema(),
-        Decoration(IconCode::Code::RE_PITCH, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND,
-        TranslatableString("action", "Real-time (metronome)"),
-        TranslatableString("action", "Toggle note input mode: real-time (metronome)"),
-        InputSchema(),
-        Decoration(IconCode::Code::METRONOME, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND,
-        TranslatableString("action", "Real-time (foot pedal)"),
-        TranslatableString("action", "Toggle note input mode: real-time (foot pedal)"),
-        InputSchema(),
-        Decoration(IconCode::Code::FOOT_PEDAL, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND,
-        TranslatableString("action", "Insert"),
-        TranslatableString("action", "Toggle note input mode: insert (increases measure duration)"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_PLUS, rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_INSERT_MODE_COMMAND,
-        TranslatableString("action", "Insert/overwrite"),
-        TranslatableString("action", "Toggle note input mode: insert/overwrite"),
-        InputSchema(),
-        Decoration()
-    },
     CommandInfo{
         REALTIME_ADVANCE_COMMAND,
         TranslatableString("action", "Real-time advance"),
         TranslatableString("action", "Real-time advance"),
         InputSchema(),
         Decoration(IconCode::Code::METRONOME)
-    },
-    CommandInfo{
-        SET_DURATION_LONGA_COMMAND,
-        TranslatableString("action", "Longa"),
-        TranslatableString("action", "Set duration: longa"),
-        InputSchema(),
-        Decoration(IconCode::Code::LONGO)
-    },
-    CommandInfo{
-        SET_DURATION_BREVE_COMMAND,
-        TranslatableString("action", "Breve"),
-        TranslatableString("action", "Set duration: breve"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_WHOLE_DOUBLE)
-    },
-    CommandInfo{
-        SET_DURATION_WHOLE_COMMAND,
-        TranslatableString("action", "Whole note"),
-        TranslatableString("action", "Set duration: whole note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_WHOLE)
-    },
-    CommandInfo{
-        SET_DURATION_HALF_COMMAND,
-        TranslatableString("action", "Half note"),
-        TranslatableString("action", "Set duration: half note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_HALF)
-    },
-    CommandInfo{
-        SET_DURATION_QUARTER_COMMAND,
-        TranslatableString("action", "Quarter note"),
-        TranslatableString("action", "Set duration: quarter note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_QUARTER)
-    },
-    CommandInfo{
-        SET_DURATION_EIGHTH_COMMAND,
-        TranslatableString("action", "Eighth note"),
-        TranslatableString("action", "Set duration: eighth note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_8TH)
-    },
-    CommandInfo{
-        SET_DURATION_16TH_COMMAND,
-        TranslatableString("action", "16th note"),
-        TranslatableString("action", "Set duration: 16th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_16TH)
-    },
-    CommandInfo{
-        SET_DURATION_32ND_COMMAND,
-        TranslatableString("action", "32nd note"),
-        TranslatableString("action", "Set duration: 32nd note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_32ND)
-    },
-    CommandInfo{
-        SET_DURATION_64TH_COMMAND,
-        TranslatableString("action", "64th note"),
-        TranslatableString("action", "Set duration: 64th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_64TH)
-    },
-    CommandInfo{
-        SET_DURATION_128TH_COMMAND,
-        TranslatableString("action", "128th note"),
-        TranslatableString("action", "Set duration: 128th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_128TH)
-    },
-    CommandInfo{
-        SET_DURATION_256TH_COMMAND,
-        TranslatableString("action", "256th note"),
-        TranslatableString("action", "Set duration: 256th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_256TH)
-    },
-    CommandInfo{
-        SET_DURATION_512TH_COMMAND,
-        TranslatableString("action", "512th note"),
-        TranslatableString("action", "Set duration: 512th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_512TH)
-    },
-    CommandInfo{
-        SET_DURATION_1024TH_COMMAND,
-        TranslatableString("action", "1024th note"),
-        TranslatableString("action", "Set duration: 1024th note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_1024TH)
     },
 
     CommandInfo{
@@ -3021,9 +2894,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Diagnostic: Check for score corruptions"),
         InputSchema(),
         Decoration()
-    },
-
-    makeCommandInfo<GetNoteInputStateCommand>()
+    }
 };
 
 std::string NotationCommandsRegister::moduleName() const

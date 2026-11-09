@@ -884,7 +884,7 @@ void NotationBraille::toggleMode()
         break;
     }
 
-    commandDispatcher()->dispatch(notation::TOGGLE_NOTE_INPUT_COMMAND);
+    commandDispatcher()->dispatch(notation::ToggleNoteInputDefaultCommand {});
 
     const QString stateTitle = interaction()->noteInput()->isNoteInputMode()
                                //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.

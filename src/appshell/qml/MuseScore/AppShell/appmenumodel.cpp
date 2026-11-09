@@ -586,7 +586,7 @@ MenuItemList AppMenuModel::makeRecentSubMenuItems()
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem(TOGGLE_NOTE_INPUT_COMMAND),
+        makeMenuItem(ToggleNoteInputDefaultCommand {}),
         makeSeparator(),
         makeMenuItem(ENTER_NOTE_C_COMMAND),
         makeMenuItem(ENTER_NOTE_D_COMMAND),
