@@ -5430,6 +5430,22 @@ void NotationInteraction::deleteSelection()
         return;
     }
 
+    // If a single barline is being deleted, remember where it was
+    // so that the barline remaining there can be selected afterwards
+    const Measure* deletedBarLineMeasure = nullptr;
+    staff_idx_t deletedBarLineStaffIdx = muse::nidx;
+    if (!isTextEditingStarted() && score()->selection().isSingle()) {
+        const EngravingItem* element = score()->selection().element();
+        if (element && element->isBarLine() && toBarLine(element)->measure() && !toBarLine(element)->measure()->isMMRest()) {
+            const BarLine* barLine = toBarLine(element);
+            // A start repeat is on the left of its measure, so the barline remaining there belongs to the previous measure
+            deletedBarLineMeasure = barLine->barLineType() == BarLineType::START_REPEAT
+                                    ? barLine->measure()->prevMeasure() : barLine->measure();
+            deletedBarLineStaffIdx = barLine->staffIdx();
+        }
+    }
+    const Fraction deletedBarLineTick = deletedBarLineMeasure ? deletedBarLineMeasure->tick() : Fraction(0, 1);
+
     startEdit(TranslatableString("undoableAction", "Delete"));
 
     if (isTextEditingStarted()) {
@@ -5447,6 +5463,27 @@ void NotationInteraction::deleteSelection()
 
     checkAndShowError();
     apply();
+
+    if (deletedBarLineMeasure) {
+        // Layout has now (re)created the remaining barline
+        const Measure* measure = score()->tick2measure(deletedBarLineTick);
+        const BarLine* remaining = measure ? measure->endBarLine(deletedBarLineStaffIdx) : nullptr;
+        if (remaining && !remaining->segment()->enabled()) {
+            remaining = nullptr;
+        }
+
+        if (!remaining && measure && measure->nextMeasure()) {
+            // The end barline is omitted before a start repeat, which then acts as the barline
+            const Segment* startRepeatSeg = measure->nextMeasure()->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
+            const EngravingItem* item = startRepeatSeg ? startRepeatSeg->element(staff2track(deletedBarLineStaffIdx)) : nullptr;
+            remaining = item && item->isBarLine() ? toBarLine(item) : nullptr;
+        }
+
+        if (remaining) {
+            select({ const_cast<BarLine*>(remaining) }, SelectType::SINGLE, deletedBarLineStaffIdx);
+        }
+    }
+
     resetHitElementContext();
 }
 
