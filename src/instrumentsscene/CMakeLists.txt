@@ -40,3 +40,7 @@ target_link_libraries(instrumentsscene PRIVATE engraving)
 if (MUE_BUILD_INSTRUMENTSSCENE_QML)
     add_subdirectory(qml/MuseScore/InstrumentsScene)
 endif()
+
+if (MUE_BUILD_INSTRUMENTSSCENE_TESTS)
+    add_subdirectory(tests)
+endif()

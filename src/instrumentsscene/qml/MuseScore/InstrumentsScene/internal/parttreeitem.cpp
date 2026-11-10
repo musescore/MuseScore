@@ -126,7 +126,12 @@ void PartTreeItem::createAndAddPart(const ID& masterPartId)
 
     size_t index = resolveNewPartIndex(masterPartId);
 
-    notation()->parts()->insertPart(masterPart->clone(), index);
+    // The clone would keep the main score's shared part, which doesn't exist in parts. While it's enabled
+    // (instruments combined), the instrument would stay hidden in the part (see Part::show())
+    Part* part = masterPart->clone();
+    part->setSharedPart(nullptr);
+
+    notation()->parts()->insertPart(part, index);
 }
 
 size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
@@ -277,7 +282,13 @@ void PartTreeItem::resetAllFormatting()
     .onResolve(this, [this](const IInteractive::Result& res) {
         if (res.isButton(IInteractive::Button::Yes)) {
             const Part* masterPart = masterNotation()->parts()->part(id());
-            notation()->parts()->replacePart(id(), masterPart->clone());
+
+            // The clone would keep the main score's shared part, which doesn't exist in parts. While it's enabled
+            // (instruments combined), the instrument would stay hidden in the part (see Part::show())
+            Part* part = masterPart->clone();
+            part->setSharedPart(nullptr);
+
+            notation()->parts()->replacePart(id(), part);
         }
     });
 }
