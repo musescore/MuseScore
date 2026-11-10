@@ -3872,10 +3872,11 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     }
 
     const mu::engraving::Selection& selection = score()->selection();
+    const bool hasNotes = !selection.uniqueNotes().empty();
 
-    // Range selections only transpose notes; rests are moved for list selections only
+    // Range selections only transpose notes; rests are moved for list selections (without notes) only
     std::vector<Rest*> rests;
-    if (selection.isList()) {
+    if (!hasNotes && selection.isList()) {
         for (EngravingItem* el : selection.elements()) {
             if (el->isRest()) {
                 rests.push_back(toRest(el));
@@ -3883,7 +3884,6 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         }
     }
 
-    const bool hasNotes = !selection.uniqueNotes().empty();
     if (rests.empty() && !hasNotes) {
         return;
     }
@@ -3891,22 +3891,19 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     startEdit(hasNotes ? TranslatableString("undoableAction", "Change pitch")
               : TranslatableString("undoableAction", "Change vertical position"));
 
-    doMovePitch(d, mode, rests);
-
-    apply();
-}
-
-void NotationInteraction::doMovePitch(MoveDirection d, PitchMode mode, const std::vector<Rest*>& rests)
-{
-    for (Rest* rest : rests) {
-        if (rest->staff()->isTabStaff(rest->tick())) {
-            // The rest won't be visible - don't try to move it...
-            continue;
+    if (hasNotes) {
+        EditNote::upDown(score(), MoveDirection::Up == d, mode);
+    } else {
+        for (Rest* rest : rests) {
+            if (rest->staff()->isTabStaff(rest->tick())) {
+                // The rest won't be visible - don't try to move it...
+                continue;
+            }
+            score()->cmdMoveRest(rest, toDirection(d));
         }
-        score()->cmdMoveRest(rest, toDirection(d));
     }
 
-    EditNote::upDown(score(), MoveDirection::Up == d, mode);
+    apply();
 }
 
 void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements)
@@ -4046,31 +4043,23 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
             return false;
         }
 
-        startEdit(TranslatableString("undoableAction", "Change pitch"));
-        doMovePitch(d, pitchMode, {});
-        apply();
-
+        movePitch(d, pitchMode);
         return true;
     }
 
     std::vector<EngravingItem*> lyrics;
     std::vector<EngravingItem*> nudgeable;
-    std::vector<Rest*> rests;
-    bool hasNotes = false;
+    bool hasNotesOrRests = false;
 
     for (EngravingItem* el : selection.elements()) {
         if (vertical && !quickly && el->isLyrics()) {
             lyrics.push_back(el);
         } else if (isNudgeable(el)) {
             nudgeable.push_back(el);
-        } else if (vertical && el->isRest()) {
-            rests.push_back(toRest(el));
-        } else if (vertical && el->isNote()) {
-            hasNotes = true;
+        } else if (vertical && (el->isNote() || el->isRest())) {
+            hasNotesOrRests = true;
         }
     }
-
-    const bool hasNotesOrRests = hasNotes || !rests.empty();
 
     // Lyrics only change verse when no other items are being nudged: otherwise, they're nudged with them
     if (!lyrics.empty() && !nudgeable.empty()) {
@@ -4078,19 +4067,21 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
         lyrics.clear();
     }
 
-    if (lyrics.empty() && nudgeable.empty() && !hasNotesOrRests) {
-        return false;
+    if (lyrics.empty() && nudgeable.empty()) {
+        if (!hasNotesOrRests) {
+            return false;
+        }
+        // Selection contains only notes and/or rests (in a mixed list, notes and rests stay where they are)
+        movePitch(d, pitchMode);
+        return true;
     }
 
     startEdit(TranslatableString("undoableAction", "Move items"));
 
-    // In a mixed list, notes and rests stay where they are
     if (!lyrics.empty()) {
         doMoveLyrics(d, lyrics);
-    } else if (!nudgeable.empty()) {
-        doNudge(d, quickly, nudgeable);
     } else {
-        doMovePitch(d, pitchMode, rests);
+        doNudge(d, quickly, nudgeable);
     }
 
     apply();
