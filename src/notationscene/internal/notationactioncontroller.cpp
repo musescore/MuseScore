@@ -211,6 +211,19 @@ void NotationActionController::init()
     registerCommand<AddNoteA_ToInsertChordCommand>([this]() { return addNote(NoteName::A, NoteAddingMode::InsertChord); });
     registerCommand<AddNoteB_ToInsertChordCommand>([this]() { return addNote(NoteName::B, NoteAddingMode::InsertChord); });
 
+    registerCommand<ToggleAccidentalCommand>(&Controller::toggleAccidental);
+    // registerCommand(TOGGLE_FLAT2_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT2); });
+    // registerCommand(TOGGLE_FLAT_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT); });
+    // registerCommand(TOGGLE_NAT_COMMAND, [this]() { toggleAccidental(AccidentalType::NATURAL); });
+    // registerCommand(TOGGLE_SHARP_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP); });
+    // registerCommand(TOGGLE_SHARP2_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP2); });
+
+    // registerCommand(ADD_SHARP2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
+    // registerCommand(ADD_SHARP_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
+    // registerCommand(ADD_NAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
+    // registerCommand(ADD_FLAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT, PlayMode::PlayNote);
+    // registerCommand(ADD_FLAT2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT2, PlayMode::PlayNote);
+
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -246,18 +259,6 @@ void NotationActionController::init()
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
-
-    registerCommand(TOGGLE_FLAT2_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT2); });
-    registerCommand(TOGGLE_FLAT_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT); });
-    registerCommand(TOGGLE_NAT_COMMAND, [this]() { toggleAccidental(AccidentalType::NATURAL); });
-    registerCommand(TOGGLE_SHARP_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP); });
-    registerCommand(TOGGLE_SHARP2_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP2); });
-
-    registerCommand(ADD_SHARP2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
-    registerCommand(ADD_SHARP_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
-    registerCommand(ADD_NAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
-    registerCommand(ADD_FLAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT, PlayMode::PlayNote);
-    registerCommand(ADD_FLAT2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT2, PlayMode::PlayNote);
 
     registerCommand(TOGGLE_TIE_COMMAND, &Controller::addTie);
     registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
@@ -1523,34 +1524,47 @@ muse::Ret NotationActionController::removeNote(const muse::rcommand::Params& par
     return muse::make_ok();
 }
 
-void NotationActionController::toggleAccidental(AccidentalType type)
+muse::Ret NotationActionController::toggleAccidental(const ToggleAccidentalCommand& command)
 {
-    TRACEFUNC;
+    //! TODO The methods `toggleAccidental` and `changeAccidental` have been combined as-is. Refactoring is required.
 
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    INotationNoteInputPtr noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
+    const AccidentalType type = command.type;
 
-    if (interaction->selection()->isNone()) {
-        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
-            return;
+    if (command.affectNoteInput) {
+        INotationNoteInputPtr noteInput = interaction->noteInput();
+        if (!noteInput) {
+            return muse::make_ret(muse::Ret::Code::InternalError);
         }
 
-        startNoteInput();
+        if (interaction->selection()->isNone()) {
+            if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
+                return muse::make_ret(muse::Ret::Code::NotSupported);
+            }
+
+            startNoteInput();
+        }
+
+        if (noteInput->isNoteInputMode() && configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
+            noteInput->setAccidental(type);
+        } else {
+            interaction->toggleAccidentalForSelection(type);
+            seekAndPlaySelectedElement();
+        }
+    } else {
+        interaction->changeAccidental(type);
+
+        seekSelectedElement();
+        if (command.playMode != PlayMode::NoPlay) {
+            playSelectedElement(command.playMode == PlayMode::PlayChord);
+        }
     }
 
-    if (noteInput->isNoteInputMode() && configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
-        noteInput->setAccidental(type);
-    } else {
-        interaction->toggleAccidentalForSelection(type);
-        seekAndPlaySelectedElement();
-    }
+    return muse::make_ok();
 }
 
 void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)

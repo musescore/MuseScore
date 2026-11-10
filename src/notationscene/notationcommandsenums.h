@@ -183,6 +183,17 @@ struct PlayModeContract {
         { "chord", PlayMode::PlayChord, "play chord" },
     } };
 };
+
+struct AccidentalTypeContract {
+    //! NOTE Only these types are used in the commands
+    static constexpr EnumTable<AccidentalType, 5> table { {
+        { "flat2", AccidentalType::FLAT2, "double-flat" },
+        { "flat", AccidentalType::FLAT, "flat" },
+        { "natural", AccidentalType::NATURAL, "natural" },
+        { "sharp", AccidentalType::SHARP, "sharp" },
+        { "sharp2", AccidentalType::SHARP2, "double-sharp" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -196,4 +207,5 @@ DECLARE_ENUM_CONTRACT(mu::engraving::TupletBracketType, mu::notation::TupletBrac
 DECLARE_ENUM_CONTRACT(mu::engraving::TupletSelectedDuration, mu::notation::TupletSelectedDurationContract);
 DECLARE_ENUM_CONTRACT(mu::notation::SelectionTarget, mu::notation::SelectionTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PlayMode, mu::notation::PlayModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::AccidentalType, mu::notation::AccidentalTypeContract);
 }

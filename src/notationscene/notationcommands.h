@@ -841,6 +841,46 @@ struct AddNoteB_ToInsertChordCommand {
     sci_auto availabilities = Availability::UI;
 };
 
+// accidental commands
+struct ToggleAccidentalCommand {
+    sci_auto id = Command("command://notation/toggle-accidental");
+    sci_auto title = MnemonicString("action", "Toggle accidental");
+    sci_auto description = TranslatableString("action", "Toggle accidental");
+    sci_auto availabilities = Availability::API;
+
+    AccidentalType type = AccidentalType::NATURAL;
+    PlayMode playMode = PlayMode::PlayNote;
+    bool affectNoteInput = false;
+
+    sce_auto input = FieldsScheme {
+        Field{ "type", &ToggleAccidentalCommand::type, "Accidental type" },
+        Field{ "play-mode", &ToggleAccidentalCommand::playMode, "Play mode", Presence::Optional },
+        Field{ "affect-note-input", &ToggleAccidentalCommand::affectNoteInput, "Affect note input", Presence::Optional },
+    };
+};
+
+// aliases for toggle accidental command
+struct ToggleFlat2Command {
+    sci_auto id = Command("command://notation/toggle-flat2");
+    sci_auto title = MnemonicString("action", "Toggle double-flat");
+    sci_auto description = TranslatableString("action", "Toggle accidental: double-flat");
+    sci_auto availabilities = Availability::UI;
+
+    sci_auto dispatch = ToggleAccidentalCommand(AccidentalType::FLAT2, PlayMode::NoPlay, true);
+};
+
+inline static const muse::rcommand::Command TOGGLE_FLAT2_COMMAND("command://notation/toggle-flat2");
+inline static const muse::rcommand::Command TOGGLE_FLAT_COMMAND("command://notation/toggle-flat");
+inline static const muse::rcommand::Command TOGGLE_NAT_COMMAND("command://notation/toggle-nat");
+inline static const muse::rcommand::Command TOGGLE_SHARP_COMMAND("command://notation/toggle-sharp");
+inline static const muse::rcommand::Command TOGGLE_SHARP2_COMMAND("command://notation/toggle-sharp2");
+
+inline static const muse::rcommand::Command ADD_SHARP2_COMMAND("command://notation/add-sharp2");
+inline static const muse::rcommand::Command ADD_SHARP_COMMAND("command://notation/add-sharp");
+inline static const muse::rcommand::Command ADD_NAT_COMMAND("command://notation/add-nat");
+inline static const muse::rcommand::Command ADD_FLAT_COMMAND("command://notation/add-flat");
+inline static const muse::rcommand::Command ADD_FLAT2_COMMAND("command://notation/add-flat2");
+
 struct FlipCommand {
     sci_auto id = Command("command://notation/flip");
     sci_auto title = MnemonicString("action", "Flip direction");
@@ -896,18 +936,6 @@ inline static const muse::rcommand::Command EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND(
 inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
 
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
-
-inline static const muse::rcommand::Command TOGGLE_FLAT2_COMMAND("command://notation/toggle-flat2");
-inline static const muse::rcommand::Command TOGGLE_FLAT_COMMAND("command://notation/toggle-flat");
-inline static const muse::rcommand::Command TOGGLE_NAT_COMMAND("command://notation/toggle-nat");
-inline static const muse::rcommand::Command TOGGLE_SHARP_COMMAND("command://notation/toggle-sharp");
-inline static const muse::rcommand::Command TOGGLE_SHARP2_COMMAND("command://notation/toggle-sharp2");
-
-inline static const muse::rcommand::Command ADD_SHARP2_COMMAND("command://notation/add-sharp2");
-inline static const muse::rcommand::Command ADD_SHARP_COMMAND("command://notation/add-sharp");
-inline static const muse::rcommand::Command ADD_NAT_COMMAND("command://notation/add-nat");
-inline static const muse::rcommand::Command ADD_FLAT_COMMAND("command://notation/add-flat");
-inline static const muse::rcommand::Command ADD_FLAT2_COMMAND("command://notation/add-flat2");
 
 inline static const muse::rcommand::Command TOGGLE_TIE_COMMAND("command://notation/toggle-tie");
 inline static const muse::rcommand::Command ADD_SLUR_COMMAND("command://notation/add-slur");

@@ -163,6 +163,8 @@ private:
     muse::Ret addDrumNote(const muse::rcommand::Params& params);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
 
+    muse::Ret toggleAccidental(const ToggleAccidentalCommand& command);
+
     muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);
@@ -170,7 +172,6 @@ private:
 
     void realtimeAdvance();
 
-    void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
     muse::Ret putTuplet(const muse::rcommand::Params& params);
