@@ -495,7 +495,6 @@ private:
     void resetGripEdit();
     void resetHitElementContext() override;
 
-    void doMovePitch(MoveDirection d, PitchMode mode, const std::vector<Rest*>& rests);
     void doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
     void doNudgeAnchors(MoveDirection d);
     void doMoveLyrics(engraving::Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements);
