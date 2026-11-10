@@ -4037,43 +4037,36 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     const PitchMode pitchMode = quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC;
     const mu::engraving::Selection& selection = score()->selection();
 
-    // Range selections only transpose notes
-    if (selection.isRange()) {
-        if (!vertical || selection.uniqueNotes().empty()) {
+    // Range selections only transpose notes. In list selections, notes and rests take precedence over other items
+    const std::vector<EngravingItem*>& selectionElements = selection.elements();
+    const auto isNoteOrRest = [](const EngravingItem* el) { return el->isNote() || el->isRest(); };
+    if (selection.isRange() || std::any_of(selectionElements.begin(), selectionElements.end(), isNoteOrRest)) {
+        if (!vertical || (selection.isRange() && selection.uniqueNotes().empty())) {
             return false;
         }
-
         movePitch(d, pitchMode);
         return true;
     }
 
     std::vector<EngravingItem*> lyrics;
     std::vector<EngravingItem*> nudgeable;
-    bool hasNotesOrRests = false;
 
-    for (EngravingItem* el : selection.elements()) {
+    for (EngravingItem* el : selectionElements) {
         if (vertical && !quickly && el->isLyrics()) {
             lyrics.push_back(el);
         } else if (isNudgeable(el)) {
             nudgeable.push_back(el);
-        } else if (vertical && (el->isNote() || el->isRest())) {
-            hasNotesOrRests = true;
         }
+    }
+
+    if (lyrics.empty() && nudgeable.empty()) {
+        return false;
     }
 
     // Lyrics only change verse when no other items are being nudged: otherwise, they're nudged with them
     if (!lyrics.empty() && !nudgeable.empty()) {
         nudgeable.insert(nudgeable.end(), lyrics.begin(), lyrics.end());
         lyrics.clear();
-    }
-
-    if (lyrics.empty() && nudgeable.empty()) {
-        if (!hasNotesOrRests) {
-            return false;
-        }
-        // Selection contains only notes and/or rests (in a mixed list, notes and rests stay where they are)
-        movePitch(d, pitchMode);
-        return true;
     }
 
     startEdit(TranslatableString("undoableAction", "Move items"));
