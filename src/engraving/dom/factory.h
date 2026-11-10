@@ -269,6 +269,8 @@ public:
 
     static Vibrato* createVibrato(DummyParent* parent, bool isAccessibleEnabled = true);
 
+    static BoxLine* createBoxLine(DummyParentOr<EngravingItem> parent, bool isAccessibleEnabled = true);
+
     static TextLine* createTextLine(DummyParentOr<Note> parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TextLine> makeTextLine(DummyParentOr<Note> parent);
 

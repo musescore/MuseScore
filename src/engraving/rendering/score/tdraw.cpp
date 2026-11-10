@@ -45,6 +45,7 @@
 #include "dom/beam.h"
 #include "dom/bend.h"
 #include "dom/box.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -214,6 +215,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::FBOX:         draw(item_cast<const FBox*>(item), painter, opt);
         break;
     case ElementType::TBOX:         draw(item_cast<const TBox*>(item), painter, opt);
+        break;
+    case ElementType::BOXLINE_SEGMENT: draw(item_cast<const BoxLineSegment*>(item), painter, opt);
         break;
     case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter, opt);
         break;
@@ -1107,6 +1110,42 @@ void TDraw::draw(const FBox* item, Painter* painter, const PaintOptions& opt)
 void TDraw::draw(const TBox* item, Painter* painter, const PaintOptions& opt)
 {
     draw(static_cast<const Box*>(item), painter, opt);
+}
+
+void TDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    const BoxLineSegment::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    const BoxLine* box = item->boxLine();
+
+    const Color color = item->curColor(box->visible(), box->lineColor(), opt);
+    Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
+            PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+
+    const RectF& r = ldata->rect;
+    if (ldata->closedLeft && ldata->closedRight) {
+        // Full box
+        painter->drawRect(r);
+    } else if (ldata->closedLeft) {
+        // [  shape (first system)
+        const PointF pts[] = { r.topRight(), r.topLeft(), r.bottomLeft(), r.bottomRight() };
+        painter->drawPolyline(pts, 4);
+    } else if (ldata->closedRight) {
+        //  ] shape (last system)
+        const PointF pts[] = { r.topLeft(), r.topRight(), r.bottomRight(), r.bottomLeft() };
+        painter->drawPolyline(pts, 4);
+    } else {
+        //  = middle systems
+        painter->drawLine(r.topLeft(), r.topRight());
+        painter->drawLine(r.bottomLeft(), r.bottomRight());
+    }
 }
 
 void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)

@@ -47,6 +47,7 @@
 #include "dom/beam.h"
 #include "dom/bend.h"
 #include "dom/box.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -240,6 +241,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TBOX:
         layoutTBox(item_cast<const TBox*>(item), static_cast<TBox::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::BOXLINE:
+        layoutBoxLine(item_cast<BoxLine*>(item), ctx);
+        break;
+    case ElementType::BOXLINE_SEGMENT:
+        layoutBoxLineSegment(item_cast<BoxLineSegment*>(item), ctx);
         break;
     case ElementType::BRACKET:
         layoutBracket(item_cast<const Bracket*>(item), static_cast<Bracket::LayoutData*>(ldata), ctx.conf());
@@ -1429,6 +1436,42 @@ void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const Layout
 {
     LAYOUT_CALL_ITEM(item);
     BoxLayout::layoutTBox(item, ldata, ctx);
+}
+
+void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
+{
+    LAYOUT_CALL_ITEM(item);
+    BoxLineSegment::LayoutData* ldata = item->mutldata();
+    const BoxLine* box = item->boxLine();
+
+    if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(item->tick()));
+    }
+    if (box->placeBelow()) {
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
+    }
+
+    ldata->move(item->defaultPos());
+    ldata->moveY(item->staffOffsetY());
+
+    const double w = item->pos2().x();
+    const double h = item->absoluteFromSpatium(box->boxHeight());
+
+    // Line y is the box's bottom edge when above, top edge when below
+    ldata->rect = box->placeAbove() ? RectF(0.0, -h, w, h) : RectF(0.0, 0.0, w, h);
+    ldata->closedLeft  = item->isSingleBeginType();
+    ldata->closedRight = item->isSingleEndType();
+
+    const double lw2 = 0.5 * item->absoluteFromSpatium(box->lineWidth());
+    ldata->setShape(Shape(ldata->rect.padded(lw2), item));   // bbox for selection + autoplace
+
+    Autoplace::autoplaceSpannerSegment(item, ldata);
+}
+
+void TLayout::layoutBoxLine(BoxLine* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+    layoutLine(static_cast<SLine*>(item), ctx);
 }
 
 void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)

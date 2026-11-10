@@ -121,6 +121,7 @@ class EngravingItem;
 
 class BagpipeEmbellishment;
 class Beam;
+class BoxLine;
 
 class Chord;
 
@@ -228,6 +229,9 @@ public:
     static void layoutVBox(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx);
+
+    static void layoutBoxLine(BoxLine* item, LayoutContext& ctx);
+    static void layoutBoxLineSegment(BoxLineSegment* item, LayoutContext& ctx);
 
     static void layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutBreath(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf);

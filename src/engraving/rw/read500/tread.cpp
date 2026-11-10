@@ -41,6 +41,7 @@
 #include "../../dom/beam.h"
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
+#include "../../dom/boxline.h"
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 #include "../../dom/capo.h"
@@ -188,6 +189,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::FBOX: read(item_cast<FBox*>(item), xml, ctx);
         break;
     case ElementType::TBOX: read(item_cast<TBox*>(item), xml, ctx);
+        break;
+    case ElementType::BOXLINE: read(item_cast<BoxLine*>(item), xml, ctx);
         break;
     case ElementType::BRACKET: read(item_cast<Bracket*>(item), xml, ctx);
         break;
@@ -2307,6 +2310,19 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(BoxLine* b, XmlReader& e, ReadContext& ctx)
+{
+    b->eraseSpannerSegments();
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (readProperty(b, tag, e, ctx, Pid::BOXLINE_HEIGHT)) {
+        } else if (!readProperties(static_cast<SLine*>(b), e, ctx)) {
+            e.unknown();
+        }
+    }
 }
 
 void TRead::read(Bracket* b, XmlReader& e, ReadContext& ctx)

@@ -51,6 +51,7 @@
 #include "dom/beam.h"
 #include "dom/bend.h"
 #include "dom/box.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -205,6 +206,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::FBOX:         write(item_cast<const FBox*>(item), xml, ctx);
         break;
     case ElementType::TBOX:         write(item_cast<const TBox*>(item), xml, ctx);
+        break;
+    case ElementType::BOXLINE:      write(item_cast<const BoxLine*>(item), xml, ctx);
         break;
     case ElementType::BRACKET:      write(item_cast<const Bracket*>(item), xml, ctx);
         break;
@@ -1038,6 +1041,17 @@ void TWrite::write(const Bracket* item, XmlWriter& xml, WriteContext& ctx)
 
         xml.endElement();
     }
+}
+
+void TWrite::write(const BoxLine* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::BOXLINE_HEIGHT);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    xml.endElement();
 }
 
 void TWrite::write(const Breath* item, XmlWriter& xml, WriteContext& ctx)
