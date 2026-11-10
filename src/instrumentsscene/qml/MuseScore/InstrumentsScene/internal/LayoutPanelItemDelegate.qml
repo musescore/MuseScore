@@ -63,6 +63,8 @@ FocusableControl {
     signal changeEnabledOfSelectedRowsRequested(bool enable)
     signal changeEnabledRequested(var modelIndex, bool enable)
 
+    signal expandRequested(bool expand)
+
     signal mousePressed()
     signal mouseReleased()
 
@@ -204,11 +206,7 @@ FocusableControl {
         isExpanded: root.isExpanded
         expandableDepth: root.depth
         onExpandButtonClicked: function(expand) {
-            if (expand) {
-                root.treeView.expand(root.row)
-            } else {
-                root.treeView.collapse(root.row)
-            }
+            root.expandRequested(expand)
         }
 
         FlatButton {

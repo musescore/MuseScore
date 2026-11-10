@@ -68,6 +68,64 @@ Item {
         property int draggedDepth: 0
         property real dragStartY: 0
 
+        property int focusedRow: -1
+        property int focusedColumn: -1
+        property bool focusedHighlight: false
+
+        function setExpanded(delegate, expand) {
+            if (treeNavigationPanel.active) {
+                const navigation = prv.findNavigation(delegate, function(nav) { return nav.active })
+                if (navigation) {
+                    prv.focusedRow = delegate.row
+                    prv.focusedColumn = navigation.column
+                    prv.focusedHighlight = navigation.highlight
+                }
+            }
+
+            if (expand) {
+                layoutPanelTreeView.expand(delegate.row)
+            } else {
+                layoutPanelTreeView.collapse(delegate.row)
+            }
+        }
+
+        //! NOTE Expanding or collapsing doesn't move the toggled row
+        function restoreFocus() {
+            const row = prv.focusedRow
+            prv.focusedRow = -1
+            if (row < 0) {
+                return
+            }
+
+            const cell = layoutPanelTreeView.itemAtCell(Qt.point(0, row))
+            if (!cell) {
+                return
+            }
+
+            const column = prv.focusedColumn
+            const navigation = prv.findNavigation(cell, function(nav) { return nav.column === column })
+            if (navigation) {
+                navigation.requestActive(prv.focusedHighlight)
+            }
+        }
+
+        //! NOTE Walks the row's items, so that VisibilityControls' buttons are found too
+        function findNavigation(item, predicate) {
+            const navigation = item.navigation
+            if (navigation && navigation.panel === treeNavigationPanel && predicate(navigation)) {
+                return navigation
+            }
+
+            for (let i = 0; i < item.children.length; ++i) {
+                const found = prv.findNavigation(item.children[i], predicate)
+                if (found) {
+                    return found
+                }
+            }
+
+            return null
+        }
+
         function releasePressedDelegate() {
             if (!rowDragHandler.active) {
                 prv.pressedDelegate = null
@@ -158,6 +216,10 @@ Item {
 
         model: root.model
 
+        onLayoutChanged: {
+            prv.restoreFocus()
+        }
+
         columnWidthProvider: function(column) {
             return layoutPanelTreeView.width
         }
@@ -247,8 +309,12 @@ Item {
 
                         onDoubleClicked: {
                             if (itemDelegate.isExpandable) {
-                                layoutPanelTreeView.toggleExpanded(dropArea.row)
+                                prv.setExpanded(itemDelegate, !itemDelegate.isExpanded)
                             }
+                        }
+
+                        onExpandRequested: function(expand) {
+                            prv.setExpanded(itemDelegate, expand)
                         }
 
                         onRemoveSelectionRequested: {
