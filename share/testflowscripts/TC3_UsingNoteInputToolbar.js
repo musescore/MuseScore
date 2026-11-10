@@ -23,13 +23,15 @@
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC3: Using hote input toolbar",
     description: "Let's check the functionality of the buttons on the note input toolbar",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -43,93 +45,93 @@ var testCase = {
             NoteInput.chooseDefaultMode()
         }},
         {name: "Put", func: function() {
-            NoteInput.chooseNoteDuration("pad-note-64")
-            NoteInput.putNotes("note-c", 16)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_64TH_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 16)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-32")
-            NoteInput.putNotes("note-c", 8)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_32ND_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 8)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-16")
-            NoteInput.putNotes("note-c", 4)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_16TH_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 4)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-8")
-            NoteInput.putNotes("note-c", 2)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 2)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-4")
-            NoteInput.putNotes("note-c", 2)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 2)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-2")
-            NoteInput.putNotes("note-c", 1)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_HALF_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 1)
             api.testflow.seeChanges()
-            NoteInput.chooseNoteDuration("pad-note-1")
-            NoteInput.putNotes("note-c", 1)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_WHOLE_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 1)
             api.testflow.seeChanges()
 
             // note with dot
-            NoteInput.chooseNoteDuration("pad-note-4")
-            NoteInput.toggleDot("pad-dot")
-            NoteInput.putNotes("note-c", 2)
-            NoteInput.toggleDot("pad-dot")
-            NoteInput.putNotes("note-c", 1)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+            NoteInput.toggleDot(Commands.TOGGLE_DOT_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 2)
+            NoteInput.toggleDot(Commands.TOGGLE_DOT_COMMAND)
+            NoteInput.putNotes(Commands.ENTER_NOTE_C_COMMAND, 1)
             api.testflow.seeChanges()
 
             // note with accidental
-            NoteInput.chooseNoteDuration("pad-note-4")
-            NoteInput.toggleAccidental("flat2")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleAccidental("flat")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleAccidental("nat")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleAccidental("sharp")
-            NoteInput.putNote("note-c")
-            NoteInput.chooseNoteDuration("pad-note-1")
-            NoteInput.toggleAccidental("sharp2")
-            NoteInput.putNote("note-c")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+            NoteInput.toggleAccidental(Commands.TOGGLE_FLAT2_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleAccidental(Commands.TOGGLE_FLAT_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleAccidental(Commands.TOGGLE_NAT_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleAccidental(Commands.TOGGLE_SHARP_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_WHOLE_COMMAND)
+            NoteInput.toggleAccidental(Commands.TOGGLE_SHARP2_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 
             // tie
-            NoteInput.chooseNoteDuration("pad-note-4")
-            NoteInput.putNote("note-c")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
             NoteInput.putTie()
             NoteInput.putTie()
             NoteInput.putTie()
 
             // slur
             //! TODO The problem with the finish of the slur, see issues/7985
-//                NoteInput.chooseNoteDuration("pad-note-4")
-//                NoteInput.putNote("note-c")
+//                NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+//                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 //                NoteInput.toggleSlur()
-//                NoteInput.putNote("note-c")
-//                NoteInput.putNote("note-c")
-//                NoteInput.putNote("note-c")
+//                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+//                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+//                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 //                NoteInput.toggleSlur()
 
             // articulation
-            NoteInput.chooseNoteDuration("pad-note-8")
-            NoteInput.toggleArticulation("add-marcato")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-sforzato") // `add-marcato` to `add-sforzato`
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-sforzato") // `add-sforzato` off
-            NoteInput.toggleArticulation("add-tenuto")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-tenuto") // `add-tenuto` off
-            NoteInput.toggleArticulation("add-staccato")
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-marcato") // `add-staccato` + `add-marcato`
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-sforzato") // `add-staccato` + `add-sforzato`
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-tenuto") // `add-staccato` + `add-tenuto + `add-sforzato`
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-marcato") // `add-staccato` + `add-tenuto + `add-marcato`
-            NoteInput.putNote("note-c")
-            NoteInput.toggleArticulation("add-marcato") // `add-marcato` off
-            NoteInput.toggleArticulation("add-tenuto") // `add-tenuto` off
-            NoteInput.toggleArticulation("add-staccato") // `add-staccato` off
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_MARCATO_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_SFORZATO_COMMAND) // `add-marcato` to `add-sforzato`
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_SFORZATO_COMMAND) // `add-sforzato` off
+            NoteInput.toggleArticulation(Commands.TOGGLE_TENUTO_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_TENUTO_COMMAND) // `add-tenuto` off
+            NoteInput.toggleArticulation(Commands.TOGGLE_STACCATO_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_MARCATO_COMMAND) // `add-staccato` + `add-marcato`
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_SFORZATO_COMMAND) // `add-staccato` + `add-sforzato`
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_TENUTO_COMMAND) // `add-staccato` + `add-tenuto + `add-sforzato`
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_MARCATO_COMMAND) // `add-staccato` + `add-tenuto + `add-marcato`
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.toggleArticulation(Commands.TOGGLE_MARCATO_COMMAND) // `add-marcato` off
+            NoteInput.toggleArticulation(Commands.TOGGLE_TENUTO_COMMAND) // `add-tenuto` off
+            NoteInput.toggleArticulation(Commands.TOGGLE_STACCATO_COMMAND) // `add-staccato` off
 
-            NoteInput.chooseNoteDuration("pad-note-4")
-            NoteInput.putNote("note-c")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_QUARTER_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
 
             // tuplets
             NoteInput.putTuplet(3)
@@ -139,7 +141,7 @@ var testCase = {
             api.testflow.saveProject("TC3 Using note input toolbar.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             Home.goToHome()

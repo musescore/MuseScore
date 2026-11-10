@@ -44,6 +44,8 @@ install(FILES
       steps/PropertiesPanel.js
       steps/Navigation.js
       steps/Home.js
+      steps/Project.js
+      steps/Commands.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts/steps
       )
 

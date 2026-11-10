@@ -65,7 +65,7 @@ public:
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void runOnSplashScreen() override;
-    void runAfterSplashScreen() override;
+    muse::async::Promise<muse::Ret> runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:

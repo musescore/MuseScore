@@ -157,6 +157,7 @@ FocusableItem {
                     id: noteDirectionSection
 
                     titleText: qsTrc("propertiespanel", "Note direction")
+                    navigationName: "NoteDirection"
                     propertyItem: root.headModel ? root.headModel.headDirection : null
 
                     orientation: Qt.Horizontal

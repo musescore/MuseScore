@@ -7,20 +7,31 @@
 #include "../cmdoptions.h"
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "appshell/iappshellconfiguration.h"
+#include "network/inetworkconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
+
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/itestflowcmdrunner.h"
+#endif
 
 #include "appshell/widgets/splashscreen/splashscreen.h"
 
 class QQuickWindow;
 
 namespace mu::app {
-class MuseScoreGuiApp : public muse::ui::GuiApplication
+class MuseScoreGuiApp : public muse::ui::GuiApplication, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
+    muse::GlobalInject<muse::network::INetworkConfiguration> networkConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::GlobalInject<muse::testflow::ITestflowCmdRunner> testflowCmdRunner;
+#endif
 
 public:
     MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);

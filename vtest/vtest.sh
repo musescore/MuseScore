@@ -36,7 +36,8 @@ export MU_QT_QPA_PLATFORM=offscreen
 
 $MSCORE_BIN \
         --test-case $HERE/vtest.js \
-        --test-case-context $HERE/vtest_context.json 
+        --test-case-mode console \
+        --test-case-context $HERE/vtest_context.json
 
 code=$?
 echo "diagnostic code: $code"

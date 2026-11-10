@@ -208,6 +208,7 @@ MenuItem* NoteInputBarModel::makeServiceItem(const std::string& intent, const QS
 {
     const ServiceItemInfo info = serviceItemInfo(intent);
     MenuItem* item = new MenuItem(this);
+    item->setId(QString::fromStdString(intent));
     item->setTitle(info.title);
     item->setIcon(info.icon);
     item->setSection(section);

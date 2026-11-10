@@ -25,13 +25,15 @@ var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC1.1: Create Simple Score",
     description: "Just create a simple two-instrument score, a few notes, play it and save the project",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -48,42 +50,42 @@ var testCase = {
         }},
         {name: "Turn on note input", func: function() {
             NoteInput.chooseDefaultMode()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
         }},
         {name: "Put notes", func: function() {
             for (let i = 0; i < 3; ++i) {
-                NoteInput.putNote("note-c")
+                NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-d")
+                NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-e")
+                NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-f")
+                NoteInput.putNote(Commands.ENTER_NOTE_F_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-g")
+                NoteInput.putNote(Commands.ENTER_NOTE_G_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-a")
+                NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
                 api.testflow.seeChanges()
-                NoteInput.putNote("note-b")
+                NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
                 api.testflow.seeChanges()
             }
         }},
         {name: "Play", func: function() {
             //Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
             Score.firstElement()
-            api.dispatcher.dispatch("command://playback/play")
+            api.dispatcher.dispatch(Commands.PLAY_COMMAND)
         }},
         {name: "Stop", func: function() {
             // wait interval + 5 sec
             api.testflow.sleep(5000)
             //Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
-            api.dispatcher.dispatch("command://playback/pause")
+            api.dispatcher.dispatch(Commands.PAUSE_COMMAND)
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC1.1_CreateSimpleScore.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             Home.goToHome()

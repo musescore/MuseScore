@@ -295,6 +295,28 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/
 
+    - name: Run testflow test cases
+      if: matrix.arch == 'x86_64'
+      run: |
+        # Test the packaged application
+        APPIMAGE=$(realpath ./build.artifacts/*.AppImage)
+        chmod +x "${APPIMAGE}"
+        mkdir -p ./build.testflow
+        (cd ./build.testflow && "${APPIMAGE}" --appimage-extract >/dev/null)
+        # Each test case runs with a clean user data directory and without network access, on a virtual display
+        xvfb-run -a -s "-screen 0 1920x1080x24" \
+          cmake -P ./muse/buildscripts/ci/testflow/run_testflow.cmake \
+            --app ./build.testflow/squashfs-root/AppRun \
+            --scripts_dir ./share/testflowscripts \
+            --test_cases_file ./buildscripts/ci/testflow/test_cases.txt \
+            --output_dir ./build.testflow/results
+    - name: Upload testflow results
+      if: always() && matrix.arch == 'x86_64'
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}_testflow
+        path: ./build.testflow/results/
+
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
       if: always() && github.event_name != 'pull_request'

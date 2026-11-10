@@ -20,16 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var Instruments = require("steps/Instruments.js")
+var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC5: Using instruments",
     description: "Let's check the functionality of the instruments",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Project.closeIfOpened()
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -64,17 +68,18 @@ var testCase = {
         }},
         {name: "Manually Edit Setting", func: function() {
             api.testflow.pause()
+            Instruments.closeSettingsInstrument()
         }},
-        {name: "Move Flute Down", func: function() {
-            Instruments.moveDownInstrument("Flute")
+        {name: "Move Flute 1 Down", func: function() {
+            Instruments.moveDownInstrument("Flute 1")
             seeChangesLong()
         }},
-        {name: "Move Flute Down Again", func: function() {
-            Instruments.moveDownInstrument("Flute")
+        {name: "Move Flute 1 Down Again", func: function() {
+            Instruments.moveDownInstrument("Flute 1")
             seeChangesLong()
         }},
-        {name: "Move Flute Up", func: function() {
-            Instruments.moveUpInstrument("Flute")
+        {name: "Move Flute 1 Up", func: function() {
+            Instruments.moveUpInstrument("Flute 1")
             seeChangesLong()
         }},
         {name: "Remove Piano", func: function() {
@@ -85,15 +90,13 @@ var testCase = {
             api.testflow.saveProject("TC5_UsingInstruments.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }},
         {name: "Open Instruments panel", func: function() {
             Instruments.openInstrumentsPanel()
