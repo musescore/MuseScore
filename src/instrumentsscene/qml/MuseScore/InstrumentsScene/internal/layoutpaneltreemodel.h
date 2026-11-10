@@ -39,13 +39,9 @@
 
 #include "layoutpanelutils.h"
 
-Q_MOC_INCLUDE(< QItemSelectionModel >)
-
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;
 }
-
-class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
@@ -116,8 +112,6 @@ public:
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
-
-    Q_INVOKABLE QItemSelectionModel* selectionModel() const;
 
 signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
