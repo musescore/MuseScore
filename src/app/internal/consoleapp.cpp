@@ -342,4 +342,3 @@ int MuseScoreConsoleApp::processAudioPluginRegistration(const MuseScoreCmdOption
 
     return ret.code();
 }
-
