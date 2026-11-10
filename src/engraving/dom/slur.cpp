@@ -284,6 +284,12 @@ void SlurSegment::dragGrip(EditData& ed)
     switch (g) {
     case Grip::START:
     case Grip::END:
+        // Lock the location of the endpoints in as user offset as the code calculating this will no longer run when points are edited
+        // This prevents the endpoints jumping as soon as they are dragged
+        if (!isEndPointsEdited()) {
+            ups(Grip::START).off += endPointOff1();
+            ups(Grip::END).off += endPointOff2();
+        }
         ups(g).off += ed.delta;
         //
         // move anchor for slurs/ties

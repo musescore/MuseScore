@@ -2780,12 +2780,6 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     if (slurSeg->autoplace()) {
         adjustEndPoints(slurSeg);
     }
-    // If end point adjustment is locked, restore the endpoints to
-    // where they were before
-    if (slurSeg->isEndPointsEdited()) {
-        slurSeg->ups(Grip::START).off += slurSeg->endPointOff1();
-        slurSeg->ups(Grip::END).off += slurSeg->endPointOff2();
-    }
     // Get start and end points (have been calculated before)
     PointF pp1 = slurSeg->ups(Grip::START).p + slurSeg->ups(Grip::START).off;
     PointF pp2 = slurSeg->ups(Grip::END).p + slurSeg->ups(Grip::END).off;
@@ -2863,6 +2857,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     p3 -= difference;
     p4 -= difference;
     // Keep track of how much the end points position has changed
+    // Add this value to user offset in Slur::dragGrip to prevent end points jumping
     if (!slurSeg->isEndPointsEdited()) {
         slurSeg->setEndPointOff1(pp1 - oldp1);
         slurSeg->setEndPointOff2(pp2 - oldp2);
