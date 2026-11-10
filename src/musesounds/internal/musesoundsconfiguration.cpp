@@ -39,7 +39,31 @@ static const Settings::Key SHOW_LOADING_FAILED_WARNING_KEY(module_name, "musesou
 
 static const Settings::Key MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE(module_name, "musesounds/checkForUpdateTestMode");
 
-static const muse::String OPEN_SOUND_URL("https://www.musehub.com/muse-sounds/");
+static std::string utmParams(const std::string& campaignParams, const std::string& utmContent, const std::string& utmTerm)
+{
+    std::string params = campaignParams;
+
+    if (!utmContent.empty()) {
+        params += "&utm_content=" + utmContent;
+    }
+
+    if (!utmTerm.empty()) {
+        params += "&utm_term=" + utmTerm;
+    }
+
+    return params;
+}
+
+static std::string museHubParams(const std::string& utmContent, const std::string& utmTerm = std::string())
+{
+    return utmParams("utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink", utmContent, utmTerm);
+}
+
+static std::string museHubAppParams(const std::string& utmContent, const std::string& utmTerm = std::string())
+{
+    return utmParams("from=musescore&utm_medium=referral&utm_source=MSS&utm_campaign=MH_WW_REF_MSS_APP_ALL_011226_crosslink",
+                     utmContent, utmTerm);
+}
 
 static QString osCode()
 {
@@ -84,11 +108,38 @@ UriQuery MuseSoundsConfiguration::soundsUri() const
            : UriQuery("https://customers-api-dev.musehub.com/graphql/v3");
 }
 
-UriQuery MuseSoundsConfiguration::soundPageUri(const muse::String& soundCode) const
+MuseHubUrls MuseSoundsConfiguration::museHubUrls(MuseHubPage page, const std::string& utmContent, const String& soundCode) const
 {
-    String utm = String("?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
-                        "&utm_content=home_musesounds&utm_term=%1").arg(soundCode);
-    return UriQuery(OPEN_SOUND_URL + soundCode + utm);
+    const std::string baseUrl = globalConfiguration()->museHubWebUrl();
+
+    switch (page) {
+    case MuseHubPage::MuseSounds:
+        return { "musehub://musesounds?" + museHubAppParams(utmContent),
+                 baseUrl + "muse-sounds?" + museHubParams(utmContent) };
+    case MuseHubPage::FreeMuseSounds:
+        return { "musehub://musesounds?" + museHubAppParams(utmContent),
+                 baseUrl + "free-musesounds?" + museHubParams(utmContent) };
+    case MuseHubPage::MuseSoundsCore:
+        return { "musehub://product/store?id=musesounds-core&" + museHubAppParams(utmContent),
+                 baseUrl + "muse-sounds/musesounds-core?" + museHubParams(utmContent) };
+    case MuseHubPage::MuseSoundsPro:
+        return { "musehub://product/store?id=musesounds-pro&" + museHubAppParams(utmContent),
+                 baseUrl + "muse-sounds/musesounds-pro?" + museHubParams(utmContent) };
+    case MuseHubPage::Plugins:
+        return { "musehub://plugins?" + museHubAppParams(utmContent),
+                 baseUrl + "plugins?" + museHubParams(utmContent) };
+    case MuseHubPage::SoundLibrary: {
+        IF_ASSERT_FAILED(!soundCode.empty()) {
+            break;
+        }
+
+        const std::string codeStr = soundCode.toStdString();
+        return { "musehub://product/store?id=" + codeStr + "&" + museHubAppParams(utmContent, codeStr),
+                 baseUrl + "muse-sounds/" + codeStr + "?" + museHubParams(utmContent, codeStr) };
+    }
+    }
+
+    return { "musehub://", baseUrl };
 }
 
 QUrl MuseSoundsConfiguration::checkForMuseSoundsUpdateUrl() const

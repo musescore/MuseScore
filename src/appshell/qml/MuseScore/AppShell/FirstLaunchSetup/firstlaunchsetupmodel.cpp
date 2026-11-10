@@ -101,12 +101,10 @@ void FirstLaunchSetupModel::setCurrentPageIndex(int index)
 bool FirstLaunchSetupModel::askAboutClosingEarly()
 {
     const std::string title = muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?");
-    const std::string body = muse::qtrc("appshell/gettingstarted",
-                                        "If you choose to cancel, then be sure to check out our free "
-                                        "MuseSounds playback libraries on <a href=\"%1\">MuseHub.com</a>.")
-                             .arg(QString::fromStdString(configuration()->museHubFreeMuseSoundsUrl()))
-                             .toStdString();
-    const IInteractive::Text text(body, IInteractive::TextFormat::RichText);
+    const std::string body = muse::trc("appshell/gettingstarted",
+                                       "If you choose to cancel, then be sure to check out our free "
+                                       "MuseSounds playback libraries on MuseHub.");
+    const IInteractive::Text text(body, IInteractive::TextFormat::PlainText);
 
     static constexpr int visitMuseHubBtnId = int(IInteractive::Button::CustomButton) + 1;
     const IInteractive::ButtonData visitMuseHubBtn {
@@ -140,7 +138,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     IInteractive::Result result = interactive()->warningSync(title, text, buttons, int(IInteractive::Button::Cancel));
 
     if (result.isButton(visitMuseHubBtnId)) {
-        interactive()->openUrl(configuration()->museHubFreeMuseSoundsUrl());
+        museHubLauncher()->open(musesounds::MuseHubPage::FreeMuseSounds, "first_launch");
         return true;
     }
 

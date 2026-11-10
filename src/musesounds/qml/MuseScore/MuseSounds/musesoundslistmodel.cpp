@@ -24,6 +24,8 @@
 
 #include <unordered_set>
 
+#include "log.h"
+
 using namespace mu::musesounds;
 
 static const QVariantMap soundLibraryInfoToMap(const SoundLibraryInfo& soundLibraryInfo)
@@ -33,7 +35,6 @@ static const QVariantMap soundLibraryInfoToMap(const SoundLibraryInfo& soundLibr
     map["title"] = soundLibraryInfo.title.toQString();
     map["subtitle"] = soundLibraryInfo.subtitle.toQString();
     map["thumbnail"] = QString::fromStdString(soundLibraryInfo.thumbnail.toString());
-    map["uri"] = QString::fromStdString(soundLibraryInfo.uri.toString());
 
     return map;
 }
@@ -87,6 +88,11 @@ void MuseSoundsListModel::load()
     repository()->soundsCatalogueListChanged().onNotify(this, [this](){
         setSoundsCatalogs(repository()->soundsCatalogueList());
     });
+}
+
+void MuseSoundsListModel::openSoundLibrary(const QString& code)
+{
+    museHubLauncher()->openSoundLibrary(muse::String::fromQString(code), "home_musesounds");
 }
 
 QString MuseSoundsListModel::searchText() const

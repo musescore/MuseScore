@@ -23,6 +23,7 @@ set(MODULE_TEST musesounds_test)
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/musesamplercheckstatusservicemock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/musesoundsconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/musehublauncher_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckstatusscenario_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckstatusservice_tests.cpp
 )

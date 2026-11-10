@@ -31,6 +31,7 @@ target_sources(musesounds PRIVATE
     imusesoundscheckupdateservice.h
     imusesamplercheckstatusservice.h
     imusesamplercheckstatusscenario.h
+    imusehublauncher.h
 
     internal/musesoundsrepository.cpp
     internal/musesoundsrepository.h
@@ -45,6 +46,8 @@ target_sources(musesounds PRIVATE
     internal/musesamplercheckstatusservice.h
     internal/musesamplercheckstatusscenario.cpp
     internal/musesamplercheckstatusscenario.h
+    internal/musehublauncher.cpp
+    internal/musehublauncher.h
 )
 
 target_link_libraries(musesounds PRIVATE Qt::Concurrent)

@@ -47,6 +47,7 @@ Column {
     spacing: 16
 
     signal navigationActivated(var itemRect)
+    signal soundLibraryRequested(string code)
 
     function focusOnFirst() {
         view.itemAtIndex(0).requestActive()
@@ -121,7 +122,7 @@ Column {
 
                 onGetSoundLibraryRequested: {
                     forceActiveFocus()
-                    api.launcher.openUrl(item.modelData.uri)
+                    root.soundLibraryRequested(item.modelData.code)
                 }
             }
         }

@@ -27,6 +27,8 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
+#include "iinteractive.h"
+#include "musesounds/imusehublauncher.h"
 
 namespace mu::appshell {
 class WelcomeDialogModel : public QObject, public muse::Contextable
@@ -43,6 +45,8 @@ class WelcomeDialogModel : public QObject, public muse::Contextable
     QML_ELEMENT
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<musesounds::IMuseHubLauncher> museHubLauncher = { this };
 
 public:
     WelcomeDialogModel();
@@ -56,6 +60,7 @@ public:
 
     Q_INVOKABLE void nextItem();
     Q_INVOKABLE void prevItem();
+    Q_INVOKABLE void openCurrentItem();
 
     bool showOnStartup() const;
     void setShowOnStartup(bool show);

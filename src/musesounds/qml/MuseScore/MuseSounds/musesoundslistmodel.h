@@ -28,8 +28,8 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
 #include "imusesoundsrepository.h"
+#include "musesounds/imusehublauncher.h"
 
 namespace mu::musesounds {
 class MuseSoundsListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable
@@ -42,8 +42,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
 
     QML_ELEMENT
 
-    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<IMuseSoundsRepository> repository = { this };
+    muse::ContextInject<IMuseHubLauncher> museHubLauncher = { this };
 
 public:
     explicit MuseSoundsListModel(QObject* parent = nullptr);
@@ -53,6 +53,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void openSoundLibrary(const QString& code);
 
     bool isEmpty() const;
     bool noResultsFound() const;
