@@ -400,6 +400,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_STYLE,                      P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "endFontStyle",                    QT_TRANSLATE_NOOP("engraving/propertyName", "end font style") },
     { Pid::END_TEXT_OFFSET,                     P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "endTextOffset",                   QT_TRANSLATE_NOOP("engraving/propertyName", "end text offset") },
 
+    { Pid::BOXLINE_HEIGHT,                      P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, false, "boxLineHeight",                   QT_TRANSLATE_NOOP("engraving/propertyName", "box line height") },
+
     { Pid::NOTELINE_PLACEMENT,                  P_TYPE::NOTELINE_PLACEMENT_TYPE,   PropertyGroup::APPEARANCE, false, "noteLinePlacement",               QT_TRANSLATE_NOOP("engraving/propertyName", "note-anchored line placement") },
 
     { Pid::AVOID_BARLINES,                      P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "avoidBarLines",                   QT_TRANSLATE_NOOP("engraving/propertyName", "avoid barlines") },

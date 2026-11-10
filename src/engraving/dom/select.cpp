@@ -1292,6 +1292,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::TRILL_SEGMENT:
         case ElementType::LET_RING_SEGMENT:
         case ElementType::VIBRATO_SEGMENT:
+        case ElementType::BOXLINE_SEGMENT:
         case ElementType::PALM_MUTE_SEGMENT:
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::RASGUEADO_SEGMENT:
@@ -1308,6 +1309,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::TRILL:
         case ElementType::LET_RING:
         case ElementType::VIBRATO:
+        case ElementType::BOXLINE:
         case ElementType::PALM_MUTE:
         case ElementType::WHAMMY_BAR:
         case ElementType::RASGUEADO:
