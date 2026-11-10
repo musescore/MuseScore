@@ -238,6 +238,14 @@ static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_HAIRPIN_REVERSE_COMMAND
 };
 
+static const std::vector<Command> SYSTEM_COMMANDS = {
+    APPLY_SYSTEM_LOCK_COMMAND,
+    TOGGLE_SYSTEM_LOCK_COMMAND,
+    MAKE_INTO_SYSTEM_COMMAND,
+    MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+    MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND,
+};
+
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
     { SelectFirstItemCommand::id, MoveSelectionType::EngravingItem },
     { SelectLastItemCommand::id, MoveSelectionType::EngravingItem },
@@ -348,6 +356,7 @@ void NotationCommandsState::init()
         updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(SYSTEM_COMMANDS);
         updateCommandStates(TAB_COMMANDS);
     });
 
@@ -528,6 +537,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         // Re-pitch must not change durations
         const bool isRepitch = controller()->isNoteInputMode() && controller()->noteInputMethod() == NoteInputMethod::REPITCH;
         return CommandState(controller()->isNoteOrRestSelected() && !isRepitch, false);
+    }
+
+    if (muse::contains(SYSTEM_COMMANDS, command)) {
+        return CommandState(controller()->isSystemSelected(), false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
