@@ -21,21 +21,36 @@
  */
 #pragma once
 
+#include <string>
+
 #include "types/string.h"
 #include "types/uri.h"
 
 namespace mu::musesounds {
+enum class MuseHubPage {
+    MuseSounds,
+    FreeMuseSounds,
+    MuseSoundsCore,
+    MuseSoundsPro,
+    Plugins,
+    SoundLibrary,
+};
+
+struct MuseHubUrls {
+    std::string museHubUri;
+    std::string webUrl;
+};
+
 struct SoundLibraryInfo {
     muse::String code;
     muse::String title;
     muse::String subtitle;
     muse::UriQuery thumbnail;
-    muse::UriQuery uri;
 
     bool operator==(const SoundLibraryInfo& o) const
     {
         return code == o.code && title == o.title && subtitle == o.subtitle
-               && thumbnail == o.thumbnail && uri == o.uri;
+               && thumbnail == o.thumbnail;
     }
 };
 using SoundLibraryInfoList = std::vector<SoundLibraryInfo>;

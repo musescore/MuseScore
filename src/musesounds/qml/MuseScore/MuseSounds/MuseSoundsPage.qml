@@ -174,6 +174,10 @@ FocusScope {
                     onNavigationActivated: function(itemRect) {
                         Utils.ensureContentVisible(flickable, itemRect, headerHeight + 16)
                     }
+
+                    onSoundLibraryRequested: function(code) {
+                        museSoundsModel.openSoundLibrary(code)
+                    }
                 }
             }
         }

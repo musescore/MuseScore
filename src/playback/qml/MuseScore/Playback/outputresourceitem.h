@@ -30,8 +30,7 @@
 
 #include "modularity/ioc.h"
 
-#include "global/iglobalconfiguration.h"
-#include "iinteractive.h"
+#include "musesounds/imusehublauncher.h"
 
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"
@@ -54,8 +53,7 @@ class OutputResourceItem : public AbstractAudioResourceItem
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
 
-    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<musesounds::IMuseHubLauncher> museHubLauncher = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
 
 public:

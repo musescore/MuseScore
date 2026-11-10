@@ -176,7 +176,6 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             soundLibrary.subtitle = productObj.value("subtitle").toString();
             soundLibrary.thumbnail = correctThumbnailSize(UriQuery(soundItemObj.value("iconImageUrl").toStdString()));
             soundLibrary.code = productObj.value("code").toString();
-            soundLibrary.uri = configuration()->soundPageUri(soundLibrary.code);
 
             catalogue.soundLibraries.emplace_back(soundLibrary);
         }

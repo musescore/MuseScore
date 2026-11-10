@@ -31,6 +31,7 @@
 #include "internal/musesoundscheckupdateservice.h"
 #include "internal/musesamplercheckstatusservice.h"
 #include "internal/musesamplercheckstatusscenario.h"
+#include "internal/musehublauncher.h"
 
 using namespace mu::musesounds;
 using namespace muse;
@@ -49,6 +50,7 @@ void MuseSoundsModule::registerExports()
     m_museSoundsCheckUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(iocContext());
     m_museSamplerCheckStatusService = std::make_shared<MuseSamplerCheckStatusService>(iocContext());
     m_museSamplerCheckStatusScenario = std::make_shared<MuseSamplerCheckStatusScenario>(iocContext());
+    m_museHubLauncher = std::make_shared<MuseHubLauncher>(iocContext());
 
     ioc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMuseSoundsRepository>(moduleName(), m_repository);
@@ -58,6 +60,8 @@ void MuseSoundsModule::registerExports()
 
     ioc()->registerExport<IMuseSamplerCheckStatusService>(moduleName(), m_museSamplerCheckStatusService);
     ioc()->registerExport<IMuseSamplerCheckStatusScenario>(moduleName(), m_museSamplerCheckStatusScenario);
+
+    ioc()->registerExport<IMuseHubLauncher>(moduleName(), m_museHubLauncher);
 }
 
 void MuseSoundsModule::resolveImports()

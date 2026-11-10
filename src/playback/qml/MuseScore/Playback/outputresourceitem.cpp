@@ -97,10 +97,7 @@ void OutputResourceItem::handleMenuItem(const QString& menuItemId)
         updateCurrentFxParams(AudioResourceMeta());
         return;
     } else if (menuItemId == GET_MORE_EFFECTS) {
-        const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
-        const QString urlParams("plugins?utm_medium=Referral&utm_source=mss"
-                                "&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=mixer_fx");
-        interactive()->openUrl(url + urlParams);
+        museHubLauncher()->open(musesounds::MuseHubPage::Plugins, "mixer_fx");
         return;
     }
 
