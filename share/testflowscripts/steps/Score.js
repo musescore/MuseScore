@@ -47,11 +47,16 @@ function selectedNote()
 }
 
 //! NOTE Moves the selection by the shortcut until a note (with the pitch, if given) is selected
+function isNoteSelected(pitch)
+{
+    var note = selectedNote()
+    return note !== null && (pitch === undefined || note.pitch === pitch)
+}
+
 function findNote(shortcut, pitch, maxSteps)
 {
     for (var i = 0; i < maxSteps; ++i) {
-        var note = selectedNote()
-        if (note && (pitch === undefined || note.pitch === pitch)) {
+        if (isNoteSelected(pitch)) {
             return true
         }
 
@@ -59,7 +64,7 @@ function findNote(shortcut, pitch, maxSteps)
         api.testflow.sleep(50)
     }
 
-    return selectedNote() !== null
+    return isNoteSelected(pitch)
 }
 
 module.exports = {
