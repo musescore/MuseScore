@@ -41,7 +41,6 @@ using muse::rcommand::Checkable;
 // A few typed commands as an example. Eventually, all commands should be made typed.
 
 #define sci_auto static const inline auto
-#define sce_auto static constexpr auto
 
 // select commands
 struct SelectCommand {
@@ -54,7 +53,7 @@ struct SelectCommand {
     SelectionTarget target = SelectionTarget::FirstItem;
     PlayMode playMode = PlayMode::NoPlay;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "target", &SelectCommand::target, "Selection target" },
         Field{ "play-mode", &SelectCommand::playMode, "Play mode", Presence::Optional },
     };
@@ -238,7 +237,7 @@ struct AddToSelectionCommand {
 
     SelectionTarget target = SelectionTarget::BeginSystem;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "target", &AddToSelectionCommand::target, "Selection target" },
     };
 };
@@ -337,7 +336,7 @@ struct ToggleNoteInputCommand {
 
     NoteInputMethod method = NoteInputMethod::DEFAULT;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "method", &ToggleNoteInputCommand::method, "Note input method" },
     };
 };
@@ -423,7 +422,7 @@ struct SetDurationCommand {
 
     DurationType duration = DurationType::V_QUARTER;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "duration", &SetDurationCommand::duration, "Duration" },
     };
 };
@@ -542,7 +541,7 @@ struct ChangeDurationCommand {
 
     ChangeDurationMode mode = ChangeDurationMode::Double;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "mode", &ChangeDurationCommand::mode, "Change duration mode" },
     };
 };
@@ -584,7 +583,7 @@ struct ToggleDotsCommand {
 
     int dots = 1;
 
-    sce_auto input = FieldsScheme {
+    sci_auto input = FieldsScheme {
         Field{ "dots", &ToggleDotsCommand::dots, "Number of dots", 1, engraving::MAX_DOTS },
     };
 };
@@ -643,7 +642,7 @@ struct RequestNoteInputStateCommand {
     };
 
     using O = RequestNoteInputStateCommand::Output;
-    sce_auto output = std::tuple {
+    sci_auto output = std::tuple {
         Field{ "enabled", &O::enabled, "Flag indicating whether the note input mode is enabled" },
         Field{ "method", &O::method, "The method used to input the note" },
     };
@@ -659,7 +658,7 @@ struct AddNoteCommand {
     NoteName note = NoteName::C;
     NoteAddingMode mode = NoteAddingMode::NextChord;
 
-    sce_auto input = std::tuple {
+    sci_auto input = std::tuple {
         Field{ "note", &AddNoteCommand::note, "Note name" },
         Field{ "mode", &AddNoteCommand::mode, "Adding mode", Presence::Optional },
     };
@@ -850,7 +849,6 @@ struct FlipCommand {
 };
 
 #undef sci_auto
-#undef sce_auto
 }
 
 namespace mu::notation {
