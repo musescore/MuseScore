@@ -32,16 +32,44 @@ function triggerNoteInputBtn(btn)
     api.testflow.sleep(100)
 }
 
+var MODE_TIMEOUT_MSEC = 5000
+var MODE_CHECK_MSEC = 50
+
+//! NOTE A fixed wait is not enough under load, the notes would be entered before the mode is on,
+//! so wait until the mode is in the required state
+function setDefaultMode(on)
+{
+    var command = Commands.TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND
+    if (api.testflow.isCommandChecked(command) === on) {
+        return
+    }
+
+    Navigation.triggerControl("NoteInputSection", "NoteInputBar", command)
+    for (var waited = 0; waited < MODE_TIMEOUT_MSEC; waited += MODE_CHECK_MSEC) {
+        if (api.testflow.isCommandChecked(command) === on) {
+            return
+        }
+        api.testflow.sleep(MODE_CHECK_MSEC)
+    }
+
+    //! NOTE The mode may be set during the last sleep
+    if (api.testflow.isCommandChecked(command) === on) {
+        return
+    }
+
+    api.testflow.error("note input error: the note input mode is not " + (on ? "on" : "off") + " after " + MODE_TIMEOUT_MSEC + " msec")
+}
+
 module.exports = {
 
     chooseDefaultMode: function()
     {
-        triggerNoteInputBtn(Commands.TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND)
+        setDefaultMode(true)
     },
 
     turnoffDefaultMode: function()
     {
-        triggerNoteInputBtn(Commands.TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND)
+        setDefaultMode(false)
     },
 
     // Commands.SET_DURATION_*_COMMAND, Commands.TOGGLE_REST_COMMAND

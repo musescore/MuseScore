@@ -11,6 +11,7 @@
 #include "multiwindows/imultiwindowsprovider.h"
 #include "appshell/iappshellconfiguration.h"
 #include "network/inetworkconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
 #include "muse_framework_config.h"
@@ -28,6 +29,7 @@ class MuseScoreGuiApp : public muse::ui::GuiApplication, public muse::async::Asy
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<muse::network::INetworkConfiguration> networkConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 #ifdef MUSE_MODULE_TESTFLOW
     muse::GlobalInject<muse::testflow::ITestflowCmdRunner> testflowCmdRunner;

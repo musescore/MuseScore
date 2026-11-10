@@ -95,6 +95,10 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
         networkConfiguration()->setOffline(options->network.offline.value());
     }
 
+    if (options->audio.outputDisabled) {
+        audioConfiguration()->setOutputDisabled(options->audio.outputDisabled.value());
+    }
+
     notationConfiguration()->setTemplateModeEnabled(options->notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options->notation.testModeEnabled);
 

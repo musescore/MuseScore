@@ -1,14 +1,15 @@
 # Testflow test cases run on CI (see muse/buildscripts/ci/testflow/run_testflow.cmake)
+# The long test cases first: the test cases run in parallel in the given order
 # Not run:
 #   TC9_BigScore(perfomance) - performance, the timing is not stable on CI
 #   TC10_PlayToggle          - playback, there is no audio on CI
 
+TC4_UsingPalettes
+TC7_UsingExport
+TC6_UsingPropertiesPanel_Note
 TC1.1_CreateSimpleScore
 TC1.2_CreateSimpleScoreWithRandomInstruments
 TC2_CreateSimpleScoreByTemplate
 TC3_UsingNoteInputToolbar
-TC4_UsingPalettes
 TC5_UsingInstruments
-TC6_UsingPropertiesPanel_Note
-TC7_UsingExport
 TC8_EngravingText
