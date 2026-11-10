@@ -166,6 +166,10 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
         networkConfiguration()->setOffline(options->network.offline.value());
     }
 
+    if (options->audio.outputDisabled) {
+        audioConfiguration()->setOutputDisabled(options->audio.outputDisabled.value());
+    }
+
     if (options->app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options->app.revertToFactorySettings.value());
     }
