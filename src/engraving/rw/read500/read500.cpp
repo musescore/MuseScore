@@ -477,6 +477,8 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Measure* measure = score->tick2measure(tick);
                     tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(ctx.track());
+                    tuplet->setOwnershipParent(measure);
+                    tuplet->setTick(tick);
                     TRead::read(tuplet, e, ctx);
                     if (doScale) {
                         Fraction ticksScaled = tuplet->ticks() * scale;
@@ -487,8 +489,6 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         tuplet->setTicks(ticksScaled);
                         tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
                     }
-                    tuplet->setOwnershipParent(measure);
-                    tuplet->setTick(tick);
                     tuplet->setTuplet(oldTuplet);
                     if (tuplet->rtick() + tuplet->actualTicks() > measure->ticks()) {
                         delete tuplet;

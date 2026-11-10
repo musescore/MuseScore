@@ -73,6 +73,8 @@ Tuplet::Tuplet(DummyParentOr<Measure> parent)
     m_number       = 0;
     m_hasBracket   = false;
     m_isUp         = true;
+    // Temporary value to prevent initElementStyle laying out from the start of the score when m_tick is 0
+    m_tick = parent.as<Measure>() ? parent.as<Measure>()->tick() : Fraction(0, 1);
     initElementStyle(&tupletStyle);
 }
 
