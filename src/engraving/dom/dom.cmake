@@ -43,6 +43,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp
     ${CMAKE_CURRENT_LIST_DIR}/box.h
+    ${CMAKE_CURRENT_LIST_DIR}/boxline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/boxline.h
     ${CMAKE_CURRENT_LIST_DIR}/bracket.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bracket.h
     ${CMAKE_CURRENT_LIST_DIR}/bracketitem.cpp

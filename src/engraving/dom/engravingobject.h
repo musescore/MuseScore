@@ -50,6 +50,8 @@ class Beam;
 class BeamSegment;
 class Bend;
 class Box;
+class BoxLine;
+class BoxLineSegment;
 class Bracket;
 class BracketItem;
 class Breath;
@@ -478,6 +480,7 @@ public:
     CONVERT(GradualTempoChange, GRADUAL_TEMPO_CHANGE)
     CONVERT(GradualTempoChangeSegment, GRADUAL_TEMPO_CHANGE_SEGMENT)
     CONVERT(Vibrato,       VIBRATO)
+    CONVERT(BoxLine,       BOXLINE)
     CONVERT(PalmMute,      PALM_MUTE)
     CONVERT(PalmMuteSegment, PALM_MUTE_SEGMENT)
     CONVERT(WhammyBar,      WHAMMY_BAR)
@@ -489,6 +492,7 @@ public:
     CONVERT(PickScrape,      PICK_SCRAPE)
     CONVERT(PickScrapeSegment, PICK_SCRAPE_SEGMENT)
     CONVERT(VibratoSegment,  VIBRATO_SEGMENT)
+    CONVERT(BoxLineSegment, BOXLINE_SEGMENT)
     CONVERT(Symbol,        SYMBOL)
     CONVERT(FSymbol,       FSYMBOL)
     CONVERT(Fingering,     FINGERING)
@@ -585,6 +589,7 @@ public:
                || isTextLineBaseSegment()
                || isTrillSegment()
                || isVibratoSegment()
+               || isBoxLineSegment()
                || isGuitarBendSegment()
                || isGuitarBendHoldSegment()
         ;
@@ -633,7 +638,7 @@ public:
 
     bool isSLine() const
     {
-        return isTextLineBase() || isTrill() || isGlissando() || isVibrato() || isGuitarBend() || isGuitarBendHold();
+        return isTextLineBase() || isTrill() || isGlissando() || isVibrato() || isBoxLine() || isGuitarBend() || isGuitarBendHold();
     }
 
     bool isSpanner() const
@@ -829,6 +834,8 @@ CONVERT(GradualTempoChange)
 CONVERT(GradualTempoChangeSegment)
 CONVERT(Vibrato)
 CONVERT(VibratoSegment)
+CONVERT(BoxLine)
+CONVERT(BoxLineSegment)
 CONVERT(PalmMute)
 CONVERT(PalmMuteSegment)
 CONVERT(WhammyBar)

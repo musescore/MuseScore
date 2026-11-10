@@ -1525,6 +1525,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::PEDAL:
     case ElementType::LET_RING:
     case ElementType::VIBRATO:
+    case ElementType::BOXLINE:
     case ElementType::PALM_MUTE:
     case ElementType::OTTAVA:
     case ElementType::TRILL:
@@ -1891,6 +1892,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::PEDAL:
     case ElementType::LET_RING:
     case ElementType::VIBRATO:
+    case ElementType::BOXLINE:
     case ElementType::PALM_MUTE:
     case ElementType::HAIRPIN:
     case ElementType::WHAMMY_BAR:

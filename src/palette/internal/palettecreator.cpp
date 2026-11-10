@@ -34,6 +34,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/bagpembell.h"
 #include "engraving/dom/barline.h"
+#include "engraving/dom/boxline.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/capo.h"
@@ -1335,6 +1336,9 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         vibrato->setVibratoType(vibratoType);
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
+
+    auto boxLine = makeElement<BoxLine>(paletteScore());
+    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box"));
 
     auto pm = makeElement<PalmMute>(paletteScore());
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));

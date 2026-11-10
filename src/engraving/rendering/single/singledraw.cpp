@@ -41,6 +41,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -181,6 +182,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter, opt);
         break;
     case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter, opt);
+        break;
+    case ElementType::BOXLINE_SEGMENT: draw(item_cast<const BoxLineSegment*>(item), painter, opt);
         break;
     case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter, opt);
         break;
@@ -993,6 +996,26 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
         x = x2;
         y = y2;
     }
+}
+
+void SingleDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    const BoxLineSegment::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    const BoxLine* box = item->boxLine();
+
+    const Color color = item->curColor(box->visible(), box->lineColor(), opt);
+    Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
+            PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+
+    painter->drawRect(ldata->rect);
 }
 
 void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
