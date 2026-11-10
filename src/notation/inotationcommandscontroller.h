@@ -78,6 +78,10 @@ public:
     virtual bool isNoteOrRestSelected() const = 0;
     virtual bool isHairpinSelected() const = 0;
     virtual bool isSystemSelected() const = 0;
+    virtual bool isMeasureSelected() const = 0;
+    virtual bool hasMeasureBasesInSelection() const = 0;
+    virtual bool isVBoxBaseSelected() const = 0;
+    virtual bool isMakeIntoSystemAvailable() const = 0;
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
 
     virtual bool isToggleLayoutBreakAvailable() const = 0;
