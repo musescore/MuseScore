@@ -25,21 +25,13 @@ target_sources(appshell PRIVATE
     appshellmodule.h
     iappshellconfiguration.h
     appshelltypes.h
-    internal/applicationuiactions.cpp
-    internal/applicationuiactions.h
     internal/appshellconfiguration.cpp
     internal/appshellconfiguration.h
-    internal/applicationactioncontroller.cpp
-    internal/applicationactioncontroller.h
     internal/istartupscenario.h
     internal/startupscenario.cpp
     internal/startupscenario.h
     view/appmenumodel.cpp
     view/appmenumodel.h
-    view/notationpagemodel.cpp
-    view/notationpagemodel.h
-    view/notationstatusbarmodel.cpp
-    view/notationstatusbarmodel.h
     view/navigableappmenumodel.cpp
     view/navigableappmenumodel.h
 )

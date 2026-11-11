@@ -28,8 +28,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::appshell {
-class ApplicationActionController;
-class ApplicationUiActions;
 class AppShellConfiguration;
 class AppShellModule : public muse::modularity::IModuleSetup
 {
@@ -49,8 +47,6 @@ public:
     void onDeinit() override;
 
 private:
-    std::shared_ptr<ApplicationActionController> m_applicationActionController;
-    std::shared_ptr<ApplicationUiActions> m_applicationUiActions;
     std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
 };
 }
