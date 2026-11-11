@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
@@ -35,6 +36,7 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/editbeam.h"
 #include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/edittuplet.h"
 #include "engraving/editing/noteinput.h"
@@ -1641,6 +1643,19 @@ static void moveToStaffBelow(Measure* measure, size_t from, size_t to)
     });
 }
 
+// writes an eighth note over the rest at `index` and joins its beam to the previous chord's
+static void addEighthJoinedToBeam(Measure* measure, size_t index, int pitch)
+{
+    Score* score = measure->score();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->setNoteRest(chordRestAt(measure, index)->segment(), 0, NoteVal(pitch), Fraction(1, 8));
+    });
+    score->select(chordRestAt(measure, index), SelectType::SINGLE);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        EditBeam::setBeamMode(tx, score, BeamMode::MID);
+    });
+}
+
 //-----------------------------------------
 //    nestedTupletsOuterBracket
 //     with Automatic brackets, an outer tuplet that starts and ends its beam group
@@ -1715,6 +1730,128 @@ TEST_F(Engraving_TupletTests, nestedTupletsOuterBracketCrossStaff)
     ASSERT_TRUE(outer->isUp());
     ASSERT_TRUE(toTuplet(outer->elements().at(2))->isUp());
     EXPECT_FALSE(outer->hasBracket());
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOuterDirection
+//     an outer tuplet made only of nested tuplets
+//     is placed on the stem side of their chords
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterDirection)
+{
+    for (bool up : { false, true }) {
+        MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+        ASSERT_TRUE(score);
+        // D5 E5 F5 with stems down, or E4 F4 G4 with stems up
+        Measure* m1 = score->firstMeasure();
+        Tuplet* outer = addNestedTriplets(m1, up ? std::vector<int> { 64, 65, 67 } : std::vector<int> { 74, 76, 77 });
+        ASSERT_TRUE(outer);
+
+        for (size_t i = 0; i < 9; ++i) {
+            ASSERT_EQ(toChord(chordRestAt(m1, i))->up(), up);
+        }
+        for (const DurationElement* e : outer->elements()) {
+            EXPECT_EQ(toTuplet(e)->isUp(), up);
+        }
+        EXPECT_EQ(outer->isUp(), up);
+
+        delete score;
+    }
+}
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterDirectionCrossStaff)
+{
+    // the middle nested triplet moved to the staff below: the cross-staff beam sets the stems, so they don't
+    // vote, and the outer tuplet stays above
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 62, 64, 65 });
+    ASSERT_TRUE(outer);
+    moveToStaffBelow(m1, 3, 6);
+    ASSERT_EQ(chordRestAt(m1, 4)->staffMove(), 1);
+    ASSERT_TRUE(outer->cross());
+
+    EXPECT_TRUE(outer->isUp());
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOuterDirectionCrossStaffGroup
+//     where any note of a nested group is cross-staff, a tuplet in it without cross-staff notes
+//     doesn't take its side from its nested chords either
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterDirectionCrossStaffGroup)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    // three levels: a half-note triplet whose first two notes are quarter triplets of eighth triplets, D4 E4 F4
+    Measure* m1 = score->firstMeasure();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->setNoteRest(m1->first(SegmentType::ChordRest), 0, NoteVal(62), Fraction(1, 1));
+    });
+    ASSERT_TRUE(addTuplet(chordRestAt(m1, 0), Fraction(3, 2), DurationType::V_HALF));
+    for (size_t start : { size_t(0), size_t(9) }) {
+        ASSERT_TRUE(addTuplet(chordRestAt(m1, start), Fraction(3, 2), DurationType::V_QUARTER));
+        for (size_t i = start; i < start + 9; i += 3) {
+            ASSERT_TRUE(addTuplet(chordRestAt(m1, i), Fraction(3, 2), DurationType::V_EIGHTH));
+        }
+    }
+    const int pitches[] = { 62, 64, 65 };
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        for (size_t i = 0; i < 18; ++i) {
+            score->setNoteRest(chordRestAt(m1, i)->segment(), 0, NoteVal(pitches[i % 3]), Fraction(1, 8));
+        }
+    });
+    ASSERT_EQ(rhythm(m1), "3:2[ 3:2[ 3:2[8 8 8] 3:2[8 8 8] 3:2[8 8 8]] 3:2[ 3:2[8 8 8] 3:2[8 8 8] 3:2[8 8 8]] r2]");
+    Tuplet* second = toTuplet(chordRestAt(m1, 0)->topTuplet()->elements().at(1));
+    ASSERT_TRUE(second->isUp());
+
+    // only the first note moved to the staff below: the cross-staff beam turns the second quarter triplet's
+    // stems down, but it stays above
+    moveToStaffBelow(m1, 0, 1);
+    ASSERT_FALSE(second->cross());
+    ASSERT_FALSE(toChord(chordRestAt(m1, 9))->up());
+    EXPECT_TRUE(second->isUp());
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOuterDirectionCrossStaffBeam
+//     where a nested group is under a cross-staff beam, the outer tuplet
+//     doesn't take its side from its nested chords
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterDirectionCrossStaffBeam)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    // D4 E4 F4: stems up
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 62, 64, 65 });
+    ASSERT_TRUE(outer);
+    ASSERT_TRUE(outer->isUp());
+
+    // a G4 beamed to the group and moved to the staff below: no note of the group is cross-staff, but the
+    // cross-staff beam turns its stems down, and the outer tuplet stays above
+    addEighthJoinedToBeam(m1, 9, 67);
+    moveToStaffBelow(m1, 9, 10);
+    ASSERT_FALSE(outer->cross());
+    const Beam* beam = toChord(chordRestAt(m1, 0))->beam();
+    ASSERT_TRUE(beam);
+    ASSERT_EQ(beam, toChord(chordRestAt(m1, 9))->beam());
+    ASSERT_TRUE(beam->cross());
+    ASSERT_FALSE(toChord(chordRestAt(m1, 0))->up());
+    EXPECT_TRUE(outer->isUp());
 
     delete score;
 }

@@ -209,15 +209,13 @@ void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
     item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
 }
 
-void TupletLayout::computeDirection(Tuplet* item)
+// Stem direction votes of the chords in a tuplet, including those in nested tuplets unless the group
+// is cross-staff (a cross-staff beam sets the stems)
+static int stemDirectionVotes(const Tuplet* tuplet)
 {
-    if (item->direction() != DirectionV::AUTO) {
-        item->setIsUp(item->direction() == DirectionV::UP);
-        return;
-    }
-
+    const bool countNested = !tuplet->inCrossStaffGroup();
     int up = 0;
-    for (const DurationElement* e : item->elements()) {
+    for (const DurationElement* e : tuplet->elements()) {
         if (e->isChord()) {
             const Chord* c = toChord(e);
             if (c->stemDirection() != DirectionV::AUTO) {
@@ -225,8 +223,21 @@ void TupletLayout::computeDirection(Tuplet* item)
             } else {
                 up += c->up() ? 1 : -1;
             }
+        } else if (e->isTuplet() && countNested) {
+            up += stemDirectionVotes(toTuplet(e));
         }
     }
+    return up;
+}
+
+void TupletLayout::computeDirection(Tuplet* item)
+{
+    if (item->direction() != DirectionV::AUTO) {
+        item->setIsUp(item->direction() == DirectionV::UP);
+        return;
+    }
+
+    int up = stemDirectionVotes(item);
     if (up == 0) {
         // this is a tuplet full of rests, default to up but also take voices into consideration
         Measure* m = item->measure();
