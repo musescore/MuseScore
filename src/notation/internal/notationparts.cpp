@@ -185,9 +185,10 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
 {
     std::vector<Part*> parts;
+    parts.reserve(partsIds.size());
 
-    for (Part* part : score()->parts()) {
-        if (std::find(partsIds.cbegin(), partsIds.cend(), part->id()) != partsIds.cend()) {
+    for (const ID& partId : partsIds) {
+        if (Part* part = score()->partById(partId)) {
             parts.push_back(part);
         }
     }
@@ -862,43 +863,6 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     apply();
 }
 
-void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destinationStaffId)
-{
-    Staff* srcStaff = staffModifiable(sourceStaffId);
-    if (!srcStaff || !srcStaff->isSystemObjectStaff()) {
-        return;
-    }
-
-    Staff* dstStaff = staffModifiable(destinationStaffId);
-    if (!dstStaff) {
-        return;
-    }
-
-    startEdit(TranslatableString("undoableAction", "Move system markings"));
-
-    EditPart::moveSystemObjects(score(), srcStaff, dstStaff);
-
-    apply();
-}
-
-void NotationParts::moveSystemObjectLayerBelowBottomStaff()
-{
-    startEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
-
-    score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, true);
-
-    apply();
-}
-
-void NotationParts::moveSystemObjectLayerAboveBottomStaff()
-{
-    startEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
-
-    score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
-
-    apply();
-}
-
 void NotationParts::toggleStaveSharing(bool on)
 {
     undoStack()->transaction(TranslatableString("undoableAction", "Toggle stave sharing"), [&](engraving::Transaction& tx) {
@@ -1086,26 +1050,34 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     apply();
 }
 
-void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
+void NotationParts::reorderParts(const IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves)
 {
     TRACEFUNC;
 
-    std::vector<Part*> sourceParts = parts(sourcePartsIds);
-    if (sourceParts.empty()) {
-        return;
-    }
-
-    Part* destinationPart = partModifiable(destinationPartId);
-    if (!destinationPart) {
+    const std::vector<Part*> orderedParts = parts(partIds);
+    const std::vector<EditPart::SystemObjectsMove> moves = editPartSystemObjectsMoves(systemObjectsMoves);
+    if (!EditPart::reorderPartsChangesScore(score(), orderedParts, moves)) {
         return;
     }
 
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Move instruments"));
 
-    EditPart::moveParts(score(), sourceParts, destinationPart, mode == InsertMode::After);
+    EditPart::reorderParts(score(), orderedParts, moves);
 
     apply();
+}
+
+std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const
+{
+    std::vector<EditPart::SystemObjectsMove> result;
+    result.reserve(moves.size());
+
+    for (const SystemObjectsMove& move : moves) {
+        result.push_back({ staffModifiable(move.staffId), staffModifiable(move.destinationStaffId), move.belowBottomStaff });
+    }
+
+    return result;
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)

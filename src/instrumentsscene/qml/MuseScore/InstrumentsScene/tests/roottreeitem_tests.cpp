@@ -21,6 +21,8 @@
  */
 #include <gmock/gmock.h>
 
+#include "async/notifylist.h"
+
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
@@ -40,6 +42,8 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse;
+
+using Moves = std::vector<INotationParts::SystemObjectsMove>;
 
 namespace mu::instrumentsscene {
 class InstrumentsScene_RootTreeItemTests : public ::testing::Test
@@ -67,6 +71,11 @@ protected:
 
         ON_CALL(*m_parts, staff(_)).WillByDefault(Invoke([this](const ID& staffId) {
             return m_score->staffById(staffId);
+        }));
+
+        ON_CALL(*m_parts, partList()).WillByDefault(Invoke([this]() {
+            const std::vector<const Part*> parts(m_score->parts().begin(), m_score->parts().end());
+            return async::NotifyList<const Part*>(parts, nullptr);
         }));
     }
 
@@ -149,16 +158,13 @@ protected:
     //! Same as LayoutPanelTreeModel during a drag: moveRows() for each one-row step, endActiveDrag() on drop
     void dragRow(int row, int toRow)
     {
-        MoveParams params;
         const int step = toRow > row ? 1 : -1;
         for (int r = row; r != toRow; r += step) {
             const int destinationRow = step > 0 ? r + 2 : r - 1;
-            params = m_root->buildMoveParams(r, 1, m_root, destinationRow);
-            ASSERT_TRUE(params.isValid());
             m_root->moveChildren(r, 1, m_root, destinationRow, false);
         }
 
-        m_root->moveChildrenOnScore(params);
+        m_root->applyToScore();
     }
 
     //! E.g. "[A:0] A B [C:0] C": instrument titles, and "[instrument:staff index]" for system markings rows
@@ -200,12 +206,12 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentDown)
 {
     // [GIVEN] Three instruments, system markings only on the top staff
     const Part* a = addPart(u"A");
-    addPart(u"B");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     buildTree(); // [A:0] A B C
 
-    // [THEN] A goes before C
-    EXPECT_CALL(*m_parts, moveParts(IDList { a->id() }, c->id(), INotationParts::InsertMode::Before));
+    // [THEN] A goes between B and C
+    EXPECT_CALL(*m_parts, reorderParts(IDList { b->id(), a->id(), c->id() }, Moves {}));
 
     // [WHEN] A is moved down by one row
     moveRow(1, 2);
@@ -218,13 +224,13 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentDown)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentUp)
 {
     // [GIVEN] Three instruments, system markings only on the top staff
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     buildTree(); // [A:0] A B C
 
     // [THEN] C goes before B
-    EXPECT_CALL(*m_parts, moveParts(IDList { c->id() }, b->id(), INotationParts::InsertMode::Before));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id(), b->id() }, Moves {}));
 
     // [WHEN] C is moved up by one row
     moveRow(3, 2);
@@ -237,15 +243,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentUp)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastMarkings)
 {
     // [GIVEN] Three instruments, system markings above A and C
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A B [C:0] C
 
     // [THEN] The instruments keep their order, and the markings move onto B
-    EXPECT_CALL(*m_parts, moveParts(_, _, _)).Times(0);
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(0)->id(), b->staff(0)->id()));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }));
 
     // [WHEN] B is moved down past the markings row above C
     moveRow(2, 3);
@@ -258,14 +264,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastMarkings)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUp)
 {
     // [GIVEN] Three instruments, system markings above A and C
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A B [C:0] C
 
     // [THEN] The markings move onto B
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(0)->id(), b->staff(0)->id()));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }));
 
     // [WHEN] The markings row above C is moved up past B
     moveRow(3, 2);
@@ -278,16 +285,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUp)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsToEnd)
 {
     // [GIVEN] Three instruments, C with two staves, system markings above A and C
-    addPart(u"A");
-    addPart(u"B");
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C", 2);
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A B [C:0] C
 
-    // [THEN] The markings move onto C's bottom staff, then below it
-    InSequence seq;
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(0)->id(), c->staff(1)->id()));
-    EXPECT_CALL(*m_parts, moveSystemObjectLayerBelowBottomStaff());
+    // [THEN] The markings move below the bottom staff
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }));
 
     // [WHEN] The markings row above C is moved to the end
     moveRow(3, 4);
@@ -300,16 +306,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsToEnd)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUpFromBottom)
 {
     // [GIVEN] Three instruments, C with two staves, system markings on the top staff and below the bottom staff
-    addPart(u"A");
-    addPart(u"B");
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C", 2);
     addSystemObjects(c->staff(1), true);
     buildTree(); // [A:0] A B C [C:1]
 
     // [THEN] The markings move onto C's top staff, above it
-    InSequence seq;
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(1)->id(), c->staff(0)->id()));
-    EXPECT_CALL(*m_parts, moveSystemObjectLayerAboveBottomStaff());
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }));
 
     // [WHEN] The markings row below C is moved up past C
     moveRow(4, 3);
@@ -322,16 +327,16 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUpFromBottom)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_LastInstrumentPastMarkings)
 {
     // [GIVEN] Three instruments, system markings above A and C
-    addPart(u"A");
-    addPart(u"B");
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A B [C:0] C
 
-    // [THEN] The markings stay on C's only staff, below it
-    EXPECT_CALL(*m_parts, moveSystemObjects(_, _)).Times(0);
+    // [THEN] The markings move below the bottom staff
     EXPECT_CALL(*m_parts, removeSystemObjects(_)).Times(0);
-    EXPECT_CALL(*m_parts, moveSystemObjectLayerBelowBottomStaff());
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), c->staff(0)->id(), true } }));
 
     // [WHEN] C is moved up past its markings row
     moveRow(4, 3);
@@ -341,22 +346,19 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_LastInstrumentPastMarkin
     EXPECT_EQ(childNames(), "[A:0] A B C [C:0]");
 }
 
-//! Fails for now: C's top staff isn't the score's last staff,
-//! so RootTreeItem finds no destination for the markings and removes them instead
-TEST_F(InstrumentsScene_RootTreeItemTests, DISABLED_MoveChildren_LastInstrumentWithTwoStavesPastMarkings)
+TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_LastInstrumentWithTwoStavesPastMarkings)
 {
     // [GIVEN] Three instruments, C with two staves, system markings above A and C
-    addPart(u"A");
-    addPart(u"B");
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C", 2);
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A B [C:0] C
 
-    // [THEN] The markings move onto C's bottom staff, then below it
+    // [THEN] The markings move below the bottom staff
     EXPECT_CALL(*m_parts, removeSystemObjects(_)).Times(0);
-    InSequence seq;
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(0)->id(), c->staff(1)->id()));
-    EXPECT_CALL(*m_parts, moveSystemObjectLayerBelowBottomStaff());
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }));
 
     // [WHEN] C is moved up past its markings row
     moveRow(4, 3);
@@ -366,20 +368,18 @@ TEST_F(InstrumentsScene_RootTreeItemTests, DISABLED_MoveChildren_LastInstrumentW
     EXPECT_EQ(childNames(), "[A:0] A B C [C:1]");
 }
 
-//! Fails for now: the drop applies only the last one-row step,
-//! which moves C past the markings row and changes nothing in the score
-TEST_F(InstrumentsScene_RootTreeItemTests, DISABLED_MoveChildrenOnScore_AfterDrag)
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_AfterDrag)
 {
     // [GIVEN] Three instruments, system markings above A and B
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(b->staff(0));
     buildTree(); // [A:0] A [B:0] B C
 
-    // [THEN] C goes before B, and the markings stay above B
-    EXPECT_CALL(*m_parts, moveParts(IDList { c->id() }, b->id(), INotationParts::InsertMode::Before));
-    EXPECT_CALL(*m_parts, moveSystemObjects(_, _)).Times(0);
+    // [THEN] C goes before B, and the markings stay on B
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id(), b->id() },
+                                       Moves { { b->staff(0)->id(), b->staff(0)->id() } }));
 
     // [WHEN] C is dragged up past B and the markings row above B
     dragRow(4, 2);
@@ -395,11 +395,11 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_TwoInstrumentsUp)
     const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
-    addPart(u"D");
+    const Part* d = addPart(u"D");
     buildTree(); // [A:0] A B C D
 
     // [THEN] B and C go before A
-    EXPECT_CALL(*m_parts, moveParts(IDList { b->id(), c->id() }, a->id(), INotationParts::InsertMode::Before));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { b->id(), c->id(), a->id(), d->id() }, Moves {}));
 
     // [WHEN] B and C are moved up by one row
     moveRows(2, 2, 1);
@@ -414,12 +414,12 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_TwoInstrumentsDown)
     // [GIVEN] Four instruments, system markings only on the top staff
     const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
-    addPart(u"C");
+    const Part* c = addPart(u"C");
     const Part* d = addPart(u"D");
     buildTree(); // [A:0] A B C D
 
-    // [THEN] A and B go before D
-    EXPECT_CALL(*m_parts, moveParts(IDList { a->id(), b->id() }, d->id(), INotationParts::InsertMode::Before));
+    // [THEN] A and B go between C and D
+    EXPECT_CALL(*m_parts, reorderParts(IDList { c->id(), a->id(), b->id(), d->id() }, Moves {}));
 
     // [WHEN] A and B are moved down by one row
     moveRows(1, 2, 3);
@@ -432,13 +432,13 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_TwoInstrumentsDown)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentToEnd)
 {
     // [GIVEN] Three instruments, system markings only on the top staff
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     buildTree(); // [A:0] A B C
 
     // [THEN] B goes after C
-    EXPECT_CALL(*m_parts, moveParts(IDList { b->id() }, c->id(), INotationParts::InsertMode::After));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id(), b->id() }, Moves {}));
 
     // [WHEN] B is moved down to the end
     moveRow(2, 3);
@@ -451,14 +451,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentToEnd)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsDown)
 {
     // [GIVEN] Three instruments, system markings above A and B
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(b->staff(0));
     buildTree(); // [A:0] A [B:0] B C
 
     // [THEN] The markings move onto C
-    EXPECT_CALL(*m_parts, moveSystemObjects(b->staff(0)->id(), c->staff(0)->id()));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { b->staff(0)->id(), c->staff(0)->id() } }));
 
     // [WHEN] The markings row above B is moved down past B
     moveRow(2, 3);
@@ -471,15 +472,16 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsDown)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoMarkings)
 {
     // [GIVEN] Three instruments, system markings above each of them
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(b->staff(0));
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A [B:0] B [C:0] C
 
-    // [THEN] B's markings move onto C, in place of C's
-    EXPECT_CALL(*m_parts, moveSystemObjects(b->staff(0)->id(), c->staff(0)->id()));
+    // [THEN] Both markings rows ask for C's staff
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { b->staff(0)->id(), c->staff(0)->id() }, { c->staff(0)->id(), c->staff(0)->id() } }));
 
     // [WHEN] The markings row above B is moved down past B
     moveRow(2, 3);
@@ -492,16 +494,15 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoMarkings)
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastBottomMarkings)
 {
     // [GIVEN] Three instruments, C with two staves, system markings on the top staff and below the bottom staff
-    addPart(u"A");
-    addPart(u"B");
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
     const Part* c = addPart(u"C", 2);
     addSystemObjects(c->staff(1), true);
     buildTree(); // [A:0] A B C [C:1]
 
     // [THEN] The markings move onto C's top staff, above it
-    InSequence seq;
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(1)->id(), c->staff(0)->id()));
-    EXPECT_CALL(*m_parts, moveSystemObjectLayerAboveBottomStaff());
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }));
 
     // [WHEN] C is moved down past the markings row below it
     moveRow(3, 4);
@@ -514,7 +515,7 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastBottomMark
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoSharedPart)
 {
     // [GIVEN] An instrument, a shared-staves group and an instrument, system markings above A and C
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* s = addPart(u"S");
     const Part* c = addPart(u"C");
     markAsSharedPart(s);
@@ -522,7 +523,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoSharedPart)
     buildTree(); // [A:0] A S [C:0] C
 
     // [THEN] The markings move onto S
-    EXPECT_CALL(*m_parts, moveSystemObjects(c->staff(0)->id(), s->staff(0)->id()));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), s->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), s->staff(0)->id() } }));
 
     // [WHEN] The markings row above C is moved up past S
     moveRow(3, 2);
@@ -532,19 +534,17 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoSharedPart)
     EXPECT_EQ(childNames(), "[A:0] A [S:0] S C");
 }
 
-//! Fails for now: RootTreeItem only takes PART rows as a destination,
-//! so it skips S and finds nowhere to move C in the score
-TEST_F(InstrumentsScene_RootTreeItemTests, DISABLED_MoveChildren_InstrumentPastSharedPart)
+TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastSharedPart)
 {
     // [GIVEN] An instrument, a shared-staves group and an instrument
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* s = addPart(u"S");
     const Part* c = addPart(u"C");
     markAsSharedPart(s);
     buildTree(); // [A:0] A S C
 
     // [THEN] C goes before S
-    EXPECT_CALL(*m_parts, moveParts(IDList { c->id() }, s->id(), INotationParts::InsertMode::Before));
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id(), s->id() }, Moves {}));
 
     // [WHEN] C is moved up past S
     moveRow(3, 2);
@@ -557,14 +557,14 @@ TEST_F(InstrumentsScene_RootTreeItemTests, DISABLED_MoveChildren_InstrumentPastS
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_PartScore_InstrumentPastMissing)
 {
     // [GIVEN] A part score with A and C, but not B
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
-    addPart(u"C");
+    const Part* c = addPart(u"C");
     buildTree(false); // A B C
     ON_CALL(*m_parts, partExists(b->id())).WillByDefault(Return(false));
 
     // [THEN] A and C keep their order
-    EXPECT_CALL(*m_parts, moveParts(_, _, _)).Times(0);
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id() }, Moves {}));
 
     // [WHEN] C is moved up past B
     moveRow(2, 1);
@@ -577,14 +577,14 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_PartScore_InstrumentPast
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_PartScore_MissingInstrument)
 {
     // [GIVEN] A part score with A and C, but not B
-    addPart(u"A");
+    const Part* a = addPart(u"A");
     const Part* b = addPart(u"B");
-    addPart(u"C");
+    const Part* c = addPart(u"C");
     buildTree(false); // A B C
     ON_CALL(*m_parts, partExists(b->id())).WillByDefault(Return(false));
 
-    // [THEN] Nothing changes in the score
-    EXPECT_CALL(*m_parts, moveParts(_, _, _)).Times(0);
+    // [THEN] Only A and C are sent, in their old order
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), c->id() }, Moves {}));
 
     // [WHEN] B is moved up past A
     moveRow(1, 0);

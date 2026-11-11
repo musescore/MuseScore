@@ -64,7 +64,7 @@ public:
     MOCK_METHOD(void, removeParts, (const muse::IDList& partsIds), (override));
     MOCK_METHOD(void, removeStaves, (const muse::IDList& stavesIds), (override));
 
-    MOCK_METHOD(void, moveParts, (const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId, InsertMode mode), (override));
+    MOCK_METHOD(void, reorderParts, (const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves), (override));
     MOCK_METHOD(void, moveStaves, (const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId, InsertMode mode),
                 (override));
 
@@ -85,9 +85,6 @@ public:
 
     MOCK_METHOD(void, addSystemObjects, (const muse::IDList& stavesIds), (override));
     MOCK_METHOD(void, removeSystemObjects, (const muse::IDList& stavesIds), (override));
-    MOCK_METHOD(void, moveSystemObjects, (const muse::ID& sourceStaffId, const muse::ID& destinationStaffId), (override));
-    MOCK_METHOD(void, moveSystemObjectLayerBelowBottomStaff, (), (override));
-    MOCK_METHOD(void, moveSystemObjectLayerAboveBottomStaff, (), (override));
 
     MOCK_METHOD(void, toggleStaveSharing, (bool on), (override));
 

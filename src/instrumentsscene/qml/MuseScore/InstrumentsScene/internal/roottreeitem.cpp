@@ -21,6 +21,8 @@
  */
 #include "roottreeitem.h"
 
+#include <algorithm>
+
 #include "engraving/dom/score.h"
 
 #include "parttreeitem.h"
@@ -29,11 +31,6 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
-
-static inline bool isIndexInRange(int index, int start, int end)
-{
-    return start <= index && index < end;
-}
 
 static inline bool isPartItem(const AbstractLayoutPanelTreeItem* item)
 {
@@ -45,242 +42,84 @@ RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notat
 {
 }
 
-MoveParams RootTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                                         int destinationRow) const
-{
-    // User is explicitly moving a system objects layer
-    if (childType(sourceRow) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        DO_ASSERT(count == 1); // only 1 layer can be moved at a time
-        return buildSystemObjectsMoveParams(sourceRow, 1, destinationRow);
-    }
-
-    // User is going to place parts after a system objects layer
-    // Update the system objects position on the score if the resulting parts order remains the same
-    if (!partsOrderWillBeChanged(sourceRow, count, destinationRow)) {
-        const int newRow = sourceRow > destinationRow ? destinationRow : destinationRow - 1;
-        if (childType(newRow) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            return buildSystemObjectsMoveParams(sourceRow, count, newRow);
-        }
-    }
-
-    return buildPartsMoveParams(sourceRow, count, destinationParent, destinationRow);
-}
-
 void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                 int destinationRow, bool updateNotation)
 {
-    if (updateNotation) {
-        MoveParams moveParams = buildMoveParams(sourceRow, count, destinationParent, destinationRow);
-        moveChildrenOnScore(moveParams);
-    }
-
     AbstractLayoutPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
+
+    if (updateNotation) {
+        applyToScore();
+    }
 }
 
-void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
+void RootTreeItem::applyToScore()
 {
-    if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && !params.destinationObjectId.isValid()) {
-        if (params.moveSysObjBelowBottomStaff) {
-            notation()->parts()->moveSystemObjectLayerBelowBottomStaff();
+    IDList partIds;
+    std::vector<std::pair<SystemObjectsLayerTreeItem*, const Staff*> > layerDestinations;
+    std::vector<INotationParts::SystemObjectsMove> moves;
+    const Part* partBelow = nullptr;
+
+    for (int row = childCount() - 1; row >= 0; --row) {
+        AbstractLayoutPanelTreeItem* child = childAtRow(row);
+        if (isPartItem(child)) {
+            if (notation()->parts()->partExists(child->id())) {
+                partIds.push_back(child->id());
+            }
+            partBelow = static_cast<const PartTreeItem*>(child)->part();
+            continue;
+        }
+
+        // The first row's markings are always on the top staff
+        if (row == 0 || child->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            continue;
+        }
+
+        auto layer = static_cast<SystemObjectsLayerTreeItem*>(child);
+        const Staff* staff = layer->staff();
+        const Staff* destination = nullptr;
+
+        if (!partBelow) {
+            destination = staff->score()->staves().back();
+        } else if (partBelow == staff->part() && !staff->hasSystemObjectsBelowBottomStaff()) {
+            destination = staff;
         } else {
-            notation()->parts()->removeSystemObjects(params.objectIdListToMove);
+            destination = partBelow->staff(0);
         }
-        return;
+
+        layerDestinations.emplace_back(layer, destination);
+        moves.push_back({ staff->id(), destination->id(), !partBelow });
     }
 
-    if (!params.isValid()) {
-        return;
-    }
+    std::reverse(partIds.begin(), partIds.end());
+    std::reverse(moves.begin(), moves.end());
 
-    if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        auto systemObjectsLayerItem = dynamic_cast<SystemObjectsLayerTreeItem*>(childAtId(params.objectIdListToMove.front(),
-                                                                                          LayoutPanelItemType::SYSTEM_OBJECTS_LAYER));
+    notation()->parts()->reorderParts(partIds, moves);
 
-        const Staff* dstStaff = notation()->parts()->staff(params.destinationObjectId);
-
-        if (systemObjectsLayerItem && dstStaff && systemObjectsLayerItem->staff() != dstStaff) {
-            notation()->parts()->moveSystemObjects(systemObjectsLayerItem->staff()->id(), dstStaff->id());
-            systemObjectsLayerItem->setStaff(dstStaff);
-        }
-
-        if (params.moveSysObjBelowBottomStaff) {
-            notation()->parts()->moveSystemObjectLayerBelowBottomStaff();
-        } else if (params.moveSysObjAboveBottomStaff) {
-            notation()->parts()->moveSystemObjectLayerAboveBottomStaff();
-        }
-    } else {
-        notation()->parts()->moveParts(params.objectIdListToMove, params.destinationObjectId, params.insertMode);
+    // Markings that couldn't move are put back when the panel updates its markings rows
+    for (const auto& [layer, destination] : layerDestinations) {
+        layer->setStaff(destination);
     }
 }
 
 void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
 {
-    IDList partIds;
-    IDList stavesIds;
-
-    for (int i = row; i < row + count; ++i) {
-        const AbstractLayoutPanelTreeItem* child = childAtRow(i);
-
-        if (isPartItem(child)) {
-            partIds.push_back(child->id());
-        } else if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            stavesIds.push_back(child->id());
-        }
-    }
-
     if (deleteChild) {
+        IDList partIds;
+        IDList stavesIds;
+
+        for (int i = row; i < row + count; ++i) {
+            const AbstractLayoutPanelTreeItem* child = childAtRow(i);
+
+            if (isPartItem(child)) {
+                partIds.push_back(child->id());
+            } else if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+                stavesIds.push_back(child->id());
+            }
+        }
+
         masterNotation()->notation()->parts()->removeParts(partIds);
         masterNotation()->notation()->parts()->removeSystemObjects(stavesIds);
     }
 
     AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
-}
-
-bool RootTreeItem::partsOrderWillBeChanged(int sourceRow, int count, int destinationRow) const
-{
-    if (sourceRow > destinationRow) {
-        for (int i = sourceRow - 1; i >= destinationRow; --i) {
-            if (childType(i) == LayoutPanelItemType::PART) {
-                return true;
-            }
-        }
-    } else {
-        for (int i = sourceRow + count; i < destinationRow; ++i) {
-            if (childType(i) == LayoutPanelItemType::PART) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, int destinationRow) const
-{
-    const AbstractLayoutPanelTreeItem* srcItem = childAtRow(sourceRow);
-    const AbstractLayoutPanelTreeItem* dstItem = childAtRow(destinationRow);
-    if (!srcItem) {
-        return {};
-    }
-
-    const Staff* srcStaff = nullptr;
-    const Staff* dstStaff = nullptr;
-
-    if (srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && destinationRow >= childCount()) {
-        srcStaff = static_cast<const SystemObjectsLayerTreeItem*>(srcItem)->staff();
-        dstStaff = srcStaff->score()->staves().back();
-        MoveParams moveParams;
-        moveParams.objectsType = LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
-        moveParams.objectIdListToMove.push_back(srcStaff->id());
-        moveParams.destinationObjectId = dstStaff->id();
-        moveParams.moveSysObjBelowBottomStaff = true;
-        return moveParams;
-    }
-
-    if (!dstItem) {
-        return {};
-    }
-
-    auto resolveDstStaff = [](const AbstractLayoutPanelTreeItem* item) -> const Staff* {
-        if (item) {
-            if (isPartItem(item)) {
-                return static_cast<const PartTreeItem*>(item)->part()->staff(0);
-            } else if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-                return static_cast<const SystemObjectsLayerTreeItem*>(item)->staff();
-            }
-        }
-
-        return nullptr;
-    };
-
-    if (srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        srcStaff = static_cast<const SystemObjectsLayerTreeItem*>(srcItem)->staff();
-        dstStaff = resolveDstStaff(dstItem);
-    } else if (dstItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        srcStaff = static_cast<const SystemObjectsLayerTreeItem*>(dstItem)->staff();
-
-        if (sourceRow > destinationRow) {
-            dstStaff = resolveDstStaff(childAtRow(sourceRow + count));
-        } else {
-            dstStaff = resolveDstStaff(srcItem);
-        }
-    }
-
-    if (!srcStaff) {
-        return {};
-    }
-
-    MoveParams moveParams;
-    moveParams.objectsType = LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
-    moveParams.objectIdListToMove.push_back(srcStaff->id());
-    if (dstStaff) {
-        moveParams.destinationObjectId = dstStaff->id();
-    }
-
-    bool moveUp = destinationRow < sourceRow;
-    bool moveDown = destinationRow > sourceRow;
-    bool sourceIsSystemObjectLayer = srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
-    bool sourceIsPartLayer = isPartItem(srcItem);
-    if (srcStaff->hasSystemObjectsBelowBottomStaff()) {
-        if ((sourceIsSystemObjectLayer && moveUp) || (sourceIsPartLayer && moveDown)) {
-            moveParams.moveSysObjAboveBottomStaff = true;
-        }
-    } else if (sourceIsPartLayer && srcStaff->isLastOfScore() && moveUp) {
-        moveParams.moveSysObjBelowBottomStaff = true;
-    }
-
-    return moveParams;
-}
-
-MoveParams RootTreeItem::buildPartsMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                                              int destinationRow) const
-{
-    IDList partIds;
-    for (int i = sourceRow; i < sourceRow + count; ++i) {
-        ID partId = childAtRow(i)->id();
-
-        if (notation()->parts()->partExists(partId)) {
-            partIds.push_back(partId);
-        }
-    }
-
-    MoveParams moveParams;
-    moveParams.objectsType = LayoutPanelItemType::PART;
-    moveParams.objectIdListToMove = partIds;
-
-    int destinationRow_ = destinationRow;
-    int childCount = destinationParent->childCount();
-    bool moveDown = destinationRow > sourceRow;
-    INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
-    const AbstractLayoutPanelTreeItem* destinationPartItem = nullptr;
-
-    do {
-        destinationPartItem = destinationParent->childAtRow(destinationRow_);
-
-        if (destinationPartItem) {
-            if (destinationPartItem->type() == LayoutPanelItemType::PART) {
-                if (notation()->parts()->partExists(destinationPartItem->id())) {
-                    break;
-                }
-            }
-
-            destinationPartItem = nullptr;
-        }
-
-        if (moveDown) {
-            destinationRow_--;
-            moveMode = INotationParts::InsertMode::After;
-        } else {
-            destinationRow_++;
-            moveMode = INotationParts::InsertMode::Before;
-        }
-    } while (isIndexInRange(destinationRow_, 0, childCount) && !isIndexInRange(destinationRow_, sourceRow, sourceRow + count));
-
-    if (destinationPartItem) {
-        moveParams.destinationObjectId = destinationPartItem->id();
-    }
-
-    moveParams.insertMode = moveMode;
-
-    return moveParams;
 }

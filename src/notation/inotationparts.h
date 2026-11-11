@@ -75,7 +75,21 @@ public:
         After
     };
 
-    virtual void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
+    struct SystemObjectsMove {
+        muse::ID staffId;
+        muse::ID destinationStaffId;
+        bool belowBottomStaff = false;
+
+        bool operator==(const SystemObjectsMove& other) const
+        {
+            return staffId == other.staffId && destinationStaffId == other.destinationStaffId
+                   && belowBottomStaff == other.belowBottomStaff;
+        }
+    };
+
+    //! Puts the parts in the given order and moves the system markings, as one undo step
+    virtual void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) = 0;
+
     virtual void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId,
                             InsertMode mode = InsertMode::Before) = 0;
 
@@ -95,9 +109,6 @@ public:
 
     virtual void addSystemObjects(const muse::IDList& stavesIds) = 0;
     virtual void removeSystemObjects(const muse::IDList& stavesIds) = 0;
-    virtual void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) = 0;
-    virtual void moveSystemObjectLayerBelowBottomStaff() = 0;
-    virtual void moveSystemObjectLayerAboveBottomStaff() = 0;
 
     virtual void toggleStaveSharing(bool on) = 0;
 

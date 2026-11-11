@@ -134,6 +134,41 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
     endGlobalEdit();
 }
 
+void MasterNotationParts::reorderParts(const IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves)
+{
+    TRACEFUNC;
+
+    startGlobalEdit(TranslatableString("undoableAction", "Move instruments"));
+
+    NotationParts::reorderParts(partIds, systemObjectsMoves);
+
+    // Part scores keep their own instrument order, only the markings move
+    for (const INotationPartsPtr& parts : excerptsParts()) {
+        NotationParts* impl = get_impl(parts);
+        mu::engraving::Score* excerptScore = impl->score();
+        if (excerptScore->staves().empty()) {
+            continue;
+        }
+
+        const Staff* bottomStaff = excerptScore->staves().back();
+
+        std::vector<mu::engraving::EditPart::SystemObjectsMove> moves;
+        for (const SystemObjectsMove& move : systemObjectsMoves) {
+            Staff* staff = impl->staffModifiable(move.staffId);
+            Staff* destination = impl->staffModifiable(move.destinationStaffId);
+            if (!staff || !destination) {
+                continue;
+            }
+
+            moves.push_back({ staff, destination, move.belowBottomStaff && destination == bottomStaff });
+        }
+
+        mu::engraving::EditPart::reorderParts(excerptScore, excerptScore->parts(), moves);
+    }
+
+    endGlobalEdit();
+}
+
 bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
@@ -286,45 +321,6 @@ void MasterNotationParts::removeSystemObjects(const muse::IDList& stavesIds)
     startGlobalEdit(TranslatableString("undoableAction", "Remove system markings"));
 
     NotationParts::removeSystemObjects(stavesIds);
-
-    endGlobalEdit();
-}
-
-void MasterNotationParts::moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId)
-{
-    startGlobalEdit(TranslatableString("undoableAction", "Move system markings"));
-
-    NotationParts::moveSystemObjects(sourceStaffId, destinationStaffId);
-
-    for (const INotationPartsPtr& parts : excerptsParts()) {
-        parts->moveSystemObjects(sourceStaffId, destinationStaffId);
-    }
-
-    endGlobalEdit();
-}
-
-void MasterNotationParts::moveSystemObjectLayerBelowBottomStaff()
-{
-    IF_ASSERT_FAILED(score()->nstaves() > 1) {
-        return;
-    }
-
-    startGlobalEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
-
-    NotationParts::moveSystemObjectLayerBelowBottomStaff();
-
-    endGlobalEdit();
-}
-
-void MasterNotationParts::moveSystemObjectLayerAboveBottomStaff()
-{
-    IF_ASSERT_FAILED(score()->nstaves() > 1) {
-        return;
-    }
-
-    startGlobalEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
-
-    NotationParts::moveSystemObjectLayerAboveBottomStaff();
 
     endGlobalEdit();
 }

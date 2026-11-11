@@ -35,19 +35,12 @@ class RootTreeItem : public AbstractLayoutPanelTreeItem
 public:
     RootTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
 
-    MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
-
     void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
 
-    void moveChildrenOnScore(const MoveParams& params) override;
+    //! Moves the parts and the system markings on the score to match the panel
+    void applyToScore();
 
     void removeChildren(int row, int count, bool deleteChild) override;
-
-private:
-    bool partsOrderWillBeChanged(int sourceRow, int count, int destinationRow) const;
-
-    MoveParams buildSystemObjectsMoveParams(int sourceRow, int count, int destinationRow) const;
-    MoveParams buildPartsMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const;
 };
 }
