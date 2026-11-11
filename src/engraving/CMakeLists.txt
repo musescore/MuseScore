@@ -144,6 +144,8 @@ target_sources(engraving PRIVATE
     editing/editinstrumentchange.h
     editing/editkeysig.cpp
     editing/editkeysig.h
+    editing/editlyrics.cpp
+    editing/editlyrics.h
     editing/editmeasurerepeat.cpp
     editing/editmeasurerepeat.h
     editing/editmeasures.cpp
