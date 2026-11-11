@@ -185,13 +185,15 @@ struct PlayModeContract {
 };
 
 struct AccidentalTypeContract {
+    static constexpr std::string_view key = "type";
+    static constexpr AccidentalType def = AccidentalType::NATURAL;
     //! NOTE Only these types are used in the commands
     static constexpr EnumTable<AccidentalType, 5> table { {
-        { "flat2", AccidentalType::FLAT2, "double-flat" },
+        { "flat2", AccidentalType::FLAT2, "double flat" },
         { "flat", AccidentalType::FLAT, "flat" },
         { "natural", AccidentalType::NATURAL, "natural" },
         { "sharp", AccidentalType::SHARP, "sharp" },
-        { "sharp2", AccidentalType::SHARP2, "double-sharp" },
+        { "sharp2", AccidentalType::SHARP2, "double sharp" },
     } };
 };
 }

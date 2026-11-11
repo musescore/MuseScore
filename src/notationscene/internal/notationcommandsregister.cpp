@@ -229,6 +229,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddNoteA_ToInsertChordCommand>(),
     makeCommandInfo<AddNoteB_ToInsertChordCommand>(),
 
+    makeCommandInfo<ToggleAccidentalCommand>(),
+    makeCommandInfo<ToggleFlat2Command>(),
+    makeCommandInfo<ToggleFlatCommand>(),
+    makeCommandInfo<ToggleNaturalCommand>(),
+    makeCommandInfo<ToggleSharpCommand>(),
+    makeCommandInfo<ToggleSharp2Command>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -352,77 +359,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME)
     },
 
-    CommandInfo{
-        TOGGLE_FLAT2_COMMAND,
-        TranslatableString("action", "Toggle double-flat"),
-        TranslatableString("action", "Toggle accidental: double-flat"),
-        InputSchema(),
-        Decoration(IconCode::Code::FLAT_DOUBLE)
-    },
-    CommandInfo{
-        TOGGLE_FLAT_COMMAND,
-        TranslatableString("action", "Toggle flat"),
-        TranslatableString("action", "Toggle accidental: flat"),
-        InputSchema(),
-        Decoration(IconCode::Code::FLAT)
-    },
-    CommandInfo{
-        TOGGLE_NAT_COMMAND,
-        TranslatableString("action", "Toggle natural"),
-        TranslatableString("action", "Toggle accidental: natural"),
-        InputSchema(),
-        Decoration(IconCode::Code::NATURAL)
-    },
-    CommandInfo{
-        TOGGLE_SHARP_COMMAND,
-        TranslatableString("action", "Toggle sharp"),
-        TranslatableString("action", "Toggle accidental: sharp"),
-        InputSchema(),
-        Decoration(IconCode::Code::SHARP)
-    },
-    CommandInfo{
-        TOGGLE_SHARP2_COMMAND,
-        TranslatableString("action", "Toggle double-sharp"),
-        TranslatableString("action", "Toggle accidental: double-sharp"),
-        InputSchema(),
-        Decoration(IconCode::Code::SHARP_DOUBLE)
-    },
-
-    CommandInfo{
-        ADD_SHARP2_COMMAND,
-        TranslatableString("action", "Add double-sharp"),
-        TranslatableString("action", "Add accidental: double-sharp"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SHARP_COMMAND,
-        TranslatableString("action", "Add sharp"),
-        TranslatableString("action", "Add accidental: sharp"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NAT_COMMAND,
-        TranslatableString("action", "Add natural"),
-        TranslatableString("action", "Add accidental: natural"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_FLAT_COMMAND,
-        TranslatableString("action", "Add flat"),
-        TranslatableString("action", "Add accidental: flat"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_FLAT2_COMMAND,
-        TranslatableString("action", "Add double-flat"),
-        TranslatableString("action", "Add accidental: double-flat"),
-        InputSchema(),
-        Decoration()
-    },
     CommandInfo{
         TOGGLE_TIE_COMMAND,
         TranslatableString("action", "Tie"),

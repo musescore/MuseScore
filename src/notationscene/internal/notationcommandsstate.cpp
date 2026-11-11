@@ -164,11 +164,11 @@ static const std::map<Command, int> DOT_COUNT_COMMANDS = {
 };
 
 static const std::map<Command, AccidentalType> ACCIDENTAL_COMMANDS = {
-    { TOGGLE_FLAT2_COMMAND, AccidentalType::FLAT2 },
-    { TOGGLE_FLAT_COMMAND, AccidentalType::FLAT },
-    { TOGGLE_NAT_COMMAND, AccidentalType::NATURAL },
-    { TOGGLE_SHARP_COMMAND, AccidentalType::SHARP },
-    { TOGGLE_SHARP2_COMMAND, AccidentalType::SHARP2 }
+    { ToggleFlat2Command::id, AccidentalType::FLAT2 },
+    { ToggleFlatCommand::id, AccidentalType::FLAT },
+    { ToggleNaturalCommand::id, AccidentalType::NATURAL },
+    { ToggleSharpCommand::id, AccidentalType::SHARP },
+    { ToggleSharp2Command::id, AccidentalType::SHARP2 }
 };
 
 static const std::vector<Command> ADD_COMMANDS = {
@@ -476,7 +476,7 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
                                 controller()->isNoteInputMode()
                                 && controller()->noteInputMethod() == NOTE_INPUT_METHODS.at(command));
         } else {
-            return CommandState(controller()->isNoteInputMode(), false);
+            return CommandState(controller()->isNoteInputAllowed(), false);
         }
     }
 

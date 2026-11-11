@@ -294,9 +294,9 @@ TEST_F(Project_ConvertFileToScoreScenarioTest, Init_Success_OpenScoreButton_Disp
     EXPECT_CALL(*m_commandDispatcher, dispatch(Truly([](const rcommand::Request& request) {
         return request.command == PROJECT_OPEN_COMMAND
                && QUrl(request.params.at("url").toQString()) == QUrl("musescore://open-score/555");
-    })))
+    }), _))
     .Times(1)
-    .WillOnce([](const rcommand::Request& request) {
+    .WillOnce([](const rcommand::Request& request, bool) {
         return async::make_promise<rcommand::Response>([request](auto resolve) {
             return resolve(rcommand::make_response(request, make_ok()));
         });
