@@ -201,12 +201,14 @@ int main(int argc, char** argv)
             QMetaObject::invokeMethod(qapp, [&app]() {
                 app->setupNewContext();
 
+#ifndef QT_NO_SSL
                 LOGI() << QString("SSL Info: supported: %1, build: %2, runtime: %3, active backend: %4, available backends: %5")
                     .arg(QSslSocket::supportsSsl())
                     .arg(QSslSocket::sslLibraryBuildVersionString())
                     .arg(QSslSocket::sslLibraryVersionString())
                     .arg(QSslSocket::activeBackend())
                     .arg(QSslSocket::availableBackends().join(", "));
+#endif
             }, Qt::QueuedConnection);
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);
