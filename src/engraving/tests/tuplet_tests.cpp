@@ -1304,6 +1304,16 @@ TEST_F(Engraving_TupletTests, addTupletsWithSelectedDurationsDoubleDotted)
     delete score;
 }
 
+TEST_F(Engraving_TupletTests, conventionalTupletDenominator)
+{
+    // duplet to nonuplet: 2:3, 3:2, 4:3, 5:4, 6:4, 7:4, 8:6, 9:8
+    const std::vector<std::pair<int, int> > ratios = { { 2, 3 }, { 3, 2 }, { 4, 3 }, { 5, 4 }, { 6, 4 }, { 7, 4 }, { 8, 6 }, { 9, 8 } };
+    for (const auto& [numerator, denominator] : ratios) {
+        EXPECT_EQ(Tuplet::conventionalTupletDenominator(numerator), denominator) << numerator;
+    }
+    EXPECT_EQ(Tuplet::conventionalTupletDenominator(0), 0);
+}
+
 //-----------------------------------------
 //    deleteTupletSelection
 //     deleting a tuplet selects the rest that replaces it

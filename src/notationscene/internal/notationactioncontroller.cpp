@@ -32,6 +32,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
+#include "engraving/dom/tuplet.h"
 #include "engraving/editing/noteinput.h"
 
 #include "notation/imasternotation.h"
@@ -1622,6 +1623,11 @@ void NotationActionController::putTuplet(int tupletCount)
     options.ratio.setNumerator(tupletCount);
     options.ratio.setDenominator(2);
     options.autoBaseLen = true;
+    options.selectedDurationAs = configuration()->tupletCommandsSelectedDurationAs();
+    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
+        // e.g. a triplet of the selected duration
+        options.ratio.setDenominator(engraving::Tuplet::conventionalTupletDenominator(tupletCount));
+    }
     // get the bracket type from score style settings
     if (INotationStylePtr style = notationStyle()) {
         int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();

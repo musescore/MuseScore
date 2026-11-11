@@ -154,6 +154,11 @@ public:
     virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
     virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
 
+    // what the tuplet commands (duplet to nonuplet) use the selected duration as (see TupletOptions::selectedDurationAs)
+    virtual engraving::TupletSelectedDuration tupletCommandsSelectedDurationAs() const = 0;
+    virtual void setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs) = 0;
+    virtual muse::async::Notification tupletCommandsSelectedDurationAsChanged() const = 0;
+
     virtual muse::io::path_t userMusicFontsPath() const = 0;
     virtual void setUserMusicFontsPath(const muse::io::path_t& path) = 0;
     virtual muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const = 0;

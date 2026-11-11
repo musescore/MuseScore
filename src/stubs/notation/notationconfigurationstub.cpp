@@ -402,6 +402,21 @@ muse::async::Notification NotationConfigurationStub::addAccidentalDotsArticulati
     return n;
 }
 
+engraving::TupletSelectedDuration NotationConfigurationStub::tupletCommandsSelectedDurationAs() const
+{
+    return engraving::TupletSelectedDuration::SUBDIVISION;
+}
+
+void NotationConfigurationStub::setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::tupletCommandsSelectedDurationAsChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 muse::io::path_t NotationConfigurationStub::userMusicFontsPath() const
 {
     return muse::io::path_t();
