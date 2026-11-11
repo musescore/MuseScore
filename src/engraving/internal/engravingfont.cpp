@@ -95,6 +95,10 @@ double EngravingFont::textEnclosureThickness()
 
 bool EngravingFont::hasOversizedNoteheadsSupport() const
 {
+    // Petaluma would map to identical glyphs with shifted bounding boxes
+    if (m_family == "Petaluma") {
+        return false;
+    }
     return m_symbols[static_cast<size_t>(SymId::noteheadBlackOversized)].isValid();
 }
 
