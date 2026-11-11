@@ -68,9 +68,6 @@ public:
     double textEnclosureThickness();
 
     bool hasOversizedNoteheadsSupport() const override;
-    bool oversizedNoteheads() const;
-    void setOversizedNoteheads(bool enable);
-    std::shared_ptr<IEngravingFont> clone() const override;
 
     char32_t symCode(SymId id) const override;
     SymId fromCode(char32_t code) const override;
@@ -135,14 +132,12 @@ private:
 
     void constructShapeWithCutouts(Shape& shape, SymId id);
 
-    SymId resolveSymId(SymId id) const;
     Sym& sym(SymId id);
     const Sym& sym(SymId id) const;
 
     bool useFallbackFont(SymId id) const;
 
     bool m_loaded = false;
-    bool m_oversizedNoteheads = false;
     std::vector<Sym> m_symbols;
     mutable muse::draw::Font m_font;
 
