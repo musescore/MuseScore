@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iprojectsession.h"
+#include "project/iprojectsession.h"
 #include "global/iglobalconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "ui/imainwindow.h"
@@ -44,14 +44,14 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
 
 public:
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<mu::context::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
