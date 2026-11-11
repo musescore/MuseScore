@@ -253,7 +253,7 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInit
 #endif
 
     // [THEN] The app keeps running
-    EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
+    EXPECT_CALL(*m_commandDispatcher, dispatch(_, _)).Times(0);
 
     // [WHEN] Checking the status
     m_scenario->checkAndShowStatusIfNeed();
@@ -444,7 +444,7 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_UpdateD
     }));
 
     // [THEN] The app keeps running
-    EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
+    EXPECT_CALL(*m_commandDispatcher, dispatch(_, _)).Times(0);
 
     // [WHEN] Checking the status
     m_scenario->checkAndShowStatusIfNeed();

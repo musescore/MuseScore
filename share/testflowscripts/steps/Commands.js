@@ -46,7 +46,7 @@ module.exports = {
     TOGGLE_REST_COMMAND: "command://notation/toggle-rest",
     TOGGLE_FLAT2_COMMAND: "command://notation/toggle-flat2",
     TOGGLE_FLAT_COMMAND: "command://notation/toggle-flat",
-    TOGGLE_NAT_COMMAND: "command://notation/toggle-nat",
+    TOGGLE_NAT_COMMAND: "command://notation/toggle-natural",
     TOGGLE_SHARP_COMMAND: "command://notation/toggle-sharp",
     TOGGLE_SHARP2_COMMAND: "command://notation/toggle-sharp2",
     TOGGLE_TIE_COMMAND: "command://notation/toggle-tie",

@@ -77,7 +77,7 @@ protected:
         });
         ON_CALL(*m_interactive, open(_)).WillByDefault([] { return dialogAnswer(RetVal<Val>::make_ok(Val())); });
         ON_CALL(*m_interactive, closeAllDialogs()).WillByDefault([] { return resolvedPromise(make_ok()); });
-        ON_CALL(*m_commandDispatcher, dispatch(_)).WillByDefault([](const rcommand::Request& request) {
+        ON_CALL(*m_commandDispatcher, dispatch(_, _)).WillByDefault([](const rcommand::Request& request, bool) {
             return async::make_promise<rcommand::Response>([request](auto resolve) {
                 return resolve(rcommand::make_response(request, make_ok()));
             });
@@ -315,8 +315,8 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_WhilePlaying_StopsPlayback)
     ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(true));
 
     //! [THEN] Playback is stopped, rather than left running over a score that is no longer there
-    EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(AnyNumber());
-    EXPECT_CALL(*m_commandDispatcher, dispatch(IsStopPlayback())).Times(1);
+    EXPECT_CALL(*m_commandDispatcher, dispatch(_, _)).Times(AnyNumber());
+    EXPECT_CALL(*m_commandDispatcher, dispatch(IsStopPlayback(), _)).Times(1);
 
     //! [WHEN] Closing...
     closeOpenedProject();
@@ -328,7 +328,7 @@ TEST_F(CloseProjectScenarioTests, CloseOpenedProject_NotPlaying_DispatchesNothin
     ON_CALL(*m_playbackState, isPlaying()).WillByDefault(Return(false));
 
     //! [THEN] There is nothing to stop
-    EXPECT_CALL(*m_commandDispatcher, dispatch(_)).Times(0);
+    EXPECT_CALL(*m_commandDispatcher, dispatch(_, _)).Times(0);
 
     //! [WHEN] Closing...
     closeOpenedProject();

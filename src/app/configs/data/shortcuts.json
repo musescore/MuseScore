@@ -112,7 +112,7 @@
         {"command": "command://notation/toggle-marcato",  "sequences": ["Shift+O"]},
         {"command": "command://notation/toggle-sforzato",  "sequences": ["Shift+V"]},
         {"command": "command://notation/toggle-sharp",  "sequences": ["+","Num++"]},
-        {"command": "command://notation/toggle-nat",  "sequences": ["="]},
+        {"command": "command://notation/toggle-natural",  "sequences": ["="]},
         {"command": "command://notation/toggle-flat",  "sequences": ["-","Num+-"]},
         {"command": "command://notation/stretch-increase",  "sequences": ["}"]},
         {"command": "command://notation/stretch-decrease",  "sequences": ["{"]},
