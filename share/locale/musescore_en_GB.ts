@@ -28865,7 +28865,7 @@ If the issue persists, follow the steps at the troubleshooting link below.</tran
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="61"/>
         <source>Chord symbols</source>
-        <translation>Chord syms.</translation>
+        <translation>Chord symbols</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="63"/>
