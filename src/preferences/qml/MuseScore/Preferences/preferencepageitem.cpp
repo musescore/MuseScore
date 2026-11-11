@@ -30,13 +30,6 @@ PreferencePageItem::PreferencePageItem(QObject* parent)
 {
 }
 
-PreferencePageItem::~PreferencePageItem()
-{
-    for (PreferencePageItem* child : m_children) {
-        child->deleteLater();
-    }
-}
-
 QString PreferencePageItem::id() const
 {
     return m_id;
@@ -55,65 +48,6 @@ int PreferencePageItem::icon() const
 QString PreferencePageItem::path() const
 {
     return m_path;
-}
-
-bool PreferencePageItem::expanded() const
-{
-    return m_expanded;
-}
-
-PreferencePageItem* PreferencePageItem::parentItem() const
-{
-    return m_parent;
-}
-
-void PreferencePageItem::setParentItem(PreferencePageItem* parent)
-{
-    m_parent = parent;
-}
-
-QList<PreferencePageItem*> PreferencePageItem::childrenItems() const
-{
-    return m_children;
-}
-
-bool PreferencePageItem::isEmpty() const
-{
-    return m_children.isEmpty();
-}
-
-PreferencePageItem* PreferencePageItem::childAtRow(const int row) const
-{
-    if (row < 0 || row >= childCount()) {
-        return nullptr;
-    }
-
-    return m_children.at(row);
-}
-
-void PreferencePageItem::appendChild(PreferencePageItem* child)
-{
-    if (!child) {
-        return;
-    }
-
-    child->setParentItem(this);
-
-    m_children.append(child);
-}
-
-int PreferencePageItem::childCount() const
-{
-    return m_children.size();
-}
-
-int PreferencePageItem::row() const
-{
-    if (!parentItem()) {
-        return 0;
-    }
-
-    return parentItem()->childrenItems().indexOf(const_cast<PreferencePageItem*>(this));
 }
 
 void PreferencePageItem::setId(QString id)
@@ -154,14 +88,4 @@ void PreferencePageItem::setPath(QString path)
 
     m_path = path;
     emit pathChanged(m_path);
-}
-
-void PreferencePageItem::setExpanded(bool expanded)
-{
-    if (m_expanded == expanded) {
-        return;
-    }
-
-    m_expanded = expanded;
-    emit expandedChanged(m_expanded);
 }
