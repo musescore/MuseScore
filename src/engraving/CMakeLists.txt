@@ -166,6 +166,8 @@ target_sources(engraving PRIVATE
     editing/editscoreproperties.h
     editing/editslashnotation.cpp
     editing/editslashnotation.h
+    editing/editslur.cpp
+    editing/editslur.h
     editing/editsoundflag.cpp
     editing/editsoundflag.h
     editing/editspanner.cpp
