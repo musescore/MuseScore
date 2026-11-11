@@ -38,6 +38,7 @@ class Accidental;
 class AccidentalState;
 class Chord;
 class Factory;
+class JianpuOctaveDot;
 class NoteDot;
 class NoteEditData;
 class Score;
@@ -268,6 +269,11 @@ public:
     bool fretConflict() const { return m_fretConflict; }
     void setFretConflict(bool val) { m_fretConflict = val; }
 
+    String jianpuDigit() const { return m_jianpuDigit; }
+    void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
+    String jianpuAccidental() const { return m_jianpuAccidental; }
+    void setJianpuAccidental(const String& s) { m_jianpuAccidental = s; }
+
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
@@ -455,6 +461,10 @@ public:
 
     bool isExactUnison(Note* other);
 
+    const std::vector<JianpuOctaveDot*>& jianpuOctaveDots() const { return m_jianpuOctaveDots; }
+    std::vector<JianpuOctaveDot*>& jianpuOctaveDots() { return m_jianpuOctaveDots; }
+    void setJianpuOctaveDotCount(size_t count);
+
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
         ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
@@ -559,6 +569,9 @@ private:
     std::vector<Spanner*> m_spannerBack;
 
     String m_fretString;
+    String m_jianpuDigit;
+    String m_jianpuAccidental;
+    std::vector<JianpuOctaveDot*> m_jianpuOctaveDots;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
     TieJumpPointList m_jumpPoints { this };

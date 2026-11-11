@@ -110,6 +110,8 @@ enum class P_TYPE : unsigned char {
     LINE_TYPE,
     HOOK_TYPE,
     KEY_MODE,
+    KEY,
+    JIANPU_NUMBERING,
     TEXT_STYLE,
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
@@ -312,6 +314,12 @@ public:
 
     PropertyValue(KeyMode v)
         : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
+
+    PropertyValue(Key v)
+        : m_type(P_TYPE::KEY), m_data(make_data<Key>(v)) {}
+
+    PropertyValue(JianpuNumbering v)
+        : m_type(P_TYPE::JIANPU_NUMBERING), m_data(make_data<JianpuNumbering>(v)) {}
 
     PropertyValue(TextStyleType v)
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}

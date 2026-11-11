@@ -37,6 +37,7 @@
 #include "engraving/style/textstyle.h"
 
 #include "inotationsceneconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 class QQuickView;
 
@@ -49,6 +50,7 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
 
     muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
+    muse::GlobalInject<mu::notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };

@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/durationtype.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
@@ -30,6 +31,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/utils.h"
 
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/noteinput.h"
@@ -50,6 +52,8 @@ private slots:
     void decDurationDotted();
     void incDurationDotted();
     void halfDoubleDurationLinkedStaves();
+    void augmentationLines();
+    void diminutionLines();
 };
 
 // Simple tests for command "half-duration" (default shortcut "Q").
@@ -233,4 +237,38 @@ TEST_F(Engraving_DurationTypeTests, halfDoubleDurationLinkedStaves)
     expectTicks(Fraction(1, 8));
 
     delete score;
+}
+
+TEST_F(Engraving_DurationTypeTests, augmentationLines)
+{
+    auto jianpuDurationLines = [](DurationType type, int dots) {
+        TDuration duration(type);
+        duration.setDots(dots);
+        return jianpuAugmentationLinesForDuration(duration);
+    };
+
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 0), 1);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 1), 2);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_HALF, 2), 2);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_WHOLE, 0), 3);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_WHOLE, 1), 5);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_BREVE, 0), 7);
+    EXPECT_EQ(jianpuDurationLines(DurationType::V_LONG, 0), 15);
+}
+
+TEST_F(Engraving_DurationTypeTests, diminutionLines)
+{
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_LONG)), 0);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_BREVE)), 0);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_WHOLE)), 0);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_HALF)), 0);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_QUARTER)), 0);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_EIGHTH)), 1);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_16TH)), 2);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_32ND)), 3);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_64TH)), 4);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_128TH)), 5);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_256TH)), 6);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_512TH)), 7);
+    EXPECT_EQ(jianpuDiminutionLinesForDuration(TDuration(DurationType::V_1024TH)), 8);
 }

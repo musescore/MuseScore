@@ -38,6 +38,7 @@
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
+#include "jianpudurationline.h"
 #include "keysig.h"
 #include "lyrics.h"
 #include "marker.h"
@@ -135,6 +136,7 @@ ChordRest::~ChordRest()
 {
     muse::DeleteAll(m_lyrics);
     muse::DeleteAll(m_el);
+    muse::DeleteAll(m_jianpuDurationLines);
     delete m_tabDur;
 
     if (m_beam) {
@@ -886,6 +888,9 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     for (EngravingItem* e : m_el) {
         func(e);
     }
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
+        func(dl);
+    }
 }
 
 //---------------------------------------------------------
@@ -1108,6 +1113,9 @@ void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
     }
     if (m_tabDur) {
         func(m_tabDur);
+    }
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
+        func(dl);
     }
 }
 
@@ -1375,5 +1383,20 @@ bool ChordRest::hasPrecedingJumpItem() const
     std::vector<Measure*> precedingRepeatMeasures = findPreviousRepeatMeasures(measure);
 
     return !precedingRepeatMeasures.empty();
+}
+
+void ChordRest::setJianpuDurationLineCount(size_t count)
+{
+    while (m_jianpuDurationLines.size() < count) {
+        JianpuDurationLine* dl = new JianpuDurationLine(this);
+        dl->setOwnershipParent(this);
+        dl->setTrack(track());
+        m_jianpuDurationLines.push_back(dl);
+    }
+
+    while (m_jianpuDurationLines.size() > count) {
+        delete m_jianpuDurationLines.back();
+        m_jianpuDurationLines.pop_back();
+    }
 }
 }

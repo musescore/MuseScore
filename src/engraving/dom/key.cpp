@@ -231,6 +231,10 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
     if (e.m_custom != m_custom || e.m_mode != m_mode || e.m_forInstrumentChange != m_forInstrumentChange) {
         return false;
     }
+    if (e.m_jianpuNumbering != m_jianpuNumbering || e.m_jianpuTonicKey != m_jianpuTonicKey
+        || e.m_jianpuTonicMode != m_jianpuTonicMode) {
+        return false;
+    }
     if (m_custom && !isAtonal()) {
         if (e.m_customKeyDefs.size() != m_customKeyDefs.size()) {
             return false;

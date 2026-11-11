@@ -81,6 +81,9 @@ class IndicatorIcon;
 class Image;
 class InstrumentChange;
 class InstrumentName;
+
+class JianpuDurationLine;
+class JianpuOctaveDot;
 class Jump;
 
 class KeySig;
@@ -108,7 +111,6 @@ class NoteDot;
 class NoteLineSegment;
 
 class Ornament;
-
 class Ottava;
 class OttavaSegment;
 
@@ -243,6 +245,8 @@ private:
     static void draw(const InstrumentChange* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const InstrumentName* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
+    static void draw(const JianpuDurationLine* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const JianpuOctaveDot* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Jump* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const KeySig* item, muse::draw::Painter* painter, const PaintOptions& opt);

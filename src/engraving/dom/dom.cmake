@@ -148,6 +148,10 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/interval.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interval.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.h
     ${CMAKE_CURRENT_LIST_DIR}/jump.cpp
     ${CMAKE_CURRENT_LIST_DIR}/jump.h
     ${CMAKE_CURRENT_LIST_DIR}/key.cpp

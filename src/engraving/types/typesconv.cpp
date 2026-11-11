@@ -643,6 +643,12 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::TAPPING_TEXT, "TappingText",
           TranslatableString("engraving", "tapping text(s)", nullptr, 1),
           TranslatableString("engraving", "Tapping text(s)", nullptr, 1) },
+    Item{ ElementType::JIANPU_OCTAVE_DOT, "JianpuOctaveDot",
+          TranslatableString("engraving", "jianpu octave dot"),
+          TranslatableString("engraving", "Jianpu octave dot") },
+    Item{ ElementType::JIANPU_DURATION_LINE, "JianpuDurationLine",
+          TranslatableString("engraving", "jianpu duration line"),
+          TranslatableString("engraving", "Jianpu duration line") },
     Item{ ElementType::ROOT_ITEM, "RootItem",
           TranslatableString::untranslatable("root item"),
           TranslatableString::untranslatable("Root item") },
@@ -1754,6 +1760,50 @@ KeyMode TConv::fromXml(const AsciiStringView& tag, KeyMode def)
     return findTypeByXmlTag<KeyMode>(KEY_MODES, tag, def);
 }
 
+static const std::vector<Item<JianpuNumbering> > JIANPU_NUMBERINGS = {
+    { JianpuNumbering::FOLLOW_SCORE_KEY, "followScoreKey" },
+    { JianpuNumbering::CUSTOM,           "custom" },
+};
+
+AsciiStringView TConv::toXml(JianpuNumbering v)
+{
+    return findXmlTagByType(JIANPU_NUMBERINGS, v);
+}
+
+JianpuNumbering TConv::fromXml(const AsciiStringView& tag, JianpuNumbering def)
+{
+    return findTypeByXmlTag(JIANPU_NUMBERINGS, tag, def);
+}
+
+static const std::vector<Item<Key> > KEYS = {
+    { Key::INVALID, "invalid" },
+    { Key::C_B, "Cb" },
+    { Key::G_B, "Gb" },
+    { Key::D_B, "Db" },
+    { Key::A_B, "Ab" },
+    { Key::E_B, "Eb" },
+    { Key::B_B, "Bb" },
+    { Key::F,   "F" },
+    { Key::C,   "C" },
+    { Key::G,   "G" },
+    { Key::D,   "D" },
+    { Key::A,   "A" },
+    { Key::E,   "E" },
+    { Key::B,   "B" },
+    { Key::F_S, "F#" },
+    { Key::C_S, "C#" },
+};
+
+AsciiStringView TConv::toXml(Key v)
+{
+    return findXmlTagByType(KEYS, v);
+}
+
+Key TConv::fromXml(const AsciiStringView& tag, Key def)
+{
+    return findTypeByXmlTag(KEYS, tag, def);
+}
+
 static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::DEFAULT,           "default",              muse::TranslatableString("engraving", "Default") },
     { TextStyleType::TITLE,             "title",                muse::TranslatableString("engraving", "Title") },
@@ -1815,6 +1865,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  muse::TranslatableString("engraving", "Harp pedal diagram") },
     { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", muse::TranslatableString("engraving", "Harp pedal text diagram") },
     { TextStyleType::ARTICULATION, "articulation", muse::TranslatableString("engraving", "Articulation") },
+    { TextStyleType::JIANPU_NUMBER, "jianpu_number", muse::TranslatableString("engraving", "Jianpu number") },
 
     { TextStyleType::TEXTLINE,          "textline",             muse::TranslatableString("engraving", "Text line") },
     { TextStyleType::SYSTEM_TEXTLINE,   "system_textline",      muse::TranslatableString("engraving", "System text line") },
@@ -3247,10 +3298,11 @@ MarkerType TConv::fromXml(const AsciiStringView& tag, MarkerType def)
     return def;
 }
 
-static const std::array<Item<StaffGroup>, 3> STAFFGROUP_TYPES = { {
+static const std::array<Item<StaffGroup>, 4> STAFFGROUP_TYPES = { {
     { StaffGroup::STANDARD,     "pitched",    muse::TranslatableString("engraving/staffgroup", "Standard") },
     { StaffGroup::PERCUSSION,   "percussion", muse::TranslatableString("engraving/staffgroup", "Percussion") },
     { StaffGroup::TAB,          "tablature",  muse::TranslatableString("engraving/staffgroup", "Tablature") },
+    { StaffGroup::JIANPU,       "jianpu",     muse::TranslatableString("engraving/staffgroup", "Jianpu") },
 } };
 
 String TConv::translatedUserName(StaffGroup v)
@@ -3268,7 +3320,7 @@ StaffGroup TConv::fromXml(const AsciiStringView& tag, StaffGroup def)
     return findTypeByXmlTag<StaffGroup>(STAFFGROUP_TYPES, tag, def);
 }
 
-static const std::array<Item<StaffTypes>, 27> STAFFTYPES_ITEMS = { {
+static const std::array<Item<StaffTypes>, 28> STAFFTYPES_ITEMS = { {
     { StaffTypes::STANDARD,      "stdNormal",      muse::TranslatableString("engraving/stafftypes", "Standard") },
     { StaffTypes::PERC_1LINE,    "perc1Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 1 line") },
     { StaffTypes::PERC_2LINE,    "perc2Line",      muse::TranslatableString("engraving/stafftypes", "Perc. 2 lines") },
@@ -3296,6 +3348,7 @@ static const std::array<Item<StaffTypes>, 27> STAFFTYPES_ITEMS = { {
     { StaffTypes::TAB_8SIMPLE,   "tab8StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 8-str. simple") },
     { StaffTypes::TAB_9SIMPLE,   "tab9StrSimple",  muse::TranslatableString("engraving/stafftypes", "Tab. 9-str. simple") },
     { StaffTypes::TAB_10SIMPLE,  "tab10StrSimple", muse::TranslatableString("engraving/stafftypes", "Tab. 10-str. simple") },
+    { StaffTypes::JIANPU,        "jianpu",         muse::TranslatableString("engraving/stafftypes", "Jianpu") },
 } };
 
 const TranslatableString& TConv::userName(StaffTypes v)

@@ -136,6 +136,9 @@ class HammerOnPullOffSegment;
 class HammerOnPullOffText;
 class HarmonicMarkSegment;
 
+class JianpuDurationLine;
+class JianpuOctaveDot;
+
 class LedgerLine;
 class LetRing;
 class LetRingSegment;
@@ -272,6 +275,8 @@ public:
     static void layoutInstrumentChange(const InstrumentChange* item, InstrumentChange::LayoutData* ldata);
     static void layoutInstrumentName(const InstrumentName* item, InstrumentName::LayoutData* ldata);
 
+    static void layoutJianpuDurationLine(JianpuDurationLine* item, const LayoutContext& ctx);
+    static void layoutJianpuOctaveDot(JianpuOctaveDot* item, LayoutContext& ctx);
     static void layoutJump(const Jump* item, Jump::LayoutData* ldata);
 
     static void layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf);

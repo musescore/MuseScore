@@ -60,6 +60,8 @@ static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_nam
 
 static const Settings::Key THIN_NOTE_INPUT_CURSOR(module_name, "ui/canvas/thinNoteInputCursor");
 
+static const Settings::Key ENABLE_JIANPU(module_name, "notation/enableJianpu");
+
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
@@ -211,6 +213,8 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(THIN_NOTE_INPUT_CURSOR, Val(false)); // accessible via DevTools/Settings
+
+    settings()->setDefaultValue(ENABLE_JIANPU, Val(false));
 
     settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
     settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
@@ -621,6 +625,11 @@ int NotationConfiguration::cursorOpacity() const
 bool NotationConfiguration::thinNoteInputCursor() const
 {
     return settings()->value(THIN_NOTE_INPUT_CURSOR).toBool();
+}
+
+bool NotationConfiguration::enableJianpu() const
+{
+    return settings()->value(ENABLE_JIANPU).toBool();
 }
 
 QColor NotationConfiguration::loopMarkerColor() const

@@ -289,7 +289,7 @@ StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
 
         Staff* firstStaff = part->staves().front();
         const StaffType* staffType = firstStaff->staffType();
-        if (staffType->group() != StaffGroup::STANDARD) {
+        if (staffType->group() != StaffGroup::STANDARD && staffType->group() != StaffGroup::JIANPU) {
             return true;
         }
 

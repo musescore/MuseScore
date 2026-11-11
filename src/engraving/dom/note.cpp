@@ -59,6 +59,7 @@
 #include "fingering.h"
 #include "glissando.h"
 #include "guitarbend.h"
+#include "jianpuoctavedot.h"
 #include "laissezvib.h"
 #include "linkedobjects.h"
 #include "measure.h"
@@ -671,6 +672,7 @@ Note::~Note()
     }
 
     muse::DeleteAll(m_dots);
+    muse::DeleteAll(m_jianpuOctaveDots);
 }
 
 std::vector<Note*> Note::compoundNotes() const
@@ -796,7 +798,9 @@ Note::Note(const Note& n, bool link)
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
-    m_mark      = n.m_mark;
+    m_mark = n.m_mark;
+    m_jianpuDigit = n.m_jianpuDigit;
+    m_jianpuAccidental = n.m_jianpuAccidental;
 
     setDropTarget(false);
 }
@@ -2357,6 +2361,9 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     for (NoteDot* dot : m_dots) {
         func(dot);
     }
+    for (JianpuOctaveDot* od : m_jianpuOctaveDots) {
+        func(od);
+    }
 }
 
 //---------------------------------------------------------
@@ -2405,6 +2412,9 @@ void Note::setTrack(track_idx_t val)
         return;
     }
     for (NoteDot* dot : m_dots) {
+        dot->setTrack(val);
+    }
+    for (JianpuOctaveDot* dot : m_jianpuOctaveDots) {
         dot->setTrack(val);
     }
 }
@@ -3393,6 +3403,9 @@ void Note::setScore(Score* s)
     for (NoteDot* dot : m_dots) {
         dot->setScore(s);
     }
+    for (JianpuOctaveDot* dot : m_jianpuOctaveDots) {
+        dot->setScore(s);
+    }
     for (EngravingItem* el : m_el) {
         el->setScore(s);
     }
@@ -4262,5 +4275,19 @@ staff_idx_t Note::vStaffIdx() const
 {
     const Chord* c = chord();
     return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
+void Note::setJianpuOctaveDotCount(size_t count)
+{
+    while (m_jianpuOctaveDots.size() < count) {
+        JianpuOctaveDot* dot = new JianpuOctaveDot(this);
+        dot->setOwnershipParent(this);
+        dot->setTrack(track());
+        m_jianpuOctaveDots.push_back(dot);
+    }
+    while (m_jianpuOctaveDots.size() > count) {
+        delete m_jianpuOctaveDots.back();
+        m_jianpuOctaveDots.pop_back();
+    }
 }
 }

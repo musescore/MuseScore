@@ -107,6 +107,7 @@ static const QStringList ALL_PAGE_CODES {
     "chord-symbols",
     "fretboard-diagrams",
     "tablature-styles",
+    "jianpu",
     "text-styles"
 };
 
@@ -161,6 +162,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "fretboard-diagram-fret-number",
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
+    "jianpu-number",
     "text-line",
     "system-text-line",
     "note-line",
@@ -718,6 +720,15 @@ void EditStyle::classBegin()
         { StyleId::tabShowTiedFret, false, tabShowTiedFrets, 0 },
         { StyleId::tabParenthesizeTiedFret, false, tabParenthFrets, 0 },
         { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
+
+        { StyleId::jianpuNumberVerticalDistance, false, jianpuNumberVerticalDistance, jianpuNumberVerticalDistanceReset },
+        { StyleId::jianpuVoiceVerticalDistance, false, jianpuVoiceVerticalDistance, jianpuVoiceVerticalDistanceReset },
+        { StyleId::jianpuOctaveDotRadius, false, jianpuOctaveDotRadius, jianpuOctaveDotRadiusReset },
+        { StyleId::jianpuOctaveDotDistance, false, jianpuOctaveDotDistance, jianpuOctaveDotDistanceReset },
+        { StyleId::jianpuDiminutionBeamThickness, false, jianpuDiminutionBeamThickness, jianpuDiminutionBeamThicknessReset },
+        { StyleId::jianpuDiminutionBeamDistance, false, jianpuDiminutionBeamDistance, jianpuDiminutionBeamDistanceReset },
+        { StyleId::jianpuDiminutionBeamPlacement, false, jianpuDiminutionBeamPlacement, jianpuDiminutionBeamPlacementReset },
+        { StyleId::jianpuDurationLineThickness, false, jianpuDurationLineThickness, jianpuDurationLineThicknessReset },
     };
 
     // ====================================================
@@ -782,6 +793,7 @@ void EditStyle::classBegin()
         tempoTextPlacement,
         staffTextPlacement,
         rehearsalMarkPlacement,
+        jianpuDiminutionBeamPlacement,
     };
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
@@ -1145,7 +1157,12 @@ void EditStyle::classBegin()
         QListWidgetItem* item = new QListWidgetItem(score->getTextStyleUserName(textStyleType).qTranslated());
         item->setData(Qt::UserRole, int(textStyleType));
         textStyles->addItem(item);
+        if (textStyleType == TextStyleType::JIANPU_NUMBER) {
+            item->setHidden(!notationConfiguration()->enableJianpu());
+        }
     }
+
+    pageList->item(ALL_PAGE_CODES.indexOf("jianpu"))->setHidden(!notationConfiguration()->enableJianpu());
 
     textStyleFrameType->clear();
     textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
@@ -1308,11 +1325,19 @@ void EditStyle::classBegin()
     });
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
-    textStyles->setCurrentRow(notation->viewState()->styleDialogLastSubPageIndex());
+    int lastSubPage = notation->viewState()->styleDialogLastSubPageIndex();
+    if (QListWidgetItem* item = textStyles->item(lastSubPage); item&& item->isHidden()) {
+        lastSubPage = 0;
+    }
+    textStyles->setCurrentRow(lastSubPage);
 
     connect(pageList, &QListWidget::currentRowChanged, pageStack, &QStackedWidget::setCurrentIndex);
     connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::on_pageRowSelectionChanged);
-    pageList->setCurrentRow(notation->viewState()->styleDialogLastPageIndex());
+    int lastPage = notation->viewState()->styleDialogLastPageIndex();
+    if (QListWidgetItem* item = pageList->item(lastPage); item&& item->isHidden()) {
+        lastPage = 0;
+    }
+    pageList->setCurrentRow(lastPage);
 
     editLyricsTextStyleButton->setChecked(false);
     connect(editLyricsTextStyleButton, &QPushButton::clicked, pageList, [this](){
