@@ -123,8 +123,13 @@ if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
         set(QT_ADD_CONCURRENT OFF)
         set(QT_CONCURRENT_SUPPORTED OFF)
         set(MUSE_THREADS_SUPPORT OFF)
+        # The engine runs in the audio worklet, a single thread
+        set(MUSE_MODULE_AUDIO_WORKMODE 2) # driver callback
     else()
         set(MUSE_THREADS_SUPPORT ON)
+        # The native audio drivers may call back on different threads (e.g. AudioQueue on macOS),
+        # the engine needs its own thread, as on desktop
+        set(MUSE_MODULE_AUDIO_WORKMODE 3) # driver callback + worker rpc
     endif()
 
     set(MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED OFF)
@@ -133,7 +138,6 @@ if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
     set(MUE_GENERAL_APP ON)
     set(MUSE_MODULE_SHORTCUTS ON)
     set(MUSE_MODULE_AUDIO ON)
-    set(MUSE_MODULE_AUDIO_WORKMODE 2) # driver callback
     set(MUSE_MODULE_MPE ON)
     set(MUE_BUILD_APPSHELL_MODULE ON)
     set(MUE_BUILD_PROJECT_MODULE ON)
