@@ -58,6 +58,7 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
     opt.printPageBackground = false; // Printed by us using image.fill
+    opt.applyWatermark = muse::value(options, OptionKey::APPLY_WATERMARK, Val(true)).toBool();
 
     const SizeF pageSizeInch = notation->painting()->pageSizeInch(opt);
 
