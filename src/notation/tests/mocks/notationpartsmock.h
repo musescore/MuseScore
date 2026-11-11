@@ -65,8 +65,7 @@ public:
     MOCK_METHOD(void, removeStaves, (const muse::IDList& stavesIds), (override));
 
     MOCK_METHOD(void, reorderParts, (const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves), (override));
-    MOCK_METHOD(void, moveStaves, (const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId, InsertMode mode),
-                (override));
+    MOCK_METHOD(void, reorderStaves, (const muse::IDList& staffIds), (override));
 
     MOCK_METHOD(bool, appendStaff, (Staff * staff, const muse::ID& destinationPartId), (override));
     MOCK_METHOD(bool, appendStaffLinkedToMaster, (Staff * staff, Staff * masterSourceStaff, const muse::ID& destinationPartId),

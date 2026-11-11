@@ -70,11 +70,6 @@ public:
     virtual void removeParts(const muse::IDList& partsIds) = 0;
     virtual void removeStaves(const muse::IDList& stavesIds) = 0;
 
-    enum class InsertMode {
-        Before,
-        After
-    };
-
     struct SystemObjectsMove {
         muse::ID staffId;
         muse::ID destinationStaffId;
@@ -90,8 +85,8 @@ public:
     //! Puts the parts in the given order and moves the system markings, as one undo step
     virtual void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) = 0;
 
-    virtual void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId,
-                            InsertMode mode = InsertMode::Before) = 0;
+    //! Puts the part's staves in the given order, as one undo step
+    virtual void reorderStaves(const muse::IDList& staffIds) = 0;
 
     virtual bool appendStaff(Staff* staff, const muse::ID& destinationPartId) = 0;
     virtual bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) = 0;

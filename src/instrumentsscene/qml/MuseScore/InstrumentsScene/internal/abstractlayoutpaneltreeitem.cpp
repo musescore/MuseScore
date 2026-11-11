@@ -122,12 +122,6 @@ void AbstractLayoutPanelTreeItem::appendNewItem()
 {
 }
 
-MoveParams AbstractLayoutPanelTreeItem::buildMoveParams(int, int, AbstractLayoutPanelTreeItem*, int) const
-{
-    UNREACHABLE;
-    return MoveParams();
-}
-
 void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
                                                AbstractLayoutPanelTreeItem* destinationParent,
                                                int destinationRow, bool)
@@ -152,7 +146,7 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
     AbstractLayoutPanelTreeItem::removeChildren(childToRemoveIndex, count);
 }
 
-void AbstractLayoutPanelTreeItem::moveChildrenOnScore(const MoveParams&)
+void AbstractLayoutPanelTreeItem::applyToScore()
 {
 }
 

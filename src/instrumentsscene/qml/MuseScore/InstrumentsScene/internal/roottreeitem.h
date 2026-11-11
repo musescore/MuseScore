@@ -38,8 +38,7 @@ public:
     void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
 
-    //! Moves the parts and the system markings on the score to match the panel
-    void applyToScore();
+    void applyToScore() override;
 
     void removeChildren(int row, int count, bool deleteChild) override;
 };

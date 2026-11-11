@@ -168,13 +168,10 @@ Staff* NotationParts::staffModifiable(const ID& staffId) const
 std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 {
     std::vector<Staff*> staves;
+    staves.reserve(stavesIds.size());
 
-    if (stavesIds.empty()) {
-        return staves;
-    }
-
-    for (Staff* staff : score()->staves()) {
-        if (muse::contains(stavesIds, staff->id())) {
+    for (const ID& staffId : stavesIds) {
+        if (Staff* staff = score()->staffById(staffId)) {
             staves.push_back(staff);
         }
     }
@@ -1080,30 +1077,19 @@ std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMov
     return result;
 }
 
-void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
+void NotationParts::reorderStaves(const IDList& staffIds)
 {
     TRACEFUNC;
 
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
-    if (!destinationStaff) {
+    const std::vector<Staff*> orderedStaves = staves(staffIds);
+    if (!EditPart::reorderStavesChangesScore(orderedStaves)) {
         return;
-    }
-
-    std::vector<Staff*> staves = this->staves(sourceStavesIds);
-    if (staves.empty()) {
-        return;
-    }
-
-    for (const Staff* staff : staves) {
-        IF_ASSERT_FAILED_X(staff->part() == destinationStaff->part(), "All staves must have the same part!") {
-            return;
-        }
     }
 
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Move staves"));
 
-    EditPart::moveStaves(score(), staves, destinationStaff, mode == InsertMode::After);
+    EditPart::reorderStaves(score(), orderedStaves);
 
     apply();
 }

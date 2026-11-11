@@ -669,16 +669,8 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         return false;
     }
 
-    if (m_dragInProgress && sourceParentItem == m_rootItem) {
+    if (m_dragInProgress) {
         m_dragSourceParentItem = sourceParentItem;
-    } else if (m_dragInProgress) {
-        MoveParams params = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
-        if (!params.isValid()) {
-            return false;
-        }
-
-        m_dragSourceParentItem = sourceParentItem;
-        m_activeDragMoveParams = params;
     }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
@@ -703,14 +695,11 @@ void LayoutPanelTreeModel::endActiveDrag()
 {
     setLoadingBlocked(true);
 
-    if (m_dragSourceParentItem == m_rootItem) {
-        static_cast<RootTreeItem*>(m_rootItem)->applyToScore();
-    } else if (m_dragSourceParentItem) {
-        m_dragSourceParentItem->moveChildrenOnScore(m_activeDragMoveParams);
+    if (m_dragSourceParentItem) {
+        m_dragSourceParentItem->applyToScore();
     }
 
     m_dragSourceParentItem = nullptr;
-    m_activeDragMoveParams = MoveParams();
     m_dragInProgress = false;
 
     setLoadingBlocked(false);

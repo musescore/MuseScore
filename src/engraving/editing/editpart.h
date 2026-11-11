@@ -280,6 +280,9 @@ public:
     static bool reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
     static void reorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
 
+    static bool reorderStavesChangesScore(const std::vector<Staff*>& staves);
+    static void reorderStaves(Score* score, const std::vector<Staff*>& staves);
+
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);

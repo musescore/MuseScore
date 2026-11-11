@@ -44,6 +44,8 @@
 #include "../dom/stringtunings.h"
 #include "../dom/utils.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 //---------------------------------------------------------
@@ -764,6 +766,49 @@ void EditPart::reorderParts(Score* score, const std::vector<Part*>& parts, const
     if (belowBottomStaff != score->style().styleB(Sid::systemObjectsBelowBottomStaff)) {
         score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, belowBottomStaff);
     }
+}
+
+bool EditPart::reorderStavesChangesScore(const std::vector<Staff*>& staves)
+{
+    if (staves.empty() || !staves.front()) {
+        return false;
+    }
+
+    const Part* part = staves.front()->part();
+    const std::vector<Staff*>& partStaves = part->staves();
+    if (staves.size() != partStaves.size()) {
+        return false;
+    }
+
+    for (const Staff* staff : staves) {
+        IF_ASSERT_FAILED_X(staff && staff->part() == part, "All staves must have the same part!") {
+            return false;
+        }
+    }
+
+    return !std::equal(staves.begin(), staves.end(), partStaves.begin());
+}
+
+void EditPart::reorderStaves(Score* score, const std::vector<Staff*>& staves)
+{
+    if (!score) {
+        return;
+    }
+
+    std::vector<staff_idx_t> staffMapping;
+    staffMapping.reserve(score->nstaves());
+    for (const Staff* staff : score->staves()) {
+        staffMapping.push_back(staff->idx());
+    }
+
+    // The part's staff slots get its staves in the new order
+    const staff_idx_t firstStaffIdx = staves.front()->part()->staves().front()->idx();
+    for (size_t i = 0; i < staves.size(); ++i) {
+        staffMapping[firstStaffIdx + i] = staves[i]->idx();
+    }
+
+    score->undo(new SortStaves(score, staffMapping));
+    score->setBracketsAndBarlines();
 }
 
 bool EditPart::moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff)

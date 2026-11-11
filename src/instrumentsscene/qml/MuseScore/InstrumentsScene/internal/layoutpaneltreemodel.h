@@ -223,7 +223,6 @@ private:
 
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
-    MoveParams m_activeDragMoveParams;
 
     muse::ID m_systemStaffToSelect;
 };
