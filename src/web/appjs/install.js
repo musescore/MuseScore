@@ -7,7 +7,7 @@ console.log("args:", args)
 console.log("__dirname:", __dirname);
 
 const HERE=__dirname
-const ROOT=HERE+"/../.."
+const ROOT=HERE+"/../../.."
 const OUTPUT_DIR = args.length > 0 ? args[0] : "./out"
 const MUSE_MODULE_AUDIO_WORKER = "OFF"
 
