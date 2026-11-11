@@ -93,6 +93,8 @@ void AppMenuModel::setupConnections()
 MenuItem* AppMenuModel::makeFileMenu()
 {
     MenuItemList fileItems {
+        makeMenuItem(PROJECT_OPEN_COMMAND),
+        makeSeparator(),
         makeMenuItem(PROJECT_SAVE_COMMAND)
     };
 
