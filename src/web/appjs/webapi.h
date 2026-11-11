@@ -25,8 +25,9 @@
 
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
 #include "project/iprojectsession.h"
+#include "project/iopenprojectscenario.h"
+#include "project/icloseprojectscenario.h"
 #include "project/inotationproject.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
@@ -35,8 +36,9 @@ namespace mu::appjs {
 class WebApi : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
+    muse::ContextInject<mu::project::IOpenProjectScenario> openProjectScenario = { this };
+    muse::ContextInject<mu::project::ICloseProjectScenario> closeProjectScenario = { this };
     inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
     inline static muse::GlobalInject<muse::audio::ISoundFontController> soundFontController;
 
@@ -59,5 +61,9 @@ private:
     void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
 
     project::INotationProjectPtr m_currentProject;
+
+    //! NOTE The file of the opened project, it's needed while the project is open
+    muse::io::path_t m_projectFilePath;
+    int m_loadCount = 0;
 };
 }
