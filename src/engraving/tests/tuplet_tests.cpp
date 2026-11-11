@@ -30,6 +30,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
@@ -1852,6 +1853,235 @@ TEST_F(Engraving_TupletTests, nestedTupletsOuterDirectionCrossStaffBeam)
     ASSERT_TRUE(beam->cross());
     ASSERT_FALSE(toChord(chordRestAt(m1, 0))->up());
     EXPECT_TRUE(outer->isUp());
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOppositeSide
+//     with the style, nested tuplets at any depth, of notes or of rests,
+//     are placed opposite the outermost tuplet
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOppositeSide)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    // E4 F4 G4: stems up
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 64, 65, 67 });
+    ASSERT_TRUE(outer);
+
+    // a 16th triplet in the first eighth triplet, three levels deep
+    ASSERT_TRUE(addTuplet(chordRestAt(m1, 0), Fraction(3, 2), DurationType::V_16TH));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        for (size_t i = 1; i < 3; ++i) {
+            score->setNoteRest(chordRestAt(m1, i)->segment(), 0, NoteVal(65), Fraction(1, 16));
+        }
+    });
+    ASSERT_EQ(rhythm(m1), "3:2[ 3:2[ 3:2[16 16 16] 8 8] 3:2[8 8 8] 3:2[8 8 8]] r2");
+    ASSERT_EQ(toChord(chordRestAt(m1, 0))->beam(), toChord(chordRestAt(m1, 10))->beam());
+    Tuplet* deepest = chordRestAt(m1, 0)->tuplet();
+    const std::vector<const Tuplet*> nested {
+        deepest, deepest->tuplet(), toTuplet(outer->elements().at(1)), toTuplet(outer->elements().at(2))
+    };
+    auto expectNested = [&](bool up) {
+        for (const Tuplet* t : nested) {
+            EXPECT_EQ(t->isUp(), up);
+        }
+    };
+
+    // by default, all on the stem side
+    EXPECT_TRUE(outer->isUp());
+    expectNested(true);
+
+    // with the style, all nested tuplets below; the beam shows the outer tuplet's span
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::tupletNestedOppositeSide, true);
+    });
+    EXPECT_TRUE(outer->isUp());
+    expectNested(false);
+    EXPECT_FALSE(outer->hasBracket());
+
+    // a nested tuplet of rests too
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        for (size_t i = 8; i < 11; ++i) {
+            score->setNoteRest(chordRestAt(m1, i)->segment(), 0, NoteVal(), Fraction(1, 8));
+        }
+    });
+    ASSERT_EQ(rhythm(m1), "3:2[ 3:2[ 3:2[16 16 16] 8 8] 3:2[8 8 8] 3:2[r8 r8 r8]] r2");
+    expectNested(false);
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOppositeSideManualDirection
+//     with the style, a nested tuplet's manual direction wins,
+//     and flipping the outer tuplet flips the nested ones
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOppositeSideManualDirection)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    // E4 F4 G4: stems up
+    Tuplet* outer = addNestedTriplets(score->firstMeasure(), { 64, 65, 67 });
+    ASSERT_TRUE(outer);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::tupletNestedOppositeSide, true);
+    });
+    Tuplet* middle = toTuplet(outer->elements().at(1));
+    auto expectNested = [&](bool up) {
+        for (const DurationElement* e : outer->elements()) {
+            EXPECT_EQ(toTuplet(e)->isUp(), up);
+        }
+    };
+    EXPECT_TRUE(outer->isUp());
+    expectNested(false);
+
+    // a nested tuplet's manual direction wins
+    changeProperty(middle, Pid::DIRECTION, PropertyValue::fromValue(DirectionV::UP));
+    EXPECT_TRUE(middle->isUp());
+    EXPECT_TRUE(outer->hasBracket());
+    changeProperty(middle, Pid::DIRECTION, PropertyValue::fromValue(DirectionV::AUTO));
+    expectNested(false);
+
+    // flipping the outer tuplet flips the nested ones
+    changeProperty(outer, Pid::DIRECTION, PropertyValue::fromValue(DirectionV::DOWN));
+    EXPECT_FALSE(outer->isUp());
+    expectNested(true);
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOppositeSideVoices
+//     the style doesn't apply where other voices share the outer tuplet's span
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOppositeSideVoices)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    // E4 F4 G4: stems up
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 64, 65, 67 });
+    ASSERT_TRUE(outer);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::tupletNestedOppositeSide, true);
+    });
+    auto expectNested = [&](bool up) {
+        for (const DurationElement* e : outer->elements()) {
+            EXPECT_EQ(toTuplet(e)->isUp(), up);
+        }
+    };
+    expectNested(false);
+
+    // a second voice within the outer tuplet's span: all on the stem side
+    Segment* start = m1->first(SegmentType::ChordRest);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->setNoteRest(start, 1, NoteVal(60), Fraction(1, 4));
+    });
+    ASSERT_TRUE(start->element(1) && start->element(1)->isChord());
+    EXPECT_TRUE(outer->isUp());
+    expectNested(true);
+    score->undoRedo(true, nullptr);
+    expectNested(false);
+
+    // a second voice only after it: the style applies
+    Segment* afterTuplets = m1->findSegment(SegmentType::ChordRest, m1->tick() + Fraction(1, 2));
+    ASSERT_TRUE(afterTuplets);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->setNoteRest(afterTuplets, 1, NoteVal(60), Fraction(1, 4));
+    });
+    std::vector<EngravingItem*> voice2Rests;
+    for (Segment* s = start; s && s->tick() < afterTuplets->tick(); s = s->next(SegmentType::ChordRest)) {
+        if (s->element(1) && s->element(1)->isRest()) {
+            voice2Rests.push_back(s->element(1));
+        }
+    }
+    ASSERT_FALSE(voice2Rests.empty());
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        for (EngravingItem* rest : voice2Rests) {
+            score->deleteItem(rest);
+        }
+    });
+    // deleted voice 2 rests become gaps
+    ASSERT_TRUE(afterTuplets->element(1) && afterTuplets->element(1)->isChord());
+    ASSERT_TRUE(start->element(1) && start->element(1)->isRest() && toRest(start->element(1))->isGap());
+    expectNested(false);
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOppositeSideCrossStaff
+//     the style doesn't apply where a nested note is cross-staff
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOppositeSideCrossStaff)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    // D4 E4 F4: stems up
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 62, 64, 65 });
+    ASSERT_TRUE(outer);
+    moveToStaffBelow(m1, 3, 6);
+    ASSERT_TRUE(outer->cross());
+    std::vector<bool> withoutStyle;
+    for (const DurationElement* e : outer->elements()) {
+        withoutStyle.push_back(toTuplet(e)->isUp());
+    }
+    // the moved middle triplet is above its notes
+    ASSERT_TRUE(withoutStyle.at(1));
+
+    // with the style, each nested tuplet keeps its side
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::tupletNestedOppositeSide, true);
+    });
+    for (size_t i = 0; i < withoutStyle.size(); ++i) {
+        EXPECT_EQ(toTuplet(outer->elements().at(i))->isUp(), withoutStyle[i]);
+    }
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOppositeSideCrossStaffBeam
+//     the style doesn't apply where a nested group is under a cross-staff beam
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOppositeSideCrossStaffBeam)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    // D4 E4 F4, then a G4 beamed to them and moved to the staff below: the group's stems turn down
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 62, 64, 65 });
+    ASSERT_TRUE(outer);
+    addEighthJoinedToBeam(m1, 9, 67);
+    moveToStaffBelow(m1, 9, 10);
+    ASSERT_FALSE(outer->cross());
+    ASSERT_FALSE(toChord(chordRestAt(m1, 0))->up());
+    // the outer tuplet below, so that the style would put the nested tuplets above
+    changeProperty(outer, Pid::DIRECTION, PropertyValue::fromValue(DirectionV::DOWN));
+    std::vector<bool> withoutStyle;
+    for (const DurationElement* e : outer->elements()) {
+        withoutStyle.push_back(toTuplet(e)->isUp());
+    }
+    ASSERT_FALSE(withoutStyle.at(0));
+
+    // with the style, each nested tuplet keeps its side
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::tupletNestedOppositeSide, true);
+    });
+    for (size_t i = 0; i < withoutStyle.size(); ++i) {
+        EXPECT_EQ(toTuplet(outer->elements().at(i))->isUp(), withoutStyle[i]);
+    }
 
     delete score;
 }

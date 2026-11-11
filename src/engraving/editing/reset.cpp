@@ -183,6 +183,7 @@ void Reset::resetToDefaultLayout(Transaction& tx, Score* score)
         Sid::tupletOutOfStaff,
         Sid::tupletDirection,
         Sid::tupletBracketType,
+        Sid::tupletNestedOppositeSide,
         Sid::dynamicsPlacement,
         Sid::textLinePlacement,
         Sid::harpPedalDiagramPlacement,

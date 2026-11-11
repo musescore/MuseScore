@@ -54,7 +54,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     createNumber(item, ctx);
 
-    computeDirection(item);
+    computeDirection(item, ctx);
 
     const ChordRest* cr1 = nullptr;
     const ChordRest* cr2 = nullptr;
@@ -230,13 +230,9 @@ static int stemDirectionVotes(const Tuplet* tuplet)
     return up;
 }
 
-void TupletLayout::computeDirection(Tuplet* item)
+// Whether a tuplet with Auto direction goes above, by the stems of its chords
+static bool isUpByStems(const Tuplet* item)
 {
-    if (item->direction() != DirectionV::AUTO) {
-        item->setIsUp(item->direction() == DirectionV::UP);
-        return;
-    }
-
     int up = stemDirectionVotes(item);
     if (up == 0) {
         // this is a tuplet full of rests, default to up but also take voices into consideration
@@ -247,8 +243,30 @@ void TupletLayout::computeDirection(Tuplet* item)
             up = 1;             // default up
         }
     }
+    return up > 0;
+}
 
-    item->setIsUp(up > 0);
+void TupletLayout::computeDirection(Tuplet* item, const LayoutContext& ctx)
+{
+    if (item->direction() != DirectionV::AUTO) {
+        item->setIsUp(item->direction() == DirectionV::UP);
+        return;
+    }
+
+    // with the style, nested tuplets go opposite the outermost tuplet, unless other voices share its span
+    // or the group is cross-staff
+    const Tuplet* outermost = item->topTuplet();
+    const Measure* m = outermost ? outermost->measure() : nullptr;
+    if (m && ctx.conf().styleB(Sid::tupletNestedOppositeSide) && !outermost->inCrossStaffGroup()
+        && !m->hasVoices(outermost->staffIdx(), outermost->tick(), outermost->ticks())) {
+        bool outermostUp = outermost->direction() != DirectionV::AUTO
+                           ? outermost->direction() == DirectionV::UP
+                           : isUpByStems(outermost);
+        item->setIsUp(!outermostUp);
+        return;
+    }
+
+    item->setIsUp(isUpByStems(item));
 }
 
 void TupletLayout::computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2)
