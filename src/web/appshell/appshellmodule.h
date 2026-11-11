@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#pragma once
 
 #include <memory>
 
@@ -41,14 +40,20 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 
-    void onPreInit(const muse::IApplication::RunMode& mode) override;
     void onInit(const muse::IApplication::RunMode& mode) override;
-    void onAllInited(const muse::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
     std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
 };
-}
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+class AppShellContext : public muse::modularity::IContextSetup
+{
+public:
+    AppShellContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+};
+}
