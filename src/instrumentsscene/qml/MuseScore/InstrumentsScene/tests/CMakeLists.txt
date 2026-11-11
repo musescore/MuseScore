@@ -24,8 +24,10 @@ set(MODULE_TEST_SRC
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/masternotationmock.h
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationmock.h
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationpartsmock.h
+    ${PROJECT_SOURCE_DIR}/src/notationscene/tests/mocks/selectinstrumentsscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/roottreeitem_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/parttreeitem_tests.cpp
 )
 
 set(MODULE_TEST_LINK

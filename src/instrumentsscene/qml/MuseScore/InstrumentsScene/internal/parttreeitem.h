@@ -37,10 +37,10 @@ class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Contextabl
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")
 
+public:
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
     muse::ContextInject<muse::IInteractive> interactive { this };
 
-public:
     PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent,
                  LayoutPanelItemType::ItemType type = LayoutPanelItemType::ItemType::PART);
 
