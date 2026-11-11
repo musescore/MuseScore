@@ -35,6 +35,7 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/edittuplet.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -1615,6 +1616,105 @@ TEST_F(Engraving_TupletTests, nestedTupletsAvoidEachOther)
     ASSERT_FALSE(outer->hasBracket());
     ASSERT_TRUE(outer->number());
     expectOuterClear();
+
+    delete score;
+}
+
+// a second staff in the first part, for cross-staff notes
+static void addStaffBelow(Score* score)
+{
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        Staff* staff = Factory::createStaff(score->staff(0)->part());
+        staff->setPart(score->staff(0)->part());
+        score->undoInsertStaff(staff, 1);
+    });
+}
+
+// moves to the staff below the chords from index `from` up to, but not including, index `to`
+static void moveToStaffBelow(Measure* measure, size_t from, size_t to)
+{
+    Score* score = measure->score();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (size_t i = from; i < to; ++i) {
+            EditCrossStaff::moveDown(tx, score, chordRestAt(measure, i));
+        }
+    });
+}
+
+//-----------------------------------------
+//    nestedTupletsOuterBracket
+//     with Automatic brackets, an outer tuplet that starts and ends its beam group
+//     shows a bracket when a printed nested tuplet is on the same side
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterBracket)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    // E4 F4 G4: stems up, all nine notes under one beam
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 64, 65, 67 });
+    ASSERT_TRUE(outer);
+    ASSERT_TRUE(outer->isUp());
+    ASSERT_TRUE(toChord(chordRestAt(m1, 0))->beam());
+    ASSERT_EQ(toChord(chordRestAt(m1, 0))->beam(), toChord(chordRestAt(m1, 8))->beam());
+    ASSERT_EQ(outer->elements().size(), 3u);
+    Tuplet* middle = toTuplet(outer->elements().at(1));
+
+    // all nested tuplets above, like the outer tuplet
+    EXPECT_TRUE(outer->hasBracket());
+
+    // all nested tuplets below: the beam shows the outer tuplet's span
+    for (DurationElement* e : outer->elements()) {
+        changeProperty(toTuplet(e), Pid::DIRECTION, PropertyValue::fromValue(DirectionV::DOWN));
+    }
+    EXPECT_FALSE(outer->hasBracket());
+
+    // the middle one above again
+    changeProperty(middle, Pid::DIRECTION, PropertyValue::fromValue(DirectionV::AUTO));
+    ASSERT_TRUE(middle->isUp());
+    EXPECT_TRUE(outer->hasBracket());
+
+    // ... but invisible
+    changeProperty(middle, Pid::VISIBLE, false);
+    EXPECT_FALSE(outer->hasBracket());
+
+    // ... visible, with neither a number nor a bracket
+    changeProperty(middle, Pid::VISIBLE, true);
+    changeProperty(middle, Pid::NUMBER_TYPE, int(TupletNumberType::NO_TEXT));
+    changeProperty(middle, Pid::BRACKET_TYPE, int(TupletBracketType::SHOW_NO_BRACKET));
+    EXPECT_FALSE(outer->hasBracket());
+
+    // ... with a bracket only
+    changeProperty(middle, Pid::BRACKET_TYPE, int(TupletBracketType::SHOW_BRACKET));
+    EXPECT_TRUE(outer->hasBracket());
+
+    delete score;
+}
+
+//-----------------------------------------
+//    nestedTupletsOuterBracketCrossStaff
+//     where a nested note is cross-staff, the nested tuplets
+//     don't give the outer tuplet a bracket
+//-----------------------------------------
+
+TEST_F(Engraving_TupletTests, nestedTupletsOuterBracketCrossStaff)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    addStaffBelow(score);
+    // D4 E4 F4: stems up, all nine notes under one beam
+    Measure* m1 = score->firstMeasure();
+    Tuplet* outer = addNestedTriplets(m1, { 62, 64, 65 });
+    ASSERT_TRUE(outer);
+
+    // the second and third nested triplets moved to the staff below, still above their notes
+    moveToStaffBelow(m1, 3, 9);
+    ASSERT_TRUE(outer->cross());
+    ASSERT_EQ(toChord(chordRestAt(m1, 0))->beam(), toChord(chordRestAt(m1, 8))->beam());
+    ASSERT_TRUE(outer->isUp());
+    ASSERT_TRUE(toTuplet(outer->elements().at(2))->isUp());
+    EXPECT_FALSE(outer->hasBracket());
 
     delete score;
 }

@@ -197,6 +197,22 @@ void Tuplet::resetNumberProperty(Text* number)
     }
 }
 
+// Whether a nested tuplet at any depth is printed on the given side
+static bool hasPrintedNestedTupletOnSide(const Tuplet* tuplet, bool up)
+{
+    for (const DurationElement* e : tuplet->elements()) {
+        if (!e->isTuplet()) {
+            continue;
+        }
+        const Tuplet* nested = toTuplet(e);
+        bool printed = nested->visible() && (nested->hasBracket() || nested->numberType() != TupletNumberType::NO_TEXT);
+        if ((printed && nested->isUp() == up) || hasPrintedNestedTupletOnSide(nested, up)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 //---------------------------------------------------------
 //   calcHasBracket
 //---------------------------------------------------------
@@ -218,6 +234,10 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     Beam const* beamStart = c1->beam();
     Beam const* beamEnd = c2->beam();
     if (!beamStart || !beamEnd || beamStart != beamEnd) {
+        return true;
+    }
+    // not in a cross-staff group: the cross-staff beam sets the nested tuplets' sides
+    if (!inCrossStaffGroup() && hasPrintedNestedTupletOnSide(this, isUp())) {
         return true;
     }
     bool tupletStartsBeam = beamStart->elements().front() == c1;
@@ -516,6 +536,34 @@ bool Tuplet::cross() const
         }
     }
     return false;
+}
+
+// Whether a chord in a tuplet, at any depth, is under a cross-staff beam
+static bool hasCrossStaffBeam(const Tuplet* tuplet)
+{
+    for (const DurationElement* e : tuplet->elements()) {
+        if (e->isChord()) {
+            const Beam* beam = toChord(e)->beam();
+            if (beam && beam->cross()) {
+                return true;
+            }
+        } else if (e->isTuplet() && hasCrossStaffBeam(toTuplet(e))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   inCrossStaffGroup
+///  Whether a note anywhere in the outermost tuplet is
+///  cross-staff, or under a cross-staff beam
+//---------------------------------------------------------
+
+bool Tuplet::inCrossStaffGroup() const
+{
+    const Tuplet* outermost = topTuplet() ? topTuplet() : this;
+    return outermost->cross() || hasCrossStaffBeam(outermost);
 }
 
 //---------------------------------------------------------

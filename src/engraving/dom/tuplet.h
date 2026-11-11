@@ -116,6 +116,7 @@ public:
     Fraction elementsDuration();
     void sortElements();
     bool cross() const;
+    bool inCrossStaffGroup() const;
     staff_idx_t vStaffIdx() const override;
 
     const PointF& p1() const { return m_p1; }
