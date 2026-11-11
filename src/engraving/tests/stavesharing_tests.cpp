@@ -1680,3 +1680,47 @@ TEST_F(Engraving_StaveSharingTests, testInstrumentChangeForAllOriginParts)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testNoStaleHeaderKeySigAfterDisablingStaveSharing)
+{
+    // [GIVEN] Two clarinets with a key change in m.2, and m.8 at the start of the second system
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staleHeaderKeySig.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled, then disabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Disable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, false);
+    });
+    score->doLayout();
+
+    // [WHEN] A system break is added at measure 3
+    Measure* m3 = score->crMeasure(2);
+    Measure* m8 = score->crMeasure(7);
+    ASSERT_TRUE(m3 && m8);
+    ASSERT_TRUE(m8->system());
+    ASSERT_EQ(m8->system()->firstMeasure(), m8);
+
+    score->startCmd(muse::TranslatableString::untranslatable("Add system break"));
+    m3->undoSetLineBreak(true);
+    score->endCmd();
+    score->doLayout();
+
+    // [THEN] Measure 8 should not be the start of a system
+    ASSERT_TRUE(m8->system());
+    ASSERT_NE(m8->system()->firstMeasure(), m8);
+
+    // [THEN] Measure 8 should not have a key signature on any staff
+    const Segment* keySigSeg = m8->findSegment(SegmentType::KeySig, m8->tick());
+    if (keySigSeg && keySigSeg->enabled()) {
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            EXPECT_FALSE(keySigSeg->element(staff2track(staffIdx))) << "Key signature in measure 8 on staff " << staffIdx;
+        }
+    }
+
+    delete score;
+}
