@@ -807,6 +807,9 @@ public:
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
 
+    SymId resolveSym(SymId id) const;
+    SymIdList resolveSyms(const SymIdList& symbols) const;
+
     std::vector<staff_idx_t> uniqueStaves() const;
 
     size_t nmeasures() const;

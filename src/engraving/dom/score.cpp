@@ -1066,7 +1066,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
     for (Staff* staff : m_staves) {
         staff->spatiumChanged(oldValue, newValue);
     }
-    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / style().defaultSpatium());
+    m_layoutOptions.noteHeadWidth = m_engravingFont->width(resolveSym(SymId::noteheadBlack), newValue / style().defaultSpatium());
     updatePaddingTables();
 }
 
@@ -4672,6 +4672,50 @@ void Score::setStyle(const MStyle& s, const bool overlap)
 }
 
 //---------------------------------------------------------
+//   resolveSym
+//---------------------------------------------------------
+
+SymId Score::resolveSym(SymId id) const
+{
+    if (!style().styleB(Sid::oversizedNoteheads) || !m_engravingFont || !m_engravingFont->hasOversizedNoteheadsSupport()) {
+        return id;
+    }
+
+    switch (id) {
+    case SymId::noteheadBlack:
+        return SymId::noteheadBlackOversized;
+    case SymId::noteheadHalf:
+        return SymId::noteheadHalfOversized;
+    case SymId::noteheadWhole:
+        return SymId::noteheadWholeOversized;
+    case SymId::noteheadDoubleWhole:
+        return SymId::noteheadDoubleWholeOversized;
+    case SymId::noteheadDoubleWholeSquare:
+        return SymId::noteheadDoubleWholeSquareOversized;
+    default:
+        return id;
+    }
+}
+
+//---------------------------------------------------------
+//   resolveSyms
+//---------------------------------------------------------
+
+SymIdList Score::resolveSyms(const SymIdList& symbols) const
+{
+    if (!style().styleB(Sid::oversizedNoteheads) || !m_engravingFont || !m_engravingFont->hasOversizedNoteheadsSupport()) {
+        return symbols;
+    }
+
+    SymIdList resolved;
+    resolved.reserve(symbols.size());
+    for (SymId id : symbols) {
+        resolved.push_back(resolveSym(id));
+    }
+    return resolved;
+}
+
+//---------------------------------------------------------
 //   getTextStyleUserName
 //---------------------------------------------------------
 
@@ -5029,7 +5073,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::musicalSymbolFont).value<String>().toStdString());
-    m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / style().defaultSpatium());
+    m_layoutOptions.noteHeadWidth = m_engravingFont->width(resolveSym(SymId::noteheadBlack), style().spatium() / style().defaultSpatium());
 
     if (this->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (this->isMaster()) {

@@ -1096,7 +1096,7 @@ SymId Note::noteHead() const
 //---------------------------------------------------------
 double Note::bboxRightPos() const
 {
-    const auto& bbox = score()->engravingFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->engravingFont()->bbox(score()->resolveSym(noteHead()), magS());
     return bbox.right();
 }
 
@@ -1217,7 +1217,7 @@ double Note::headWidth() const
 //---------------------------------------------------------
 double Note::bboxXShift() const
 {
-    const auto& bbox = score()->engravingFont()->bbox(noteHead(), magS());
+    const auto& bbox = score()->engravingFont()->bbox(score()->resolveSym(noteHead()), magS());
     return bbox.bottomLeft().x();
 }
 
@@ -1228,7 +1228,7 @@ double Note::bboxXShift() const
 //---------------------------------------------------------
 double Note::noteheadCenterX() const
 {
-    return score()->engravingFont()->width(noteHead(), magS()) / 2 + bboxXShift();
+    return score()->engravingFont()->width(score()->resolveSym(noteHead()), magS()) / 2 + bboxXShift();
 }
 
 //---------------------------------------------------------
