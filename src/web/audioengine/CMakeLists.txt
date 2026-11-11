@@ -64,7 +64,11 @@ include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
 # The artifacts of the app and the audio engine are placed together
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MU_ROOT}/build.artifacts)
+if(MUSE_ARTIFACTS_DIR)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MUSE_ARTIFACTS_DIR})
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MU_ROOT}/build.artifacts)
+endif()
 
 # Dependencies: only the source ones, needed by the global module
 set(EXTDEPS_DIR ${MU_ROOT}/muse_deps)
