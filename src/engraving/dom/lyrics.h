@@ -205,6 +205,18 @@ public:
         const std::vector<LineF>& dashes() const { return m_dashes; }
         void clearDashes() { m_dashes.clear(); }
         void addDash(const LineF& dash) { m_dashes.push_back(dash); }
+
+        // The lyrics this segment's position was calculated from (if any), so it moves with them
+        const Lyrics* startXLyrics = nullptr;
+        const Lyrics* endXLyrics = nullptr;
+        const Lyrics* yLyrics = nullptr;
+        void clearReferenceLyrics()
+        {
+            startXLyrics = nullptr;
+            endXLyrics = nullptr;
+            yLyrics = nullptr;
+        }
+
     private:
         std::vector<LineF> m_dashes;
     };
