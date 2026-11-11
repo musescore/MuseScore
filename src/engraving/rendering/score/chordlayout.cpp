@@ -3360,7 +3360,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
     Shape shape;
     {
         for (Lyrics* l : item->lyrics()) {
-            if (!l || !l->addToSkyline() || l->xmlText().empty()) {
+            if (!l || l->xmlText().empty()) {
                 continue;
             }
             RectF bbox = l->ldata()->bbox().translated(l->pos());
