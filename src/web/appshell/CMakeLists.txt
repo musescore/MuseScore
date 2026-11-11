@@ -52,4 +52,5 @@ target_link_libraries(appshell PRIVATE
 )
 
 # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-target_include_directories(appshell PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
+find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
+target_link_libraries(appshell PRIVATE Qt6::GuiPrivate)

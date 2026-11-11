@@ -21,37 +21,31 @@
  */
 #pragma once
 
+#include <qqmlintegration.h>
+
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
-#include "muse_framework_config.h"
-
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "project/iprojectsession.h"
 #include "global/iglobalconfiguration.h"
-#include "project/iprojectconfiguration.h"
+#include "project/iprojectsession.h"
 #include "ui/imainwindow.h"
 #include "ui/inavigationcontroller.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 
-#include "appshell/iappshellconfiguration.h"
+#include "notation/inotationundostack.h"
 
 namespace mu::appshell {
 class AppMenuModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
+    QML_ANONYMOUS
 
 public:
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
-    muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
@@ -62,11 +56,6 @@ public:
 private:
     void setupConnections();
 
-    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
-
-    using muse::uicomponents::AbstractMenuModel::makeMenuItem;
-    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
-
     muse::uicomponents::MenuItem* makeFileMenu();
     muse::uicomponents::MenuItem* makeEditMenu();
     muse::uicomponents::MenuItem* makeViewMenu();
@@ -75,8 +64,6 @@ private:
     muse::uicomponents::MenuItem* makeToolsMenu();
     muse::uicomponents::MenuItem* makeDiagnosticsMenu();
 
-    muse::uicomponents::MenuItemList appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores);
-
     muse::uicomponents::MenuItemList makeNotesItems();
     muse::uicomponents::MenuItemList makeIntervalsItems();
     muse::uicomponents::MenuItemList makeTupletsItems();
@@ -84,14 +71,9 @@ private:
     muse::uicomponents::MenuItemList makeFramesItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
-    muse::uicomponents::MenuItemList makeToolbarsItems();
-    muse::uicomponents::MenuItemList makeWorkspacesItems();
-    muse::uicomponents::MenuItemList makeShowItems();
-    muse::uicomponents::MenuItemList makePluginsItems();
+    muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
 
     mu::notation::INotationUndoStackPtr undoStack() const;
     void updateUndoRedoItems();
-
-    std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }

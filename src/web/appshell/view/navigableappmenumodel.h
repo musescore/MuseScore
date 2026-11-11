@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NAVIGABLEAPPMENUMODEL_H
-#define MU_APPSHELL_NAVIGABLEAPPMENUMODEL_H
+
+#pragma once
 
 #include <optional>
 
 #include <QObject>
+#include <QRect>
+#include <qqmlintegration.h>
 
 #include "appmenumodel.h"
 
@@ -44,6 +46,8 @@ class NavigableAppMenuModel : public AppMenuModel
 
     Q_PROPERTY(QWindow * appWindow READ appWindow WRITE setAppWindow)
 
+    QML_NAMED_ELEMENT(AppMenuModel)
+
 public:
     explicit NavigableAppMenuModel(QObject* parent = nullptr);
 
@@ -52,6 +56,7 @@ public:
     Q_INVOKABLE void openMenu(const QString& menuId, bool byHover);
     Q_INVOKABLE void openPrevMenu();
     Q_INVOKABLE void openNextMenu();
+    Q_INVOKABLE bool menuItemMatchesSymbol(muse::uicomponents::MenuItem* menuItem, const QChar& symbol);
 
     bool isNavigationStarted() const;
     bool isMenuOpened() const;
@@ -75,6 +80,7 @@ signals:
     void openedMenuIdChanged(QString openedMenuId);
     void appMenuAreaRectChanged(QRect appMenuAreaRect);
     void openedMenuAreaRectChanged(QRect openedMenuAreaRect);
+    void navigateWithSymbolRequested(const QChar& symbol);
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -83,10 +89,8 @@ private:
 
     bool isNavigateKey(int key) const;
     void navigate(const QSet<int>& activatePossibleKeys);
-    void navigateToSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
 
     bool hasItem(const QSet<int>& activatePossibleKeys);
-    bool hasSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
     void navigate(int scanCode);
 
     void resetNavigation();
@@ -120,5 +124,3 @@ private:
     QRect m_openedMenuAreaRect;
 };
 }
-
-#endif // MU_APPSHELL_NAVIGABLEAPPMENUMODEL_H
