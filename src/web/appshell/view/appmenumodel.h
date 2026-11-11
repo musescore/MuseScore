@@ -35,7 +35,7 @@
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 
-#include "iappshellconfiguration.h"
+#include "appshell/iappshellconfiguration.h"
 
 namespace mu::appshell {
 class AppMenuModel : public muse::uicomponents::AbstractMenuModel

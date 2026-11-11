@@ -28,7 +28,7 @@
 
 #include "interactive/iinteractiveuriregister.h"
 
-#include "internal/appshellconfiguration.h"
+#include "appshell/internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
 
 #include "view/navigableappmenumodel.h"

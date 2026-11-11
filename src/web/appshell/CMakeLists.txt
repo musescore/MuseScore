@@ -23,11 +23,6 @@ muse_create_module(appshell)
 target_sources(appshell PRIVATE
     appshellmodule.cpp
     appshellmodule.h
-    iappshellconfiguration.h
-    appshelltypes.h
-    internal/appshellconfiguration.cpp
-    internal/appshellconfiguration.h
-    internal/istartupscenario.h
     internal/startupscenario.cpp
     internal/startupscenario.h
     view/appmenumodel.cpp
@@ -35,6 +30,17 @@ target_sources(appshell PRIVATE
     view/navigableappmenumodel.cpp
     view/navigableappmenumodel.h
 )
+
+# Shared with the desktop appshell
+set(APPSHELL_SRC_DIR ${PROJECT_SOURCE_DIR}/src/appshell)
+target_sources(appshell PRIVATE
+    ${APPSHELL_SRC_DIR}/iappshellconfiguration.h
+    ${APPSHELL_SRC_DIR}/appshelltypes.h
+    ${APPSHELL_SRC_DIR}/internal/appshellconfiguration.cpp
+    ${APPSHELL_SRC_DIR}/internal/appshellconfiguration.h
+    ${APPSHELL_SRC_DIR}/internal/istartupscenario.h
+)
+target_include_directories(appshell PRIVATE ${APPSHELL_SRC_DIR})
 
 qt_add_resources(appshell_rcc appshell.qrc)
 target_sources(appshell PRIVATE ${appshell_rcc})
