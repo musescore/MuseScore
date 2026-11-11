@@ -583,7 +583,7 @@ AudioSourceType ProjectAudioSettings::sourceTypeFromString(const QString& string
 audioplugins::PluginType ProjectAudioSettings::resourceTypeFromString(const QString& string) const
 {
     for (const auto& pair : RESOURCE_TYPE_MAP) {
-        if (pair.second == string) {
+        if (pair.second.toQString() == string) {
             return audio::resourceTypeName(pair.first);
         }
     }
