@@ -23,6 +23,7 @@
 #include "editlyrics.h"
 
 #include "containers.h"
+#include "log.h"
 
 #include "../dom/chord.h"
 #include "../dom/factory.h"
@@ -114,7 +115,7 @@ Lyrics* EditLyrics::navigateToNextSyllable(Transaction&, Score* score, const Ini
             score->undoAddElement(createPartialLyricsLine(score, state, false, Fraction(0, 1)));
 
             // Don't advance cursor
-            Lyrics* toLyrics = createLyrics(initialCR, state, state.styleType, LyricsSyllabic::END);
+            Lyrics* toLyrics = createSyllable(initialCR, state, state.styleType, LyricsSyllabic::END);
             score->undoAddElement(toLyrics);
             return toLyrics;
         }
@@ -165,7 +166,7 @@ Lyrics* EditLyrics::navigateToNextSyllable(Transaction&, Score* score, const Ini
         /* Don't advance the cursor when starting an incoming partial dash after a repeat,
          * i.e. when there is no adjacent preceding syllable to dash from: */
         ChordRest* toLyricsChord = startIncomingPartialDash ? initialCR : cr;
-        toLyrics = createLyrics(toLyricsChord, state, state.styleType, LyricsSyllabic::END);
+        toLyrics = createSyllable(toLyricsChord, state, state.styleType, LyricsSyllabic::END);
     } else {
         // as we arrived at toLyrics by a dash, it cannot be initial or isolated
         if (toLyrics->syllabic() == LyricsSyllabic::BEGIN) {
@@ -301,7 +302,7 @@ EditLyrics::MelismaEnds EditLyrics::addMelisma(Transaction&, Score* score, const
     Lyrics* toLyrics = nextCR->lyrics(verse, placement);
     const bool newLyrics = (toLyrics == nullptr);
     if (!toLyrics) {
-        toLyrics = createLyrics(nextCR, state, std::nullopt, LyricsSyllabic::SINGLE);
+        toLyrics = createSyllable(nextCR, state, std::nullopt, LyricsSyllabic::SINGLE);
     }
     // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
     else if (toLyrics->syllabic() == LyricsSyllabic::MIDDLE) {
@@ -339,19 +340,104 @@ EditLyrics::MelismaEnds EditLyrics::addMelisma(Transaction&, Score* score, const
 
 Lyrics* EditLyrics::addVerse(Transaction&, Score* score, const InitialState& state)
 {
-    Lyrics* lyrics = Factory::createLyrics(state.chordRest);
-    lyrics->setTrack(state.track);
-    lyrics->setPlacement(state.placement);
-    lyrics->setPropertyFlags(Pid::PLACEMENT, state.placementFlags);
-    lyrics->setCenterBetweenStaves(state.centering);
-
-    lyrics->setVerse(state.verse + 1);
-    lyrics->setTextStyleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
-
-    lyrics->setFontStyle(state.fontStyle);
-    lyrics->setPropertyFlags(Pid::FONT_STYLE, state.fontStyleFlags);
-
+    Lyrics* lyrics = createLyrics(state.chordRest, state, state.verse + 1, std::nullopt);
     score->undoAddElement(lyrics);
+    return lyrics;
+}
+
+bool EditLyrics::canNavigateToLyrics(const InitialState& state, bool back)
+{
+    return findNextLyricsSegment(state, back);
+}
+
+EditLyrics::NavigatedLyrics EditLyrics::navigateToLyrics(Transaction&, Score* score, const InitialState& state, bool back,
+                                                         bool moveOnly)
+{
+    const track_idx_t track = state.track;
+    const int verse = state.verse;
+    const PlacementV placement = state.placement;
+
+    Segment* nextSegment = findNextLyricsSegment(state, back);
+    if (!nextSegment) {
+        return {};
+    }
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // if we are skipping several chords with spaces
+    Lyrics* fromLyrics = nullptr;
+    if (!back) {
+        Segment* segment = state.segment;
+        while (segment) {
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (cr) {
+                fromLyrics = cr->lyrics(verse, placement);
+                if (fromLyrics) {
+                    break;
+                }
+            }
+            segment = segment->prev1(SegmentType::ChordRest);
+        }
+    }
+
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    if (!cr) {
+        LOGD("no next lyrics list: %s", nextSegment->element(track)->typeName());
+        return {};
+    }
+
+    Lyrics* nextLyrics = cr->lyrics(verse, placement);
+    const bool newLyrics = !nextLyrics;
+    if (newLyrics) {
+        nextLyrics = createSyllable(cr, state, state.styleType, LyricsSyllabic::SINGLE);
+    }
+
+    if (fromLyrics && !moveOnly) {
+        switch (nextLyrics->syllabic()) {
+        // as we arrived at nextLyrics by a [Space], it can be the beginning
+        // of a multi-syllable, but cannot have syllabic dashes before
+        case LyricsSyllabic::SINGLE:
+        case LyricsSyllabic::BEGIN:
+            break;
+        case LyricsSyllabic::END:
+            nextLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::SINGLE));
+            break;
+        case LyricsSyllabic::MIDDLE:
+            nextLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::BEGIN));
+            break;
+        }
+        // as we moved away from fromLyrics by a [Space], it can be
+        // the end of a multi-syllable, but cannot have syllabic dashes after
+        switch (fromLyrics->syllabic()) {
+        case LyricsSyllabic::SINGLE:
+        case LyricsSyllabic::END:
+            break;
+        case LyricsSyllabic::BEGIN:
+            fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::SINGLE));
+            break;
+        case LyricsSyllabic::MIDDLE:
+            fromLyrics->undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::END));
+            break;
+        }
+        // for the same reason, it cannot have a melisma
+        if (fromLyrics->separator() && !fromLyrics->separator()->isEndMelisma()) {
+            fromLyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction(0, 1));
+        }
+    }
+
+    if (newLyrics) {
+        score->undoAddElement(nextLyrics);
+    }
+
+    return { nextLyrics, newLyrics };
+}
+
+Lyrics* EditLyrics::navigateToVerse(Transaction&, Score* score, const InitialState& state, int verse)
+{
+    Lyrics* lyrics = state.chordRest->lyrics(verse, state.placement);
+    if (!lyrics) {
+        lyrics = createLyrics(state.chordRest, state, verse, state.styleType);
+        score->undoAddElement(lyrics);
+    }
     return lyrics;
 }
 
@@ -381,20 +467,43 @@ Segment* EditLyrics::findNextSyllableSegment(const InitialState& state, track_id
     return segmentsAreAdjacent(state.segment, nextSegment) ? nextSegment : nullptr;
 }
 
-Lyrics* EditLyrics::createLyrics(ChordRest* cr, const InitialState& state, std::optional<TextStyleType> styleType,
-                                 LyricsSyllabic syllabic)
+Segment* EditLyrics::findNextLyricsSegment(const InitialState& state, bool back)
+{
+    Segment* nextSegment = state.segment;
+    while ((nextSegment = back ? nextSegment->prev1(SegmentType::ChordRest) : nextSegment->next1(SegmentType::ChordRest))) {
+        EngravingItem* el = nextSegment->element(state.track);
+        if (!el) {
+            continue;
+        }
+        if (el->isChord()) {
+            break;
+        } else if (el->isRest() && toChordRest(el)->lyrics(state.verse, state.placement)) {
+            break;
+        }
+    }
+    return nextSegment;
+}
+
+Lyrics* EditLyrics::createLyrics(ChordRest* cr, const InitialState& state, int verse, std::optional<TextStyleType> styleType)
 {
     Lyrics* lyrics = Factory::createLyrics(cr);
     lyrics->setTrack(state.track);
-    lyrics->setVerse(state.verse);
+    lyrics->setVerse(verse);
     lyrics->setTextStyleType(styleType ? *styleType : (lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD));
 
     lyrics->setPlacement(state.placement);
     lyrics->setPropertyFlags(Pid::PLACEMENT, state.placementFlags);
     lyrics->setCenterBetweenStaves(state.centering);
-    lyrics->setSyllabic(syllabic);
     lyrics->setFontStyle(state.fontStyle);
     lyrics->setPropertyFlags(Pid::FONT_STYLE, state.fontStyleFlags);
+    return lyrics;
+}
+
+Lyrics* EditLyrics::createSyllable(ChordRest* cr, const InitialState& state, std::optional<TextStyleType> styleType,
+                                   LyricsSyllabic syllabic)
+{
+    Lyrics* lyrics = createLyrics(cr, state, state.verse, styleType);
+    lyrics->setSyllabic(syllabic);
     lyrics->setOffset(PointF(0.0, state.yOffset));
     return lyrics;
 }

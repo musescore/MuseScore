@@ -76,11 +76,27 @@ public:
 
     static Lyrics* addVerse(Transaction& tx, Score* score, const InitialState& state);
 
+    static bool canNavigateToLyrics(const InitialState& state, bool back);
+
+    struct NavigatedLyrics {
+        Lyrics* lyrics = nullptr;
+        bool isNew = false;
+    };
+
+    // Unless moveOnly, a forward move ends the word
+    static NavigatedLyrics navigateToLyrics(Transaction& tx, Score* score, const InitialState& state, bool back, bool moveOnly);
+
+    static Lyrics* navigateToVerse(Transaction& tx, Score* score, const InitialState& state, int verse);
+
 private:
     static Segment* findNextSyllableSegment(const InitialState& state, track_idx_t& toLyricTrack);
 
+    static Segment* findNextLyricsSegment(const InitialState& state, bool back);
+
     // Without a style type, uses the odd/even verse style
-    static Lyrics* createLyrics(ChordRest* cr, const InitialState& state, std::optional<TextStyleType> styleType, LyricsSyllabic syllabic);
+    static Lyrics* createLyrics(ChordRest* cr, const InitialState& state, int verse, std::optional<TextStyleType> styleType);
+    static Lyrics* createSyllable(ChordRest* cr, const InitialState& state, std::optional<TextStyleType> styleType,
+                                  LyricsSyllabic syllabic);
     static PartialLyricsLine* createPartialLyricsLine(Score* score, const InitialState& state, bool isEndMelisma, const Fraction& ticks);
 
     static PartialLyricsLine* findPartialMelisma(const Score* score, const ChordRest* cr, int verse, PlacementV placement);

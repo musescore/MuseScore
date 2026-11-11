@@ -398,3 +398,141 @@ TEST_F(Engraving_LyricsTests, AddVerse)
 
     delete score;
 }
+
+// Dashes from the lyrics to the next syllable
+static Lyrics* dash(Score* score, Lyrics* lyrics)
+{
+    const EditLyrics::InitialState state = EditLyrics::initialState(lyrics);
+    Lyrics* toLyrics = nullptr;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        toLyrics = EditLyrics::navigateToNextSyllable(tx, score, state);
+    });
+    return toLyrics;
+}
+
+static EditLyrics::NavigatedLyrics navigateToLyrics(Score* score, Lyrics* lyrics, bool back, bool moveOnly)
+{
+    const EditLyrics::InitialState state = EditLyrics::initialState(lyrics);
+    EditLyrics::NavigatedLyrics navigated;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        navigated = EditLyrics::navigateToLyrics(tx, score, state, back, moveOnly);
+    });
+    return navigated;
+}
+
+TEST_F(Engraving_LyricsTests, CanNavigateToLyrics)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    EXPECT_TRUE(EditLyrics::canNavigateToLyrics(EditLyrics::initialState(lyricsAt(score, 0, 0)), false));
+    EXPECT_TRUE(EditLyrics::canNavigateToLyrics(EditLyrics::initialState(lyricsAt(score, 0, 1)), true));
+    // At the start and end of the score
+    EXPECT_FALSE(EditLyrics::canNavigateToLyrics(EditLyrics::initialState(lyricsAt(score, 0, 0)), true));
+    EXPECT_FALSE(EditLyrics::canNavigateToLyrics(EditLyrics::initialState(lyricsAt(score, 3, 3)), false));
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, NavigateToLyricsEndsWord)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    Lyrics* a = lyricsAt(score, 0, 0);
+    Lyrics* b = lyricsAt(score, 0, 1);
+    ASSERT_EQ(dash(score, a), b);
+
+    const EditLyrics::NavigatedLyrics navigated = navigateToLyrics(score, a, false, false);
+
+    EXPECT_EQ(navigated.lyrics, b);
+    EXPECT_FALSE(navigated.isNew);
+    EXPECT_EQ(a->syllabic(), LyricsSyllabic::SINGLE);
+    EXPECT_EQ(b->syllabic(), LyricsSyllabic::SINGLE);
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, NavigateToLyricsMoveOnly)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    Lyrics* a = lyricsAt(score, 0, 0);
+    Lyrics* b = lyricsAt(score, 0, 1);
+    ASSERT_EQ(dash(score, a), b);
+
+    const EditLyrics::NavigatedLyrics navigated = navigateToLyrics(score, a, false, true);
+
+    EXPECT_EQ(navigated.lyrics, b);
+    EXPECT_EQ(a->syllabic(), LyricsSyllabic::BEGIN);
+    EXPECT_EQ(b->syllabic(), LyricsSyllabic::END);
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, NavigateToLyricsCreatesLyrics)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    const EditLyrics::NavigatedLyrics navigated = navigateToLyrics(score, lyricsAt(score, 0, 1), false, false);
+
+    ASSERT_TRUE(navigated.lyrics);
+    EXPECT_TRUE(navigated.isNew);
+    EXPECT_EQ(navigated.lyrics, lyricsAt(score, 0, 2));
+    EXPECT_EQ(navigated.lyrics->syllabic(), LyricsSyllabic::SINGLE);
+    EXPECT_EQ(navigated.lyrics->verse(), 0);
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, NavigateToLyricsBack)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    Lyrics* a = lyricsAt(score, 0, 0);
+    Lyrics* b = lyricsAt(score, 0, 1);
+    ASSERT_EQ(dash(score, a), b);
+
+    // Moving back leaves the dash
+    const EditLyrics::NavigatedLyrics navigated = navigateToLyrics(score, b, true, false);
+
+    EXPECT_EQ(navigated.lyrics, a);
+    EXPECT_FALSE(navigated.isNew);
+    EXPECT_EQ(a->syllabic(), LyricsSyllabic::BEGIN);
+    EXPECT_EQ(b->syllabic(), LyricsSyllabic::END);
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, NavigateToVerse)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    Lyrics* a = lyricsAt(score, 0, 0);
+    const EditLyrics::InitialState state = EditLyrics::initialState(a);
+
+    Lyrics* verse2 = nullptr;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        verse2 = EditLyrics::navigateToVerse(tx, score, state, 1);
+    });
+
+    ASSERT_TRUE(verse2);
+    EXPECT_EQ(verse2->chordRest(), a->chordRest());
+    EXPECT_EQ(verse2->verse(), 1);
+    EXPECT_EQ(verse2->placement(), a->placement());
+    // The style is copied from the lyrics navigated from
+    EXPECT_EQ(verse2->textStyleType(), a->textStyleType());
+
+    // Existing lyrics of the verse aren't duplicated
+    Lyrics* again = nullptr;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        again = EditLyrics::navigateToVerse(tx, score, state, 1);
+    });
+    EXPECT_EQ(again, verse2);
+
+    delete score;
+}
