@@ -54,7 +54,6 @@ int MScore::pedalEventsMinTicks;
 
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
-double MScore::nudgeStep50;
 
 bool MScore::noImages = false;
 bool MScore::pdfPrinting = false;

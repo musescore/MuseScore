@@ -161,37 +161,19 @@ static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km
     return mu::engraving::KeyboardModifier(int(km));
 }
 
-static double nudgeDistance(const mu::engraving::EditData& editData)
+static double nudgeDistance(const EngravingItem* item, bool quickly, double raster)
 {
-    double spatium = editData.element->spatium();
+    const double spatium = item->spatium();
 
-    if (editData.element->isBeam()) {
-        if (editData.modifiers & Qt::ControlModifier) {
-            return spatium;
-        } else if (editData.modifiers & Qt::AltModifier) {
-            return spatium * 4;
-        }
-
-        return spatium * 0.25;
+    double distance = 0.0;
+    if (item->isBeam()) {
+        distance = quickly ? spatium : spatium * 0.25;
+    } else {
+        distance = spatium * (quickly ? mu::engraving::MScore::nudgeStep10 : mu::engraving::MScore::nudgeStep);
     }
 
-    if (editData.modifiers & Qt::ControlModifier) {
-        return spatium * mu::engraving::MScore::nudgeStep10;
-    } else if (editData.modifiers & Qt::AltModifier) {
-        return spatium * mu::engraving::MScore::nudgeStep50;
-    }
-
-    return spatium * mu::engraving::MScore::nudgeStep;
-}
-
-static double nudgeDistance(const mu::engraving::EditData& editData, double raster)
-{
-    double distance = nudgeDistance(editData);
     if (raster > 0) {
-        raster = editData.element->spatium() / raster;
-        if (distance < raster) {
-            distance = raster;
-        }
+        distance = std::max(distance, spatium / raster);
     }
 
     return distance;
@@ -3358,34 +3340,18 @@ void NotationInteraction::resetAnchorLines()
     m_anchorLines.clear();
 }
 
-double NotationInteraction::getHRaster() const
+double NotationInteraction::gridRaster(const EngravingItem* item, muse::Orientation orientation) const
 {
-    double hRaster = mu::engraving::MScore::hRaster();
-
-    if (m_editData.element->isBeam()) {
+    if (item->isBeam()) {
         // Always adjust by .25sp
-        hRaster = 4.0;
-    } else if (m_editData.element->isLyricsLineSegment()) {
-        // Ignore grid
-        hRaster = 0.0;
+        return 4.0;
     }
 
-    return hRaster;
-}
-
-double NotationInteraction::getVRaster() const
-{
-    double vRaster = mu::engraving::MScore::vRaster();
-
-    if (m_editData.element->isBeam()) {
-        // Always adjust by .25sp
-        vRaster = 4.0;
-    } else if (m_editData.element->isLyricsLineSegment()) {
-        // Ignore grid
-        vRaster = 0.0;
+    if (!configuration()->isSnappedToGrid(orientation)) {
+        return 0.0;
     }
 
-    return vRaster;
+    return orientation == muse::Orientation::Horizontal ? mu::engraving::MScore::hRaster() : mu::engraving::MScore::vRaster();
 }
 
 double NotationInteraction::currentScaling(Painter* painter) const
@@ -3940,9 +3906,11 @@ void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<Engrav
 
 void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements)
 {
+    const bool horizontal = d == MoveDirection::Left || d == MoveDirection::Right;
+    const muse::Orientation orientation = horizontal ? muse::Orientation::Horizontal : muse::Orientation::Vertical;
+
     for (EngravingItem* el : elements) {
-        qreal step = quickly ? mu::engraving::MScore::nudgeStep10 : mu::engraving::MScore::nudgeStep;
-        step = step * el->spatium();
+        const double step = nudgeDistance(el, quickly, gridRaster(el, orientation));
 
         switch (d) {
         case MoveDirection::Undefined:
@@ -3972,21 +3940,23 @@ void NotationInteraction::doNudgeAnchors(MoveDirection d)
         return;
     }
 
-    double vRaster = getVRaster();
-    double hRaster = getHRaster();
+    const EngravingItem* element = m_editData.element;
+    const bool quickly = m_editData.modifiers & mu::engraving::ControlModifier;
+    const double hRaster = gridRaster(element, muse::Orientation::Horizontal);
+    const double vRaster = gridRaster(element, muse::Orientation::Vertical);
 
     switch (d) {
     case MoveDirection::Left:
-        m_editData.delta = PointF(-nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(-nudgeDistance(element, quickly, hRaster), 0);
         break;
     case MoveDirection::Right:
-        m_editData.delta = PointF(nudgeDistance(m_editData, hRaster), 0);
+        m_editData.delta = PointF(nudgeDistance(element, quickly, hRaster), 0);
         break;
     case MoveDirection::Up:
-        m_editData.delta = PointF(0, -nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, -nudgeDistance(element, quickly, vRaster));
         break;
     case MoveDirection::Down:
-        m_editData.delta = PointF(0, nudgeDistance(m_editData, vRaster));
+        m_editData.delta = PointF(0, nudgeDistance(element, quickly, vRaster));
         break;
     case MoveDirection::Undefined:
         UNREACHABLE;

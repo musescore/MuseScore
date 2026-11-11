@@ -191,7 +191,6 @@ public:
     static void setVRaster(int val) { _vRaster = val; }
     static void setNudgeStep(double val) { nudgeStep = val; }
     static void setNudgeStep10(double val) { nudgeStep10 = val; }
-    static void setNudgeStep50(double val) { nudgeStep50 = val; }
 
     static bool verticalOrientation() { return _verticalOrientation; }
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
@@ -202,7 +201,6 @@ public:
 
     static double nudgeStep;
     static double nudgeStep10;
-    static double nudgeStep50;
 
 // #ifndef NDEBUG
     static bool noHorizontalStretch;

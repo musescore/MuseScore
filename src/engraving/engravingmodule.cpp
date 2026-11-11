@@ -269,7 +269,6 @@ void EngravingModule::onInit(const IApplication::RunMode&)
 
     MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)
-    MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
 
     //! NOTE And some initialization in the `Notation::init()`
 }
