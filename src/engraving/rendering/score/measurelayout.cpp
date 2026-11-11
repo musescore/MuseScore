@@ -1993,18 +1993,17 @@ void MeasureLayout::removeSystemHeader(Measure* m)
     if (!m->header()) {
         return;
     }
+
+    // Shared stave's keyLists can become stale when stave sharing is off, so ignore them
+    // They contain all their origin stave's keys plus entries for every mapping change, so it is safe
+    const int tick = m->tick().ticks();
+    const bool keySigChangeHappensHere = muse::contains_if(m->score()->staves(), [tick](Staff* staff) {
+        return !staff->part()->isSharedPart() && staff->keyList()->count(tick) > 0;
+    });
+
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        if (seg->isKeySigType()) {
-            bool keySigChangeHappensHere = false;
-            for (Staff* staff : m->score()->staves()) {
-                if (staff->keyList()->count(m->tick().ticks()) > 0) {
-                    keySigChangeHappensHere = true;
-                    break;
-                }
-            }
-            if (seg->header() && !keySigChangeHappensHere) {
-                seg->setEnabled(false);
-            }
+        if (seg->isKeySigType() && seg->header() && !keySigChangeHappensHere) {
+            seg->setEnabled(false);
         }
         if (!seg->header()) {
             break;
