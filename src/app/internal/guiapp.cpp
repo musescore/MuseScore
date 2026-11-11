@@ -1,12 +1,16 @@
 #include "guiapp.h"
 
+#include <QCoreApplication>
+
 #include "modularity/ioc.h"
 #include "appshell/internal/istartupscenario.h"
 
-#include "commandlineparser.h"
-
 #include "muse_framework_config.h"
 #include "app_config.h"
+
+#ifdef MUE_ENABLE_CONSOLEAPP
+#include "commandlineparser.h"
+#endif
 
 #include "log.h"
 
@@ -76,6 +80,7 @@ void MuseScoreGuiApp::showContextSplash(const muse::modularity::ContextPtr& ctxI
 
 std::shared_ptr<muse::CmdOptions> MuseScoreGuiApp::makeContextOptions(const muse::StringList& args) const
 {
+#ifdef MUE_ENABLE_CONSOLEAPP
     if (args.size() > 0) {
         std::vector<std::string> args_ = args.toStdStringList();
         args_.insert(args_.begin(), "dummy/path/to/app.exe");  // for compatibility
@@ -90,9 +95,12 @@ std::shared_ptr<muse::CmdOptions> MuseScoreGuiApp::makeContextOptions(const muse
         commandLineParser.init();
         commandLineParser.parse(argc, argv.data());
         return commandLineParser.options();
-    } else {
-        return m_appOptions;
     }
+#else
+    UNUSED(args);
+#endif
+
+    return m_appOptions;
 }
 
 QString MuseScoreGuiApp::mainWindowQmlPath(const QString& platform) const
