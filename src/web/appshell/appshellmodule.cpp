@@ -22,8 +22,6 @@
 
 #include "appshellmodule.h"
 
-#include <qqml.h>
-
 #include "modularity/ioc.h"
 
 #include "interactive/iinteractiveuriregister.h"
@@ -31,18 +29,11 @@
 #include "appshell/internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
 
-#include "view/navigableappmenumodel.h"
-
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::modularity;
 
 static const std::string mname("appshell");
-
-static void appshell_init_qrc()
-{
-    Q_INIT_RESOURCE(appshell);
-}
 
 std::string AppShellModule::moduleName() const
 {
@@ -63,16 +54,6 @@ void AppShellModule::resolveImports()
         ir->registerPageUri(Uri("musescore://notation"));
         ir->registerPageUri(Uri("musescore://devtools"));
     }
-}
-
-void AppShellModule::registerResources()
-{
-    appshell_init_qrc();
-}
-
-void AppShellModule::registerUiTypes()
-{
-    qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)

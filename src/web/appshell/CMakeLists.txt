@@ -25,10 +25,6 @@ target_sources(appshell PRIVATE
     appshellmodule.h
     internal/startupscenario.cpp
     internal/startupscenario.h
-    view/appmenumodel.cpp
-    view/appmenumodel.h
-    view/navigableappmenumodel.cpp
-    view/navigableappmenumodel.h
 )
 
 # Shared with the desktop appshell
@@ -42,15 +38,11 @@ target_sources(appshell PRIVATE
 )
 target_include_directories(appshell PRIVATE ${APPSHELL_SRC_DIR})
 
-qt_add_resources(appshell_rcc appshell.qrc)
-target_sources(appshell PRIVATE ${appshell_rcc})
-
 target_link_libraries(appshell PRIVATE
     muse::ui
     muse::uicomponents
-    Qt::Quick
 )
 
-# we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
-target_link_libraries(appshell PRIVATE Qt6::GuiPrivate)
+if (MUE_BUILD_APPSHELL_QML)
+    add_subdirectory(qml/MuseScore/AppShell)
+endif()
