@@ -1836,7 +1836,7 @@ static void setItemGeometry(QQuickItem* item, const QRectF& rect)
 void AbstractNotationPaintView::updatePlaybackCursorItemsGeometry()
 {
     // Each flag's share of the playback cursor's full height, so the flags scale with zoom
-    static constexpr qreal FLAG_HEIGHT_RATIO = 0.1;
+    static constexpr qreal FLAG_HEIGHT_RATIO = 0.1; // a percentage
 
     const QRectF viewRect(0.0, 0.0, width(), height());
     const QRectF cueRect = cursorViewRect(m_playbackCue.get());
@@ -1844,9 +1844,23 @@ void AbstractNotationPaintView::updatePlaybackCursorItemsGeometry()
 
     const bool bothVisible = m_playbackCue && m_playbackCue->isVisible()
                              && m_playbackCursor && m_playbackCursor->isVisible();
-    // (If the playback cursor is entirely outside the view, there's nothing to attach flags to, and pinning
-    // them to the view's edges would show them for an off-screen cursor)
-    const bool flagged = bothVisible && headRect.intersects(viewRect) && cueRect.intersects(headRect);
+
+    // A cursor's rect spans its whole system, so two cursors in the same system have the same top and bottom.
+    // Merely intersecting isn't enough: the rects of cursors in neighboring systems can overlap in the margin
+    // between the systems.
+    static constexpr qreal SAME_Y_TOLERANCE = 0.5; // in view pixels
+
+    const bool sameSystem = (std::abs(cueRect.top() - headRect.top()) < SAME_Y_TOLERANCE)
+                            && (std::abs(cueRect.bottom() - headRect.bottom()) < SAME_Y_TOLERANCE);
+    const bool sameSpot = sameSystem
+                          && (cueRect.left() < headRect.right())
+                          && (headRect.left() < cueRect.right());
+
+    // Both must be at least partly on screen, or the flags would mark a cursor that isn't in view
+    const bool flagged = bothVisible
+                         && sameSpot
+                         && headRect.intersects(viewRect)
+                         && cueRect.intersects(viewRect);
 
     if (!flagged) {
         if (m_playbackCueItem) {
