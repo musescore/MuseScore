@@ -51,15 +51,19 @@ public:
     void setNotation(INotationPtr notation);
     void move(muse::midi::tick_t newTick);
 
-    //! Re-resolves the rect for the current tick (e.g. after a relayout)
-    void refresh();
+    //! Re-resolves the rect for the current tick (e.g. after a relayout). Returns true if the rect changed.
+    bool refresh();
+    //! Like refresh(), but also moves to newTick. Returns true if the rect changed.
+    bool refresh(muse::midi::tick_t newTick);
 
-    muse::midi::tick_t tick() const;
+    muse::midi::tick_t tick() const { return m_tick; }
 
-    bool visible() const;
-    void setVisible(bool arg);
+    bool isRenderable() const { return m_isRenderable; }
+    void setIsRenderable(bool newRenderability) { m_isRenderable = newRenderability; }
 
-    const muse::RectF& rect() const;
+    bool isVisible() const;
+
+    const muse::RectF& rect() const { return m_rect; }
 
 protected:
     muse::GlobalInject<INotationConfiguration> configuration;
@@ -86,7 +90,7 @@ protected:
     } mutable m_cache;
 
 private:
-    bool m_visible = false;
+    bool m_isRenderable = false;
     muse::midi::tick_t m_tick = 0;
     muse::RectF m_rect;
 

@@ -787,19 +787,29 @@ int PlaybackController::playFromSelectionStartTick() const
 
     int startTick = 0;
 
-    if (!selection()->isNone()) {
-        startTick = INT_MAX;
-        for (const EngravingItem* item : selection()->elements()) {
-            startTick = std::min(startTick, item->tick().ticks());
-        }
-    } else {
+    if (selection()->isNone()) {
         // Selection is none - fall back to last element hit...
         if (const EngravingItem* lastElementHit = selection()->lastElementHit()) {
             startTick = lastElementHit->tick().ticks();
         }
+    } else if (selection()->isRange()) {
+        // Not the earliest selected element: a range's elements include spanners that merely overlap it (e.g. a slur
+        // starting several measures earlier), and the selection filter can exclude all of them
+        startTick = selection()->range()->startTick().ticks();
+    } else {
+        startTick = INT_MAX;
+
+        for (const EngravingItem* item : selection()->elements()) {
+            startTick = std::min(startTick, item->tick().ticks());
+        }
+
+        if (startTick == INT_MAX) {
+            startTick = 0;
+        }
     }
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
+
     if (loop.enabled) {
         if (startTick < loop.loopInTick.ticks() || startTick > loop.loopOutTick.ticks()) {
             startTick = loop.loopInTick.ticks();

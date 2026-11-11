@@ -309,18 +309,18 @@ private:
     muse::draw::Transform m_matrix;
 
     bool m_loadCalled = false;
-    std::unique_ptr<NotationViewInputController> m_inputController;
+    std::unique_ptr<NotationViewInputController> m_inputController = nullptr;
     QQuickItem* m_automationLinesContainer = nullptr;
-    std::unique_ptr<NotationAutomationController> m_notationAutomationController;
+    std::unique_ptr<NotationAutomationController> m_notationAutomationController = nullptr;
 
-    std::unique_ptr<PlaybackCue> m_playbackCue;
-    std::unique_ptr<PlaybackCursor> m_playbackCursor;
+    std::unique_ptr<PlaybackCue> m_playbackCue = nullptr;
+    std::unique_ptr<PlaybackCursor> m_playbackCursor = nullptr;
 
-    std::unique_ptr<NoteInputCursor> m_noteInputCursor;
-    std::unique_ptr<NotationRuler> m_ruler;
-    std::unique_ptr<LoopMarker> m_loopInMarker;
-    std::unique_ptr<LoopMarker> m_loopOutMarker;
-    std::unique_ptr<ContinuousPanel> m_continuousPanel;
+    std::unique_ptr<NoteInputCursor> m_noteInputCursor = nullptr;
+    std::unique_ptr<NotationRuler> m_ruler = nullptr;
+    std::unique_ptr<LoopMarker> m_loopInMarker = nullptr;
+    std::unique_ptr<LoopMarker> m_loopOutMarker = nullptr;
+    std::unique_ptr<ContinuousPanel> m_continuousPanel = nullptr;
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;

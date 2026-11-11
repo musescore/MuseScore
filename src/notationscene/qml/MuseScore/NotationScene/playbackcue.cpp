@@ -22,6 +22,8 @@
 
 #include "playbackcue.h"
 
+using namespace mu::notation;
+
 QColor PlaybackCue::color() const
 {
     return configuration()->playbackCueColor();

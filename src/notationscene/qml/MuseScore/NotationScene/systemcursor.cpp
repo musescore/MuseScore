@@ -78,7 +78,7 @@ static double interpolateXByTicks(int targetTick, int startTick, int endTick, do
 
 void SystemCursor::paint(draw::Painter* painter)
 {
-    if (!m_visible) {
+    if (!isVisible()) {
         return;
     }
 
@@ -108,6 +108,13 @@ void SystemCursor::setNotation(INotationPtr notation)
 
     m_notation = notation;
     m_cache.clear();
+
+    // The old tick and rect belong to the old score. With no score there's nothing to point at, so drop them.
+    // (With a new score, the owner moves the cursor to a tick in it.)
+    if (!m_notation) {
+        m_tick = 0;
+        m_rect = RectF();
+    }
 }
 
 void SystemCursor::move(midi::tick_t newTick)
@@ -116,15 +123,19 @@ void SystemCursor::move(midi::tick_t newTick)
     m_rect = resolveCursorRectByTick(newTick);
 }
 
-void SystemCursor::refresh()
+bool SystemCursor::refresh()
 {
-    m_cache.clear();
-    m_rect = resolveCursorRectByTick(m_tick);
+    return refresh(m_tick);
 }
 
-midi::tick_t SystemCursor::tick() const
+bool SystemCursor::refresh(midi::tick_t newTick)
 {
-    return m_tick;
+    m_cache.clear();
+
+    const RectF oldRect = m_rect;
+    move(newTick);
+
+    return m_rect != oldRect;
 }
 
 RectF SystemCursor::resolveCursorRectByTick(int newTick) const
@@ -171,6 +182,11 @@ RectF SystemCursor::resolveCursorRectByTick(int newTick) const
         }
     }
 
+    // Segments normally own [startTick, endTick), since a measure's end tick is the next measure's start tick.
+    // The score's final tick has no next measure, so there the last segment owns its end tick too (playback
+    // stops at that tick when it reaches the end of the score).
+    const bool isScoreEnd = (fracTick == measure->endTick());
+
     for (const Segment* currentSegment = measure->first(SegmentType::ChordRest); currentSegment;) {
         const Fraction segmentStartTick = currentSegment->tick();
         const double segmentStartX = currentSegment->canvasPos().x();
@@ -195,7 +211,11 @@ RectF SystemCursor::resolveCursorRectByTick(int newTick) const
             segmentEndX = endBar ? endBar->canvasPos().x() : measure->canvasPos().x() + measure->width();
         }
 
-        if (fracTick < segmentStartTick || fracTick >= segmentEndTick) {
+        const bool isPastSegment = isScoreEnd
+                                   ? (nextSegment != nullptr)
+                                   : (segmentEndTick <= fracTick);
+
+        if (fracTick < segmentStartTick || isPastSegment) {
             currentSegment = nextSegment;
             continue;
         }
@@ -227,17 +247,8 @@ RectF SystemCursor::resolveCursorRectByTick(int newTick) const
     return RectF();
 }
 
-bool SystemCursor::visible() const
+bool SystemCursor::isVisible() const
 {
-    return m_visible;
-}
-
-void SystemCursor::setVisible(bool isVisible)
-{
-    m_visible = isVisible;
-}
-
-const RectF& SystemCursor::rect() const
-{
-    return m_rect;
+    return isRenderable()
+           && color().alpha() > 0;
 }
