@@ -1150,28 +1150,27 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.pos = fromPos;
     }
 
-    PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
-    PointF delta = toPos - normalizedBegin;
-    PointF evtDelta = toPos - m_dragData.ed.pos;
-    PointF moveDelta = delta - m_dragData.elementOffset;
-
+    // Constrain relative to the drag origin (not the previous position), so that releasing
+    // the modifier moves the item back to the mouse, and pressing it again snaps it back to the axis
+    PointF constrainedPos = toPos;
     bool constrainDirection = !(isGripEditStarted() && m_editData.element && m_editData.element->isBarLine());
     if (constrainDirection) {
         switch (mode) {
         case DragMode::BothXY:
             break;
         case DragMode::OnlyX:
-            delta.setY(m_dragData.ed.delta.y());
-            moveDelta.setY(m_dragData.ed.moveDelta.y());
-            evtDelta.setY(0.0);
+            constrainedPos.setY(m_dragData.beginMove.y());
             break;
         case DragMode::OnlyY:
-            delta.setX(m_dragData.ed.delta.x());
-            moveDelta.setX(m_dragData.ed.moveDelta.x());
-            evtDelta.setX(0.0);
+            constrainedPos.setX(m_dragData.beginMove.x());
             break;
         }
     }
+
+    PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
+    PointF delta = constrainedPos - normalizedBegin;
+    PointF evtDelta = constrainedPos - m_dragData.ed.pos;
+    PointF moveDelta = delta - m_dragData.elementOffset;
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
 
@@ -1180,7 +1179,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.delta = delta;
     m_dragData.ed.moveDelta = moveDelta;
     m_dragData.ed.evtDelta = evtDelta;
-    m_dragData.ed.pos = toPos;
+    m_dragData.ed.pos = constrainedPos;
     m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
     m_dragData.ed.isEditMode = isEditingElement();

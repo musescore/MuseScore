@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <optional>
+
 #include <QtEvents>
 
 #include "../../../internal/inotationviewcontroller.h"
@@ -200,6 +202,8 @@ private:
 
     void setScaling(qreal scaling, const muse::PointF& pos = muse::PointF(), bool overrideZoomType = true);
 
+    void dragElements(const muse::PointF& logicPos, bool lockToAxis);
+    void updateElementDragOnShiftChange(bool shiftPressed);
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
     void updateShadowNotePopupVisibility(bool forceHide = false);
@@ -252,6 +256,9 @@ private:
 
         QPointF physicalBeginPoint;
         muse::PointF logicalBeginPoint;
+
+        // Set while dragging elements, so the drag can be updated when modifiers change
+        std::optional<muse::PointF> lastElementDragLogicalPoint;
     } m_mouseDownInfo;
 
     struct DragMoveEvent {
@@ -271,7 +278,7 @@ private:
     std::vector<const mu::engraving::EngravingItem*> m_notesBeingDragged;
 
     bool m_hitElementWasAlreadySingleSelected = false;
-    bool m_shouldSelectOnLeftClickRelease = false;
+    std::optional<SelectType> m_selectOnLeftClickRelease;
     bool m_shouldStartEditOnLeftClickRelease = false;
     bool m_ignoreNextMouseContextMenuEvent = false;
 };
