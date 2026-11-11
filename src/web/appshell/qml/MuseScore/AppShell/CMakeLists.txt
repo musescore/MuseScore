@@ -33,7 +33,7 @@ qt_add_qml_module(appshell_qml
         AppMenuBar.qml
         AppWindow.qml
         DevFrame.qml
-        Main.qml
+        platform/web/Main.qml
         NotationFrame.qml
     IMPORTS
         TARGET muse_ui_qml
