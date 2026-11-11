@@ -24,6 +24,7 @@
 #include "global/modularity/ioc.h"
 
 #include "global/runtime.h"
+#include "global/async/processevents.h"
 
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
 
@@ -94,5 +95,9 @@ void WebAudioEngine::init()
 
 void WebAudioEngine::process(float* stream, unsigned samplesPerChannel)
 {
+    //! NOTE The engine runs in the audio worklet, there is no event loop,
+    //! so the async messages (promises, notifications) are processed here
+    async::processMessages();
+
     m_controller->process(stream, samplesPerChannel);
 }
