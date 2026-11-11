@@ -23,7 +23,12 @@
 #pragma once
 
 #include <QDir>
+
+#include "muse_framework_config.h"
+
+#ifdef QT_QPROCESS_SUPPORTED
 #include <QProcess>
+#endif
 
 #include "global/modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
@@ -154,6 +159,7 @@ private:
     QString m_source;
 };
 
+#ifdef QT_QPROCESS_SUPPORTED
 //---------------------------------------------------------
 //   MsProcess
 //   @@ QProcess
@@ -186,4 +192,5 @@ public slots:
     /// --
     Q_INVOKABLE QByteArray readAllStandardOutput() { return QProcess::readAllStandardOutput(); }
 };
+#endif // QT_QPROCESS_SUPPORTED
 }
