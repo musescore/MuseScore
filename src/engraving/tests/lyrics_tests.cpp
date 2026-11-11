@@ -536,3 +536,47 @@ TEST_F(Engraving_LyricsTests, NavigateToVerse)
 
     delete score;
 }
+
+TEST_F(Engraving_LyricsTests, MoveLyrics)
+{
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    Lyrics* a = lyricsAt(score, 0, 0);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        EditLyrics::moveLyrics(tx, a, DirectionV::DOWN);
+    });
+    EXPECT_EQ(a->verse(), 1);
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        EditLyrics::moveLyrics(tx, a, DirectionV::UP);
+    });
+    EXPECT_EQ(a->verse(), 0);
+
+    // Not above the first verse
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
+        EditLyrics::moveLyrics(tx, a, DirectionV::UP);
+    });
+    EXPECT_EQ(a->verse(), 0);
+
+    delete score;
+}
+
+TEST_F(Engraving_LyricsTests, AddLyrics)
+{
+    // Tests the function which adds lyrics during midi import
+    MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
+    ASSERT_TRUE(score);
+
+    ChordRest* cr = chordRestAt(score, 0, 2);
+    EditLyrics::addLyrics(score, cr->tick(), 0, u"la");
+    ASSERT_TRUE(cr->lyrics(0, PlacementV::BELOW));
+    EXPECT_EQ(cr->lyrics(0, PlacementV::BELOW)->xmlText(), u"la");
+
+    // Blank text adds nothing
+    ChordRest* cr2 = chordRestAt(score, 0, 3);
+    EditLyrics::addLyrics(score, cr2->tick(), 0, u"  ");
+    EXPECT_TRUE(cr2->lyrics().empty());
+
+    delete score;
+}

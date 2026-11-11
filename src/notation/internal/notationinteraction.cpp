@@ -3893,9 +3893,9 @@ void NotationInteraction::moveLyrics(MoveDirection d)
     IF_ASSERT_FAILED(el && el->isLyrics()) {
         return;
     }
-    startEdit(TranslatableString("undoableAction", "Move lyrics"));
-    score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
-    apply();
+    transaction(TranslatableString("undoableAction", "Move lyrics"), [&](Transaction& tx) {
+        EditLyrics::moveLyrics(tx, toLyrics(el), toDirection(d));
+    });
 }
 
 void NotationInteraction::nudge(MoveDirection d, bool quickly)

@@ -3683,42 +3683,6 @@ void Score::lassoSelectEnd()
     setUpdateAll();
 }
 
-//---------------------------------------------------------
-//   addLyrics
-//---------------------------------------------------------
-
-void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String& txt)
-{
-    if (txt.trimmed().isEmpty()) {
-        return;
-    }
-    Measure* measure = tick2measure(tick);
-    Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
-    if (seg == 0) {
-        LOGD("no segment found for lyrics<%s> at tick %d",
-             muPrintable(txt), tick.ticks());
-        return;
-    }
-
-    bool lyricsAdded = false;
-    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        track_idx_t track = staffIdx * VOICES + voice;
-        ChordRest* cr = toChordRest(seg->element(track));
-        if (cr) {
-            Lyrics* l = Factory::createLyrics(cr);
-            l->setXmlText(txt);
-            l->setTrack(track);
-            cr->add(l);
-            lyricsAdded = true;
-            break;
-        }
-    }
-    if (!lyricsAdded) {
-        LOGD("no chord/rest for lyrics<%s> at tick %d, staff %zu",
-             muPrintable(txt), tick.ticks(), staffIdx);
-    }
-}
-
 BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
     return tempoTimeline(/*expandRepeats*/ false).tempo(tick.ticks());

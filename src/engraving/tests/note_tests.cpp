@@ -40,6 +40,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/tremolosinglechord.h"
 
+#include "engraving/editing/editlyrics.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
@@ -742,7 +743,7 @@ TEST_F(Engraving_NoteTests, PreserveLyricsOnRepitch)
 
     // create a note, attach a lyric, then repitch to another note
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
-    score->addLyrics(tick, 0, u"la");
+    EditLyrics::addLyrics(score, tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
     ASSERT_TRUE(cr);
@@ -772,7 +773,7 @@ TEST_F(Engraving_NoteTests, RepitchDoesNotDuplicateLyrics)
     Fraction duration = cr->ticks();
 
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
-    score->addLyrics(tick, 0, u"la");
+    EditLyrics::addLyrics(score, tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
     ASSERT_TRUE(cr);
@@ -805,7 +806,7 @@ TEST_F(Engraving_NoteTests, ReplacingNoteWithRestDoesNotPreserveLyrics)
     Fraction duration = cr->ticks();
 
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
-    score->addLyrics(tick, 0, u"la");
+    EditLyrics::addLyrics(score, tick, 0, u"la");
 
     cr = chordRestAtTick(score, tick, 0);
     ASSERT_TRUE(cr);
@@ -865,7 +866,7 @@ TEST_F(Engraving_NoteTests, RepitchPreservesMultipleLyricsAndFormatting)
     ASSERT_TRUE(cr->isChord());
 
     // edge case: multiple lyrics and formatted text
-    score->addLyrics(tick, 0, u"do");
+    EditLyrics::addLyrics(score, tick, 0, u"do");
     Lyrics* lyricVerse1 = Factory::createLyrics(cr);
     lyricVerse1->setVerse(1);
     lyricVerse1->setXmlText(u"re &amp; <i>mi</i>");
@@ -906,7 +907,7 @@ TEST_F(Engraving_NoteTests, RepitchLyricsUndoRedoPreservesLyrics)
 
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     score->setNoteRest(cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
-    score->addLyrics(tick, 0, u"la");
+    EditLyrics::addLyrics(score, tick, 0, u"la");
     score->endCmd();
 
     cr = chordRestAtTick(score, tick, 0);
@@ -964,7 +965,7 @@ TEST_F(Engraving_NoteTests, RepeatedRepitchWithTwoLyricsPreservesBoth)
     ASSERT_TRUE(cr);
     ASSERT_TRUE(cr->isChord());
 
-    score->addLyrics(tick, 0, u"do");
+    EditLyrics::addLyrics(score, tick, 0, u"do");
     Lyrics* lyricVerse1 = Factory::createLyrics(cr);
     lyricVerse1->setVerse(1);
     lyricVerse1->setXmlText(u"re &amp; <i>mi</i>");
@@ -1005,7 +1006,7 @@ TEST_F(Engraving_NoteTests, RepitchInVoiceTwoDoesNotAffectVoiceOneLyrics)
     Fraction duration = voice1Cr->ticks();
 
     score->setNoteRest(voice1Cr->segment(), 0, NoteVal(60), duration, DirectionV::AUTO);
-    score->addLyrics(tick, 0, u"solo");
+    EditLyrics::addLyrics(score, tick, 0, u"solo");
 
     Segment* segment = voice1Cr->segment();
     // add and repitch voice 2 independently from voice 1

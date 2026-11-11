@@ -1652,19 +1652,6 @@ void Score::cmdMoveRest(Rest* rest, DirectionV dir)
 }
 
 //---------------------------------------------------------
-//   cmdMoveLyrics
-//---------------------------------------------------------
-
-void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
-{
-    int verse = lyrics->verse() + (dir == DirectionV::UP ? -1 : 1);
-    if (verse < 0) {
-        return;
-    }
-    lyrics->undoChangeProperty(Pid::VERSE, verse);
-}
-
-//---------------------------------------------------------
 //   cmdAddGrace
 ///   adds grace note of specified type to selected notes
 //---------------------------------------------------------

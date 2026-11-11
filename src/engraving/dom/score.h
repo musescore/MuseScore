@@ -339,7 +339,6 @@ public:
     void cmdToggleHideEmpty();
     void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
     void cmdMoveRest(Rest*, DirectionV);
-    void cmdMoveLyrics(Lyrics*, DirectionV);
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
@@ -615,8 +614,6 @@ public:
 
     int mscVersion() const { return m_mscVersion; }
     void setMscVersion(int v) { m_mscVersion = v; }
-
-    void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String&);
 
     void updateSwing();
 

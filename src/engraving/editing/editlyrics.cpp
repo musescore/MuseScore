@@ -441,6 +441,41 @@ Lyrics* EditLyrics::navigateToVerse(Transaction&, Score* score, const InitialSta
     return lyrics;
 }
 
+void EditLyrics::moveLyrics(Transaction&, Lyrics* lyrics, DirectionV direction)
+{
+    const int verse = lyrics->verse() + (direction == DirectionV::UP ? -1 : 1);
+    if (verse < 0) {
+        return;
+    }
+    lyrics->undoChangeProperty(Pid::VERSE, verse);
+}
+
+void EditLyrics::addLyrics(Score* score, const Fraction& tick, staff_idx_t staffIdx, const String& text)
+{
+    if (text.trimmed().isEmpty()) {
+        return;
+    }
+    Measure* measure = score->tick2measure(tick);
+    Segment* seg = measure->findSegment(SegmentType::ChordRest, tick);
+    if (!seg) {
+        LOGD("no segment found for lyrics<%s> at tick %d", muPrintable(text), tick.ticks());
+        return;
+    }
+
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+        const track_idx_t track = staff2track(staffIdx, voice);
+        ChordRest* cr = toChordRest(seg->element(track));
+        if (cr) {
+            Lyrics* lyrics = Factory::createLyrics(cr);
+            lyrics->setXmlText(text);
+            lyrics->setTrack(track);
+            cr->add(lyrics);
+            return;
+        }
+    }
+    LOGD("no chord/rest for lyrics<%s> at tick %d, staff %zu", muPrintable(text), tick.ticks(), staffIdx);
+}
+
 Segment* EditLyrics::findNextSyllableSegment(const InitialState& state, track_idx_t& toLyricTrack)
 {
     const track_idx_t track = state.track;

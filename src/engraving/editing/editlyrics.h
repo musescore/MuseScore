@@ -88,6 +88,11 @@ public:
 
     static Lyrics* navigateToVerse(Transaction& tx, Score* score, const InitialState& state, int verse);
 
+    static void moveLyrics(Transaction& tx, Lyrics* lyrics, DirectionV direction);
+
+    // Not undoable, for import
+    static void addLyrics(Score* score, const Fraction& tick, staff_idx_t staffIdx, const String& text);
+
 private:
     static Segment* findNextSyllableSegment(const InitialState& state, track_idx_t& toLyricTrack);
 
