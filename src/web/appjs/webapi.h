@@ -27,15 +27,16 @@
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "project/iprojectsession.h"
+#include "project/inotationproject.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
 
 namespace mu::appjs {
-class WebApi : public muse::async::Asyncable
+class WebApi : public muse::Contextable, public muse::async::Asyncable
 {
-    inline static muse::GlobalInject<muse::IInteractive> interactive;
-    inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
-    inline static muse::GlobalInject<mu::project::IProjectSession> projectSession;
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
     inline static muse::GlobalInject<muse::audio::ISoundFontController> soundFontController;
 
@@ -43,7 +44,7 @@ public:
 
     static WebApi* instance();
 
-    void init();
+    void init(const muse::modularity::ContextPtr& ctx);
     void deinit();
 
     void load(const void* source, unsigned int len);
@@ -52,7 +53,8 @@ public:
 
 private:
 
-    WebApi() = default;
+    WebApi()
+        : muse::Contextable(muse::modularity::ContextPtr()) {}
 
     void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
 
