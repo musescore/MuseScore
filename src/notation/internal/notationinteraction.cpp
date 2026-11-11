@@ -3877,6 +3877,7 @@ void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<Engrav
     const bool up = d == MoveDirection::Up;
 
     std::vector<Lyrics*> lyrics;
+    std::set<const LinkedObjects*> movedLinks;
     for (EngravingItem* el : elements) {
         if (!el->isLyrics()) {
             continue;
@@ -3887,6 +3888,10 @@ void NotationInteraction::doMoveLyrics(MoveDirection d, const std::vector<Engrav
         // Move the selected lyrics as a block: if one can't move up, don't move any
         if (up && l->verse() == 0) {
             return;
+        }
+
+        if (l->links() && !movedLinks.insert(l->links()).second) {
+            continue;
         }
 
         lyrics.push_back(l);
@@ -3997,6 +4002,16 @@ static bool isNudgeable(const EngravingItem* item)
            || item->isSlurTieSegment();
 }
 
+static bool followsLyrics(const LyricsLineSegment* segment, const std::set<const EngravingItem*>& lyrics, bool horizontal)
+{
+    const LyricsLineSegment::LayoutData* ldata = segment->ldata();
+    if (horizontal) {
+        return lyrics.count(ldata->startXLyrics) > 0 || lyrics.count(ldata->endXLyrics) > 0;
+    }
+
+    return lyrics.count(ldata->yLyrics) > 0;
+}
+
 bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
 {
     if (d == MoveDirection::Undefined) {
@@ -4037,6 +4052,19 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
     if (!lyrics.empty() && !nudgeable.empty()) {
         nudgeable.insert(nudgeable.end(), lyrics.begin(), lyrics.end());
         lyrics.clear();
+    }
+
+    // Don't nudge lyrics lines that already follow the position of a nudged lyric (or they would move twice as much)
+    std::set<const EngravingItem*> nudgedLyrics;
+    for (const EngravingItem* el : nudgeable) {
+        if (el->isLyrics()) {
+            nudgedLyrics.insert(el);
+        }
+    }
+    if (!nudgedLyrics.empty()) {
+        std::erase_if(nudgeable, [&nudgedLyrics, vertical](const EngravingItem* el) {
+            return el->isLyricsLineSegment() && followsLyrics(toLyricsLineSegment(el), nudgedLyrics, !vertical);
+        });
     }
 
     startEdit(TranslatableString("undoableAction", "Move items"));

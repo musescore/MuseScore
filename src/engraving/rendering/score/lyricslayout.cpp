@@ -214,6 +214,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     ldata->clearDashes();
+    ldata->clearReferenceLyrics();
 
     if (item->lyricsLine()->isEndMelisma()) {
         layoutMelismaLine(item);
@@ -751,7 +752,7 @@ void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutCont
     }
 }
 
-double LyricsLayout::lyricsLineStartX(const LyricsLineSegment* item)
+double LyricsLayout::lyricsLineStartX(LyricsLineSegment* item)
 {
     const System* system = item->system();
     const LyricsLine* lyricsLine = item->lyricsLine();
@@ -776,10 +777,11 @@ double LyricsLayout::lyricsLineStartX(const LyricsLineSegment* item)
     // Full melisma or dashes in middle of system
     const double pad = melisma ? style.styleAbsolute(Sid::lyricsMelismaPad) : style.styleAbsolute(Sid::lyricsDashPad);
     const double lyricsRightEdge = startLyrics->pageX() - system->pageX() + startLyrics->shape().right();
+    item->mutldata()->startXLyrics = startLyrics;
     return lyricsRightEdge + pad;
 }
 
-double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics* endLyrics)
+double LyricsLayout::lyricsLineEndX(LyricsLineSegment* item, const Lyrics* endLyrics)
 {
     const System* system = item->system();
     const LyricsLine* lyricsLine = item->lyricsLine();
@@ -808,6 +810,7 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     if (!melisma && hasPrecedingJump && item->isPartialLyricsLineSegment()) {
         if (endLyrics) {
             const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+            item->mutldata()->endXLyrics = endLyrics;
             return lyricsLeftEdge - style.styleAbsolute(Sid::lyricsDashPad);
         } else if (endChordRest->isChord()) {
             const Chord* endChord = toChord(endChordRest);
@@ -828,6 +831,7 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     // Full or partial dashes in middle of system
     if (!melisma && endLyrics) {
         const double lyricsLeftEdge = endLyrics->pageX() - systemPageX + endLyrics->ldata()->bbox().left();
+        item->mutldata()->endXLyrics = endLyrics;
         return lyricsLeftEdge - style.styleAbsolute(Sid::lyricsDashPad);
     }
 
@@ -859,6 +863,7 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
         if (nextLyrics) {
             PointF nextLyricsDefaultPos = nextLyrics->defaultPos();
             ldata->setPosY(nextLyrics->offset().y() + nextLyricsDefaultPos.y());
+            ldata->yLyrics = nextLyrics;
         } else {
             PointF lyricsOffset = item->styleValue(Pid::OFFSET,
                                                    item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
@@ -870,6 +875,7 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     if (item->isSingleBeginType()) {
         PointF startLyricsDefaultPos = startLyrics->defaultPos();
         ldata->setPosY(startLyrics->offset().y() + startLyricsDefaultPos.y());
+        ldata->yLyrics = startLyrics;
         return;
     }
 
@@ -880,10 +886,12 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
         PointF refLyricsDefaultPos = refLyrics->defaultPos();
 
         ldata->setPosY(refLyrics->offset().y() + refLyricsDefaultPos.y());
+        ldata->yLyrics = refLyrics;
         return;
     }
 
     PointF endLyricsDefaultPos = endLyrics->defaultPos();
 
     ldata->setPosY(endLyrics->offset().y() + endLyricsDefaultPos.y());
+    ldata->yLyrics = endLyrics;
 }
