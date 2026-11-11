@@ -18,42 +18,40 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(appshell)
+muse_create_module(appshell)
 
-set(MODULE_QRC appshell.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+target_sources(appshell PRIVATE
+    appshellmodule.cpp
+    appshellmodule.h
+    iappshellconfiguration.h
+    appshelltypes.h
+    internal/applicationuiactions.cpp
+    internal/applicationuiactions.h
+    internal/appshellconfiguration.cpp
+    internal/appshellconfiguration.h
+    internal/applicationactioncontroller.cpp
+    internal/applicationactioncontroller.h
+    internal/istartupscenario.h
+    internal/startupscenario.cpp
+    internal/startupscenario.h
+    view/appmenumodel.cpp
+    view/appmenumodel.h
+    view/notationpagemodel.cpp
+    view/notationpagemodel.h
+    view/notationstatusbarmodel.cpp
+    view/notationstatusbarmodel.h
+    view/navigableappmenumodel.cpp
+    view/navigableappmenumodel.h
+)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/appshelltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.h
-    )
+qt_add_resources(appshell_rcc appshell.qrc)
+target_sources(appshell PRIVATE ${appshell_rcc})
 
-set(MODULE_LINK
+target_link_libraries(appshell PRIVATE
     muse::ui
     muse::uicomponents
     Qt::Quick
-    )
+)
 
 # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
-
-setup_module()
+target_include_directories(appshell PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
