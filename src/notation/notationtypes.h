@@ -87,6 +87,7 @@ using BracketType = mu::engraving::BracketType;
 using Segment = mu::engraving::Segment;
 using TextStyleType = mu::engraving::TextStyleType;
 using PageList = std::vector<Page*>;
+using PlacementV = mu::engraving::PlacementV;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using staff_idx_t = mu::engraving::staff_idx_t;

@@ -6200,7 +6200,7 @@ bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIt
     return true;
 }
 
-void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
@@ -6213,10 +6213,10 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
-    addText(type, item);
+    addText(type, item, placement);
 }
 
-void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addText(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
@@ -6234,6 +6234,13 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
         if (!selectInstrument(toInstrumentChange(text))) {
             rollback();
             return;
+        }
+    }
+
+    if (placement.has_value()) {
+        const PlacementV defaultPlacement = text->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
+        if (placement.value() != defaultPlacement) {
+            text->undoChangeProperty(Pid::PLACEMENT, placement.value(), PropertyFlags::UNSTYLED);
         }
     }
 
@@ -7588,13 +7595,24 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         return;
     }
 
+    // for these types - the near text must have the same placement as the item we're navigating from
+    static const std::unordered_set<mu::engraving::TextStyleType> PRESERVE_PLACEMENT_TYPES {
+        TextStyleType::STICKING,
+        TextStyleType::FINGERING,
+        TextStyleType::LH_GUITAR_FINGERING,
+        TextStyleType::RH_GUITAR_FINGERING,
+        TextStyleType::STRING_NUMBER,
+    };
+
     TextBase* ot = mu::engraving::toTextBase(oe);
-    mu::engraving::TextStyleType textStyleType = ot->textStyleType();
-    ElementType type = ot->type();
-    mu::engraving::staff_idx_t staffIdx = ot->staffIdx();
-    bool back = direction == MoveDirection::Left;
-    int minTrack = static_cast<int>(trackZeroVoice(oe->track()));
-    int maxTrack = minTrack + VOICES - 1;
+    const mu::engraving::TextStyleType textStyleType = ot->textStyleType();
+    const ElementType type = ot->type();
+    const mu::engraving::PlacementV oldPlacement = ot->placement();
+    const mu::engraving::staff_idx_t staffIdx = ot->staffIdx();
+    bool preservePlacement = muse::contains(PRESERVE_PLACEMENT_TYPES, textStyleType);
+    const bool back = direction == MoveDirection::Left;
+    const int minTrack = static_cast<int>(trackZeroVoice(oe->track()));
+    const int maxTrack = minTrack + VOICES - 1;
 
     mu::engraving::EngravingItem* el = nullptr;
 
@@ -7731,6 +7749,16 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             LOGD("navigateToNearText: new element is not Note.");
             return;
         }
+
+        if (preservePlacement && ot->isFingering()) {
+            // see Fingering::calculateDefaultPlacement - with multiple voices, fingering placement depends on each
+            // chord's stem direction. in this case we shouldn't try to override the placement when navigating...
+            const Chord* origChord = toNote(op)->chord();
+            const Chord* newChord = toNote(el)->chord();
+            preservePlacement = !origChord->measure()->hasVoices(staffIdx, origChord->tick(), origChord->actualTicks())
+                                && !newChord->measure()->hasVoices(staffIdx, newChord->tick(), newChord->actualTicks());
+        }
+
         // check element list of new note
         for (mu::engraving::EngravingItem* e : toNote(el)->el()) {
             if (e->type() != type) {
@@ -7738,8 +7766,10 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             }
             TextBase* nt = mu::engraving::toTextBase(e);
             if (nt->textStyleType() == textStyleType) {
-                textEl = e;
-                break;
+                if (!preservePlacement || nt->placement() == oldPlacement) {
+                    textEl = e;
+                    break;
+                }
             }
         }
     } else if (op->isSegment()) {
@@ -7755,8 +7785,10 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
             }
             TextBase* nt = mu::engraving::toTextBase(e);
             if (nt->textStyleType() == textStyleType) {
-                textEl = e;
-                break;
+                if (!preservePlacement || nt->placement() == oldPlacement) {
+                    textEl = e;
+                    break;
+                }
             }
         }
     }
@@ -7776,7 +7808,11 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         // add new text if no existing element to edit
         // TODO: for tempo text, would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
-            addTextToItem(textStyleType, el);
+            std::optional<PlacementV> newPlacement;
+            if (preservePlacement) {
+                newPlacement = oldPlacement;
+            }
+            addTextToItem(textStyleType, el, newPlacement);
         }
     }
 }

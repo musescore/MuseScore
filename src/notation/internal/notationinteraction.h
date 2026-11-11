@@ -266,7 +266,7 @@ public:
     void addAnchoredLineToSelectedNotes() override;
 
     void addTextToTopFrame(TextStyleType type) override;
-    void addTextToItem(TextStyleType type, EngravingItem* item) override;
+    void addTextToItem(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement = std::nullopt) override;
 
     muse::Ret canAddImageToItem(const EngravingItem* item) const override;
     void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) override;
@@ -419,7 +419,7 @@ private:
 
     bool canAddTextToItem(TextStyleType type, const EngravingItem* item) const;
 
-    void addText(TextStyleType type, EngravingItem* item = nullptr);
+    void addText(TextStyleType type, EngravingItem* item = nullptr, std::optional<PlacementV> placement = std::nullopt);
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
