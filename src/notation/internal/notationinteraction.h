@@ -441,8 +441,7 @@ private:
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
 
-    double getHRaster() const;
-    double getVRaster() const;
+    double gridRaster(const EngravingItem* item, muse::Orientation orientation) const;
 
     double currentScaling(muse::draw::Painter* painter) const;
 
