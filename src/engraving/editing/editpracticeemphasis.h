@@ -25,11 +25,10 @@
 
 #include "transaction/undoablecommand.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/playback/practiceemphasisdata.h"
 
 namespace mu::engraving {
-class MasterScore;
-
 class ChangePracticeEmphasis : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePracticeEmphasis)

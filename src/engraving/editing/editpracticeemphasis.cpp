@@ -22,8 +22,6 @@
 
 #include "editpracticeemphasis.h"
 
-#include "engraving/dom/masterscore.h"
-
 using namespace mu::engraving;
 
 ChangePracticeEmphasis::ChangePracticeEmphasis(MasterScore* score, PracticeEmphasisData::Document document)
