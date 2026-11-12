@@ -310,6 +310,26 @@ StyledFlickable {
                             styleItem: barNumbersModel.measureNumberPosBelow
                         }
                     }
+
+                    RowLayout {
+                        spacing: 6
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: 156
+                            text: qsTrc("notation/editstyle/voltas", "Avoid collisions by:")
+                            horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.Wrap
+                        }
+
+                        ComboBoxDropdown {
+                            model: barNumbersModel.possibleMeasureNumberAvoidanceOptions()
+                            styleItem: barNumbersModel.measureNumberAvoidance
+                        }
+
+                        StyleResetButton {
+                            styleItem: barNumbersModel.measureNumberAvoidance
+                        }
+                    }
                 }
             }
         }
