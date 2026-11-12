@@ -4681,20 +4681,28 @@ SymId Score::resolveSym(SymId id) const
         return id;
     }
 
+    SymId oversizedId = SymId::noSym;
     switch (id) {
     case SymId::noteheadBlack:
-        return SymId::noteheadBlackOversized;
+        oversizedId = SymId::noteheadBlackOversized;
+        break;
     case SymId::noteheadHalf:
-        return SymId::noteheadHalfOversized;
+        oversizedId = SymId::noteheadHalfOversized;
+        break;
     case SymId::noteheadWhole:
-        return SymId::noteheadWholeOversized;
+        oversizedId = SymId::noteheadWholeOversized;
+        break;
     case SymId::noteheadDoubleWhole:
-        return SymId::noteheadDoubleWholeOversized;
+        oversizedId = SymId::noteheadDoubleWholeOversized;
+        break;
     case SymId::noteheadDoubleWholeSquare:
-        return SymId::noteheadDoubleWholeSquareOversized;
+        oversizedId = SymId::noteheadDoubleWholeSquareOversized;
+        break;
     default:
         return id;
     }
+
+    return m_engravingFont->isValid(oversizedId) ? oversizedId : id;
 }
 
 //---------------------------------------------------------
