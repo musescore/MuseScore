@@ -80,6 +80,12 @@ protected:
     virtual void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
     virtual void rebaseAnchors(EditData&, Grip);
 
+    /**
+     * The standard line grip whose behaviour `grip` uses. Subclasses with extra grips
+     * (e.g. BoxLine corners) can map them here to get the line's start/end behaviour.
+     */
+    virtual Grip lineGripFor(Grip grip) const { return grip; }
+
 private:
     void undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
     PointF leftAnchorPosition(const double& systemPositionY) const;
