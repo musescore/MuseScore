@@ -1462,8 +1462,18 @@ void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
     ldata->closedLeft  = item->isSingleBeginType();
     ldata->closedRight = item->isSingleEndType();
 
+    const RectF& r = ldata->rect;
     const double lw2 = 0.5 * item->absoluteFromSpatium(box->lineWidth());
-    ldata->setShape(Shape(ldata->rect.padded(lw2), item));   // bbox for selection + autoplace
+    Shape shape;
+    shape.add(RectF(r.left(), r.top(), r.width(), 0.0).padded(lw2), item);
+    shape.add(RectF(r.left(), r.bottom(), r.width(), 0.0).padded(lw2), item);
+    if (ldata->closedLeft) {
+        shape.add(RectF(r.left(), r.top(), 0.0, r.height()).padded(lw2), item);
+    }
+    if (ldata->closedRight) {
+        shape.add(RectF(r.right(), r.top(), 0.0, r.height()).padded(lw2), item);
+    }
+    ldata->setShape(shape);
 
     Autoplace::autoplaceSpannerSegment(item, ldata);
 }
