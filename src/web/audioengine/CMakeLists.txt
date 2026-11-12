@@ -17,56 +17,73 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 cmake_minimum_required(VERSION 3.22)
+
+# src/web/audioengine
+set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../..)
+set(MUSE_FRAMEWORK_PATH ${MU_ROOT}/muse)
+set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
+
+if (NOT EXISTS ${MUSE_FRAMEWORK_SRC_PATH})
+    message(FATAL_ERROR "muse framework not found: ${MUSE_FRAMEWORK_SRC_PATH}")
+endif()
 
 project(MuseAudio LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_MODULE_PATH
+    ${MUSE_FRAMEWORK_SRC_PATH}/cmake
+    ${MUSE_FRAMEWORK_PATH}/buildscripts
+    ${MUSE_FRAMEWORK_PATH}/buildscripts/cmake
+    ${CMAKE_MODULE_PATH}
+    )
 
 option(MUSE_MODULE_AUDIO_WORKER "Enable audio worker" OFF)
 option(MUSE_FIX_MUSEAUDIO_FILENAME "Fix MuseAudio.js file name" OFF)
 
-# src/web/audioengine
-set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../..)
-set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
-set(MUSE_FRAMEWORK_SRC_PATH ${MU_ROOT}/src/framework)
+# Framework configuration: only the audio engine, without Qt and threads
+include(GetPaths)
+include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseDeclareOptions.cmake)
 
-if (NOT EXISTS ${MU_ROOT}/buildscripts)
-    message(FATAL_ERROR "not root: ${MU_ROOT}")
-endif()
+set(MUSE_QT_SUPPORT OFF)
+set(MUSE_THREADS_SUPPORT OFF)
+set(MUSE_CONFIGURATION_IS_WEB ON)
+set(MUSE_ENABLE_UNIT_TESTS OFF)
+set(MUSE_MODULE_AUDIO_EXPORT OFF)
+set(MUSE_COMPILE_USE_PCH OFF)
+set(MUSE_MODULE_MULTIWINDOWS OFF)
 
-set(CMAKE_MODULE_PATH
-    ${MU_ROOT}
-    ${MU_ROOT}/buildscripts
-    ${MU_ROOT}/buildscripts/cmake
-    ${MU_ROOT}/src/framework/cmake
-    ${CMAKE_MODULE_PATH}
-    )
+include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 
+include(SetupBuildEnvironment)
+include(GetPlatformInfo)
 
-include(MuseCreateModule)
-include(SetupCompileWarnings)
-include(GetBuildType)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MU_ROOT}/build.artifacts)
-
-set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1 -O2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
-
-if (BUILD_IS_DEBUG)
-    set(EMCC_LINKER_FLAGS -O0)
+# The artifacts of the app and the audio engine are placed together
+if(MUSE_ARTIFACTS_DIR)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MUSE_ARTIFACTS_DIR})
 else()
-    set(EMCC_LINKER_FLAGS -Os)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MU_ROOT}/build.artifacts)
 endif()
 
-set(AUDIO_ROOT ${MU_ROOT}/src/framework/audio)
-add_subdirectory(${AUDIO_ROOT}/common common)
-set(WEBWORKER_FACADE_MODE OFF)
-add_subdirectory(${AUDIO_ROOT}/engine engine)
+# Dependencies: only the source ones, needed by the global module
+set(EXTDEPS_DIR ${MU_ROOT}/muse_deps)
+set(LOCAL_ROOT_PATH ${PROJECT_BINARY_DIR}/_deps)
+include(${EXTDEPS_DIR}/buildtools/manifest.cmake)
+require_source_dep(picojson)
+require_source_dep(pugixml)
+require_source_dep(utfcpp)
 
-target_link_libraries(MuseAudio PRIVATE muse_audio_common muse_audio_engine)
+add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH}/global global)
+
+set(AUDIO_ROOT ${MUSE_FRAMEWORK_SRC_PATH}/audio)
+set(WEBENGINE_FACADE_MODE OFF) # the real engine
+add_subdirectory(${AUDIO_ROOT}/common common)
+add_subdirectory(${AUDIO_ROOT}/engine engine)
 
 add_executable(MuseAudio
     ${CMAKE_CURRENT_LIST_DIR}/engine_export.cpp
@@ -79,34 +96,17 @@ add_executable(MuseAudio
 
 target_include_directories(MuseAudio PRIVATE
     ${PROJECT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-
-    ${PROJECT_SOURCE_DIR}/src
-
     ${MUSE_FRAMEWORK_PATH}
-    ${MUSE_FRAMEWORK_PATH}/framework
-    ${MUSE_FRAMEWORK_PATH}/framework/global
-    ${MUSE_FRAMEWORK_PATH}/framework/audio
-
-    # compat
-    ${MUSE_FRAMEWORK_PATH}/src
-    ${MUSE_FRAMEWORK_PATH}/src/framework
-    ${MUSE_FRAMEWORK_PATH}/src/framework/global
-    ${MUSE_FRAMEWORK_PATH}/src/framework/audio
-    # end compat
+    ${MUSE_FRAMEWORK_SRC_PATH}
+    ${MUSE_FRAMEWORK_SRC_PATH}/global
+    ${AUDIO_ROOT}
 )
-
-add_definitions(-DNO_QT_SUPPORT)
-add_definitions(-DQ_OS_WASM)
-set(GLOBAL_NO_INTERNAL ON)
-
-configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
-
-add_subdirectory(${MU_ROOT}/src/framework/global global)
 
 target_link_libraries(MuseAudio PRIVATE
     embind
     muse::global
+    muse_audio_common
+    muse_audio_engine
 )
 
 #set_target_properties(MuseAudio PROPERTIES OUTPUT_NAME "MuseAudio.wasm")
@@ -117,7 +117,7 @@ target_link_options(MuseAudio PRIVATE "SHELL:-s MODULARIZE=1")
 target_link_options(MuseAudio PRIVATE "SHELL:-s FETCH=1")
 target_link_options(MuseAudio PRIVATE "SHELL:-s INITIAL_MEMORY=50MB")
 target_link_options(MuseAudio PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
-target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_RUNTIME_METHODS=ccall,cwrap")
+target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_RUNTIME_METHODS=ccall,cwrap,HEAPU8")
 target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_main,_malloc,_free,_Init,_process]")
 
 if (MUSE_MODULE_AUDIO_WORKER)

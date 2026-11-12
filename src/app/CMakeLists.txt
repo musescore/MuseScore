@@ -316,6 +316,8 @@ if (CC_IS_EMCC)
     include(exported_functions.cmake)
     target_link_options(MuseScoreStudio PRIVATE ${EMCC_LINKER_FLAGS})
     target_link_options(MuseScoreStudio PRIVATE ${EXPORTED_FUNCTIONS})
+    # Used by the js api (src/web/appjs/distr), not exported by default since Emscripten 4
+    set_target_properties(MuseScoreStudio PROPERTIES QT_WASM_EXTRA_EXPORTED_METHODS "ccall,HEAPU8")
 endif()
 
 

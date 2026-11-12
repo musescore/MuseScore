@@ -21,9 +21,11 @@
  */
 #include "appjsmodule.h"
 
-#include <emscripten/val.h>
-
 #include "webapi.h"
+
+#ifdef Q_OS_WASM
+#include <emscripten/val.h>
+#endif
 
 using namespace muse;
 using namespace mu::appjs;
@@ -33,17 +35,26 @@ std::string AppJsModule::moduleName() const
     return "appjs";
 }
 
-void AppJsModule::onInit(const muse::IApplication::RunMode&)
-{
-    WebApi::instance()->init();
-}
-
-void AppJsModule::onDeinit()
-{
-    WebApi::instance()->deinit();
-}
-
 void AppJsModule::onStartApp()
 {
+#ifdef Q_OS_WASM
     emscripten::val::module_property("onStartApp")();
+#endif
+}
+
+muse::modularity::IContextSetup* AppJsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new AppJsContext(ctx);
+}
+
+// Context
+
+void AppJsContext::onInit(const muse::IApplication::RunMode&)
+{
+    WebApi::instance()->init(iocContext());
+}
+
+void AppJsContext::onDeinit()
+{
+    WebApi::instance()->deinit();
 }

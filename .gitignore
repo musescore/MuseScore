@@ -11,6 +11,7 @@
 build
 /build_overrides.cmake
 build.release
+build.web
 build.debug
 build.install
 build.tooldata

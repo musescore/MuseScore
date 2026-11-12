@@ -117,14 +117,19 @@ if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
     set(MUSE_CONFIGURATION_IS_WEB ON)
 
     set(QT_ADD_LINGUISTTOOLS OFF)
-    set(QT_ADD_CONCURRENT OFF)
     set(QT_QPROCESS_SUPPORTED OFF)
-    set(QT_CONCURRENT_SUPPORTED OFF)
 
     if (OS_IS_WASM)
+        set(QT_ADD_CONCURRENT OFF)
+        set(QT_CONCURRENT_SUPPORTED OFF)
         set(MUSE_THREADS_SUPPORT OFF)
+        # The engine runs in the audio worklet, a single thread
+        set(MUSE_MODULE_AUDIO_WORKMODE 2) # driver callback
     else()
         set(MUSE_THREADS_SUPPORT ON)
+        # The native audio drivers may call back on different threads (e.g. AudioQueue on macOS),
+        # the engine needs its own thread, as on desktop
+        set(MUSE_MODULE_AUDIO_WORKMODE 3) # driver callback + worker rpc
     endif()
 
     set(MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED OFF)
@@ -133,7 +138,6 @@ if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
     set(MUE_GENERAL_APP ON)
     set(MUSE_MODULE_SHORTCUTS ON)
     set(MUSE_MODULE_AUDIO ON)
-    set(MUSE_MODULE_AUDIO_WORKMODE 2) # driver callback
     set(MUSE_MODULE_MPE ON)
     set(MUE_BUILD_APPSHELL_MODULE ON)
     set(MUE_BUILD_PROJECT_MODULE ON)
@@ -172,6 +176,7 @@ if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
     set(MUE_BUILD_PRINT_MODULE OFF)
     set(MUE_BUILD_MUSESOUNDS_MODULE OFF)
     set(MUE_BUILD_BRAILLE_MODULE OFF)
+    set(MUE_BUILD_MACOS_INTEGRATION OFF)
     # IMPORT EXPORT MODULES
     set(MUE_BUILD_IMPEXP_BB_MODULE OFF)
     set(MUE_BUILD_IMPEXP_BWW_MODULE OFF)

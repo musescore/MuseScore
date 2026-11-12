@@ -24,9 +24,11 @@
 #include "global/modularity/ioc.h"
 
 #include "global/runtime.h"
+#include "global/async/processevents.h"
 
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
 
+#include "audio/engine/enginesetup.h"
 #include "audio/engine/internal/enginecontroller.h"
 
 #include "log.h"
@@ -48,7 +50,7 @@ static std::string moduleName()
     return "audio_engine";
 }
 
-static modularity::ModulesIoC* ioc()
+static modularity::ModulesGlobalIoC* ioc()
 {
     return modularity::globalIoc();
 }
@@ -81,8 +83,11 @@ void WebAudioEngine::init()
     m_rpcChannel->setupOnEngine();
     ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
 
+    m_engineSetup = std::make_shared<EngineGlobalSetup>();
+    m_engineSetup->registerExports();
+    m_engineSetup->resolveImports();
+
     m_controller = std::make_shared<EngineController>(m_rpcChannel);
-    m_controller->registerExports();
     m_controller->onStartRunning();
 
     LOGI() << "Web audio engine running";
@@ -90,5 +95,9 @@ void WebAudioEngine::init()
 
 void WebAudioEngine::process(float* stream, unsigned samplesPerChannel)
 {
+    //! NOTE The engine runs in the audio worklet, there is no event loop,
+    //! so the async messages (promises, notifications) are processed here
+    async::processMessages();
+
     m_controller->process(stream, samplesPerChannel);
 }

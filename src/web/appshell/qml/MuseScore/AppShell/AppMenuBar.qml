@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
-import MuseScore.AppShell 1.0
+import MuseScore.AppShell
 
 Item {
     id: root
 
     property alias appWindow: appMenuModel.appWindow
 
-    property int availableWidth: 0
+    property int availableWidth: ui.rootItem.width
     property bool truncated: availableWidth < contentRow.childrenRect.width
 
     implicitWidth: contentRow.width
@@ -48,6 +48,12 @@ Item {
 
         onCloseOpenedMenuRequested: {
             menuLoader.close()
+        }
+
+        onNavigateWithSymbolRequested: function(symbol) {
+            if (menuLoader.isMenuOpened) {
+                menuLoader.menu.navigateWithSymbolRequested(symbol, appMenuModel)
+            }
         }
     }
 
@@ -72,15 +78,15 @@ Item {
             delegate: FlatButton {
                 id: radioButtonDelegate
 
-                property var item: Boolean(model) ? model.itemRole : null
+                required property MenuItem item
+                required property int index
+
                 property string menuId: Boolean(item) ? item.id : ""
                 property string title: Boolean(item) ? item.title : ""
                 property string titleWithMnemonicUnderline: Boolean(item) ? item.titleWithMnemonicUnderline : ""
 
                 property bool isMenuOpened: menuLoader.isMenuOpened && menuLoader.parent === this
                 property bool highlight: appMenuModel.highlightedMenuId === menuId
-
-                property int viewIndex: index
 
                 buttonType: FlatButton.TextOnly
                 isNarrow: true
@@ -126,16 +132,15 @@ Item {
                 contentItem: StyledTextLabel {
                     id: textLabel
 
-                    width: textMetrics.width
-
                     text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
                     textFormat: Text.RichText
                     font: ui.theme.bodyFont
+                }
 
-            text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
-            textFormat: Text.RichText
-            font: ui.theme.bodyFont
-        }
+                backgroundItem: AppButtonBackground {
+                    mouseArea: radioButtonDelegate.mouseArea
+
+                    highlight: radioButtonDelegate.highlight
 
                     color: radioButtonDelegate.normalColor
                 }
@@ -188,12 +193,16 @@ Item {
         id: prv
 
         property var openedMenu: null
+        property bool needRestoreNavigationAfterClose: false
+        property string lastOpenedMenuId: ""
 
         function openMenu(menuId, byHover) {
             var children = contentRow.children
             for (var i = 0; i < children.length; ++i) {
                 var item = children[i]
                 if (Boolean(item) && item.menuId === menuId) {
+                    needRestoreNavigationAfterClose = true
+                    lastOpenedMenuId = menuId
 
                     if (!byHover) {
                         if (menuLoader.isMenuOpened && menuLoader.parent === item) {
@@ -227,4 +236,3 @@ Item {
         }
     }
 }
-

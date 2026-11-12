@@ -22,101 +22,52 @@
 
 #include "appshellmodule.h"
 
-#include <qqml.h>
-
 #include "modularity/ioc.h"
 
-#include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"
 
-#include "internal/applicationuiactions.h"
-#include "internal/applicationactioncontroller.h"
-#include "internal/appshellconfiguration.h"
-#include "internal/applicationactioncontroller.h"
+#include "appshell/internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
-
-#include "view/notationpagemodel.h"
-#include "view/notationstatusbarmodel.h"
-#include "view/navigableappmenumodel.h"
 
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::modularity;
-using namespace muse::dock;
 
-static void appshell_init_qrc()
-{
-    Q_INIT_RESOURCE(appshell);
-}
+static const std::string mname("appshell");
 
 std::string AppShellModule::moduleName() const
 {
-    return "appshell";
+    return mname;
 }
 
 void AppShellModule::registerExports()
 {
-    m_applicationActionController = std::make_shared<ApplicationActionController>(globalCtx());
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, globalCtx());
     m_appShellConfiguration = std::make_shared<AppShellConfiguration>(globalCtx());
 
-    globalIoc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
-    globalIoc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(globalCtx()));
+    globalIoc()->registerExport<IAppShellConfiguration>(mname, m_appShellConfiguration);
 }
 
 void AppShellModule::resolveImports()
 {
-    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_applicationUiActions);
-    }
-
-    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerPageUri(Uri("musescore://notation"));
         ir->registerPageUri(Uri("musescore://devtools"));
     }
 }
 
-void AppShellModule::registerResources()
+void AppShellModule::onInit(const IApplication::RunMode&)
 {
-    appshell_init_qrc();
-}
-
-void AppShellModule::registerUiTypes()
-{
-    qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
-    qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
-    qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
-}
-
-void AppShellModule::onPreInit(const IApplication::RunMode& mode)
-{
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
-    m_applicationActionController->preInit();
-}
-
-void AppShellModule::onInit(const IApplication::RunMode& mode)
-{
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
     m_appShellConfiguration->init();
-    m_applicationActionController->init();
-    m_applicationUiActions->init();
 }
 
-void AppShellModule::onAllInited(const IApplication::RunMode& mode)
+// Context
+muse::modularity::IContextSetup* AppShellModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
+    return new AppShellContext(ctx);
 }
 
-void AppShellModule::onDeinit()
+void AppShellContext::registerExports()
 {
+    ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
 }

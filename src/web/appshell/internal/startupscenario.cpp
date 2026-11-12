@@ -47,17 +47,19 @@ void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFi
     NOT_IMPLEMENTED;
 }
 
-muse::async::Promise<Ret> StartupScenario::runOnSplashScreen()
+void StartupScenario::runOnSplashScreen()
 {
-    return async::make_promise<Ret>([](auto resolve) {
-        return resolve(muse::make_ok());
-    });
 }
 
-void StartupScenario::runAfterSplashScreen()
+muse::async::Promise<Ret> StartupScenario::runAfterSplashScreen()
 {
-    interactive()->open("musescore://notation").onResolve(this, [this](const Val&) {
-        m_startupCompleted = true;
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        interactive()->open("musescore://notation").onResolve(this, [this, resolve](const Val&) mutable {
+            m_startupCompleted = true;
+            (void)resolve(muse::make_ok());
+        });
+
+        return async::Promise<Ret>::dummy_result();
     });
 }
 

@@ -146,7 +146,11 @@
 #endif
 
 // Modules
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+#include "web/appshell/appshellmodule.h"
+#else
 #include "appshell/appshellmodule.h"
+#endif
 
 #ifdef MUSE_MODULE_TESTFLOW
 #include "testflow/testflowmodule.h"

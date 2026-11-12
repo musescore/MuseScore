@@ -23,12 +23,12 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import Muse.Ui 1.0
+import Muse.Ui
 import Muse.UiComponents
 
-import MuseScore.NotationScene 1.0
-import MuseScore.Palette 1.0
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.NotationScene
+import MuseScore.Palette
+import MuseScore.InstrumentsScene
 import MuseScore.PropertiesPanel
 
 Item {
