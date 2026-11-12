@@ -236,6 +236,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ToggleSharpCommand>(),
     makeCommandInfo<ToggleSharp2Command>(),
 
+    makeCommandInfo<UseVoiceCommand>(),
+    makeCommandInfo<UseVoice1Command>(),
+    makeCommandInfo<UseVoice2Command>(),
+    makeCommandInfo<UseVoice3Command>(),
+    makeCommandInfo<UseVoice4Command>(),
+
+    makeCommandInfo<SwapVoicesCommand>(),
+    makeCommandInfo<SwapVoice12Command>(),
+    makeCommandInfo<SwapVoice13Command>(),
+    makeCommandInfo<SwapVoice14Command>(),
+    makeCommandInfo<SwapVoice23Command>(),
+    makeCommandInfo<SwapVoice24Command>(),
+    makeCommandInfo<SwapVoice34Command>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -407,76 +421,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Add articulation: staccato"),
         InputSchema(),
         Decoration(IconCode::Code::STACCATO)
-    },
-    CommandInfo{
-        USE_VOICE_1_COMMAND,
-        TranslatableString("action", "Voice 1"),
-        TranslatableString("action", "Use voice 1"),
-        InputSchema(),
-        Decoration(IconCode::Code::VOICE_1)
-    },
-    CommandInfo{
-        USE_VOICE_2_COMMAND,
-        TranslatableString("action", "Voice 2"),
-        TranslatableString("action", "Use voice 2"),
-        InputSchema(),
-        Decoration(IconCode::Code::VOICE_2)
-    },
-    CommandInfo{
-        USE_VOICE_3_COMMAND,
-        TranslatableString("action", "Voice 3"),
-        TranslatableString("action", "Use voice 3"),
-        InputSchema(),
-        Decoration(IconCode::Code::VOICE_3)
-    },
-    CommandInfo{
-        USE_VOICE_4_COMMAND,
-        TranslatableString("action", "Voice 4"),
-        TranslatableString("action", "Use voice 4"),
-        InputSchema(),
-        Decoration(IconCode::Code::VOICE_4)
-    },
-    CommandInfo{
-        SWAP_VOICE_X12_COMMAND,
-        TranslatableString("action", "Exchange voice &1-2"),
-        TranslatableString("action", "Exchange voice 1-2"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SWAP_VOICE_X13_COMMAND,
-        TranslatableString("action", "Exchange voice 1-3"),
-        TranslatableString("action", "Exchange voice 1-3"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SWAP_VOICE_X14_COMMAND,
-        TranslatableString("action", "Exchange voice 1-&4"),
-        TranslatableString("action", "Exchange voice 1-4"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SWAP_VOICE_X23_COMMAND,
-        TranslatableString("action", "Exchange voice &2-3"),
-        TranslatableString("action", "Exchange voice 2-3"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SWAP_VOICE_X24_COMMAND,
-        TranslatableString("action", "Exchange voice 2-4"),
-        TranslatableString("action", "Exchange voice 2-4"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SWAP_VOICE_X34_COMMAND,
-        TranslatableString("action", "Exchange voice &3-4"),
-        TranslatableString("action", "Exchange voice 3-4"),
-        InputSchema(),
-        Decoration()
     },
 
     CommandInfo{

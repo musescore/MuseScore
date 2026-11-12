@@ -51,8 +51,6 @@ enum class AccidentalType : unsigned char;
 enum class NoteType : unsigned char;
 struct NoteParenthesisInfo;
 
-static constexpr int MAX_DOTS = 4;
-
 //--------------------------------------------------------------------------------
 // LINE ATTACHMENT POINT
 // Represents the attachment point of any line (tie, slur, glissando...)

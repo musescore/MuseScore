@@ -164,6 +164,8 @@ private:
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
 
     muse::Ret toggleAccidental(const ToggleAccidentalCommand& command);
+    muse::Ret changeVoice(const UseVoiceCommand& command);
+    muse::Ret swapVoices(const SwapVoicesCommand& command);
 
     muse::Ret flipSelection();
 
@@ -182,9 +184,6 @@ private:
     void move(MoveDirection direction, bool quickly = false);
     void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
-
-    void changeVoice(voice_idx_t voiceIndex);
-    void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2);
 
     void cutSelection();
     void repeatSelection();
