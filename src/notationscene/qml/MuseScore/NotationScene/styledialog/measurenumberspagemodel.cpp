@@ -40,6 +40,7 @@ MeasureNumbersPageModel::MeasureNumbersPageModel(QObject* parent)
                                          StyleId::measureNumberPosBelow,
                                          StyleId::measureNumberAlternatePosBelow,
                                          StyleId::measureNumberAlignToBarline,
+                                         StyleId::measureNumberAvoidance,
 
                                          StyleId::mmRestShowMeasureNumberRange,
                                          StyleId::mmRestRangeBracketType,
@@ -82,6 +83,24 @@ StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const
 }
 
 StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
+StyleItem* MeasureNumbersPageModel::measureNumberAvoidance() const { return styleItem(StyleId::measureNumberAvoidance); }
+
+QVariantList MeasureNumbersPageModel::possibleMeasureNumberAvoidanceOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/voltas", "Moving outside other notation") },
+            { "value", static_cast<int>(MeasureNumberAvoidance::MOVE_CLEAR) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/voltas", "Fitting into gaps where possible") },
+            { "value", static_cast<int>(MeasureNumberAvoidance::FIT_IN_GAPS) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/voltas", "Masking slurs and ties") },
+            { "value", static_cast<int>(MeasureNumberAvoidance::MASK_SPANNERS) } },
+    };
+
+    return options;
+}
 
 StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const { return styleItem(StyleId::mmRestShowMeasureNumberRange); }
 StyleItem* MeasureNumbersPageModel::mmRestRangeBracketType() const { return styleItem(StyleId::mmRestRangeBracketType); }
