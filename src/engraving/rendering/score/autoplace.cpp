@@ -191,16 +191,25 @@ static double distanceToNearestGap(const SkylineLine& skyline, const Shape& shap
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
                                      double minSkylineHorizontalClearance, double minDistance)
 {
-    const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
+    // Read once per item rather than for each skyline element
+    const MeasureNumberAvoidance avoidance = item->isMeasureNumber()
+                                             ? item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()
+                                             : MeasureNumberAvoidance::MOVE_CLEAR;
+    const bool ignoreSlursAndTies = avoidance == MeasureNumberAvoidance::MASK_SPANNERS;
+
+    const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item, ignoreSlursAndTies](const ShapeElement& shapeEl) {
         const EngravingItem* skylineItem = shapeEl.item();
         if (!skylineItem) {
             return false;
         }
+        // Masked around the item instead
+        if (ignoreSlursAndTies && skylineItem->isSlurTieSegment() && !skylineItem->isTappingHalfSlurSegment()) {
+            return true;
+        }
         return itemsShouldIgnoreEachOther(item, skylineItem);
     });
 
-    if (item->isMeasureNumber()
-        && item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>() == MeasureNumberAvoidance::FIT_IN_GAPS) {
+    if (avoidance != MeasureNumberAvoidance::MOVE_CLEAR) {
         return distanceToNearestGap(filteredSkyline, shape, above, minSkylineHorizontalClearance, minDistance);
     }
 

@@ -36,8 +36,11 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/editing/editpart.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -1119,7 +1122,7 @@ TEST_F(Engraving_MeasureTests, timeDeleteNoteWithAnnotationUndo)
 // Reads a score with a measure number centred on every barline and whole notes in bars 1 and 2, optionally tied,
 // and lays it out
 static std::unique_ptr<MasterScore> layOutWholeNotesScore(int pitch, bool tied, double numberOffsetY, PlacementV placement,
-                                                          MeasureNumberAvoidance avoidance)
+                                                          MeasureNumberAvoidance avoidance, FrameType frameType = FrameType::NO_FRAME)
 {
     std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"empty.mscx"));
     if (!score) {
@@ -1131,6 +1134,7 @@ static std::unique_ptr<MasterScore> layOutWholeNotesScore(int pitch, bool tied, 
     score->style().set(Sid::measureNumberSystem, false);
     score->style().set(Sid::measureNumberHPlacement, AlignH::HCENTER);
     score->style().set(Sid::measureNumberAvoidance, avoidance);
+    score->style().set(Sid::measureNumberFrameType, int(frameType));
     if (placement == PlacementV::ABOVE) {
         score->style().set(Sid::measureNumberPosAbove, PointF(0.0, numberOffsetY));
     } else {
@@ -1247,3 +1251,156 @@ TEST_F(Engraving_MeasureTests, measureNumberFitInGapsBelowStaff)
     EXPECT_GT(shiftByTie(highPitch, farFromStaff, below, fitInGaps), 0.0);
 }
 
+/**
+ *  When masking slurs and ties, a measure number stays at its position and ties are masked around it,
+ *  whatever their own mask property
+ */
+TEST_F(Engraving_MeasureTests, measureNumberMasksSlursAndTies)
+{
+    const MeasureNumberAvoidance maskSpanners = MeasureNumberAvoidance::MASK_SPANNERS;
+    const int abovePitch = 81; // A5
+    const int belowPitch = 60; // C4
+    const double aboveOffsetY = -2.0;
+    const double belowOffsetY = 2.0;
+    auto bar1Tie = [](MasterScore* score) {
+        Measure* m1 = score->firstMeasure();
+        return m1->findChord(m1->tick(), 0)->upNote()->tieFor();
+    };
+
+    for (PlacementV placement : { PlacementV::ABOVE, PlacementV::BELOW }) {
+        const bool above = placement == PlacementV::ABOVE;
+        const int pitch = above ? abovePitch : belowPitch;
+        const double numberOffsetY = above ? aboveOffsetY : belowOffsetY;
+
+        // [GIVEN] A tie over the barline with no room for the measure number
+        EXPECT_GT(shiftByTie(pitch, numberOffsetY, placement, MeasureNumberAvoidance::FIT_IN_GAPS), 0.0);
+
+        // [WHEN] Measure numbers mask spanners
+        // [THEN] The tie doesn't move the number
+        EXPECT_DOUBLE_EQ(shiftByTie(pitch, numberOffsetY, placement, maskSpanners), 0.0);
+
+        // [THEN] The tie is masked around the number
+        std::unique_ptr<MasterScore> score = layOutWholeNotesScore(pitch, true, numberOffsetY, placement, maskSpanners);
+        ASSERT_TRUE(score);
+        const Tie* tie = bar1Tie(score.get());
+        ASSERT_TRUE(tie && tie->frontSegment());
+        EXPECT_FALSE(tie->frontSegment()->ldata()->mask().empty());
+    }
+
+    // [WHEN] A tie's own mask property is off
+    std::unique_ptr<MasterScore> score = layOutWholeNotesScore(abovePitch, true, aboveOffsetY, PlacementV::ABOVE, maskSpanners);
+    ASSERT_TRUE(score);
+    Tie* tie = bar1Tie(score.get());
+    ASSERT_TRUE(tie && tie->frontSegment());
+    const double numberY = bar2NumberY(score.get());
+    tie->setProperty(Pid::MASK_SLURTIE, AutoOnOff::OFF);
+    score->doLayout();
+
+    // [THEN] The number stays where it is, and the tie is still masked around it
+    EXPECT_DOUBLE_EQ(bar2NumberY(score.get()), numberY);
+    EXPECT_FALSE(tie->frontSegment()->ldata()->mask().empty());
+
+    // [THEN] The mask is padded beyond an unframed number, but reaches only up to a frame
+    for (FrameType frameType : { FrameType::NO_FRAME, FrameType::RECTANGLE }) {
+        std::unique_ptr<MasterScore> numberScore
+            = layOutWholeNotesScore(abovePitch, true, aboveOffsetY, PlacementV::ABOVE, maskSpanners, frameType);
+        ASSERT_TRUE(numberScore);
+        const Tie* numberTie = bar1Tie(numberScore.get());
+        const MeasureNumber* number = numberScore->firstMeasure()->nextMeasure()->measureNumber(0);
+        ASSERT_TRUE(numberTie && numberTie->frontSegment() && number);
+        const double padding = frameType == FrameType::NO_FRAME ? 0.25 * numberScore->style().spatium() : 0.0;
+        EXPECT_NEAR(numberTie->frontSegment()->ldata()->mask().bbox().width(), number->ldata()->bbox().width() + 2 * padding, 0.001);
+    }
+}
+
+// Lays out a score with one staff per instrument, measure numbers masking slurs and ties, and a high tie over
+// the first barline in the bottom staff
+static std::unique_ptr<MasterScore> layOutTieInBottomStaff(size_t nstaves, MeasureNumberPlacement placementMode)
+{
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
+    for (size_t i = 0; i < nstaves; ++i) {
+        Part* part = new Part(score.get());
+        score->appendPart(part);
+        score->appendStaff(Factory::createStaff(part));
+    }
+    score->style().set(Sid::measureNumberInterval, 1);
+    score->style().set(Sid::measureNumberSystem, false);
+    score->style().set(Sid::measureNumberPlacementMode, placementMode);
+    score->style().set(Sid::measureNumberHPlacement, AlignH::HCENTER);
+    score->style().set(Sid::measureNumberPosAbove, PointF(0.0, -2.0));
+    score->style().set(Sid::measureNumberAvoidance, MeasureNumberAvoidance::MASK_SPANNERS);
+    score->appendMeasures(2);
+
+    const track_idx_t bottomTrack = staff2track(nstaves - 1);
+    const int pitch = 81; // A5
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->setNoteRest(m1->first(SegmentType::ChordRest), bottomTrack, NoteVal(pitch), Fraction(1, 1));
+    score->setNoteRest(m2->first(SegmentType::ChordRest), bottomTrack, NoteVal(pitch), Fraction(1, 1));
+    score->endCmd();
+    score->select(m1->findChord(m1->tick(), bottomTrack)->upNote());
+    EditTie::cmdToggleTie(score.get());
+    if (!m1->findChord(m1->tick(), bottomTrack)->upNote()->tieFor()) {
+        ADD_FAILURE() << "tie not added";
+        return nullptr;
+    }
+    score->doLayout();
+    return score;
+}
+
+static bool bottomStaffTieIsMasked(const MasterScore* score)
+{
+    const Measure* m1 = score->firstMeasure();
+    const Tie* tie = m1->findChord(m1->tick(), staff2track(score->nstaves() - 1))->upNote()->tieFor();
+    if (!tie || !tie->frontSegment()) {
+        ADD_FAILURE() << "no tie segment";
+        return false;
+    }
+    return !tie->frontSegment()->ldata()->mask().empty();
+}
+
+static void hidePart(MasterScore* score, size_t partIdx)
+{
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    EditPart::setPartVisible(score, score->parts().at(partIdx), false);
+    score->endCmd();
+    score->doLayout();
+}
+
+/**
+ *  When masking slurs and ties, a tie is masked around the measure number drawn over its staff,
+ *  even when the number belongs to a hidden staff above
+ */
+TEST_F(Engraving_MeasureTests, measureNumberMasksTieBelowHiddenStaff)
+{
+    // [GIVEN] Two instruments with measure numbers above the system, and a tie in the lower one
+    std::unique_ptr<MasterScore> score = layOutTieInBottomStaff(2, MeasureNumberPlacement::ABOVE_SYSTEM);
+    ASSERT_TRUE(score);
+    EXPECT_FALSE(bottomStaffTieIsMasked(score.get()));
+
+    // [WHEN] The upper instrument is hidden
+    hidePart(score.get(), 0);
+
+    // [THEN] The number is drawn over the lower instrument, and the tie is masked around it
+    EXPECT_TRUE(bottomStaffTieIsMasked(score.get()));
+
+    // [GIVEN] Three instruments with measure numbers at system marking positions, above the top and middle staves,
+    // and a tie in the bottom one
+    score = layOutTieInBottomStaff(3, MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES);
+    ASSERT_TRUE(score);
+    Staff* middleStaff = score->staff(1);
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    EditPart::addSystemObjects(score.get(), { middleStaff });
+    middleStaff->undoSetShowMeasureNumbers(true);
+    score->endCmd();
+    score->doLayout();
+    ASSERT_TRUE(score->firstMeasure()->nextMeasure()->measureNumber(1));
+    EXPECT_FALSE(bottomStaffTieIsMasked(score.get()));
+
+    // [WHEN] The middle instrument is hidden
+    hidePart(score.get(), 1);
+
+    // [THEN] Its number is drawn over the bottom instrument, and the tie is masked around it
+    EXPECT_TRUE(bottomStaffTieIsMasked(score.get()));
+}
