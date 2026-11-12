@@ -15,6 +15,7 @@
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <maskSlurs>0</maskSlurs>
       <maskTies>0</maskTies>
+      <measureNumberAvoidance>move-clear</measureNumberAvoidance>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <pageNumberMusicalSymbolSize>9</pageNumberMusicalSymbolSize>
