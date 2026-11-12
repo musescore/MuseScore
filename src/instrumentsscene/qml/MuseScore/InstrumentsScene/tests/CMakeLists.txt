@@ -21,13 +21,21 @@
 set(MODULE_TEST instrumentsscene_qml_tests)
 
 set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/excerptnotationmock.h
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/masternotationmock.h
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationelementsmock.h
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationinteractionmock.h
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationmock.h
     ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationpartsmock.h
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationselectionmock.h
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationstylemock.h
+    ${PROJECT_SOURCE_DIR}/src/notation/tests/mocks/notationundostackmock.h
     ${PROJECT_SOURCE_DIR}/src/notationscene/tests/mocks/selectinstrumentsscenariomock.h
+    ${PROJECT_SOURCE_DIR}/src/project/tests/mocks/projectsessionmock.h
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/roottreeitem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parttreeitem_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layoutpaneltreemodel_tests.cpp
 )
 
 set(MODULE_TEST_LINK
