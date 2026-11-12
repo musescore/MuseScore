@@ -192,6 +192,7 @@ private:
                                                              const SystemObjectGroups& systemObjects);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
 
+    void applyToScore(AbstractLayoutPanelTreeItem* item);
     void updateSystemObjectLayers();
 
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;

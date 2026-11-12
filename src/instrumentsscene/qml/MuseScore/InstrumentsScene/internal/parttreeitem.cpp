@@ -180,7 +180,7 @@ void PartTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
     }
 }
 
-void PartTreeItem::applyToScore()
+PartTreeItem::ApplyResult PartTreeItem::applyToScore()
 {
     IDList staffIds;
     for (const AbstractLayoutPanelTreeItem* child : childItems()) {
@@ -190,6 +190,8 @@ void PartTreeItem::applyToScore()
     }
 
     notation()->parts()->reorderStaves(staffIds);
+
+    return ApplyResult::Applied;
 }
 
 void PartTreeItem::removeChildren(int row, int count, bool deleteChild)

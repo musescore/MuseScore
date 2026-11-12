@@ -674,10 +674,11 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, false /*updateNotation*/);
     endMoveRows();
 
     if (!m_dragInProgress) {
+        applyToScore(sourceParentItem);
         updateSystemObjectLayers();
     }
 
@@ -696,7 +697,7 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(true);
 
     if (m_dragSourceParentItem) {
-        m_dragSourceParentItem->applyToScore();
+        applyToScore(m_dragSourceParentItem);
     }
 
     m_dragSourceParentItem = nullptr;
@@ -705,6 +706,14 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(false);
 
     updateSystemObjectLayers();
+}
+
+void LayoutPanelTreeModel::applyToScore(AbstractLayoutPanelTreeItem* item)
+{
+    // Skipped markings moves leave their rows wrong until rebuilt from the score
+    if (item->applyToScore() == AbstractLayoutPanelTreeItem::ApplyResult::AppliedPartly) {
+        m_shouldUpdateSystemObjectLayers = true;
+    }
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)

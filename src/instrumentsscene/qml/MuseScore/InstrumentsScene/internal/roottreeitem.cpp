@@ -22,11 +22,14 @@
 #include "roottreeitem.h"
 
 #include <algorithm>
+#include <set>
 
 #include "engraving/dom/score.h"
 
 #include "parttreeitem.h"
 #include "systemobjectslayertreeitem.h"
+
+#include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -52,7 +55,7 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
     }
 }
 
-void RootTreeItem::applyToScore()
+RootTreeItem::ApplyResult RootTreeItem::applyToScore()
 {
     IDList partIds;
     std::vector<std::pair<SystemObjectsLayerTreeItem*, const Staff*> > layerDestinations;
@@ -95,10 +98,32 @@ void RootTreeItem::applyToScore()
 
     notation()->parts()->reorderParts(partIds, moves);
 
-    // Markings that couldn't move are put back when the panel updates its markings rows
+    if (moves.empty()) {
+        return ApplyResult::Applied;
+    }
+
+    IF_ASSERT_FAILED(partBelow) {
+        return ApplyResult::AppliedPartly;
+    }
+
+    // partBelow is now the top instrument, whose first staff always has markings
+    std::set<const Staff*> expectedStaves { partBelow->staff(0) };
+    for (const auto& [layer, destination] : layerDestinations) {
+        expectedStaves.insert(destination);
+    }
+
+    const std::vector<Staff*>& scoreStaves = notation()->parts()->systemObjectStaves();
+    const bool allMoved = expectedStaves.size() == layerDestinations.size() + 1
+                          && expectedStaves == std::set<const Staff*>(scoreStaves.begin(), scoreStaves.end());
+    if (!allMoved) {
+        return ApplyResult::AppliedPartly;
+    }
+
     for (const auto& [layer, destination] : layerDestinations) {
         layer->setStaff(destination);
     }
+
+    return ApplyResult::Applied;
 }
 
 void RootTreeItem::removeChildren(int row, int count, bool deleteChild)

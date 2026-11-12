@@ -85,8 +85,14 @@ public:
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);
 
+    enum class ApplyResult {
+        NotApplied,
+        Applied,
+        AppliedPartly, // the score skipped some changes, so the panel no longer matches it
+    };
+
     //! Puts the children's order on the score to match the panel
-    virtual void applyToScore();
+    virtual ApplyResult applyToScore();
 
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 

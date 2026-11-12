@@ -146,8 +146,9 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
     AbstractLayoutPanelTreeItem::removeChildren(childToRemoveIndex, count);
 }
 
-void AbstractLayoutPanelTreeItem::applyToScore()
+AbstractLayoutPanelTreeItem::ApplyResult AbstractLayoutPanelTreeItem::applyToScore()
 {
+    return ApplyResult::NotApplied;
 }
 
 void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool deleteChild)

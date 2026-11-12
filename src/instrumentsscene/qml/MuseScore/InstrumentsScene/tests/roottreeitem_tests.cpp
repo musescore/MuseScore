@@ -44,6 +44,7 @@ using namespace mu::engraving;
 using namespace muse;
 
 using Moves = std::vector<INotationParts::SystemObjectsMove>;
+using ApplyResult = AbstractLayoutPanelTreeItem::ApplyResult;
 
 namespace mu::instrumentsscene {
 class InstrumentsScene_RootTreeItemTests : public ::testing::Test
@@ -72,6 +73,8 @@ protected:
         ON_CALL(*m_parts, staff(_)).WillByDefault(Invoke([this](const ID& staffId) {
             return m_score->staffById(staffId);
         }));
+
+        ON_CALL(*m_parts, systemObjectStaves()).WillByDefault(ReturnRef(m_systemObjectStaves));
 
         ON_CALL(*m_parts, partList()).WillByDefault(Invoke([this]() {
             const std::vector<const Part*> parts(m_score->parts().begin(), m_score->parts().end());
@@ -117,9 +120,11 @@ protected:
     {
         m_root = new RootTreeItem(m_masterNotation, m_notation);
 
+        m_systemObjectStaves = m_score->systemObjectStavesWithTopStaff();
+
         std::vector<Staff*> systemObjectStaves;
         if (withSystemObjects) {
-            systemObjectStaves = m_score->systemObjectStavesWithTopStaff();
+            systemObjectStaves = m_systemObjectStaves;
         }
 
         for (Part* part : m_score->parts()) {
@@ -144,19 +149,21 @@ protected:
     }
 
     //! Same as the up/down buttons: LayoutPanelTreeModel::moveRows()
-    void moveRows(int row, int count, int toRow)
+    ApplyResult moveRows(int row, int count, int toRow)
     {
         const int destinationRow = row + count - 1 > toRow ? toRow : toRow + 1;
-        m_root->moveChildren(row, count, m_root, destinationRow, true);
+        m_root->moveChildren(row, count, m_root, destinationRow, false);
+
+        return m_root->applyToScore();
     }
 
-    void moveRow(int row, int toRow)
+    ApplyResult moveRow(int row, int toRow)
     {
-        moveRows(row, 1, toRow);
+        return moveRows(row, 1, toRow);
     }
 
     //! Same as LayoutPanelTreeModel during a drag: moveRows() for each one-row step, endActiveDrag() on drop
-    void dragRow(int row, int toRow)
+    ApplyResult dragRow(int row, int toRow)
     {
         const int step = toRow > row ? 1 : -1;
         for (int r = row; r != toRow; r += step) {
@@ -164,7 +171,15 @@ protected:
             m_root->moveChildren(r, 1, m_root, destinationRow, false);
         }
 
-        m_root->applyToScore();
+        return m_root->applyToScore();
+    }
+
+    //! The score's markings staves once reorderParts() has moved them
+    auto markingsMovedTo(const std::vector<Staff*>& staves)
+    {
+        return InvokeWithoutArgs([this, staves]() {
+            m_systemObjectStaves = staves;
+        });
     }
 
     //! E.g. "[A:0] A B [C:0] C": instrument titles, and "[instrument:staff index]" for system markings rows
@@ -186,6 +201,7 @@ protected:
     MasterScore* m_score = nullptr;
     RootTreeItem* m_root = nullptr;
     std::shared_ptr<NotationPartsMock> m_parts;
+    std::vector<Staff*> m_systemObjectStaves;
 
 private:
     void appendSystemObjectsRow(Staff* staff)
@@ -251,7 +267,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastMarkings)
 
     // [THEN] The instruments keep their order, and the markings move onto B
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }));
+                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), b->staff(0) }));
 
     // [WHEN] B is moved down past the markings row above C
     moveRow(2, 3);
@@ -272,7 +289,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUp)
 
     // [THEN] The markings move onto B
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }));
+                                       Moves { { c->staff(0)->id(), b->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), b->staff(0) }));
 
     // [WHEN] The markings row above C is moved up past B
     moveRow(3, 2);
@@ -293,7 +311,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsToEnd)
 
     // [THEN] The markings move below the bottom staff
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }));
+                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), c->staff(1) }));
 
     // [WHEN] The markings row above C is moved to the end
     moveRow(3, 4);
@@ -314,7 +333,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsUpFromBottom)
 
     // [THEN] The markings move onto C's top staff, above it
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }));
+                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), c->staff(0) }));
 
     // [WHEN] The markings row below C is moved up past C
     moveRow(4, 3);
@@ -358,7 +378,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_LastInstrumentWithTwoSta
     // [THEN] The markings move below the bottom staff
     EXPECT_CALL(*m_parts, removeSystemObjects(_)).Times(0);
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }));
+                                       Moves { { c->staff(0)->id(), c->staff(1)->id(), true } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), c->staff(1) }));
 
     // [WHEN] C is moved up past its markings row
     moveRow(4, 3);
@@ -459,7 +480,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsDown)
 
     // [THEN] The markings move onto C
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { b->staff(0)->id(), c->staff(0)->id() } }));
+                                       Moves { { b->staff(0)->id(), c->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), c->staff(0) }));
 
     // [WHEN] The markings row above B is moved down past B
     moveRow(2, 3);
@@ -479,16 +501,39 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoMarkings)
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A [B:0] B [C:0] C
 
-    // [THEN] Both markings rows ask for C's staff
+    // [THEN] Both markings rows ask for C's staff, and the score keeps the markings where they are
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
                                        Moves { { b->staff(0)->id(), c->staff(0)->id() }, { c->staff(0)->id(), c->staff(0)->id() } }));
 
     // [WHEN] The markings row above B is moved down past B
-    moveRow(2, 3);
+    const ApplyResult result = moveRow(2, 3);
 
-    // [THEN] Both markings rows are above C, and show C's staff
+    // [THEN] The moved markings row keeps B's staff until the panel rebuilds its markings rows
+    EXPECT_EQ(result, ApplyResult::AppliedPartly);
     EXPECT_EQ(m_root->childCount(), 6);
-    EXPECT_EQ(childNames(), "[A:0] A B [C:0] [C:0] C");
+    EXPECT_EQ(childNames(), "[A:0] A B [B:0] [C:0] C");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_MarkingsDraggedBelowTopMarkings)
+{
+    // [GIVEN] Three instruments, system markings on the top staff and below the bottom staff
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addSystemObjects(c->staff(0), true);
+    buildTree(); // [A:0] A B C [C:0]
+
+    // [THEN] The markings row asks for A's staff, which already has markings, so the score keeps them below C
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), a->staff(0)->id() } }));
+
+    // [WHEN] The markings row below C is dragged up right below the top markings row
+    const ApplyResult result = dragRow(4, 1);
+
+    // [THEN] The markings row keeps C's staff until the panel rebuilds its markings rows
+    EXPECT_EQ(result, ApplyResult::AppliedPartly);
+    EXPECT_EQ(m_root->childCount(), 5);
+    EXPECT_EQ(childNames(), "[A:0] [C:0] A B C");
 }
 
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastBottomMarkings)
@@ -502,7 +547,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastBottomMark
 
     // [THEN] The markings move onto C's top staff, above it
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
-                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }));
+                                       Moves { { c->staff(1)->id(), c->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), c->staff(0) }));
 
     // [WHEN] C is moved down past the markings row below it
     moveRow(3, 4);
@@ -524,7 +570,8 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoSharedPart)
 
     // [THEN] The markings move onto S
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), s->id(), c->id() },
-                                       Moves { { c->staff(0)->id(), s->staff(0)->id() } }));
+                                       Moves { { c->staff(0)->id(), s->staff(0)->id() } }))
+    .WillOnce(markingsMovedTo({ a->staff(0), s->staff(0) }));
 
     // [WHEN] The markings row above C is moved up past S
     moveRow(3, 2);

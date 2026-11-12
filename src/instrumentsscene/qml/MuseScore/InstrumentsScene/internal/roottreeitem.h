@@ -38,7 +38,7 @@ public:
     void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
 
-    void applyToScore() override;
+    ApplyResult applyToScore() override;
 
     void removeChildren(int row, int count, bool deleteChild) override;
 };
