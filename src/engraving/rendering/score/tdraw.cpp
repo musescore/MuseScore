@@ -1134,15 +1134,15 @@ void TDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOption
         // Full box
         painter->drawRect(r);
     } else if (ldata->closedLeft) {
-        // [  shape (first system)
+        // [  (first system)
         const PointF pts[] = { r.topRight(), r.topLeft(), r.bottomLeft(), r.bottomRight() };
         painter->drawPolyline(pts, 4);
     } else if (ldata->closedRight) {
-        //  ] shape (last system)
+        //  ] (last system)
         const PointF pts[] = { r.topLeft(), r.topRight(), r.bottomRight(), r.bottomLeft() };
         painter->drawPolyline(pts, 4);
     } else {
-        //  = middle systems
+        //  = (middle systems)
         painter->drawLine(r.topLeft(), r.topRight());
         painter->drawLine(r.bottomLeft(), r.bottomRight());
     }
