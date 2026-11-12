@@ -221,6 +221,125 @@
             </Chord>
           </voice>
         </Measure>
+      <Measure>
+        <startRepeat/>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Vlt8MeasAAA_Vlt8MeasAAA</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tempo>
+            <tempo>1</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 60</text>
+            </Tempo>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Vlt9MeasAAA_Vlt9MeasAAA</eid>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tempo>
+            <tempo>1.5</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 90</text>
+            </Tempo>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>section</subtype>
+          <pause>2</pause>
+          </LayoutBreak>
+        <voice>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Tempo>
+            <tempo>2.5</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 150</text>
+            </Tempo>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <pause>1</pause>
+            </Breath>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <play>0</play>
+            </Fermata>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
       </Staff>
     <SpannerMap>
       <GradualTempoChange>
@@ -244,6 +363,29 @@
           <offset x="0" y="-2"/>
           </Segment>
         </GradualTempoChange>
+      <GradualTempoChange>
+        <tempoChangeType>ritardando</tempoChangeType>
+        <tempoChangeFactor>0.5</tempoChangeFactor>
+        <track2>0</track2>
+        <startTick>9/1</startTick>
+        <ticks>1/1</ticks>
+        <track>0</track>
+        </GradualTempoChange>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>1.</beginText>
+        <startElement>Vlt8MeasAAA_Vlt8MeasAAA</startElement>
+        <endElement>Vlt8MeasAAA_Vlt8MeasAAA</endElement>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <Volta>
+        <beginText>2.</beginText>
+        <startElement>Vlt9MeasAAA_Vlt9MeasAAA</startElement>
+        <endElement>Vlt9MeasAAA_Vlt9MeasAAA</endElement>
+        <track>0</track>
+        <endings>2</endings>
+        </Volta>
       </SpannerMap>
     </Score>
   </museScore>

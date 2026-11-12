@@ -269,6 +269,193 @@ TEST_F(Engraving_TempoTimelineTests, PAUSES)
     EXPECT_EQ(timeline.utime2utick(3.0), 1440); // resumed: 0.5s @ 120 BPM = 480 ticks past 960
 }
 
+// A curve whose first marking is after tick 0 plays at the default tempo until that marking
+TEST_F(Engraving_TempoTimelineTests, CURVE_STARTING_AFTER_TICK_ZERO)
+{
+    // [GIVEN] A single 60 BPM marking at tick 1920
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 1920, flatTempo(60.0) } }, {});
+
+    // [THEN] A default-tempo point is added at tick 0
+    const std::vector<TempoTimePoint>& points = timeline.points();
+    ASSERT_EQ(points.size(), 2);
+    EXPECT_EQ(points[0].utick, 0);
+    EXPECT_NEAR(points[0].bps, Constants::DEFAULT_TEMPO.val, TEMPO_ERROR);
+    EXPECT_EQ(points[1].utick, 1920);
+
+    // [AND] Time runs at 120 BPM up to the marking, then at 60 BPM
+    EXPECT_NEAR(timeline.tempo(960).val, Constants::DEFAULT_TEMPO.val, TEMPO_ERROR);
+    EXPECT_NEAR(timeline.utick2utime(1920), 2.0, TIME_ERROR); // 1920 ticks @ 120 BPM
+    EXPECT_NEAR(timeline.utick2utime(2400), 3.0, TIME_ERROR); // + 480 ticks @ 60 BPM
+}
+
+// A ramp longer than 8 beats is resampled once per beat
+TEST_F(Engraving_TempoTimelineTests, LONG_RAMP_RESAMPLED_PER_BEAT)
+{
+    // [GIVEN] A ramp from 120 to 60 BPM over 7680 ticks (16 beats)
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 0, flatTempo(120.0) }, { 7680, rampArrival(60.0, 60.0) } }, {});
+
+    // [THEN] 16 steps: the 2 authored points + 15 resampled ones, one every 480 ticks, 3.75 BPM apart
+    const std::vector<TempoTimePoint>& points = timeline.points();
+    ASSERT_EQ(points.size(), 17);
+
+    for (int s = 0; s <= 16; ++s) {
+        EXPECT_EQ(points[s].utick, s * 480) << "s=" << s;
+        EXPECT_NEAR(points[s].bps, BeatsPerSecond::fromBPM(120.0 - 3.75 * s).val, TEMPO_ERROR) << "s=" << s;
+    }
+}
+
+// An eased ramp follows its curve instead of a straight line
+TEST_F(Engraving_TempoTimelineTests, EASED_RAMP)
+{
+    // [GIVEN] A ramp from 120 to 90 BPM over 3840 ticks, eased through 25% of the change at its midpoint
+    const AutomationEase easing { muse::real_t(0.5), muse::real_t(0.25) };
+
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 0, flatTempo(120.0) }, { 3840, rampArrival(90.0, 90.0, easing) } }, {});
+
+    // [THEN] Still 8 steps, but the tempo changes slowly at first (linear would give 112.5 / 105 / 97.5 BPM)
+    ASSERT_EQ(timeline.points().size(), 9);
+
+    const std::map<int, double> expectedBpm {
+        { 960, 118.125 },  // 1/4 of the way
+        { 1920, 112.5 },   // midpoint: 120 - 25% of 30 BPM
+        { 2880, 103.125 }, // 3/4 of the way
+        { 3840, 90.0 },
+    };
+
+    for (const auto& [utick, bpm] : expectedBpm) {
+        const std::optional<double> bps = bpsAtUTick(timeline, utick);
+        ASSERT_TRUE(bps.has_value()) << "utick=" << utick;
+        EXPECT_NEAR(*bps, BeatsPerSecond::fromBPM(bpm).val, TEMPO_ERROR) << "utick=" << utick;
+    }
+}
+
+// A ramp starting where another one arrives starts from that arrival
+TEST_F(Engraving_TempoTimelineTests, BACK_TO_BACK_RAMPS)
+{
+    // [GIVEN] A ramp from 120 to 60 BPM (ticks 0-1920), then straight away a ramp back to 120 BPM (ticks 1920-3840)
+    const AutomationCurve curve {
+        { 0, flatTempo(120.0) },
+        { 1920, rampArrival(60.0, 60.0) },   // 1st ramp's arrival = 2nd ramp's start
+        { 3840, rampArrival(120.0, 120.0) },
+    };
+
+    TempoTimeline timeline;
+    timeline.rebuild(curve, {});
+
+    // [THEN] Each ramp has 8 steps, 240 ticks and 7.5 BPM apart: down to 60 BPM, then up from 60 BPM
+    const std::vector<TempoTimePoint>& points = timeline.points();
+    ASSERT_EQ(points.size(), 17);
+
+    for (int s = 0; s <= 8; ++s) {
+        EXPECT_EQ(points[s].utick, s * 240) << "s=" << s;
+        EXPECT_NEAR(points[s].bps, BeatsPerSecond::fromBPM(120.0 - 7.5 * s).val, TEMPO_ERROR) << "s=" << s;
+
+        EXPECT_EQ(points[8 + s].utick, 1920 + s * 240) << "s=" << s;
+        EXPECT_NEAR(points[8 + s].bps, BeatsPerSecond::fromBPM(60.0 + 7.5 * s).val, TEMPO_ERROR) << "s=" << s;
+    }
+}
+
+// A pause on the tick of a tempo change holds there, then continues at the new tempo
+TEST_F(Engraving_TempoTimelineTests, PAUSE_ON_TEMPO_CHANGE)
+{
+    // [GIVEN] 120 BPM, then 60 BPM from tick 960, with a 1s pause at tick 960
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 0, flatTempo(120.0) }, { 960, flatTempo(60.0) } }, PausesMap { { 960, 1.0 } });
+
+    // [THEN] The tempo point comes first, then the pause point at the same tick, which takes the new tempo
+    const std::vector<TempoTimePoint>& points = timeline.points();
+    ASSERT_EQ(points.size(), 3);
+    EXPECT_EQ(points[1].utick, 960);
+    EXPECT_NEAR(points[1].time, 1.0, TIME_ERROR);
+    EXPECT_NEAR(points[1].pause, 0.0, TIME_ERROR);
+    EXPECT_EQ(points[2].utick, 960);
+    EXPECT_NEAR(points[2].time, 2.0, TIME_ERROR);
+    EXPECT_NEAR(points[2].pause, 1.0, TIME_ERROR);
+    EXPECT_NEAR(points[2].bps, BeatsPerSecond::fromBPM(60.0).val, TEMPO_ERROR);
+
+    // [AND] utick2utime includes the pause at its tick, then runs at 60 BPM
+    EXPECT_NEAR(timeline.utick2utime(960), 2.0, TIME_ERROR);
+    EXPECT_NEAR(timeline.utick2utime(1440), 3.0, TIME_ERROR);
+    EXPECT_NEAR(timeline.tempo(960).val, BeatsPerSecond::fromBPM(60.0).val, TEMPO_ERROR);
+
+    // [AND] utime2utick holds at 960 during the pause, then runs at 60 BPM
+    EXPECT_EQ(timeline.utime2utick(0.5), 480);
+    EXPECT_EQ(timeline.utime2utick(1.5), 960);
+    EXPECT_EQ(timeline.utime2utick(3.0), 1440);
+}
+
+// Playback speed scales the time between ticks, but not pauses or the tempo itself
+TEST_F(Engraving_TempoTimelineTests, TEMPO_MULTIPLIER)
+{
+    // [GIVEN] 120 BPM, then 60 BPM from tick 1920, with a 1s pause at tick 960
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 0, flatTempo(120.0) }, { 1920, flatTempo(60.0) } }, PausesMap { { 960, 1.0 } });
+
+    // [WHEN] Playback is set to double speed
+    timeline.setTempoMultiplier(BeatsPerSecond(2.0));
+
+    // [THEN] Tempo time is halved, the 1s pause isn't: at normal speed these are 2s, 3s and 5s
+    EXPECT_NEAR(timeline.utick2utime(960), 1.5, TIME_ERROR); // 0.5s to reach 960 + the 1s pause
+    EXPECT_NEAR(timeline.utick2utime(1920), 2.0, TIME_ERROR);
+    EXPECT_NEAR(timeline.utick2utime(2880), 3.0, TIME_ERROR);
+
+    // [AND] utime2utick maps the times back, holding at 960 during the whole pause (0.5s-1.5s)
+    EXPECT_EQ(timeline.utime2utick(0.25), 480);
+    EXPECT_EQ(timeline.utime2utick(1.2), 960);
+    EXPECT_EQ(timeline.utime2utick(3.0), 2880);
+
+    // [AND] The tempo itself is unchanged
+    EXPECT_NEAR(timeline.tempo(2880).val, BeatsPerSecond::fromBPM(60.0).val, TEMPO_ERROR);
+    EXPECT_NEAR(timeline.tempoMultiplier().val, 2.0, TEMPO_ERROR);
+}
+
+// A zero tempo is clamped to the minimum, so time stays finite
+TEST_F(Engraving_TempoTimelineTests, ZERO_TEMPO_CLAMPED)
+{
+    // [GIVEN] A tempo point at 0 BPM, then 120 BPM from tick 480
+    TempoTimeline timeline;
+    timeline.rebuild(AutomationCurve { { 0, flatTempo(0.0) }, { 480, flatTempo(120.0) } }, {});
+
+    // [THEN] It plays at the minimum tempo (5 BPM): one beat takes 12s
+    EXPECT_NEAR(timeline.tempo(0).val, Constants::MIN_TEMPO.val, TEMPO_ERROR);
+    EXPECT_NEAR(timeline.utick2utime(480), 12.0, TIME_ERROR);
+}
+
+// Queries give the same results in any order, regardless of the cached lookup position
+TEST_F(Engraving_TempoTimelineTests, QUERIES_IN_ANY_ORDER)
+{
+    // [GIVEN] 100 BPM, 140 BPM from tick 1920, 70 BPM from tick 3840, and a 0.5s pause at tick 2880
+    const AutomationCurve curve {
+        { 0, flatTempo(100.0) },
+        { 1920, flatTempo(140.0) },
+        { 3840, flatTempo(70.0) },
+    };
+    const PausesMap pauses { { 2880, 0.5 } };
+
+    TempoTimeline timeline;
+    timeline.rebuild(curve, pauses);
+
+    // [WHEN] Querying far ahead, back to the start, then in between
+    for (int utick : { 100000, 0, 2880, 960, 5000, 1920, 2879, 0 }) {
+        // [THEN] Each result matches a timeline queried for the first time
+        TempoTimeline fresh;
+        fresh.rebuild(curve, pauses);
+
+        EXPECT_NEAR(timeline.utick2utime(utick), fresh.utick2utime(utick), TIME_ERROR) << "utick=" << utick;
+        EXPECT_NEAR(timeline.tempo(utick).val, fresh.tempo(utick).val, TEMPO_ERROR) << "utick=" << utick;
+    }
+
+    for (double time : { 60.0, 0.0, 3.2, 1.0, 5.0, 2.0, 3.0, 0.0 }) {
+        TempoTimeline fresh;
+        fresh.rebuild(curve, pauses);
+
+        EXPECT_EQ(timeline.utime2utick(time), fresh.utime2utick(time)) << "time=" << time;
+    }
+}
+
 /**
  * @brief Engraving_TempoTimelineTests_TEMPO_NORMALIZE_DENORMALIZE_ROUND_TRIP
  * @details normalizeTempo/denormalizeTempo are used to bring every Tempo

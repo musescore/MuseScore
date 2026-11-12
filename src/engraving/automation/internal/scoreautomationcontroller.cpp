@@ -63,13 +63,20 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
     return muse::RealRound(bps.val, Constants::TEMPO_PRECISION);
 }
 
-static AutomationPoint makeTempoPoint(real_t normalizedBps, std::optional<EID> itemId)
+static AutomationPoint makeGeneratedPoint(real_t outValue, std::optional<EID> itemId,
+                                          AutomationPoint::InValue inValue = AutomationPoint::ArrivalFromPrevious {})
 {
     AutomationPoint point;
-    point.value.outValue = std::clamp(normalizedBps, MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO);
+    point.value.inValue = inValue;
+    point.value.outValue = outValue;
     point.itemId = itemId;
     point.generated = true;
     return point;
+}
+
+static AutomationPoint makeTempoPoint(real_t normalizedBps, std::optional<EID> itemId)
+{
+    return makeGeneratedPoint(std::clamp(normalizedBps, MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO), itemId);
 }
 
 //! TODO: map EXPONENTIAL/EASE_IN/EASE_OUT/EASE_IN_OUT to a real ease shape; every method is linear for now
@@ -201,9 +208,42 @@ static std::optional<real_t> endHairpinValue(const Hairpin* hairpin)
     return dynamicValue(type, true);
 }
 
+static int dynamicEndTick(const Dynamic* dynamic, const BeatsPerSecond& tempo)
+{
+    const int tick = dynamic->tick().ticks();
+
+    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, dynamic->dynamicType())) {
+        const Segment* nextSeg = dynamic->segment()->next();
+        return nextSeg ? nextSeg->tick().ticks() : tick;
+    }
+
+    return tick + dynamic->velocityChangeLength(tempo).ticks();
+}
+
 static int dynamicPriority(const EngravingItem* item)
 {
     return static_cast<int>(item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>());
+}
+
+static EID eidOrAssignNew(const EngravingItem* item)
+{
+    const EID eid = item->eid();
+    return eid.isValid() ? eid : item->assignNewEID();
+}
+
+static double longestBreathPause(const Segment& segment)
+{
+    if (!segment.isBreathType()) {
+        return 0.0;
+    }
+
+    double length = 0.0;
+    for (const EngravingItem* e : segment.elist()) {
+        if (e && e->isBreath()) {
+            length = std::max(length, toBreath(e)->pause());
+        }
+    }
+    return length;
 }
 
 static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
@@ -239,6 +279,7 @@ static real_t currentTempoAt(const AutomationCurve& tempoCurve, utick_t tick)
 struct ChangeRelevance {
     bool dynamics = false;
     bool tempo = false;
+    bool voiceAssignment = false;
 };
 
 static ChangeRelevance classifyChanges(const ScoreChanges& changes)
@@ -277,7 +318,8 @@ static ChangeRelevance classifyChanges(const ScoreChanges& changes)
 
     // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
     // so the old points on staves outside the new assignment must also be cleared
-    result.dynamics |= muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+    result.voiceAssignment = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+    result.dynamics |= result.voiceAssignment;
 
     static const std::unordered_set<Pid> REPEAT_PROPERTIES {
         Pid::REPEAT_START,
@@ -315,6 +357,12 @@ void ScoreAutomationController::setTempoMultiplier(const BeatsPerSecond& bps)
 {
     m_tempoTimeline.setTempoMultiplier(bps);
     m_flattenedTempoTimeline.setTempoMultiplier(bps);
+
+    // fp/pf lengths depend on tempo
+    if (m_score && m_automationData && m_hasTempoDependentDynamics) {
+        const UpdateRequest request { 0, muse::nidx, muse::nidx, /*includeTempo*/ false, /*includeDynamics*/ true };
+        update(request, m_automationData->curves());
+    }
 }
 
 void ScoreAutomationController::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
@@ -416,17 +464,15 @@ void ScoreAutomationController::update(const ScoreChanges& changes)
 
     UpdateRequest request;
     request.includeTempo = relevance.tempo;
-    request.includeDynamics = relevance.dynamics;
+    request.includeDynamics = relevance.dynamics || (relevance.tempo && m_hasTempoDependentDynamics); // fp/pf lengths depend on tempo
 
     // When tempo is relevant, the whole score must be reparsed in one full pass,
     // so tickFrom/staffIdxFrom/staffIdxTo are left at their defaults (0/nidx/nidx)
     if (!relevance.tempo) {
         request.tickFrom = std::max(changes.tickFrom, 0);
 
-        // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
-        // so the old points on staves outside the new assignment must also be cleared
-        const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
-        if (!voiceAssignmentChanged) {
+        // Old points on staves outside the new voice assignment must also be cleared
+        if (!relevance.voiceAssignment) {
             request.staffIdxFrom = changes.staffIdxFrom;
             request.staffIdxTo = changes.staffIdxTo;
         }
@@ -463,7 +509,7 @@ void ScoreAutomationController::editPoints(const AutomationCurveKey& key, Automa
             }
         }
 
-        fullRebuild(curves, /*includeTempo*/ true, /*includeDynamics*/ false);
+        fullRebuild(curves, /*includeTempo*/ true, /*includeDynamics*/ m_hasTempoDependentDynamics);
         return;
     }
 
@@ -485,8 +531,13 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         return;
     }
 
-    const auto repeatFromIt = std::find_if(repeatList.cbegin(), repeatList.cend(),
-                                           [tickFrom = request.tickFrom](const RepeatSegment* seg) {
+    const StaffRange range(m_score, request.staffIdxFrom, request.staffIdxTo);
+
+    const int tickFrom = request.includeDynamics && request.tickFrom > 0
+                         ? dynamicsRebuildStart(request.tickFrom, range)
+                         : request.tickFrom;
+
+    const auto repeatFromIt = std::find_if(repeatList.cbegin(), repeatList.cend(), [tickFrom](const RepeatSegment* seg) {
         return seg->endTick() > tickFrom;
     });
 
@@ -494,15 +545,15 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         return;
     }
 
-    const StaffRange range(m_score, request.staffIdxFrom, request.staffIdxTo);
     const RepeatSegment* firstSeg = *repeatFromIt;
 
     UpdateContext ctx;
     ctx.request = request;
+    ctx.request.tickFrom = tickFrom;
     ctx.tempoMultiplier = m_tempoTimeline.tempoMultiplier();
 
     // The first utick the rebuild will regenerate; everything before it is kept as is
-    ctx.clearFromUTick = std::max(firstSeg->utick, request.tickFrom + (firstSeg->utick - firstSeg->tick));
+    ctx.clearFromUTick = std::max(firstSeg->utick, tickFrom + (firstSeg->utick - firstSeg->tick));
 
     // Copy only the curves this update can affect, dropping the generated points that the rebuild
     // below re-creates; all other curves stay untouched
@@ -536,7 +587,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
 
         // tickFrom limits only the first affected repeat segment: later segments may replay
         // measures from before tickFrom, and all their points were cleared, so rebuild them in full
-        const int measureFrom = (it == repeatFromIt) ? std::max(seg->tick, request.tickFrom) : seg->tick;
+        const int measureFrom = (it == repeatFromIt) ? std::max(seg->tick, tickFrom) : seg->tick;
 
         const std::vector<const Measure*>& segMeasures = seg->measureList();
         for (size_t mi = 0; mi < segMeasures.size(); ++mi) {
@@ -587,19 +638,26 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
     // Step 3: resolve pending tempo resets now that noRepeatTempoCurve is fully built
     resolvePendingTempoResets(ctx);
 
-    // Step 4: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
-    fillVoiceCurvesFromBase(ctx);
-
-    // Step 5: measure repeats
+    // Step 4: measure repeats
     addMeasureRepeatPoints(ctx);
 
-    // Step 6: Mirror directly-authored points to repeats
+    // Step 5: Mirror directly-authored points to repeats
     mirrorAuthoredPointsToRepeats(ctx);
+
+    // Step 6: fill each voice curve with any points from the base (all-voice) curve it doesn't already have,
+    // after Steps 4-5 so the base curve's repeat copies are included
+    fillVoiceCurvesFromBase(ctx);
 
     if (request.includeTempo) {
         // TempoTimeline falls back to the default tempo when the curve has no points
         m_tempoTimeline.rebuild(*ctx.tempoCurve, ctx.pauses);
         m_flattenedTempoTimeline.rebuild(ctx.noRepeatTempoCurve, ctx.noRepeatPauses);
+    }
+
+    if (request.includeDynamics) {
+        // A partial rebuild can't tell whether the last fp/pf was removed
+        const bool isFullRebuild = tickFrom == 0 && range.isFull;
+        m_hasTempoDependentDynamics = ctx.hasTempoDependentDynamics || (!isFullRebuild && m_hasTempoDependentDynamics);
     }
 
     // Passed through as-is: replaceCurves() clears a key when given an empty curve for it
@@ -644,10 +702,13 @@ void ScoreAutomationController::mirrorAuthoredPointsToRepeats(UpdateContext& ctx
             continue;
         }
 
+        const size_t authoredCount = edits.size();
+
         //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
         mirrorEditsToRepeats(key, edits);
 
-        for (const AutomationPointEdit& edit : edits) {
+        for (size_t i = authoredCount; i < edits.size(); ++i) {
+            const AutomationPointEdit& edit = edits[i];
             const auto* setPoint = std::get_if<AutomationPointEdit::SetPoint>(&edit.change);
             IF_ASSERT_FAILED(setPoint) {
                 continue;
@@ -656,6 +717,32 @@ void ScoreAutomationController::mirrorAuthoredPointsToRepeats(UpdateContext& ctx
             curve.insert_or_assign(edit.tick, setPoint->point);
         }
     }
+}
+
+int ScoreAutomationController::dynamicsRebuildStart(int tickFrom, const StaffRange& range) const
+{
+    // The score's max tempo overestimates compound dynamic lengths, so nothing reaching tickFrom is missed
+    const BeatsPerSecond maxTempo = m_tempoTimeline.maxTempo() * m_tempoTimeline.tempoMultiplier();
+    const int lookback = Dynamic::maxVelocityChangeLength(maxTempo).ticks();
+
+    const Measure* measure = m_score->tick2measure(Fraction::fromTicks(std::max(0, tickFrom - lookback)));
+    const Segment* segment = measure ? measure->first(RELEVANT_SEGMENT_TYPES) : nullptr;
+
+    for (; segment && segment->tick().ticks() < tickFrom; segment = segment->next1(RELEVANT_SEGMENT_TYPES)) {
+        for (const EngravingItem* annotation : segment->annotations()) {
+            if (!annotation || !annotation->isDynamic() || !range.contains(annotation->staffIdx())) {
+                continue;
+            }
+
+            const Dynamic* dynamic = toDynamic(annotation);
+            if (dynamic->playDynamic() && dynamicEndTick(dynamic, maxTempo) >= tickFrom) {
+                // An earlier dynamic may reach the new start
+                return dynamicsRebuildStart(segment->tick().ticks(), range);
+            }
+        }
+    }
+
+    return tickFrom;
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
@@ -751,6 +838,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         info.kind = singleNote;
     } else if (auto compoundIt = COMPOUND_DYNAMIC_VALUES.find(dynamicType); compoundIt != COMPOUND_DYNAMIC_VALUES.end()) {
         const BeatsPerSecond tempo = denormalizeTempo(currentTempoAt(*ctx.tempoCurve, tick)) * ctx.tempoMultiplier;
+        ctx.hasTempoDependentDynamics = true;
         info.kind = DynamicInfo::Compound { compoundIt->second.first, compoundIt->second.second,
                                             tick + dynamic->velocityChangeLength(tempo).ticks() };
     } else {
@@ -765,10 +853,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     info.priority = dynamicPriority(dynamic);
 
-    info.eid = dynamic->eid();
-    if (!info.eid.isValid()) {
-        info.eid = dynamic->assignNewEID();
-    }
+    info.eid = eidOrAssignNew(dynamic);
 
     for (const AutomationCurveKey& key : keys) {
         addDynamicPoints(info, key, ctx);
@@ -781,28 +866,18 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
         return;
     }
 
-    AutomationCurve& curve = ctx.curves[key];
-    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
+    const DynamicPointDestination dest { ctx.curves[key], ctx.dynamicPriorities[key] };
 
     if (const auto* ordinary = std::get_if<DynamicInfo::Ordinary>(&info.kind)) {
-        AutomationPoint point;
-        point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        point.value.outValue = ordinary->value;
-        point.itemId = info.eid;
-        point.generated = true;
-        addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
+        addDynamicPoint(makeGeneratedPoint(ordinary->value, info.eid), info.priority, dest, info.tick, true /*mergeSamePriority*/);
         return;
     }
 
     if (const auto* singleNote = std::get_if<DynamicInfo::SingleNote>(&info.kind)) {
         const AutomationPoint* prevPoint = singleNote->nextTick ? activePoint(ctx.curves, key, info.tick) : nullptr;
 
-        AutomationPoint point;
-        point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        point.value.outValue = singleNote->value;
-        point.itemId = info.eid;
-        point.generated = true;
-        addDynamicPoint(curve, tickPrioMap, info.tick, point, info.priority);
+        const AutomationPoint point = makeGeneratedPoint(singleNote->value, info.eid);
+        addDynamicPoint(point, info.priority, dest, info.tick, true /*mergeSamePriority*/);
 
         if (singleNote->nextTick) {
             // Recovers to whatever was active before this dynamic
@@ -810,26 +885,17 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
             const AutomationPoint::Ease preservedEase = ease(nextPoint).value_or(AutomationPoint::Ease::none());
             nextPoint.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, preservedEase };
             nextPoint.generated = true;
-            tryAddDynamicPoint(curve, tickPrioMap, *singleNote->nextTick, nextPoint, info.priority);
+            addDynamicPoint(nextPoint, info.priority, dest, *singleNote->nextTick);
         }
 
         return;
     }
 
     if (const auto* compound = std::get_if<DynamicInfo::Compound>(&info.kind)) {
-        AutomationPoint startPoint;
-        startPoint.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        startPoint.value.outValue = compound->startValue;
-        startPoint.itemId = info.eid;
-        startPoint.generated = true;
-        addDynamicPoint(curve, tickPrioMap, info.tick, startPoint, info.priority);
+        addDynamicPoint(makeGeneratedPoint(compound->startValue, info.eid), info.priority, dest, info.tick, true /*mergeSamePriority*/);
 
-        AutomationPoint endPoint;
-        endPoint.value.outValue = compound->endValue;
-        endPoint.value.inValue = AutomationPoint::ExplicitArrival { endPoint.value.outValue, AutomationPoint::Ease::none() };
-        endPoint.itemId = info.eid;
-        endPoint.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, compound->endPointTick, endPoint, info.priority);
+        const AutomationPoint::ExplicitArrival endArrival { compound->endValue, AutomationPoint::Ease::none() };
+        addDynamicPoint(makeGeneratedPoint(compound->endValue, info.eid, endArrival), info.priority, dest, compound->endPointTick);
     }
 }
 
@@ -849,7 +915,12 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
         return;
     }
 
-    const auto& intervals = spannerMap.findOverlapping(overlapStart, overlapStop);
+    // Not sorted by tick, but a ramp or hairpin may start where an earlier one ends and take its start value from it
+    SpannerMap::IntervalList intervals = spannerMap.findOverlapping(overlapStart, overlapStop);
+    std::stable_sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {
+        return a.start < b.start;
+    });
+
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
         if (!spanner->playSpanner()) {
@@ -892,6 +963,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
             // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
             const BeatsPerSecond tempo = denormalizeTempo(currentTempoAt(*ctx.tempoCurve, info.from)) * ctx.tempoMultiplier;
             info.from += startDynamic->velocityChangeLength(tempo).ticks();
+            ctx.hasTempoDependentDynamics = true;
         }
     }
 
@@ -899,10 +971,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         return;
     }
 
-    info.eid = hairpin->eid();
-    if (!info.eid.isValid()) {
-        info.eid = hairpin->assignNewEID();
-    }
+    info.eid = eidOrAssignNew(hairpin);
 
     info.priority = dynamicPriority(hairpin);
     info.isCrescendo = hairpin->isCrescendo();
@@ -916,8 +985,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
 
 void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const AutomationCurveKey& key, UpdateContext& ctx)
 {
-    AutomationCurve& curve = ctx.curves[key];
-    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
+    const DynamicPointDestination dest { ctx.curves[key], ctx.dynamicPriorities[key] };
 
     // --- Determine valueFrom
     const AutomationPoint* prevPoint = activePoint(ctx.curves, key, info.from);
@@ -926,14 +994,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
     const real_t valueFrom = info.nominalValueFrom.value_or(prevOutValue);
 
-    {
-        AutomationPoint startPoint;
-        startPoint.value.outValue = valueFrom;
-        startPoint.value.inValue = AutomationPoint::ArrivalFromPrevious {};
-        startPoint.itemId = info.eid;
-        startPoint.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, info.from, startPoint, info.priority);
-    }
+    addDynamicPoint(makeGeneratedPoint(valueFrom, info.eid), info.priority, dest, info.from);
 
     // --- Determine valueTo
     // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
@@ -946,14 +1007,14 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
                            ? info.nominalValueTo.value()
                            : valueFrom + (info.isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
-    const auto endPointIt = curve.find(info.to);
-    const bool hasPointAtEnd = endPointIt != curve.end();
+    const auto endPointIt = dest.curve.find(info.to);
+    const bool hasPointAtEnd = endPointIt != dest.curve.end();
 
     if (hasPointAtEnd) {
         // A point already exists at the end tick; encode the hairpin's arrival via inValue, but only
         // if this hairpin has at least as much priority as whoever placed that point
-        const auto tickIt = tickPrioMap.find(info.to);
-        const bool canModify = tickIt == tickPrioMap.end() || info.priority >= tickIt->second;
+        const auto tickIt = dest.priorities.find(info.to);
+        const bool canModify = tickIt == dest.priorities.end() || info.priority >= tickIt->second;
         if (canModify) {
             const AutomationPoint::Ease preservedEase = ease(endPointIt->second).value_or(AutomationPoint::Ease::none());
             endPointIt->second.value.inValue = AutomationPoint::ExplicitArrival { valueTo, preservedEase };
@@ -961,14 +1022,8 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         return;
     }
 
-    if (info.from < info.to) {
-        AutomationPoint point;
-        point.value.outValue = valueTo;
-        point.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, AutomationPoint::Ease::none() };
-        point.itemId = info.eid;
-        point.generated = true;
-        tryAddDynamicPoint(curve, tickPrioMap, info.to, point, info.priority);
-    }
+    const AutomationPoint::ExplicitArrival endArrival { valueTo, AutomationPoint::Ease::none() };
+    addDynamicPoint(makeGeneratedPoint(valueTo, info.eid, endArrival), info.priority, dest, info.to);
 }
 
 void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
@@ -986,7 +1041,13 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
             continue;
         }
 
-        curve.insert(baseIt->second.cbegin(), baseIt->second.cend());
+        // Copies are generated, so a rebuild drops them once the base point is gone
+        for (const auto& [tick, point] : baseIt->second) {
+            const auto [it, inserted] = curve.try_emplace(tick, point);
+            if (inserted) {
+                it->second.generated = true;
+            }
+        }
     }
 }
 
@@ -1114,15 +1175,7 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
 
     // Add pauses from the end of the previous measure (at measure->tick()):
     for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
-        if (!s->isBreathType()) {
-            continue;
-        }
-        double length = 0.0;
-        for (EngravingItem* e : s->elist()) {
-            if (e && e->isBreath()) {
-                length = std::max(length, toBreath(e)->pause());
-            }
-        }
+        const double length = longestBreathPause(*s);
         if (!muse::RealIsNull(length)) {
             pauses[startUtick] = length;
             noRepeatPauses[startTick.ticks()] = length;
@@ -1130,22 +1183,11 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
     }
 
     for (const Segment& segment : measure->segments()) {
-        if (!segment.isBreathType()) {
-            continue;
-        }
-
-        double length = 0.0;
-        Fraction tick = segment.tick();
-        // find longest pause
-        for (track_idx_t i = 0, n = measure->score()->ntracks(); i < n; ++i) {
-            EngravingItem* e = segment.element(i);
-            if (e && e->isBreath()) {
-                length = std::max(length, toBreath(e)->pause());
-            }
-        }
+        const double length = longestBreathPause(segment);
         if (!muse::RealIsNull(length)) {
-            pauses[tick.ticks() + tickOffset] = length;
-            noRepeatPauses[tick.ticks()] = length;
+            const int tick = segment.tick().ticks();
+            pauses[tick + tickOffset] = length;
+            noRepeatPauses[tick] = length;
         }
     }
 }
@@ -1162,10 +1204,7 @@ void ScoreAutomationController::addTempoTextPoint(const TempoText* tt, int tickO
 
     const utick_t tick = tt->segment()->tick().ticks() + tickOffset;
 
-    EID itemId = tt->eid();
-    if (!itemId.isValid()) {
-        itemId = tt->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(tt);
 
     if (tt->isATempo() && tt->followText()) {
         // This will effectively reset the tempo to the previous one when a progressive change was active
@@ -1188,11 +1227,9 @@ void ScoreAutomationController::addFermataStretchPoints(const Fermata* fermata, 
     const auto beforeIt = muse::findLessOrEqual(*ctx.tempoCurve, tick);
     const bool hasBefore = beforeIt != ctx.tempoCurve->cend();
     const real_t before = hasBefore ? beforeIt->second.value.outValue : DEFAULT_NORMALIZED_TEMPO;
+    const std::optional<EID> beforeItemId = hasBefore ? beforeIt->second.itemId : std::nullopt;
 
-    EID itemId = fermata->eid();
-    if (!itemId.isValid()) {
-        itemId = fermata->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(fermata);
 
     setTempoPoint(tick, tickOffset, before / stretch, ctx, itemId);
 
@@ -1207,7 +1244,7 @@ void ScoreAutomationController::addFermataStretchPoints(const Fermata* fermata, 
     // Restore to whatever was active before the fermata, so the point belongs to that marking, not the fermata
     const auto etickIt = ctx.tempoCurve->lower_bound(etick);
     if (etickIt == ctx.tempoCurve->end() || etickIt->first != etick) {
-        setTempoPoint(etickIt, etick, tickOffset, before, ctx, hasBefore ? beforeIt->second.itemId : std::nullopt);
+        setTempoPoint(etickIt, etick, tickOffset, before, ctx, beforeItemId);
     }
 }
 
@@ -1215,27 +1252,32 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
 {
     const utick_t tickFrom = tempoChange->tick().ticks() + tickOffset;
     const utick_t tickTo = tickFrom + tempoChange->ticks().ticks();
-    const real_t normalizedCurrent = currentTempoAt(*ctx.tempoCurve, tickFrom);
 
-    EID itemId = tempoChange->eid();
-    if (!itemId.isValid()) {
-        itemId = tempoChange->assignNewEID();
-    }
+    const EID itemId = eidOrAssignNew(tempoChange);
 
-    const auto tickFromIt = ctx.tempoCurve->lower_bound(tickFrom);
-    if (tickFromIt == ctx.tempoCurve->end() || tickFromIt->first != tickFrom) {
-        // Explicit flat arrival, so the ramp is anchored here rather than at whatever
-        // unrelated marking last happened to be an arrival
-        AutomationPoint startPoint;
-        startPoint.value.outValue = normalizedCurrent;
-        startPoint.value.inValue = AutomationPoint::ExplicitArrival { normalizedCurrent, AutomationPoint::Ease::none() };
-        startPoint.itemId = itemId;
-        startPoint.generated = true;
-        ctx.tempoCurve->emplace_hint(tickFromIt, tickFrom, startPoint);
+    const auto [startIt, startInserted] = ctx.tempoCurve->try_emplace(tickFrom);
+    const real_t prevTempo = startIt == ctx.tempoCurve->begin() ? DEFAULT_NORMALIZED_TEMPO
+                             : std::prev(startIt)->second.value.outValue;
+
+    // Make the ramp start here. Otherwise TempoTimeline starts it at the previous ramp's end,
+    // overriding all tempo markings in between
+    const AutomationPoint::ExplicitArrival flatArrival { prevTempo, AutomationPoint::Ease::none() };
+
+    AutomationPoint& startPoint = startIt->second;
+    if (startInserted) {
+        startPoint = makeGeneratedPoint(prevTempo, itemId, flatArrival);
         setNoRepeatTempoPoint(tickFrom - tickOffset, startPoint, ctx);
+    } else if (startPoint.generated && !std::holds_alternative<AutomationPoint::ExplicitArrival>(startPoint.value.inValue)) {
+        startPoint.value.inValue = flatArrival;
+
+        const auto rawIt = ctx.noRepeatTempoCurve.find(tickFrom - tickOffset);
+        if (rawIt != ctx.noRepeatTempoCurve.end() && rawIt->second.generated
+            && !std::holds_alternative<AutomationPoint::ExplicitArrival>(rawIt->second.value.inValue)) {
+            rawIt->second.value.inValue = flatArrival;
+        }
     }
 
-    const real_t normalizedTarget = std::clamp(normalizedCurrent * tempoChange->tempoChangeFactor(),
+    const real_t normalizedTarget = std::clamp(startPoint.value.outValue * tempoChange->tempoChangeFactor(),
                                                MIN_NORMALIZED_TEMPO, MAX_NORMALIZED_TEMPO);
     const AutomationPoint::ExplicitArrival arrival { normalizedTarget, changeMethodToEase(tempoChange->easingMethod()) };
 
@@ -1254,11 +1296,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
         return;
     }
 
-    AutomationPoint endPoint;
-    endPoint.value.outValue = normalizedTarget;
-    endPoint.value.inValue = arrival;
-    endPoint.itemId = itemId;
-    endPoint.generated = true;
+    const AutomationPoint endPoint = makeGeneratedPoint(normalizedTarget, itemId, arrival);
     ctx.tempoCurve->emplace_hint(tickToIt, tickTo, endPoint);
     setNoRepeatTempoPoint(tickTo - tickOffset, endPoint, ctx);
 }
@@ -1277,11 +1315,8 @@ void ScoreAutomationController::addVoltaTempoResetPoint(const Volta* volta, Upda
     const bool hasBefore = beforeIt != ctx.noRepeatTempoCurve.end();
     const real_t tempoBeforeVolta = hasBefore ? beforeIt->second.value.outValue : DEFAULT_NORMALIZED_TEMPO;
 
-    AutomationPoint point;
-    point.value.outValue = tempoBeforeVolta;
     // Recovers to whatever was active before the volta, so the point belongs to that marking, not the volta
-    point.itemId = hasBefore ? beforeIt->second.itemId : std::nullopt;
-    point.generated = true;
+    const AutomationPoint point = makeGeneratedPoint(tempoBeforeVolta, hasBefore ? beforeIt->second.itemId : std::nullopt);
 
     // Don't overwrite an explicit tempo marking already sitting at this exact tick
     // (e.g. the seconda volta's own TempoText, written in Step 1 before this Step 2 pass runs)
@@ -1300,7 +1335,8 @@ void ScoreAutomationController::resolvePendingTempoResets(UpdateContext& ctx)
         const real_t tempo = rawIt != ctx.noRepeatTempoCurve.end() ? rawIt->second.value.outValue
                              : DEFAULT_NORMALIZED_TEMPO;
 
-        const real_t currentTempo = currentTempoAt(*ctx.tempoCurve, utick);
+        const real_t currentTempo = utickIt == ctx.tempoCurve->begin() ? DEFAULT_NORMALIZED_TEMPO
+                                    : std::prev(utickIt)->second.value.outValue;
         if (RealIsEqual(tempo, currentTempo)) {
             continue; // no actual change - don't emit a redundant point
         }
@@ -1331,49 +1367,32 @@ void ScoreAutomationController::fixAnacrusisTempo(UpdateContext& ctx)
     }
 }
 
-bool ScoreAutomationController::tryAddDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick,
-                                                   const AutomationPoint& point, int priority)
+void ScoreAutomationController::addDynamicPoint(const AutomationPoint& point, int priority, const DynamicPointDestination& dest,
+                                                utick_t tick, bool mergeSamePriority)
 {
     //! See: https://github.com/musescore/MuseScore/issues/23355
-    const auto prioIt = tickPrioMap.lower_bound(tick);
-    const bool hasPrio = prioIt != tickPrioMap.end() && prioIt->first == tick;
-
-    if (hasPrio) {
-        if (priority <= prioIt->second) {
-            return false;
+    const auto prioIt = dest.priorities.lower_bound(tick);
+    if (prioIt != dest.priorities.end() && prioIt->first == tick) {
+        if (mergeSamePriority && priority == prioIt->second) {
+            // Keep the existing arrival value and use this point's departure value
+            AutomationPoint& existing = dest.curve[tick];
+            const AutomationPoint::InValue arrivalValue = existing.value.inValue;
+            existing = point;
+            existing.value.inValue = arrivalValue;
+        } else if (priority > prioIt->second) {
+            dest.curve[tick] = point;
+            prioIt->second = priority;
         }
-
-        curve[tick] = point;
-        prioIt->second = priority;
-        return true;
-    }
-
-    const auto curveIt = curve.lower_bound(tick);
-    if (curveIt != curve.end() && curveIt->first == tick) {
-        return false; // point from a prior update pass — don't overwrite
-    }
-
-    curve.emplace_hint(curveIt, tick, point);
-    tickPrioMap.emplace_hint(prioIt, tick, priority);
-
-    return true;
-}
-
-void ScoreAutomationController::addDynamicPoint(AutomationCurve& curve, std::map<utick_t, int>& tickPrioMap, utick_t tick,
-                                                const AutomationPoint& point, int priority)
-{
-    // If a point with the same priority already exists at this tick, merge them:
-    // keep the existing arrival value and use this point's departure value
-    const auto prioIt = tickPrioMap.find(tick);
-    if (prioIt != tickPrioMap.end() && prioIt->second == priority) {
-        AutomationPoint& existing = curve[tick];
-        const AutomationPoint::InValue arrivalValue = existing.value.inValue;
-        existing = point;
-        existing.value.inValue = arrivalValue;
         return;
     }
 
-    tryAddDynamicPoint(curve, tickPrioMap, tick, point, priority);
+    const auto curveIt = dest.curve.lower_bound(tick);
+    if (curveIt != dest.curve.end() && curveIt->first == tick) {
+        return; // point from a prior update pass — don't overwrite
+    }
+
+    dest.curve.emplace_hint(curveIt, tick, point);
+    dest.priorities.emplace_hint(prioIt, tick, priority);
 }
 
 void ScoreAutomationController::setNoRepeatTempoPoint(utick_t rawTick, const AutomationPoint& point, UpdateContext& ctx)
@@ -1484,14 +1503,19 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
 
     // Measure repeats are staff-specific; global/instrument-scoped points (e.g. Tempo, Volume, Pan)
     // aren't tied to any staff, so they're mirrored to regular repeats only, not measure repeats
-    std::optional<StaffRange> staffRange;
+    // One list per repeat segment, in repeatList order
+    std::vector<std::vector<MirrorRange> > measureRepeatRanges;
     if (const std::optional<muse::ID> staffId = key.staffId()) {
         const Staff* staff = m_score->staffById(*staffId);
         IF_ASSERT_FAILED(staff) {
             return;
         }
 
-        staffRange.emplace(m_score, staff->idx(), staff->idx());
+        const StaffRange staffRange(m_score, staff->idx(), staff->idx());
+        measureRepeatRanges.reserve(repeatList.size());
+        for (const RepeatSegment* seg : repeatList) {
+            measureRepeatRanges.push_back(measureRepeatMirrorRanges(seg, staffRange));
+        }
     }
 
     // Bounded by the original size, since mirrored edits are appended to the same vector below
@@ -1513,13 +1537,17 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
             movePoint->from -= sourceTickOffset;
         }
 
-        for (const RepeatSegment* targetSeg : repeatList) {
+        for (size_t segIdx = 0; segIdx < repeatList.size(); ++segIdx) {
+            const RepeatSegment* targetSeg = repeatList[segIdx];
             if (targetSeg != sourceSeg) {
                 const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
                 mirrorPointIfInRange(localEdit, targetRange, edits);
             }
-            if (staffRange) {
-                mirrorToMeasureRepeats(targetSeg, *staffRange, localEdit, edits);
+
+            if (!measureRepeatRanges.empty()) {
+                for (const MirrorRange& range : measureRepeatRanges[segIdx]) {
+                    mirrorPointIfInRange(localEdit, range, edits);
+                }
             }
         }
     }
@@ -1554,19 +1582,20 @@ void ScoreAutomationController::mirrorPointIfInRange(const AutomationPointEdit& 
     }
 }
 
-void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range,
-                                                       const AutomationPointEdit& localEdit, AutomationPointEdits& allEdits)
+std::vector<ScoreAutomationController::MirrorRange> ScoreAutomationController::measureRepeatMirrorRanges(const RepeatSegment* seg,
+                                                                                                         const StaffRange& range)
 {
-    const int tickOffset = targetSeg->utick - targetSeg->tick;
+    const int tickOffset = seg->utick - seg->tick;
 
     // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
     MeasureRepeats measureRepeats;
-    for (const Measure* measure : targetSeg->measureList()) {
+    for (const Measure* measure : seg->measureList()) {
         if (const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest)) {
             collectMeasureRepeats(firstChordRestSegment, tickOffset, range, measureRepeats);
         }
     }
 
+    std::vector<MirrorRange> result;
     for (const auto& [mr, mrTickOffset] : measureRepeats) {
         const Measure* currMeasure = mr->firstMeasureOfGroup();
         for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
@@ -1576,11 +1605,10 @@ void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targ
             }
 
             const int measureFrom = referringMeasure->tick().ticks();
-            const int measureToExclusive = referringMeasure->endTick().ticks();
             const int tickShift = currMeasure->tick().ticks() - measureFrom;
-
-            const MirrorRange measureRange { measureFrom, measureToExclusive, tickShift + mrTickOffset };
-            mirrorPointIfInRange(localEdit, measureRange, allEdits);
+            result.push_back({ measureFrom, referringMeasure->endTick().ticks(), tickShift + mrTickOffset });
         }
     }
+
+    return result;
 }
