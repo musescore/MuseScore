@@ -784,8 +784,8 @@ TEST_F(Engraving_BarlineTests, rangeRestorePreservesBarlineSpanStyle)
 
 TEST_F(Engraving_BarlineTests, spanStylePreservesUnforcedBarlineTypes)
 {
-    for (BarLineType type : { BarLineType::DOUBLE, BarLineType::END, BarLineType::END_REPEAT,
-                              BarLineType::BROKEN, BarLineType::DOTTED, BarLineType::HEAVY }) {
+    for (BarLineType type : { BarLineType::DOUBLE, BarLineType::END, BarLineType::BROKEN,
+                              BarLineType::DOTTED, BarLineType::HEAVY }) {
         std::unique_ptr<MasterScore> score(ScoreRW::readScore(BARLINE_DATA_DIR + "barline-span-style.mscx"));
         ASSERT_TRUE(score);
         Measure* measure = score->firstMeasure();
