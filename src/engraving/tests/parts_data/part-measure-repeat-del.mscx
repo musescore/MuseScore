@@ -154,6 +154,7 @@
       <measureNumberFontStyle>2</measureNumberFontStyle>
       <measureNumberHPlacement>left</measureNumberHPlacement>
       <measureNumberPosition>left</measureNumberPosition>
+      <measureNumberAvoidance>fit-in-gaps</measureNumberAvoidance>
       <translatorFontFace>Edwin</translatorFontFace>
       <translatorFontSize>10</translatorFontSize>
       <systemTextFontFace>Edwin</systemTextFontFace>

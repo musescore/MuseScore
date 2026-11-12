@@ -11,6 +11,7 @@
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <maskSlurs>0</maskSlurs>
       <maskTies>0</maskTies>
+      <measureNumberAvoidance>move-clear</measureNumberAvoidance>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
