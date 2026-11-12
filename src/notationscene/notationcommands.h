@@ -639,7 +639,7 @@ struct ToggleDotsCommand {
     int dots = 1;
 
     cprop_decl input = FieldsScheme {
-        Field{ "dots", &ToggleDotsCommand::dots, "Number of dots", 1, engraving::MAX_DOTS },
+        Field{ "dots", &ToggleDotsCommand::dots, "Number of dots", 1, (int)engraving::MAX_DOTS },
     };
 };
 
@@ -985,6 +985,184 @@ struct ToggleSharp2Command {
     cprop_decl redirect = ToggleAccidentalCommand(AccidentalType::SHARP2, PlayMode::NoPlay, true);
 };
 
+// voice commands
+struct UseVoiceCommand {
+    cprop_decl id = Command("command://notation/use-voice");
+    cprop_decl title = MnemonicString("action", "Voice");
+    cprop_decl description = TranslatableString("action", "Use voice");
+    cprop_decl availabilities = Availability::API;
+    cprop_decl annotations = Annotation::Idempotent;
+
+    int voice = 0;   // voice number (1-4)!!, not index (0-3)
+
+    cprop_decl input = FieldsScheme {
+        Field{ "voice", &UseVoiceCommand::voice, "Voice", 1, (int)engraving::MAX_VOICES },
+    };
+};
+
+// aliases for use voice command
+
+struct UseVoice1Command {
+    cprop_decl id = Command("command://notation/use-voice/1");
+    cprop_decl title = MnemonicString("action", "Voice 1");
+    cprop_decl description = TranslatableString("action", "Use voice 1");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::VOICE_1);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = UseVoiceCommand(1);
+};
+
+struct UseVoice2Command {
+    cprop_decl id = Command("command://notation/use-voice/2");
+    cprop_decl title = MnemonicString("action", "Voice 2");
+    cprop_decl description = TranslatableString("action", "Use voice 2");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::VOICE_2);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = UseVoiceCommand(2);
+};
+
+struct UseVoice3Command {
+    cprop_decl id = Command("command://notation/use-voice/3");
+    cprop_decl title = MnemonicString("action", "Voice 3");
+    cprop_decl description = TranslatableString("action", "Use voice 3");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::VOICE_3);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = UseVoiceCommand(3);
+};
+
+struct UseVoice4Command {
+    cprop_decl id = Command("command://notation/use-voice/4");
+    cprop_decl title = MnemonicString("action", "Voice 4");
+    cprop_decl description = TranslatableString("action", "Use voice 4");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::VOICE_4);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = UseVoiceCommand(4);
+};
+
+struct SwapVoicesCommand {
+    cprop_decl id = Command("command://notation/swap-voices");
+    cprop_decl title = MnemonicString("action", "Swap voices");
+    cprop_decl description = TranslatableString("action", "Swap two voices");
+    cprop_decl availabilities = Availability::API;
+    cprop_decl annotations = Annotation::None;
+
+    int voiceA = 0; // voice number (1-4)!!, not index (0-3)
+    int voiceB = 0; // voice number (1-4)!!, not index (0-3)
+
+    cprop_decl input = FieldsScheme {
+        Field{ "voice-a", &SwapVoicesCommand::voiceA, "First of the two voices to swap", 1, (int)engraving::MAX_VOICES },
+        Field{ "voice-b", &SwapVoicesCommand::voiceB, "Second of the two voices to swap", 1, (int)engraving::MAX_VOICES },
+    };
+};
+
+// aliases for swap voices command
+
+struct SwapVoice12Command {
+    cprop_decl id = Command("command://notation/swap-voices/1-2");
+    cprop_decl title = MnemonicString("action", "Exchange voice &1-2");
+    cprop_decl description = TranslatableString("action", "Exchange voice 1-2");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(1, 2);
+};
+
+struct SwapVoice13Command {
+    cprop_decl id = Command("command://notation/swap-voices/1-3");
+    cprop_decl title = MnemonicString("action", "Exchange voice 1-3");
+    cprop_decl description = TranslatableString("action", "Exchange voice 1-3");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(1, 3);
+};
+
+struct SwapVoice14Command {
+    cprop_decl id = Command("command://notation/swap-voices/1-4");
+    cprop_decl title = MnemonicString("action", "Exchange voice 1-&4");
+    cprop_decl description = TranslatableString("action", "Exchange voice 1-4");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(1, 4);
+};
+
+struct SwapVoice23Command {
+    cprop_decl id = Command("command://notation/swap-voices/2-3");
+    cprop_decl title = MnemonicString("action", "Exchange voice &2-3");
+    cprop_decl description = TranslatableString("action", "Exchange voice 2-3");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(2, 3);
+};
+
+struct SwapVoice24Command {
+    cprop_decl id = Command("command://notation/swap-voices/2-4");
+    cprop_decl title = MnemonicString("action", "Exchange voice 2-4");
+    cprop_decl description = TranslatableString("action", "Exchange voice 2-4");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(2, 4);
+};
+
+struct SwapVoice34Command {
+    cprop_decl id = Command("command://notation/swap-voices/3-4");
+    cprop_decl title = MnemonicString("action", "Exchange voice &3-4");
+    cprop_decl description = TranslatableString("action", "Exchange voice 3-4");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl annotations = Annotation::None;
+    cprop_decl redirect = SwapVoicesCommand(3, 4);
+};
+
+// tuplet commands
+struct AddTupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet");
+    cprop_decl title = MnemonicString("action", "Tuplet");
+    cprop_decl description = TranslatableString("action", "Add tuplet");
+    cprop_decl availabilities = Availability::API;
+
+    std::string ratio;   // Fraction as string (e.g. "3/2", "4/3", "5/4", "6/5", "7/6", "8/7", "9/8")
+    engraving::TupletNumberType numberType = engraving::TupletNumberType::DEFAULT;
+    engraving::TupletBracketType bracketType = engraving::TupletBracketType::DEFAULT;
+    bool autoBaseLen = true;
+    engraving::TupletSelectedDuration selectedDurationAs = engraving::TupletSelectedDuration::DEFAULT;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "ratio", &AddTupletCommand::ratio, "Tuplet ratio (e.g. 3/2, 4/3, 5/4, 6/5, 7/6, 8/7, 9/8)" },
+        Field{ "number-type", &AddTupletCommand::numberType, "Tuplet number type", Presence::Optional },
+        Field{ "bracket-type", &AddTupletCommand::bracketType, "Tuplet bracket type", Presence::Optional },
+        Field{ "auto-baselen", &AddTupletCommand::autoBaseLen, "Auto base length", Presence::Optional },
+        Field{ "selected-duration-as", &AddTupletCommand::selectedDurationAs, "Use selected duration as subdivision or tuplet-length",
+               Presence::Optional },
+    };
+
+    AddTupletCommand(int tupletCount)
+        : ratio(std::to_string(tupletCount) + "/2") {}
+};
+
+// aliases for add tuplet command
+struct AddDupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/duplet");
+    cprop_decl title = MnemonicString("action", "Duplet");
+    cprop_decl description = TranslatableString("action", "Add duplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(2);
+};
+
+inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
+inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
+inline static const muse::rcommand::Command ADD_TRIPLET_COMMAND("command://notation/add-triplet");
+inline static const muse::rcommand::Command ADD_QUADRUPLET_COMMAND("command://notation/add-quadruplet");
+inline static const muse::rcommand::Command ADD_QUINTUPLET_COMMAND("command://notation/add-quintuplet");
+inline static const muse::rcommand::Command ADD_SEXTUPLET_COMMAND("command://notation/add-sextuplet");
+inline static const muse::rcommand::Command ADD_SEPTUPLET_COMMAND("command://notation/add-septuplet");
+inline static const muse::rcommand::Command ADD_OCTUPLET_COMMAND("command://notation/add-octuplet");
+inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://notation/add-nonuplet");
+
+inline static const muse::rcommand::Command OPEN_TUPLET_CONFIGURE_COMMAND("command://notation/open-tuplet-configure");
+struct OpenTupletConfigureCommand {
+    cprop_decl id = Command("command://notation/open-tuplet-configure");
+    cprop_decl title = MnemonicString("action", "Open tuplet configure");
+    cprop_decl description = TranslatableString("action", "Open tuplet configure");
+    cprop_decl availabilities = Availability::UI;
+};
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1048,16 +1226,7 @@ inline static const muse::rcommand::Command TOGGLE_TENUTO_COMMAND("command://not
 inline static const muse::rcommand::Command TOGGLE_STACCATO_COMMAND("command://notation/toggle-staccato");
 
 // voice commands
-inline static const muse::rcommand::Command USE_VOICE_1_COMMAND("command://notation/use-voice-1");
-inline static const muse::rcommand::Command USE_VOICE_2_COMMAND("command://notation/use-voice-2");
-inline static const muse::rcommand::Command USE_VOICE_3_COMMAND("command://notation/use-voice-3");
-inline static const muse::rcommand::Command USE_VOICE_4_COMMAND("command://notation/use-voice-4");
-inline static const muse::rcommand::Command SWAP_VOICE_X12_COMMAND("command://notation/swap-voice-x12");
-inline static const muse::rcommand::Command SWAP_VOICE_X13_COMMAND("command://notation/swap-voice-x13");
-inline static const muse::rcommand::Command SWAP_VOICE_X14_COMMAND("command://notation/swap-voice-x14");
-inline static const muse::rcommand::Command SWAP_VOICE_X23_COMMAND("command://notation/swap-voice-x23");
-inline static const muse::rcommand::Command SWAP_VOICE_X24_COMMAND("command://notation/swap-voice-x24");
-inline static const muse::rcommand::Command SWAP_VOICE_X34_COMMAND("command://notation/swap-voice-x34");
+
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 
@@ -1070,16 +1239,6 @@ inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://not
 inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notation/enter-rest");
 
 // add commands
-inline static const muse::rcommand::Command OPEN_TUPLET_CONFIGURE_COMMAND("command://notation/open-tuplet-configure");
-inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
-inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
-inline static const muse::rcommand::Command ADD_TRIPLET_COMMAND("command://notation/add-triplet");
-inline static const muse::rcommand::Command ADD_QUADRUPLET_COMMAND("command://notation/add-quadruplet");
-inline static const muse::rcommand::Command ADD_QUINTUPLET_COMMAND("command://notation/add-quintuplet");
-inline static const muse::rcommand::Command ADD_SEXTUPLET_COMMAND("command://notation/add-sextuplet");
-inline static const muse::rcommand::Command ADD_SEPTUPLET_COMMAND("command://notation/add-septuplet");
-inline static const muse::rcommand::Command ADD_OCTUPLET_COMMAND("command://notation/add-octuplet");
-inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://notation/add-nonuplet");
 
 inline static const muse::rcommand::Command INSERT_HBOX_COMMAND("command://notation/insert-hbox");
 inline static const muse::rcommand::Command INSERT_VBOX_COMMAND("command://notation/insert-vbox");

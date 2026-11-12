@@ -185,10 +185,10 @@ static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
 };
 
 static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
-    { USE_VOICE_1_COMMAND, 0 },
-    { USE_VOICE_2_COMMAND, 1 },
-    { USE_VOICE_3_COMMAND, 2 },
-    { USE_VOICE_4_COMMAND, 3 }
+    { UseVoice1Command::id, 0 },
+    { UseVoice2Command::id, 1 },
+    { UseVoice3Command::id, 2 },
+    { UseVoice4Command::id, 3 }
 };
 
 static const std::vector<Command> NOTE_COMMANDS = {

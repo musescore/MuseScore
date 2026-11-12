@@ -1598,16 +1598,16 @@ enum class ActionIconType : signed char {
 };
 
 enum class TupletNumberType : unsigned char {
-    SHOW_NUMBER, SHOW_RELATION, NO_TEXT
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT, DEFAULT /*from style*/
 };
 
 enum class TupletBracketType : unsigned char {
-    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET, DEFAULT /*from style*/
 };
 
 // what a tuplet command uses the selected duration as
 enum class TupletSelectedDuration : unsigned char {
-    SUBDIVISION, TUPLET_LENGTH
+    SUBDIVISION, TUPLET_LENGTH, DEFAULT /*from configuration*/
 };
 } // mu::engraving
 

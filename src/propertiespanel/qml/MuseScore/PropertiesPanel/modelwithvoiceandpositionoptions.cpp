@@ -138,22 +138,22 @@ void ModelWithVoiceAndPositionOptions::changeVoice(int voice)
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice1() const
 {
-    return shortcutsForCommand(USE_VOICE_1_COMMAND);
+    return shortcutsForCommand(UseVoice1Command::id);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice2() const
 {
-    return shortcutsForCommand(USE_VOICE_2_COMMAND);
+    return shortcutsForCommand(UseVoice2Command::id);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice3() const
 {
-    return shortcutsForCommand(USE_VOICE_3_COMMAND);
+    return shortcutsForCommand(UseVoice3Command::id);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseVoice4() const
 {
-    return shortcutsForCommand(USE_VOICE_4_COMMAND);
+    return shortcutsForCommand(UseVoice4Command::id);
 }
 
 QString ModelWithVoiceAndPositionOptions::shortcutUseAllVoicesInstrument() const

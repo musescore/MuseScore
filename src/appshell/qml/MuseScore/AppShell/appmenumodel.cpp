@@ -367,12 +367,12 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem(STAFF_IMPLODE_COMMAND),
         makeMenuItem(OPEN_REALIZECHORDSYMBOLS_COMMAND),
         makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), {
-            makeMenuItem(SWAP_VOICE_X12_COMMAND),
-            makeMenuItem(SWAP_VOICE_X13_COMMAND),
-            makeMenuItem(SWAP_VOICE_X14_COMMAND),
-            makeMenuItem(SWAP_VOICE_X23_COMMAND),
-            makeMenuItem(SWAP_VOICE_X24_COMMAND),
-            makeMenuItem(SWAP_VOICE_X34_COMMAND)
+            makeMenuItem(SwapVoice12Command::id),
+            makeMenuItem(SwapVoice13Command::id),
+            makeMenuItem(SwapVoice14Command::id),
+            makeMenuItem(SwapVoice23Command::id),
+            makeMenuItem(SwapVoice24Command::id),
+            makeMenuItem(SwapVoice34Command::id)
         }, "menu-voices"),
         makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), {
             makeMenuItem(SPLIT_MEASURE_COMMAND),

@@ -145,10 +145,10 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
             { TUPLET_SUBITEMS, true },              // service
             { FlipCommand::id, true },
             { ToolConfig::____________, true },
-            { USE_VOICE_1_COMMAND, true },
-            { USE_VOICE_2_COMMAND, true },
-            { USE_VOICE_3_COMMAND, false },
-            { USE_VOICE_4_COMMAND, false }
+            { UseVoice1Command::id, true },
+            { UseVoice2Command::id, true },
+            { UseVoice3Command::id, false },
+            { UseVoice4Command::id, false }
         };
     }
     return config;

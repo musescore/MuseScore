@@ -28,6 +28,7 @@
 
 #include "global/containers.h"
 
+#include "engraving/types/constants.h" // IWYU pragma: export
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/durationtype.h"

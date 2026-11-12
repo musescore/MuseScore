@@ -125,6 +125,9 @@ void NotationActionController::init()
 
     registerCommand<ToggleAccidentalCommand>(&Controller::toggleAccidental);
 
+    registerCommand<UseVoiceCommand>(&Controller::changeVoice);
+    registerCommand<SwapVoicesCommand>(&Controller::swapVoices);
+
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -168,17 +171,6 @@ void NotationActionController::init()
     registerCommand(TOGGLE_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
     registerCommand(TOGGLE_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
     registerCommand(TOGGLE_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
-
-    registerCommand(USE_VOICE_1_COMMAND, [this]() { changeVoice(0); });
-    registerCommand(USE_VOICE_2_COMMAND, [this]() { changeVoice(1); });
-    registerCommand(USE_VOICE_3_COMMAND, [this]() { changeVoice(2); });
-    registerCommand(USE_VOICE_4_COMMAND, [this]() { changeVoice(3); });
-    registerCommand(SWAP_VOICE_X12_COMMAND, [this]() { swapVoices(0, 1); });
-    registerCommand(SWAP_VOICE_X13_COMMAND, [this]() { swapVoices(0, 2); });
-    registerCommand(SWAP_VOICE_X14_COMMAND, [this]() { swapVoices(0, 3); });
-    registerCommand(SWAP_VOICE_X23_COMMAND, [this]() { swapVoices(1, 2); });
-    registerCommand(SWAP_VOICE_X24_COMMAND, [this]() { swapVoices(1, 3); });
-    registerCommand(SWAP_VOICE_X34_COMMAND, [this]() { swapVoices(2, 3); });
 
     registerCommand<FlipCommand>(&Controller::flipSelection);
     registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
@@ -1783,26 +1775,31 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
     seekAndPlaySelectedElement(true);
 }
 
-void NotationActionController::changeVoice(voice_idx_t voiceIndex)
+muse::Ret NotationActionController::changeVoice(const UseVoiceCommand& command)
 {
     TRACEFUNC;
 
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (interaction->selection()->isNone()) {
         if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
-            return;
+            return muse::make_ret(muse::Ret::Code::NotAllowed);
         }
 
         startNoteInput();
+    }
+
+    const voice_idx_t voiceIndex = command.voice - 1; // number to index conversion
+    IF_ASSERT_FAILED(voiceIndex < MAX_VOICES) {
+        return muse::make_ret(muse::Ret::Code::BadArgs);
     }
 
     noteInput->setCurrentVoice(voiceIndex);
@@ -1810,17 +1807,31 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     if (!noteInput->isNoteInputMode()) {
         interaction->changeSelectedElementsVoice(voiceIndex);
     }
+
+    return muse::make_ok();
 }
 
-void NotationActionController::swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2)
+muse::Ret NotationActionController::swapVoices(const SwapVoicesCommand& command)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    interaction->swapVoices(voiceIndex1, voiceIndex2);
+    const voice_idx_t voiceAIndex = command.voiceA - 1; // number to index conversion
+    const voice_idx_t voiceBIndex = command.voiceB - 1; // number to index conversion
+
+    IF_ASSERT_FAILED(voiceAIndex < MAX_VOICES) {
+        return muse::make_ret(muse::Ret::Code::BadArgs);
+    }
+
+    IF_ASSERT_FAILED(voiceBIndex < MAX_VOICES) {
+        return muse::make_ret(muse::Ret::Code::BadArgs);
+    }
+
+    interaction->swapVoices(voiceAIndex, voiceBIndex);
+    return muse::make_ok();
 }
 
 void NotationActionController::cutSelection()
