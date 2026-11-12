@@ -22,13 +22,89 @@
 
 #include "boxline.h"
 
+#include "editing/elementeditdata.h"
+
 namespace mu::engraving {
+static constexpr Spatium BOXLINE_MIN_HEIGHT = 0.5_sp;
+
 //---------------------------------------------------------
 //   BoxLineSegment
 //---------------------------------------------------------
+
 BoxLineSegment::BoxLineSegment(BoxLine* sp)
     : LineSegment(ElementType::BOXLINE_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {}
+
+std::vector<PointF> BoxLineSegment::gripsPositions(const EditData&) const
+{
+    const RectF& r = ldata()->rect;
+    const bool above = boxLine()->placeAbove();
+    const double nearY = above ? r.bottom() : r.top(); // near = edge nearest the staff
+    const double farY = above ? r.top() : r.bottom();
+    const PointF pp = pagePos();
+
+    // in page coordinates (+ pp)
+    std::vector<PointF> grips(gripsCount());
+    grips[int(Grip::START)] = PointF(r.left(), nearY) + pp;
+    grips[int(Grip::END)] = PointF(r.right(), nearY) + pp;
+    grips[int(Grip::MIDDLE)] = r.center() + pp;
+    grips[int(FAR_START)] = PointF(r.left(), farY) + pp;
+    grips[int(FAR_END)] = PointF(r.right(), farY) + pp;
+    return grips;
+}
+
+Grip BoxLineSegment::lineGripFor(Grip grip) const
+{
+    if (grip == FAR_START) {
+        return Grip::START;
+    }
+    if (grip == FAR_END) {
+        return Grip::END;
+    }
+    return grip;
+}
+
+EngravingObject* BoxLineSegment::propertyDelegate(Pid pid) const
+{
+    if (pid == Pid::BOXLINE_HEIGHT) {
+        return spanner();
+    }
+    return LineSegment::propertyDelegate(pid);
+}
+
+void BoxLineSegment::startDragGrip(EditData& ed)
+{
+    LineSegment::startDragGrip(ed);
+    if (ElementEditDataPtr eed = ed.getData(this)) {
+        eed->pushProperty(Pid::BOXLINE_HEIGHT);
+    }
+}
+
+void BoxLineSegment::dragGrip(EditData& ed)
+{
+    if (ed.curGrip != Grip::MIDDLE) {
+        resizeHeight(ed);
+    }
+    LineSegment::dragGrip(ed);
+}
+
+void BoxLineSegment::resizeHeight(EditData& ed)
+{
+    BoxLine* box = boxLine();
+    const double dy = ed.evtDelta.y() / absoluteFromSpatium(Spatium(1.0));
+    const bool farEdge = ed.curGrip == FAR_START || ed.curGrip == FAR_END;
+    const double movedAway = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
+    const double growth = farEdge ? movedAway : -movedAway;
+
+    const double oldHeight = box->boxHeight().val();
+    const double newHeight = std::max(BOXLINE_MIN_HEIGHT.val(), oldHeight + growth);
+
+    if (muse::RealIsEqual(newHeight, oldHeight)) {
+        return;
+    }
+
+    box->setBoxHeight(Spatium(newHeight));
+}
 
 //---------------------------------------------------------
 //   BoxLine
@@ -48,13 +124,8 @@ LineSegment* BoxLine::createLineSegment()
 {
     BoxLineSegment* seg = new BoxLineSegment(this);
     seg->setTrack(track());
-    seg->setColor(lineColor());
     return seg;
 }
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
 
 PropertyValue BoxLine::getProperty(Pid propertyId) const
 {
@@ -67,26 +138,22 @@ PropertyValue BoxLine::getProperty(Pid propertyId) const
     return SLine::getProperty(propertyId);
 }
 
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
 bool BoxLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::BOXLINE_HEIGHT:
         setBoxHeight(val.value<Spatium>());
         break;
+    case Pid::DIAGONAL:
+        // BoxLineSegment::dragGrip relies on LineSegment::dragGrip resizing
+        // horizontally only, which holds only if diagonal() is false.
+        return false;
     default:
         return SLine::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
 }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
 
 PropertyValue BoxLine::propertyDefault(Pid propertyId) const
 {
@@ -104,5 +171,11 @@ PointF BoxLine::defaultPos() const
 {
     const double gap = 1.0 * spatium();
     return PointF(0.0, placeAbove() ? -gap : gap);
+}
+
+void BoxLine::reset()
+{
+    SLine::reset();
+    undoResetProperty(Pid::BOXLINE_HEIGHT);
 }
 }

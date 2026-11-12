@@ -43,12 +43,36 @@ public:
 
     BoxLine* boxLine() const { return toBoxLine(spanner()); }
 
+    /**
+     * Grips: START/END are the corners on the edge nearest the staff, FAR_START/FAR_END
+     * are the corners on the far edge, MIDDLE is the centre of the box. Every corner
+     * resizes horizontally like START/END (including re-anchoring) and vertically by
+     * changing the box height only. The center only offsets the box.
+     */
+    static constexpr Grip FAR_START = Grip(3);
+    static constexpr Grip FAR_END = Grip(4);
+
+    int gripsCount() const override { return 5; }
+    Grip initialEditModeGrip() const override { return Grip::MIDDLE; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
+
+    EngravingObject* propertyDelegate(Pid) const override;
+
     struct LayoutData : public EngravingItem::LayoutData {
         RectF rect; // box in segment-local coordinates
         bool closedLeft = true;
         bool closedRight = true;
     };
     DECLARE_LAYOUTDATA_METHODS(BoxLineSegment)
+
+protected:
+    Grip lineGripFor(Grip grip) const override;
+    void startDragGrip(EditData&) override;
+    void dragGrip(EditData&) override;
+
+private:
+    void resizeHeight(EditData&);
 };
 
 //---------------------------------------------------------
@@ -79,6 +103,8 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     PointF defaultPos() const override;
+
+    void reset() override;
 
     Spatium boxHeight() const { return m_height; }
     void setBoxHeight(const Spatium& v) { m_height = v; }
