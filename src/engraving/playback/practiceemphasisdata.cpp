@@ -1178,6 +1178,11 @@ void PracticeEmphasisData::projectNonUndoableFields(Document& snap) const
             part.parentId = old->parentId;
             part.added = old->added;
             part.removed = old->removed;
+        } else if (part.builtin) {
+            // ensurePart during this command must not keep the new membership
+            // when the snapshot predates that part.
+            part.added.clear();
+            part.removed.clear();
         }
         if (!part.parentId.empty() && !isBuiltinPartId(part.parentId)
             && !findRuleById(m_document.parts, part.parentId)) {
@@ -1209,7 +1214,12 @@ void PracticeEmphasisData::commitToScoreUndo(const Score* score, const Document&
     }
 
     Document after = m_document;
-    m_document = before;
+    // flip() projects live UI onto the command snapshot. Reverting live to
+    // `before` would wipe in-command fields such as editingPartId on the first
+    // flip. Keep before's membership with after's UI so that first flip sticks.
+    Document prepared = before;
+    projectNonUndoableFields(prepared);
+    m_document = std::move(prepared);
     const bool started = !master->undoStack()->hasActiveTransaction();
     if (started) {
         master->startCmd(actionName);
@@ -1237,9 +1247,10 @@ bool PracticeEmphasisData::copyFromPart(const Score* score, const std::string& t
     std::vector<std::string> added;
     std::vector<std::string> removed;
     Score* writable = const_cast<Score*>(score);
-    for (Measure* measure = writable->firstMeasure(); measure; measure = measure->nextMeasure()) {
+    Score* source = writable->masterScore() ? writable->masterScore() : writable;
+    for (Measure* measure = source->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
-            for (track_idx_t track = 0; track < writable->ntracks(); ++track) {
+            for (track_idx_t track = 0; track < source->ntracks(); ++track) {
                 EngravingItem* element = segment->element(track);
                 if (!element || !element->isChord()) {
                     continue;

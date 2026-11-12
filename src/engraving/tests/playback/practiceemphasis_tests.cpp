@@ -895,6 +895,14 @@ TEST_F(Engraving_PracticeEmphasisTests, ClickSwitchesEditingPartByStaffAndManual
     EXPECT_EQ(emphasis.noteHighlight(e5), PracticeEmphasisData::Highlight::OtherLoud);
     EXPECT_EQ(emphasis.noteHighlight(tenor), PracticeEmphasisData::Highlight::None);
 
+    ASSERT_TRUE(score->undoStack());
+    score->undoRedo(true, nullptr);
+    EXPECT_EQ(emphasis.document().editingPartId, "T1");
+    EXPECT_TRUE(emphasis.partContains(tenor, "T1"));
+    score->undoRedo(false, nullptr);
+    EXPECT_EQ(emphasis.document().editingPartId, "T1");
+    EXPECT_FALSE(emphasis.partContains(tenor, "T1"));
+
     const std::string manualId = emphasis.addCustomPart(score, "Picked notes", {});
     emphasis.editNote(tenor);
     EXPECT_EQ(emphasis.document().editingPartId, manualId);
@@ -1047,6 +1055,9 @@ TEST_F(Engraving_PracticeEmphasisTests, SoloMutesNonEditingNotesDuringPlayback)
 
     emphasis.setPlaybackActive(true);
     emphasis.setSolo(false);
+    // A1 was checked only to prove solo ignores checks. Drop it so alto is
+    // "other" again; otherwise the union would keep it loud on the companion.
+    emphasis.setPartSelected(score, "A1", false);
     EXPECT_TRUE(emphasis.playbackEngaged());
     EXPECT_EQ(emphasis.otherGainDb(), PracticeEmphasisData::DEFAULT_OTHER_DB);
 
