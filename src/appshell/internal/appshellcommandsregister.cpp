@@ -221,6 +221,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Availability::All
         ),
     CommandInfo(
+        DOCK_TOGGLE_PRACTICE_EMPHASIS_COMMAND,
+        TranslatableString("action", "Practice &emphasis"),
+        TranslatableString("action", "Show/hide practice emphasis"),
+        InputSchema(),
+        Decoration(IconCode::Code::AUDIO, rcommand::Checkable::Yes),
+        Availability::All
+        ),
+    CommandInfo(
         DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND,
         TranslatableString("action", "Piano &keyboard"),
         TranslatableString("action", "Show/hide piano keyboard"),
