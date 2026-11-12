@@ -24,10 +24,12 @@
 
 #include <algorithm>
 #include <functional>
+#include <unordered_map>
 
 #include "global/serialization/json.h"
 
 #include "dom/chord.h"
+#include "dom/engravingitem.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/note.h"
@@ -35,6 +37,9 @@
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/tie.h"
+
+#include "editing/editpracticeemphasis.h"
+#include "editing/transaction/undostack.h"
 
 #include "log.h"
 
@@ -224,7 +229,11 @@ void normalizeEidList(std::vector<std::string>& list)
 std::vector<std::string> readEidArray(const muse::JsonObject& item, const char* key)
 {
     std::vector<std::string> values;
-    const muse::JsonArray array = item.value(key).toArray();
+    const muse::JsonValue value = item.value(key);
+    if (!value.isArray()) {
+        return values;
+    }
+    const muse::JsonArray array = value.toArray();
     for (size_t i = 0; i < array.size(); ++i) {
         const std::string eid = array.at(i).toStdString();
         if (!eid.empty()) {
@@ -233,6 +242,34 @@ std::vector<std::string> readEidArray(const muse::JsonObject& item, const char* 
     }
     normalizeEidList(values);
     return values;
+}
+
+const Note* masterNote(const Note* note)
+{
+    if (!note) {
+        return nullptr;
+    }
+    const Score* master = note->score() ? note->score()->masterScore() : nullptr;
+    if (!master || note->score() == master) {
+        return note;
+    }
+    const EngravingItem* linked = note->findLinkedInScore(master);
+    return (linked && linked->isNote()) ? toNote(linked) : note;
+}
+
+Note* writableMasterNote(Note* note)
+{
+    return const_cast<Note*>(masterNote(note));
+}
+
+const std::vector<PracticeEmphasisData::PartRule>& cachedTemplates(int staffCount)
+{
+    static std::unordered_map<int, std::vector<PracticeEmphasisData::PartRule> > cache;
+    auto it = cache.find(staffCount);
+    if (it == cache.end()) {
+        it = cache.emplace(staffCount, PracticeEmphasisData::templatesForStaffCount(staffCount)).first;
+    }
+    return it->second;
 }
 
 muse::JsonArray writeEidArray(const std::vector<std::string>& values)
@@ -320,15 +357,24 @@ std::vector<PracticeEmphasisData::PartRule> PracticeEmphasisData::templatesForSt
 void PracticeEmphasisData::setDocument(Document document, bool notify)
 {
     m_document = std::move(document);
-    resetHistory();
+    m_unreadableSidecar = {};
     if (notify) {
         notifyListeners();
     }
 }
 
+void PracticeEmphasisData::applyUndoableSnapshot(Document snapshot)
+{
+    projectNonUndoableFields(snapshot);
+    m_document = std::move(snapshot);
+    m_unreadableSidecar = {};
+    notifyListeners();
+}
+
 bool PracticeEmphasisData::isDefault() const
 {
-    return !m_document.playbackActive
+    return m_unreadableSidecar.empty()
+           && !m_document.playbackActive
            && !m_document.emphasisMode
            && m_document.emphasizedDb == DEFAULT_EMPHASIZED_DB
            && m_document.otherDb == DEFAULT_OTHER_DB
@@ -341,6 +387,11 @@ bool PracticeEmphasisData::isDefault() const
 
 muse::ByteArray PracticeEmphasisData::toJson() const
 {
+    if (!m_unreadableSidecar.empty()
+        && m_document == Document()) {
+        return m_unreadableSidecar;
+    }
+
     muse::JsonObject root;
     root.set("version", CURRENT_VERSION);
     root.set("generator", GENERATOR);
@@ -379,7 +430,8 @@ bool PracticeEmphasisData::fromJson(const muse::ByteArray& json)
 {
     if (json.empty()) {
         m_document = Document();
-        resetHistory();
+        m_unreadableSidecar = {};
+        notifyListeners();
         return true;
     }
 
@@ -387,6 +439,9 @@ bool PracticeEmphasisData::fromJson(const muse::ByteArray& json)
     const muse::JsonDocument doc = muse::JsonDocument::fromJson(json, &error);
     if (!error.empty() || !doc.isObject()) {
         LOGE() << "Ignoring practice-emphasis.json: " << error;
+        if (m_document == Document()) {
+            m_unreadableSidecar = json;
+        }
         return false;
     }
 
@@ -406,7 +461,8 @@ bool PracticeEmphasisData::fromJson(const muse::ByteArray& json)
     next.editingPartId = root.value("editingPartId").toStdString();
     next.solo = root.value("solo").toBool();
 
-    const muse::JsonArray parts = root.value("parts").toArray();
+    const muse::JsonValue partsValue = root.value("parts");
+    const muse::JsonArray parts = partsValue.isArray() ? partsValue.toArray() : muse::JsonArray();
     for (size_t i = 0; i < parts.size(); ++i) {
         const muse::JsonObject item = parts.at(i).toObject();
         PartRule part;
@@ -435,7 +491,7 @@ bool PracticeEmphasisData::fromJson(const muse::ByteArray& json)
     }
 
     m_document = std::move(next);
-    resetHistory();
+    m_unreadableSidecar = {};
     notifyListeners();
     return true;
 }
@@ -552,20 +608,20 @@ std::vector<PracticeEmphasisData::PartRule> PracticeEmphasisData::visibleParts(c
     return result;
 }
 
-std::optional<PracticeEmphasisData::PartRule> PracticeEmphasisData::resolvePart(const Score* score, const std::string& id) const
+const PracticeEmphasisData::PartRule* PracticeEmphasisData::resolvePart(const Score* score, const std::string& id) const
 {
     if (const PartRule* existing = findPart(id)) {
-        return *existing;
+        return existing;
     }
     if (!score || id.empty()) {
-        return std::nullopt;
+        return nullptr;
     }
-    for (const PartRule& candidate : templatesForStaffCount(static_cast<int>(score->nstaves()))) {
+    for (const PartRule& candidate : cachedTemplates(static_cast<int>(score->nstaves()))) {
         if (candidate.id == id) {
-            return candidate;
+            return &candidate;
         }
     }
-    return std::nullopt;
+    return nullptr;
 }
 
 void PracticeEmphasisData::setPartSelected(const Score* score, const std::string& id, bool selected)
@@ -672,7 +728,7 @@ void PracticeEmphasisData::setPartParent(const Score* score, const std::string& 
         return;
     }
     part->parentId = parentId;
-    commitEdit(before);
+    commitToScoreUndo(score, before, muse::TranslatableString("undoableAction", "Change practice emphasis parent"));
 }
 
 std::vector<std::string> PracticeEmphasisData::parentOptionIds(const Score* score, const std::string& childId) const
@@ -750,7 +806,7 @@ bool PracticeEmphasisData::deletePart(const std::string& id)
     return true;
 }
 
-void PracticeEmphasisData::resetPartEdits(const std::string& id)
+void PracticeEmphasisData::resetPartEdits(const Score* score, const std::string& id)
 {
     PartRule* part = findPart(id);
     if (!part || (part->added.empty() && part->removed.empty())) {
@@ -759,7 +815,7 @@ void PracticeEmphasisData::resetPartEdits(const std::string& id)
     const Document before = m_document;
     part->added.clear();
     part->removed.clear();
-    commitEdit(before);
+    commitToScoreUndo(score, before, muse::TranslatableString("undoableAction", "Reset practice emphasis edits"));
 }
 
 bool PracticeEmphasisData::partSelected(const std::string& id) const
@@ -797,7 +853,7 @@ int PracticeEmphasisData::sourceStaffIndex(const Score* score, const PartRule& p
     if (part.parentId.empty()) {
         return -1;
     }
-    if (std::optional<PartRule> parent = resolvePart(score, part.parentId)) {
+    if (const PartRule* parent = resolvePart(score, part.parentId)) {
         return sourceStaffIndex(score, *parent, visiting);
     }
     return -1;
@@ -841,7 +897,7 @@ bool PracticeEmphasisData::ruleMatches(const Note* note, const PartRule& part) c
 bool PracticeEmphasisData::baseContains(const PartRule& part, const Note* note, std::unordered_set<std::string>& visiting) const
 {
     if (!part.parentId.empty()) {
-        if (std::optional<PartRule> parent = resolvePart(note ? note->score() : nullptr, part.parentId)) {
+        if (const PartRule* parent = resolvePart(note ? note->score() : nullptr, part.parentId)) {
             return partContains(*parent, note, visiting);
         }
         return false;
@@ -875,10 +931,11 @@ bool PracticeEmphasisData::partContains(const PartRule& part, const Note* note, 
 
 bool PracticeEmphasisData::partContains(const Note* note, const std::string& partId) const
 {
+    note = masterNote(note);
     if (!note || partId.empty()) {
         return false;
     }
-    const std::optional<PartRule> part = resolvePart(note->score(), partId);
+    const PartRule* part = resolvePart(note->score(), partId);
     if (!part) {
         return false;
     }
@@ -914,6 +971,7 @@ bool PracticeEmphasisData::noteManuallyAdded(const Note* note, const std::string
 
 bool PracticeEmphasisData::isEmphasized(const Note* note) const
 {
+    note = masterNote(note);
     if (!note) {
         return false;
     }
@@ -925,6 +983,7 @@ bool PracticeEmphasisData::isEmphasized(const Note* note) const
 
 PracticeEmphasisData::Highlight PracticeEmphasisData::noteHighlight(const Note* note) const
 {
+    note = masterNote(note);
     if (!note || !m_document.emphasisMode) {
         return Highlight::None;
     }
@@ -1021,6 +1080,7 @@ void PracticeEmphasisData::toggleMembership(PartRule& part, Note* note)
 
 void PracticeEmphasisData::editNote(Note* note)
 {
+    note = writableMasterNote(note);
     if (!note) {
         return;
     }
@@ -1035,7 +1095,7 @@ void PracticeEmphasisData::editNote(Note* note)
     const int noteStaff = static_cast<int>(note->staffIdx());
     std::string targetId = m_document.editingPartId;
     int currentStaff = -1;
-    if (std::optional<PartRule> current = resolvePart(score, targetId)) {
+    if (const PartRule* current = resolvePart(score, targetId)) {
         currentStaff = sourceStaffIndex(score, *current);
     }
 
@@ -1063,7 +1123,7 @@ void PracticeEmphasisData::editNote(Note* note)
     const Document before = m_document;
     m_document.editingPartId = targetId;
     toggleMembership(*part, note);
-    commitEdit(before);
+    commitToScoreUndo(score, before, muse::TranslatableString("undoableAction", "Edit practice emphasis"));
 }
 
 std::vector<std::pair<int, int> > PracticeEmphasisData::emphasizedVoices(const Score* score) const
@@ -1098,14 +1158,6 @@ std::vector<std::pair<int, int> > PracticeEmphasisData::emphasizedVoices(const S
     return voices;
 }
 
-void PracticeEmphasisData::resetHistory()
-{
-    m_history.clear();
-    m_history.push_back(m_document);
-    m_historyIndex = 0;
-    m_coalesceKey.clear();
-}
-
 void PracticeEmphasisData::projectNonUndoableFields(Document& snap) const
 {
     snap.version = m_document.version;
@@ -1138,88 +1190,34 @@ void PracticeEmphasisData::projectNonUndoableFields(Document& snap) const
 
 void PracticeEmphasisData::applyNonUndoableChange()
 {
-    if (m_applyingHistory) {
-        notifyListeners();
-        return;
-    }
-    m_coalesceKey.clear();
-    if (m_history.empty()) {
-        m_history.push_back(m_document);
-        m_historyIndex = 0;
-    } else {
-        for (Document& snap : m_history) {
-            projectNonUndoableFields(snap);
-        }
-    }
-    notifyListeners();
+    m_unreadableSidecar = {};
+    notifyListeners(true);
 }
 
-void PracticeEmphasisData::commitEdit(const Document& before, const std::string& coalesceKey)
+void PracticeEmphasisData::commitToScoreUndo(const Score* score, const Document& before,
+                                             const muse::TranslatableString& actionName)
 {
-    if (m_applyingHistory || before == m_document) {
+    if (before == m_document) {
         return;
     }
 
-    const bool coalesce = !coalesceKey.empty()
-                          && coalesceKey == m_coalesceKey
-                          && m_historyIndex > 0
-                          && m_historyIndex + 1 == m_history.size();
-    if (coalesce) {
-        m_history[m_historyIndex] = m_document;
-        notifyListeners();
+    Score* writable = const_cast<Score*>(score);
+    MasterScore* master = writable ? writable->masterScore() : nullptr;
+    if (!master || !master->undoStack()) {
+        notifyListeners(true);
         return;
     }
 
-    if (m_history.empty()) {
-        m_history.push_back(before);
-        m_historyIndex = 0;
-    } else {
-        m_history.resize(m_historyIndex + 1);
-        if (m_history[m_historyIndex] != before) {
-            m_history.push_back(before);
-            ++m_historyIndex;
-        }
+    Document after = m_document;
+    m_document = before;
+    const bool started = !master->undoStack()->hasActiveTransaction();
+    if (started) {
+        master->startCmd(actionName);
     }
-    m_history.push_back(m_document);
-    m_historyIndex = m_history.size() - 1;
-    m_coalesceKey = coalesceKey;
-    notifyListeners();
-}
-
-bool PracticeEmphasisData::canUndo() const
-{
-    return m_historyIndex > 0;
-}
-
-bool PracticeEmphasisData::canRedo() const
-{
-    return m_historyIndex + 1 < m_history.size();
-}
-
-void PracticeEmphasisData::undo()
-{
-    if (!canUndo()) {
-        return;
+    master->undo(new ChangePracticeEmphasis(master, std::move(after)));
+    if (started) {
+        master->endCmd();
     }
-    m_applyingHistory = true;
-    --m_historyIndex;
-    m_document = m_history[m_historyIndex];
-    m_coalesceKey.clear();
-    m_applyingHistory = false;
-    notifyListeners();
-}
-
-void PracticeEmphasisData::redo()
-{
-    if (!canRedo()) {
-        return;
-    }
-    m_applyingHistory = true;
-    ++m_historyIndex;
-    m_document = m_history[m_historyIndex];
-    m_coalesceKey.clear();
-    m_applyingHistory = false;
-    notifyListeners();
 }
 
 bool PracticeEmphasisData::copyFromPart(const Score* score, const std::string& targetId, const std::string& sourceId)
@@ -1247,7 +1245,10 @@ bool PracticeEmphasisData::copyFromPart(const Score* score, const std::string& t
                     continue;
                 }
                 visitChordNotes(toChord(element), [&](const Note* note) {
-                    Note* writableNote = const_cast<Note*>(note);
+                    Note* writableNote = writableMasterNote(const_cast<Note*>(note));
+                    if (!writableNote) {
+                        return;
+                    }
                     const std::string eid = assignNoteEid(writableNote);
                     if (eid.empty()) {
                         return;
@@ -1271,11 +1272,14 @@ bool PracticeEmphasisData::copyFromPart(const Score* score, const std::string& t
     }
     target->added = std::move(added);
     target->removed = std::move(removed);
-    commitEdit(before);
+    commitToScoreUndo(score, before, muse::TranslatableString("undoableAction", "Copy practice emphasis part"));
     return true;
 }
 
-void PracticeEmphasisData::notifyListeners()
+void PracticeEmphasisData::notifyListeners(bool nonUndoable)
 {
     m_changed.send();
+    if (nonUndoable) {
+        m_nonUndoableChanged.send();
+    }
 }

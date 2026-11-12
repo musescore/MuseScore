@@ -1117,7 +1117,7 @@ void NotationProject::listenIfNeedSaveChanges()
     });
 
     if (MasterScore* master = m_masterNotation->masterScore()) {
-        master->practiceEmphasis().changed().onReceive(this, [this]() {
+        master->practiceEmphasis().nonUndoableChanged().onReceive(this, [this]() {
             markAsUnsaved();
             m_hasNonUndoStackChanges = true;
         }, muse::async::Asyncable::Mode::SetReplace);

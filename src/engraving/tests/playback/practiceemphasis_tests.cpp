@@ -44,6 +44,8 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/editing/transaction/undostack.h"
+#include "engraving/types/types.h"
+#include "global/types/translatablestring.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
@@ -550,7 +552,7 @@ TEST_F(Engraving_PracticeEmphasisTests, EditsAndRangeChangeWhoIsLoud)
     soprano = findPart(emphasis.document().parts, "S1");
     ASSERT_TRUE(soprano);
     EXPECT_TRUE(std::find(soprano->added.begin(), soprano->added.end(), c5->eid().toStdString()) != soprano->added.end());
-    emphasis.resetPartEdits("S1");
+    emphasis.resetPartEdits(score, "S1");
     EXPECT_FALSE(emphasis.isEmphasized(c5));
     soprano = findPart(emphasis.document().parts, "S1");
     ASSERT_TRUE(soprano);
@@ -852,7 +854,7 @@ TEST_F(Engraving_PracticeEmphasisTests, PerPartEditsDoNotLeakAndUnionIsAcrossChe
     EXPECT_TRUE(emphasis.isEmphasized(c5));
     EXPECT_TRUE(emphasis.isEmphasized(e5));
 
-    emphasis.resetPartEdits(soloId);
+    emphasis.resetPartEdits(score, soloId);
     EXPECT_FALSE(emphasis.partContains(c5, soloId));
     EXPECT_FALSE(emphasis.isEmphasized(c5));
     EXPECT_TRUE(emphasis.partContains(alto, "S1"));
@@ -1014,8 +1016,7 @@ TEST_F(Engraving_PracticeEmphasisTests, SoloMutesNonEditingNotesDuringPlayback)
                                                                      PracticeEmphasisData::DEFAULT_EMPHASIZED_DB);
     const dynamic_level_t quiet = PracticeEmphasis::scaleDynamicLevel(writtenAlto,
                                                                       PracticeEmphasisData::DEFAULT_OTHER_DB);
-    const dynamic_level_t muted = PracticeEmphasis::scaleDynamicLevel(writtenAlto,
-                                                                      PracticeEmphasisData::SOLO_MUTE_DB);
+    const dynamic_level_t muted = MIN_DYNAMIC_LEVEL;
     const staff_layer_idx_t sopranoCompanion = PracticeEmphasis::EMPHASIS_STAFF_OFFSET;
 
     PracticeEmphasisData& emphasis = score->practiceEmphasis();
@@ -1134,6 +1135,22 @@ TEST_F(Engraving_PracticeEmphasisTests, SidecarRoundTripsSoloAndOlderFilesDefaul
     delete score;
 }
 
+TEST(Engraving_PracticeEmphasis, UnreadableSidecarIsPreserved)
+{
+    PracticeEmphasisData parsed;
+    const muse::ByteArray garbage("{not valid json");
+    EXPECT_FALSE(parsed.fromJson(garbage));
+    EXPECT_FALSE(parsed.isDefault());
+    EXPECT_EQ(parsed.toJson(), garbage);
+
+    parsed.setSolo(true);
+    const muse::ByteArray rewritten = parsed.toJson();
+    EXPECT_NE(rewritten, garbage);
+    PracticeEmphasisData rewrittenParsed;
+    EXPECT_TRUE(rewrittenParsed.fromJson(rewritten));
+    EXPECT_TRUE(rewrittenParsed.document().solo);
+}
+
 TEST(Engraving_PracticeEmphasis, VersionOneOverridesAreIgnored)
 {
     PracticeEmphasisData parsed;
@@ -1167,6 +1184,7 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoRedoClicksResetAndDropsRedoTail)
 {
     MasterScore* score = ScoreRW::readScore(SCORE_FILE);
     ASSERT_TRUE(score);
+    ASSERT_TRUE(score->undoStack());
 
     Note* e5 = findPitch(score, 76);
     Note* c5 = findPitch(score, 72);
@@ -1178,58 +1196,59 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoRedoClicksResetAndDropsRedoTail)
     ASSERT_TRUE(alto);
 
     PracticeEmphasisData& emphasis = score->practiceEmphasis();
-    EXPECT_FALSE(emphasis.canUndo());
-    EXPECT_FALSE(emphasis.canRedo());
+    EXPECT_FALSE(score->undoStack()->canUndo());
+    EXPECT_FALSE(score->undoStack()->canRedo());
 
     emphasis.setPartSelected(score, "S1", true);
     emphasis.setEditingPartId(score, "S1");
-    EXPECT_FALSE(emphasis.canUndo());
-    EXPECT_FALSE(emphasis.canRedo());
+    EXPECT_FALSE(score->undoStack()->canUndo());
+    EXPECT_FALSE(score->undoStack()->canRedo());
 
     emphasis.editNote(d5);
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
     emphasis.editNote(c5);
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
+    EXPECT_TRUE(score->undoStack()->canUndo());
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_FALSE(emphasis.partContains(c5, "S1"));
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
-    EXPECT_TRUE(emphasis.canRedo());
+    EXPECT_TRUE(score->undoStack()->canRedo());
 
-    emphasis.redo();
+    score->undoRedo(false, nullptr);
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
 
-    emphasis.resetPartEdits("S1");
+    emphasis.resetPartEdits(score, "S1");
     EXPECT_TRUE(emphasis.partContains(d5, "S1"));
     EXPECT_FALSE(emphasis.partContains(c5, "S1"));
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
 
-    emphasis.redo();
+    score->undoRedo(false, nullptr);
     EXPECT_TRUE(emphasis.partContains(d5, "S1"));
     EXPECT_FALSE(emphasis.partContains(c5, "S1"));
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
     emphasis.editNote(alto);
     EXPECT_TRUE(emphasis.partContains(alto, "S1"));
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
-    EXPECT_FALSE(emphasis.canRedo());
+    EXPECT_FALSE(score->undoStack()->canRedo());
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_FALSE(emphasis.partContains(alto, "S1"));
     EXPECT_TRUE(emphasis.partContains(c5, "S1"));
-    emphasis.redo();
+    score->undoRedo(false, nullptr);
     EXPECT_TRUE(emphasis.partContains(alto, "S1"));
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
 
     const std::string customId = emphasis.addCustomPart(score, "scratch", "S1");
     ASSERT_FALSE(customId.empty());
     EXPECT_EQ(emphasis.document().editingPartId, customId);
-    EXPECT_TRUE(emphasis.canUndo());
+    EXPECT_TRUE(score->undoStack()->canUndo());
 
     emphasis.setPartName(customId, "A");
     emphasis.setPartName(customId, "AB");
@@ -1237,7 +1256,7 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoRedoClicksResetAndDropsRedoTail)
     const PracticeEmphasisData::PartRule* custom = findPart(emphasis.document().parts, customId);
     ASSERT_TRUE(custom);
     EXPECT_EQ(custom->name, "ABC");
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     custom = findPart(emphasis.document().parts, customId);
     ASSERT_TRUE(custom);
     EXPECT_EQ(custom->name, "ABC");
@@ -1246,7 +1265,7 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoRedoClicksResetAndDropsRedoTail)
 
     EXPECT_TRUE(emphasis.deletePart(customId));
     EXPECT_EQ(findPart(emphasis.document().parts, customId), nullptr);
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_EQ(findPart(emphasis.document().parts, customId), nullptr);
 
     delete score;
@@ -1383,27 +1402,28 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoParentKeepsNameAndSettings)
 {
     MasterScore* score = ScoreRW::readScore(SCORE_FILE);
     ASSERT_TRUE(score);
+    ASSERT_TRUE(score->undoStack());
 
     PracticeEmphasisData& emphasis = score->practiceEmphasis();
     const std::string customId = emphasis.addCustomPart(score, "sops", "S1");
     ASSERT_FALSE(customId.empty());
-    EXPECT_FALSE(emphasis.canUndo());
+    EXPECT_FALSE(score->undoStack()->canUndo());
 
     emphasis.setSolo(true);
     emphasis.setPartName(customId, "renamed");
     emphasis.setPartSelected(score, customId, true);
     emphasis.setRange(1, 2);
-    EXPECT_FALSE(emphasis.canUndo());
+    EXPECT_FALSE(score->undoStack()->canUndo());
 
     emphasis.setPartParent(score, customId, "A1");
-    EXPECT_TRUE(emphasis.canUndo());
+    EXPECT_TRUE(score->undoStack()->canUndo());
     const PracticeEmphasisData::PartRule* custom = findPart(emphasis.document().parts, customId);
     ASSERT_TRUE(custom);
     EXPECT_EQ(custom->parentId, "A1");
     EXPECT_EQ(custom->name, "renamed");
     EXPECT_GT(emphasis.parentOptionIndex(score, customId, "A1"), 0);
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     custom = findPart(emphasis.document().parts, customId);
     ASSERT_TRUE(custom);
     EXPECT_EQ(custom->parentId, "S1");
@@ -1414,7 +1434,7 @@ TEST_F(Engraving_PracticeEmphasisTests, UndoParentKeepsNameAndSettings)
     EXPECT_EQ(emphasis.document().toMeasure, 2);
     EXPECT_GT(emphasis.parentOptionIndex(score, customId, "S1"), 0);
 
-    emphasis.redo();
+    score->undoRedo(false, nullptr);
     custom = findPart(emphasis.document().parts, customId);
     ASSERT_TRUE(custom);
     EXPECT_EQ(custom->parentId, "A1");
@@ -1428,6 +1448,7 @@ TEST_F(Engraving_PracticeEmphasisTests, CopyFromPartIsOneUndoableStep)
 {
     MasterScore* score = ScoreRW::readScore(SCORE_FILE);
     ASSERT_TRUE(score);
+    ASSERT_TRUE(score->undoStack());
 
     Note* e5 = findPitch(score, 76);
     Note* c5 = findPitch(score, 72);
@@ -1450,13 +1471,13 @@ TEST_F(Engraving_PracticeEmphasisTests, CopyFromPartIsOneUndoableStep)
     EXPECT_TRUE(emphasis.partContains(c5, childId));
     EXPECT_FALSE(emphasis.copyFromPart(score, childId, "S2"));
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_TRUE(emphasis.partContains(e5, childId));
     EXPECT_TRUE(emphasis.partContains(d5, childId));
     EXPECT_FALSE(emphasis.partContains(c5, childId));
-    EXPECT_TRUE(emphasis.canRedo());
+    EXPECT_TRUE(score->undoStack()->canRedo());
 
-    emphasis.redo();
+    score->undoRedo(false, nullptr);
     EXPECT_TRUE(emphasis.partContains(c5, childId));
     EXPECT_FALSE(emphasis.partContains(e5, childId));
 
@@ -1466,15 +1487,15 @@ TEST_F(Engraving_PracticeEmphasisTests, CopyFromPartIsOneUndoableStep)
     EXPECT_TRUE(emphasis.partContains(e5, emptyId));
     EXPECT_TRUE(emphasis.partContains(d5, emptyId));
     EXPECT_FALSE(emphasis.partContains(c5, emptyId));
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_FALSE(emphasis.partContains(e5, emptyId));
     EXPECT_FALSE(emphasis.partContains(c5, emptyId));
-    EXPECT_TRUE(emphasis.canRedo());
+    EXPECT_TRUE(score->undoStack()->canRedo());
 
     delete score;
 }
 
-TEST_F(Engraving_PracticeEmphasisTests, EmphasisUndoIsIndependentOfScoreUndo)
+TEST_F(Engraving_PracticeEmphasisTests, EmphasisEditsShareTheScoreUndoStack)
 {
     MasterScore* score = ScoreRW::readScore(SCORE_FILE);
     ASSERT_TRUE(score);
@@ -1491,26 +1512,22 @@ TEST_F(Engraving_PracticeEmphasisTests, EmphasisUndoIsIndependentOfScoreUndo)
     emphasis.setEditingPartId(score, "S1");
     emphasis.editNote(d5);
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
-    EXPECT_FALSE(score->undoStack()->canUndo());
-
-    const PracticeEmphasisData::Document afterEdit = emphasis.document();
-    score->startCmd(TranslatableString::untranslatable("Practice emphasis tests"));
-    e5->undoChangeProperty(Pid::VISIBLE, false);
-    score->endCmd();
     EXPECT_TRUE(score->undoStack()->canUndo());
-    EXPECT_FALSE(e5->visible());
-    EXPECT_EQ(emphasis.document(), afterEdit);
+
+    const int oldPitch = e5->pitch();
+    score->startCmd(TranslatableString::untranslatable("Practice emphasis tests"));
+    e5->undoChangeProperty(Pid::PITCH, oldPitch - 1);
+    score->endCmd();
+    EXPECT_EQ(e5->pitch(), oldPitch - 1);
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
 
     score->undoRedo(true, nullptr);
-    EXPECT_TRUE(e5->visible());
-    EXPECT_EQ(emphasis.document(), afterEdit);
+    EXPECT_EQ(e5->pitch(), oldPitch);
     EXPECT_FALSE(emphasis.partContains(d5, "S1"));
 
-    emphasis.undo();
+    score->undoRedo(true, nullptr);
     EXPECT_TRUE(emphasis.partContains(d5, "S1"));
-    EXPECT_TRUE(e5->visible());
-    EXPECT_FALSE(score->undoStack()->canUndo());
+    EXPECT_EQ(e5->pitch(), oldPitch);
 
     delete score;
 }
@@ -1569,6 +1586,15 @@ TEST_F(Engraving_PracticeEmphasisTests, MissingNoteEditsStayDormantUntilSameEidR
     ASSERT_TRUE(restored);
     EXPECT_EQ(restored->eid().toStdString(), altoEid);
     EXPECT_TRUE(emphasis.partContains(restored, "S1"));
+
+    score->undoRedo(true, nullptr);
+    restored = findPitch(score, 67);
+    ASSERT_TRUE(restored);
+    EXPECT_EQ(restored->eid().toStdString(), altoEid);
+    EXPECT_FALSE(emphasis.partContains(restored, "S1"));
+    soprano = findPart(emphasis.document().parts, "S1");
+    ASSERT_TRUE(soprano);
+    EXPECT_TRUE(std::find(soprano->added.begin(), soprano->added.end(), altoEid) == soprano->added.end());
 
     delete score;
 }

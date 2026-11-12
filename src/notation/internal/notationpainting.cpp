@@ -262,6 +262,9 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
             if (!item->isNote()) {
                 return defaultColor;
             }
+            if (item->selected()) {
+                return defaultColor;
+            }
             const Note* note = toNote(item);
             const MasterScore* master = note->score() ? note->score()->masterScore() : nullptr;
             if (!master || !master->practiceEmphasis().document().emphasisMode) {

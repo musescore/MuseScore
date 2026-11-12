@@ -64,6 +64,23 @@ void scaleCurve(DynamicAutomationMap& curve, float gainDb)
     }
 }
 
+void muteCurve(DynamicAutomationMap& curve)
+{
+    if (curve.empty()) {
+        return;
+    }
+
+    const muse::real_t muted = muse::real_t(static_cast<double>(MIN_DYNAMIC_LEVEL)
+                                            / static_cast<double>(MAX_DYNAMIC_LEVEL));
+    for (auto it = curve.begin(); it != curve.end(); ++it) {
+        muse::mpe::AutomationPoint& point = it->second;
+        point.outValue = muted;
+        if (auto* arrival = std::get_if<muse::mpe::AutomationPoint::ExplicitArrival>(&point.inValue)) {
+            arrival->value = muted;
+        }
+    }
+}
+
 DynamicAutomationMap constantCurve(dynamic_level_t level)
 {
     muse::mpe::AutomationPoint point;
@@ -116,8 +133,12 @@ void PracticeEmphasis::applyToNote(const Note* note, NominalNoteCtx& ctx)
     }
 
     const bool emphasized = data.isEmphasized(note);
-    const float gain = emphasized ? data.document().emphasizedDb : data.otherGainDb();
-    ctx.dynamicLevel = scaleDynamicLevel(ctx.dynamicLevel, gain);
+    if (!emphasized && data.document().solo) {
+        ctx.dynamicLevel = MIN_DYNAMIC_LEVEL;
+    } else {
+        const float gain = emphasized ? data.document().emphasizedDb : data.otherGainDb();
+        ctx.dynamicLevel = scaleDynamicLevel(ctx.dynamicLevel, gain);
+    }
     if (emphasized) {
         ctx.staffIdx = static_cast<staff_idx_t>(ctx.staffIdx + EMPHASIS_STAFF_OFFSET);
     }
@@ -132,13 +153,26 @@ void PracticeEmphasis::applyToDynamics(const Score* score, DynamicAutomationLaye
     if (!master) {
         return;
     }
+    applyToDynamics(score, layers, master->practiceEmphasis().emphasizedVoices(score));
+}
+
+void PracticeEmphasis::applyToDynamics(const Score* score, DynamicAutomationLayers& layers,
+                                       const std::vector<VoiceKey>& emphasizedVoices)
+{
+    if (!score || layers.empty()) {
+        return;
+    }
+    const MasterScore* master = score->masterScore();
+    if (!master) {
+        return;
+    }
     const PracticeEmphasisData& data = master->practiceEmphasis();
     if (!data.playbackEngaged()) {
         return;
     }
 
     std::vector<std::pair<layer_idx_t, DynamicAutomationMap> > companions;
-    for (const std::pair<int, int>& voice : data.emphasizedVoices(score)) {
+    for (const std::pair<int, int>& voice : emphasizedVoices) {
         if (!partOwnsStaff(layers, voice.first)) {
             continue;
         }
@@ -156,7 +190,11 @@ void PracticeEmphasis::applyToDynamics(const Score* score, DynamicAutomationLaye
         if (static_cast<int>(it->first / MAX_VOICES) >= EMPHASIS_STAFF_OFFSET) {
             continue;
         }
-        scaleCurve(it->second, data.otherGainDb());
+        if (data.document().solo) {
+            muteCurve(it->second);
+        } else {
+            scaleCurve(it->second, data.otherGainDb());
+        }
     }
     for (auto& companion : companions) {
         layers[companion.first] = std::move(companion.second);

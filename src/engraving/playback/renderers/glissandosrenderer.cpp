@@ -24,6 +24,7 @@
 
 #include "dom/glissando.h"
 
+#include "playback/practiceemphasis.h"
 #include "playback/renderingcontext.h"
 #include "playback/utils/expressionutils.h"
 
@@ -87,6 +88,8 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, NominalNoteCt
 
         const int utick = timestampToTick(noteCtx.chordCtx.score, noteCtx.timestamp);
         noteCtx.dynamicLevel = ctx.chordCtx.playbackCtx->appliableDynamicLevel(note->track(), utick);
+        noteCtx.staffIdx = note->staffIdx();
+        PracticeEmphasis::applyToNote(note, noteCtx);
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,

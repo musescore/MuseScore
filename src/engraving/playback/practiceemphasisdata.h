@@ -21,7 +21,6 @@
  */
 #pragma once
 
-#include <optional>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -29,6 +28,7 @@
 
 #include "global/async/channel.h"
 #include "global/types/bytearray.h"
+#include "global/types/translatablestring.h"
 
 namespace mu::engraving {
 class Note;
@@ -100,6 +100,7 @@ public:
 
     const Document& document() const { return m_document; }
     void setDocument(Document document, bool notifyListeners = true);
+    void applyUndoableSnapshot(Document snapshot);
 
     bool isDefault() const;
     muse::ByteArray toJson() const;
@@ -116,18 +117,13 @@ public:
     void setPartParent(const Score* score, const std::string& id, const std::string& parentId);
     std::string addCustomPart(const Score* score, const std::string& name = {}, const std::string& parentId = {});
     bool deletePart(const std::string& id);
-    void resetPartEdits(const std::string& id);
+    void resetPartEdits(const Score* score, const std::string& id);
     bool copyFromPart(const Score* score, const std::string& targetId, const std::string& sourceId);
 
     //! Parent dropdown values: empty string first ("(none)"), then every visible part
     //! that would not create a parent cycle. Index 0 is always none.
     std::vector<std::string> parentOptionIds(const Score* score, const std::string& childId) const;
     int parentOptionIndex(const Score* score, const std::string& childId, const std::string& parentId) const;
-
-    bool canUndo() const;
-    bool canRedo() const;
-    void undo();
-    void redo();
 
     bool partSelected(const std::string& id) const;
     bool partContains(const Note* note, const std::string& partId) const;
@@ -141,13 +137,14 @@ public:
     std::vector<std::pair<int, int> > emphasizedVoices(const Score* score) const;
 
     muse::async::Channel<> changed() const { return m_changed; }
+    muse::async::Channel<> nonUndoableChanged() const { return m_nonUndoableChanged; }
 
 private:
     const PartRule* findPart(const std::string& id) const;
     PartRule* findPart(const std::string& id);
     PartRule* ensurePart(const Score* score, const std::string& id);
     std::vector<PartRule> visibleParts(const Score* score) const;
-    std::optional<PartRule> resolvePart(const Score* score, const std::string& id) const;
+    const PartRule* resolvePart(const Score* score, const std::string& id) const;
 
     bool ruleMatches(const Note* note, const PartRule& part) const;
     bool baseContains(const PartRule& part, const Note* note, std::unordered_set<std::string>& visiting) const;
@@ -161,17 +158,14 @@ private:
     bool wouldCreateCycle(const std::string& childId, const std::string& parentId) const;
     void bindStaffEid(const Score* score, PartRule& part) const;
     void toggleMembership(PartRule& part, Note* note);
-    void resetHistory();
-    void commitEdit(const Document& before, const std::string& coalesceKey = {});
     void applyNonUndoableChange();
+    void commitToScoreUndo(const Score* score, const Document& before, const muse::TranslatableString& actionName);
     void projectNonUndoableFields(Document& snap) const;
-    void notifyListeners();
+    void notifyListeners(bool nonUndoable = false);
 
     Document m_document;
-    std::vector<Document> m_history;
-    size_t m_historyIndex = 0;
-    std::string m_coalesceKey;
-    bool m_applyingHistory = false;
+    muse::ByteArray m_unreadableSidecar;
     muse::async::Channel<> m_changed;
+    muse::async::Channel<> m_nonUndoableChanged;
 };
 }

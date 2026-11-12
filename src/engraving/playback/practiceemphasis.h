@@ -21,6 +21,9 @@
  */
 #pragma once
 
+#include <utility>
+#include <vector>
+
 #include "mpe/events.h"
 
 namespace mu::engraving {
@@ -40,7 +43,11 @@ public:
 
     static muse::mpe::dynamic_level_t scaleDynamicLevel(muse::mpe::dynamic_level_t level, float gainDb);
 
+    using VoiceKey = std::pair<int, int>;
+
     static void applyToNote(const Note* note, NominalNoteCtx& ctx);
     static void applyToDynamics(const Score* score, muse::mpe::DynamicAutomationLayers& layers);
+    static void applyToDynamics(const Score* score, muse::mpe::DynamicAutomationLayers& layers,
+                                const std::vector<VoiceKey>& emphasizedVoices);
 };
 }
