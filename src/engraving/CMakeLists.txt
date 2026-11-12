@@ -384,6 +384,10 @@ target_sources(engraving PRIVATE
     automation/internal/scoreautomationcontroller.cpp
     automation/internal/scoreautomationcontroller.h
 
+    # Sidecar JSON loaded by MscLoader, independent of MUE_BUILD_ENGRAVING_PLAYBACK.
+    playback/practiceemphasisdata.cpp
+    playback/practiceemphasisdata.h
+
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
     ${RENDERING_EDITMODE_SRC}

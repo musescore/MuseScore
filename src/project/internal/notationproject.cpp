@@ -47,6 +47,7 @@
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/engravingproject.h"
+#include "engraving/playback/practiceemphasisdata.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/rw/inoutdata.h"
 #include "engraving/rw/write/writecontext.h"
@@ -1114,6 +1115,13 @@ void NotationProject::listenIfNeedSaveChanges()
         markAsUnsaved();
         m_hasNonUndoStackChanges = true;
     });
+
+    if (MasterScore* master = m_masterNotation->masterScore()) {
+        master->practiceEmphasis().changed().onReceive(this, [this]() {
+            markAsUnsaved();
+            m_hasNonUndoStackChanges = true;
+        }, muse::async::Asyncable::Mode::SetReplace);
+    }
 }
 
 void NotationProject::markAsSaved(const muse::io::path_t& path)
