@@ -248,6 +248,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::MEASURE_NUMBER_PLACEMENT:
                 set(idx, TConv::fromXml(e.readAsciiText(), MeasureNumberPlacement::ABOVE_SYSTEM));
                 break;
+            case P_TYPE::MEASURE_NUMBER_AVOIDANCE:
+                set(idx, TConv::fromXml(e.readAsciiText(), MeasureNumberAvoidance::FIT_IN_GAPS));
+                break;
             case P_TYPE::INSTRUMENT_NAMES_ALIGN:
                 set(idx, TConv::fromXml(e.readAsciiText(), InstrumentNamesAlign::RIGHT_RIGHT));
                 break;
@@ -352,6 +355,7 @@ void MStyle::applyCompatStyleVals(int mscVersion)
         set(Sid::maskTies, false);
         set(Sid::dashBarWidth, value(Sid::barWidth));
         set(Sid::lyricsStackingOrder, int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
+        set(Sid::measureNumberAvoidance, MeasureNumberAvoidance::MOVE_CLEAR);
     }
 
     if (mscVersion < 470) {
@@ -807,6 +811,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
         } else if (P_TYPE::MEASURE_NUMBER_PLACEMENT == type) {
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<MeasureNumberPlacement>()));
+        } else if (P_TYPE::MEASURE_NUMBER_AVOIDANCE == type) {
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<MeasureNumberAvoidance>()));
         } else if (P_TYPE::INSTRUMENT_NAMES_ALIGN == type) {
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<InstrumentNamesAlign>()));
         } else if (P_TYPE::INSTRUMENT_NAMES_FORMAT == type) {

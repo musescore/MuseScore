@@ -30,6 +30,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
 #include "engraving/dom/mmrest.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
@@ -37,6 +38,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -1113,3 +1115,135 @@ TEST_F(Engraving_MeasureTests, timeDeleteNoteWithAnnotationUndo)
     ASSERT_TRUE(textSeg);
     EXPECT_TRUE(textSeg->element(0) && textSeg->element(0)->isChord());
 }
+
+// Reads a score with a measure number centred on every barline and whole notes in bars 1 and 2, optionally tied,
+// and lays it out
+static std::unique_ptr<MasterScore> layOutWholeNotesScore(int pitch, bool tied, double numberOffsetY, PlacementV placement,
+                                                          MeasureNumberAvoidance avoidance)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"empty.mscx"));
+    if (!score) {
+        ADD_FAILURE() << "empty.mscx not read";
+        return nullptr;
+    }
+    // Measure numbers take their placement from the style when they are created, so set it before any layout
+    score->style().set(Sid::measureNumberInterval, 1);
+    score->style().set(Sid::measureNumberSystem, false);
+    score->style().set(Sid::measureNumberHPlacement, AlignH::HCENTER);
+    score->style().set(Sid::measureNumberAvoidance, avoidance);
+    if (placement == PlacementV::ABOVE) {
+        score->style().set(Sid::measureNumberPosAbove, PointF(0.0, numberOffsetY));
+    } else {
+        score->style().set(Sid::measureNumberPlacementMode, MeasureNumberPlacement::ON_ALL_STAVES);
+        score->style().set(Sid::measureNumberVPlacement, placement);
+        score->style().set(Sid::measureNumberPosBelow, PointF(0.0, numberOffsetY));
+    }
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->setNoteRest(m1->first(SegmentType::ChordRest), 0, NoteVal(pitch), Fraction(1, 1));
+    score->setNoteRest(m2->first(SegmentType::ChordRest), 0, NoteVal(pitch), Fraction(1, 1));
+    score->endCmd();
+    if (tied) {
+        score->select(m1->findChord(m1->tick(), 0)->upNote());
+        EditTie::cmdToggleTie(score.get());
+        if (!m1->findChord(m1->tick(), 0)->upNote()->tieFor()) {
+            ADD_FAILURE() << "tie not added";
+            return nullptr;
+        }
+    }
+    score->doLayout();
+    return score;
+}
+
+static double bar2NumberY(const MasterScore* score)
+{
+    const MeasureNumber* number = score->firstMeasure()->nextMeasure()->measureNumber(0);
+    if (!number) {
+        ADD_FAILURE() << "no measure number in bar 2";
+        return 0.0;
+    }
+    return number->ldata()->pos().y();
+}
+
+// How far a tie over the barline moves bar 2's measure number away from the staff
+static double shiftByTie(int pitch, double numberOffsetY, PlacementV placement, MeasureNumberAvoidance avoidance)
+{
+    std::unique_ptr<MasterScore> untied = layOutWholeNotesScore(pitch, false, numberOffsetY, placement, avoidance);
+    std::unique_ptr<MasterScore> tied = layOutWholeNotesScore(pitch, true, numberOffsetY, placement, avoidance);
+    if (!untied || !tied) {
+        return 0.0;
+    }
+    const double shift = bar2NumberY(tied.get()) - bar2NumberY(untied.get());
+    return placement == PlacementV::ABOVE ? -shift : shift;
+}
+
+/**
+ *  A measure number that fits under a tie over the barline stays close to the staff; one that doesn't fit
+ *  is moved clear, as before. Scores from earlier versions keep the old placement.
+ */
+TEST_F(Engraving_MeasureTests, measureNumberFitInGaps)
+{
+    // [GIVEN] A score saved in an earlier version
+    {
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"empty.mscx"));
+        ASSERT_TRUE(score);
+
+        // [THEN] It keeps the old placement
+        EXPECT_EQ(score->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>(), MeasureNumberAvoidance::MOVE_CLEAR);
+    }
+
+    const PlacementV above = PlacementV::ABOVE;
+    const MeasureNumberAvoidance moveClear = MeasureNumberAvoidance::MOVE_CLEAR;
+    const MeasureNumberAvoidance fitInGaps = MeasureNumberAvoidance::FIT_IN_GAPS;
+
+    const int highPitch = 91; // G6
+    const int lowPitch = 81; // A5
+    const double farFromStaff = -2.0;
+    const double nearStaff = -0.5; // within the min distance, so the number is always nudged off the staff
+
+    // [WHEN] Measure numbers move clear of everything
+    // [THEN] Numbers under ties are pushed above them
+    EXPECT_GT(shiftByTie(highPitch, farFromStaff, above, moveClear), 0.0);
+    EXPECT_GT(shiftByTie(lowPitch, nearStaff, above, moveClear), 0.0);
+    EXPECT_GT(shiftByTie(lowPitch, farFromStaff, above, moveClear), 0.0);
+
+    // [WHEN] Measure numbers fit into gaps
+    // [THEN] Numbers stay where they are when there is room under the tie
+    EXPECT_DOUBLE_EQ(shiftByTie(highPitch, farFromStaff, above, fitInGaps), 0.0);
+    EXPECT_DOUBLE_EQ(shiftByTie(lowPitch, nearStaff, above, fitInGaps), 0.0);
+
+    // [THEN] A number that doesn't fit under the tie is still pushed above it
+    EXPECT_GT(shiftByTie(lowPitch, farFromStaff, above, fitInGaps), 0.0);
+}
+
+/**
+ *  Below the staff, a measure number fits into a gap over a tie that curves down over the barline, as above the staff
+ */
+TEST_F(Engraving_MeasureTests, measureNumberFitInGapsBelowStaff)
+{
+    const PlacementV below = PlacementV::BELOW;
+    const MeasureNumberAvoidance moveClear = MeasureNumberAvoidance::MOVE_CLEAR;
+    const MeasureNumberAvoidance fitInGaps = MeasureNumberAvoidance::FIT_IN_GAPS;
+
+    const int lowPitch = 53; // F3
+    const int highPitch = 60; // C4
+    const double farFromStaff = 2.0;
+    const double nearStaff = 0.5; // within the min distance, so the number is always nudged off the staff
+
+    // [WHEN] Measure numbers move clear of everything
+    // [THEN] Numbers over ties are pushed below them
+    EXPECT_GT(shiftByTie(lowPitch, farFromStaff, below, moveClear), 0.0);
+    EXPECT_GT(shiftByTie(highPitch, nearStaff, below, moveClear), 0.0);
+    EXPECT_GT(shiftByTie(highPitch, farFromStaff, below, moveClear), 0.0);
+
+    // [WHEN] Measure numbers fit into gaps
+    // [THEN] Numbers stay where they are when there is room over the tie
+    EXPECT_DOUBLE_EQ(shiftByTie(lowPitch, farFromStaff, below, fitInGaps), 0.0);
+    EXPECT_DOUBLE_EQ(shiftByTie(highPitch, nearStaff, below, fitInGaps), 0.0);
+
+    // [THEN] A number that doesn't fit over the tie is still pushed below it
+    EXPECT_GT(shiftByTie(highPitch, farFromStaff, below, fitInGaps), 0.0);
+}
+

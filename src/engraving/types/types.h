@@ -600,6 +600,11 @@ enum class MeasureNumberPlacement {
     ON_ALL_STAVES
 };
 
+enum class MeasureNumberAvoidance : unsigned char {
+    MOVE_CLEAR,  // < v5.0
+    FIT_IN_GAPS  // >= v5.0
+};
+
 // P_TYPE::NOTEHEAD_TYPE
 enum class NoteHeadType : signed char {
     HEAD_AUTO    = -1,

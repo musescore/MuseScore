@@ -91,6 +91,103 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
     doAutoplaceElement(item, ldata, system, above, /* add = */ false, /* minSkylineHorizontalClearance = */ 0.0, spatium);
 }
 
+// Returns the move away from the staff that keeps the min distance from items at the given distance
+static double moveToClear(double distance, bool above, double minDistance)
+{
+    if (!(distance > -minDistance)) {
+        return 0.0;
+    }
+
+    return (distance + minDistance) * (above ? -1.0 : 1.0);
+}
+
+static double distanceToClearSkyline(const SkylineLine& skyline, const Shape& shape, bool above, double minHorizontalClearance,
+                                     double minDistance)
+{
+    if (skyline.elements().empty()) {
+        return 0.0;
+    }
+
+    const double d = above ? skyline.minDistanceToShapeAbove(shape, minHorizontalClearance)
+                     : skyline.minDistanceToShapeBelow(shape, minHorizontalClearance);
+
+    return moveToClear(d, above, minDistance);
+}
+
+static double distanceToClearItems(const Shape& items, const Shape& shape, bool above, double minHorizontalClearance, double minDistance)
+{
+    if (items.empty()) {
+        return 0.0;
+    }
+
+    const double d = above ? shape.minVerticalDistance(items, minHorizontalClearance)
+                     : items.minVerticalDistance(shape, minHorizontalClearance);
+
+    return moveToClear(d, above, minDistance);
+}
+
+static bool clearsItems(const Shape& items, const Shape& shape, bool above, double minHorizontalClearance, double minDistance)
+{
+    // Items further from the staff than the shape may come closer than items between the shape and the staff
+    const double outerMinDistance = minDistance / 2;
+    const double minDistanceAbove = above ? outerMinDistance : minDistance;
+    const double minDistanceBelow = above ? minDistance : outerMinDistance;
+    for (const ShapeElement& itemEl : items.elements()) {
+        if (itemEl.height() <= 0.0) {
+            continue;
+        }
+        for (const ShapeElement& el : shape.elements()) {
+            if (el.height() <= 0.0
+                || !mu::engraving::intersects(el.left(), el.right(), itemEl.left(), itemEl.right(), minHorizontalClearance)) {
+                continue;
+            }
+            const bool clearAbove = muse::RealIsEqualOrLess(itemEl.bottom() + minDistanceAbove, el.top());
+            const bool clearBelow = muse::RealIsEqualOrMore(itemEl.top(), el.bottom() + minDistanceBelow);
+            if (!clearAbove && !clearBelow) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Returns the smallest move away from the staff that clears the skyline, which may leave the shape in a gap between items
+static double distanceToNearestGap(const SkylineLine& skyline, const Shape& shape, bool above, double minHorizontalClearance,
+                                   double minDistance)
+{
+    // Only items that overlap the shape horizontally can collide with it: collect them in one pass, split into
+    // those between the shape and the staff and those beyond it
+    const double itemEdge = above ? shape.top() : shape.bottom();
+    const RectF& bbox = shape.bbox();
+    Shape nearItems;
+    Shape farItems;
+    for (const ShapeElement& el : skyline.elements()) {
+        if (!mu::engraving::intersects(el.left(), el.right(), bbox.left(), bbox.right(), minHorizontalClearance)) {
+            continue;
+        }
+        const bool isBeyondItem = above ? el.bottom() <= itemEdge : el.top() >= itemEdge;
+        (isBeyondItem ? farItems : nearItems).add(el);
+    }
+
+    // Clear whatever lies between the shape and the staff, then try just past each item beyond it, nearest first
+    const double nearYd = distanceToClearItems(nearItems, shape, above, minHorizontalClearance, minDistance);
+    std::vector<double> candidates { nearYd };
+    for (const ShapeElement& el : farItems.elements()) {
+        candidates.push_back(above ? std::min(nearYd, el.top() - minDistance - shape.bottom())
+                             : std::max(nearYd, el.bottom() + minDistance - shape.top()));
+    }
+    std::sort(candidates.begin(), candidates.end(), [above](double a, double b) { return above ? a > b : a < b; });
+
+    for (double yd : candidates) {
+        if (clearsItems(farItems, shape.translated(PointF(0.0, yd)), above, minHorizontalClearance, minDistance)) {
+            return yd;
+        }
+    }
+
+    // Not expected: the last candidate is beyond every item
+    return distanceToClearSkyline(skyline, shape, above, minHorizontalClearance, minDistance);
+}
+
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
                                      double minSkylineHorizontalClearance, double minDistance)
 {
@@ -102,20 +199,12 @@ double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLin
         return itemsShouldIgnoreEachOther(item, skylineItem);
     });
 
-    if (filteredSkyline.elements().empty()) {
-        return 0.0;
+    if (item->isMeasureNumber()
+        && item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>() == MeasureNumberAvoidance::FIT_IN_GAPS) {
+        return distanceToNearestGap(filteredSkyline, shape, above, minSkylineHorizontalClearance, minDistance);
     }
 
-    const double d = above ? filteredSkyline.minDistanceToShapeAbove(shape, minSkylineHorizontalClearance)
-                     : filteredSkyline.minDistanceToShapeBelow(shape, minSkylineHorizontalClearance);
-
-    if (!(d > -minDistance)) {
-        return 0.0;
-    }
-
-    const double yd = (d + minDistance) * (above ? -1.0 : 1.0);
-
-    return yd;
+    return distanceToClearSkyline(filteredSkyline, shape, above, minSkylineHorizontalClearance, minDistance);
 }
 
 void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
