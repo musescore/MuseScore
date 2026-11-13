@@ -35,6 +35,7 @@
 
 #include "exportmusicxml.h"
 
+#include <algorithm>
 #include <math.h>
 #include <set>
 
@@ -636,6 +637,19 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
     return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingConfiguration>("iex_musicxml");
 }
 
+static String color2Hex(const muse::Color& color)
+{
+    std::string hex = color.toString();
+
+    if (hex.size() == 9) {
+        // For alpha channel MusicXML specifies colors in ARGB order.
+        // #RRGGBBAA → #AARRGGBB
+        std::rotate(hex.begin() + 1, hex.begin() + 7, hex.end());
+    }
+
+    return String::fromStdString(hex);
+}
+
 //---------------------------------------------------------
 //   color2xml
 //---------------------------------------------------------
@@ -643,9 +657,9 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
 static String color2xml(const EngravingItem* el)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
-        return String(u" color=\"%1\"").arg(String::fromStdString(el->color().toString()));
+        return String(u" color=\"%1\"").arg(color2Hex(el->color()));
     } else if (el->isSLine() && ((SLine*)el)->lineColor() != engravingConfiguration()->defaultColor()) {
-        return String(u" color=\"%1\"").arg(String::fromStdString(((SLine*)el)->lineColor().toString()));
+        return String(u" color=\"%1\"").arg(color2Hex(((SLine*)el)->lineColor()));
     } else {
         return String();
     }
@@ -654,7 +668,7 @@ static String color2xml(const EngravingItem* el)
 static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
-        attrs.emplace_back(std::make_pair("color", String::fromStdString(el->color().toString())));
+        attrs.emplace_back(std::make_pair("color", color2Hex(el->color())));
     }
 }
 
@@ -7879,7 +7893,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
             shortInstrumentAttributes.push_back({ "print-object", "no" });
         }
         if (longInstrumentColor != engravingConfiguration()->defaultColor()) {
-            longInstrumentAttributes.push_back({ "color", String::fromStdString(longInstrumentColor.toString()) });
+            longInstrumentAttributes.push_back({ "color", color2Hex(longInstrumentColor) });
         }
         xml.tag("part-name", longInstrumentAttributes,
                 MScoreTextToMusicXml::toPlainText(partName).replace(u'♭', 'b').replace(u'♯', '#'));
@@ -7890,7 +7904,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         }
         if (!part->shortName().isEmpty()) {
             if (shortInstrumentColor != engravingConfiguration()->defaultColor()) {
-                shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
+                shortInstrumentAttributes.push_back({ "color", color2Hex(shortInstrumentColor) });
             }
             xml.tag("part-abbreviation", shortInstrumentAttributes,
                     MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u'♭', 'b').replace(u'♯', '#'));
@@ -8105,7 +8119,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
                 for (int lineIdx = 0; lineIdx < st->lines(Fraction(0, 1)); ++lineIdx) {
                     String ld = String(u"line-detail line=\"%1\"").arg(lineIdx + 1);
                     if (lineColor != engravingConfiguration()->defaultColor()) {
-                        ld += String(u" color=\"%1\"").arg(String::fromStdString(lineColor.toString()));
+                        ld += String(u" color=\"%1\"").arg(color2Hex(lineColor));
                     }
                     if (invis) {
                         ld += u" print-object=\"no\"";
