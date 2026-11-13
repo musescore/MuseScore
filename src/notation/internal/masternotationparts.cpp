@@ -252,7 +252,9 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
 {
     TRACEFUNC;
 
-    startGlobalEdit(TranslatableString("undoableAction", "Edit drumset"));
+    if (undoable) {
+        startGlobalEdit(TranslatableString("undoableAction", "Edit drumset"));
+    }
 
     NotationParts::replaceDrumset(instrumentKey, newDrumset, undoable);
 
@@ -260,7 +262,9 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
         parts->replaceDrumset(instrumentKey, newDrumset, undoable);
     }
 
-    endGlobalEdit();
+    if (undoable) {
+        endGlobalEdit();
+    }
 }
 
 void MasterNotationParts::addSystemObjects(const muse::IDList& stavesIds)
