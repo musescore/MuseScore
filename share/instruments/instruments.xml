@@ -1588,6 +1588,26 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="f-castilian-dulzaina">
+                  <family>dulzainas</family>
+                  <trackName>Castilian Dulzaina</trackName>
+                  <longName>Castilian Dulzaina</longName>
+                  <shortName>Cast. Dulz.</shortName>
+                  <traitName type="transposition">F</traitName>
+                  <description>Spanish double-reed folk instrument from the Castile region. In F.</description>
+                  <musicXMLid>wind.reed.dulzaina</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-86</aPitchRange>
+                  <pPitchRange>62-91</pPitchRange>
+                  <transposeDiatonic>3</transposeDiatonic>
+                  <transposeChromatic>5</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
+                        <program value="68"/> <!--Oboe-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="fs-castilian-dulzaina">
                   <family>dulzainas</family>
                   <trackName>Castilian Dulzaina</trackName>
@@ -1598,10 +1618,30 @@
                   <musicXMLid>wind.reed.dulzaina</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>63-91</aPitchRange>
-                  <pPitchRange>63-96</pPitchRange>
+                  <aPitchRange>63-87</aPitchRange>
+                  <pPitchRange>63-92</pPitchRange>
                   <transposeDiatonic>3</transposeDiatonic>
                   <transposeChromatic>6</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
+                        <program value="68"/> <!--Oboe-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-castilian-dulzaina">
+                  <family>dulzainas</family>
+                  <trackName>Castilian Dulzaina</trackName>
+                  <longName>Castilian Dulzaina</longName>
+                  <shortName>Cast. Dulz.</shortName>
+                  <traitName type="transposition">G</traitName>
+                  <description>Spanish double-reed folk instrument from the Castile region. In G.</description>
+                  <musicXMLid>wind.reed.dulzaina</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>64-88</aPitchRange>
+                  <pPitchRange>64-93</pPitchRange>
+                  <transposeDiatonic>4</transposeDiatonic>
+                  <transposeChromatic>7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 68; MS General: Oboe-->
                         <program value="68"/> <!--Oboe-->
