@@ -701,6 +701,7 @@ TripletFeel* Factory::createTripletFeel(DummyParentOr<Segment> parent, TripletFe
 CREATE_ITEM_IMPL(Vibrato, DummyParent*)
 
 CREATE_ITEM_IMPL(BoxLine, DummyParentOr<EngravingItem>)
+MAKE_ITEM_IMPL(BoxLine, DummyParentOr<EngravingItem>);
 
 CREATE_ITEM_IMPL(TextLine, DummyParentOr<Note>)
 MAKE_ITEM_IMPL(TextLine, DummyParentOr<Note>);
