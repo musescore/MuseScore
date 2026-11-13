@@ -421,6 +421,17 @@ void EditPart::setPartVisible(Score* score, Part* part, bool visible)
     }
 
     part->undoChangeProperty(Pid::VISIBLE, visible);
+
+    if (visible) {
+        removeLocksContainingMMRests(score);
+    }
+}
+
+void EditPart::removeLocksContainingMMRests(Score* score)
+{
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPageLocks::removePageLocksContainingMMRests(tx, score);
+    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
 }
 
 void EditPart::setStaffVisible(Score* score, Staff* staff, bool visible)
@@ -1038,10 +1049,7 @@ void EditPart::insertPart(Score* score, Part* part, size_t index)
         return;
     }
 
-    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
-    EditPageLocks::removePageLocksContainingMMRests(tx, score);
-    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
-
+    removeLocksContainingMMRests(score);
     insertPartCopy(score, part, index);
 }
 

@@ -231,12 +231,6 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     mu::engraving::EditPart::setPartVisible(score(), part, visible);
 
-    if (visible) {
-        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-        EditPageLocks::removePageLocksContainingMMRests(tx, score());
-        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
-    }
-
     apply();
 
     notifyAboutPartChanged(part);
