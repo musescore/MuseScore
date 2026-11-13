@@ -343,6 +343,22 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
     return m_scoreOrders[m_currentOrderIndex];
 }
 
+//! Moves one instrument to an insertion boundary, using the existing score-order update path.
+void InstrumentsOnScoreListModel::moveInstrument(int sourceRow, int destinationRow)
+{
+    if (sourceRow < 0 || sourceRow >= rowCount() || destinationRow < 0 || destinationRow > rowCount()
+        || destinationRow == sourceRow || destinationRow == sourceRow + 1) {
+        return;
+    }
+
+    // SelectableItemListModel::moveRows expects the final row, not Qt's insertion boundary.
+    const int targetRow = destinationRow > sourceRow ? destinationRow - 1 : destinationRow;
+    if (moveRow(QModelIndex(), sourceRow, QModelIndex(), targetRow)) {
+        clearSelection();
+        selectRow(targetRow);
+    }
+}
+
 void InstrumentsOnScoreListModel::onRowsMoved()
 {
     verifyScoreOrder();
