@@ -81,13 +81,20 @@ void SharedPart::removeOriginPart(Part* p)
     computeIsSameInstruments();
 }
 
-Part* SharedPart::mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const
+Staff* SharedPart::mappedOriginStaff(track_idx_t sharedTrack, const Fraction& tick) const
 {
     const SharedTrackMap& trackMap = staveSharingStateAtTick(tick.negative() ? Fraction(0, 1) : tick).sharedTrackMap();
 
     track_idx_t originTrack = muse::key(trackMap, sharedTrack, muse::nidx);
 
-    const Staff* originStaff = originTrack != muse::nidx ? score()->staff(track2staff(originTrack)) : nullptr;
+    Staff* originStaff = originTrack != muse::nidx ? score()->staff(track2staff(originTrack)) : nullptr;
+
+    return originStaff;
+}
+
+Part* SharedPart::mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const
+{
+    const Staff* originStaff = mappedOriginStaff(sharedTrack, tick);
     return originStaff ? originStaff->part() : nullptr;
 }
 
@@ -104,7 +111,12 @@ const Part* SharedPart::originPart(track_idx_t sharedTrack, const Fraction& tick
 
 Part* SharedPart::originPartForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const
 {
-    return mappedOriginPart(staff2track(sharedStaffIdx, 0), tick);
+    return mappedOriginPart(staff2track(sharedStaffIdx), tick);
+}
+
+Staff* SharedPart::originStaffForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const
+{
+    return mappedOriginStaff(staff2track(sharedStaffIdx), tick);
 }
 
 const StaveSharingState& SharedPart::staveSharingStateAtTick(const Fraction& tick) const

@@ -85,6 +85,7 @@ public:
     const Part* originPart(track_idx_t sharedTrack, const Fraction& tick) const override;
     using Part::originPart;
     Part* originPartForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const;
+    Staff* originStaffForStaff(staff_idx_t sharedStaffIdx, const Fraction& tick) const;
 
     String partName() const override;
 
@@ -111,6 +112,7 @@ public:
     bool isSameInstruments() const { return m_isSameInstruments; }
 
 private:
+    Staff* mappedOriginStaff(track_idx_t sharedTrack, const Fraction& tick) const;
     Part* mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const;
 
     void computeIsSameInstruments();

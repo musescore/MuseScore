@@ -85,8 +85,7 @@ private:
                                  std::unordered_set<Note*>& localUnisonNotes);
 
     static bool checkSegmentForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool segHasLocalKeySig(const Segment* segment, const SharedPart* sharedPart);
+    static bool checkClefKeyTimeSigForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, const StaveSharingContext& ctx);
     static bool checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkItemsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack,
                                        const std::function<bool(const EngravingItem*, const EngravingItem*)>& isEqual);
@@ -105,6 +104,7 @@ private:
                                                                                                  const EngravingItem*)>& isEqual);
 
     static void makeSharedNotation(StaveSharingContext& ctx);
+    static void updateStaffClefKeyMaps(StaveSharingContext& ctx);
     static void makeSharedClefKeyTimeSigs(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedBreaths(StaveSharingContext& ctx);
