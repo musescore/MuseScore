@@ -338,6 +338,20 @@ bool Page::isLocked() const
     return firstMeasure ? firstMeasure->isStartOfPageLock() : false;
 }
 
+bool Page::allLocked(const std::vector<Page*>& pages)
+{
+    if (pages.empty()) {
+        return false;
+    }
+
+    for (Page* page : pages) {
+        if (!page->isLocked()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 const RangeLock* Page::pageLock() const
 {
     MeasureBase* firstMeasure = firstMeasureBase();
