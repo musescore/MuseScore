@@ -38,7 +38,7 @@ BoxLineSettingsModel::BoxLineSettingsModel(QObject* parent, const muse::modulari
     : PropertiesPanelAbstractModel(parent, iocCtx, repository, ElementType::BOXLINE)
 {
     setModelType(PropertiesPanelModelType::TYPE_BOXLINE);
-    setTitle(muse::qtrc("propertiespanel", "Box line"));
+    setTitle(muse::qtrc("propertiespanel", "Box"));
     setIcon(muse::ui::IconCode::Code::FRAME_SQUARE);
     createProperties();
 }
