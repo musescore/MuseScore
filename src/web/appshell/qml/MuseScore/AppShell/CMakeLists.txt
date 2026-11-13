@@ -33,13 +33,14 @@ qt_add_qml_module(appshell_qml
         AppMenuBar.qml
         AppWindow.qml
         DevFrame.qml
+        NotationPage/NotationPage.qml
         platform/web/Main.qml
-        NotationFrame.qml
     IMPORTS
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET muse_interactive_qml
         TARGET muse_shortcuts_qml
+        TARGET muse_dockwindow_qml
         TARGET instrumentsscene_qml
         TARGET notationscene_qml
         TARGET palette_qml
