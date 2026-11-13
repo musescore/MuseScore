@@ -1011,6 +1011,53 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_WithoutMoves)
     m_model->endActiveDrag();
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_MarkingsOntoMarkings)
+{
+    // [GIVEN] Three instruments, system markings above each of them
+    addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addSystemObjects(b->staff(0));
+    addSystemObjects(c->staff(0));
+    createModel(); // [A:0] A [B:0] B [C:0] C
+
+    std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
+
+    // [THEN] The score replaces C's markings with B's
+    EXPECT_CALL(*m_parts, reorderParts(_, _)).WillOnce(InvokeWithoutArgs([this, b]() {
+        removeSystemObjects(b->staff(0));
+        m_systemObjectStavesChanged.notify();
+    }));
+
+    // [WHEN] The markings row above B is moved down past B, onto C's markings
+    EXPECT_TRUE(moveRootRows(2, 1, 3));
+
+    // [THEN] One markings row is left above C, without reloading the panel
+    EXPECT_EQ(rowNames(), "[A:0] A B [C:0] C");
+    EXPECT_EQ(*resets, 0);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_MarkingsRowsNotRebuiltAfterReload)
+{
+    // [GIVEN] Four instruments, the panel reloaded after the score added markings to B
+    addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    createModel();
+    addSystemObjects(b->staff(0));
+    m_systemObjectStavesChanged.notify(); // [A:0] A [B:0] B C D
+
+    // [GIVEN] The score has markings on C that the panel wasn't told about
+    addSystemObjects(c->staff(0));
+
+    // [WHEN] D is moved up past C
+    EXPECT_TRUE(moveRootRows(5, 1, 4));
+
+    // [THEN] The markings rows are not rebuilt from the score
+    EXPECT_EQ(rowNames(), "[A:0] A [B:0] B D C");
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_ScoreAddsMarkings)
 {
     // [GIVEN] Three instruments

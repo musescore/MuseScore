@@ -147,7 +147,9 @@ protected:
     void moveRows(int row, int count, int toRow)
     {
         const int destinationRow = row + count - 1 > toRow ? toRow : toRow + 1;
-        m_root->moveChildren(row, count, m_root, destinationRow, true);
+        m_root->moveChildren(row, count, m_root, destinationRow, false);
+
+        m_root->applyToScore();
     }
 
     void moveRow(int row, int toRow)
@@ -479,16 +481,82 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_MarkingsOntoMarkings)
     addSystemObjects(c->staff(0));
     buildTree(); // [A:0] A [B:0] B [C:0] C
 
-    // [THEN] Both markings rows ask for C's staff
+    // [THEN] Both markings rows ask for C's staff, and the score replaces C's markings with B's
     EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
                                        Moves { { b->staff(0)->id(), c->staff(0)->id() }, { c->staff(0)->id(), c->staff(0)->id() } }));
 
     // [WHEN] The markings row above B is moved down past B
     moveRow(2, 3);
 
-    // [THEN] Both markings rows are above C, and show C's staff
+    // [THEN] Both markings rows show C's staff until the panel rebuilds its markings rows
     EXPECT_EQ(m_root->childCount(), 6);
     EXPECT_EQ(childNames(), "[A:0] A B [C:0] [C:0] C");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_MarkingsDraggedOntoMarkings)
+{
+    // [GIVEN] Three instruments, system markings above each of them
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addSystemObjects(b->staff(0));
+    addSystemObjects(c->staff(0));
+    buildTree(); // [A:0] A [B:0] B [C:0] C
+
+    // [THEN] Both markings rows ask for B's staff, and the score replaces B's markings with C's
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), b->staff(0)->id() }, { b->staff(0)->id(), b->staff(0)->id() } }));
+
+    // [WHEN] The markings row above C is dragged up onto the markings row above B
+    dragRow(4, 2);
+
+    // [THEN] Both markings rows show B's staff until the panel rebuilds its markings rows
+    EXPECT_EQ(m_root->childCount(), 6);
+    EXPECT_EQ(childNames(), "[A:0] A [B:0] [B:0] B C");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_TwoInstrumentsDownPastMarkings)
+{
+    // [GIVEN] Four instruments, system markings above A, B and D
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    const Part* d = addPart(u"D");
+    addSystemObjects(b->staff(0));
+    addSystemObjects(d->staff(0));
+    buildTree(); // [A:0] A [B:0] B C [D:0] D
+
+    // [THEN] The instruments keep their order, and the score replaces B's markings with D's
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id(), d->id() },
+                                       Moves { { b->staff(0)->id(), b->staff(0)->id() }, { d->staff(0)->id(), b->staff(0)->id() } }));
+
+    // [WHEN] B and C are moved down past the markings row above D
+    moveRows(3, 2, 5);
+
+    // [THEN] Both markings rows show B's staff until the panel rebuilds its markings rows
+    EXPECT_EQ(m_root->childCount(), 7);
+    EXPECT_EQ(childNames(), "[A:0] A [B:0] [B:0] B C D");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_MarkingsDraggedBelowTopMarkings)
+{
+    // [GIVEN] Three instruments, system markings on the top staff and below the bottom staff
+    const Part* a = addPart(u"A");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addSystemObjects(c->staff(0), true);
+    buildTree(); // [A:0] A B C [C:0]
+
+    // [THEN] C's markings replace the top staff's
+    EXPECT_CALL(*m_parts, reorderParts(IDList { a->id(), b->id(), c->id() },
+                                       Moves { { c->staff(0)->id(), a->staff(0)->id() } }));
+
+    // [WHEN] The markings row below C is dragged up right below the top markings row
+    dragRow(4, 1);
+
+    // [THEN] Both markings rows show A's staff until the panel rebuilds its markings rows
+    EXPECT_EQ(m_root->childCount(), 5);
+    EXPECT_EQ(childNames(), "[A:0] [A:0] A B C");
 }
 
 TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_InstrumentPastBottomMarkings)

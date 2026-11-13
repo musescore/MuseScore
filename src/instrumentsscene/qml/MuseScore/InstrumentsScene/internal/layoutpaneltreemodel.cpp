@@ -459,6 +459,8 @@ void LayoutPanelTreeModel::load()
 
     endResetModel();
 
+    m_shouldUpdateSystemObjectLayers = false;
+
     setupPartsConnections();
     setupNotationConnections();
 

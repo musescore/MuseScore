@@ -22,7 +22,7 @@
 
 #include "editpart.h"
 
-#include "containers.h"
+#include <algorithm>
 
 #include "editscoreproperties.h"
 #include "editstaff.h"
@@ -815,7 +815,13 @@ bool EditPart::moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t
 {
     Staff* bottomStaff = score->staves().back();
 
-    // Only onto staves without markings, so none get deleted
+    auto hasPendingMoveFrom = [&moves](staff_idx_t staffIdx) {
+        return std::any_of(moves.begin(), moves.end(), [staffIdx](const std::pair<staff_idx_t, Staff*>& move) {
+            return move.first == staffIdx;
+        });
+    };
+
+    // Waits for the destination's own markings to move away, otherwise replaces them
     bool moved = true;
     while (!moves.empty() && moved) {
         moved = false;
@@ -823,7 +829,7 @@ bool EditPart::moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t
         for (auto it = moves.begin(); it != moves.end();) {
             Staff* from = score->staff(it->first);
             Staff* to = it->second ? it->second : bottomStaff;
-            if (!from || (from != to && muse::contains(score->systemObjectStavesWithTopStaff(), to))) {
+            if (!from || (from != to && hasPendingMoveFrom(to->idx()))) {
                 ++it;
                 continue;
             }
