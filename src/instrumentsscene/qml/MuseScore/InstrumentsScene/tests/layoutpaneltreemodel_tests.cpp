@@ -860,6 +860,27 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_InvalidArguments)
     EXPECT_EQ(rowNames(), "[A:0] A B C");
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_StaffOutOfPart)
+{
+    // [GIVEN] A with two staves and B, system markings above A and B
+    const Part* a = addPart(u"A", 2);
+    const Part* b = addPart(u"B");
+    addSystemObjects(b->staff(0));
+    createModel(); // [A:0] A [B:0] B
+
+    // [THEN] Nothing is sent to the score
+    EXPECT_CALL(*m_parts, reorderStaves(_)).Times(0);
+    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+
+    // [WHEN] A staff of A is moved onto the markings row above B
+    // [THEN] Nothing moves
+    EXPECT_FALSE(m_model->moveRows(row(1), 0, 1, QModelIndex(), 2));
+    EXPECT_EQ(rowNames(), "[A:0] A [B:0] B");
+    EXPECT_EQ(childTypes(1), (ItemTypes { ItemType::STAFF, ItemType::STAFF, ItemType::CONTROL_ADD_STAFF }));
+    EXPECT_EQ(childItem(1, 0)->id(), a->staff(0)->id());
+    EXPECT_EQ(childItem(1, 1)->id(), a->staff(1)->id());
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsDown)
 {
     // [GIVEN] Three instruments
