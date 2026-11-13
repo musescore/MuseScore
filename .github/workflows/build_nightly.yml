@@ -45,7 +45,7 @@ jobs:
               workflow_id: 'build_all.yml',
               ref: ref,
               inputs: {
-                platforms: 'linux_arm64 linux_x64 macos windows_x64 windows_portable utest vtest',
+                platforms: 'linux_arm64 linux_x64 macos windows_x64 windows_portable wasm utest vtest',
                 build_mode: 'nightly',
                 publish: 'on'
               }
