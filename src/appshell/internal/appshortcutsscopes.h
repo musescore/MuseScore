@@ -5,9 +5,9 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
  * published by the Free Software Foundation.
  *
@@ -19,42 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include <map>
-#include <functional>
-
-#include "shortcuts_v2/ishortcutsresolver.h"
+#include <memory>
 
 #include "modularity/ioc.h"
+#include "shortcuts_v2/ishortcutsresolver.h"
 #include "ui/inavigationcontroller.h"
 #include "notationscene/inotationcommandscontroller.h"
 
 namespace mu::appshell {
-class ShortcutResolver : public muse::shortcuts::IShortcutsResolver, public muse::Contextable
+//! NOTE Sets the shortcut scopes of the app: their titles and priorities.
+//! The scopes NOTATION* are active only when the notation is focused.
+class AppShortcutsScopes : public muse::Contextable, public std::enable_shared_from_this<AppShortcutsScopes>
 {
+    muse::ContextInject<muse::shortcuts::IShortcutsResolver> shortcutsResolver = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<notation::INotationCommandsController> notationCommandsController = { this };
 
 public:
-    ShortcutResolver(const muse::modularity::ContextPtr& iocCtx)
+    AppShortcutsScopes(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    muse::shortcuts::Shortcut selectActive(const muse::shortcuts::ShortcutList& list) const override;
-
-    muse::TranslatableString scopeTitle(const std::string& scopeCode) const override;
+    void init();
 
 private:
-    int scopePriority(const std::string& scope) const;
+    using Condition = bool (AppShortcutsScopes::*)() const;
+
+    bool isNotationActive(Condition condition) const;
 
     bool isNotationFocused() const;
-    bool isNotationFocusedAndNoteInputMode() const;
-    bool isNotationFocusedAndTabStaff() const;
-    bool isNotationFocusedAndHasSelection() const;
-    bool isNotationFocusedAndSingleSelection() const;
-    bool isNotationFocusedAndRangeSelection() const;
-    bool isNotationFocusedAndTextEditing() const;
-
-    mutable std::map<std::string, std::function<int()> > m_scopePriorityMap;
+    bool isNoteInputMode() const;
+    bool isTablatureStaff() const;
+    bool hasSelection() const;
+    bool isSingleSelection() const;
+    bool isRangeSelection() const;
+    bool isTextEditing() const;
 };
 }

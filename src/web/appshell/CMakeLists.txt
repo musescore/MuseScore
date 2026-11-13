@@ -25,6 +25,8 @@ target_sources(appshell PRIVATE
     appshellmodule.h
     internal/startupscenario.cpp
     internal/startupscenario.h
+    internal/appshortcutsscopes.cpp
+    internal/appshortcutsscopes.h
 )
 
 # Shared with the desktop appshell

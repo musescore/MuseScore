@@ -38,8 +38,8 @@
 #include "internal/sessionsmanager.h"
 #include "internal/appshellcommandsregister.h"
 #include "internal/appshellcommandsstate.h"
-#include "internal/shortcutresolver.h"
 #include "internal/extensioncontextresolver.h"
+#include "internal/appshortcutsscopes.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosappmenumodelhook.h"
@@ -116,12 +116,12 @@ void AppShellContext::registerExports()
     m_commandsController = std::make_shared<AppshellCommandsController>(iocContext());
     m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
     m_extensionContextResolver = std::make_shared<ExtensionContextResolver>(iocContext());
+    m_shortcutsScopes = std::make_shared<AppShortcutsScopes>(iocContext());
 
     ioc()->registerExport<IAppShellState>(mname, m_appshellState);
     ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
     ioc()->registerExport<ISessionsManager>(mname, m_sessionsManager);
     ioc()->registerExport<IAppshellCommandsController>(mname, m_commandsController);
-    ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext()));
     ioc()->registerExport<IExtensionContextResolver>(mname, m_extensionContextResolver);
 
 #ifdef Q_OS_MAC
@@ -154,6 +154,7 @@ void AppShellContext::onInit(const muse::IApplication::RunMode& mode)
 
     m_commandsController->init();
     m_extensionContextResolver->init();
+    m_shortcutsScopes->init();
 }
 
 void AppShellContext::onDeinit()
