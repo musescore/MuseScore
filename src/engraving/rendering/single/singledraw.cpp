@@ -998,6 +998,23 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
     }
 }
 
+static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
+{
+    static constexpr double DOTTED_DASH_LEN = 0.01;
+    static constexpr double DOTTED_GAP_LEN = 1.99;
+    switch (line->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = line->dashLineLen(), gap = line->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+}
+
 void SingleDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -1012,6 +1029,15 @@ void SingleDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintO
     const Color color = item->curColor(box->visible(), box->lineColor(), opt);
     Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
             PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+
+    double dash = 0;
+    double gap = 0;
+    setDashAndGapLen(box, dash, gap, pen);
+
+    if (box->lineStyle() != LineType::SOLID) {
+        pen.setDashPattern({ dash, gap });
+    }
+
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
 
@@ -1646,23 +1672,6 @@ void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, mu
 {
     painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
-}
-
-static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
-{
-    static constexpr double DOTTED_DASH_LEN = 0.01;
-    static constexpr double DOTTED_GAP_LEN = 1.99;
-    switch (line->lineStyle()) {
-    case LineType::SOLID:
-        break;
-    case LineType::DASHED:
-        dash = line->dashLineLen(), gap = line->dashGapLen();
-        break;
-    case LineType::DOTTED:
-        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
-        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
-        break;
-    }
 }
 
 static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
