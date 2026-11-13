@@ -136,6 +136,12 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
     TRACEFUNC;
 
     PointF logicPos = toLogical(event->pos());
+
+    if (!notationContentRect().contains(logicPos)) {
+        event->ignore();
+        return;
+    }
+
     m_startMove = logicPos;
     if (m_cursorRect.contains(logicPos)) {
         return;

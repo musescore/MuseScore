@@ -1308,6 +1308,11 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    if (m_readonly) {
+        event->ignore();
+        return;
+    }
+
     if (m_view->isNoteEnterMode()) {
         return;
     }
