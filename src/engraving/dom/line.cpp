@@ -149,10 +149,8 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 {
     std::vector<LineF> result;
 
-    const Grip lineGrip = lineGripFor(grip);
-
     // Middle or aperture grip have no anchor
-    if (!system() || lineGrip == Grip::APERTURE) {
+    if (!system() || grip == Grip::APERTURE) {
         return result;
     }
 
@@ -166,12 +164,12 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 
     const Page* p = system()->page();
     const PointF pageOffset = p ? p->pos() : PointF();
-    switch (lineGrip) {
+    switch (grip) {
     case Grip::START:
-        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(grip))).translated(pageOffset));
+        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
         break;
     case Grip::END:
-        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(grip))).translated(pageOffset));
+        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     case Grip::MIDDLE:
         result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
@@ -230,9 +228,8 @@ bool LineSegment::isEditAllowed(EditData& ed) const
 
 bool LineSegment::edit(EditData& ed)
 {
-    const Grip grip = lineGripFor(ed.curGrip);
-    const bool moveStart = grip == Grip::START;
-    const bool moveEnd = grip == Grip::END || grip == Grip::MIDDLE;
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later
@@ -710,16 +707,15 @@ void LineSegment::dragGrip(EditData& ed)
     // Only for resizing according to the diagonal properties
     const PointF deltaResize(ed.evtDelta.x(), line()->diagonal() ? ed.evtDelta.y() : 0.0);
 
-    const Grip grip = lineGripFor(ed.curGrip);
-    switch (grip) {
+    switch (ed.curGrip) {
     case Grip::START:         // Resize the begin of element (left grip)
         setOffset(offset() + deltaResize);
         m_offset2 -= deltaResize;
-        rebaseAnchors(ed, grip);
+        rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::END:         // Resize the end of element (right grip)
         m_offset2 += deltaResize;
-        rebaseAnchors(ed, grip);
+        rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::MIDDLE: {         // Move the element (middle grip)
         // Only for moving, no y limitation

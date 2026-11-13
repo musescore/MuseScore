@@ -44,15 +44,14 @@ public:
     BoxLine* boxLine() const { return toBoxLine(spanner()); }
 
     /**
-     * Grips: START/END are the corners on the edge nearest the staff, FAR_START/FAR_END
-     * are the corners on the far edge, MIDDLE is the centre of the box. Every corner
-     * resizes horizontally like START/END (including re-anchoring) and vertically by
-     * changing the box height only. The center only offsets the box.
+     * Grips: START/END are the corners on the edge nearest the staff and behave like
+     * ordinary (non-diagonal) line grips, i.e. they only resize horizontally and may
+     * re-anchor. MIDDLE is the centre of the box and moves it. HEIGHT is in the middle
+     * of the far edge and only changes the box height (no re-anchoring).
      */
-    static constexpr Grip FAR_START = Grip(3);
-    static constexpr Grip FAR_END = Grip(4);
+    static constexpr Grip HEIGHT = Grip(3);
 
-    int gripsCount() const override { return 5; }
+    int gripsCount() const override { return 4; }
     Grip initialEditModeGrip() const override { return Grip::MIDDLE; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
@@ -66,13 +65,12 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(BoxLineSegment)
 
+    bool edit(EditData&) override;
+    std::vector<LineF> gripAnchorLines(Grip) const override;
+
 protected:
-    Grip lineGripFor(Grip grip) const override;
     void startDragGrip(EditData&) override;
     void dragGrip(EditData&) override;
-
-private:
-    void resizeHeight(EditData&);
 };
 
 //---------------------------------------------------------

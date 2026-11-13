@@ -48,20 +48,8 @@ std::vector<PointF> BoxLineSegment::gripsPositions(const EditData&) const
     grips[int(Grip::START)] = PointF(r.left(), nearY) + pp;
     grips[int(Grip::END)] = PointF(r.right(), nearY) + pp;
     grips[int(Grip::MIDDLE)] = r.center() + pp;
-    grips[int(FAR_START)] = PointF(r.left(), farY) + pp;
-    grips[int(FAR_END)] = PointF(r.right(), farY) + pp;
+    grips[int(HEIGHT)] = PointF(r.center().x(), farY) + pp;
     return grips;
-}
-
-Grip BoxLineSegment::lineGripFor(Grip grip) const
-{
-    if (grip == FAR_START) {
-        return Grip::START;
-    }
-    if (grip == FAR_END) {
-        return Grip::END;
-    }
-    return grip;
 }
 
 EngravingObject* BoxLineSegment::propertyDelegate(Pid pid) const
@@ -72,31 +60,45 @@ EngravingObject* BoxLineSegment::propertyDelegate(Pid pid) const
     return LineSegment::propertyDelegate(pid);
 }
 
+bool BoxLineSegment::edit(EditData& ed)
+{
+    if (ed.curGrip == HEIGHT) {
+        return false;
+    }
+    return LineSegment::edit(ed);
+}
+
+std::vector<LineF> BoxLineSegment::gripAnchorLines(Grip grip) const
+{
+    if (grip == HEIGHT) {
+        return {};
+    }
+    return LineSegment::gripAnchorLines(grip);
+}
+
 void BoxLineSegment::startDragGrip(EditData& ed)
 {
     LineSegment::startDragGrip(ed);
-    if (ElementEditDataPtr eed = ed.getData(this)) {
-        eed->pushProperty(Pid::BOXLINE_HEIGHT);
+    if (ed.curGrip == HEIGHT) {
+        if (ElementEditDataPtr eed = ed.getData(this)) {
+            eed->pushProperty(Pid::BOXLINE_HEIGHT);
+        }
     }
 }
 
 void BoxLineSegment::dragGrip(EditData& ed)
 {
-    if (ed.curGrip != Grip::MIDDLE) {
-        resizeHeight(ed);
+    if (ed.curGrip != HEIGHT) {
+        // BoxLine is never diagonal, so START/END only resize horizontally
+        LineSegment::dragGrip(ed);
+        return;
     }
-    LineSegment::dragGrip(ed);
-}
 
-void BoxLineSegment::resizeHeight(EditData& ed)
-{
     BoxLine* box = boxLine();
     const double dy = ed.evtDelta.y() / absoluteFromSpatium(Spatium(1.0));
-    const bool farEdge = ed.curGrip == FAR_START || ed.curGrip == FAR_END;
-    const double movedAway = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
-    const double growth = farEdge ? movedAway : -movedAway;
-
+    const double growth = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
     box->setBoxHeight(box->boxHeight() + Spatium(growth));
+    triggerLayout();
 }
 
 //---------------------------------------------------------
