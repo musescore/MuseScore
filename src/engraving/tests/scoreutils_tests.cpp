@@ -23,9 +23,12 @@
 #include <gtest/gtest.h>
 
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/clef.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftype.h"
 
 using namespace mu::engraving;
 
@@ -116,6 +119,55 @@ TEST_F(Engraving_ScoreUtilsTests, StaffTestMergeMatchingRests)
     score->staff(0)->setMergeMatchingRests(AutoOnOff::OFF);
     // [THEN] rests display unmerged
     EXPECT_FALSE(score->staff(0)->shouldMergeMatchingRests());
+
+    delete score;
+}
+
+TEST_F(Engraving_ScoreUtilsTests, AppendPartFromTablatureTemplate)
+{
+    // [GIVEN] A score and the Classical Guitar (tablature) instrument template
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    const InstrumentTemplate* t = searchTemplate(String(u"guitar-nylon-tablature"));
+    ASSERT_NE(t, nullptr);
+    ASSERT_NE(t->staffTypePreset, nullptr);
+    ASSERT_EQ(t->staffTypePreset->group(), StaffGroup::TAB);
+
+    // [WHEN] The part is appended via the engraving API used by the plugin layer
+    score->appendPart(t);
+
+    // [THEN] The resulting staff is a TAB staff, not a default standard staff
+    ASSERT_EQ(score->parts().size(), 1u);
+    Part* part = score->parts().front();
+    EXPECT_TRUE(part->hasTabStaff());
+    EXPECT_FALSE(part->hasPitchedStaff());
+
+    ASSERT_EQ(part->nstaves(), 1u);
+    const StaffType* stt = part->staff(0)->staffType(Fraction(0, 1));
+    EXPECT_EQ(stt->group(), StaffGroup::TAB);
+    EXPECT_EQ(stt->lines(), 6);
+
+    delete score;
+}
+
+TEST_F(Engraving_ScoreUtilsTests, AppendPartFromStandardTemplatePreservesClefs)
+{
+    // [GIVEN] A score and the Piano template (two staves, treble + bass)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    const InstrumentTemplate* t = searchTemplate(String(u"piano"));
+    ASSERT_NE(t, nullptr);
+
+    // [WHEN] The part is appended
+    score->appendPart(t);
+
+    // [THEN] Both staves are standard, with the template's per-staff clefs applied
+    ASSERT_EQ(score->parts().size(), 1u);
+    Part* part = score->parts().front();
+    EXPECT_TRUE(part->hasPitchedStaff());
+    EXPECT_FALSE(part->hasTabStaff());
+
+    ASSERT_EQ(part->nstaves(), 2u);
+    EXPECT_EQ(part->staff(0)->defaultClefType().concertClef, ClefType::G);
+    EXPECT_EQ(part->staff(1)->defaultClefType().concertClef, ClefType::F);
 
     delete score;
 }
