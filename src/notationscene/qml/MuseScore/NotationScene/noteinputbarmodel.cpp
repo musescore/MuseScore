@@ -329,14 +329,14 @@ MenuItemList NoteInputBarModel::makeIntervalsItems()
 MenuItemList NoteInputBarModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem(INSERT_MEASURES_COMMAND),
-        makeMenuItem(APPEND_MEASURES_COMMAND),
+        makeMenuItem(InsertMeasureCommand::id),
+        makeMenuItem(AppendMeasureCommand::id),
         makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_COMMAND),
-        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND),
+        makeMenuItem(InsertMeasuresCommand::id),
+        makeMenuItem(InsertMeasuresAfterSelectionCommand::id),
         makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND),
-        makeMenuItem(APPEND_MEASURES_COMMAND)
+        makeMenuItem(InsertMeasuresAtStartOfScoreCommand::id),
+        makeMenuItem(AppendMeasuresCommand::id)
     };
 
     return items;
@@ -345,16 +345,16 @@ MenuItemList NoteInputBarModel::makeMeasuresItems()
 MenuItemList NoteInputBarModel::makeFramesItems()
 {
     MenuItemList items {
-        makeMenuItem(INSERT_HBOX_COMMAND),
-        makeMenuItem(INSERT_VBOX_COMMAND),
-        makeMenuItem(INSERT_TEXTFRAME_COMMAND),
-        makeMenuItem(INSERT_FRETFRAME_COMMAND),
+        makeMenuItem(InsertHBoxCommand::id),
+        makeMenuItem(InsertVBoxCommand::id),
+        makeMenuItem(InsertTextFrameCommand::id),
+        makeMenuItem(InsertFretFrameCommand::id),
         makeSeparator(),
         makeMenu(TranslatableString("notation", "Insert at end of score"), {
-            makeMenuItem(APPEND_HBOX_COMMAND),
-            makeMenuItem(APPEND_VBOX_COMMAND),
-            makeMenuItem(APPEND_TEXTFRAME_COMMAND),
-            makeMenuItem(APPEND_FRETFRAME_COMMAND)
+            makeMenuItem(AppendHBoxCommand::id),
+            makeMenuItem(AppendVBoxCommand::id),
+            makeMenuItem(AppendTextFrameCommand::id),
+            makeMenuItem(AppendFretFrameCommand::id)
         })
     };
 
@@ -410,7 +410,7 @@ MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
         makeMenuItem(ADD_CHORD_TEXT_COMMAND),
         makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
         makeSeparator(),
-        makeMenuItem(INSERT_FRETFRAME_COMMAND, TranslatableString("notation", "Fretboard diagram legend"))
+        makeMenuItem(InsertFretFrameCommand::id, TranslatableString("notation", "Fretboard diagram legend"))
     };
 
     return items;

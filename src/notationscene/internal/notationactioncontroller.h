@@ -170,6 +170,8 @@ private:
     muse::Ret putTuplet(const AddTupletCommand& command);
     muse::Ret openTupletOtherDialog();
 
+    muse::Ret addBoxes(const AddBoxesCommand& command);
+
     muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);
@@ -203,9 +205,6 @@ private:
 
     muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
     muse::Ret startEditSelectedText(const muse::rcommand::Params& params);
-
-    muse::Ret addMeasures(const muse::rcommand::Params& params, AddBoxesTarget target);
-    void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
 
