@@ -1338,7 +1338,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     }
 
     auto boxLine = makeElement<BoxLine>(paletteScore());
-    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box"));
+    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box line"));
 
     auto pm = makeElement<PalmMute>(paletteScore());
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
