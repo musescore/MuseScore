@@ -138,6 +138,8 @@ qt_add_qml_module(propertiespanel_qml
         notation/lines/textlinesettingsmodel.h
         notation/lines/vibratosettingsmodel.cpp
         notation/lines/vibratosettingsmodel.h
+        notation/lines/boxlinesettingsmodel.cpp
+        notation/lines/boxlinesettingsmodel.h
         notation/lines/voltasettingsmodel.cpp
         notation/lines/voltasettingsmodel.h
         notation/lines/lyricslinesettingsmodel.cpp
@@ -335,6 +337,7 @@ qt_add_qml_module(propertiespanel_qml
         notation/lines/SlurAndTieSettings.qml
         notation/lines/ChordBracketSettings.qml
         notation/lines/VibratoSettings.qml
+        notation/lines/BoxLineSettings.qml
         notation/lines/LyricsLineSettings.qml
         notation/lyrics/LyricsSettings.qml
         notation/markers/MarkerSettings.qml

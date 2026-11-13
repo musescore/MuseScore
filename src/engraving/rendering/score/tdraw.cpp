@@ -1112,42 +1112,6 @@ void TDraw::draw(const TBox* item, Painter* painter, const PaintOptions& opt)
     draw(static_cast<const Box*>(item), painter, opt);
 }
 
-void TDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
-{
-    TRACE_DRAW_ITEM;
-
-    const BoxLineSegment::LayoutData* ldata = item->ldata();
-    IF_ASSERT_FAILED(ldata) {
-        return;
-    }
-
-    const BoxLine* box = item->boxLine();
-
-    const Color color = item->curColor(box->visible(), box->lineColor(), opt);
-    Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
-            PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
-    painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-
-    const RectF& r = ldata->rect;
-    if (ldata->closedLeft && ldata->closedRight) {
-        // Full box
-        painter->drawRect(r);
-    } else if (ldata->closedLeft) {
-        // [  (first system)
-        const PointF pts[] = { r.topRight(), r.topLeft(), r.bottomLeft(), r.bottomRight() };
-        painter->drawPolyline(pts, 4);
-    } else if (ldata->closedRight) {
-        //  ] (last system)
-        const PointF pts[] = { r.topLeft(), r.topRight(), r.bottomRight(), r.bottomLeft() };
-        painter->drawPolyline(pts, 4);
-    } else {
-        //  = (middle systems)
-        painter->drawLine(r.topLeft(), r.topRight());
-        painter->drawLine(r.bottomLeft(), r.bottomRight());
-    }
-}
-
 void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -1657,6 +1621,52 @@ static std::vector<double> distributedDashPattern(double dash, double gap, doubl
     double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
 
     return { dash, newGap };
+}
+
+void TDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    const BoxLineSegment::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    const BoxLine* box = item->boxLine();
+
+    const Color color = item->curColor(box->visible(), box->lineColor(), opt);
+    Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
+            PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+
+    double dash = 0;
+    double gap = 0;
+    setDashAndGapLen(box, dash, gap, pen);
+
+    const bool isNonSolid = box->lineStyle() != LineType::SOLID;
+    if (isNonSolid) {
+        pen.setDashPattern({ dash, gap });
+    }
+
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+
+    const RectF& r = ldata->rect;
+    if (ldata->closedLeft && ldata->closedRight) {
+        // Full box
+        painter->drawRect(r);
+    } else if (ldata->closedLeft) {
+        // [  (first system)
+        const PointF pts[] = { r.topRight(), r.topLeft(), r.bottomLeft(), r.bottomRight() };
+        painter->drawPolyline(pts, 4);
+    } else if (ldata->closedRight) {
+        //  ] (last system)
+        const PointF pts[] = { r.topLeft(), r.topRight(), r.bottomRight(), r.bottomLeft() };
+        painter->drawPolyline(pts, 4);
+    } else {
+        //  = (middle systems)
+        painter->drawLine(r.topLeft(), r.topRight());
+        painter->drawLine(r.bottomLeft(), r.bottomRight());
+    }
 }
 
 void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOptions& opt)

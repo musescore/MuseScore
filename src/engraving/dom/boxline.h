@@ -86,6 +86,9 @@ class BoxLine final : public SLine
     DECLARE_CLASSOF(ElementType::BOXLINE)
 
 public:
+    static constexpr Spatium MIN_HEIGHT = 0.5_sp;
+    static constexpr Spatium MAX_HEIGHT = 900.0_sp;
+
     BoxLine(DummyParentOr<EngravingItem> parent);
     BoxLine(const BoxLine&);
     ~BoxLine() {}
@@ -107,7 +110,7 @@ public:
     void reset() override;
 
     Spatium boxHeight() const { return m_height; }
-    void setBoxHeight(const Spatium& v) { m_height = v; }
+    void setBoxHeight(const Spatium& v);
 
 private:
     Spatium m_height = 2.0_sp;

@@ -22,11 +22,11 @@
 
 #include "boxline.h"
 
+#include <algorithm>
+
 #include "editing/elementeditdata.h"
 
 namespace mu::engraving {
-static constexpr Spatium BOXLINE_MIN_HEIGHT = 0.5_sp;
-
 //---------------------------------------------------------
 //   BoxLineSegment
 //---------------------------------------------------------
@@ -96,14 +96,7 @@ void BoxLineSegment::resizeHeight(EditData& ed)
     const double movedAway = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
     const double growth = farEdge ? movedAway : -movedAway;
 
-    const double oldHeight = box->boxHeight().val();
-    const double newHeight = std::max(BOXLINE_MIN_HEIGHT.val(), oldHeight + growth);
-
-    if (muse::RealIsEqual(newHeight, oldHeight)) {
-        return;
-    }
-
-    box->setBoxHeight(Spatium(newHeight));
+    box->setBoxHeight(box->boxHeight() + Spatium(growth));
 }
 
 //---------------------------------------------------------
@@ -177,5 +170,10 @@ void BoxLine::reset()
 {
     SLine::reset();
     undoResetProperty(Pid::BOXLINE_HEIGHT);
+}
+
+void BoxLine::setBoxHeight(const Spatium& v)
+{
+    m_height = Spatium(std::clamp(v.val(), MIN_HEIGHT.val(), MAX_HEIGHT.val()));
 }
 }

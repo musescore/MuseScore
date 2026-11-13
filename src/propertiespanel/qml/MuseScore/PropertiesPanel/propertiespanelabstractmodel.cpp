@@ -56,6 +56,8 @@ static const QMap<mu::engraving::ElementType, PropertiesPanelModelType> NOTATION
     { mu::engraving::ElementType::GLISSANDO_SEGMENT, PropertiesPanelModelType::TYPE_GLISSANDO },
     { mu::engraving::ElementType::VIBRATO, PropertiesPanelModelType::TYPE_VIBRATO },
     { mu::engraving::ElementType::VIBRATO_SEGMENT, PropertiesPanelModelType::TYPE_VIBRATO },
+    { mu::engraving::ElementType::BOXLINE, PropertiesPanelModelType::TYPE_BOXLINE },
+    { mu::engraving::ElementType::BOXLINE_SEGMENT, PropertiesPanelModelType::TYPE_BOXLINE },
     { mu::engraving::ElementType::SLUR, PropertiesPanelModelType::TYPE_SLUR },
     { mu::engraving::ElementType::SLUR_SEGMENT, PropertiesPanelModelType::TYPE_SLUR },
     { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, PropertiesPanelModelType::TYPE_HAMMER_ON_PULL_OFF },

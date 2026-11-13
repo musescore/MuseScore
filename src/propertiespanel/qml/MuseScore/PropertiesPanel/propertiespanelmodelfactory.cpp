@@ -45,6 +45,7 @@
 #include "notation/lines/ottavasettingsmodel.h"
 #include "notation/lines/voltasettingsmodel.h"
 #include "notation/lines/vibratosettingsmodel.h"
+#include "notation/lines/boxlinesettingsmodel.h"
 #include "notation/lines/slurandtiesettingsmodel.h"
 #include "notation/lines/gradualtempochangesettingsmodel.h"
 #include "notation/lines/notelinesettingsmodel.h"
@@ -151,6 +152,8 @@ PropertiesPanelAbstractModel* PropertiesPanelModelFactory::newPropertiesPanelLis
         return new GradualTempoChangeSettingsModel(parent, iocCtx, repository);
     case PropertiesPanelModelType::TYPE_VIBRATO:
         return new VibratoSettingsModel(parent, iocCtx, repository);
+    case PropertiesPanelModelType::TYPE_BOXLINE:
+        return new BoxLineSettingsModel(parent, iocCtx, repository);
     case PropertiesPanelModelType::TYPE_SLUR:
         return new SlurAndTieSettingsModel(parent, iocCtx, repository, SlurAndTieSettingsModel::Slur);
     case PropertiesPanelModelType::TYPE_TIE:
