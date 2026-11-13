@@ -147,13 +147,7 @@ void Rest::setOffset(const PointF& o)
 
 RectF Rest::drag(EditData& ed)
 {
-    if (ed.modifiers & ShiftModifier) {
-        Segment* seg = segment();
-        const Spatium deltaSp = Spatium(ed.evtDelta.x() / spatium());
-        seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
-    } else {
-        setOffset(offset() + ed.evtDelta);
-    }
+    setOffset(offset() + ed.evtDelta);
     triggerLayout();
     return RectF();
 }
