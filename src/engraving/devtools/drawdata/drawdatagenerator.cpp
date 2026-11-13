@@ -224,6 +224,11 @@ bool DrawDataGenerator::loadScore(mu::engraving::MasterScore* score, const muse:
 //#endif
     }
 
+    // Style is loaded after construction, so refresh its derived spacing tables.
+    for (Score* loadedScore : score->scoreList()) {
+        loadedScore->updatePaddingTables();
+    }
+
     return true;
 }
 
