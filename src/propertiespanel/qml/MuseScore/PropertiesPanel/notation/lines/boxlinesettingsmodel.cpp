@@ -95,14 +95,49 @@ void BoxLineSettingsModel::createProperties()
 
 void BoxLineSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_placement);
-    loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_thickness, formatDoubleFunc);
-    loadPropertyItem(m_lineStyle);
-    loadPropertyItem(m_dashLineLength, formatDoubleFunc);
-    loadPropertyItem(m_dashGapLength, formatDoubleFunc);
+    static const PropertyIdSet propertyIdSet {
+        Pid::PLACEMENT,
+        Pid::BOXLINE_HEIGHT,
+        Pid::LINE_WIDTH,
+        Pid::LINE_STYLE,
+        Pid::DASH_LINE_LEN,
+        Pid::DASH_GAP_LEN,
+    };
 
-    updateDashPropertiesAvailability();
+    loadProperties(propertyIdSet);
+}
+
+void BoxLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+{
+    loadProperties(changedPropertyIdSet);
+}
+
+void BoxLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (muse::contains(propertyIdSet, Pid::PLACEMENT)) {
+        loadPropertyItem(m_placement);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::BOXLINE_HEIGHT)) {
+        loadPropertyItem(m_height, formatDoubleFunc);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::LINE_WIDTH)) {
+        loadPropertyItem(m_thickness, formatDoubleFunc);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::LINE_STYLE)) {
+        loadPropertyItem(m_lineStyle);
+        updateDashPropertiesAvailability();
+    }
+
+    if (muse::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
+        loadPropertyItem(m_dashLineLength, formatDoubleFunc);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
+        loadPropertyItem(m_dashGapLength, formatDoubleFunc);
+    }
 }
 
 void BoxLineSettingsModel::updateDashPropertiesAvailability()
