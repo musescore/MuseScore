@@ -50,7 +50,7 @@ double MScore::horizontalPageGapOdd = 3.5 * DPMM;
 
 bool MScore::warnPitchRange;
 bool MScore::warnGuitarBends;
-int MScore::pedalEventsMinTicks;
+int MScore::pedalReleaseGapMs;
 
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
