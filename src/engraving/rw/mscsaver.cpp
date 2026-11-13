@@ -39,6 +39,7 @@
 #include "dom/page.h"
 
 #include "engraving/automation/internal/automationrw.h"
+#include "engraving/playback/practiceemphasisdata.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"
@@ -191,6 +192,14 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             if (!data.empty()) {
                 mscWriter.writeAutomationJsonFile(data);
             }
+        }
+    }
+
+    // Practice emphasis is not notation. Stock MuseScore drops this sidecar on the next save.
+    {
+        const PracticeEmphasisData& emphasis = score->practiceEmphasis();
+        if (!emphasis.isDefault()) {
+            mscWriter.writePracticeEmphasisJsonFile(emphasis.toJson());
         }
     }
 

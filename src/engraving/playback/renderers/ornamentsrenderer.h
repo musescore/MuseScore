@@ -38,13 +38,13 @@ public:
 private:
     static void applyTiedNotesDuration(const Note* note, const muse::mpe::ArticulationType ornamentType, RenderingContext& ctx);
 
-    static void convert(const muse::mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
-                        muse::mpe::PlaybackEventList& result);
+    static void convert(const muse::mpe::ArticulationType type, const DisclosurePattern& pattern, const Note* note,
+                        NominalNoteCtx&& noteCtx, muse::mpe::PlaybackEventList& result);
 
     static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
                                         const DisclosurePattern& pattern);
 
-    static void createEvents(const muse::mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
+    static void createEvents(const muse::mpe::ArticulationType type, const Note* note, NominalNoteCtx& noteCtx, const int alterationsCount,
                              const int availableDurationTicks, const int overallDurationTicks,
                              const std::vector<muse::mpe::pitch_level_t>& pitchOffsets, muse::mpe::PlaybackEventList& result);
 };

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.75</spatium>
+    </Style>
+    <metaTag name="workTitle">SSATB practice listen</metaTag>
+    <!-- Part 1: Soprano/Alto share one treble staff (closed score) -->
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <trackName>Women</trackName>
+      <Instrument id="soprano">
+        <longName>S/A</longName>
+        <trackName>Women</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <instrumentId>voice.soprano</instrumentId>
+        <clef>G</clef>
+        <Channel>
+          <program value="52"/>
+        </Channel>
+      </Instrument>
+    </Part>
+    <!-- Part 2: Tenor/Bass share one bass staff -->
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+        <defaultClef>F</defaultClef>
+      </Staff>
+      <trackName>Men</trackName>
+      <Instrument id="bass">
+        <longName>T/B</longName>
+        <trackName>Men</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>67</maxPitchP>
+        <instrumentId>voice.bass</instrumentId>
+        <clef>F</clef>
+        <Channel>
+          <program value="52"/>
+        </Channel>
+      </Instrument>
+    </Part>
+
+    <!-- Staff 1, measure 1 -->
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Tempo><tempo>1</tempo><text><sym>metNoteQuarterUp</sym> = 60</text></Tempo>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Soprano 1 + Soprano 2 as ONE chord, two noteheads.
+               Beat 1-2: they divide (E5 / C5). Beat 3-4: unison D5 (shared note). -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>76</pitch><tpc>18</tpc></Note><!-- S1: E5 -->
+            <Note><pitch>72</pitch><tpc>14</tpc></Note><!-- S2: C5 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>74</pitch><tpc>16</tpc></Note><!-- S1+S2 unison: D5 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Alto -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>67</pitch><tpc>15</tpc></Note><!-- A: G4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>65</pitch><tpc>13</tpc></Note><!-- A: F4 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Tempo><tempo>1</tempo><text><sym>metNoteQuarterUp</sym> = 60</text></Tempo>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Soprano 1 + Soprano 2 as ONE chord, two noteheads.
+               Beat 1-2: they divide (E5 / C5). Beat 3-4: unison D5 (shared note). -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>76</pitch><tpc>18</tpc></Note><!-- S1: E5 -->
+            <Note><pitch>72</pitch><tpc>14</tpc></Note><!-- S2: C5 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>74</pitch><tpc>16</tpc></Note><!-- S1+S2 unison: D5 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Alto -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>67</pitch><tpc>15</tpc></Note><!-- A: G4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>65</pitch><tpc>13</tpc></Note><!-- A: F4 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Tempo><tempo>1</tempo><text><sym>metNoteQuarterUp</sym> = 60</text></Tempo>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Soprano 1 + Soprano 2 as ONE chord, two noteheads.
+               Beat 1-2: they divide (E5 / C5). Beat 3-4: unison D5 (shared note). -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>76</pitch><tpc>18</tpc></Note><!-- S1: E5 -->
+            <Note><pitch>72</pitch><tpc>14</tpc></Note><!-- S2: C5 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>74</pitch><tpc>16</tpc></Note><!-- S1+S2 unison: D5 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Alto -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>67</pitch><tpc>15</tpc></Note><!-- A: G4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>65</pitch><tpc>13</tpc></Note><!-- A: F4 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Tempo><tempo>1</tempo><text><sym>metNoteQuarterUp</sym> = 60</text></Tempo>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Soprano 1 + Soprano 2 as ONE chord, two noteheads.
+               Beat 1-2: they divide (E5 / C5). Beat 3-4: unison D5 (shared note). -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>76</pitch><tpc>18</tpc></Note><!-- S1: E5 -->
+            <Note><pitch>72</pitch><tpc>14</tpc></Note><!-- S2: C5 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>74</pitch><tpc>16</tpc></Note><!-- S1+S2 unison: D5 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Alto -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>67</pitch><tpc>15</tpc></Note><!-- A: G4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>65</pitch><tpc>13</tpc></Note><!-- A: F4 -->
+          </Chord>
+        </voice>
+      </Measure>
+
+    </Staff>
+
+    <!-- Staff 2, measure 1 -->
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef><concertClefType>F</concertClefType><transposingClefType>F</transposingClefType></Clef>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Tenor -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>60</pitch><tpc>14</tpc></Note><!-- T: C4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>59</pitch><tpc>19</tpc></Note><!-- T: B3 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Bass -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>48</pitch><tpc>14</tpc></Note><!-- B: C3 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>43</pitch><tpc>15</tpc></Note><!-- B: G2 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <Clef><concertClefType>F</concertClefType><transposingClefType>F</transposingClefType></Clef>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Tenor -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>60</pitch><tpc>14</tpc></Note><!-- T: C4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>59</pitch><tpc>19</tpc></Note><!-- T: B3 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Bass -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>48</pitch><tpc>14</tpc></Note><!-- B: C3 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>43</pitch><tpc>15</tpc></Note><!-- B: G2 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <Clef><concertClefType>F</concertClefType><transposingClefType>F</transposingClefType></Clef>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Tenor -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>60</pitch><tpc>14</tpc></Note><!-- T: C4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>59</pitch><tpc>19</tpc></Note><!-- T: B3 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Bass -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>48</pitch><tpc>14</tpc></Note><!-- B: C3 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>43</pitch><tpc>15</tpc></Note><!-- B: G2 -->
+          </Chord>
+        </voice>
+      </Measure>
+<Measure>
+        <voice>
+          <Clef><concertClefType>F</concertClefType><transposingClefType>F</transposingClefType></Clef>
+          <KeySig><concertKey>0</concertKey></KeySig>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Dynamic><subtype>mf</subtype><velocity>80</velocity></Dynamic>
+          <!-- Voice 1 (stems up): Tenor -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>60</pitch><tpc>14</tpc></Note><!-- T: C4 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note><pitch>59</pitch><tpc>19</tpc></Note><!-- T: B3 -->
+          </Chord>
+          <BarLine><subtype>end</subtype></BarLine>
+        </voice>
+        <voice>
+          <!-- Voice 2 (stems down): Bass -->
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>48</pitch><tpc>14</tpc></Note><!-- B: C3 -->
+          </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note><pitch>43</pitch><tpc>15</tpc></Note><!-- B: G2 -->
+          </Chord>
+        </voice>
+      </Measure>
+
+    </Staff>
+  </Score>
+</museScore>
