@@ -42,7 +42,7 @@
 
 #include "rcommand/commandtypes.h"
 
-namespace mu::appshell {
+namespace mu::notation {
 class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -60,7 +60,7 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     QML_ELEMENT
 
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
-    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<project::IProjectSession> context = { this };

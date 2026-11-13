@@ -45,7 +45,6 @@
 #include "notationscene/notationcommands.h"
 #include "workspace/workspacecommands.h"
 
-using namespace mu::appshell;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::rcommand;
