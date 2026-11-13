@@ -250,6 +250,17 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<SwapVoice24Command>(),
     makeCommandInfo<SwapVoice34Command>(),
 
+    makeCommandInfo<AddTupletCommand>(),
+    makeCommandInfo<AddDupletCommand>(),
+    makeCommandInfo<AddTripletCommand>(),
+    makeCommandInfo<AddQuadrupletCommand>(),
+    makeCommandInfo<AddQuintupletCommand>(),
+    makeCommandInfo<AddSextupletCommand>(),
+    makeCommandInfo<AddSeptupletCommand>(),
+    makeCommandInfo<AddOctupletCommand>(),
+    makeCommandInfo<AddNonupletCommand>(),
+    makeCommandInfo<OpenTupletConfigureCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -466,85 +477,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::REST)
     },
 
-    // tuplet
-    CommandInfo{
-        OPEN_TUPLET_CONFIGURE_COMMAND,
-        TranslatableString("action", "Othe&r…"),
-        TranslatableString("action", "Show tuplet configure"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TUPLET_COMMAND,
-        TranslatableString("action", "Tuplet"),
-        TranslatableString("action", "Enter tuplet"),
-        InputSchema({
-            { "ratio", Arg(DataType::String, u"Tuplet ratio (e.g. 3/2, 4/3, 5/4, 6/5, 7/6, 8/7, 9/8)") },
-            { "number-type", Arg(DataType::String, u"Tuplet number type (number, relation, none)") },
-            { "bracket-type", Arg(DataType::String, u"Tuplet bracket type (auto, show, none)") },
-            { "auto-baselen", Arg(DataType::Bool, u"Auto base length") },
-            { "selected-duration-as", Arg(DataType::String, u"Use selected duration as (subdivision, tuplet-length)") },
-        }),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_DUPLET_COMMAND,
-        TranslatableString("action", "Duplet"),
-        TranslatableString("action", "Enter tuplet: duplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TRIPLET_COMMAND,
-        TranslatableString("action", "Triplet"),
-        TranslatableString("action", "Enter tuplet: triplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_QUADRUPLET_COMMAND,
-        TranslatableString("action", "Quadruplet"),
-        TranslatableString("action", "Enter tuplet: quadruplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_QUINTUPLET_COMMAND,
-        TranslatableString("action", "Quintuplet"),
-        TranslatableString("action", "Enter tuplet: quintuplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SEXTUPLET_COMMAND,
-        TranslatableString("action", "Sextuplet"),
-        TranslatableString("action", "Enter tuplet: sextuplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SEPTUPLET_COMMAND,
-        TranslatableString("action", "Septuplet"),
-        TranslatableString("action", "Enter tuplet: septuplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_OCTUPLET_COMMAND,
-        TranslatableString("action", "Octuplet"),
-        TranslatableString("action", "Enter tuplet: octuplet"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NONUPLET_COMMAND,
-        TranslatableString("action", "Nonuplet"),
-        TranslatableString("action", "Enter tuplet: nonuplet"),
-        InputSchema(),
-        Decoration()
-    },
-
-    // text navigation commands
     CommandInfo{
         EDITTEXT_NEXT_WORD_COMMAND,
         TranslatableString("action", "Edit next word"),

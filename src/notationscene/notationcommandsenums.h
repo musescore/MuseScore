@@ -106,30 +106,33 @@ struct NoteAddingModeContract {
 
 struct TupletNumberTypeContract {
     static constexpr std::string_view key = "number-type";
-    static constexpr engraving::TupletNumberType def = engraving::TupletNumberType::SHOW_NUMBER;
-    static constexpr EnumTable<engraving::TupletNumberType, 3> table { {
-        { "number", engraving::TupletNumberType::SHOW_NUMBER, "show number" },
-        { "relation", engraving::TupletNumberType::SHOW_RELATION, "show relation" },
-        { "none", engraving::TupletNumberType::NO_TEXT, "no text" },
+    static constexpr TupletNumberType def = TupletNumberType::SHOW_NUMBER;
+    static constexpr EnumTable<TupletNumberType, 4> table { {
+        { "number", TupletNumberType::SHOW_NUMBER, "show number" },
+        { "relation", TupletNumberType::SHOW_RELATION, "show relation" },
+        { "none", TupletNumberType::NO_TEXT, "no text" },
+        { "default", TupletNumberType::DEFAULT, "default (from style)" },
     } };
 };
 
 struct TupletBracketTypeContract {
     static constexpr std::string_view key = "bracket-type";
-    static constexpr engraving::TupletBracketType def = engraving::TupletBracketType::AUTO_BRACKET;
-    static constexpr EnumTable<engraving::TupletBracketType, 3> table { {
-        { "auto", engraving::TupletBracketType::AUTO_BRACKET, "auto bracket" },
-        { "show", engraving::TupletBracketType::SHOW_BRACKET, "show bracket" },
-        { "none", engraving::TupletBracketType::SHOW_NO_BRACKET, "no bracket" },
+    static constexpr TupletBracketType def = TupletBracketType::AUTO_BRACKET;
+    static constexpr EnumTable<TupletBracketType, 4> table { {
+        { "auto", TupletBracketType::AUTO_BRACKET, "auto bracket" },
+        { "show", TupletBracketType::SHOW_BRACKET, "show bracket" },
+        { "none", TupletBracketType::SHOW_NO_BRACKET, "no bracket" },
+        { "default", TupletBracketType::DEFAULT, "default (from style)" },
     } };
 };
 
 struct TupletSelectedDurationContract {
     static constexpr std::string_view key = "selected-duration-as";
-    static constexpr engraving::TupletSelectedDuration def = engraving::TupletSelectedDuration::TUPLET_LENGTH;
-    static constexpr EnumTable<engraving::TupletSelectedDuration, 2> table { {
-        { "subdivision", engraving::TupletSelectedDuration::SUBDIVISION, "subdivision" },
-        { "tuplet-length", engraving::TupletSelectedDuration::TUPLET_LENGTH, "tuplet length" },
+    static constexpr TupletSelectedDuration def = TupletSelectedDuration::TUPLET_LENGTH;
+    static constexpr EnumTable<TupletSelectedDuration, 3> table { {
+        { "subdivision", TupletSelectedDuration::SUBDIVISION, "subdivision" },
+        { "tuplet-length", TupletSelectedDuration::TUPLET_LENGTH, "tuplet length" },
+        { "default", TupletSelectedDuration::DEFAULT, "default (from configuration)" },
     } };
 };
 
@@ -204,9 +207,9 @@ DECLARE_ENUM_CONTRACT(mu::notation::NoteInputMethod, mu::notation::NoteInputMeth
 DECLARE_ENUM_CONTRACT(mu::engraving::DurationType, mu::notation::DurationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ChangeDurationMode, mu::notation::ChangeDurationModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::NoteAddingMode, mu::notation::NoteAddingModeContract);
-DECLARE_ENUM_CONTRACT(mu::engraving::TupletNumberType, mu::notation::TupletNumberTypeContract);
-DECLARE_ENUM_CONTRACT(mu::engraving::TupletBracketType, mu::notation::TupletBracketTypeContract);
-DECLARE_ENUM_CONTRACT(mu::engraving::TupletSelectedDuration, mu::notation::TupletSelectedDurationContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletNumberType, mu::notation::TupletNumberTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletBracketType, mu::notation::TupletBracketTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletSelectedDuration, mu::notation::TupletSelectedDurationContract);
 DECLARE_ENUM_CONTRACT(mu::notation::SelectionTarget, mu::notation::SelectionTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PlayMode, mu::notation::PlayModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AccidentalType, mu::notation::AccidentalTypeContract);

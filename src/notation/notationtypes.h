@@ -94,6 +94,9 @@ using staff_idx_t = mu::engraving::staff_idx_t;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using Pid = mu::engraving::Pid;
 using VoiceAssignment = mu::engraving::VoiceAssignment;
+using TupletNumberType = mu::engraving::TupletNumberType;
+using TupletBracketType = mu::engraving::TupletBracketType;
+using TupletSelectedDuration = mu::engraving::TupletSelectedDuration;
 
 enum class DragMode : unsigned char
 {
