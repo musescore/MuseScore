@@ -24,6 +24,7 @@
 
 #include <algorithm>
 
+#include "addremoveelement.h"
 #include "editscoreproperties.h"
 #include "editstaff.h"
 #include "transaction/transaction.h"
@@ -849,14 +850,15 @@ bool EditPart::moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t
     return belowBottomStaff && bottomStaff->isSystemObjectStaff();
 }
 
-void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
+void EditPart::appendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
 {
     if (!score || !staff || !destinationPart) {
         return;
     }
 
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
-    KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
+    Staff* lastStaff = staffLocalIndex > 0 ? destinationPart->staff(staffLocalIndex - 1) : nullptr;
+    KeyList keyList = lastStaff ? *lastStaff->keyList() : score->keyList();
 
     staff->setScore(score);
     staff->setPart(destinationPart);
@@ -867,6 +869,7 @@ void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, 
     score->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
     score->updateBracesAndBarlines(destinationPart, staffLocalIndex);
+    score->setBracketsAndBarlines();
 
     destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
 }
@@ -878,8 +881,20 @@ Staff* EditPart::appendStaff(Score* score, Part* destinationPart)
     }
 
     Staff* staff = Factory::createStaff(destinationPart);
-    doAppendStaff(score, staff, destinationPart);
+    appendStaff(score, staff, destinationPart);
     return staff;
+}
+
+void EditPart::appendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart)
+{
+    if (!score || !staff || !sourceStaff || !destinationPart) {
+        return;
+    }
+
+    appendStaff(score, staff, destinationPart, false);
+
+    staff->setLinks(nullptr);
+    Excerpt::cloneStaff(sourceStaff, staff);
 }
 
 Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart)
@@ -889,12 +904,20 @@ Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* desti
     }
 
     Staff* staff = Factory::createStaff(destinationPart);
-    doAppendStaff(score, staff, destinationPart, false);
-
-    staff->setLinks(nullptr);
-    Excerpt::cloneStaff(sourceStaff, staff);
-
+    appendLinkedStaff(score, staff, sourceStaff, destinationPart);
     return staff;
+}
+
+void EditPart::appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart)
+{
+    if (!score || !staff || !masterSourceStaff || !destinationPart) {
+        return;
+    }
+
+    appendStaff(score, staff, destinationPart, false);
+    score->undo(new Link(staff, masterSourceStaff));
+
+    Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score->endTick());
 }
 
 bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible)

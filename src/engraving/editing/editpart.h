@@ -288,7 +288,12 @@ public:
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
 
     static Staff* appendStaff(Score* score, Part* destinationPart);
+    static void appendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
+
     static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
+    static void appendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
+
+    static void appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart);
 
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
@@ -300,7 +305,6 @@ public:
     static void setScoreOrder(Score* score, const ScoreOrder& order);
 
 private:
-    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
     static bool moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
 };
 }

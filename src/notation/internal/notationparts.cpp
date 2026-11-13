@@ -669,7 +669,9 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     }
 
     startEdit(TranslatableString("undoableAction", "Add staff"));
-    doAppendStaff(staff, destinationPart);
+
+    EditPart::appendStaff(score(), staff, destinationPart);
+
     apply();
 
     return true;
@@ -690,10 +692,7 @@ bool NotationParts::appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceS
 
     startEdit(TranslatableString("undoableAction", "Add staff"));
 
-    doAppendStaff(staff, destinationPart, /*createRests*/ false);
-    score()->undo(new mu::engraving::Link(staff, masterSourceStaff));
-
-    mu::engraving::Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score()->endTick());
+    EditPart::appendStaffLinkedToMaster(score(), staff, masterSourceStaff, destinationPart);
 
     return true;
 }
@@ -714,11 +713,7 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
 
     startEdit(TranslatableString("undoableAction", "Add linked staff"));
 
-    doAppendStaff(staff, destinationPart, false);
-
-    ///! NOTE: need to unlink before linking
-    staff->setLinks(nullptr);
-    mu::engraving::Excerpt::cloneStaff(sourceStaff, staff);
+    EditPart::appendLinkedStaff(score(), staff, sourceStaff, destinationPart);
 
     apply();
 
@@ -954,25 +949,6 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 
 void NotationParts::onPartsRemoved(const std::vector<Part*>&)
 {
-}
-
-void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart, bool createRests)
-{
-    staff_idx_t staffLocalIndex = destinationPart->nstaves();
-    mu::engraving::KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
-
-    staff->setScore(score());
-    staff->setPart(destinationPart);
-
-    insertStaff(staff, staffLocalIndex, createRests);
-
-    staff_idx_t staffGlobalIndex = staff->idx();
-    score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
-
-    score()->updateBracesAndBarlines(destinationPart, staffLocalIndex);
-    setBracketsAndBarlines();
-
-    destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
 }
 
 void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick)

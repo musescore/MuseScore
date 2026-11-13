@@ -122,7 +122,6 @@ private:
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
-    void doAppendStaff(Staff* staff, Part* destinationPart, bool createRests=true);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
     void doInsertPart(Part* part, size_t index);
 
