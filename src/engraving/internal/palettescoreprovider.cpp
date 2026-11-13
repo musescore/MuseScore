@@ -61,7 +61,7 @@ void PaletteScoreProvider::init()
     m_paletteScore->style().set(Sid::musicalTextFont, String(u"Leland Text"));
     IEngravingFontPtr scoreFont = engravingfonts()->fontByName("Leland");
     m_paletteScore->setEngravingFont(scoreFont);
-    m_paletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack,
+    m_paletteScore->setNoteHeadWidth(scoreFont->width(m_paletteScore->resolveSym(SymId::noteheadBlack),
                                                       m_paletteScore->style().spatium()) / m_paletteScore->style().defaultSpatium());
 }
 

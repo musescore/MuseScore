@@ -6567,32 +6567,6 @@
                 -0.296
             ], 
             "splitStemDownNE": [
-                0.968, 
-                -0.248
-            ], 
-            "splitStemDownNW": [
-                0.12, 
-                -0.416
-            ], 
-            "splitStemUpSE": [
-                1.092, 
-                0.392
-            ], 
-            "splitStemUpSW": [
-                0.312, 
-                0.356
-            ], 
-            "stemDownNW": [
-                0.0, 
-                -0.168
-            ], 
-            "stemUpSE": [
-                1.18, 
-                0.168
-            ]
-        }, 
-        "noteheadBlackOversized": {
-            "splitStemDownNE": [
                 1.048, 
                 -0.308
             ], 
@@ -7033,19 +7007,13 @@
         }, 
         "noteheadDoubleWhole": {
             "noteheadOrigin": [
-                0.36, 
+                0.392, 
                 0.0
             ]
         }, 
         "noteheadDoubleWholeAlt": {
             "noteheadOrigin": [
                 0.14, 
-                0.0
-            ]
-        }, 
-        "noteheadDoubleWholeOversized": {
-            "noteheadOrigin": [
-                0.392, 
                 0.0
             ]
         }, 
@@ -7070,32 +7038,6 @@
                 0.98, 
                 -0.3
             ], 
-            "splitStemDownNE": [
-                0.956, 
-                -0.3
-            ], 
-            "splitStemDownNW": [
-                0.128, 
-                -0.428
-            ], 
-            "splitStemUpSE": [
-                1.108, 
-                0.372
-            ], 
-            "splitStemUpSW": [
-                0.328, 
-                0.38
-            ], 
-            "stemDownNW": [
-                0.0, 
-                -0.168
-            ], 
-            "stemUpSE": [
-                1.18, 
-                0.168
-            ]
-        }, 
-        "noteheadHalfOversized": {
             "splitStemDownNE": [
                 1.028, 
                 -0.368
@@ -7389,16 +7331,6 @@
                 0.0
             ]
         }, 
-        "noteheadSlashDiamondWhiteOversized": {
-            "stemDownNW": [
-                0.0, 
-                0.0
-            ], 
-            "stemUpSE": [
-                2.404, 
-                0.0
-            ]
-        }, 
         "noteheadSlashHorizontalEnds": {
             "stemDownNW": [
                 0.0, 
@@ -7417,26 +7349,6 @@
             "stemUpSE": [
                 2.12, 
                 1.0
-            ]
-        }, 
-        "noteheadSlashHorizontalEndsMutedOversized": {
-            "stemDownNW": [
-                0.0, 
-                -1.2
-            ], 
-            "stemUpSE": [
-                2.544, 
-                1.2
-            ]
-        }, 
-        "noteheadSlashHorizontalEndsOversized": {
-            "stemDownNW": [
-                0.0, 
-                -1.2
-            ], 
-            "stemUpSE": [
-                2.548, 
-                1.2
             ]
         }, 
         "noteheadSlashVerticalEnds": {
@@ -7459,26 +7371,6 @@
                 0.656
             ]
         }, 
-        "noteheadSlashVerticalEndsMutedOversized": {
-            "stemDownNW": [
-                0.004, 
-                -0.796
-            ], 
-            "stemUpSE": [
-                1.756, 
-                0.796
-            ]
-        }, 
-        "noteheadSlashVerticalEndsOversized": {
-            "stemDownNW": [
-                0.0, 
-                -0.62
-            ], 
-            "stemUpSE": [
-                1.84, 
-                0.62
-            ]
-        }, 
         "noteheadSlashVerticalEndsSmall": {
             "stemDownNW": [
                 0.0, 
@@ -7487,16 +7379,6 @@
             "stemUpSE": [
                 0.732, 
                 0.244
-            ]
-        }, 
-        "noteheadSlashVerticalEndsSmallOversized": {
-            "stemDownNW": [
-                0.0, 
-                -0.268
-            ], 
-            "stemUpSE": [
-                1.044, 
-                0.268
             ]
         }, 
         "noteheadSlashWhiteHalf": {
@@ -7509,16 +7391,6 @@
                 1.0
             ]
         }, 
-        "noteheadSlashWhiteHalfOversized": {
-            "stemDownNW": [
-                0.0, 
-                -1.2
-            ], 
-            "stemUpSE": [
-                3.74, 
-                1.2
-            ]
-        }, 
         "noteheadSlashWhiteMuted": {
             "stemDownNW": [
                 0.0, 
@@ -7529,16 +7401,6 @@
                 1.0
             ]
         }, 
-        "noteheadSlashWhiteMutedOversized": {
-            "stemDownNW": [
-                0.0, 
-                -1.2
-            ], 
-            "stemUpSE": [
-                3.744, 
-                1.2
-            ]
-        }, 
         "noteheadSlashX": {
             "stemDownNW": [
                 0.0, 
@@ -7547,16 +7409,6 @@
             "stemUpSE": [
                 2.12, 
                 1.0
-            ]
-        }, 
-        "noteheadSlashXOversized": {
-            "stemDownNW": [
-                0.0, 
-                -1.2
-            ], 
-            "stemUpSE": [
-                2.544, 
-                1.2
             ]
         }, 
         "noteheadSlashedBlack1": {
