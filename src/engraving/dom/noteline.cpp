@@ -111,7 +111,7 @@ NoteLine::NoteLine(DummyParentOr<Note> parent)
 }
 
 NoteLine::NoteLine(const NoteLine& nl)
-    : TextLineBase(nl)
+    : TextLineBase(nl), m_lineEndPlacement(nl.m_lineEndPlacement)
 {
 }
 
