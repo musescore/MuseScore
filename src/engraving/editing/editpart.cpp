@@ -534,6 +534,24 @@ void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
     score->undo(new ChangeStaffType(staff, *staffType));
 }
 
+void EditPart::setStaffConfig(Score* score, Staff* staff, const StaffConfig& config, const Fraction& tick)
+{
+    if (!score || !staff || !staff->staffType(tick)) {
+        return;
+    }
+
+    const bool becomesVisible = config.visible && !staff->visible();
+
+    score->undo(new ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.cutaway,
+                                config.hideSystemBarline, config.mergeMatchingRests, config.reflectTranspositionInLinkedTab));
+
+    score->undo(new ChangeStaffType(staff, config.staffType, tick));
+
+    if (becomesVisible) {
+        removeLocksContainingMMRests(score);
+    }
+}
+
 void EditPart::removeParts(Score* score, const std::vector<Part*>& parts)
 {
     if (!score || parts.empty()) {

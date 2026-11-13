@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "staffconfig.h"
 #include "transaction/undoablecommand.h"
 
 #include "../compat/midi/midipatch.h"
@@ -268,6 +269,7 @@ public:
     static void setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number);
     static void setSharedPartEnabled(Score* score, Part* part, bool enabled);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
+    static void setStaffConfig(Score* score, Staff* staff, const StaffConfig& config, const Fraction& tick = Fraction(0, 1));
 
     static void removeParts(Score* score, const std::vector<Part*>& parts);
     static void removeStaves(Score* score, const std::vector<Staff*>& staves);

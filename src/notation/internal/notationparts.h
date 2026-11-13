@@ -118,7 +118,6 @@ private:
 
     engraving::EditPart::SetPartsResult doSetParts(const PartInstrumentList& parts, const ScoreOrder& order);
     std::vector<engraving::EditPart::PartEntry> partEntries(const PartInstrumentList& parts) const;
-    void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
 
     Staff* staffModifiable(const muse::ID& staffId) const;
 

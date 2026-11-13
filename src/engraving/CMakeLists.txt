@@ -219,6 +219,7 @@ target_sources(engraving PRIVATE
     editing/reset.h
     editing/splitjoinmeasure.cpp
     editing/splitjoinmeasure.h
+    editing/staffconfig.h
     editing/textedit.cpp
     editing/textedit.h
     editing/transaction/transaction.cpp

@@ -24,10 +24,8 @@
 #include "translation.h"
 
 #include "engraving/dom/instrument.h"
-#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
-#include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "igetscore.h"
@@ -556,13 +554,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     startEdit(actionName);
 
     config.visible = visible;
-    doSetStaffConfig(staff, config);
-
-    if (visible) {
-        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-        EditPageLocks::removePageLocksContainingMMRests(tx, score());
-        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
-    }
+    EditPart::setStaffConfig(score(), staff, config);
 
     apply();
 
@@ -608,7 +600,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config,
 
     startEdit(TranslatableString("undoableAction", "Edit staff properties"));
 
-    doSetStaffConfig(staff, config, tick);
+    EditPart::setStaffConfig(score(), staff, config, tick);
 
     apply();
 
@@ -902,20 +894,6 @@ void NotationParts::removeParts(const IDList& partsIds)
     for (const Part* part : partsToRemove) {
         notifyAboutPartRemoved(part);
     }
-}
-
-void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick)
-{
-    mu::engraving::StaffType* staffType = staff->staffType(tick);
-    if (!staffType) {
-        return;
-    }
-
-    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.cutaway,
-                                                 config.hideSystemBarline, config.mergeMatchingRests,
-                                                 config.reflectTranspositionInLinkedTab));
-
-    score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType, tick));
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
