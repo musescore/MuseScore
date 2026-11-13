@@ -184,6 +184,39 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         }
     }
 
+    // Write snapshots
+    {
+        const std::vector<MasterScore::Snapshot>& snapshots = score->snapshots();
+
+        std::vector<size_t> persistedIndices;
+        for (size_t i = 0; i < snapshots.size(); ++i) {
+            if (!snapshots[i].transient) {
+                persistedIndices.push_back(i);
+            }
+        }
+        if (!persistedIndices.empty()) {
+            ByteArray indexData;
+            auto indexBuf = Buffer::opened(IODevice::WriteOnly, &indexData);
+            XmlStreamWriter xml(&indexBuf);
+            xml.startDocument();
+            xml.startElement("snapshots");
+            for (size_t i : persistedIndices) {
+                xml.startElement("snapshot");
+                xml.element("index", int(i));
+                xml.element("name", snapshots[i].name);
+                xml.endElement();
+            }
+            xml.endElement();
+            xml.flush();
+            mscWriter.writeSnapshotIndexFile(indexData);
+
+            for (size_t i : persistedIndices) {
+                mscWriter.addSnapshotFile(i, snapshots[i].scoreData);
+                mscWriter.addSnapshotAutomationJsonFile(i, snapshots[i].automationData);
+            }
+        }
+    }
+
     // Write automation
     {
         if (score->automationData()) {
