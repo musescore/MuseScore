@@ -28,6 +28,7 @@
 #include "async/notifylist.h"
 
 #include "engraving/dom/score.h"
+#include "engraving/editing/editpart.h"
 
 #include "inotationparts.h"
 #include "inotationstyle.h"
@@ -73,8 +74,8 @@ public:
     void removeParts(const muse::IDList& partsIds) override;
     void removeStaves(const muse::IDList& stavesIds) override;
 
-    void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
-    void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
+    void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) override;
+    void reorderStaves(const muse::IDList& staffIds) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
     bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) override;
@@ -92,9 +93,6 @@ public:
 
     void addSystemObjects(const muse::IDList& stavesIds) override;
     void removeSystemObjects(const muse::IDList& stavesIds) override;
-    void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) override;
-    void moveSystemObjectLayerBelowBottomStaff() override;
-    void moveSystemObjectLayerAboveBottomStaff() override;
 
     void toggleStaveSharing(bool on) override;
 
@@ -132,6 +130,7 @@ private:
 
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
+    std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
 
     void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
     void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex, bool createRests=true);

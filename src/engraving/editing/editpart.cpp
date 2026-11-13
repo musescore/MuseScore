@@ -21,6 +21,9 @@
  */
 
 #include "editpart.h"
+
+#include "containers.h"
+
 #include "editscoreproperties.h"
 #include "editstaff.h"
 #include "transaction/transaction.h"
@@ -40,6 +43,8 @@
 #include "../dom/stafftype.h"
 #include "../dom/stringtunings.h"
 #include "../dom/utils.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -689,6 +694,153 @@ void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destin
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }
+}
+
+bool EditPart::reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts,
+                                        const std::vector<SystemObjectsMove>& moves)
+{
+    if (!score || score->staves().empty()) {
+        return false;
+    }
+
+    const std::vector<Part*>& scoreParts = score->parts();
+    if (parts.size() == scoreParts.size() && !std::equal(parts.begin(), parts.end(), scoreParts.begin())) {
+        return true;
+    }
+
+    if (moves.empty()) {
+        return false;
+    }
+
+    const Staff* bottomStaff = score->staves().back();
+    const bool currentBelowBottomStaff = score->style().styleB(Sid::systemObjectsBelowBottomStaff);
+    bool belowBottomStaff = currentBelowBottomStaff;
+
+    for (const SystemObjectsMove& move : moves) {
+        if (move.staff != (move.belowBottomStaff ? bottomStaff : move.destination)) {
+            return true;
+        }
+
+        if (move.staff == bottomStaff) {
+            belowBottomStaff = move.belowBottomStaff;
+        }
+    }
+
+    return (belowBottomStaff && bottomStaff->isSystemObjectStaff()) != currentBelowBottomStaff;
+}
+
+void EditPart::reorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves)
+{
+    if (!score || score->staves().empty()) {
+        return;
+    }
+
+    // Sorting keeps the markings at their staff positions, so their indexes are taken first
+    std::vector<std::pair<staff_idx_t, Staff*> > pendingMoves;
+    pendingMoves.reserve(moves.size());
+
+    for (const SystemObjectsMove& move : moves) {
+        if (move.staff && move.staff->isSystemObjectStaff() && (move.destination || move.belowBottomStaff)) {
+            pendingMoves.emplace_back(move.staff->idx(), move.belowBottomStaff ? nullptr : move.destination);
+        }
+    }
+
+    const Staff* staffWithMarkingsBelow = score->style().styleB(Sid::systemObjectsBelowBottomStaff)
+                                          ? score->staves().back() : nullptr;
+
+    const std::vector<Part*>& scoreParts = score->parts();
+    if (parts.size() == scoreParts.size() && !std::equal(parts.begin(), parts.end(), scoreParts.begin())) {
+        std::vector<staff_idx_t> staffMapping;
+        staffMapping.reserve(score->nstaves());
+        for (const Part* part : parts) {
+            for (const Staff* staff : part->staves()) {
+                staffMapping.push_back(staff->idx());
+            }
+        }
+
+        score->undo(new SortStaves(score, staffMapping));
+        score->setBracketsAndBarlines();
+    }
+
+    const bool belowBottomStaff = moveSystemObjects(score, pendingMoves, staffWithMarkingsBelow == score->staves().back());
+    if (belowBottomStaff != score->style().styleB(Sid::systemObjectsBelowBottomStaff)) {
+        score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, belowBottomStaff);
+    }
+}
+
+bool EditPart::reorderStavesChangesScore(const std::vector<Staff*>& staves)
+{
+    if (staves.empty() || !staves.front()) {
+        return false;
+    }
+
+    const Part* part = staves.front()->part();
+    const std::vector<Staff*>& partStaves = part->staves();
+    if (staves.size() != partStaves.size()) {
+        return false;
+    }
+
+    for (const Staff* staff : staves) {
+        IF_ASSERT_FAILED_X(staff && staff->part() == part, "All staves must have the same part!") {
+            return false;
+        }
+    }
+
+    return !std::equal(staves.begin(), staves.end(), partStaves.begin());
+}
+
+void EditPart::reorderStaves(Score* score, const std::vector<Staff*>& staves)
+{
+    if (!score) {
+        return;
+    }
+
+    std::vector<staff_idx_t> staffMapping;
+    staffMapping.reserve(score->nstaves());
+    for (const Staff* staff : score->staves()) {
+        staffMapping.push_back(staff->idx());
+    }
+
+    // The part's staff slots get its staves in the new order
+    const staff_idx_t firstStaffIdx = staves.front()->part()->staves().front()->idx();
+    for (size_t i = 0; i < staves.size(); ++i) {
+        staffMapping[firstStaffIdx + i] = staves[i]->idx();
+    }
+
+    score->undo(new SortStaves(score, staffMapping));
+    score->setBracketsAndBarlines();
+}
+
+bool EditPart::moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff)
+{
+    Staff* bottomStaff = score->staves().back();
+
+    // Only onto staves without markings, so none get deleted
+    bool moved = true;
+    while (!moves.empty() && moved) {
+        moved = false;
+
+        for (auto it = moves.begin(); it != moves.end();) {
+            Staff* from = score->staff(it->first);
+            Staff* to = it->second ? it->second : bottomStaff;
+            if (!from || (from != to && muse::contains(score->systemObjectStavesWithTopStaff(), to))) {
+                ++it;
+                continue;
+            }
+
+            if (to == bottomStaff) {
+                belowBottomStaff = !it->second;
+            }
+            if (from != to) {
+                moveSystemObjects(score, from, to);
+            }
+
+            it = moves.erase(it);
+            moved = true;
+        }
+    }
+
+    return belowBottomStaff && bottomStaff->isSystemObjectStaff();
 }
 
 void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)

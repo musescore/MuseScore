@@ -401,6 +401,9 @@ void LayoutPanelTreeModel::clear()
 
 void LayoutPanelTreeModel::deleteItems()
 {
+    m_dragSourceParentItem = nullptr;
+    m_dragInProgress = false;
+
     m_selectionModel->clear();
     delete m_rootItem;
     m_rootItem = nullptr;
@@ -666,21 +669,21 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         return false;
     }
 
-    if (m_dragInProgress) {
-        MoveParams params = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
-        if (!params.isValid()) {
-            return false;
-        }
+    // Staves stay in their part
+    if (sourceParentItem != destinationParentItem && sourceParentItem != m_rootItem) {
+        return false;
+    }
 
+    if (m_dragInProgress) {
         m_dragSourceParentItem = sourceParentItem;
-        m_activeDragMoveParams = params;
     }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, false /*updateNotation*/);
     endMoveRows();
 
     if (!m_dragInProgress) {
+        applyToScore(sourceParentItem);
         updateSystemObjectLayers();
     }
 
@@ -699,16 +702,23 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(true);
 
     if (m_dragSourceParentItem) {
-        m_dragSourceParentItem->moveChildrenOnScore(m_activeDragMoveParams);
+        applyToScore(m_dragSourceParentItem);
     }
 
     m_dragSourceParentItem = nullptr;
-    m_activeDragMoveParams = MoveParams();
     m_dragInProgress = false;
 
     setLoadingBlocked(false);
 
     updateSystemObjectLayers();
+}
+
+void LayoutPanelTreeModel::applyToScore(AbstractLayoutPanelTreeItem* item)
+{
+    // Skipped markings moves leave their rows wrong until rebuilt from the score
+    if (item->applyToScore() == AbstractLayoutPanelTreeItem::ApplyResult::AppliedPartly) {
+        m_shouldUpdateSystemObjectLayers = true;
+    }
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)

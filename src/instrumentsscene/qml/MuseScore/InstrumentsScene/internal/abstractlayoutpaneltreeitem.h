@@ -39,21 +39,6 @@ struct ScoreChanges;
 }
 
 namespace mu::instrumentsscene {
-struct MoveParams {
-    muse::IDList objectIdListToMove;
-    muse::ID destinationObjectId;
-    LayoutPanelItemType::ItemType objectsType = LayoutPanelItemType::UNDEFINED;
-    notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
-    bool moveSysObjBelowBottomStaff = false;
-    bool moveSysObjAboveBottomStaff = false;
-
-    bool isValid() const
-    {
-        return !objectIdListToMove.empty() && (destinationObjectId.isValid() || moveSysObjBelowBottomStaff)
-               && objectsType != LayoutPanelItemType::UNDEFINED;
-    }
-};
-
 class AbstractLayoutPanelTreeItem : public QObject
 {
     Q_OBJECT
@@ -97,12 +82,17 @@ public:
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
 
-    virtual MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const;
-
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);
 
-    virtual void moveChildrenOnScore(const MoveParams& params);
+    enum class ApplyResult {
+        NotApplied,
+        Applied,
+        AppliedPartly, // the score skipped some changes, so the panel no longer matches it
+    };
+
+    //! Puts the children's order on the score to match the panel
+    virtual ApplyResult applyToScore();
 
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 

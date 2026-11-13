@@ -65,13 +65,13 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<project::IProjectSession> context = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
-public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
     ~LayoutPanelTreeModel() override;
 
@@ -192,6 +192,7 @@ private:
                                                              const SystemObjectGroups& systemObjects);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
 
+    void applyToScore(AbstractLayoutPanelTreeItem* item);
     void updateSystemObjectLayers();
 
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
@@ -223,7 +224,6 @@ private:
 
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
-    MoveParams m_activeDragMoveParams;
 
     muse::ID m_systemStaffToSelect;
 };

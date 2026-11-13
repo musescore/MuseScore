@@ -93,6 +93,8 @@ Item {
                                           : qsTrc("layoutpanel", "Part: %1").arg(treeModel.scoreName)
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
+
+            visible: treeModel.isAddingAvailable
         }
 
         LayoutControlPanel {
@@ -139,6 +141,8 @@ Item {
 
             navigation.panel: controlPanel.navigation
             navigation.order: 5
+
+            enabled: treeModel.isAddingAvailable
 
             text: qsTrc("layoutpanel", "Automatically hide all empty staves")
             checked: treeModel.isHideEmptyStavesEnabled
@@ -199,6 +203,12 @@ Item {
             navigationOrder: controlPanel.navigation.order + 1
 
             sideMargin: contentColumn.sideMargin
+        }
+
+        Item {
+            Layout.fillHeight: true
+
+            visible: !treeModel.isAddingAvailable
         }
     }
 }
