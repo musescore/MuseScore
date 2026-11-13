@@ -817,6 +817,8 @@ void Hairpin::reset()
 {
     undoResetProperty(Pid::DIRECTION);
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    undoResetProperty(Pid::SNAP_BEFORE);
+    undoResetProperty(Pid::SNAP_AFTER);
     TextLineBase::reset();
 }
 

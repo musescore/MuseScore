@@ -1203,14 +1203,8 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             TLayout::layoutItem(a, ctx);
             if (a->up()) {
                 a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight - yOffset);
-                if (a->visible()) {
-                    staffTopY = a->y() - a->height() - minDist + yOffset;
-                }
             } else {
                 a->setPos(item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffBotY - kearnHeight - yOffset);
-                if (a->visible()) {
-                    staffBotY = a->y() + a->height() + minDist + yOffset;
-                }
             }
             a->mutldata()->moveX(-a->ldata()->opticalCenter());
         }
@@ -1227,6 +1221,14 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             }
             if (a->addToSkyline()) {
                 a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
+            }
+        }
+
+        if (a->visible() && !a->layoutCloseToNote()) {
+            if (a->up()) {
+                staffTopY = a->y() - a->height() - minDist + yOffset;
+            } else {
+                staffBotY = a->y() + a->height() + minDist + yOffset;
             }
         }
     }
@@ -3830,7 +3832,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
     Shape shape;
     {
         for (Lyrics* l : item->lyrics()) {
-            if (!l || !l->addToSkyline() || l->xmlText().empty()) {
+            if (!l || l->xmlText().empty()) {
                 continue;
             }
             RectF bbox = l->ldata()->bbox().translated(l->pos());
