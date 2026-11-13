@@ -1337,9 +1337,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         sp->appendElement(vibrato, TConv::userName(vibratoType));
     }
 
-    auto boxLine = makeElement<BoxLine>(paletteScore());
-    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box (staff-attached)"));
-
     auto pm = makeElement<PalmMute>(paletteScore());
     sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
 
@@ -1352,6 +1349,9 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
         sp->appendElement(c, names[i]);
     }
+
+    auto boxLine = makeElement<BoxLine>(paletteScore());
+    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box (staff-attached)"));
 
     return sp;
 }
