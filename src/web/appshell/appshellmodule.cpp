@@ -28,10 +28,12 @@
 
 #include "appshell/internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
+#include "internal/appshortcutsscopes.h"
 
 using namespace mu::appshell;
 using namespace muse;
 using namespace muse::modularity;
+using namespace muse::shortcuts;
 
 static const std::string mname("appshell");
 
@@ -69,5 +71,16 @@ muse::modularity::IContextSetup* AppShellModule::newContext(const muse::modulari
 
 void AppShellContext::registerExports()
 {
+    m_shortcutsScopes = std::make_shared<AppShortcutsScopes>(iocContext());
+
     ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
+}
+
+void AppShellContext::onInit(const muse::IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_shortcutsScopes->init();
 }
