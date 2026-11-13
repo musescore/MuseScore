@@ -21,20 +21,14 @@
  */
 #include "notationparts.h"
 
-#include <map>
-
 #include "translation.h"
 
-#include "engraving/dom/barline.h"
 #include "engraving/dom/instrument.h"
-#include "engraving/dom/page.h"
 #include "engraving/editing/editpagelocks.h"
-#include "engraving/editing/editpart.h"
 #include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/transaction/transaction.h"
-#include "engraving/editing/transpose.h"
 
 #include "igetscore.h"
 #include "inotationnoteinput.h" // IWYU pragma: keep
@@ -196,12 +190,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
-    doSetScoreOrder(order);
-    removeMissingParts(parts);
-    insertNewParts(parts, score()->keyList());
-    updateSoloist(parts);
-    sortParts(parts);
-    setBracketsAndBarlines();
+    doSetParts(parts, order);
     updatePartsAndSystemObjectStaves();
 
     apply();
@@ -388,6 +377,35 @@ void NotationParts::doSetScoreOrder(const ScoreOrder& order)
     EditPart::setScoreOrder(score(), order);
 
     m_scoreOrderChanged.notify();
+}
+
+EditPart::SetPartsResult NotationParts::doSetParts(const PartInstrumentList& parts, const ScoreOrder& order)
+{
+    EditPart::SetPartsResult result = EditPart::setParts(score(), partEntries(parts), order);
+
+    for (Part* part : result.addedParts) {
+        m_partChangedNotifier.itemAdded(part);
+    }
+
+    m_scoreOrderChanged.notify();
+
+    return result;
+}
+
+std::vector<EditPart::PartEntry> NotationParts::partEntries(const PartInstrumentList& parts) const
+{
+    std::vector<EditPart::PartEntry> entries;
+    entries.reserve(parts.size());
+
+    for (const PartInstrument& pi : parts) {
+        if (pi.isExistingPart) {
+            entries.push_back({ score()->partById(pi.partId), nullptr, pi.isSoloist });
+        } else {
+            entries.push_back({ nullptr, &pi.instrumentTemplate, pi.isSoloist });
+        }
+    }
+
+    return entries;
 }
 
 void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const QString& name)
@@ -907,38 +925,13 @@ void NotationParts::removeParts(const IDList& partsIds)
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Remove instruments"));
 
-    doRemoveParts(partsToRemove);
-
-    PartInstrumentList parts;
-    for (mu::engraving::Part* part: score()->parts()) {
-        PartInstrument pi;
-        pi.isExistingPart = true;
-        pi.partId = part->id();
-        parts << pi;
-    }
-
-    sortParts(parts);
-
-    setBracketsAndBarlines();
+    EditPart::removeParts(score(), partsToRemove);
 
     apply();
 
     for (const Part* part : partsToRemove) {
         notifyAboutPartRemoved(part);
     }
-}
-
-void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
-{
-    TRACEFUNC;
-
-    EditPart::removeParts(score(), parts);
-
-    onPartsRemoved(parts);
-}
-
-void NotationParts::onPartsRemoved(const std::vector<Part*>&)
-{
 }
 
 void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick)
@@ -1017,175 +1010,6 @@ void NotationParts::reorderStaves(const IDList& staffIds)
     EditPart::reorderStaves(score(), orderedStaves);
 
     apply();
-}
-
-void NotationParts::removeMissingParts(const PartInstrumentList& newParts)
-{
-    TRACEFUNC;
-
-    auto needRemove = [&newParts](const Part* part) {
-        for (const PartInstrument& pi : newParts) {
-            if (pi.partId == part->id()) {
-                return false;
-            }
-        }
-
-        return true;
-    };
-
-    std::vector<Part*> partsToRemove;
-
-    for (Part* part: score()->parts()) {
-        if (needRemove(part)) {
-            partsToRemove.push_back(part);
-        }
-    }
-
-    doRemoveParts(partsToRemove);
-}
-
-void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::engraving::KeyList& keyList)
-{
-    TRACEFUNC;
-
-    size_t partIdx = 0;
-
-    // Taken before any new parts are inserted; existing parts aren't removed or moved in memory meanwhile
-    const PartByIdMap existingParts = partsById();
-    const std::vector<int> instrumentNumbers = resolveInstrumentNumbers(parts, existingParts);
-
-    for (const PartInstrument& pi: parts) {
-        const int instrumentNumber = instrumentNumbers.at(partIdx);
-
-        if (pi.isExistingPart) {
-            Part* existingPart = muse::value(existingParts, pi.partId.toUint64());
-            if (existingPart && instrumentNumber >= 0 && existingPart->number() != instrumentNumber) {
-                score()->undo(new mu::engraving::ChangeInstrumentNumber(Fraction(-1, 1), existingPart, instrumentNumber));
-            }
-            ++partIdx;
-            continue;
-        }
-
-        Part* part = EditPart::insertPart(score(), pi.instrumentTemplate, partIdx, keyList);
-        part->setSoloist(pi.isSoloist);
-        part->setNumber(std::max(instrumentNumber, 0));
-        ++partIdx;
-
-        m_partChangedNotifier.itemAdded(part);
-    }
-}
-
-void NotationParts::updateSoloist(const PartInstrumentList& parts)
-{
-    TRACEFUNC;
-
-    const PartByIdMap partById = partsById();
-
-    for (const PartInstrument& pi: parts) {
-        if (!pi.isExistingPart) {
-            continue;
-        }
-
-        Part* part = muse::value(partById, pi.partId.toUint64());
-        if (part && !part->isSharedPart() && (pi.isSoloist != part->soloist())) {
-            score()->undo(new mu::engraving::SetSoloist(part, pi.isSoloist));
-        }
-    }
-}
-
-void NotationParts::sortParts(const PartInstrumentList& parts)
-{
-    TRACEFUNC;
-
-    std::vector<mu::engraving::staff_idx_t> staffMapping;
-
-    int partIndex = 0;
-    for (const PartInstrument& pi: parts) {
-        mu::engraving::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
-
-        for (mu::engraving::Staff* staff : currentPart->staves()) {
-            mu::engraving::staff_idx_t actualStaffIndex = muse::indexOf(score()->staves(), staff);
-            staffMapping.push_back(actualStaffIndex);
-        }
-        ++partIndex;
-    }
-
-    score()->undo(new mu::engraving::SortStaves(score(), staffMapping));
-}
-
-NotationParts::PartByIdMap NotationParts::partsById() const
-{
-    const std::vector<Part*>& parts = score()->parts();
-
-    PartByIdMap result;
-    result.reserve(parts.size());
-
-    for (Part* part : parts) {
-        result.emplace(part->id().toUint64(), part);
-    }
-
-    return result;
-}
-
-std::vector<int> NotationParts::resolveInstrumentNumbers(const PartInstrumentList& parts, const PartByIdMap& existingParts) const
-{
-    // Kinds with an instrument being added are numbered in their (new) order, unless there's only one. Shared staves
-    // and instruments numbered in their name (e.g. "Violins 1") aren't numbered, though the latter still count.
-    // Returns the number for each instrument, or -1 to leave it as it is
-    struct Counter {
-        int count = 0;
-        size_t firstIndex = 0; // in parts / numbers: the first instrument of this kind
-    };
-
-    std::map<String, Counter> counters;
-    for (const PartInstrument& pi : parts) {
-        if (!pi.isExistingPart) {
-            counters.try_emplace(pi.instrumentTemplate.id);
-        }
-    }
-
-    std::vector<int> numbers;
-    numbers.reserve(static_cast<size_t>(parts.size()));
-
-    for (const PartInstrument& pi : parts) {
-        Counter* counter = nullptr; // null: not renumbered
-        bool isNumberedInName = false;
-
-        if (!pi.isExistingPart) {
-            counter = &counters.at(pi.instrumentTemplate.id);
-        } else if (const Part* part = muse::value(existingParts, pi.partId.toUint64()); part && !part->isSharedPart()) {
-            const Instrument* instrument = part->instrument();
-            auto it = counters.find(instrument->id());
-
-            if (it != counters.end()) {
-                const String& name = instrument->longName();
-
-                counter = &it->second;
-                isNumberedInName = !name.empty() && name.back().isDigit();
-            }
-        }
-
-        if (!counter) {
-            numbers.push_back(-1);
-            continue;
-        }
-
-        if (counter->count == 0) {
-            counter->firstIndex = numbers.size();
-        }
-        ++counter->count;
-
-        numbers.push_back(isNumberedInName ? 0 : counter->count);
-    }
-
-    // An instrument that's the only one of its kind isn't numbered
-    for (const auto& [instrumentId, counter] : counters) {
-        if (counter.count == 1) {
-            numbers[counter.firstIndex] = 0;
-        }
-    }
-
-    return numbers;
 }
 
 void NotationParts::setBracketsAndBarlines()

@@ -129,7 +129,7 @@ struct PartInstrument
     bool isSoloist = false;
 };
 
-using PartInstrumentList = QList<PartInstrument>;
+using PartInstrumentList = std::vector<PartInstrument>;
 
 struct PartInstrumentListScoreOrder
 {

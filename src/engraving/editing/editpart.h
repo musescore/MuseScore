@@ -295,15 +295,25 @@ public:
 
     static void appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart);
 
-    static void appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
-
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
     static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset);
 
     static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
-    static Part* insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
     static void insertPart(Score* score, Part* part, size_t index);
+
+    struct PartEntry {
+        Part* part = nullptr;                                  // existing
+        const InstrumentTemplate* instrumentTemplate = nullptr; // new
+        bool isSoloist = false;
+    };
+
+    struct SetPartsResult {
+        std::vector<Part*> addedParts;
+        std::vector<Part*> removedParts;
+    };
+
+    static SetPartsResult setParts(Score* score, const std::vector<PartEntry>& entries, const ScoreOrder& order);
 
     static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
     static void replacePart(Score* score, Part* oldPart, Part* newPart);
@@ -311,8 +321,17 @@ public:
     static void setScoreOrder(Score* score, const ScoreOrder& order);
 
 private:
+    static void appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
+    static Part* insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
     static void doInsertPart(Score* score, Part* part, size_t index);
     static void insertPartCopy(Score* score, Part* part, size_t index);
+    static std::vector<Part*> removeMissingParts(Score* score, const std::vector<PartEntry>& entries);
+    static std::vector<Part*> insertNewParts(Score* score, const std::vector<PartEntry>& entries, const KeyList& keyList);
+    static std::vector<int> resolveInstrumentNumbers(const std::vector<PartEntry>& entries);
+    static void updateSoloist(Score* score, const std::vector<PartEntry>& entries);
+    static void sortParts(Score* score, const std::vector<PartEntry>& entries);
+    static void sortStaves(Score* score, const std::vector<Part*>& orderedParts);
+    static void deleteExcerptsOfParts(MasterScore* master, const std::vector<Part*>& parts);
     static bool moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
 };
 }

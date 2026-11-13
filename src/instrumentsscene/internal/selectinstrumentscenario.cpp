@@ -47,7 +47,7 @@ muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstru
     return async::make_promise<InstrumentTemplate>([this, params](auto resolve, auto reject) {
         Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params, ScoreOrder());
         selectedInstruments.onResolve(this, [resolve](const PartInstrumentListScoreOrder& selectedInstruments) {
-            const InstrumentTemplate& tpl = selectedInstruments.instruments.first().instrumentTemplate;
+            const InstrumentTemplate& tpl = selectedInstruments.instruments.front().instrumentTemplate;
             (void)resolve(tpl);
         });
         selectedInstruments.onReject(this, [reject](int code, const std::string& msg) {
@@ -96,7 +96,7 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
                 const String instrumentId = String::fromStdString(map["instrumentId"].toString());
                 pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
-                result.instruments << pi;
+                result.instruments.push_back(pi);
             }
 
             ValMap order = content["scoreOrder"].toMap();

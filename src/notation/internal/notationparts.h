@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include <unordered_map>
-
 #include "async/asyncable.h"
 #include "async/notifylist.h"
 
@@ -111,8 +109,6 @@ protected:
     void apply();
     void rollback();
 
-    virtual void onPartsRemoved(const std::vector<Part*>& parts);
-
 private:
     friend class MasterNotationParts;
 
@@ -121,7 +117,8 @@ private:
     void listenStyleChanges();
 
     void doSetScoreOrder(const ScoreOrder& order);
-    void doRemoveParts(const std::vector<Part*>& parts);
+    engraving::EditPart::SetPartsResult doSetParts(const PartInstrumentList& parts, const ScoreOrder& order);
+    std::vector<engraving::EditPart::PartEntry> partEntries(const PartInstrumentList& parts) const;
     void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
 
     Staff* staffModifiable(const muse::ID& staffId) const;
@@ -129,16 +126,6 @@ private:
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
     std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
-
-    void removeMissingParts(const PartInstrumentList& newParts);
-    void insertNewParts(const PartInstrumentList& parts, const mu::engraving::KeyList& keyList);
-    void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts);
-
-    using PartByIdMap = std::unordered_map<uint64_t /*ID*/, Part*>;
-    PartByIdMap partsById() const;
-
-    std::vector<int> resolveInstrumentNumbers(const PartInstrumentList& parts, const PartByIdMap& existingParts) const;
 
     void setBracketsAndBarlines();
 

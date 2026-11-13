@@ -23,6 +23,8 @@
 #include "editpart.h"
 
 #include <algorithm>
+#include <map>
+#include <unordered_set>
 
 #include "containers.h"
 #include "translation.h"
@@ -497,6 +499,30 @@ void EditPart::removeParts(Score* score, const std::vector<Part*>& parts)
     }
 
     score->setBracketsAndBarlines();
+
+    if (score->isMaster()) {
+        deleteExcerptsOfParts(score->masterScore(), parts);
+    }
+}
+
+void EditPart::deleteExcerptsOfParts(MasterScore* master, const std::vector<Part*>& parts)
+{
+    const std::vector<Excerpt*> excerpts = master->excerpts();
+
+    for (Excerpt* excerpt : excerpts) {
+        const muse::ID& initialPartId = excerpt->initialPartId();
+        if (!initialPartId.isValid()) {
+            continue;
+        }
+
+        const bool isPartRemoved = std::find_if(parts.cbegin(), parts.cend(), [&initialPartId](const Part* part) {
+            return part->id() == initialPartId;
+        }) != parts.cend();
+
+        if (isPartRemoved) {
+            master->deleteExcerpt(excerpt);
+        }
+    }
 }
 
 void EditPart::removeStaves(Score* score, const std::vector<Staff*>& staves)
@@ -1061,6 +1087,178 @@ void EditPart::insertPartCopy(Score* score, Part* part, size_t index)
     }
 
     score->remapBracketsAndBarlines();
+}
+
+EditPart::SetPartsResult EditPart::setParts(Score* score, const std::vector<PartEntry>& entries, const ScoreOrder& order)
+{
+    if (!score) {
+        return {};
+    }
+
+    const KeyList keyList = score->keyList();
+
+    SetPartsResult result;
+
+    setScoreOrder(score, order);
+    result.removedParts = removeMissingParts(score, entries);
+    result.addedParts = insertNewParts(score, entries, keyList);
+    updateSoloist(score, entries);
+    sortParts(score, entries);
+    score->setBracketsAndBarlines();
+
+    return result;
+}
+
+std::vector<Part*> EditPart::removeMissingParts(Score* score, const std::vector<PartEntry>& entries)
+{
+    std::unordered_set<Part*> keptParts;
+    for (const PartEntry& entry : entries) {
+        if (entry.part) {
+            keptParts.insert(entry.part);
+        }
+    }
+
+    std::vector<Part*> partsToRemove;
+    for (Part* part : score->parts()) {
+        if (!muse::contains(keptParts, part)) {
+            partsToRemove.push_back(part);
+        }
+    }
+
+    removeParts(score, partsToRemove);
+
+    return partsToRemove;
+}
+
+std::vector<Part*> EditPart::insertNewParts(Score* score, const std::vector<PartEntry>& entries, const KeyList& keyList)
+{
+    std::vector<Part*> newParts;
+    if (!score) {
+        return newParts;
+    }
+
+    const std::vector<int> numbers = resolveInstrumentNumbers(entries);
+
+    for (size_t i = 0; i < entries.size(); ++i) {
+        const PartEntry& entry = entries[i];
+        const int number = numbers.at(i);
+
+        if (!entry.instrumentTemplate) {
+            if (entry.part && number >= 0 && entry.part->number() != number) {
+                score->undo(new ChangeInstrumentNumber(Fraction(-1, 1), entry.part, number));
+            }
+            continue;
+        }
+
+        Part* part = insertPart(score, *entry.instrumentTemplate, i, keyList);
+        part->setSoloist(entry.isSoloist);
+        part->setNumber(std::max(number, 0));
+        newParts.push_back(part);
+    }
+
+    return newParts;
+}
+
+std::vector<int> EditPart::resolveInstrumentNumbers(const std::vector<PartEntry>& entries)
+{
+    // Kinds with an instrument being added are numbered in their (new) order, unless there's only one. Shared staves
+    // and instruments numbered in their name (e.g. "Violins 1") aren't numbered, though the latter still count.
+    // Returns the number for each instrument, or -1 to leave it as it is
+    struct Counter {
+        int count = 0;
+        size_t firstIndex = 0; // in entries / numbers: the first instrument of this kind
+    };
+
+    std::map<String, Counter> counters;
+    for (const PartEntry& entry : entries) {
+        if (entry.instrumentTemplate) {
+            counters.try_emplace(entry.instrumentTemplate->id);
+        }
+    }
+
+    std::vector<int> numbers;
+    numbers.reserve(entries.size());
+
+    for (const PartEntry& entry : entries) {
+        Counter* counter = nullptr; // null: not renumbered
+        bool isNumberedInName = false;
+
+        if (entry.instrumentTemplate) {
+            counter = &counters.at(entry.instrumentTemplate->id);
+        } else if (const Part* part = entry.part; part && !part->isSharedPart()) {
+            const Instrument* instrument = part->instrument();
+            auto it = counters.find(instrument->id());
+
+            if (it != counters.end()) {
+                const String& name = instrument->longName();
+
+                counter = &it->second;
+                isNumberedInName = !name.empty() && name.back().isDigit();
+            }
+        }
+
+        if (!counter) {
+            numbers.push_back(-1);
+            continue;
+        }
+
+        if (counter->count == 0) {
+            counter->firstIndex = numbers.size();
+        }
+        ++counter->count;
+
+        numbers.push_back(isNumberedInName ? 0 : counter->count);
+    }
+
+    // An instrument that's the only one of its kind isn't numbered
+    for (const auto& [instrumentId, counter] : counters) {
+        if (counter.count == 1) {
+            numbers[counter.firstIndex] = 0;
+        }
+    }
+
+    return numbers;
+}
+
+void EditPart::updateSoloist(Score* score, const std::vector<PartEntry>& entries)
+{
+    for (const PartEntry& entry : entries) {
+        Part* part = entry.part;
+        if (part && !part->isSharedPart() && entry.isSoloist != part->soloist()) {
+            score->undo(new SetSoloist(part, entry.isSoloist));
+        }
+    }
+}
+
+void EditPart::sortParts(Score* score, const std::vector<PartEntry>& entries)
+{
+    const std::vector<Part*>& scoreParts = score->parts();
+
+    std::vector<Part*> orderedParts;
+    orderedParts.reserve(entries.size());
+
+    for (size_t i = 0; i < entries.size(); ++i) {
+        const PartEntry& entry = entries[i];
+        Part* part = entry.instrumentTemplate ? muse::value(scoreParts, i) : entry.part;
+        if (part) {
+            orderedParts.push_back(part);
+        }
+    }
+
+    sortStaves(score, orderedParts);
+}
+
+void EditPart::sortStaves(Score* score, const std::vector<Part*>& orderedParts)
+{
+    std::vector<staff_idx_t> staffMapping;
+
+    for (const Part* part : orderedParts) {
+        for (Staff* staff : part->staves()) {
+            staffMapping.push_back(muse::indexOf(score->staves(), staff));
+        }
+    }
+
+    score->undo(new SortStaves(score, staffMapping));
 }
 
 void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ)

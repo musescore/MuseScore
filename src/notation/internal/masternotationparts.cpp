@@ -70,34 +70,19 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
 {
     TRACEFUNC;
 
-    mu::engraving::KeyList keyList = score()->keyList();
-
     endInteractionWithScore();
     startGlobalEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
-    doSetScoreOrder(order);
-    removeMissingParts(partList);
-    insertNewParts(partList, keyList);
-    updateSoloist(partList);
-    sortParts(partList);
-    setBracketsAndBarlines();
+    const mu::engraving::EditPart::SetPartsResult result = doSetParts(partList, order);
 
-    for (const INotationPartsPtr& excerptParts : excerptsParts()) {
-        auto impl = get_impl(excerptParts);
+    IDList removedPartIds;
+    removedPartIds.reserve(result.removedParts.size());
+    for (const Part* part : result.removedParts) {
+        removedPartIds.push_back(part->id());
+    }
 
-        impl->removeMissingParts(partList);
-
-        PartInstrumentList excerptPartList;
-        for (mu::engraving::Part* part: impl->score()->parts()) {
-            PartInstrument pi;
-            pi.isExistingPart = true;
-            pi.partId = part->id();
-            excerptPartList << pi;
-        }
-
-        impl->sortParts(excerptPartList);
-
-        impl->setBracketsAndBarlines();
+    for (const INotationPartsPtr& parts : excerptsParts()) {
+        parts->removeParts(removedPartIds);
     }
 
     updatePartsAndSystemObjectStaves();
@@ -276,27 +261,6 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
     }
 
     endGlobalEdit();
-}
-
-void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
-{
-    mu::engraving::MasterScore* master = score()->masterScore();
-    std::vector<mu::engraving::Excerpt*> excerpts = master->excerpts();
-
-    for (mu::engraving::Excerpt* excerpt : excerpts) {
-        const ID& initialPartId = excerpt->initialPartId();
-        if (!initialPartId.isValid()) {
-            continue;
-        }
-
-        bool deleteExcerpt = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
-            return part->id() == initialPartId;
-        }) != parts.cend();
-
-        if (deleteExcerpt) {
-            master->deleteExcerpt(excerpt);
-        }
-    }
 }
 
 void MasterNotationParts::addSystemObjects(const muse::IDList& stavesIds)

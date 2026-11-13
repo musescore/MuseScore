@@ -54,7 +54,6 @@ private:
     void startGlobalEdit(const muse::TranslatableString& actionName);
     void endGlobalEdit();
 
-    void onPartsRemoved(const std::vector<Part*>& parts) override;
 
     std::vector<INotationPartsPtr> excerptsParts() const;
     mu::engraving::Excerpt* findExcerpt(const muse::ID& initialPartId) const;
