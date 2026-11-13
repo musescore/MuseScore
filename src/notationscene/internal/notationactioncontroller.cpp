@@ -887,7 +887,7 @@ muse::Ret NotationActionController::addDrumNote(const muse::rcommand::Params& pa
     TRACEFUNC;
 
     int pitch = params.at("pitch").toInt();
-    NoteAddingMode mode = EnumContract<NoteAddingMode>::get(params);
+    NoteAddingMode mode = EnumContract<NoteAddingMode>::enum_val(params.at("mode").toString()).value();
 
     NoteInputParams noteInputParams;
     noteInputParams.drumPitch = pitch;
@@ -1491,7 +1491,7 @@ muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
         options.numberType = static_cast<TupletNumberType>(numberType);
     }
 
-    if (options.selectedDurationAs == TupletSelectedDuration::DEFAULT) {
+    if (options.autoBaseLen && options.selectedDurationAs == TupletSelectedDuration::DEFAULT) {
         options.selectedDurationAs = configuration()->tupletCommandsSelectedDurationAs();
     }
 
