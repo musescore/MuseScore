@@ -93,18 +93,8 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
         return NATURAL_DYNAMIC_LEVEL;
     }
 
-    const auto it = muse::findLessOrEqual(*curve, nominalPositionTick);
-    if (it == curve->cend()) {
-        return NATURAL_DYNAMIC_LEVEL;
-    }
-
-    const auto next = std::next(it);
-    if (next == curve->cend()) {
-        return toDynamicLevel(it->second.value.outValue);
-    }
-
-    const real_t t = static_cast<real_t>(nominalPositionTick - it->first) / static_cast<real_t>(next->first - it->first);
-    return toDynamicLevel(muse::mpe::evaluateAt(next->second.value, it->second.value.outValue, t));
+    const std::optional<real_t> value = mu::engraving::evaluateCurveAt(*curve, nominalPositionTick);
+    return value ? toDynamicLevel(*value) : NATURAL_DYNAMIC_LEVEL;
 }
 
 std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const track_idx_t trackIdx,
