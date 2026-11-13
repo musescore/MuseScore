@@ -22,9 +22,10 @@
 #include "mnxexporter.h"
 
 #include <optional>
-#include <cmath>
+#include <utility>
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/breath.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
@@ -34,10 +35,12 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/timesig.h"
 #include "log.h"
+#include "realfn.h"
 #include "internal/shared/mnxtypesconv.h"
 
 using namespace mu::engraving;
@@ -241,27 +244,61 @@ static void assignRepeats(mnx::global::Measure& mnxMeasure, const Measure* measu
 //   emit a MNX tempo entry from a TempoText item
 //---------------------------------------------------------
 
-static void createTempo(mnx::global::Measure& mnxMeasure, const TempoText* tempo, const Fraction& relTick)
+static void createTempo(mnx::global::Measure& mnxMeasure, const Measure* measure, const TempoText* tempo, const Fraction& relTick)
 {
-    IF_ASSERT_FAILED(tempo) {
+    IF_ASSERT_FAILED(measure && tempo) {
+        return;
+    }
+
+    // The MNX tempo object is a playback directive, so a tempo text that MuseScore does not play
+    // has nothing reliable to contribute (its stored tempo may be stale or unrelated to the text).
+    /// @todo When MNX adds a display string to tempo, export non-playing tempo texts as display-only
+    /// and include the original text for playing ones as well (as MusicXML does with words/sound).
+    if (!tempo->playTempoText()) {
         return;
     }
 
     const auto location = toMnxFractionValue(relTick).reduced();
-    const double bpm = tempo->tempoBpm();
-    if (bpm <= 0.0) {
-        LOGW() << "Skipping tempo with invalid beats-per-minute " << bpm;
+
+    // MuseScore stores the playback tempo in quarter notes per second, independent of how the text is
+    // spelled. Use that rather than re-parsing the text, which fails for non-SMuFL tempo fonts.
+    // "A tempo" and "Tempo primo" resolve to whatever the tempo map says is in effect at this tick.
+    const BeatsPerSecond bps = (tempo->isATempo() || tempo->isTempoPrimo())
+                               ? tempo->score()->tempo(tempo->tick())
+                               : tempo->tempo();
+    const double quarterBpm = bps.val * 60.0;
+    if (quarterBpm <= 0.0) {
+        LOGW() << "Skipping tempo with invalid beats-per-minute " << quarterBpm;
         return;
     }
 
-    const TDuration dur = tempo->duration();
-    const auto noteValue = toMnxNoteValue(dur);
-    if (!noteValue) {
-        LOGW() << "Skipping tempo with invalid duration value";
-        return;
-    }
+    // Prefer the note value the text displays so the exported marking reads the same. If the text
+    // cannot be parsed, use the beat of the current time signature (dotted for compound meters, unless
+    // the tempo is slow enough that the subdivision is what gets beaten), and failing that a quarter
+    // note, which is the unit the stored tempo is already in.
+    const auto [dur, noteValue] = [&]() -> std::pair<TDuration, mnx::NoteValue::Required> {
+        if (const TDuration textDur = tempo->duration(); textDur.isValid()) {
+            if (const auto nv = toMnxNoteValue(textDur)) {
+                return { textDur, *nv };
+            }
+        }
+        if (const TimeSigFrac timeSig(measure->timesig()); timeSig.isValid() && timeSig.isNotZero()) {
+            const int beatTicks = timeSig.isBeatedCompound(bps.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+            if (const TDuration beatDur(Fraction::fromTicks(beatTicks)); beatDur.isValid()) {
+                if (const auto nv = toMnxNoteValue(beatDur)) {
+                    return { beatDur, *nv };
+                }
+            }
+        }
+        return { TDuration(DurationType::V_QUARTER), mnx::NoteValue::make(mnx::NoteValueBase::Quarter) };
+    }();
+    // Smooth out floating-point noise from the unit conversions without imposing a fixed precision:
+    // snap to the rounded value only when it is equal within MuseScore's relative epsilon.
+    const double rawBpm = quarterBpm * (Fraction(1, 4) / dur.fraction()).toDouble();
+    const double roundedBpm = muse::RealRound(rawBpm, 6);
+    const double bpm = muse::RealIsEqual(rawBpm, roundedBpm) ? roundedBpm : rawBpm;
 
-    auto mnxTempo = mnxMeasure.ensure_tempos().append(static_cast<int>(std::lround(bpm)), *noteValue);
+    auto mnxTempo = mnxMeasure.ensure_tempos().append(bpm, noteValue);
     if (relTick.isNotZero()) {
         mnxTempo.ensure_location(location);
     }
@@ -291,8 +328,7 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
                 break;
             }
             if (const auto mnxJt = toMnxJumpType(jump->jumpType())) {
-                /// @note Current jump types default to measure end when stored at tick 0.
-                /// When MNX adds new types, revisit placement of new types.
+                // Navigation jumps are placed at measure end when stored at tick zero.
                 mnxMeasure.ensure_jump(*mnxJt, locationOrEnd);
             }
             break;
@@ -304,6 +340,10 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
             }
             if (marker->markerType() == MarkerType::FINE) {
                 mnxMeasure.ensure_fine(locationOrEnd);
+            } else if (marker->markerType() == MarkerType::TOCODA || marker->markerType() == MarkerType::TOCODASYM) {
+                mnxMeasure.ensure_jump(mnx::JumpType::ToCoda, locationOrEnd);
+            } else if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
+                mnxMeasure.ensure_coda(location);
             } else if (marker->isSegno()) {
                 mnxMeasure.ensure_segno(location);
                 /// @todo Export segno glyph when appropriate (defer pending MNX spec clarifications).
@@ -324,7 +364,7 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
             const Fraction relTick = item->tick() - measure->tick();
             switch (item->type()) {
             case ElementType::TEMPO_TEXT:
-                createTempo(mnxMeasure, toTempoText(item), relTick);
+                createTempo(mnxMeasure, measure, toTempoText(item), relTick);
                 break;
             default:
                 break;
@@ -347,6 +387,34 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
                 }
             }
         }
+    }
+}
+
+//---------------------------------------------------------
+//   exportGlobalCaesura
+//---------------------------------------------------------
+
+static void exportGlobalCaesura(mnx::global::Measure& mnxMeasure, const Measure* measure)
+{
+    // A matching caesura on every staff at the barline belongs to the global measure.
+    const Segment* breathSegment = measure->findSegmentR(SegmentType::Breath, measure->ticks());
+    const Breath* globalCaesura = nullptr;
+    if (breathSegment) {
+        for (staff_idx_t staffIdx = 0; staffIdx < measure->score()->nstaves(); ++staffIdx) {
+            const EngravingItem* item = breathSegment->element(staff2track(staffIdx));
+            if (!item || !item->isBreath() || !toBreath(item)->isCaesura()
+                || (globalCaesura && globalCaesura->symId() != toBreath(item)->symId())) {
+                globalCaesura = nullptr;
+                break;
+            }
+            globalCaesura = toBreath(item);
+        }
+    }
+    if (globalCaesura) {
+        const MnxCaesura value = toMnxCaesura(globalCaesura->symId());
+        auto caesura = mnxMeasure.ensure_caesura();
+        caesura.set_or_clear_shape(value.shape);
+        caesura.set_or_clear_marks(value.marks);
     }
 }
 
@@ -380,6 +448,7 @@ void MnxExporter::createGlobal()
         assignTimeSignature(mnxMeasure, measure, prevTimeSig, prevTimeSigDisplay);
         assignKeySignature(mnxMeasure, m_score, measure, prevKeyFifths);
         exportMeasureElements(mnxMeasure, measure);
+        exportGlobalCaesura(mnxMeasure, measure);
 
         const int displayNumber = measureNumberState.displayNumber(measure);
         if (displayNumber == 0) {
