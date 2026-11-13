@@ -2306,56 +2306,14 @@ static void layoutLines(const FiguredBass* item, FiguredBass::LayoutData* ldata,
     double printedLineLength = lastCR ? lastCR->pageX() - item->pageX() + 1.5 * item->spatium() : 3 * item->spatium();
     ldata->printedLineLength = printedLineLength;
 
-    // get duration indicator line(s) from page position of nextSegm
-    const std::vector<System*>& systems = ctx.dom().systems();
-    System* s1  = item->segment()->measure()->system();
-    System* s2  = nextSegm->measure()->system();
-    system_idx_t sysIdx1 = muse::indexOf(systems, s1);
-    system_idx_t sysIdx2 = muse::indexOf(systems, s2);
-
-    if (sysIdx2 == muse::nidx || sysIdx2 < sysIdx1) {
-        sysIdx2 = sysIdx1;
+    // get duration indicator line from page position of nextSegm
+    // TODO: lines on the following systems, when the duration ends on another system. The systems after
+    // the item's own may not have been laid out yet, so this needs an approach like that for spanners.
+    if (nextSegm->measure()->system() != item->segment()->measure()->system()) {
         nextSegm = item->segment()->next1();
-        // TODO
-        // During layout of figured bass next systems' numbers may be still
-        // undefined (then sysIdx2 == muse::nidx) or change in the future.
-        // A layoutSystem() approach similar to that for spanners should
-        // probably be implemented.
     }
-
-    system_idx_t i;
-    int len;
-    size_t segIdx = 0;
-    for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
-        len = 0;
-        if (sysIdx1 == sysIdx2 || i == sysIdx1) {
-            // single line
-            len = nextSegm->pageX() - item->pageX() - 4;               // stop 4 raster units before next segm
-        } else if (i == sysIdx1) {
-            // initial line
-            double w   = s1->staff(item->staffIdx())->bbox().right();
-            double x   = s1->pageX() + w;
-            len = x - item->pageX();
-        } else if (i > 0 && i != sysIdx2) {
-            // middle line
-            LOGD("FiguredBass: duration indicator middle line not implemented");
-        } else if (i == sysIdx2) {
-            // end line
-            LOGD("FiguredBass: duration indicator end line not implemented");
-        }
-        // store length item, reusing array items if already present
-        if (lineLengths.size() <= segIdx) {
-            lineLengths.push_back(len);
-        } else {
-            lineLengths[segIdx] = len;
-        }
-    }
-    // if more array items than needed, truncate array
-    if (lineLengths.size() > segIdx) {
-        lineLengths.resize(segIdx);
-    }
-
-    ldata->lineLengths = lineLengths;
+    int len = nextSegm->pageX() - item->pageX() - 4;               // stop 4 raster units before next segm
+    ldata->lineLengths = { static_cast<double>(len) };
 }
 
 void TLayout::layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx)
