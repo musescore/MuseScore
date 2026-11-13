@@ -35,7 +35,7 @@
 #include "types/ret.h"
 #include "rcommand/commandtypes.h"
 
-#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
@@ -73,6 +73,7 @@ void ProjectActionsController::init()
     d->onRequest(this, PROJECT_SHARE_AUDIO_COMMAND, [this]() { return runAsync(sharedAudio()); });
 
     d->onRequest(this, PROJECT_EXPORT_COMMAND, [this]() { return exportScore(); });
+    d->onRequest(this, PROJECT_EXPORT_SELECTION_COMMAND, [this]() { return exportSelection(); });
     d->onRequest(this, PROJECT_CONVERT_TO_SCORE_COMMAND, [this]() { return convertFileToScore(); });
 
     d->onRequest(this, PROJECT_PRINT_COMMAND, [this]() { return printScore(); });
@@ -100,14 +101,24 @@ void ProjectActionsController::init()
                 m_needSaveChanged.notify();
             });
         }
+    });
 
-        auto notation = projectSession()->currentNotation();
-        if (notation) {
-            notation->interaction()->selectionChanged().onNotify(this, [this]() {
+    auto listenSelectionChanges = [this]() {
+        if (m_observedNotation) {
+            m_observedNotation->interaction()->selectionChanged().disconnect(this);
+        }
+
+        m_observedNotation = projectSession()->currentNotation();
+        if (m_observedNotation) {
+            m_observedNotation->interaction()->selectionChanged().onNotify(this, [this]() {
                 m_hasSelectionChanged.notify();
             });
         }
-    });
+
+        m_hasSelectionChanged.notify();
+    };
+    projectSession()->currentNotationChanged().onNotify(this, listenSelectionChanges);
+    listenSelectionChanges();
 }
 
 bool ProjectActionsController::hasProject() const
@@ -164,6 +175,11 @@ bool ProjectActionsController::hasSelection() const
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }
 
+bool ProjectActionsController::hasRangeSelection() const
+{
+    return currentNotationSelection() ? currentNotationSelection()->isRange() : false;
+}
+
 muse::async::Notification ProjectActionsController::hasSelectionChanged() const
 {
     return m_hasSelectionChanged;
@@ -174,14 +190,9 @@ INotationProjectPtr ProjectActionsController::currentNotationProject() const
     return projectSession()->project();
 }
 
-IMasterNotationPtr ProjectActionsController::currentMasterNotation() const
-{
-    return currentNotationProject() ? currentNotationProject()->masterNotation() : nullptr;
-}
-
 INotationPtr ProjectActionsController::currentNotation() const
 {
-    return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
+    return projectSession()->currentNotation();
 }
 
 INotationInteractionPtr ProjectActionsController::currentInteraction() const
@@ -191,7 +202,8 @@ INotationInteractionPtr ProjectActionsController::currentInteraction() const
 
 INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 {
-    return currentNotation() ? currentInteraction()->selection() : nullptr;
+    const INotationInteractionPtr interaction = currentInteraction();
+    return interaction ? interaction->selection() : nullptr;
 }
 
 muse::Ret ProjectActionsController::openPageIfNeed(muse::Uri pageUri)
@@ -360,6 +372,23 @@ muse::Ret ProjectActionsController::exportScore()
     if (!interactive()->isOpened(EXPORT_URI).val) {
         interactive()->open(EXPORT_URI);
     }
+    return make_ok();
+}
+
+muse::Ret ProjectActionsController::exportSelection()
+{
+    const INotationPtr notation = projectSession()->currentNotation();
+    const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
+    if (!selection || !selection->isRange()) {
+        return Ret(Ret::Code::BadArgs);
+    }
+
+    UriQuery query("musescore://project/export");
+    query.set("selectionMode", Val(true));
+    if (!interactive()->isOpened(query.uri()).val) {
+        interactive()->open(query);
+    }
+
     return make_ok();
 }
 

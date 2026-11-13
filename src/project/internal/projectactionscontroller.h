@@ -33,7 +33,6 @@
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "rcommand/commandable.h"
-#include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "print/iprintprovider.h"
@@ -75,6 +74,7 @@ public:
     bool isBusy(BusyStatus status) const override;
     muse::async::Notification busyChanged() const override;
     bool hasSelection() const override;
+    bool hasRangeSelection() const override;
     muse::async::Notification hasSelectionChanged() const override;
     // --------
 
@@ -86,7 +86,6 @@ private:
     void setupConnections();
 
     project::INotationProjectPtr currentNotationProject() const;
-    notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
@@ -116,6 +115,7 @@ private:
     muse::Ret openProjectProperties();
 
     muse::Ret exportScore();
+    muse::Ret exportSelection();
     muse::Ret printScore();
 
     void setBusy(BusyStatus status, bool isBusy);
@@ -125,5 +125,6 @@ private:
 
     muse::async::Notification m_needSaveChanged;
     muse::async::Notification m_hasSelectionChanged;
+    notation::INotationPtr m_observedNotation;
 };
 }

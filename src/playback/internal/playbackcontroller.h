@@ -153,6 +153,8 @@ public:
     void setMasterNotation(notation::IMasterNotationPtr masterNotation);
 
     void setIsExportingAudio(bool exporting) override;
+    void setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes) override;
+    void setSelectionExportMetronomeEnabled(bool enabled) override;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
@@ -294,6 +296,8 @@ private:
     size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+    std::optional<PartVolumeMap> m_selectionExportTrackVolumes;
+    std::optional<bool> m_selectionExportMetronomeEnabled;
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;

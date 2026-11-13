@@ -23,13 +23,19 @@
 #include "exportdialogmodel.h"
 
 #include <algorithm>
+#include <set>
 
 #include <QItemSelectionModel>
 #include <QTimer>
 
+#include "async/notifylist.h"
+#include "engraving/dom/part.h"
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h"
+#include "notation/inotationselection.h"
 
 #include "translation.h"
 #include "log.h"
@@ -160,6 +166,7 @@ void ExportDialogModel::init()
 
     m_exportDirPath = info.exportDirPath;
     setUnitType(info.unitType);
+    ensureAudioExportTypeSelected();
 
     beginResetModel();
     m_notations.clear();
@@ -304,9 +311,261 @@ int ExportDialogModel::selectionLength() const
     return m_selectionModel->selectedIndexes().size();
 }
 
+bool ExportDialogModel::selectionMode() const
+{
+    return m_selectionMode;
+}
+
+void ExportDialogModel::setSelectionMode(bool selectionMode)
+{
+    if (m_selectionMode == selectionMode) {
+        return;
+    }
+
+    m_selectionMode = selectionMode;
+    emit selectionModeChanged();
+    emit exportTypeListChanged();
+
+    if (m_selectionMode) {
+        updateSelectionInstrumentInfo();
+    }
+
+    ensureAudioExportTypeSelected();
+}
+
+int ExportDialogModel::selectionTempoPercentage() const
+{
+    return m_selectionTempoPercentage;
+}
+
+void ExportDialogModel::setSelectionTempoPercentage(int percentage)
+{
+    percentage = std::clamp(percentage, 10, 300);
+    if (m_selectionTempoPercentage == percentage) {
+        return;
+    }
+
+    m_selectionTempoPercentage = percentage;
+    emit selectionTempoPercentageChanged();
+}
+
+bool ExportDialogModel::selectionMetronomeEnabled() const
+{
+    return m_selectionMetronomeEnabled;
+}
+
+void ExportDialogModel::setSelectionMetronomeEnabled(bool enabled)
+{
+    if (m_selectionMetronomeEnabled == enabled) {
+        return;
+    }
+
+    m_selectionMetronomeEnabled = enabled;
+    if (m_selectionMetronomeEnabled) {
+        setSelectionFadeInEnabled(false);
+    }
+    emit selectionMetronomeEnabledChanged();
+}
+
+bool ExportDialogModel::selectionFadeInEnabled() const
+{
+    return m_selectionFadeInEnabled;
+}
+
+void ExportDialogModel::setSelectionFadeInEnabled(bool enabled)
+{
+    if (m_selectionFadeInEnabled == enabled) {
+        return;
+    }
+
+    m_selectionFadeInEnabled = enabled;
+    emit selectionFadeInEnabledChanged();
+}
+
+double ExportDialogModel::selectionFadeInDuration() const
+{
+    return m_selectionFadeInDuration;
+}
+
+void ExportDialogModel::setSelectionFadeInDuration(double duration)
+{
+    duration = std::clamp(duration, 0.1, 30.0);
+    if (muse::RealIsEqual(m_selectionFadeInDuration, duration)) {
+        return;
+    }
+
+    m_selectionFadeInDuration = duration;
+    emit selectionFadeInDurationChanged();
+}
+
+bool ExportDialogModel::selectionFadeOutEnabled() const
+{
+    return m_selectionFadeOutEnabled;
+}
+
+void ExportDialogModel::setSelectionFadeOutEnabled(bool enabled)
+{
+    if (m_selectionFadeOutEnabled == enabled) {
+        return;
+    }
+
+    m_selectionFadeOutEnabled = enabled;
+    emit selectionFadeOutEnabledChanged();
+}
+
+double ExportDialogModel::selectionFadeOutDuration() const
+{
+    return m_selectionFadeOutDuration;
+}
+
+void ExportDialogModel::setSelectionFadeOutDuration(double duration)
+{
+    duration = std::clamp(duration, 0.1, 30.0);
+    if (muse::RealIsEqual(m_selectionFadeOutDuration, duration)) {
+        return;
+    }
+
+    m_selectionFadeOutDuration = duration;
+    emit selectionFadeOutDurationChanged();
+}
+
+int ExportDialogModel::selectionOtherInstrumentsVolume() const
+{
+    return m_selectionOtherInstrumentsVolume;
+}
+
+void ExportDialogModel::setSelectionOtherInstrumentsVolume(int percentage)
+{
+    percentage = std::clamp(percentage, 0, 100);
+    if (m_selectionOtherInstrumentsVolume == percentage) {
+        return;
+    }
+
+    m_selectionOtherInstrumentsVolume = percentage;
+    emit selectionOtherInstrumentsVolumeChanged();
+
+    bool instrumentsChanged = false;
+    for (SelectionInstrument& instrument : m_selectionInstruments) {
+        if (!instrument.selected && instrument.volume != percentage) {
+            instrument.volume = percentage;
+            instrumentsChanged = true;
+        }
+    }
+
+    if (instrumentsChanged) {
+        emit selectionInstrumentsChanged();
+    }
+}
+
+bool ExportDialogModel::selectionOtherInstrumentsMuted() const
+{
+    return m_selectionOtherInstrumentsMuted;
+}
+
+void ExportDialogModel::setSelectionOtherInstrumentsMuted(bool muted)
+{
+    if (m_selectionOtherInstrumentsMuted == muted) {
+        return;
+    }
+
+    m_selectionOtherInstrumentsMuted = muted;
+    emit selectionOtherInstrumentsMutedChanged();
+}
+
+QVariantList ExportDialogModel::selectionInstruments() const
+{
+    QVariantList result;
+    result.reserve(static_cast<qsizetype>(m_selectionInstruments.size()));
+
+    for (size_t i = 0; i < m_selectionInstruments.size(); ++i) {
+        const SelectionInstrument& instrument = m_selectionInstruments[i];
+        QVariantMap item;
+        item["index"] = static_cast<int>(i);
+        item["name"] = instrument.name;
+        item["selected"] = instrument.selected;
+        item["volume"] = instrument.volume;
+        result.append(item);
+    }
+
+    return result;
+}
+
+bool ExportDialogModel::hasOtherInstruments() const
+{
+    return std::any_of(m_selectionInstruments.cbegin(), m_selectionInstruments.cend(), [](const SelectionInstrument& instrument) {
+        return !instrument.selected;
+    });
+}
+
+void ExportDialogModel::setSelectionInstrumentVolume(int index, int percentage)
+{
+    if (index < 0 || static_cast<size_t>(index) >= m_selectionInstruments.size()) {
+        return;
+    }
+
+    percentage = std::clamp(percentage, 0, 200);
+    SelectionInstrument& instrument = m_selectionInstruments[static_cast<size_t>(index)];
+    if (instrument.volume == percentage) {
+        return;
+    }
+
+    instrument.volume = percentage;
+    emit selectionInstrumentsChanged();
+}
+
+void ExportDialogModel::updateSelectionInstrumentInfo()
+{
+    m_selectionInstruments.clear();
+
+    const INotationPtr notation = context()->currentNotation();
+    const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
+    const INotationSelectionRangePtr range = selection ? selection->range() : nullptr;
+    if (!notation || !notation->parts() || !selection || !selection->isRange() || !range) {
+        emit selectionInstrumentsChanged();
+        return;
+    }
+
+    std::set<muse::ID> selectedPartIds;
+    for (const engraving::Part* part : range->selectedParts()) {
+        if (part) {
+            selectedPartIds.insert(part->id());
+        }
+    }
+
+    const async::NotifyList<const engraving::Part*> parts = notation->parts()->partList();
+    for (const engraving::Part* part : parts) {
+        if (!part) {
+            continue;
+        }
+
+        const bool selected = selectedPartIds.contains(part->id());
+        m_selectionInstruments.push_back({ part->id(), part->partName().toQString(), selected,
+                                           selected ? 100 : m_selectionOtherInstrumentsVolume });
+    }
+
+    const bool shouldMuteOthersByDefault = selectedPartIds.size() == 1 && hasOtherInstruments();
+    if (m_selectionOtherInstrumentsMuted != shouldMuteOthersByDefault) {
+        m_selectionOtherInstrumentsMuted = shouldMuteOthersByDefault;
+        emit selectionOtherInstrumentsMutedChanged();
+    }
+
+    emit selectionInstrumentsChanged();
+}
+
 QVariantList ExportDialogModel::exportTypeList() const
 {
-    return m_exportTypeList.toVariantList();
+    if (!m_selectionMode) {
+        return m_exportTypeList.toVariantList();
+    }
+
+    ExportTypeList audioTypes;
+    for (const ExportType& type : m_exportTypeList) {
+        if (isAudioExportType(type)) {
+            audioTypes.push_back(type);
+        }
+    }
+
+    return audioTypes.toVariantList();
 }
 
 QVariantMap ExportDialogModel::selectedExportType() const
@@ -348,6 +607,10 @@ void ExportDialogModel::setExportType(const ExportType& type)
 void ExportDialogModel::selectExportTypeById(const QString& id)
 {
     for (const ExportType& type : std::as_const(m_exportTypeList)) {
+        if (m_selectionMode && !isAudioExportType(type)) {
+            continue;
+        }
+
         // First, check if it's a subtype
         if (type.subtypes.contains(id)) {
             setExportType(type.subtypes.getById(id));
@@ -362,6 +625,28 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 
     LOGW() << "Export type id not found: " << id;
     setExportType(m_exportTypeList.front());
+}
+
+bool ExportDialogModel::isAudioExportType(const ExportType& type) const
+{
+    return !type.suffixes.empty() && project::isAudioExport(type.suffixes.front().toStdString());
+}
+
+void ExportDialogModel::ensureAudioExportTypeSelected()
+{
+    if (!m_selectionMode || isAudioExportType(m_selectedExportType)) {
+        return;
+    }
+
+    const auto it = std::find_if(m_exportTypeList.cbegin(), m_exportTypeList.cend(), [this](const ExportType& type) {
+        return isAudioExportType(type);
+    });
+
+    IF_ASSERT_FAILED(it != m_exportTypeList.cend()) {
+        return;
+    }
+
+    setExportType(*it);
 }
 
 QVariantList ExportDialogModel::availableUnitTypes() const
@@ -418,9 +703,48 @@ void ExportDialogModel::setUnitType(UnitType unitType)
 bool ExportDialogModel::exportScores()
 {
     INotationPtrList notations;
+    INotationWriter::Options writerOptions;
 
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
-        notations.push_back(m_notations[index.row()]);
+    if (m_selectionMode) {
+        const INotationPtr notation = context()->currentNotation();
+        const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
+        if (!selection || !selection->isRange() || !selection->range()) {
+            return false;
+        }
+
+        const INotationSelectionRangePtr range = selection->range();
+        writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_START_TICK]
+            = Val(static_cast<int64_t>(range->startTick().ticks()));
+        writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_END_TICK]
+            = Val(static_cast<int64_t>(range->endTick().ticks()));
+        writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_TEMPO_PERCENT]
+            = Val(m_selectionTempoPercentage);
+        writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_METRONOME_ENABLED]
+            = Val(m_selectionMetronomeEnabled);
+        if (m_selectionFadeInEnabled) {
+            writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_FADE_IN_SEC]
+                = Val(m_selectionFadeInDuration);
+        }
+        if (m_selectionFadeOutEnabled) {
+            writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_FADE_OUT_SEC]
+                = Val(m_selectionFadeOutDuration);
+        }
+        ValList partVolumes;
+        partVolumes.reserve(m_selectionInstruments.size());
+        for (const SelectionInstrument& instrument : m_selectionInstruments) {
+            const int volume = m_selectionOtherInstrumentsMuted && !instrument.selected ? 0 : instrument.volume;
+            ValMap partVolume {
+                { "partId", Val(instrument.partId.toStdString()) },
+                { "volume", Val(volume) },
+            };
+            partVolumes.emplace_back(partVolume);
+        }
+        writerOptions[INotationWriter::OptionKey::AUDIO_EXPORT_PART_VOLUMES] = Val(partVolumes);
+        notations.push_back(notation);
+    } else {
+        for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+            notations.push_back(m_notations[index.row()]);
+        }
     }
 
     if (notations.empty()) {
@@ -442,6 +766,7 @@ bool ExportDialogModel::exportScores()
         muse::io::path_t exportPath;
         project::INotationWriter::UnitType selectedUnitType;
         bool openFolderOnExport = false;
+        INotationWriter::Options writerOptions;
     };
 
     //! NOTE We want to call the scenario method on the next event loop.
@@ -450,13 +775,14 @@ bool ExportDialogModel::exportScores()
     //! and pass them to the lambda.
     //! We can't access the dialog class member in the lambda body.
     Params params{ notations, exportPath.val, m_selectedUnitType,
-                   shouldDestinationFolderBeOpenedOnExport() };
+                   shouldDestinationFolderBeOpenedOnExport(), writerOptions };
 
     //! NOTE We can't use Async here
     // because the async::processMessages is called deep within the functions,
     // and this can't be done in Async's callback.
     QTimer::singleShot(0, [scenario, params]() {
-        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
+        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport,
+                               params.writerOptions);
     });
 
     return true;

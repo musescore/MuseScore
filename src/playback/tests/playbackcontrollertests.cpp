@@ -613,6 +613,28 @@ TEST_F(PlaybackControllerTests, ResendsAllEnvelopesOnTempoChange)
     automationData->editPoints(engraving::TEMPO_KEY, setPoint(0, 0.5));
 }
 
+TEST_F(PlaybackControllerTests, KeepsSelectionExportMuteOnTempoChange)
+{
+    // [GIVEN] A selected part is muted for export while its volume is automated
+    notation::AutomationDataPtr automationData = std::make_shared<notation::AutomationData>();
+    automationData->editPoints(TRACK_VOLUME_KEY, setPoint(TICKS_PER_SEC, 0.5));
+    setUpProject(automationData);
+    startPlayback();
+    m_controller->setSelectionExportTrackVolumes({ { TRACK_ID.partId, 0 } });
+
+    ON_CALL(*m_notationPlayback, playedTickToSec(_)).WillByDefault([](midi::tick_t tick) {
+        return audio::secs_t(tick / (2.0 * TICKS_PER_SEC));
+    });
+
+    // [THEN] Resending the automation envelope must not undo the export-only mute
+    EXPECT_CALL(*m_playback, setControlParams(AUDIO_TRACK_ID,
+                                              AllOf(VolumeEnvelopeIs(EnvelopePoints { { 0.5, 0.5 } }),
+                                                    Field(&audio::ControlParams::muted, true)))).Times(1);
+
+    // [WHEN] The tempo curve changes during the export
+    automationData->editPoints(engraving::TEMPO_KEY, setPoint(0, 0.5));
+}
+
 TEST_F(PlaybackControllerTests, ResendsNothingOnTempoChangeWithoutEnvelopes)
 {
     // [GIVEN] No Volume/Pan automation

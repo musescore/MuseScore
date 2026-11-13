@@ -43,6 +43,7 @@ public:
     muse::shortcuts::Shortcut selectActive(const muse::shortcuts::ShortcutList& list) const override;
 
     muse::TranslatableString scopeTitle(const std::string& scopeCode) const override;
+    void setScope(const Scope& scope) override;
 
 private:
     int scopePriority(const std::string& scope) const;
@@ -56,5 +57,6 @@ private:
     bool isNotationFocusedAndTextEditing() const;
 
     mutable std::map<std::string, std::function<int()> > m_scopePriorityMap;
+    std::map<std::string, Scope> m_scopes;
 };
 }

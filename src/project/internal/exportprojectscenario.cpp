@@ -112,7 +112,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
 }
 
 bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                                         const INotationWriter::Options& writerOptions) const
 {
     std::string suffix = io::suffix(destinationPath);
     INotationWriterPtr writer = writers()->writer(suffix);
@@ -191,9 +192,8 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     // not reach this point. But if we do, existing files should be overridden.
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-    };
+    INotationWriter::Options options = writerOptions;
+    options[INotationWriter::OptionKey::UNIT_TYPE] = Val(unitType);
 
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
