@@ -121,7 +121,7 @@ void AppShellContext::registerExports()
     ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
     ioc()->registerExport<ISessionsManager>(mname, m_sessionsManager);
     ioc()->registerExport<IAppshellCommandsController>(mname, m_commandsController);
-    ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext()));
+    // ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext())); //! TODO Temporary disabled
     ioc()->registerExport<IExtensionContextResolver>(mname, m_extensionContextResolver);
 
 #ifdef Q_OS_MAC
