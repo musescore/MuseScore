@@ -204,8 +204,8 @@ void NotationParts::setScoreOrder(const ScoreOrder& order)
 
     startEdit(TranslatableString("undoableAction", "Set score order"));
 
-    doSetScoreOrder(order);
-    setBracketsAndBarlines();
+    EditPart::setScoreOrder(score(), order);
+    m_scoreOrderChanged.notify();
 
     apply();
 }
@@ -370,13 +370,6 @@ void NotationParts::listenStyleChanges()
     }
 
     m_style->styleChanged().onNotify(this, [this]{ m_sharedPartsChanged.notify(); });
-}
-
-void NotationParts::doSetScoreOrder(const ScoreOrder& order)
-{
-    EditPart::setScoreOrder(score(), order);
-
-    m_scoreOrderChanged.notify();
 }
 
 EditPart::SetPartsResult NotationParts::doSetParts(const PartInstrumentList& parts, const ScoreOrder& order)
@@ -1010,11 +1003,6 @@ void NotationParts::reorderStaves(const IDList& staffIds)
     EditPart::reorderStaves(score(), orderedStaves);
 
     apply();
-}
-
-void NotationParts::setBracketsAndBarlines()
-{
-    score()->setBracketsAndBarlines();
 }
 
 void NotationParts::endInteractionWithScore()

@@ -116,7 +116,6 @@ private:
     void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});
     void listenStyleChanges();
 
-    void doSetScoreOrder(const ScoreOrder& order);
     engraving::EditPart::SetPartsResult doSetParts(const PartInstrumentList& parts, const ScoreOrder& order);
     std::vector<engraving::EditPart::PartEntry> partEntries(const PartInstrumentList& parts) const;
     void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
@@ -126,8 +125,6 @@ private:
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
     std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
-
-    void setBracketsAndBarlines();
 
     void endInteractionWithScore();
 
