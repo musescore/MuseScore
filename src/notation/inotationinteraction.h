@@ -99,8 +99,6 @@ public:
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
     virtual void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) = 0;
 
-    virtual void moveLyrics(MoveDirection d) = 0;
-
     virtual EngravingItem* contextItem() const = 0;
 
     // SelectionFilter
@@ -142,9 +140,8 @@ public:
     virtual void undoRedoToIndex(size_t idx) = 0;
 
     // Move/nudge elements
+    virtual bool moveSelectedItems(MoveDirection d, bool quickly) = 0;
     virtual void movePitch(MoveDirection d, PitchMode mode) = 0;
-    virtual void nudge(MoveDirection d, bool quickly) = 0;
-    virtual void nudgeAnchors(MoveDirection d) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
     virtual void swapChordRest(MoveDirection d) = 0;
     virtual void toggleSnapToPrevious() = 0;

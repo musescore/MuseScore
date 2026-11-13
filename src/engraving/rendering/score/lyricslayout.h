@@ -84,8 +84,8 @@ private:
     static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
                              const LyricsVersesMap& lyricsVersesBelow);
 
-    static double lyricsLineStartX(const LyricsLineSegment* item);
-    static double lyricsLineEndX(const LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
+    static double lyricsLineStartX(LyricsLineSegment* item);
+    static double lyricsLineEndX(LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
     static void adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);
 };
 }

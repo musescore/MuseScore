@@ -409,8 +409,7 @@ void Tuplet::dragGrip(EditData& ed)
     } else if (ed.curGrip == Grip::END) {
         m_userP2 += ed.delta;
     } else if (ed.curGrip == Grip::MIDDLE) {
-        m_userP1 += ed.delta;
-        m_userP2 += ed.delta;
+        setOffset(offset() + ed.delta);
     } else {
         UNREACHABLE;
         return;

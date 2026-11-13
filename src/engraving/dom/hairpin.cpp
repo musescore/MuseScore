@@ -238,6 +238,7 @@ void HairpinSegment::dragGrip(EditData& ed)
         }
         hairpin()->setHairpinHeight(Spatium(newHeight));
         triggerLayout();
+        return;
     }
     TextLineBaseSegment::dragGrip(ed);
 }
