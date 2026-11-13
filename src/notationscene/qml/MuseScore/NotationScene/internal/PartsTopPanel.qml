@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick
 
 import Muse.Ui
@@ -29,8 +30,13 @@ Item {
     id: root
 
     property int sideMargin: 0
+    property alias searchText: searchField.searchText
 
     signal createNewPartRequested()
+
+    function clearSearch() {
+        searchField.clear()
+    }
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PartsControlPanel"
@@ -48,6 +54,8 @@ Item {
     }
 
     StyledTextLabel {
+        id: title
+
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
 
@@ -63,10 +71,25 @@ Item {
 
         navigation.name: "CreateNewPartButton"
         navigation.panel: root.navigationPanel
-        navigation.column: 0
+        navigation.column: 1
 
         onClicked: {
             root.createNewPartRequested()
         }
+    }
+
+    SearchField {
+        id: searchField
+
+        anchors.top: title.bottom
+        anchors.topMargin: 16
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: root.sideMargin
+        anchors.rightMargin: root.sideMargin
+
+        navigation.name: "SearchParts"
+        navigation.panel: root.navigationPanel
+        navigation.column: 0
     }
 }
