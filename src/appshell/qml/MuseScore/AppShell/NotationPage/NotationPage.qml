@@ -453,6 +453,39 @@ DockPage {
         },
 
         DockPanel {
+            id: practiceEmphasisPanel
+
+            objectName: root.pageModel.practiceEmphasisPanelName()
+            title: qsTrc("appshell", "Practice emphasis")
+
+            readonly property bool sideDock: location === Location.Left || location === Location.Right
+
+            height: 280
+            width: root.verticalPanelDefaultWidth
+
+            minimumHeight: sideDock ? root.panelMinDimension : root.horizontalPanelMinHeight
+            maximumHeight: sideDock ? root.panelMaxDimension : root.horizontalPanelMaxHeight
+            minimumWidth: sideDock ? 220 : root.panelMinDimension
+            maximumWidth: sideDock ? root.verticalPanelDefaultWidth : root.panelMaxDimension
+
+            groupName: sideDock ? root.verticalPanelsGroup : root.horizontalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            location: Location.Bottom
+
+            dropDestinations: root.horizontalPanelDropDestinations.concat(root.verticalPanelDropDestinations)
+
+            navigationSection: root.navigationPanelSec(practiceEmphasisPanel.location)
+
+            PracticeEmphasisPanel {
+                navigationSection: practiceEmphasisPanel.navigationSection
+                contentNavigationPanelOrderStart: practiceEmphasisPanel.contentNavigationPanelOrderStart
+            }
+        },
+
+        DockPanel {
             id: pianoKeyboardPanel
 
             objectName: root.pageModel.pianoKeyboardPanelName()
