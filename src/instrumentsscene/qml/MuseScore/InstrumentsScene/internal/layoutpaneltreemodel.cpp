@@ -669,6 +669,11 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         return false;
     }
 
+    // Staves stay in their part
+    if (sourceParentItem != destinationParentItem && sourceParentItem != m_rootItem) {
+        return false;
+    }
+
     if (m_dragInProgress) {
         m_dragSourceParentItem = sourceParentItem;
     }
