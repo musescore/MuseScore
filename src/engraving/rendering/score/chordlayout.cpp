@@ -3717,7 +3717,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // don't set mag; fingerings should not scale with note
             Fingering* f = toFingering(e);
             if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED) {
-                f->setPlacement(f->calculatePlacement());
+                f->setPlacement(f->calculateDefaultPlacement());
             }
             // layout fingerings that are placed relative to notehead
             // fingerings placed relative to chord will be laid out later

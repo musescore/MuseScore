@@ -48,7 +48,7 @@ public:
 
     Note* note() const { return toNote(ownershipParent()); }
     ElementType layoutType() const;
-    PlacementV calculatePlacement() const;
+    PlacementV calculateDefaultPlacement() const;
 
     bool isEditAllowed(EditData&) const override;
 
