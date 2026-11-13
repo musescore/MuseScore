@@ -128,7 +128,6 @@ void BoxLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
     if (muse::contains(propertyIdSet, Pid::LINE_STYLE)) {
         loadPropertyItem(m_lineStyle);
-        updateDashPropertiesAvailability();
     }
 
     if (muse::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
@@ -138,6 +137,8 @@ void BoxLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     if (muse::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
         loadPropertyItem(m_dashGapLength, formatDoubleFunc);
     }
+
+    updateDashPropertiesAvailability();
 }
 
 void BoxLineSettingsModel::updateDashPropertiesAvailability()
