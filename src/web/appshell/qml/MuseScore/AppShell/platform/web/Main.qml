@@ -86,23 +86,31 @@ AppWindow {
 
                 navigationSection: topToolbarKeyNavSec
 
-                StyledTabBar {
-                    id: pagesBar
+                PageTabBar {
+                    id: toolBar
 
-                    width: 200
+                    model: MainToolBarModel {}
 
-                    readonly property var uris: [ "musescore://notation", "musescore://devtools" ]
+                    navigation.name: "MainToolBar"
+                    accessibleName: qsTrc("appshell", "Main toolbar")
 
-                    currentIndex: Math.max(0, uris.indexOf(dockWindow.currentPageUri))
+                    navigation.section: mainToolBar.navigationSection
+                    navigation.order: 1
 
-                    StyledTabButton {
-                        text: qsTrc("appshell", "Score")
-                        onClicked: dockWindow.openPage(pagesBar.uris[0])
+                    currentUri: dockWindow.currentPageUri
+
+                    navigation.onActiveChanged: {
+                        if (navigation.active) {
+                            mainToolBar.forceActiveFocus()
+                        }
                     }
 
-                    StyledTabButton {
-                        text: "Dev"
-                        onClicked: dockWindow.openPage(pagesBar.uris[1])
+                    onSelected: function(uri) {
+                        dockWindow.openPage(uri)
+                    }
+
+                    Component.onCompleted: {
+                        toolBar.focusOnFirst()
                     }
                 }
             }
