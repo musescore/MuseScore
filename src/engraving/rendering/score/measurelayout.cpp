@@ -929,17 +929,17 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                 barLine->setBarLineType(blType);
                 ctx.mutDom().addElement(barLine);
             } else {
-                // do not change bar line type if bar line is user modified
-                // and its not a repeat start/end barline (forced)
+                // Preserve custom barline types except when adding or removing a repeat end.
 
                 if (barLine->generated()) {
                     barLine->setSpanStaff(staff->barLineSpan());
                     barLine->setSpanFrom(staff->barLineFrom());
                     barLine->setSpanTo(staff->barLineTo());
                     barLine->setBarLineType(blType);
-                } else if (barLine->barLineType() != blType && force) {
+                } else if (barLine->barLineType() != blType
+                           && (force || barLine->barLineType() == BarLineType::END_REPEAT)) {
                     barLine->setBarLineType(blType);
-                    barLine->setGenerated(true);
+                    barLine->setGenerated(barLine->spanStyle() == BarLineSpanStyle::DEFAULT);
                 }
             }
 

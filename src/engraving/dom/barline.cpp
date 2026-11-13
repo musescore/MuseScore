@@ -96,6 +96,7 @@ BarLine::BarLine(const BarLine& bl)
     m_spanStaff   = bl.m_spanStaff;
     m_spanFrom    = bl.m_spanFrom;
     m_spanTo      = bl.m_spanTo;
+    m_spanStyle   = bl.m_spanStyle;
     m_barLineType = bl.m_barLineType;
     m_playCount   = bl.m_playCount;
 
@@ -230,6 +231,8 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 void BarLine::calcY()
 {
     BarLine::LayoutData* data = mutldata();
+    data->spanStyle = BarLineSpanStyle::DEFAULT;
+    data->spanStartY = 0.0;
     double _spatium = spatium();
     if (!ownershipParent()) {
         // for use in palette
@@ -271,6 +274,8 @@ void BarLine::calcY()
 
     double y1 = offset + from * lineDistance * .5 - lineWidth;
     double y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
+    double staffBottomY = offset + (oneLine ? BARLINE_SPAN_1LINESTAFF_TO : staffType1->lines() * 2 - 2)
+                          * lineDistance * .5 + lineWidth;
 
     if (spanStaff) {
         // we need spatium and line distance of bottom staff
@@ -316,6 +321,12 @@ void BarLine::calcY()
 
             // change barline, only if it is not initial one
             if (rtick().isNotZero()) {
+                if (segment()->isEndBarLineType()) {
+                    double staffBottomYNext = offsetNext
+                                              + (oneLineNext ? BARLINE_SPAN_1LINESTAFF_TO : staffType1Next->lines() * 2 - 2)
+                                              * lineDistanceNext * .5 + lineWidthNext;
+                    staffBottomY = std::max(staffBottomY, staffBottomYNext);
+                }
                 if (y1Next < y1) {
                     y1 = y1Next;
                 }
@@ -332,6 +343,16 @@ void BarLine::calcY()
 
     data->y1 = y1;
     data->y2 = y2;
+
+    const bool ordinaryBarline = m_barLineType == BarLineType::NORMAL || m_barLineType == BarLineType::BROKEN
+                                 || m_barLineType == BarLineType::DOTTED;
+    if (spanStaff && y2 > y1 && (segment()->isEndBarLineType() || segment()->isBarLineType()) && ordinaryBarline
+        && m_spanStyle != BarLineSpanStyle::DEFAULT) {
+        data->spanStartY = std::clamp(staffBottomY, y1, y2);
+        if (data->spanStartY < y2) {
+            data->spanStyle = m_spanStyle;
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -795,6 +816,8 @@ PropertyValue BarLine::getProperty(Pid id) const
         return spanFrom();
     case Pid::BARLINE_SPAN_TO:
         return spanTo();
+    case Pid::BARLINE_SPAN_STYLE:
+        return spanStyle();
     case Pid::BARLINE_SHOW_TIPS:
         return showTips();
     default:
@@ -825,6 +848,9 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BARLINE_SPAN_TO:
         setSpanTo(v.toInt());
+        break;
+    case Pid::BARLINE_SPAN_STYLE:
+        setSpanStyle(v.value<BarLineSpanStyle>());
         break;
     case Pid::BARLINE_SHOW_TIPS:
         setShowTips(v.toBool());
@@ -903,6 +929,9 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 
     case Pid::BARLINE_SPAN_TO:
         return staff() ? staff()->barLineTo() : 0;
+
+    case Pid::BARLINE_SPAN_STYLE:
+        return BarLineSpanStyle::DEFAULT;
 
     case Pid::BARLINE_SHOW_TIPS:
         return false;
