@@ -548,6 +548,7 @@ void System::add(EngravingItem* el)
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::TRILL_SEGMENT:
     case ElementType::VIBRATO_SEGMENT:
+    case ElementType::BOXLINE_SEGMENT:
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
@@ -637,6 +638,7 @@ void System::remove(EngravingItem* el)
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::TRILL_SEGMENT:
     case ElementType::VIBRATO_SEGMENT:
+    case ElementType::BOXLINE_SEGMENT:
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:

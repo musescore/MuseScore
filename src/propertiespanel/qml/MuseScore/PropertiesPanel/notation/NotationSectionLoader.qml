@@ -92,6 +92,7 @@ Loader {
             case PropertiesPanelAbstractModel.TYPE_FERMATA: return fermataComp
             case PropertiesPanelAbstractModel.TYPE_GLISSANDO: return glissandoComp
             case PropertiesPanelAbstractModel.TYPE_VIBRATO: return vibratoComp
+            case PropertiesPanelAbstractModel.TYPE_BOXLINE: return boxLineComp
             case PropertiesPanelAbstractModel.TYPE_SLUR:
             case PropertiesPanelAbstractModel.TYPE_TIE:
             case PropertiesPanelAbstractModel.TYPE_LAISSEZ_VIB:
@@ -190,6 +191,15 @@ Loader {
         id: vibratoComp
         VibratoSettings { 
             model: root.model as VibratoSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
+    }
+
+    Component {
+        id: boxLineComp
+        BoxLineSettings {
+            model: root.model as BoxLineSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
         }

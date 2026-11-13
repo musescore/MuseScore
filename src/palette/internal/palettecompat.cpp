@@ -30,6 +30,7 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/boxline.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chordbracket.h"
@@ -414,6 +415,7 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
     bool containsLeftArrowHead = false;
     bool containsRightArrowHead = false;
     bool containsChordBrackets = false;
+    bool containsBoxLine = false;
     for (const PaletteCellPtr& cell : linesPalette.cells()) {
         const ElementPtr element = cell->element;
         if (!element) {
@@ -434,6 +436,10 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
 
         if (element->isChordBracket()) {
             containsChordBrackets = true;
+        }
+
+        if (element->isBoxLine()) {
+            containsBoxLine = true;
         }
     }
 
@@ -461,6 +467,11 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
     if (!containsChordBrackets) {
         int defaultPosition = std::min(27, linesPalette.cellsCount());
         addChordBrackets(linesPalette, paletteScore, defaultPosition);
+    }
+
+    if (!containsBoxLine) {
+        auto boxLine = Factory::makeBoxLine(paletteScore->dummy());
+        linesPalette.appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box (staff-attached)"));
     }
 }
 

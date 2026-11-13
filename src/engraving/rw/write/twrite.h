@@ -46,6 +46,7 @@ class HBox;
 class VBox;
 class FBox;
 class TBox;
+class BoxLine;
 class Bracket;
 class Breath;
 
@@ -197,6 +198,7 @@ public:
     static void write(const VBox* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const FBox* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TBox* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const BoxLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Bracket* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Breath* item, XmlWriter& xml, WriteContext& ctx);
 

@@ -41,6 +41,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -181,6 +182,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter, opt);
         break;
     case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter, opt);
+        break;
+    case ElementType::BOXLINE_SEGMENT: draw(item_cast<const BoxLineSegment*>(item), painter, opt);
         break;
     case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter, opt);
         break;
@@ -995,6 +998,52 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
     }
 }
 
+static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
+{
+    static constexpr double DOTTED_DASH_LEN = 0.01;
+    static constexpr double DOTTED_GAP_LEN = 1.99;
+    switch (line->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = line->dashLineLen(), gap = line->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+}
+
+void SingleDraw::draw(const BoxLineSegment* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    const BoxLineSegment::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    const BoxLine* box = item->boxLine();
+
+    const Color color = item->curColor(box->visible(), box->lineColor(), opt);
+    Pen pen(color, item->absoluteFromSpatium(box->lineWidth()),
+            PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+
+    double dash = 0;
+    double gap = 0;
+    setDashAndGapLen(box, dash, gap, pen);
+
+    if (box->lineStyle() != LineType::SOLID) {
+        pen.setDashPattern({ dash, gap });
+    }
+
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+
+    painter->drawRect(ldata->rect);
+}
+
 void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -1623,23 +1672,6 @@ void SingleDraw::draw(const TextFragment& textFragment, const TextBase* item, mu
 {
     painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
-}
-
-static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
-{
-    static constexpr double DOTTED_DASH_LEN = 0.01;
-    static constexpr double DOTTED_GAP_LEN = 1.99;
-    switch (line->lineStyle()) {
-    case LineType::SOLID:
-        break;
-    case LineType::DASHED:
-        dash = line->dashLineLen(), gap = line->dashGapLen();
-        break;
-    case LineType::DOTTED:
-        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
-        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
-        break;
-    }
 }
 
 static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
