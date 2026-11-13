@@ -59,7 +59,10 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
     void updateDashPropertiesAvailability();
 
     PropertyItem* m_placement = nullptr;
