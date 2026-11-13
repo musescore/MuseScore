@@ -42,8 +42,6 @@ qt_add_qml_module(appshell_qml
         mainwindowtitleprovider.h
         notationpagemodel.cpp
         notationpagemodel.h
-        notationstatusbarmodel.cpp
-        notationstatusbarmodel.h
         PublishPage/publishtoolbarmodel.cpp
         PublishPage/publishtoolbarmodel.h
         welcomedialogmodel.cpp
@@ -75,7 +73,6 @@ qt_add_qml_module(appshell_qml
         HomePage/PluginsPage.qml
         MainToolBar.qml
         NotationPage/NotationPage.qml
-        NotationPage/NotationStatusBar.qml
         NotationReviewPage/NotationReviewPage.qml
         NotationReviewPage/ReviewNotationView.qml
         platform/AppButtonBackground.qml
