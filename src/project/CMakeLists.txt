@@ -44,6 +44,8 @@ target_sources(project PRIVATE
     ideletecloudscorescenario.h
     iprojectsession.h
     projectcommands.h
+    notationpageinfo.cpp
+    notationpageinfo.h
 
     types/migrationtypes.h
     types/projectcreateoptions.h
