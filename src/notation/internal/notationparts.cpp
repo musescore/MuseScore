@@ -695,6 +695,8 @@ bool NotationParts::appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceS
 
     EditPart::appendStaffLinkedToMaster(score(), staff, masterSourceStaff, destinationPart);
 
+    apply();
+
     return true;
 }
 
