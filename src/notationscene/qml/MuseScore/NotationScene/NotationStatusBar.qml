@@ -130,7 +130,7 @@ Item {
 
             transparent: true
             enabled: !root.viewOnly
-            visible: statusBarRow.remainingSpace > width + concertPitchControl.width
+            visible: model.isWorkspaceAvailable && statusBarRow.remainingSpace > width + concertPitchControl.width
 
             navigation.panel: navPanel
             navigation.order: 2
@@ -229,7 +229,7 @@ Item {
 
             enabled: !root.viewOnly
             visible: !concertPitchControl.visible ||
-                     !workspaceControl.visible
+                     (model.isWorkspaceAvailable && !workspaceControl.visible)
 
             navigation.panel: navPanel
             navigation.order: zoomControl.navigationOrderMax + 1
@@ -241,7 +241,7 @@ Item {
                     result.push(model.concertPitchItem)
                 }
 
-                if (!workspaceControl.visible) {
+                if (model.isWorkspaceAvailable && !workspaceControl.visible) {
                     result.push(model.currentWorkspaceItem)
                 }
 

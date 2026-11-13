@@ -49,6 +49,7 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
+    Q_PROPERTY(bool isWorkspaceAvailable READ isWorkspaceAvailable CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * currentWorkspaceItem READ currentWorkspaceItem CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * concertPitchItem READ concertPitchItem CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
@@ -71,6 +72,7 @@ public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
 
     QString accessibilityInfo() const;
+    bool isWorkspaceAvailable() const;
     muse::uicomponents::MenuItem* currentWorkspaceItem();
     muse::uicomponents::MenuItem* concertPitchItem();
     muse::uicomponents::MenuItem* currentViewMode();
