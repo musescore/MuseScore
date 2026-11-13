@@ -89,12 +89,12 @@ VoltaSegment::VoltaSegment(Volta* sp)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* VoltaSegment::propertyDelegate(Pid pid) const
+PropertyDelegate VoltaSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
-    return TextLineBaseSegment::propertyDelegate(pid);
+    return TextLineBaseSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

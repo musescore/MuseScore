@@ -73,6 +73,8 @@ Tuplet::Tuplet(DummyParentOr<Measure> parent)
     m_number       = 0;
     m_hasBracket   = false;
     m_isUp         = true;
+    // Temporary value to prevent initElementStyle laying out from the start of the score when m_tick is 0
+    m_tick = parent.as<Measure>() ? parent.as<Measure>()->tick() : Fraction(0, 1);
     initElementStyle(&tupletStyle);
 }
 
@@ -155,7 +157,7 @@ void Tuplet::setColor(const Color& col)
     }
 }
 
-EngravingObject* Tuplet::propertyDelegate(Pid id) const
+PropertyDelegate Tuplet::resolvePropertyDelegate(Pid id) const
 {
     switch (id) {
     case Pid::FONT_FACE:
@@ -164,9 +166,9 @@ EngravingObject* Tuplet::propertyDelegate(Pid id) const
     case Pid::ALIGN:
     case Pid::POSITION:
     case Pid::SIZE_SPATIUM_DEPENDENT:
-        return m_number;
+        return PropertyDelegate(m_number);
     default:
-        return nullptr;
+        return PropertyDelegate();
     }
 }
 
@@ -567,8 +569,8 @@ Fraction Tuplet::elementsDuration()
 
 PropertyValue Tuplet::getProperty(Pid propertyId) const
 {
-    if (EngravingObject* delegate = propertyDelegate(propertyId)) {
-        return delegate->getProperty(propertyId);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->getProperty(propertyId) : propertyDefault(propertyId);
     }
     switch (propertyId) {
     case Pid::DIRECTION:
@@ -599,8 +601,8 @@ PropertyValue Tuplet::getProperty(Pid propertyId) const
 
 bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
 {
-    if (EngravingObject* delegate = propertyDelegate(propertyId)) {
-        return delegate->setProperty(propertyId, v);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->setProperty(propertyId, v) : false;
     }
     switch (propertyId) {
     case Pid::DIRECTION:

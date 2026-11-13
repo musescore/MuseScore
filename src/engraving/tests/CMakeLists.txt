@@ -93,6 +93,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/system_dividers_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempotimeline_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/textstyle_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/timesig_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tools_tests.cpp

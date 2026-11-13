@@ -143,10 +143,10 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
         m_symAngle = v.toDouble();
         break;
     default:
-        break;
+        return BSymbol::setProperty(propertyId, v);
     }
     triggerLayout();
-    return BSymbol::setProperty(propertyId, v);
+    return true;
 }
 
 //---------------------------------------------------------

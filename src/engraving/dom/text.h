@@ -39,7 +39,7 @@ public:
     Text(DummyParentOr<EngravingItem> parent, TextStyleType tid = TextStyleType::DEFAULT);
     Text* clone() const override { return new Text(*this); }
 
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
     PropertyValue propertyDefault(Pid id) const override;
     PropertyValue getProperty(Pid id) const override;
 

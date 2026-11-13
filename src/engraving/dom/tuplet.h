@@ -131,7 +131,7 @@ public:
     void setVisible(bool f) override;
     void setColor(const Color& col) override;
 
-    EngravingObject* propertyDelegate(Pid id) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;

@@ -60,7 +60,6 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 static const ElementStyle fretStyle {
-    { Sid::fretNumPos,                         Pid::FRET_NUM_POS },
     { Sid::fretMag,                            Pid::MAG },
     { Sid::fretPlacement,                      Pid::PLACEMENT },
     { Sid::fretStrings,                        Pid::FRET_STRINGS },
