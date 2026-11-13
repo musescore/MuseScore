@@ -71,7 +71,6 @@ qt_add_qml_module(appshell_qml
         HomePage/HomeMenu.qml
         HomePage/HomePage.qml
         HomePage/PluginsPage.qml
-        MainToolBar.qml
         NotationPage/NotationPage.qml
         NotationReviewPage/NotationReviewPage.qml
         NotationReviewPage/ReviewNotationView.qml
