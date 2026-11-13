@@ -108,6 +108,8 @@ ComboBox {
             }
 
             text: comboDropdown.displayText
+
+            renderType: Text.NativeRendering
         }
 
         delegate: ListItemBlank {
