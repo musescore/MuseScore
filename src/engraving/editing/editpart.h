@@ -264,6 +264,8 @@ public:
     static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
                                               const String& shortName);
     static void setInstrumentCustomGroupAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
+    static void setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number);
+    static void setSharedPartEnabled(Score* score, Part* part, bool enabled);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
 
     static void removeParts(Score* score, const std::vector<Part*>& parts);

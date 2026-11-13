@@ -508,7 +508,7 @@ void NotationParts::setInstrumentNumber(const InstrumentKey& instrumentKey, int 
 
     startEdit(TranslatableString("undoableAction", "Set instrument number"));
 
-    score()->undo(new mu::engraving::ChangeInstrumentNumber(instrumentKey.tick, part, v));
+    EditPart::setInstrumentNumber(score(), part, instrumentKey.tick, v);
 
     apply();
 
@@ -649,7 +649,7 @@ void NotationParts::setSharedPartEnabled(const muse::ID& partId, bool enable)
 
     startEdit(actionName);
 
-    part->undoChangeProperty(Pid::SHARED_PART_ENABLED, enable);
+    EditPart::setSharedPartEnabled(score(), part, enable);
 
     apply();
 

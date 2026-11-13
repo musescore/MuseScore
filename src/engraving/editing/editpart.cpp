@@ -485,6 +485,24 @@ void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fra
     score->undo(new ChangeInstrumentGroupOptions(tick, part, useCustom, longName, shortName));
 }
 
+void EditPart::setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentNumber(tick, part, number));
+}
+
+void EditPart::setSharedPartEnabled(Score* score, Part* part, bool enabled)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    part->undoChangeProperty(Pid::SHARED_PART_ENABLED, enabled);
+}
+
 void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
 {
     if (!score || !staff) {
@@ -1153,7 +1171,7 @@ std::vector<Part*> EditPart::insertNewParts(Score* score, const std::vector<Part
 
         if (!entry.instrumentTemplate) {
             if (entry.part && number >= 0 && entry.part->number() != number) {
-                score->undo(new ChangeInstrumentNumber(Fraction(-1, 1), entry.part, number));
+                setInstrumentNumber(score, entry.part, Part::MAIN_INSTRUMENT_TICK, number);
             }
             continue;
         }
