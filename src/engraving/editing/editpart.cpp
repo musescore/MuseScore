@@ -480,14 +480,26 @@ void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fractio
     score->undo(new ChangeInstrumentShort(tick, part, abbreviature));
 }
 
-void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+bool EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
                                              const String& shortName)
 {
     if (!score || !part) {
-        return;
+        return false;
+    }
+
+    const Instrument* instrument = part->instrument(tick);
+    if (!instrument) {
+        return false;
+    }
+
+    const InstrumentLabel& label = instrument->instrumentLabel();
+    if (label.useCustomGroupName() == useCustom && label.customNameLongGroup() == longName
+        && label.customNameShortGroup() == shortName) {
+        return false;
     }
 
     score->undo(new ChangeInstrumentGroupOptions(tick, part, useCustom, longName, shortName));
+    return true;
 }
 
 void EditPart::setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number)

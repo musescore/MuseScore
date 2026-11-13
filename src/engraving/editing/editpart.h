@@ -262,7 +262,7 @@ public:
     static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
     static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
     static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
-    static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+    static bool setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
                                               const String& shortName);
     static void setInstrumentCustomGroupAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
     static void setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number);

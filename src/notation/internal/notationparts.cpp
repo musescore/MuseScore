@@ -461,24 +461,9 @@ void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKe
 
     for (const InstrumentKey& key : instruments) {
         Part* part = partModifiable(key.partId);
-        if (!part) {
-            continue;
+        if (mu::engraving::EditPart::setInstrumentGroupNameOptions(score(), part, key.tick, useCustom, name, shortName)) {
+            changedParts.push_back(part);
         }
-
-        const mu::engraving::Instrument* instrument = part->instrument(key.tick);
-        if (!instrument) {
-            continue;
-        }
-
-        const InstrumentLabel& instrLabel = instrument->instrumentLabel();
-        if (instrLabel.useCustomGroupName() == useCustom && instrLabel.customNameLongGroup() == name
-            && instrLabel.customNameShortGroup() == shortName) {
-            continue;
-        }
-
-        mu::engraving::EditPart::setInstrumentGroupNameOptions(score(), part, key.tick, useCustom, name, shortName);
-
-        changedParts.push_back(part);
     }
 
     apply();
