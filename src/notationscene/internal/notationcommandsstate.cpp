@@ -218,16 +218,16 @@ static const std::vector<Command> NOTE_COMMANDS = {
 };
 
 static const std::vector<Command> TUPLET_COMMANDS = {
-    OPEN_TUPLET_CONFIGURE_COMMAND,
-    ADD_TUPLET_COMMAND,
-    ADD_DUPLET_COMMAND,
-    ADD_TRIPLET_COMMAND,
-    ADD_QUADRUPLET_COMMAND,
-    ADD_QUINTUPLET_COMMAND,
-    ADD_SEXTUPLET_COMMAND,
-    ADD_SEPTUPLET_COMMAND,
-    ADD_OCTUPLET_COMMAND,
-    ADD_NONUPLET_COMMAND,
+    OpenTupletConfigureCommand::id,
+    AddTupletCommand::id,
+    AddDupletCommand::id,
+    AddTripletCommand::id,
+    AddQuadrupletCommand::id,
+    AddQuintupletCommand::id,
+    AddSextupletCommand::id,
+    AddSeptupletCommand::id,
+    AddOctupletCommand::id,
+    AddNonupletCommand::id,
 };
 
 static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {

@@ -167,6 +167,9 @@ private:
     muse::Ret changeVoice(const UseVoiceCommand& command);
     muse::Ret swapVoices(const SwapVoicesCommand& command);
 
+    muse::Ret putTuplet(const AddTupletCommand& command);
+    muse::Ret openTupletOtherDialog();
+
     muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);
@@ -175,10 +178,6 @@ private:
     void realtimeAdvance();
 
     void toggleArticulation(SymbolId articulationSymbolId);
-
-    muse::Ret putTuplet(const muse::rcommand::Params& params);
-    void putTuplet(const TupletOptions& options);
-    void putTuplet(int tupletCount);
 
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
@@ -227,7 +226,6 @@ private:
     void openBreaksDialog();
     void openTransposeDialog();
     void openPartsDialog();
-    void openTupletOtherDialog();
     void openStaffTextPropertiesDialog();
     void openMeasurePropertiesDialog();
     void openEditGridSizeDialog();

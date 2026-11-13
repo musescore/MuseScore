@@ -1118,10 +1118,10 @@ struct AddTupletCommand {
     cprop_decl availabilities = Availability::API;
 
     std::string ratio;   // Fraction as string (e.g. "3/2", "4/3", "5/4", "6/5", "7/6", "8/7", "9/8")
-    engraving::TupletNumberType numberType = engraving::TupletNumberType::DEFAULT;
-    engraving::TupletBracketType bracketType = engraving::TupletBracketType::DEFAULT;
+    TupletNumberType numberType = TupletNumberType::DEFAULT;
+    TupletBracketType bracketType = TupletBracketType::DEFAULT;
     bool autoBaseLen = true;
-    engraving::TupletSelectedDuration selectedDurationAs = engraving::TupletSelectedDuration::DEFAULT;
+    TupletSelectedDuration selectedDurationAs = TupletSelectedDuration::DEFAULT;
 
     cprop_decl input = FieldsScheme {
         Field{ "ratio", &AddTupletCommand::ratio, "Tuplet ratio (e.g. 3/2, 4/3, 5/4, 6/5, 7/6, 8/7, 9/8)" },
@@ -1132,6 +1132,7 @@ struct AddTupletCommand {
                Presence::Optional },
     };
 
+    AddTupletCommand() = default;
     AddTupletCommand(int tupletCount)
         : ratio(std::to_string(tupletCount) + "/2") {}
 };
@@ -1145,21 +1146,66 @@ struct AddDupletCommand {
     cprop_decl redirect = AddTupletCommand(2);
 };
 
-inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
-inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
-inline static const muse::rcommand::Command ADD_TRIPLET_COMMAND("command://notation/add-triplet");
-inline static const muse::rcommand::Command ADD_QUADRUPLET_COMMAND("command://notation/add-quadruplet");
-inline static const muse::rcommand::Command ADD_QUINTUPLET_COMMAND("command://notation/add-quintuplet");
-inline static const muse::rcommand::Command ADD_SEXTUPLET_COMMAND("command://notation/add-sextuplet");
-inline static const muse::rcommand::Command ADD_SEPTUPLET_COMMAND("command://notation/add-septuplet");
-inline static const muse::rcommand::Command ADD_OCTUPLET_COMMAND("command://notation/add-octuplet");
-inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://notation/add-nonuplet");
+struct AddTripletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/triplet");
+    cprop_decl title = MnemonicString("action", "Triplet");
+    cprop_decl description = TranslatableString("action", "Add triplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(3);
+};
 
-inline static const muse::rcommand::Command OPEN_TUPLET_CONFIGURE_COMMAND("command://notation/open-tuplet-configure");
+struct AddQuadrupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/quadruplet");
+    cprop_decl title = MnemonicString("action", "Quadruplet");
+    cprop_decl description = TranslatableString("action", "Add quadruplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(4);
+};
+
+struct AddQuintupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/quintuplet");
+    cprop_decl title = MnemonicString("action", "Quintuplet");
+    cprop_decl description = TranslatableString("action", "Add quintuplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(5);
+};
+
+struct AddSextupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/sextuplet");
+    cprop_decl title = MnemonicString("action", "Sextuplet");
+    cprop_decl description = TranslatableString("action", "Add sextuplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(6);
+};
+
+struct AddSeptupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/septuplet");
+    cprop_decl title = MnemonicString("action", "Septuplet");
+    cprop_decl description = TranslatableString("action", "Add septuplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(7);
+};
+
+struct AddOctupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/octuplet");
+    cprop_decl title = MnemonicString("action", "Octuplet");
+    cprop_decl description = TranslatableString("action", "Add octuplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(8);
+};
+
+struct AddNonupletCommand {
+    cprop_decl id = Command("command://notation/add-tuplet/nonuplet");
+    cprop_decl title = MnemonicString("action", "Nonuplet");
+    cprop_decl description = TranslatableString("action", "Add nonuplet");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTupletCommand(9);
+};
+
 struct OpenTupletConfigureCommand {
     cprop_decl id = Command("command://notation/open-tuplet-configure");
-    cprop_decl title = MnemonicString("action", "Open tuplet configure");
-    cprop_decl description = TranslatableString("action", "Open tuplet configure");
+    cprop_decl title = MnemonicString("action", "Othe&r…");
+    cprop_decl description = TranslatableString("action", "Show tuplet configure");
     cprop_decl availabilities = Availability::UI;
 };
 

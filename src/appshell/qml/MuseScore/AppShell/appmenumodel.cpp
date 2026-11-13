@@ -639,15 +639,15 @@ MenuItemList AppMenuModel::makeIntervalsItems()
 MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_DUPLET_COMMAND),
-        makeMenuItem(ADD_TRIPLET_COMMAND),
-        makeMenuItem(ADD_QUADRUPLET_COMMAND),
-        makeMenuItem(ADD_QUINTUPLET_COMMAND),
-        makeMenuItem(ADD_SEXTUPLET_COMMAND),
-        makeMenuItem(ADD_SEPTUPLET_COMMAND),
-        makeMenuItem(ADD_OCTUPLET_COMMAND),
-        makeMenuItem(ADD_NONUPLET_COMMAND),
-        makeMenuItem(OPEN_TUPLET_CONFIGURE_COMMAND)
+        makeMenuItem(AddDupletCommand::id),
+        makeMenuItem(AddTripletCommand::id),
+        makeMenuItem(AddQuadrupletCommand::id),
+        makeMenuItem(AddQuintupletCommand::id),
+        makeMenuItem(AddSextupletCommand::id),
+        makeMenuItem(AddSeptupletCommand::id),
+        makeMenuItem(AddOctupletCommand::id),
+        makeMenuItem(AddNonupletCommand::id),
+        makeMenuItem(OpenTupletConfigureCommand::id)
     };
 
     return items;

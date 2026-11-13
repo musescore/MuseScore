@@ -128,6 +128,9 @@ void NotationActionController::init()
     registerCommand<UseVoiceCommand>(&Controller::changeVoice);
     registerCommand<SwapVoicesCommand>(&Controller::swapVoices);
 
+    registerCommand<AddTupletCommand>(&Controller::putTuplet);
+    registerCommand<OpenTupletConfigureCommand>([this]() { return openTupletOtherDialog(); });
+
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -178,17 +181,6 @@ void NotationActionController::init()
     registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
 
     registerCommand(ENTER_REST_COMMAND, &Interaction::putRestToSelection);
-
-    registerCommand(OPEN_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
-    registerCommandWithParams(ADD_TUPLET_COMMAND, &Controller::putTuplet);
-    registerCommand(ADD_DUPLET_COMMAND, [this]() { putTuplet(2); });
-    registerCommand(ADD_TRIPLET_COMMAND, [this]() { putTuplet(3); });
-    registerCommand(ADD_QUADRUPLET_COMMAND, [this]() { putTuplet(4); });
-    registerCommand(ADD_QUINTUPLET_COMMAND, [this]() { putTuplet(5); });
-    registerCommand(ADD_SEXTUPLET_COMMAND, [this]() { putTuplet(6); });
-    registerCommand(ADD_SEPTUPLET_COMMAND, [this]() { putTuplet(7); });
-    registerCommand(ADD_OCTUPLET_COMMAND, [this]() { putTuplet(8); });
-    registerCommand(ADD_NONUPLET_COMMAND, [this]() { putTuplet(9); });
 
     registerCommand(INSERT_HBOX_COMMAND, [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
     registerCommand(INSERT_VBOX_COMMAND, [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
@@ -1489,30 +1481,48 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     }
 }
 
-muse::Ret NotationActionController::putTuplet(const muse::rcommand::Params& params)
+muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
 {
-    TupletOptions options;
-    options.ratio = engraving::Fraction::fromString(muse::String::fromStdString(params.at("ratio").toString()));
-    options.numberType = EnumContract<TupletNumberType>::get(params);
-    options.bracketType = EnumContract<TupletBracketType>::get(params);
-    options.autoBaseLen = params.at("auto-baselen", Val(false)).toBool();
-    options.selectedDurationAs = EnumContract<TupletSelectedDuration>::get(params);
-
-    putTuplet(options);
-    return muse::make_ok();
-}
-
-void NotationActionController::putTuplet(const TupletOptions& options)
-{
-    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    TupletOptions options;
+    options.ratio = Fraction::fromString(command.ratio);
+    options.numberType = command.numberType;
+    options.bracketType = command.bracketType;
+    options.autoBaseLen = command.autoBaseLen;
+    options.selectedDurationAs = command.selectedDurationAs;
+
+    // resolve defaults
+    INotationStylePtr style = notationStyle();
+    if (!style) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (options.bracketType == TupletBracketType::DEFAULT) {
+        int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
+        options.bracketType = static_cast<TupletBracketType>(bracketType);
+    }
+    if (options.numberType == TupletNumberType::DEFAULT) {
+        int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
+        options.numberType = static_cast<TupletNumberType>(numberType);
+    }
+
+    if (options.selectedDurationAs == TupletSelectedDuration::DEFAULT) {
+        options.selectedDurationAs = configuration()->tupletCommandsSelectedDurationAs();
+    }
+
+    // e.g. a triplet of the selected duration
+    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
+        const int numerator = options.ratio.numerator();
+        options.ratio.setDenominator(Tuplet::conventionalTupletDenominator(numerator));
     }
 
     if (noteInput->isNoteInputMode()) {
@@ -1520,30 +1530,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
     } else {
         interaction->addTupletToSelectedChordRests(options);
     }
-}
-
-void NotationActionController::putTuplet(int tupletCount)
-{
-    TRACEFUNC;
-
-    TupletOptions options;
-    options.ratio.setNumerator(tupletCount);
-    options.ratio.setDenominator(2);
-    options.autoBaseLen = true;
-    options.selectedDurationAs = configuration()->tupletCommandsSelectedDurationAs();
-    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
-        // e.g. a triplet of the selected duration
-        options.ratio.setDenominator(engraving::Tuplet::conventionalTupletDenominator(tupletCount));
-    }
-    // get the bracket type from score style settings
-    if (INotationStylePtr style = notationStyle()) {
-        int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
-        options.bracketType = static_cast<engraving::TupletBracketType>(bracketType);
-        int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
-        options.numberType = static_cast<engraving::TupletNumberType>(numberType);
-    }
-
-    putTuplet(options);
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::changeDuration(const ChangeDurationCommand& command)
@@ -2601,9 +2588,10 @@ bool NotationActionController::isEditingText() const
     return interaction->isTextEditingStarted();
 }
 
-void NotationActionController::openTupletOtherDialog()
+muse::Ret NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
+    return muse::make_ok();
 }
 
 void NotationActionController::openStaffTextPropertiesDialog()

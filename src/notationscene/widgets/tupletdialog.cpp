@@ -142,14 +142,14 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    rcommand::Params params = {
-        { "ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()) },
-        EnumContract<TupletNumberType>::param(numberType()),
-        EnumContract<TupletBracketType>::param(bracketType()),
-        EnumContract<TupletSelectedDuration>::param(selectedDurationAs()),
-    };
+    AddTupletCommand cmd;
+    cmd.ratio = Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString();
+    cmd.numberType = numberType();
+    cmd.bracketType = bracketType();
+    cmd.selectedDurationAs = selectedDurationAs();
+    cmd.autoBaseLen = false;
 
-    dispatcher()->dispatch(ADD_TUPLET_COMMAND, params);
+    dispatcher()->dispatch(cmd);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)

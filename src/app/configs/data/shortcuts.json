@@ -270,14 +270,14 @@
         {"command": "command://notation/add-rehearsalmark-text",  "sequences": ["Ctrl+M"]},
         {"command": "command://notation/add-acciaccatura",  "sequences": ["/","Num+/"]},
         {"command": "command://notation/add-figured-bass",  "sequences": ["Ctrl+G"]},
-        {"command": "command://notation/add-duplet",  "sequences": ["Ctrl+2"]},
-        {"command": "command://notation/add-triplet",  "sequences": ["Ctrl+3"]},
-        {"command": "command://notation/add-quadruplet",  "sequences": ["Ctrl+4"]},
-        {"command": "command://notation/add-quintuplet",  "sequences": ["Ctrl+5"]},
-        {"command": "command://notation/add-sextuplet",  "sequences": ["Ctrl+6"]},
-        {"command": "command://notation/add-septuplet",  "sequences": ["Ctrl+7"]},
-        {"command": "command://notation/add-octuplet",  "sequences": ["Ctrl+8"]},
-        {"command": "command://notation/add-nonuplet",  "sequences": ["Ctrl+9"]}
+        {"command": "command://notation/add-tuplet/duplet",  "sequences": ["Ctrl+2"]},
+        {"command": "command://notation/add-tuplet/triplet",  "sequences": ["Ctrl+3"]},
+        {"command": "command://notation/add-tuplet/quadruplet",  "sequences": ["Ctrl+4"]},
+        {"command": "command://notation/add-tuplet/quintuplet",  "sequences": ["Ctrl+5"]},
+        {"command": "command://notation/add-tuplet/sextuplet",  "sequences": ["Ctrl+6"]},
+        {"command": "command://notation/add-tuplet/septuplet",  "sequences": ["Ctrl+7"]},
+        {"command": "command://notation/add-tuplet/octuplet",  "sequences": ["Ctrl+8"]},
+        {"command": "command://notation/add-tuplet/nonuplet",  "sequences": ["Ctrl+9"]}
       ]
     },
     {
