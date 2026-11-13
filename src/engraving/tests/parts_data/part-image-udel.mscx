@@ -14,6 +14,7 @@
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <maskSlurs>0</maskSlurs>
       <maskTies>0</maskTies>
+      <measureNumberAvoidance>move-clear</measureNumberAvoidance>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -846,6 +847,7 @@
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <maskSlurs>0</maskSlurs>
         <maskTies>0</maskTies>
+        <measureNumberAvoidance>move-clear</measureNumberAvoidance>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1340,6 +1342,7 @@
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
         <maskSlurs>0</maskSlurs>
         <maskTies>0</maskTies>
+        <measureNumberAvoidance>move-clear</measureNumberAvoidance>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
