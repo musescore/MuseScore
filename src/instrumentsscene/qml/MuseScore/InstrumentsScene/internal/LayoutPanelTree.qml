@@ -61,6 +61,10 @@ Item {
         property string currentItemNavigationName: ""
         property bool isPopupOpened: false
 
+        readonly property int cardRadius: 3
+        readonly property int rowContentHeight: 30
+        readonly property int itemSpacing: 8
+
         property LayoutPanelItemDelegate pressedDelegate: null
 
         property AbstractLayoutPanelTreeItem draggedItem: null
@@ -224,13 +228,22 @@ Item {
             return layoutPanelTreeView.width
         }
 
+        // Blank space below the last row; sits behind the rows
+        MouseArea {
+            parent: layoutPanelTreeView
+            anchors.fill: parent
+            z: -0.5
+
+            onClicked: root.model.clearSelection()
+        }
+
         Loader {
             id: draggedItemLoader
 
             active: Boolean(prv.draggedItem)
 
             width: layoutPanelTreeView.width
-            height: 38
+            height: prv.rowContentHeight
             y: prv.dragStartY + rowDragHandler.centroid.position.y - rowDragHandler.centroid.pressPosition.y
             z: 2 // above the rows
 
@@ -249,6 +262,7 @@ Item {
                 isDragged: true
 
                 sideMargin: root.sideMargin
+                cardRadius: prv.cardRadius
 
                 navigation.enabled: false
             }
@@ -265,16 +279,41 @@ Item {
             required property AbstractLayoutPanelTreeItem item
 
             readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
+            readonly property bool isDragged: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem
 
-            implicitHeight: 38
+            readonly property bool isCardBottom: dropArea.depth === 0
+                                                 ? !dropArea.expanded
+                                                 : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
+
+            implicitHeight: prv.rowContentHeight + (dropArea.isCardBottom ? prv.itemSpacing : 0)
+
+            // The gaps between cards; clicks on the cards are handled by the rows
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.model.clearSelection()
+            }
+
+            // Where the dragged row will land; its slot follows the drag, as rows are moved live
+            Rectangle {
+                width: parent.width
+                height: prv.rowContentHeight
+
+                visible: dropArea.isDragged
+
+                radius: prv.cardRadius
+                color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
+                border.width: 1.5
+                border.color: ui.theme.accentColor
+            }
 
             Loader {
-                anchors.fill: parent
+                width: parent.width
+                height: prv.rowContentHeight
 
-                opacity: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem ? 0 : 1
+                opacity: dropArea.isDragged ? 0 : 1
 
                 sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
-                                 ? controlItemDelegateComponent : treeItemDelegateComponent
+                                 ? addStaffButtonComponent : treeItemDelegateComponent
 
                 Component {
                     id: treeItemDelegateComponent
@@ -290,6 +329,7 @@ Item {
                         isExpanded: dropArea.expanded
 
                         sideMargin: root.sideMargin
+                        cardRadius: prv.cardRadius
 
                         navigation.name: itemDelegate.item?.title || "LayoutPanelItemDelegate"
                         navigation.panel: treeNavigationPanel
@@ -352,17 +392,17 @@ Item {
                 }
 
                 Component {
-                    id: controlItemDelegateComponent
+                    id: addStaffButtonComponent
 
-                    LayoutPanelItemControl {
+                    LayoutPanelAddStaffButton {
                         title: dropArea.item?.title || ""
-                        isSelected: dropArea.item?.isSelected || false
 
                         navigation.panel: treeNavigationPanel
                         navigation.row: dropArea.row
 
                         depth: dropArea.depth
                         sideMargin: root.sideMargin
+                        cardRadius: prv.cardRadius
 
                         onClicked: {
                             dropArea.item.appendNewItem()

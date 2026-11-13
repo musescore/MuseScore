@@ -50,8 +50,11 @@ Item {
         MouseArea {
             anchors.fill: parent
 
-            onClicked: {
-                treeModel.clearSelection()
+            // Only below the header: clicks on its (disabled) buttons and switches don't deselect
+            onClicked: function(mouse) {
+                if (mouse.y > headerDivider.mapToItem(background, 0, 0).y) {
+                    treeModel.clearSelection()
+                }
             }
         }
     }
@@ -79,6 +82,18 @@ Item {
 
         readonly property int sideMargin: 12
         spacing: sideMargin
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+            Layout.leftMargin: contentColumn.sideMargin
+            Layout.rightMargin: contentColumn.sideMargin
+
+            text: treeModel.isMasterScore ? qsTrc("layoutpanel", "Main score")
+                                          //: %1 is the name of a part
+                                          : qsTrc("layoutpanel", "Part: %1").arg(treeModel.scoreName)
+            font: ui.theme.bodyBoldFont
+            horizontalAlignment: Text.AlignLeft
+        }
 
         LayoutControlPanel {
             id: controlPanel
@@ -122,12 +137,30 @@ Item {
         ToggleButton {
             Layout.leftMargin: contentColumn.sideMargin
 
-            text: qsTrc("layoutpanel", "Enable stave sharing")
+            navigation.panel: controlPanel.navigation
+            navigation.order: 5
+
+            text: qsTrc("layoutpanel", "Automatically hide all empty staves")
+            checked: treeModel.isHideEmptyStavesEnabled
+            onToggled: treeModel.toggleHideEmptyStaves(!checked)
+        }
+
+        ToggleButton {
+            Layout.leftMargin: contentColumn.sideMargin
+
+            navigation.panel: controlPanel.navigation
+            navigation.order: 6
+
+            visible: treeModel.isMasterScore
+
+            text: qsTrc("layoutpanel", "Combine instruments onto shared staves")
             checked: treeModel.isStaveSharingEnabled
             onToggled: treeModel.toggleStaveSharing(!checked)
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            id: headerDivider
+        }
 
         StyledTextLabel {
             Layout.fillWidth: true
