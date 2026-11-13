@@ -26,6 +26,8 @@ qt_add_qml_module(appshell_qml
     SOURCES
         appmenumodel.cpp
         appmenumodel.h
+        maintoolbarmodel.cpp
+        maintoolbarmodel.h
         navigableappmenumodel.cpp
         navigableappmenumodel.h
     QML_FILES
