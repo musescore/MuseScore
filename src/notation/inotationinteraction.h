@@ -86,10 +86,10 @@ public:
     // Select
     virtual INotationSelectionPtr selection() const = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
-    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) = 0;
-    virtual void select(SelectionTarget target) = 0;
-    virtual void addToSelection(SelectionTarget target) = 0;
-    virtual void expandSelection(ExpandSelectionMode mode) = 0;
+    virtual muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0) = 0;
+    virtual muse::Ret select(SelectionTarget target) = 0;
+    virtual muse::Ret addToSelection(SelectionTarget target) = 0;
+    virtual void showLocation() = 0;
     virtual void clearSelection() = 0;
 
     virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
@@ -170,6 +170,7 @@ public:
     virtual void startEditGrip(const muse::PointF& pos) = 0;
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
     virtual void endEditGrip() = 0;
+    virtual bool isStartEndGripSelected() const = 0;
 
     virtual bool isEditingElement() const = 0;
     virtual muse::async::Notification isEditingElementChanged() const = 0;
@@ -328,7 +329,6 @@ public:
     virtual void transposeSemitone(int) = 0;
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;
     virtual void toggleAutoplace(bool all) = 0;
-    virtual void getLocation() = 0;
     virtual void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) = 0;
 
     struct ShowItemRequest {

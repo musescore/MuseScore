@@ -45,8 +45,10 @@ void EditCrossStaff::moveUp(Transaction&, Score* score, ChordRest* cr)
 
     const std::vector<Staff*>& staves = part->staves();
     // we know that staffMove+rstaff-1 index exists due to the previous condition.
-    if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves.at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
+    const StaffGroup sourceGroup = staff->staffType(cr->tick())->group();
+    const StaffGroup targetGroup = staves.at(rstaff + staffMove - 1)->staffType(cr->tick())->group();
+    if ((sourceGroup != StaffGroup::STANDARD && sourceGroup != StaffGroup::JIANPU)
+        || (targetGroup != StaffGroup::STANDARD && targetGroup != StaffGroup::JIANPU)) {
         LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord up a staff
@@ -70,8 +72,10 @@ void EditCrossStaff::moveDown(Transaction&, Score* score, ChordRest* cr)
 
     const std::vector<Staff*>& staves = part->staves();
     // we know that staffMove+rstaff+1 index exists due to the previous condition.
-    if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves.at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
+    const StaffGroup sourceGroup = staff->staffType(cr->tick())->group();
+    const StaffGroup targetGroup = staves.at(staffMove + rstaff + 1)->staffType(cr->tick())->group();
+    if ((sourceGroup != StaffGroup::STANDARD && sourceGroup != StaffGroup::JIANPU)
+        || (targetGroup != StaffGroup::STANDARD && targetGroup != StaffGroup::JIANPU)) {
         LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord down a staff

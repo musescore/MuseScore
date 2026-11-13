@@ -44,16 +44,16 @@ TEST_F(Engraving_CapoTests, modeChange)
     String readFile(CAPO_DATA_DIR + u"capo_mode_changes.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo();
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto chRestSeg = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg);
+    ASSERT_TRUE(chRestSeg);
 
     auto chordStd = chRestSeg->element(0);
     EXPECT_TRUE(chordStd->isChord());
@@ -112,21 +112,21 @@ TEST_F(Engraving_CapoTests, addDelete)
     String readFile(CAPO_DATA_DIR + u"capo_add_delete.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo();
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto secondMeasure = firstMeasure->nextMeasure();
-    EXPECT_TRUE(secondMeasure);
+    ASSERT_TRUE(secondMeasure);
 
     auto chRestSeg1 = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg1);
+    ASSERT_TRUE(chRestSeg1);
     auto chRestSeg2 = secondMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg2);
+    ASSERT_TRUE(chRestSeg2);
 
     auto chordStd1 = chRestSeg1->element(0);
     EXPECT_TRUE(chordStd1->isChord());
@@ -324,16 +324,16 @@ TEST_F(Engraving_CapoTests, ignoredString)
     String readFile(CAPO_DATA_DIR + u"capo_mode_changes.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo();
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto chRestSeg = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg);
+    ASSERT_TRUE(chRestSeg);
 
     auto chordStd = chRestSeg->element(0);
     EXPECT_TRUE(chordStd->isChord());
@@ -407,16 +407,16 @@ TEST_F(Engraving_CapoTests, capoSaveOpen)
     String readFile(CAPO_DATA_DIR + u"capo_save_open.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo(true);
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto chRestSeg = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg);
+    ASSERT_TRUE(chRestSeg);
 
     auto chordStd = chRestSeg->element(0);
     EXPECT_TRUE(chordStd->isChord());
@@ -443,16 +443,16 @@ TEST_F(Engraving_CapoTests, undoRedoOnInactiveCapo)
     String readFile(CAPO_DATA_DIR + u"capo_save_open.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo(true);
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto chRestSeg = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg);
+    ASSERT_TRUE(chRestSeg);
 
     auto chordStd = chRestSeg->element(0);
     EXPECT_TRUE(chordStd->isChord());
@@ -522,21 +522,21 @@ TEST_F(Engraving_CapoTests, deleteWithPreviousCapoIncative) {
     String readFile(CAPO_DATA_DIR + u"capo_add_delete.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo();
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto secondMeasure = firstMeasure->nextMeasure();
-    EXPECT_TRUE(secondMeasure);
+    ASSERT_TRUE(secondMeasure);
 
     auto chRestSeg1 = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg1);
+    ASSERT_TRUE(chRestSeg1);
     auto chRestSeg2 = secondMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg2);
+    ASSERT_TRUE(chRestSeg2);
 
     auto chordStd1 = chRestSeg1->element(0);
     EXPECT_TRUE(chordStd1->isChord());
@@ -657,16 +657,16 @@ TEST_F(Engraving_CapoTests, caopWithBend) {
     String readFile(CAPO_DATA_DIR + u"capo_bend.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->updateCapo();
     score->doLayout();
 
     auto firstMeasure = score->firstMeasure();
-    EXPECT_TRUE(firstMeasure);
+    ASSERT_TRUE(firstMeasure);
 
     auto chRestSeg1 = firstMeasure->first(mu::engraving::SegmentType::ChordRest);
-    EXPECT_TRUE(chRestSeg1);
+    ASSERT_TRUE(chRestSeg1);
 
     auto chordStd1 = chRestSeg1->element(0);
     EXPECT_TRUE(chordStd1->isChord());

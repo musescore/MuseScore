@@ -85,7 +85,7 @@ void CapoSettingsModel::init()
         return;
     }
 
-    const mu::engraving::Part* part = m_item->part();
+    const mu::engraving::Part* part = m_item->originPart();
     IF_ASSERT_FAILED(part) {
         return;
     }

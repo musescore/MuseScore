@@ -22,17 +22,13 @@
 
 #include "paletteactionscontroller.h"
 
-#include "rcommand/actiontocommand.h"
-
 #include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "../palettecommands.h"
-#include <vector>
 
 using namespace mu::palette;
 using namespace muse;
 using namespace muse::ui;
-using namespace muse::actions;
 using namespace muse::rcommand;
 
 static const muse::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?modal=false");
@@ -41,11 +37,6 @@ static const muse::UriQuery TIME_SIGNATURE_PROPERTIES_URI("musescore://palette/t
 static const muse::UriQuery CUSTOMIZE_KIT_URI("musescore://palette/customizekit");
 
 static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
-
-bool PaletteActionsController::canReceiveAction(const ActionCode&) const
-{
-    return interactive()->currentUri().val != NOTATION_REVIEW_PAGE_URI;
-}
 
 void PaletteActionsController::init()
 {
@@ -63,25 +54,6 @@ void PaletteActionsController::init()
     cd->onRequest(this, PALETTE_APPLY_CURRENT_ELEMENT_COMMAND, [this]() { m_applyElementRequested.notify(); return muse::make_ok(); });
     cd->onRequest(this, PALETTE_EXPAND_ALL_COMMAND, [this]() { m_expandCollapseAllRequested.send(true); return muse::make_ok(); });
     cd->onRequest(this, PALETTE_COLLAPSE_ALL_COMMAND, [this]() { m_expandCollapseAllRequested.send(false); return muse::make_ok(); });
-
-    // compat
-    {
-        static const std::vector<ActionToCommand> actionToCommands = {
-            { "masterpalette", TOGGLE_MASTER_PALETTE_COMMAND, make_conv({ { "palette_name", param<std::string>  } }) },
-            { "show-keys", TOGGLE_SPECIAL_CHARACTERS_COMMAND, {} },
-            { "time-signature-properties", OPEN_TIME_SIGNATURE_PROPERTIES_COMMAND, {} },
-            { "customize-kit", OPEN_CUSTOMIZE_KIT_COMMAND, {} },
-            { "palette-search", PALETTE_SEARCH_COMMAND, {} },
-            { "apply-current-palette-element", PALETTE_APPLY_CURRENT_ELEMENT_COMMAND, {} },
-            { "toggle-single-click-to-open-palette", PALETTE_TOGGLE_SINGLE_CLICK_TO_OPEN_COMMAND, {} },
-            { "toggle-single-palette", PALETTE_TOGGLE_SINGLE_PALETTE_COMMAND, {} },
-            { "toggle-palette-drag", PALETTE_TOGGLE_DRAG_ENABLED_COMMAND, {} },
-            { "expand-all-palettes", PALETTE_EXPAND_ALL_COMMAND, {} },
-            { "collapse-all-palettes", PALETTE_COLLAPSE_ALL_COMMAND, {} },
-        };
-
-        registerActionToCommand(this, actionToCommands, cd, dispatcher());
-    }
 
     interactive()->currentUri().ch.onReceive(this, [this](const Uri& uri) {
         //! NOTE If MasterPalette are not open, then it is reasonably to compare with the current uri,
@@ -127,7 +99,7 @@ void PaletteActionsController::toggleSpecialCharactersDialog()
     if (interactive()->isOpened(SPECIAL_CHARACTERS_URI.uri()).val) {
         interactive()->close(SPECIAL_CHARACTERS_URI.uri());
     } else {
-        auto notation = globalContext()->currentNotation();
+        auto notation = projectSession()->currentNotation();
         if (notation && notation->interaction()->isTextEditingStarted()) {
             interactive()->open(SPECIAL_CHARACTERS_URI);
         }
@@ -171,7 +143,7 @@ muse::Ret PaletteActionsController::toggleDragEnabled()
 
 mu::notation::INotationInteractionPtr PaletteActionsController::notationInteraction() const
 {
-    const notation::INotationPtr notation = globalContext()->currentNotation();
+    const notation::INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

@@ -183,6 +183,15 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Can’t explode or implode");
         message = muse::trc("notation", "Cannot explode or implode between different local time signatures");
         break;
+    case MsError::NO_SPACE_FOR_TUPLET:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "There isn’t enough space for the tuplet before the end of the measure "
+                                        "(or of the tuplet it would be nested in).");
+        break;
+    case MsError::TUPLET_NOTE_VALUE_TOO_SHORT:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "Note value is too short");
+        break;
     }
 
     m_currentDialogError = err;

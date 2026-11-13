@@ -15,10 +15,12 @@ reviewed as two linked pull requests:
    capture, transient tempo/mix/metronome handling, commands, UI, and project
    tests/mocks.
 
-Open the framework PR first. The MuseScore PR may initially point to the commit
-on the contributor's framework fork and declare the dependency. Once the
-framework PR is merged, update the MuseScore submodule pointer to the upstream
-commit before merge.
+The linked review proposals are
+[muse_framework #292](https://github.com/musescore/muse_framework/pull/292) and
+[MuseScore #34920](https://github.com/musescore/MuseScore/pull/34920). The
+MuseScore proposal depends on the framework change. Once the framework PR is
+merged, update the MuseScore submodule pointer to the upstream commit before
+merge.
 
 The existing feature request is
 [MuseScore #19345](https://github.com/musescore/MuseScore/issues/19345);
@@ -59,6 +61,17 @@ failure restore normal playback state and do not dirty the score.
 
 ### Implementation
 
+- Register the command through the current project command registry and state
+  provider, including the File and range-selection context menus. The legacy
+  `ProjectUiActions` registration removed upstream is not retained. The command
+  state follows the active notation when switching between the score and parts.
+- Adapt MuseScore's enum contract declarations and three percussion command
+  call sites to the new contract API in the framework submodule. Upstream
+  MuseScore `main` still uses the older API because it pins an earlier
+  framework revision; these compatibility edits can be dropped if upstream
+  updates them first.
+- Implement the newer framework shortcut-resolver registration method in
+  MuseScore's resolver, preserving existing scope priorities and titles.
 - Snapshot the raw selection ticks and selected part IDs before export.
 - Apply the temporary tempo multiplier before mapping raw score ticks onto the
   unfolded playback timeline.
@@ -68,20 +81,33 @@ failure restore normal playback state and do not dirty the score.
 - Align the start down to the preceding audio-sample boundary so events exactly
   on the first selected beat are not skipped.
 - Apply fade ramps to the final offline mix before encoding.
-- Apply per-part gains relative to the existing mixer values, then restore all
-  tempo, metronome, solo/mute, and volume state.
+- Apply per-part gains relative to the existing mixer values whenever track
+  controls are built. This also preserves the export-only mix when automation
+  envelopes are resent after a tempo change or a track finishes loading.
+  Restore all tempo, metronome, solo/mute, and volume state afterwards.
 
 ### Validation
 
 - RelWithDebInfo build, link, and install on Windows x64 with Qt 6.10.2 and
-  MSVC 2022: **PASS**.
+  MSVC 2022: **PASS** on the November 2026 upstream integration; built and
+  installed executable hashes match. User audio smoke test is pending.
 - Manual range, tempo, focused/background mix, fade, metronome, MP3, WAV, OGG,
   and post-export state-restoration checks: see
   `docs/export-selection-test-plan.md`.
 - `SoundTrackSaveOptions` validation and RPC round-trip tests are included in
   the framework change.
+- A playback-controller regression test covers an export-muted instrument when
+  a tempo change resends its volume automation. It and the other 19 controller
+  tests passed on the refreshed local test build.
+- The November 2026 upstream integration has passed conflict, code-style,
+  full application build, and install checks locally. The audio and playback
+  test targets compile and link. User playback checks are still pending.
+- The framework audio test executable exits before GoogleTest output with a
+  local Windows `0xC0000005`, as in earlier local runs. Its test cases are not
+  claimed as passed here.
 - MuseScore CI `run_tests` passed, including `muse_audio_tests`. The local
-  Windows runner did not report results, so no local test pass is claimed.
+  Windows runner did not report results, so no local test pass is claimed for
+  that earlier revision. The upstream refresh requires a new local build.
 
 ### Scope and known limitations
 
@@ -124,20 +150,20 @@ Catalan, German, Italian, and French are in
 
 - [x] Link the existing MuseScore feature request #19345 and describe the
       rehearsal and teaching use case without creating a duplicate.
-- [ ] Confirm both repositories are based on current upstream `main`.
-- [x] Run the official Uncrustify check on touched C++ files: 13/13 framework
-      and 35/35 application sources pass; inspect the two minimal formatting
-      adjustments.
-- [ ] Run `git diff --check` in both repositories.
-- [ ] Build and install the complete application.
+- [x] Confirm both repositories include upstream `main` as fetched on
+      2026-11-13.
+- [x] Run the official Uncrustify check on touched C++ files: 14/14 framework
+      and 43/43 application sources pass.
+- [x] Run `git diff --check` in both repositories.
+- [x] Build and install the complete application on Windows x64.
 - [ ] Execute all high-priority cases in the test plan.
 - [ ] Run translation extraction and placeholder-language UI checks.
-- [ ] Commit the framework change on its own branch and open its PR first.
+- [x] Commit the framework change on its own branch and open its PR first.
 - [ ] Commit MuseScore application changes separately, including the resulting
       framework submodule pointer.
-- [ ] Exclude `TestExportacio*`, build directories, logs, and generated audio.
+- [x] Exclude `TestExportacio*`, build directories, logs, and generated audio.
 - [ ] Sign the MuseScore contributor license agreement when prompted.
-- [ ] Link both PRs and the feature issue in each description.
+- [x] Link both PRs and the feature issue in each description.
 
 ## Recommended commit grouping
 

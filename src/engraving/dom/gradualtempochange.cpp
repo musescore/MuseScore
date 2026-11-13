@@ -22,6 +22,7 @@
 
 #include "gradualtempochange.h"
 
+#include "dummyparent.h"
 #include "measure.h"
 #include "rehearsalmark.h"
 #include "score.h"
@@ -42,7 +43,6 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeSystemFlag, Pid::SYSTEM_FLAG },
     { Sid::tempoChangePlacement, Pid::PLACEMENT },
     { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE },
-    { Sid::tempoChangeLineSpacing, Pid::TEXT_LINE_SPACING },
 
     { Sid::tempoChangeColor, Pid::COLOR },
 
@@ -108,7 +108,7 @@ static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_
     { GradualTempoChangeType::Stringendo, 1.5 }
 };
 
-GradualTempoChange::GradualTempoChange(DummyParentOr<EngravingItem> parent)
+GradualTempoChange::GradualTempoChange(DummyParent* parent)
     : TextLineBase(ElementType::GRADUAL_TEMPO_CHANGE, parent, ElementFlag::SYSTEM)
 {
     initElementStyle(&tempoStyle);

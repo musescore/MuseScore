@@ -114,10 +114,11 @@ void KeySig::setKey(Key concertKey)
     KeySigEvent e;
     e.setConcertKey(concertKey);
     if (staff() && !style().styleB(Sid::concertPitch)) {
-        Interval v = staff()->part()->instrument(tick())->transpose();
+        const Part* part = staff()->originPart(tick());
+        Interval v = part->instrument(tick())->transpose();
         if (!v.isZero()) {
             v.flip();
-            Key transposedKey = Transpose::transposeKey(concertKey, v, staff()->part()->preferSharpFlat());
+            Key transposedKey = Transpose::transposeKey(concertKey, v, part->preferSharpFlat());
             e.setKey(transposedKey);
         }
     }
@@ -194,6 +195,9 @@ EngravingObject* KeySig::propertyDelegate(Pid propertyId) const
     case Pid::KEY_CONCERT:
     case Pid::SHOW_COURTESY:
     case Pid::KEYSIG_MODE:
+    case Pid::JIANPU_NUMBERING:
+    case Pid::JIANPU_TONIC_KEY:
+    case Pid::JIANPU_TONIC_MODE:
     {
         Segment* thisSeg = segment();
         Segment* nextKSSeg = thisSeg ? thisSeg->next1(SegmentType::KeySig) : nullptr;
@@ -227,6 +231,12 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
         return showCourtesy();
     case Pid::KEYSIG_MODE:
         return mode();
+    case Pid::JIANPU_NUMBERING:
+        return jianpuNumbering();
+    case Pid::JIANPU_TONIC_KEY:
+        return jianpuTonicKey();
+    case Pid::JIANPU_TONIC_MODE:
+        return jianpuTonicMode();
     case Pid::IS_COURTESY:
         return _isCourtesy;
     default:
@@ -267,6 +277,27 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
             return false;
         }
         setMode(v.value<KeyMode>());
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_NUMBERING:
+        if (generated()) {
+            return false;
+        }
+        setJianpuNumbering(v.value<JianpuNumbering>());
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_TONIC_KEY:
+        if (generated()) {
+            return false;
+        }
+        setJianpuTonicKey(v.value<Key>());
+        staff()->setKey(tick(), keySigEvent());
+        break;
+    case Pid::JIANPU_TONIC_MODE:
+        if (generated()) {
+            return false;
+        }
+        setJianpuTonicMode(v.value<KeyMode>());
         staff()->setKey(tick(), keySigEvent());
         break;
     case Pid::IS_COURTESY:
@@ -319,6 +350,12 @@ PropertyValue KeySig::propertyDefault(Pid id) const
         return true;
     case Pid::KEYSIG_MODE:
         return KeyMode::UNKNOWN;
+    case Pid::JIANPU_NUMBERING:
+        return JianpuNumbering::FOLLOW_SCORE_KEY;
+    case Pid::JIANPU_TONIC_KEY:
+        return Key::C;
+    case Pid::JIANPU_TONIC_MODE:
+        return KeyMode::MAJOR;
     case Pid::IS_COURTESY:
         return false;
     default:

@@ -22,13 +22,15 @@
 
 #include "chordsymbolsettingsmodel.h"
 
+#include "translation.h"
+
 #include "engraving/dom/harmony.h"
 
 #include "notation/inotationstyle.h" // IWYU pragma: keep
-
-#include "translation.h"
+#include "notationscene/notationcommands.h"
 
 using namespace mu::propertiespanel;
+using namespace mu::notation;
 
 ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                    IElementRepositoryService* repository)
@@ -95,7 +97,7 @@ PropertyItem* ChordSymbolSettingsModel::durationType() const
 
 void ChordSymbolSettingsModel::addFretboardDiagram()
 {
-    dispatcher()->dispatch("add-fretboard-diagram");
+    commandDispatcher()->dispatch(ADD_FRETBOARD_DIAGRAM_COMMAND);
 }
 
 bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const

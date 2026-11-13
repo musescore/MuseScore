@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "async/notification.h"
+#include "async/channel.h"
 #include "async/promise.h"
 
 #include "types/recentfile.h"
@@ -40,7 +40,7 @@ public:
     virtual ~IRecentFilesController() = default;
 
     virtual const RecentFilesList& recentFilesList() const = 0;
-    virtual muse::async::Notification recentFilesListChanged() const = 0;
+    virtual muse::async::Channel<RecentFilesChange> recentFilesListChanged() const = 0;
 
     virtual void prependRecentFile(const RecentFile& file) = 0;
     virtual void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) = 0;

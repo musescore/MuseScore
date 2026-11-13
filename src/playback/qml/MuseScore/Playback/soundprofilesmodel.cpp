@@ -54,7 +54,7 @@ void SoundProfilesModel::init()
         return false;
     });
 
-    if (INotationProjectPtr project = context()->currentProject()) {
+    if (INotationProjectPtr project = context()->project()) {
         m_activeProfile = project->audioSettings()->activeSoundProfile().toQString();
         m_currentlySelectedProfile = m_activeProfile;
     }
@@ -116,7 +116,7 @@ void SoundProfilesModel::setActiveProfile(const QString& newActiveProfile)
 
     m_activeProfile = newActiveProfile;
 
-    if (INotationProjectPtr project = context()->currentProject()) {
+    if (INotationProjectPtr project = context()->project()) {
         SoundProfileName activeProfileName = SoundProfileName::fromQString(newActiveProfile);
         project->audioSettings()->setActiveSoundProfile(activeProfileName);
         controller()->applyProfile(activeProfileName);
@@ -144,7 +144,7 @@ void SoundProfilesModel::setDefaultProjectsProfile(const QString& newDefaultProj
 
 mu::notation::INotationPlaybackPtr SoundProfilesModel::notationPlayback() const
 {
-    project::INotationProjectPtr project = context()->currentProject();
+    project::INotationProjectPtr project = context()->project();
     return project ? project->masterNotation()->playback() : nullptr;
 }
 

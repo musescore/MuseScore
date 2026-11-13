@@ -31,7 +31,6 @@ using namespace mu::playback;
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 using namespace muse::audio;
 
 static const QString VIEW_MENU_ID("view-menu");

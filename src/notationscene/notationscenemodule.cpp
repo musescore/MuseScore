@@ -23,14 +23,12 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
 #include "rcommand/icommandsregister.h"
 #include "rcommand/icommandsstate.h"
 
 #include "internal/notationsceneconfiguration.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/midiinputoutputcontroller.h"
-#include "internal/notationuiactions.h"
 #include "internal/notationcommandsregister.h"
 #include "internal/notationcommandsstate.h"
 #include "internal/notationactioncontroller.h"
@@ -109,7 +107,6 @@ IContextSetup* NotationSceneModule::newContext(const muse::modularity::ContextPt
 void NotationSceneContext::registerExports()
 {
     m_actionController = std::make_shared<NotationActionController>(iocContext());
-    m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController, iocContext());
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
 
     ioc()->registerExport<INotationCommandsController>(mname, m_actionController);
@@ -117,11 +114,6 @@ void NotationSceneContext::registerExports()
 
 void NotationSceneContext::resolveImports()
 {
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>("notationscene");
-    if (ar) {
-        ar->reg(m_notationUiActions);
-    }
-
     auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
     if (cs) {
         cs->reg(std::make_shared<NotationCommandsState>(iocContext()));
@@ -131,7 +123,6 @@ void NotationSceneContext::resolveImports()
 void NotationSceneContext::onInit(const IApplication::RunMode& mode)
 {
     m_actionController->init();
-    m_notationUiActions->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();

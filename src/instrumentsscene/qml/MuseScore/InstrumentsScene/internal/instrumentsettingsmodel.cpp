@@ -189,7 +189,7 @@ INotationPtr InstrumentSettingsModel::currentNotation() const
 
 INotationPtr InstrumentSettingsModel::currentMasterNotation() const
 {
-    IMasterNotationPtr master = context()->currentMasterNotation();
+    IMasterNotationPtr master = context()->masterNotation();
     return master ? master->notation() : nullptr;
 }
 

@@ -98,6 +98,8 @@ public:
 
     bool thinNoteInputCursor() const override;
 
+    bool enableJianpu() const override;
+
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
     QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
@@ -122,9 +124,9 @@ public:
 
     QList<int> possibleZoomPercentageList() const override;
 
-    mu::engraving::AutomationType currentAutomationType() const override;
-    void setCurrentAutomationType(mu::engraving::AutomationType type) override;
-    muse::async::Notification currentAutomationTypeChanged() const override;
+    AutomationLane currentAutomationLane() const override;
+    void setCurrentAutomationLane(AutomationLane lane) override;
+    muse::async::Notification currentAutomationLaneChanged() const override;
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
@@ -152,6 +154,10 @@ public:
     bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
     void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
     muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
+    engraving::TupletSelectedDuration tupletCommandsSelectedDurationAs() const override;
+    void setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs) override;
+    muse::async::Notification tupletCommandsSelectedDurationAsChanged() const override;
 
     muse::io::path_t userMusicFontsPath() const override;
     void setUserMusicFontsPath(const muse::io::path_t& path) override;
@@ -254,13 +260,14 @@ private:
 
     muse::async::Notification m_defaultNoteInputMethodChanged;
     muse::async::Notification m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
+    muse::async::Notification m_tupletCommandsSelectedDurationAsChanged;
     muse::async::Notification m_useNoteInputCursorInInputByDurationChanged;
     muse::async::Notification m_isMidiInputEnabledChanged;
     muse::async::Notification m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged;
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;
-    muse::async::Notification m_currentAutomationTypeChanged;
+    muse::async::Notification m_currentAutomationLaneChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;

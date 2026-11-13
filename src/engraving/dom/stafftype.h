@@ -206,6 +206,8 @@ public:
     bool showLedgerLines() const { return m_showLedgerLines; }
     void setNoteHeadScheme(NoteHeadScheme s) { m_noteHeadScheme = s; }
     NoteHeadScheme noteHeadScheme() const { return m_noteHeadScheme; }
+    void setInstrumentLabelVisibility(InstrumentLabelVisibility v) { m_instrumentLabelVisibility = v; }
+    InstrumentLabelVisibility instrumentLabelVisibility() const { return m_instrumentLabelVisibility; }
 
     String fretString(int fret, int string, bool deadNote) const;     // returns a string with the text for fret
     String durationString(DurationType type, int dots) const;
@@ -276,11 +278,18 @@ public:
     void  setShowTabFingering(bool val) { m_showTabFingering = val; }
     void  setUseNumbers(bool val);
     void  setShowBackTied(bool val) { m_showBackTied = val; }
-    void  setScore(Score* score) { m_score = score; }
+    void  setScore(Score* score);
     void  setFretUseTextStyle(bool val) { m_fretUseTextStyle = val; }
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
     void  setFretPreset(const String& str);
+    void  setJianpuTextStyle(const TextStyleType& val);
+    void  setJianpuFontSize(double val);
+
+    TextStyleType jianpuTextStyle() const { return m_jianpuTextStyle; }
+    const muse::draw::Font& jianpuFont() const { return m_jianpuFont; }
+    double jianpuFontSize() const { return m_jianpuFontSize; }
+    double jianpuBoxH() const { return m_jianpuBoxH; }
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
@@ -307,6 +316,7 @@ private:
     double defaultSpatium() const;
     void  setDurationMetrics();
     void  setFretMetrics();
+    void  setJianpuMetrics();
 
     static void initTabFonts();
 
@@ -336,6 +346,7 @@ private:
 
     // Standard: configurable properties
     NoteHeadScheme m_noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
+    InstrumentLabelVisibility m_instrumentLabelVisibility = InstrumentLabelVisibility::AUTO;
 
     // TAB: configurable propertiesm
     double m_durationFontSize = 15.0;       // the size (in points) for the duration symbol font
@@ -385,6 +396,11 @@ private:
     double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font
+
+    TextStyleType m_jianpuTextStyle = TextStyleType::JIANPU_NUMBER;
+    muse::draw::Font m_jianpuFont;  // font used to draw jianpu; cached for efficiency
+    double m_jianpuFontSize  = 9.0; // the size (in points) for the jianpu font
+    double m_jianpuBoxH = 0.0;
 
     // the array of configured fonts
     static std::vector<TablatureFretFont> m_fretFonts;

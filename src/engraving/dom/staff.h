@@ -78,6 +78,8 @@ public:
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
 
+    Part* originPart(const Fraction& tick) const;
+
     ClefList& clefList() { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
     ClefTypeList defaultClefType() const { return m_defaultClefType; }
@@ -169,6 +171,7 @@ public:
     bool isPitchedStaff(const Fraction&) const;
     bool isTabStaff(const Fraction&) const;
     bool isDrumStaff(const Fraction&) const;
+    bool isJianpuStaff(const Fraction&) const;
 
     int lines(const Fraction&) const;
     void setLines(const Fraction&, int lines);

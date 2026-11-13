@@ -1197,7 +1197,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Slur* slur1 = Factory::createSlur(score->dummy());
             slur1->setStartElement(gnote->chord());
             slur1->setEndElement(note->chord());
-            slur1->setOwnershipParent(0);
             slur1->setTrack(note->staffIdx());
             slur1->setTrack2(note->staffIdx());
             slur1->setTick(gnote->chord()->tick());
@@ -1299,7 +1298,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
             note->setHarmonicFret(harmonicFret);
             auto staff = note->staff();
-            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff);
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff, note->tick());
 
             note->setPitch(clampPitch(pitch));
             note->setTpcFromPitch(Prefer::SHARPS);
@@ -1359,7 +1358,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setFret(note->fret());
             harmonicNote->setHarmonicFret(harmonicFret + fret);
 
-            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret, staff, note->tick());
 
             harmonicNote->setPitch(clampPitch(pitch));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);

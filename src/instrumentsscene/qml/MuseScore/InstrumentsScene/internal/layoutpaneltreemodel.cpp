@@ -29,8 +29,10 @@
 #include "translation.h"
 #include "defer.h"
 
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/score.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep
@@ -52,8 +54,6 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
-
-static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -88,7 +88,7 @@ void LayoutPanelTreeModel::init()
     });
 
     onMasterNotationChanged();
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->masterNotationChanged().onNotify(this, [this]() {
         onMasterNotationChanged();
     });
 
@@ -97,20 +97,14 @@ void LayoutPanelTreeModel::init()
         onNotationChanged();
     });
 
-#ifdef MUSE_MODULE_SHORTCUTS_V2
     commandShortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         emit addInstrumentsKeyboardShortcutChanged();
     });
-#else
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        emit addInstrumentsKeyboardShortcutChanged();
-    });
-#endif
 }
 
 void LayoutPanelTreeModel::onMasterNotationChanged()
 {
-    m_masterNotation = context()->currentMasterNotation();
+    m_masterNotation = context()->masterNotation();
 }
 
 void LayoutPanelTreeModel::onNotationChanged()
@@ -127,6 +121,7 @@ void LayoutPanelTreeModel::onNotationChanged()
 
     if (m_notation) {
         load();
+        setupExcerptNameConnection();
     } else {
         clear();
     }
@@ -330,6 +325,18 @@ void LayoutPanelTreeModel::setupNotationConnections()
     }, Mode::SetReplace /*because this channel is from MasterScore*/);
 }
 
+void LayoutPanelTreeModel::setupExcerptNameConnection()
+{
+    const engraving::Excerpt* excerpt = m_notation->elements()->msScore()->excerpt();
+    if (!excerpt) {
+        return;
+    }
+
+    excerpt->nameChanged().onNotify(m_partsNotifyReceiver.get(), [this]() {
+        emit scoreChanged();
+    });
+}
+
 void LayoutPanelTreeModel::updateSelectedRows()
 {
     if (!m_layoutPanelVisible || !m_notation) {
@@ -368,6 +375,7 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
     }
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
@@ -384,6 +392,9 @@ void LayoutPanelTreeModel::clear()
     deleteItems();
     endResetModel();
 
+    updateIsHideEmptyStavesEnabled();
+
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(false);
 }
@@ -451,7 +462,9 @@ void LayoutPanelTreeModel::load()
     updateIsAddingSystemMarkingsAvailable();
 
     updateIsStaveSharingEnabled();
+    updateIsHideEmptyStavesEnabled();
 
+    emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
 }
@@ -460,6 +473,19 @@ void LayoutPanelTreeModel::toggleStaveSharing(bool on)
 {
     m_notation->parts()->toggleStaveSharing(on);
     updateIsStaveSharingEnabled();
+}
+
+void LayoutPanelTreeModel::toggleHideEmptyStaves(bool on)
+{
+    if (!m_notation || isHideEmptyStavesEnabled() == on) {
+        return;
+    }
+
+    m_notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Hide empty staves"));
+    m_notation->style()->setStyleValue(StyleId::hideEmptyStaves, on);
+    m_notation->undoStack()->commitChanges();
+
+    updateIsHideEmptyStavesEnabled();
 }
 
 void LayoutPanelTreeModel::sortParts(PartList& parts, const PartList& referenceParts)
@@ -521,7 +547,7 @@ void LayoutPanelTreeModel::clearSelection()
 
 void LayoutPanelTreeModel::addInstruments()
 {
-    dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
+    commandDispatcher()->dispatch(INSTRUMENTS_SELECT_COMMAND);
 }
 
 void LayoutPanelTreeModel::addSystemMarkings()
@@ -721,11 +747,6 @@ void LayoutPanelTreeModel::changeEnabled(const QModelIndex& index, bool enable)
     setLoadingBlocked(false);
 }
 
-QItemSelectionModel* LayoutPanelTreeModel::selectionModel() const
-{
-    return m_selectionModel;
-}
-
 QModelIndex LayoutPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {
@@ -860,16 +881,19 @@ bool LayoutPanelTreeModel::isStaveSharingEnabled() const
     return m_isStaveSharingEnabled;
 }
 
+bool LayoutPanelTreeModel::isHideEmptyStavesEnabled() const
+{
+    return m_isHideEmptyStavesEnabled;
+}
+
+QString LayoutPanelTreeModel::scoreName() const
+{
+    return m_notation ? m_notation->name() : QString();
+}
+
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
-    muse::shortcuts::Shortcut shortcut;
-
-#ifdef MUSE_MODULE_SHORTCUTS_V2
-    shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
-#else
-    shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
-#endif
-
+    muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
     if (shortcut.sequences.empty()) {
         return {};
     }
@@ -1069,6 +1093,17 @@ void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
 
     m_isStaveSharingEnabled = enabled;
     emit isStaveSharingEnabledChanged(enabled);
+}
+
+void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
+{
+    bool enabled = m_notation && m_notation->style()->styleValue(StyleId::hideEmptyStaves).toBool();
+    if (enabled == m_isHideEmptyStavesEnabled) {
+        return;
+    }
+
+    m_isHideEmptyStavesEnabled = enabled;
+    emit isHideEmptyStavesEnabledChanged(enabled);
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

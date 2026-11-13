@@ -38,8 +38,8 @@ class Marker final : public TextBase
     DECLARE_CLASSOF(ElementType::MARKER)
 
 public:
-    Marker(DummyParentOr<EngravingItem> parent);
-    Marker(DummyParentOr<EngravingItem> parent, TextStyleType);
+    Marker(DummyParentOr<Measure> parent);
+    Marker(DummyParentOr<Measure> parent, TextStyleType);
 
     void setMarkerType(MarkerType t);
     MarkerType markerType() const { return m_markerType; }
@@ -60,6 +60,7 @@ public:
     inline bool isRightMarker() const { return muse::contains(Marker::RIGHT_MARKERS, m_markerType); }
 
     Marker* clone() const override { return new Marker(*this); }
+    void setOwnershipParent(DummyParentOr<Measure> parent) { EngravingItem::setOwnershipParent(parent); }
 
     int subtype() const override { return int(m_markerType); }
     TranslatableString subtypeUserName() const override;

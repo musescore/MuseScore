@@ -218,6 +218,10 @@ enum class ElementType : unsigned char {
     TAPPING_HALF_SLUR,
     TAPPING_HALF_SLUR_SEGMENT,
     TAPPING_TEXT,
+    JIANPU_OCTAVE_DOT,
+    JIANPU_DURATION_LINE,
+
+    STAVE_SHARING_CHANGE,
 
     ROOT_ITEM,
     DUMMY,
@@ -291,7 +295,7 @@ constexpr bool autoplaceAppliesToType(ElementType type)
     case ElementType::MEASURE_NUMBER:
     case ElementType::MMREST_RANGE:
 
-    // Note/measure-attached texts and symbols
+    // Note/measure/segment-attached texts and symbols
     case ElementType::TIMESIG:
     case ElementType::REST:
     case ElementType::MMREST:
@@ -321,6 +325,7 @@ constexpr bool autoplaceAppliesToType(ElementType type)
     case ElementType::HARMONY:
     case ElementType::HARP_DIAGRAM:
     case ElementType::STICKING:
+    case ElementType::STAVE_SHARING_CHANGE:
         return true;
     default:
         return false;
@@ -860,7 +865,8 @@ enum class IntervalType : unsigned char {
 enum class InstrumentLabelVisibility : unsigned char {
     LONG,
     SHORT,
-    HIDE
+    HIDE,
+    AUTO
 };
 
 struct OrnamentInterval
@@ -1026,6 +1032,7 @@ enum class TextStyleType : unsigned char {
     FRET_DIAGRAM_FRET_NUMBER,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
+    JIANPU_NUMBER,
 
     // Line-oriented styles
     TEXTLINE,
@@ -1181,6 +1188,12 @@ enum class CourtesyBarlineMode : char {
     DOUBLE_BEFORE_COURTESY = 2,
 };
 
+// How the tonic ("1") of a Jianpu staff is determined
+enum class JianpuNumbering : char {
+    FOLLOW_SCORE_KEY = 0,     // tonic follows the actual key signature
+    CUSTOM           = 1      // tonic and mode are selected independently
+};
+
 enum class FermataType : signed char {
     Undefined = -1,
     VeryShort,
@@ -1319,9 +1332,9 @@ enum class MarkerType : unsigned char {
 };
 
 enum class StaffGroup : unsigned char {
-    STANDARD, PERCUSSION, TAB
+    STANDARD, PERCUSSION, TAB, JIANPU
 };
-constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
+constexpr int STAFF_GROUP_MAX = int(StaffGroup::JIANPU) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
 // keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset for legacy scores
 enum class StaffTypes : signed char {
@@ -1334,6 +1347,7 @@ enum class StaffTypes : signed char {
     TAB_ITALIAN, TAB_FRENCH,
     TAB_7COMMON, TAB_8COMMON, TAB_9COMMON, TAB_10COMMON,
     TAB_7SIMPLE, TAB_8SIMPLE, TAB_9SIMPLE, TAB_10SIMPLE,
+    JIANPU,
     STAFF_TYPES,
     PERC_DEFAULT = StaffTypes::PERC_5LINE,
     TAB_DEFAULT = StaffTypes::TAB_6COMMON,
@@ -1530,6 +1544,70 @@ enum class LoopBoundaryType : signed char {
     Unknown = -1,
     LoopIn = 0,
     LoopOut = 1
+};
+
+enum class ActionIconType : signed char {
+    UNDEFINED = -1,
+
+    ACCIACCATURA,
+    APPOGGIATURA,
+    GRACE4,
+    GRACE16,
+    GRACE32,
+    GRACE8_AFTER,
+    GRACE16_AFTER,
+    GRACE32_AFTER,
+
+    BEAM_AUTO,
+    BEAM_NONE,
+    BEAM_BREAK_LEFT,
+    BEAM_BREAK_INNER_8TH,
+    BEAM_BREAK_INNER_16TH,
+    BEAM_JOIN,
+
+    BEAM_FEATHERED_DECELERATE,
+    BEAM_FEATHERED_ACCELERATE,
+
+    VFRAME,
+    HFRAME,
+    TFRAME,
+    FFRAME,
+    STAFF_TYPE_CHANGE,
+    MEASURE,
+
+    PARENTHESES,
+    BRACKETS,
+
+    STANDARD_BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+
+    DIVE,
+    PRE_DIVE,
+    DIP,
+    SCOOP,
+
+    NOTE_ANCHORED_LINE,
+
+    SYSTEM_LOCK,
+    PAGE_LOCK,
+
+    STAVE_SHARING_CHANGE,
+    RESET_STAVE_SHARING_CHANGE
+};
+
+enum class TupletNumberType : unsigned char {
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT, DEFAULT /*from style*/
+};
+
+enum class TupletBracketType : unsigned char {
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET, DEFAULT /*from style*/
+};
+
+// what a tuplet command uses the selected duration as
+enum class TupletSelectedDuration : unsigned char {
+    SUBDIVISION, TUPLET_LENGTH, DEFAULT /*from configuration*/
 };
 } // mu::engraving
 

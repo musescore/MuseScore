@@ -24,6 +24,8 @@
 
 #include "translation.h"
 
+#include "notationscene/notationcommands.h"
+
 using namespace mu::propertiespanel;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -101,10 +103,10 @@ void ScoreAppearanceSettingsModel::onNotationChanged(const engraving::PropertyId
 
 void ScoreAppearanceSettingsModel::showPageSettings()
 {
-    dispatcher()->dispatch("page-settings");
+    commandDispatcher()->dispatch(OPEN_PAGE_SETTINGS_COMMAND);
 }
 
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
-    dispatcher()->dispatch("edit-style");
+    commandDispatcher()->dispatch(OPEN_EDIT_STYLE_COMMAND);
 }

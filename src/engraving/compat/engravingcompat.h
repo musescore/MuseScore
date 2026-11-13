@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <set>
 #include <vector>
 
 namespace mu::engraving {
@@ -42,6 +41,7 @@ private:
     static void correctPedalEndPoints(MasterScore* score);
     static void undoStaffTextExcludeFromPart(MasterScore* masterScore);
     static void migrateDynamicPosOnVocalStaves(MasterScore* masterScore);
+    static void resetIneffectiveCenterBetweenStaves(MasterScore* masterScore);
     static void resetMarkerLeftFontSize(MasterScore* masterScore);
     static void resetRestVerticalOffsets(MasterScore* masterScore);
     static void adjustVBoxDistances(MasterScore* masterScore);
@@ -67,7 +67,5 @@ public:
 private:
     static bool rowItemIsAbove(const EngravingItem* item);
     static void alignItemOffsetGroup(const std::vector<EngravingItem*>& group);
-    static void scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
-                                                  std::vector<EngravingItem*>& group);
 };
 } // namespace mu::engraving::compat

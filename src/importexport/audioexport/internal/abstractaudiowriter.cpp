@@ -124,8 +124,8 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     m_isCompleted = false;
     m_writeRet = muse::Ret();
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
-    const notation::INotationPtr notationForRestore = globalContext()->currentNotation();
+    muse::ContextInject<project::IProjectSession> projectSession = { m_iocContext };
+    const notation::INotationPtr notationForRestore = projectSession()->currentNotation();
     bool writeStarted = false;
     muse::Defer restoreNotationOnValidationFailure([&]() {
         if (!writeStarted) {
@@ -292,8 +292,8 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
 
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
-    m_notationForRestore = globalContext()->currentNotation();
+    muse::ContextInject<project::IProjectSession> projectSession = { m_iocContext };
+    m_notationForRestore = projectSession()->currentNotation();
 
     auto restorePlaybackState = [this]() {
         muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };

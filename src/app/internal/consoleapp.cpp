@@ -91,6 +91,14 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
 
     uiConfiguration()->setCustomPhysicalDotsPerInch(options->ui.physicalDotsPerInch);
 
+    if (options->network.offline) {
+        networkConfiguration()->setOffline(options->network.offline.value());
+    }
+
+    if (options->audio.outputDisabled) {
+        audioConfiguration()->setOutputDisabled(options->audio.outputDisabled.value());
+    }
+
     notationConfiguration()->setTemplateModeEnabled(options->notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options->notation.testModeEnabled);
 
@@ -158,25 +166,28 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
         // ====================================================
         // Process Testflow
         // ====================================================
-        MuseScoreCmdOptions::Testflow testflowOptions = options->testflow;
-        if (!testflowOptions.testCaseNameOrFile.isEmpty()) {
-            processTestflow(testflowOptions, ctxId);
+#ifdef MUSE_MODULE_TESTFLOW
+        if (options->testflow.has_value()) {
+            testflowCmdRunner()->prepare(ctxId, options->testflow.value());
+            testflowCmdRunner()->run(ctxId);
+            break;
+        }
+#endif
+
+        // ====================================================
+        // Process Diagnostic
+        // ====================================================
+        MuseScoreCmdOptions::Diagnostic diagnostic = options->diagnostic;
+        if (diagnostic.type != DiagnosticType::Undefined) {
+            int code = processDiagnostic(diagnostic, ctxId);
+            qApp->exit(code);
         } else {
             // ====================================================
-            // Process Diagnostic
+            // Process Converter
             // ====================================================
-            MuseScoreCmdOptions::Diagnostic diagnostic = options->diagnostic;
-            if (diagnostic.type != DiagnosticType::Undefined) {
-                int code = processDiagnostic(diagnostic, ctxId);
-                qApp->exit(code);
-            } else {
-                // ====================================================
-                // Process Converter
-                // ====================================================
-                MuseScoreCmdOptions::ConverterTask task = options->converterTask;
-                int code = processConverter(task, ctxId);
-                qApp->exit(code);
-            }
+            MuseScoreCmdOptions::ConverterTask task = options->converterTask;
+            int code = processConverter(task, ctxId);
+            qApp->exit(code);
         }
     } break;
     case IApplication::RunMode::AudioPluginRegistration: {
@@ -334,36 +345,4 @@ int MuseScoreConsoleApp::processAudioPluginRegistration(const MuseScoreCmdOption
     }
 
     return ret.code();
-}
-
-void MuseScoreConsoleApp::processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx)
-{
-    using namespace muse::testflow;
-    muse::ContextInject<ITestflow> testflow = { ctx };
-
-    muse::async::Channel<StepInfo, Ret> stepCh = testflow()->stepStatusChanged();
-    stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret) {
-        if (!ret) {
-            LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
-            qApp->exit(ret.code());
-        } else {
-            LOGI() << "success step: " << step.name << ", ret: " << ret.toString();
-        }
-    });
-
-    muse::async::Channel<muse::io::path_t, ITestflow::Status> statusCh = testflow()->statusChanged();
-    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, ITestflow::Status st) {
-        if (st == ITestflow::Status::Finished) {
-            LOGI() << "success finished, path: " << path;
-            qApp->exit(0);
-        }
-    });
-
-    ITestflow::Options opt;
-    opt.context = task.testCaseContextNameOrFile;
-    opt.contextVal = task.testCaseContextValue.toStdString();
-    opt.func = task.testCaseFunc.toStdString();
-    opt.funcArgs = task.testCaseFuncArgs.toStdString();
-
-    testflow()->execScript(task.testCaseNameOrFile, opt);
 }

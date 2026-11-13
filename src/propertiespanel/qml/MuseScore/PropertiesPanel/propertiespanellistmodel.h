@@ -33,7 +33,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "propertiespanelabstractmodel.h"
 
 namespace mu::propertiespanel {
@@ -44,7 +44,7 @@ class PropertiesPanelListModel : public QAbstractListModel, public QQmlParserSta
     Q_INTERFACES(QQmlParserStatus)
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit PropertiesPanelListModel(QObject* parent = nullptr);
@@ -73,18 +73,17 @@ private:
 
     void updateElementList();
 
-    bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
-    void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                        engraving::SelState selectionState = engraving::SelState::NONE, bool selectionHasStartOrEndFrame = false);
+    bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& elementList);
+    void setElementList(const QList<mu::engraving::EngravingItem*>& elementList,
+                        engraving::SelState selectionState = engraving::SelState::NONE);
 
     void buildModelsForEmptySelection();
-    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
-                                        const QList<engraving::EngravingItem*>& selectedElementList);
+    void buildModelsForElements(const ElementKeySet& elementKeySet, bool isRangeSelection,
+                                const QList<engraving::EngravingItem*>& elementList);
 
-    void createModelsBySectionType(const PropertiesPanelSectionTypeSet& sectionTypes, const ElementKeySet& selectedElementKeySet = {});
+    void createModelsBySectionType(const PropertiesPanelSectionTypeSet& sectionTypes, const ElementKeySet& elementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet, bool isRangeSelection,
-                            const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                            const PropertiesPanelSectionTypeSet& exclusions = {});
+                            const QList<mu::engraving::EngravingItem*>& elementList, const PropertiesPanelSectionTypeSet& exclusions = {});
 
     bool isModelAllowed(const PropertiesPanelAbstractModel* model, const PropertiesPanelModelTypeSet& allowedModelTypes,
                         const PropertiesPanelSectionTypeSet& allowedSectionTypes) const;

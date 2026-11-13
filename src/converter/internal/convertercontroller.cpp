@@ -27,8 +27,8 @@
 #include <QJsonParseError>
 
 #include "global/defer.h"
-#include "global/io/buffer.h"
 #include "global/io/file.h"
+#include "global/io/filestream.h"
 #include "global/io/dir.h"
 
 #include "engraving/dom/masterscore.h"
@@ -60,6 +60,74 @@ static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 static const std::string MP3_SUFFIX = "mp3";
+
+//! NOTE: Returns the dirs of the path that don't exist yet, from the deepest one to the topmost one
+static paths_t missingDirs(const path_t& dirPath)
+{
+    paths_t missing;
+    path_t dir = dirPath;
+
+    while (!dir.empty() && !Dir(dir).exists()) {
+        missing.push_back(dir);
+
+        const path_t parent = io::absoluteDirpath(dir);
+        if (parent == dir) {
+            break;
+        }
+
+        dir = parent;
+    }
+
+    return missing;
+}
+
+//! NOTE: Write directly to the file, some writers (e.g. video) write to the "file_path" themselves
+Ret ConverterController::writeNotationToFile(INotationWriterPtr writer, INotationPtr notation, const path_t& filePath,
+                                             const INotationWriter::Options& options, const path_t& dirPath) const
+{
+    const path_t outDir = io::absoluteDirpath(filePath);
+    const paths_t createdDirs = missingDirs(outDir);
+
+    Ret ret = Dir::mkpath(outDir);
+    if (!ret) {
+        LOGE() << "failed to create dir: " << outDir << ", err: " << ret.toString();
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    //! NOTE: Don't leave behind the dirs created for the output file if the convert fails.
+    //!       Remove them bottom-up and only while they are empty, so that files written there by others are kept
+    auto removeCreatedDirs = [this, &createdDirs]() {
+        for (const path_t& dir : createdDirs) {
+            if (!fileSystem()->remove(dir, /*onlyIfEmpty*/ true)) {
+                break;
+            }
+        }
+    };
+
+    FileStream outFile(filePath);
+    outFile.setMeta("file_path", filePath.toStdString());
+    if (!dirPath.empty()) {
+        outFile.setMeta("dir_path", dirPath.toStdString());
+    }
+
+    if (!outFile.open(IODevice::WriteOnly)) {
+        LOGE() << "failed to open file: " << filePath;
+        removeCreatedDirs();
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    ret = writer->write(notation, outFile, options);
+    outFile.close();
+
+    if (!ret || outFile.hasError()) {
+        LOGE() << "failed write, err: " << (ret ? outFile.errorString() : ret.toString()) << ", path: " << filePath;
+        File::remove(filePath);
+        removeCreatedDirs();
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    return make_ok();
+}
 
 Ret ConverterController::batchConvert(const path_t& batchJobFile, const OpenParams& openParams,
                                       const String& soundProfile, const UriQuery& extensionUri,
@@ -203,10 +271,10 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
         masterScore->doLayout();
     }
 
-    globalContext()->setCurrentProject(notationProject);
+    projectSession()->setProject(notationProject);
 
     DEFER {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setProject(nullptr);
     };
 
     // Check if this is a part conversion job
@@ -429,23 +497,7 @@ Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotation
         return ret;
     }
 
-    auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-    outBuf.setMeta("file_path", out.toStdString());
-    ret = writer->write(notation, outBuf);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    outBuf.close();
-    ret = File::writeFile(out, outBuf.data());
-    if (!ret) {
-        LOGE() << "failed to write file: " << ret.toString();
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    return make_ret(Ret::Code::Ok);
+    return writeNotationToFile(writer, notation, out);
 }
 
 bool ConverterController::isConvertPageByPage(const std::string& suffix) const
@@ -481,51 +533,17 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
 {
     TRACEFUNC;
 
-    auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
     const INotationWriter::Options options {
         { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(pageNum)) },
     };
 
-    outBuf.setMeta("file_path", filePath.toStdString());
-    if (!dirPath.empty()) {
-        outBuf.setMeta("dir_path", dirPath.toStdString());
-    }
-
-    Ret ret = writer->write(notation, outBuf, options);
-    if (!ret) {
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    outBuf.close();
-    ret = File::writeFile(filePath, outBuf.data());
-    if (!ret) {
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    return make_ok();
+    return writeNotationToFile(writer, notation, filePath, options, dirPath);
 }
 
 Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
                                              const project::INotationWriter::Options& options) const
 {
-    auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-    outBuf.setMeta("file_path", out.toStdString());
-    Ret ret = writer->write(notation, outBuf, options);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    outBuf.close();
-    ret = File::writeFile(out, outBuf.data());
-    if (!ret) {
-        LOGE() << "failed to write file: " << ret.toString();
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    return make_ret(Ret::Code::Ok);
+    return writeNotationToFile(writer, notation, out, options);
 }
 
 Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
@@ -542,18 +560,9 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
         QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
         muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".pdf";
 
-        auto outBuf = Buffer::opened(IODevice::WriteOnly);
-        Ret ret = writer->write(e->notation(), outBuf, options);
+        Ret ret = writeNotationToFile(writer, e->notation(), partOut, options);
         if (!ret) {
-            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
-            return make_ret(Err::OutFileFailedWrite);
-        }
-
-        outBuf.close();
-        ret = File::writeFile(partOut, outBuf.data());
-        if (!ret) {
-            LOGE() << "failed to write file: " << ret.toString();
-            return make_ret(Err::OutFileFailedWrite);
+            return ret;
         }
     }
 
@@ -592,20 +601,9 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
         QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
         muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".mp3";
 
-        auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-        outBuf.setMeta("file_path", partOut.toStdString());
-        Ret ret = writer->write(e->notation(), outBuf, options);
+        Ret ret = writeNotationToFile(writer, e->notation(), partOut, options);
         if (!ret) {
-            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
-            return make_ret(Err::OutFileFailedWrite);
-        }
-
-        outBuf.close();
-        ret = File::writeFile(partOut, outBuf.data());
-        if (!ret) {
-            LOGE() << "failed to write file: " << ret.toString();
-            return make_ret(Err::OutFileFailedWrite);
+            return ret;
         }
     }
 
@@ -742,10 +740,10 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    globalContext()->setCurrentProject(notationProject);
+    projectSession()->setProject(notationProject);
 
     DEFER {
-        globalContext()->setCurrentProject(nullptr);
+        projectSession()->setProject(nullptr);
     };
 
     const INotationWriter::Options options {

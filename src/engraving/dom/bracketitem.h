@@ -41,6 +41,7 @@ class BracketItem final : public EngravingItem
 
 public:
     EngravingItem* clone() const override;
+    void setOwnershipParent(DummyParentOr<Staff> parent) { EngravingItem::setOwnershipParent(parent); }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -71,8 +72,8 @@ private:
 
     friend class Factory;
 
-    BracketItem(DummyParentOr<EngravingItem> parent);
-    BracketItem(DummyParentOr<EngravingItem> parent, BracketType bracketType, size_t span);
+    BracketItem(DummyParentOr<Staff> parent);
+    BracketItem(DummyParentOr<Staff> parent, BracketType bracketType, size_t span);
 
     BracketType m_bracketType = BracketType::NO_BRACKET;
     size_t m_column = 0;

@@ -24,11 +24,10 @@
 
 #include <QString>
 
-#include "actions/actiontypes.h"
+#include "project/projectcommands.h"
 #include "log.h"
 
 using namespace mu::project;
-using namespace muse::actions;
 
 ScoresPageModel::ScoresPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -37,22 +36,24 @@ ScoresPageModel::ScoresPageModel(QObject* parent)
 
 void ScoresPageModel::createNewScore()
 {
-    dispatcher()->dispatch("file-new");
+    commandDispatcher()->dispatch(project::PROJECT_NEW_COMMAND);
 }
 
 void ScoresPageModel::convertFileToScore()
 {
-    dispatcher()->dispatch("file-convert-to-score");
+    commandDispatcher()->dispatch(project::PROJECT_CONVERT_TO_SCORE_COMMAND);
 }
 
 void ScoresPageModel::openOther()
 {
-    dispatcher()->dispatch("file-open");
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND);
 }
 
 void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(QUrl::fromLocalFile(scorePath), displayNameOverride));
+    commandDispatcher()->dispatch(project::PROJECT_OPEN_COMMAND, { { "url", muse::Val(QUrl::fromLocalFile(
+                                                                                          scorePath).toString()) }, { "display_name", muse::Val(
+                                                                                                                          displayNameOverride) } });
 }
 
 void ScoresPageModel::revealInFileBrowser(const QString& scorePath)
@@ -84,6 +85,11 @@ void ScoresPageModel::viewOnline(int scoreId)
 
         platformInteractive()->openUrl(scoreUrl);
     });
+}
+
+void ScoresPageModel::deleteScore(int scoreId, const QString& scoreName)
+{
+    deleteCloudScoreScenario()->deleteScore(scoreId, scoreName);
 }
 
 void ScoresPageModel::openScoreManager()

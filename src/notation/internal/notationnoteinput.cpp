@@ -53,6 +53,7 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
 {
     switch (method) {
     case NoteInputMethod::UNKNOWN:          break;
+    case NoteInputMethod::DEFAULT:          return TranslatableString("noteInputMethod", "Input by default mode");
     case NoteInputMethod::BY_NOTE_NAME:     return TranslatableString("noteInputMethod", "Input by note name mode");
     case NoteInputMethod::BY_DURATION:      return TranslatableString("noteInputMethod", "Input by duration mode");
     case NoteInputMethod::REPITCH:          return TranslatableString("noteInputMethod", "Re-pitch existing notes mode");
@@ -149,6 +150,7 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
 
     switch (staff->staffType(is.tick())->group()) {
     case StaffGroup::STANDARD:
+    case StaffGroup::JIANPU:
         break;
     case StaffGroup::TAB: {
         int strg = 0;                           // assume topmost string as current string
@@ -316,6 +318,9 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
 
 bool NotationNoteInput::shouldSetupInputNote() const
 {
+    if (!score()->inputState().isValid()) {
+        return false;
+    }
     return usingNoteInputMethod(NoteInputMethod::BY_DURATION)
            || usingNoteInputMethod(NoteInputMethod::RHYTHM);
 }
@@ -330,8 +335,12 @@ void NotationNoteInput::setupInputNote()
         return;
     }
 
-    const Fraction tick = is.tick();
     Staff* staff = is.staff();
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    const Fraction tick = is.tick();
     NoteVal nval;
 
     if (staff->isTabStaff(tick)) {
@@ -739,16 +748,38 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 
     const InputState& inputState = score()->inputState();
 
+    const bool durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
+    if (durationAsSubdivision
+        && !score()->canAddTuplet(inputState.segment(), inputState.track(), options.ratio, inputState.duration())) {
+        MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
+        m_interaction->checkAndShowError();
+        return;
+    }
+
+    if (!durationAsSubdivision && !m_interaction->canAddTupletToSelectedChordRests()) {
+        MScore::setError(MsError::TUPLET_NOTE_VALUE_TOO_SHORT);
+        m_interaction->checkAndShowError();
+        return;
+    }
+
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
     ChordRest* chordRest = inputState.cr();
     if (chordRest) {
-        Fraction ratio = options.ratio;
-        if (options.autoBaseLen) {
-            ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+        Tuplet* tuplet = nullptr;
+        if (durationAsSubdivision) {
+            tuplet = score()->addTuplet(chordRest, options.ratio, inputState.duration(), options.numberType, options.bracketType);
+        } else {
+            Fraction ratio = options.ratio;
+            if (options.autoBaseLen) {
+                ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+            }
+            score()->changeCRlen(chordRest, inputState.duration());
+            tuplet = score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
         }
-        score()->changeCRlen(chordRest, inputState.duration());
-        score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
+        if (tuplet) {
+            score()->selectNewTuplet(tuplet);
+        }
     }
     apply();
 

@@ -49,7 +49,6 @@ using namespace mu::instrumentsscene;
 using namespace mu::project;
 using namespace muse;
 using namespace muse::uicomponents;
-using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
@@ -66,7 +65,7 @@ void NotationContextMenuModel::loadItems(int elementType)
     const INotationAutomationPtr automation = this->automation();
     if (automation && automation->isAutomationModeEnabled()) {
         items << makeSeparator()
-              << makeMenu(TranslatableString::untranslatable("Automation type"), makeAutomationTypeItems());
+              << makeMenu(TranslatableString("notation/automation", "Automation type"), makeAutomationLaneItems());
     }
 
     setItems(items);
@@ -162,7 +161,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
-    if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
+    if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
         items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
     }
     items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
@@ -278,13 +277,14 @@ MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 MenuItemList NotationContextMenuModel::makeSelectItems()
 {
     if (isSingleSelection()) {
-        return MenuItemList { makeMenuItem(SELECT_SIMILAR_COMMAND),
-                              makeMenuItem(SELECT_SIMILAR_IN_STAFF_COMMAND),
-                              makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList { makeMenuItem(SelectSimilarCommand {}),
+                              makeMenuItem(SelectSimilarInStaffCommand {}),
+                              makeMenuItem(OpenSelectionOptionsCommand {}) };
     } else if (canSelectSimilarInRange()) {
-        return MenuItemList { makeMenuItem(SELECT_SIMILAR_IN_RANGE_COMMAND), makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList { makeMenuItem(SelectSimilarInRangeCommand {}),
+                              makeMenuItem(OpenSelectionOptionsCommand {}) };
     } else if (canSelectSimilar()) {
-        return MenuItemList{ makeMenuItem(OPEN_SELECTION_OPTIONS_COMMAND) };
+        return MenuItemList{ makeMenuItem(OpenSelectionOptionsCommand {}) };
     }
 
     return MenuItemList();
@@ -308,7 +308,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
     if (element && element->isEditable()) {
         items << makeSeparator();
-        items << makeMenuItem(SCREEN_EDIT_ELEMENT_COMMAND);
+        items << makeMenuItem(EDIT_ELEMENT_COMMAND);
     }
 
     items << makeSeparator()
@@ -320,11 +320,11 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND, TranslatableString("notation", "After selection…")),
-        makeMenuItem(INSERT_MEASURES_COMMAND, TranslatableString("notation", "Before selection…")),
+        makeMenuItem(InsertMeasuresAfterSelectionCommand::id, TranslatableString("notation", "After selection…")),
+        makeMenuItem(InsertMeasuresCommand::id, TranslatableString("notation", "Before selection…")),
         makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, TranslatableString("notation", "At start of score…")),
-        makeMenuItem(APPEND_MEASURES_COMMAND, TranslatableString("notation", "At end of score…"))
+        makeMenuItem(InsertMeasuresAtStartOfScoreCommand::id, TranslatableString("notation", "At start of score…")),
+        makeMenuItem(AppendMeasuresCommand::id, TranslatableString("notation", "At end of score…"))
     };
 
     return items;
@@ -500,18 +500,21 @@ bool NotationContextMenuModel::isDrumsetStaff() const
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
 }
 
-MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
+MenuItemList NotationContextMenuModel::makeAutomationLaneItems()
 {
     return {
-        makeAutomationTypeItem(AutomationType::Dynamics, "dynamics", TranslatableString::untranslatable("Dynamics")),
-        makeAutomationTypeItem(AutomationType::Tempo, "tempo", TranslatableString::untranslatable("Tempo")),
-        makeAutomationTypeItem(AutomationType::Volume, "volume", TranslatableString::untranslatable("Volume")),
-        makeAutomationTypeItem(AutomationType::Pan, "pan", TranslatableString::untranslatable("Pan")),
+        makeAutomationLaneItem(AutomationLane::Dynamics, TranslatableString("notation/automation", "Dynamics")),
+        makeAutomationLaneItem(AutomationLane::Volume, TranslatableString("notation/automation", "Volume")),
+        makeAutomationLaneItem(AutomationLane::Pan, TranslatableString("notation/automation", "Pan")),
+        makeSeparator(),
+        makeAutomationLaneItem(AutomationLane::MasterVolume, TranslatableString("notation/automation", "Master volume")),
+        makeAutomationLaneItem(AutomationLane::MasterPan, TranslatableString("notation/automation", "Master pan")),
+        makeSeparator(),
+        makeAutomationLaneItem(AutomationLane::Tempo, TranslatableString("notation/automation", "Tempo")),
     };
 }
 
-MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
-                                                           const TranslatableString& title)
+MenuItem* NotationContextMenuModel::makeAutomationLaneItem(AutomationLane lane, const TranslatableString& title)
 {
     MenuItem* item = makeMenuItem(SELECT_AUTOMATION_TYPE_COMMAND, title);
     if (!item) {
@@ -519,29 +522,29 @@ MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, 
     }
 
     rcommand::CommandQuery query(SELECT_AUTOMATION_TYPE_COMMAND);
-    query.addParam("type", Val(queryTypeParam));
+    query.addParam("type", Val(std::string(automationLaneToString(lane))));
     item->setCommandQuery(query);
 
-    item->setChecked(notationConfiguration()->currentAutomationType() == type);
+    item->setChecked(notationConfiguration()->currentAutomationLane() == lane);
 
     return item;
 }
 
 INotationInteractionPtr NotationContextMenuModel::interaction() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 
 INotationSelectionPtr NotationContextMenuModel::selection() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction()->selection() : nullptr;
 }
 
 INotationAutomationPtr NotationContextMenuModel::automation() const
 {
-    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    IMasterNotationPtr masterNotation = projectSession()->masterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
 }
 

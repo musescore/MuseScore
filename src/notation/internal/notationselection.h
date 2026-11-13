@@ -58,6 +58,7 @@ public:
     NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;
+    bool isSingle() const override;
     bool isRange() const override;
     SelectionState state() const override;
 
@@ -80,14 +81,15 @@ public:
 
     mu::engraving::MeasureBase* startMeasureBase() const override;
     mu::engraving::MeasureBase* endMeasureBase() const override;
+    std::vector<mu::engraving::MeasureBase*> measureBasesInSelection() const override;
     std::vector<mu::engraving::System*> selectedSystems() const override;
     std::vector<mu::engraving::Page*> pagesContainingSelection() const override;
 
     bool elementsSelected(const mu::engraving::ElementTypeSet& types) const override;
 
-    void select(SelectionTarget target);
-    void addToSelection(SelectionTarget target);
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0);
+    muse::Ret select(SelectionTarget target);
+    muse::Ret addToSelection(SelectionTarget target);
+    muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0);
     void clearSelection();
     muse::async::Notification selectionChanged() const;
     void notifyAboutSelectionChangedIfNeed();
@@ -102,6 +104,7 @@ private:
     void selectFirstElement(bool frame = false);
     void selectLastElement();
     void addToSelection(MoveDirection d, MoveSelectionType type);
+    void expandSelection(SelectionTarget target);
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
     void moveSegmentSelection(MoveDirection d);

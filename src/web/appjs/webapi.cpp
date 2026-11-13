@@ -59,14 +59,16 @@ WebApi* WebApi::instance()
     return &a;
 }
 
-void WebApi::init()
+void WebApi::init(const muse::modularity::ContextPtr& ctx)
 {
+    setContext(ctx);
+
     auto onProjectChanged = [this]() {
         if (m_currentProject) {
-            m_currentProject->saveComplited().resetOnReceive(this);
+            m_currentProject->saveComplited().disconnect(this);
         }
 
-        m_currentProject = globalContext()->currentProject();
+        m_currentProject = projectSession()->project();
 
         if (m_currentProject) {
             m_currentProject->saveComplited().onReceive(this, [this](const muse::io::path_t& path, project::SaveMode mode) {
@@ -75,7 +77,7 @@ void WebApi::init()
         }
     };
 
-    globalContext()->currentProjectChanged().onNotify(this, onProjectChanged);
+    projectSession()->projectChanged().onNotify(this, onProjectChanged);
 
     onProjectChanged();
 }
@@ -83,23 +85,55 @@ void WebApi::init()
 void WebApi::deinit()
 {
     if (m_currentProject) {
-        m_currentProject->saveComplited().resetOnReceive(this);
+        m_currentProject->saveComplited().disconnect(this);
+        m_currentProject = nullptr;
     }
+
+    if (projectSession()) {
+        projectSession()->projectChanged().disconnect(this);
+    }
+
+    setContext(nullptr);
 }
 
 void WebApi::load(const void* source, unsigned int len)
 {
     LOGI() << source << ", len: " << len;
-    ByteArray data = ByteArray::fromRawData(reinterpret_cast<const char*>(source), len);
-    io::path_t tempFilePath = "/mu/temp/current.mscz";
+    //! NOTE Copy, the source is freed by the caller right after this call, but the project is opened later
+    ByteArray data(reinterpret_cast<const uint8_t*>(source), len);
 
-    //! NOTE Remove last previous
-    io::File::remove(tempFilePath);
+    //! NOTE A new file for each load: the opened project keeps its file, and the open scenario
+    //! treats the same path as the already opened project
+    io::path_t filePath = "/mu/temp/score_" + std::to_string(++m_loadCount) + ".mscz";
+    Ret ret = io::File::writeFile(filePath, data);
+    if (!ret) {
+        LOGE() << "failed write project, path: " << filePath << ", err: " << ret.toString();
+        return;
+    }
 
-    //! NOTE Write new project
-    io::File::writeFile(tempFilePath, data);
+    //! NOTE Single window: close the current project first, otherwise the open scenario opens a new window
+    closeProjectScenario()->closeOpenedProject(false).onResolve(this, [this, filePath](const Ret& closeRet) {
+        if (!closeRet) {
+            LOGW() << "the current project is not closed, err: " << closeRet.toString();
+            io::File::remove(filePath);
+            return;
+        }
 
-    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1(QUrl::fromLocalFile(tempFilePath.toQString())));
+        if (!m_projectFilePath.empty()) {
+            io::File::remove(m_projectFilePath);
+            m_projectFilePath = io::path_t();
+        }
+
+        openProjectScenario()->openProject(filePath).onResolve(this, [this, filePath](const Ret& openRet) {
+            if (!openRet) {
+                LOGE() << "failed open project, path: " << filePath << ", err: " << openRet.toString();
+                io::File::remove(filePath);
+                return;
+            }
+
+            m_projectFilePath = filePath;
+        });
+    });
 }
 
 void WebApi::addSoundFont(const std::string& uri)

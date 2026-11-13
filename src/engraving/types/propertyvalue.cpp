@@ -162,6 +162,8 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::LINE_TYPE:        return static_cast<int>(value<LineType>());
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
+    case P_TYPE::KEY:              return static_cast<int>(value<Key>());
+    case P_TYPE::JIANPU_NUMBERING: return static_cast<int>(value<JianpuNumbering>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
     case P_TYPE::PLAYTECH_TYPE:    return static_cast<int>(value<PlayingTechniqueType>());
     case P_TYPE::TEMPOCHANGE_TYPE: return static_cast<int>(value<GradualTempoChangeType>());
@@ -182,6 +184,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PARENTHESES_MODE: return static_cast<int>(value<ParenthesesMode>());
     case P_TYPE::PLAY_COUNT_PRESET: return static_cast<int>(value<RepeatPlayCountPreset>());
     case P_TYPE::MARKER_TYPE: return static_cast<int>(value<MarkerType>());
+    case P_TYPE::ACTION_TYPE: return static_cast<int>(value<ActionIconType>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
@@ -190,6 +193,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::CAPO_TRANSPOSE_MODE:  return static_cast<int>(value<CapoParams::TransposeMode>());
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return static_cast<int>(value<InstrumentNamesAlign>());
     case P_TYPE::INSTRUMENT_NAMES_FORMAT: return static_cast<int>(value<InstrumentNamesFormat>());
+    case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return static_cast<int>(value<InstrumentLabelVisibility>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -288,6 +292,8 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::LINE_TYPE:        return PropertyValue(LineType(v.toInt()));
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
+    case P_TYPE::KEY:              return PropertyValue(Key(v.toInt()));
+    case P_TYPE::JIANPU_NUMBERING: return PropertyValue(JianpuNumbering(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
     case P_TYPE::PLAYTECH_TYPE:    return PropertyValue(PlayingTechniqueType(v.toInt()));
     case P_TYPE::TEMPOCHANGE_TYPE: return PropertyValue(GradualTempoChangeType(v.toInt()));
@@ -311,10 +317,12 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PARENTHESES_MODE:   return PropertyValue(ParenthesesMode(v.toInt()));
     case P_TYPE::PLAY_COUNT_PRESET:   return PropertyValue(RepeatPlayCountPreset(v.toInt()));
     case P_TYPE::MARKER_TYPE:         return PropertyValue(MarkerType(v.toInt()));
+    case P_TYPE::ACTION_TYPE: return PropertyValue(ActionIconType(v.toInt()));
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return PropertyValue(MeasureNumberPlacement(v.toInt()));
     case P_TYPE::CAPO_TRANSPOSE_MODE: return PropertyValue(CapoParams::TransposeMode(v.toInt()));
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return PropertyValue(InstrumentNamesAlign(v.toInt()));
     case P_TYPE::INSTRUMENT_NAMES_FORMAT: return PropertyValue(InstrumentNamesFormat(v.toInt()));
+    case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return PropertyValue(InstrumentLabelVisibility(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

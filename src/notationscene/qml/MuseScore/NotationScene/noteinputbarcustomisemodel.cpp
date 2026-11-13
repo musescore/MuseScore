@@ -32,7 +32,7 @@
 using namespace mu::notation;
 using namespace muse::ui;
 using namespace muse::uicomponents;
-using namespace muse::actions;
+using namespace muse::rcommand;
 
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
@@ -45,7 +45,7 @@ void NoteInputBarCustomiseModel::load()
 {
     TRACEFUNC;
 
-    QList<Item*> items;
+    ItemList items;
 
     ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
@@ -55,7 +55,7 @@ void NoteInputBarCustomiseModel::load()
         } else if (item.intent == NoteInputBarModel::CROSS_STAFF_BEAMING_SUBITEMS || item.intent == NoteInputBarModel::TUPLET_SUBITEMS) {
             items << makeServiceItem(item.intent, item.show);
         } else {
-            items << makeActionItem(item.intent, item.show);
+            items << makeCommandItem(item.intent, item.show);
         }
     }
 
@@ -229,13 +229,13 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeServiceItem(const std
     return item;
 }
 
-NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeActionItem(const std::string& intent, bool checked)
+NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeCommandItem(const std::string& intent, bool checked)
 {
-    const UiAction& action = actionsRegister()->action(intent);
+    const CommandInfo& info = commandsRegister()->commandInfo(Command(intent));
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::ACTION, this);
-    item->setId(QString::fromStdString(action.code));
-    item->setTitle(action.title.qTranslatedWithoutMnemonic());
-    item->setIcon(action.iconCode);
+    item->setId(QString::fromStdString(info.command.toString()));
+    item->setTitle(info.title.qTranslatedWithoutMnemonic());
+    item->setIcon(info.decoration.iconCode);
     item->setChecked(checked);
 
     connect(item, &NoteInputBarCustomiseItem::checkedChanged, this, [this](bool) {
@@ -258,7 +258,7 @@ void NoteInputBarCustomiseModel::saveActions()
     TRACEFUNC;
 
     ToolConfig config;
-    for (const Item* item : items()) {
+    for (const QObject* item : items()) {
         auto customiseItem = dynamic_cast<const NoteInputBarCustomiseItem*>(item);
         if (!customiseItem) {
             continue;

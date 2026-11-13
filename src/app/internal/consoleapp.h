@@ -37,9 +37,14 @@
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
-#include "testflow/itestflow.h"
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/itestflowcmdrunner.h"
+#endif
 
 #include "ui/iuiconfiguration.h"
+#include "network/inetworkconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "playback/isoundprofilesrepository.h"
@@ -54,6 +59,8 @@ namespace mu::app {
 class MuseScoreConsoleApp : public muse::ConsoleApplication
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::network::INetworkConfiguration> networkConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
@@ -63,6 +70,9 @@ class MuseScoreConsoleApp : public muse::ConsoleApplication
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::GlobalInject<muse::testflow::ITestflowCmdRunner> testflowCmdRunner;
+#endif
 
 public:
     MuseScoreConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
@@ -75,7 +85,6 @@ private:
     int processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
     int processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
     int processAudioPluginRegistration(const MuseScoreCmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
-    void processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx);
 };
 }
 

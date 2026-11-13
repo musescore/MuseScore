@@ -258,6 +258,11 @@ public:
     static constexpr Fraction eps() { return Fraction(1, Constants::DIVISION * 4); }
 
     muse::String toString() const { return muse::String(u"%1/%2").arg(m_numerator, m_denominator); }
+    static Fraction fromString(const std::string& str, bool* ok = nullptr)
+    {
+        return fromString(muse::String::fromStdString(str), ok);
+    }
+
     static Fraction fromString(const muse::String& str, bool* ok = nullptr)
     {
         const size_t i = str.indexOf(u'/');

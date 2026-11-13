@@ -21,14 +21,15 @@
  */
 #include "measuressettingsmodel.h"
 
-#include "notation/inotationinteraction.h"
-#include "notation/inotationselection.h"
-
 #include "translation.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+#include "notationscene/notationcommands.h"
+
+using namespace muse::rcommand;
 using namespace mu::propertiespanel;
 using namespace mu::notation;
-using namespace muse::actions;
 using namespace mu::engraving;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
@@ -60,22 +61,27 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    ActionData actionData = ActionData::make_arg1(numberOfMeasures);
+    auto boxTarget = [](InsertMeasuresTarget target) {
+        switch (target) {
+        case InsertMeasuresTarget::AfterSelection:
+            return AddBoxesTarget::AfterSelection;
+        case InsertMeasuresTarget::BeforeSelection:
+            return AddBoxesTarget::BeforeSelection;
+        case InsertMeasuresTarget::AtStartOfScore:
+            return AddBoxesTarget::AtStartOfScore;
+        case InsertMeasuresTarget::AtEndOfScore:
+            return AddBoxesTarget::AtEndOfScore;
+        }
+        UNREACHABLE;
+        return AddBoxesTarget::AtEndOfScore;
+    };
 
-    switch (target) {
-    case InsertMeasuresTarget::AfterSelection:
-        dispatcher()->dispatch("insert-measures-after-selection", actionData);
-        break;
-    case InsertMeasuresTarget::BeforeSelection:
-        dispatcher()->dispatch("insert-measures", actionData);
-        break;
-    case InsertMeasuresTarget::AtStartOfScore:
-        dispatcher()->dispatch("insert-measures-at-start-of-score", actionData);
-        break;
-    case InsertMeasuresTarget::AtEndOfScore:
-        dispatcher()->dispatch("append-measures", actionData);
-        break;
-    }
+    AddBoxesCommand cmd;
+    cmd.boxType = BoxType::Measure;
+    cmd.count = numberOfMeasures;
+    cmd.target = boxTarget(target);
+
+    commandDispatcher()->dispatch(cmd);
 }
 
 void MeasuresSettingsModel::deleteSelectedMeasures()

@@ -33,6 +33,7 @@
 #include "../editing/editmeasures.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
+#include "../editing/editstavesharing.h"
 #include "../editing/editsystemlocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
@@ -1081,15 +1082,13 @@ void Measure::moveTicks(const Fraction& diff)
     setTick(tick() + diff);
     for (Segment* segment = last(); segment; segment = segment->prev()) {
         if (segment->isChordRestType()) {
-            // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
-            // But each tuplet must only be adjusted once.
+            // Tuplet ticks are stored as absolute ticks, so they must be adjusted,
+            // outer tuplets of nested ones too. But each tuplet must only be adjusted once.
             for (EngravingItem* e : segment->elist()) {
                 if (e) {
                     ChordRest* cr = toChordRest(e);
-                    Tuplet* tuplet = cr->tuplet();
-                    if (tuplet && tuplets.count(tuplet) == 0) {
+                    for (Tuplet* tuplet = cr->tuplet(); tuplet && tuplets.insert(tuplet).second; tuplet = tuplet->tuplet()) {
                         tuplet->setTick(tuplet->tick() + diff);
-                        tuplets.insert(tuplet);
                     }
                 }
             }
@@ -1694,7 +1693,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             break;
         }
         default:
-            break;
+            return MeasureBase::drop(tx, data);
         }
         break;
 
@@ -1739,6 +1738,10 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     score()->undoInsertTime(startTick, diff);
 
     for (Score* s : score()->scoreList()) {
+        if (diff < Fraction(0, 1)) {
+            EditStaveSharing::removeStaveSharingStatesOnRemoveTime(s->transactionManager()->currentOrDummyTransaction(), s, startTick,
+                                                                   startTick - diff);
+        }
         s->undo(new InsertTime(s, startTick, diff));
         Measure* m = s->tick2measure(tick());
         s->undo(new ChangeMeasureLen(m, nf));
@@ -3508,7 +3511,7 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
         staffIdx = staff->idx();
     }
 
-    const StringData* stringData = staff->part()->instrument(tick())->stringData();
+    const StringData* stringData = staff->originPart(tick())->instrument(tick())->stringData();
     if (!stringData || stringData->frettedStrings() == 0) {
         return false;
     }

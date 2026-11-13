@@ -88,8 +88,13 @@
             <isHeader>1</isHeader>
             <eid>G_G</eid>
             </Clef>
-          <Rest>
+          <TimeSig>
             <eid>H_H</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -97,18 +102,13 @@
         </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <eid>I_I</eid>
-        <mmRestLast>J_J</mmRestLast>
+        <eid>J_J</eid>
+        <mmRestLast>K_K</mmRestLast>
         <voice>
           <KeySig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <concertKey>0</concertKey>
             </KeySig>
-          <TimeSig>
-            <eid>L_L</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Rest>
             <eid>M_M</eid>
             <placement>above</placement>
@@ -138,7 +138,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <voice>
           <Rest>
             <eid>R_R</eid>

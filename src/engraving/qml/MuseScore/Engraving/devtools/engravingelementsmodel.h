@@ -27,8 +27,6 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-
 #include "devtools/iengravingelementsprovider.h"
 
 namespace mu::engraving {
@@ -41,7 +39,6 @@ class EngravingElementsModel : public QAbstractItemModel, public muse::Contextab
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     EngravingElementsModel(QObject* parent = 0);

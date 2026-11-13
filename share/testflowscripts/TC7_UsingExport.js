@@ -23,14 +23,16 @@
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC7: Using Export",
     description: "Let's check the functionality of the export",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Project.closeIfOpened()
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -42,16 +44,16 @@ var testCase = {
         }},
         {name: "Turn on note input", func: function() {
             NoteInput.chooseDefaultMode()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
         }},
         {name: "Put notes", func: function() {
-            NoteInput.putNote("note-c")
-            NoteInput.putNote("note-d")
-            NoteInput.putNote("note-e")
-            NoteInput.putNote("note-f")
-            NoteInput.putNote("note-g")
-            NoteInput.putNote("note-a")
-            NoteInput.putNote("note-b")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_F_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_G_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC7_UsingExport.mscz")
@@ -61,90 +63,90 @@ var testCase = {
         }},
         {name: "Export PDF: Setup and Export", skip: false, func: function() {
             Navigation.triggerControl("DialogView", "ExportOptions", "ExportType_All parts combined in one file")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export PDF: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export PDF: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export PNG: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export PNG: Setup and Export", skip: false, func: function() {
             selectExportType("PNG")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export PNG: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export PNG: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export SVG: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export SVG: Setup and Export", skip: false, func: function() {
             selectExportType("SVG")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export SVG: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export SVG: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export MusicXML: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export MusicXML: Setup and Export", skip: false, func: function() {
             selectExportType("MusicXML")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export MusicXML: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export MusicXML: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export MP3: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export MP3: Setup and Export", skip: false, func: function() {
             selectExportType("MP3")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export MP3: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export MP3: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export WAV: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export WAV: Setup and Export", skip: false, func: function() {
             selectExportType("WAV")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export WAV: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export WAV: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export OGG: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export OGG: Setup and Export", skip: false, func: function() {
             selectExportType("OGG")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export OGG: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export OGG: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export FLAC: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export FLAC: Setup and Export", skip: false, func: function() {
             selectExportType("FLAC")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export FLAC: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export FLAC: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
         {name: "Export MIDI: Open Export Dialog", skip: false, func: function() {
             openExportDialog()
         }},
         {name: "Export MIDI: Setup and Export", skip: false, func: function() {
             selectExportType("MIDI")
-            Navigation.triggerControl("DialogView", "ExportBottom", "Export")
+            Navigation.triggerControl("DialogView", "ButtonBox", "Export")
         }},
-        {name: "Export MIDI: Check file and Open", skip: false, func: function() {
-            checkAndOpen()
+        {name: "Export MIDI: Check file", skip: false, func: function() {
+            checkExportedFile()
         }},
     ]
 };
@@ -160,11 +162,6 @@ function seeChanges()
     api.testflow.seeChanges()
 }
 
-function seeChangesLong()
-{
-    api.testflow.sleep(1000)
-}
-
 function checkFileSize(path)
 {
     var size = api.testflow.fileSize(path)
@@ -177,7 +174,7 @@ function openExportDialog()
 {
     api.testflow.showMainWindowOnFront()
     api.testflow.async(function() {
-        api.dispatcher.dispatch("file-export")
+        api.dispatcher.dispatch(Commands.PROJECT_EXPORT_COMMAND)
     })
 }
 
@@ -200,10 +197,11 @@ function selectExportType(type)
     Navigation.trigger()
 }
 
-function checkAndOpen()
+//! NOTE Only check the file, opening it in an external application is not needed (and breaks unattended runs)
+function checkExportedFile()
 {
     var filePath = api.testflow.selectedFilePath()
     checkFileSize(filePath)
-    api.interactive.openUrl(filePath)
-    seeChangesLong()
+    //! NOTE Export is finished asynchronously, the export dialog can't be opened again until then
+    api.testflow.sleep(1000)
 }

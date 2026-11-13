@@ -21,8 +21,9 @@
  */
 #pragma once
 
-#include "istartupscenario.h"
+#include "appshell/internal/istartupscenario.h"
 
+#include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
 
@@ -42,8 +43,8 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    muse::async::Promise<muse::Ret> runOnSplashScreen() override;
-    void runAfterSplashScreen() override;
+    void runOnSplashScreen() override;
+    muse::async::Promise<muse::Ret> runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:

@@ -1794,59 +1794,6 @@ void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
     TRead::read(static_cast<Symbol*>(d), e, ctx);
 }
 
-static void setActionIconTypeFromAction(ActionIcon* i, const std::string& actionCode)
-{
-    static const std::map<std::string_view, ActionIconType> map {
-        { "acciaccatura", ActionIconType::ACCIACCATURA },
-        { "appoggiatura", ActionIconType::APPOGGIATURA },
-        { "grace4", ActionIconType::GRACE4 },
-        { "grace16", ActionIconType::GRACE16 },
-        { "grace32", ActionIconType::GRACE32 },
-        { "grace8after", ActionIconType::GRACE8_AFTER },
-        { "grace16after", ActionIconType::GRACE16_AFTER },
-        { "grace32after", ActionIconType::GRACE32_AFTER },
-
-        { "beam-auto", ActionIconType::BEAM_AUTO },
-        { "beam-none", ActionIconType::BEAM_NONE },
-        { "beam-break-left", ActionIconType::BEAM_BREAK_LEFT },
-        { "beam-break-inner-8th", ActionIconType::BEAM_BREAK_INNER_8TH },
-        { "beam-break-inner-16th", ActionIconType::BEAM_BREAK_INNER_16TH },
-        { "beam-join", ActionIconType::BEAM_JOIN },
-
-        { "beam-feathered-decelerate", ActionIconType::BEAM_FEATHERED_DECELERATE },
-        { "beam-feathered-accelerate", ActionIconType::BEAM_FEATHERED_ACCELERATE },
-
-        { "add-parentheses", ActionIconType::PARENTHESES },
-        { "add-brackets", ActionIconType::BRACKETS },
-
-        { "insert-vbox", ActionIconType::VFRAME },
-        { "insert-hbox", ActionIconType::HFRAME },
-        { "insert-textframe", ActionIconType::TFRAME },
-        { "insert-fretframe", ActionIconType::FFRAME },
-        { "insert-staff-type-change", ActionIconType::STAFF_TYPE_CHANGE },
-        { "insert-measure", ActionIconType::MEASURE },
-
-        { "standard-bend", ActionIconType::STANDARD_BEND },
-        { "pre-bend", ActionIconType::PRE_BEND },
-        { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
-        { "slight-bend", ActionIconType::SLIGHT_BEND },
-
-        { "dive", ActionIconType::DIVE },
-        { "pre-dive", ActionIconType::PRE_DIVE },
-        { "dip", ActionIconType::DIP },
-        { "scoop", ActionIconType::SCOOP },
-
-        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
-
-        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
-    };
-
-    auto it = map.find(actionCode);
-    if (it != map.end()) {
-        i->setActionType(it->second);
-    }
-}
-
 void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
 {
     while (e.readNextStartElement()) {
@@ -1857,9 +1804,7 @@ void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
             // If the <action> tag is present, it will override this value, see below.
             i->setActionType(static_cast<ActionIconType>(e.readInt()));
         } else if (tag == "action") {
-            const std::string actionCode = e.readText().toStdString();
-            i->setAction(actionCode, 0);
-            setActionIconTypeFromAction(i, actionCode);
+            i->setActionType(TConv::fromXml(e.readAsciiText(), ActionIconType::UNDEFINED));
         } else {
             e.unknown();
         }
@@ -2622,65 +2567,18 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
 {
-    //! NOTE Need separated "given" data and layout data
-    ChordLine::LayoutData* ldata = l->mutldata();
-    ldata->path = PainterPath();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Path") {
-            PainterPath path;
-            PointF curveTo;
-            PointF p1;
-            int state = 0;
-            while (e.readNextStartElement()) {
-                const AsciiStringView nextTag(e.name());
-                if (nextTag == "Element") {
-                    int type = e.intAttribute("type");
-                    double x  = e.doubleAttribute("x");
-                    double y  = e.doubleAttribute("y");
-                    double spatium = ctx.spatium();
-                    x *= spatium;
-                    y *= spatium;
-                    switch (PainterPath::ElementType(type)) {
-                    case PainterPath::ElementType::MoveToElement:
-                        path.moveTo(x, y);
-                        break;
-                    case PainterPath::ElementType::LineToElement:
-                        path.lineTo(x, y);
-                        break;
-                    case PainterPath::ElementType::CurveToElement:
-                        curveTo.rx() = x;
-                        curveTo.ry() = y;
-                        state = 1;
-                        break;
-                    case PainterPath::ElementType::CurveToDataElement:
-                        if (state == 1) {
-                            p1.rx() = x;
-                            p1.ry() = y;
-                            state = 2;
-                        } else if (state == 2) {
-                            path.cubicTo(curveTo, p1, PointF(x, y));
-                            state = 0;
-                        }
-                        break;
-                    }
-                    e.skipCurrentElement();           //needed to go to next EngravingItem in Path
-                } else {
-                    e.unknown();
-                }
-            }
-            ldata->path = path;
-            l->setModified(true);
+            compat::CompatUtils::readChordLinePath(l, e);
         } else if (tag == "subtype") {
             l->setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
         } else if (tag == "straight") {
             l->setStraight(e.readInt());
         } else if (tag == "wavy") {
             l->setWavy(e.readInt());
-        } else if (tag == "lengthX") {
-            l->setLengthX(e.readInt());
-        } else if (tag == "lengthY") {
-            l->setLengthY(e.readInt());
+        } else if (tag == "lengthX" || tag == "lengthY") { // obsolete
+            e.skipCurrentElement();
         } else if (tag == "play") {
             l->setPlayChordLine(e.readBool());
         } else if (!readItemProperties(l, e, ctx)) {
@@ -3589,7 +3487,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "name") {
         p->instrument()->setLongName(e.readText());
     } else if (tag == "color") {
-        p->setColor(e.readInt());
+        e.skipCurrentElement(); // Unused
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
     } else if (tag == "show") {
@@ -3779,17 +3677,12 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
 {
-    double _spatium = s->style().spatium();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "o1") {
-            s->ups(Grip::START).off = e.readPoint() * _spatium;
-        } else if (tag == "o2") {
-            s->ups(Grip::BEZIER1).off = e.readPoint() * _spatium;
-        } else if (tag == "o3") {
-            s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
-        } else if (tag == "o4") {
-            s->ups(Grip::END).off = e.readPoint() * _spatium;
+        if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET1)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET2)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET3)) {
+        } else if (readProperty(s, tag, e, ctx, Pid::BEZIER_OFFSET4)) {
         } else if (tag == "HammerOnPullOffText") {
             DO_ASSERT(s->isHammerOnPullOffSegment());
             readHopoText(toHammerOnPullOffSegment(s), e, ctx, e.intAttribute("idx"));

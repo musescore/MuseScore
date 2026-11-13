@@ -23,6 +23,7 @@
 #include "palmmute.h"
 
 #include "chordrest.h"
+#include "dummyparent.h"
 #include "part.h"
 #include "score.h"
 #include "staff.h"
@@ -88,7 +89,7 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp)
 //   PalmMute
 //---------------------------------------------------------
 
-PalmMute::PalmMute(DummyParentOr<EngravingItem> parent)
+PalmMute::PalmMute(DummyParent* parent)
     : ChordTextLineBase(ElementType::PALM_MUTE, parent)
 {
     initElementStyle(&palmMuteStyle);
@@ -180,7 +181,7 @@ void PalmMute::setChannel()
     ChordRest* startCR = toChordRest(startEl);
     ChordRest* endCR = toChordRest(endEl);
 
-    Instrument* instrument = part()->instrument(startCR->tick());
+    Instrument* instrument = startCR->originPart()->instrument(startCR->tick());
     int idx = instrument->channelIdx(String::fromUtf8(InstrChannel::PALM_MUTE_NAME));
     if (idx > 0) {
         staff()->insertIntoChannelList(voice(), startCR->tick(), idx);

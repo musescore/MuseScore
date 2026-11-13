@@ -27,8 +27,6 @@ target_sources(instrumentsscene PRIVATE
 
     internal/selectinstrumentscenario.cpp
     internal/selectinstrumentscenario.h
-    internal/instrumentsuiactions.cpp
-    internal/instrumentsuiactions.h
     internal/instrumentsactionscontroller.cpp
     internal/instrumentsactionscontroller.h
     internal/instrumentscommandsregister.cpp
@@ -41,4 +39,8 @@ target_link_libraries(instrumentsscene PRIVATE engraving)
 
 if (MUE_BUILD_INSTRUMENTSSCENE_QML)
     add_subdirectory(qml/MuseScore/InstrumentsScene)
+endif()
+
+if (MUE_BUILD_INSTRUMENTSSCENE_TESTS)
+    add_subdirectory(tests)
 endif()

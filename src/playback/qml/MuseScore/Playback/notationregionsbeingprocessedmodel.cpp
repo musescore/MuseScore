@@ -138,7 +138,7 @@ QHash<int, QByteArray> NotationRegionsBeingProcessedModel::roleNames() const
 void NotationRegionsBeingProcessedModel::load()
 {
     clear();
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+    projectSession()->masterNotationChanged().onNotify(this, [this]() {
         clear();
     });
 
@@ -149,12 +149,12 @@ void NotationRegionsBeingProcessedModel::load()
 
     listenViewModeChanges();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    projectSession()->currentNotationChanged().onNotify(this, [this]() {
         listenViewModeChanges();
         setRegions(calculateRegions(m_tracksBeingProcessed));
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         onIsPlayingChanged();
     });
 
@@ -198,7 +198,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
 {
-    return globalContext()->playbackState()->isPlaying();
+    return playbackController()->isPlaying();
 }
 
 void NotationRegionsBeingProcessedModel::clear()
@@ -263,7 +263,7 @@ void NotationRegionsBeingProcessedModel::onIsPlayingChanged()
 
 void NotationRegionsBeingProcessedModel::listenViewModeChanges()
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -332,7 +332,7 @@ void NotationRegionsBeingProcessedModel::onProgressStarted(const InstrumentTrack
 
 void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackId& instrumentTrackId, const ChunkInfoList& chunks)
 {
-    const notation::IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    const notation::IMasterNotationPtr master = projectSession()->masterNotation();
     if (!master) {
         return;
     }
@@ -458,7 +458,7 @@ QList<NotationRegionsBeingProcessedModel::RegionInfo> NotationRegionsBeingProces
         return {};
     }
 
-    const notation::INotationPtr notation = globalContext()->currentNotation();
+    const notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return {};
     }

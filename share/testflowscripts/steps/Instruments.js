@@ -22,14 +22,38 @@
 
 var Navigation = require("Navigation.js")
 
+function isLayoutPanelOpened()
+{
+    var panels = api.navigation.panels("NavigationLeftPanel")
+    for (var i = 0; i < panels.length; ++i) {
+        if (panels[i].name === "InstrumentsHeader") {
+            return panels[i].enabled
+        }
+    }
+    return false
+}
+
+//! NOTE Triggering the tab again while it is being opened hides the panel, so trigger only if needed
 function doOpenInstrumentsPanel()
 {
-    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Instruments")
+    if (isLayoutPanelOpened()) {
+        return
+    }
+
+    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Layout")
+
+    for (var i = 0; i < 50 && !isLayoutPanelOpened(); ++i) {
+        api.testflow.sleep(100)
+    }
+
+    if (!isLayoutPanelOpened()) {
+        api.testflow.error("instruments: the Layout panel is not opened")
+    }
 }
 
 function doGoToInstrument(name)
 {
-    Navigation.goToControl("NavigationLeftPanel", "InstrumentsTree", name)
+    Navigation.goToControl("NavigationLeftPanel", "LayoutPanelTree", name)
 }
 
 module.exports = {
@@ -38,8 +62,10 @@ module.exports = {
     openAddInstrumentsDialog: function()
     {
         doOpenInstrumentsPanel()
-        Navigation.goToControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
-        api.testflow.seeChanges()
+        //! NOTE "Add" opens a menu: new instrument or system markings
+        Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
+        Navigation.goToControlInPopup("StyledMenu", "ADD_INSTRUMENT")
+        //! NOTE The dialog is modal, so open it without waiting
         api.testflow.async(function() {
             api.navigation.trigger()
         })
@@ -47,14 +73,21 @@ module.exports = {
 
     chooseInstrument: function(family, instrument)
     {
-        Navigation.goToControl("DialogView", "FamilyView", family)
+        //! NOTE Only a triggered family switches the instruments list
+        Navigation.triggerControl("DialogView", "FamilyView", family)
+        //! NOTE The instruments list is rebuilt asynchronously, an instrument triggered meanwhile is added twice
+        api.testflow.sleep(500)
         Navigation.goToControl("DialogView", "InstrumentsView", instrument)
         Navigation.trigger()
+        //! NOTE The instrument is added to the selected list asynchronously
+        if (!api.navigation.waitControl("DialogView", "ListView", instrument, 5000)) {
+            api.testflow.error("instruments: not added to the selected list: " + instrument)
+        }
     },
 
     doneAddInstruments: function()
     {
-        Navigation.triggerControl("DialogView", "BottomPanel", "OK")
+        Navigation.triggerControl("DialogView", "ButtonBox", "OK")
     },
 
     goToInstrument: doGoToInstrument,
@@ -71,6 +104,12 @@ module.exports = {
         doGoToInstrument(instrument)
         Navigation.left()
         Navigation.trigger()
+        Navigation.popupOpened()
+    },
+
+    closeSettingsInstrument: function()
+    {
+        Navigation.closePopupIfOpened()
     },
 
     moveDownInstrument: function(instrument)

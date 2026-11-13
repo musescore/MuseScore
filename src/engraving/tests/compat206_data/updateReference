@@ -20,6 +20,7 @@ cp $test_dir/hairpin-test.mscx         hairpin-ref.mscx
 cp $test_dir/instrumentNameAlign-test.mscx instrumentNameAlign-ref.mscx
 cp $test_dir/lidemptytext-test.mscx    lidemptytext-ref.mscx
 cp $test_dir/markers-test.mscx         markers-ref.mscx
+cp $test_dir/markers_mscore_font-test.mscx markers_mscore_font-ref.mscx
 cp $test_dir/noteheads-test.mscx       noteheads-ref.mscx
 cp $test_dir/textstyles-test.mscx      textstyles-ref.mscx
 cp $test_dir/tuplets-test.mscx         tuplets-ref.mscx

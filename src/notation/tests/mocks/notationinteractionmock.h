@@ -49,9 +49,9 @@ public:
     MOCK_METHOD(const HitElementContext&, hitElementContext, (), (const, override));
     MOCK_METHOD(void, setHitElementContext, (const HitElementContext&), (override));
 
-    MOCK_METHOD(void, select, (const std::vector<EngravingItem*>&, SelectType, engraving::staff_idx_t), (override));
-    MOCK_METHOD(void, select, (SelectionTarget), (override));
-    MOCK_METHOD(void, addToSelection, (SelectionTarget), (override));
+    MOCK_METHOD(muse::Ret, select, (const std::vector<EngravingItem*>&, SelectType, engraving::staff_idx_t), (override));
+    MOCK_METHOD(muse::Ret, select, (SelectionTarget), (override));
+    MOCK_METHOD(muse::Ret, addToSelection, (SelectionTarget), (override));
     MOCK_METHOD(void, selectAndStartEditIfNeeded, (EngravingItem*), (override));
     MOCK_METHOD(INotationSelectionPtr, selection, (), (const, override));
     MOCK_METHOD(void, clearSelection, (), (override));
@@ -94,7 +94,6 @@ public:
     MOCK_METHOD(void, moveSelectionDeprecated, (MoveDirection, MoveSelectionType), (override));
 
     MOCK_METHOD(void, moveLyrics, (MoveDirection), (override));
-    MOCK_METHOD(void, expandSelection, (ExpandSelectionMode), (override));
 
     MOCK_METHOD(EngravingItem*, contextItem, (), (const, override));
 
@@ -121,6 +120,7 @@ public:
 
     MOCK_METHOD(muse::async::Channel<ScoreConfigType>, scoreConfigChanged, (), (const, override));
     MOCK_METHOD(bool, isGripEditStarted, (), (const, override));
+    MOCK_METHOD(bool, isStartEndGripSelected, (), (const, override));
     MOCK_METHOD(bool, isHitGrip, (const muse::PointF&), (const, override));
     MOCK_METHOD(void, startEditGrip, (const muse::PointF&), (override));
     MOCK_METHOD(void, startEditGrip, (EngravingItem*, mu::engraving::Grip), (override));
@@ -279,7 +279,7 @@ public:
     MOCK_METHOD(void, transposeSemitone, (int), (override));
     MOCK_METHOD(void, transposeDiatonicAlterations, (mu::engraving::TransposeDirection), (override));
     MOCK_METHOD(void, toggleAutoplace, (bool), (override));
-    MOCK_METHOD(void, getLocation, (), (override));
+    MOCK_METHOD(void, showLocation, (), (override));
     MOCK_METHOD(void, execute, (void (mu::engraving::Score::*)(), const muse::TranslatableString&), (override));
 
     MOCK_METHOD(void, showItem, (const mu::engraving::EngravingItem*, int), (override));

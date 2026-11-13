@@ -26,7 +26,7 @@
 #include "propertiespanelabstractmodel.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 
 namespace mu::propertiespanel {
 class InstrumentNameSettingsModel : public PropertiesPanelAbstractModel
@@ -35,7 +35,7 @@ class InstrumentNameSettingsModel : public PropertiesPanelAbstractModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit InstrumentNameSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,

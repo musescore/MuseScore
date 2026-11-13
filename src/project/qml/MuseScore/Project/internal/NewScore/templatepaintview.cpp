@@ -25,13 +25,13 @@
 #include "stringutils.h"
 
 #include "notation/imasternotation.h"
+#include "notationscene/notationcommands.h"
 
 #include "log.h"
 
 using namespace mu::project;
 using namespace mu::notation;
 using namespace muse;
-using namespace muse::actions;
 
 TemplatePaintView::TemplatePaintView(QQuickItem* parent)
     : AbstractNotationPaintView(parent)
@@ -63,12 +63,12 @@ void TemplatePaintView::load(const QString& templatePath)
 
 QString TemplatePaintView::zoomInSequence() const
 {
-    return shortcutsTitleByActionCode("zoomin");
+    return shortcutsTitleByCommand(ZOOM_IN_COMMAND);
 }
 
 QString TemplatePaintView::zoomOutSequence() const
 {
-    return shortcutsTitleByActionCode("zoomout");
+    return shortcutsTitleByCommand(ZOOM_OUT_COMMAND);
 }
 
 void TemplatePaintView::adjustCanvas()
@@ -132,8 +132,8 @@ void TemplatePaintView::resetNotation()
     m_notationProject = nullptr;
 }
 
-QString TemplatePaintView::shortcutsTitleByActionCode(const ActionCode& code) const
+QString TemplatePaintView::shortcutsTitleByCommand(const muse::rcommand::Command& command)const
 {
-    muse::shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(code);
+    muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(command);
     return muse::shortcuts::sequencesToNativeText(shortcut.sequences);
 }

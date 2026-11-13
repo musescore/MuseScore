@@ -116,23 +116,20 @@ bool ScoreRW::saveScore(Score* score, const String& name, ExportFunc exportFunc)
     }
 }
 
-EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
+muse::ByteArray ScoreRW::writeElement(const EngravingItem* element)
 {
-    //
-    // write element
-    //
     auto buffer = Buffer::opened(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.startDocument();
     rw::RWRegister::writer()->writeItem(element, xml);
     xml.flush();
     buffer.close();
+    return buffer.data();
+}
 
-    //
-    // read element
-    //
-
-    XmlReader e(buffer.data());
+EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
+{
+    XmlReader e(writeElement(element));
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
     rw::RWRegister::reader()->readItem(element, e);

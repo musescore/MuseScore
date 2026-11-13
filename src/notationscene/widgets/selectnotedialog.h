@@ -26,7 +26,7 @@
 #include "ui_selectnotedialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "notation/notationtypes.h"
 
@@ -40,7 +40,7 @@ class SelectNoteDialog : public muse::ui::WidgetDialog, private Ui::SelectNoteDi
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     SelectNoteDialog(QWidget* parent = nullptr);

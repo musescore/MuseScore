@@ -1008,13 +1008,13 @@
         <veloChange>10</veloChange>
         <beginHookHeight>-1.9</beginHookHeight>
         <endHookHeight>-1.9</endHookHeight>
-        <beginText>cresc.</beginText>
-        <continueText>(cresc.)</continueText>
         <track2>0</track2>
         <startTick>1/1</startTick>
         <ticks>1/4</ticks>
         <eid>nC_nC</eid>
         <track>0</track>
+        <beginText>cresc.</beginText>
+        <continueText>(cresc.)</continueText>
         </HairPin>
       <Slur>
         <startElement>AB_AB</startElement>

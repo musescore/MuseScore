@@ -32,8 +32,9 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iprojectconfiguration.h"
-#include "iconvertfiletoscorescenario.h"
+#include "project/iprojectconfiguration.h"
+#include "project/iconvertfiletoscorescenario.h"
+#include "project/ideletecloudscorescenario.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
@@ -48,9 +49,11 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::ContextInject<IDeleteCloudScoreScenario> deleteCloudScoreScenario = { this };
 
 public:
     CloudScoresModel(QObject* parent = nullptr);
@@ -67,6 +70,7 @@ public:
     Q_INVOKABLE void reload();
 
     Q_INVOKABLE void retryAllConversions();
+    Q_INVOKABLE void cancelUpload(int uploadId);
     Q_INVOKABLE void cancelConversion(int convertType, int convertId);
 
     State state() const;
@@ -85,16 +89,23 @@ signals:
 private:
     void setState(State state);
 
+    enum class RequestState {
+        Idle, // no request in flight
+        Pending, // request is in flight
+        PendingStale // request in flight when reload() reset the list - discard its result
+    };
+
     void loadItemsIfNecessary(std::optional<int> refreshPage = std::nullopt);
     bool needsLoading();
     size_t loadedCloudItemCount() const;
     bool containsCloudScore(int scoreId) const;
+    void removeScore(int scoreId);
 
     std::vector<QVariantMap> buildWatchedItems(const std::unordered_set<int>& downloadedScoreIds = {}) const;
     void updateWatchedItems(const std::unordered_set<int>& downloadedScoreIds = {}, bool allowRefresh = true);
 
     State m_state = State::Fine;
-    bool m_isRequestPending = false;
+    RequestState m_requestState = RequestState::Idle;
     std::optional<int> m_queuedRefreshPage;
 
     size_t m_totalItems = muse::nidx;

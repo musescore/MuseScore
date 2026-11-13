@@ -58,6 +58,11 @@ bool NotationSelection::isNone() const
     return score()->selection().isNone();
 }
 
+bool NotationSelection::isSingle() const
+{
+    return score()->selection().isSingle();
+}
+
 bool NotationSelection::isRange() const
 {
     return score()->selection().isRange();
@@ -167,6 +172,11 @@ MeasureBase* NotationSelection::endMeasureBase() const
     return score()->selection().endMeasureBase();
 }
 
+std::vector<MeasureBase*> NotationSelection::measureBasesInSelection() const
+{
+    return score()->selection().measureBasesInSelection();
+}
+
 std::vector<System*> NotationSelection::selectedSystems() const
 {
     return score()->selection().selectedSystems();
@@ -187,7 +197,7 @@ bool NotationSelection::elementsSelected(const mu::engraving::ElementTypeSet& ty
     return score()->selection().elementsSelected(types);
 }
 
-void NotationSelection::select(SelectionTarget target)
+muse::Ret NotationSelection::select(SelectionTarget target)
 {
     //! TODO It's better to change the implementation,
     // instead of calling different methods, it's better to do this:
@@ -197,9 +207,11 @@ void NotationSelection::select(SelectionTarget target)
     case SelectionTarget::Undefined:
         break;
     case SelectionTarget::FirstItem:
+    case SelectionTarget::BeginScore:
         selectFirstElement();
         break;
     case SelectionTarget::LastItem:
+    case SelectionTarget::EndScore:
         selectLastElement();
         break;
     case SelectionTarget::NextItem:
@@ -208,10 +220,10 @@ void NotationSelection::select(SelectionTarget target)
     case SelectionTarget::PrevItem:
         moveSelection(MoveDirection::Left, MoveSelectionType::EngravingItem);
         break;
-    case SelectionTarget::NextSegmentItem:
+    case SelectionTarget::NextSegment:
         moveSegmentSelection(MoveDirection::Right);
         break;
-    case SelectionTarget::PrevSegmentItem:
+    case SelectionTarget::PrevSegment:
         moveSegmentSelection(MoveDirection::Left);
         break;
     case SelectionTarget::NextChord:
@@ -243,6 +255,12 @@ void NotationSelection::select(SelectionTarget target)
         break;
     case SelectionTarget::PrevSystem:
         moveSelection(MoveDirection::Left, MoveSelectionType::System);
+        break;
+    case SelectionTarget::BeginSystem:
+        return make_ret(Ret::Code::NotImplemented);
+        break;
+    case SelectionTarget::EndSystem:
+        return make_ret(Ret::Code::NotImplemented);
         break;
     case SelectionTarget::AboveStaff:
         moveSelection(MoveDirection::Up, MoveSelectionType::Track);
@@ -287,9 +305,11 @@ void NotationSelection::select(SelectionTarget target)
         selectSection();
         break;
     }
+
+    return make_ret(Ret::Code::Ok);
 }
 
-void NotationSelection::addToSelection(SelectionTarget target)
+muse::Ret NotationSelection::addToSelection(SelectionTarget target)
 {
     switch (target) {
     case SelectionTarget::NextChord:
@@ -310,13 +330,74 @@ void NotationSelection::addToSelection(SelectionTarget target)
     case SelectionTarget::BelowStaff:
         addToSelection(MoveDirection::Down, MoveSelectionType::Track);
         break;
-    default:
-        NOT_SUPPORTED << "SelectionTarget: " << str_conv(target);
+    case SelectionTarget::BeginSystem:
+        expandSelection(SelectionTarget::BeginSystem);
         break;
+    case SelectionTarget::EndSystem:
+        expandSelection(SelectionTarget::EndSystem);
+        break;
+    case SelectionTarget::BeginScore:
+        expandSelection(SelectionTarget::BeginScore);
+        break;
+    case SelectionTarget::EndScore:
+        expandSelection(SelectionTarget::EndScore);
+        break;
+    default:
+        NOT_IMPLEMENTED << "SelectionTarget: " << (int)target;
+        return make_ret(Ret::Code::NotImplemented);
+        break;
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+void NotationSelection::expandSelection(SelectionTarget target)
+{
+    ChordRest* cr = activeCr(score());
+    if (!cr) {
+        return;
+    }
+    ChordRest* el = 0;
+    switch (target) {
+    case SelectionTarget::BeginSystem: {
+        Measure* measure = cr->segment()->measure()->system()->firstMeasure();
+        if (measure) {
+            el = measure->first()->nextChordRest(cr->track());
+        }
+        break;
+    }
+    case SelectionTarget::EndSystem: {
+        Measure* measure = cr->segment()->measure()->system()->lastMeasure();
+        if (measure) {
+            el = measure->last()->nextChordRest(cr->track(), true);
+        }
+        break;
+    }
+    case SelectionTarget::BeginScore: {
+        Measure* measure = score()->firstMeasureMM();
+        if (measure) {
+            el = measure->first()->nextChordRest(cr->track());
+        }
+        break;
+    }
+    case SelectionTarget::EndScore: {
+        Measure* measure = score()->lastMeasureMM();
+        if (measure) {
+            el = measure->last()->nextChordRest(cr->track(), true);
+        }
+        break;
+    }
+    default:
+        NOT_SUPPORTED << "SelectionTarget: " << (int)target;
+        break;
+    }
+
+    if (el) {
+        select({ el }, SelectType::RANGE, el->staffIdx());
     }
 }
 
-void NotationSelection::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
+muse::Ret NotationSelection::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
 
@@ -330,13 +411,17 @@ void NotationSelection::select(const std::vector<EngravingItem*>& elements, Sele
     const staff_idx_t oldStartStaff = selection.staffStart();
     const staff_idx_t oldEndStaff = selection.staffEnd();
 
+    const Box* oldStartBox = selection.startBox();
+    const Box* oldEndBox = selection.endBox();
+
     doSelect(elements, type, staffIndex);
 
     bool rangeChanged = false;
     if (selection.isRange()) {
         const bool ticksChanged = oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd();
         const bool stavesChanged = oldStartStaff != selection.staffStart() || oldEndStaff != selection.staffEnd();
-        rangeChanged = ticksChanged || stavesChanged;
+        const bool boxesChanged = oldStartBox != selection.startBox() || oldEndBox != selection.endBox();
+        rangeChanged = ticksChanged || stavesChanged || boxesChanged;
     }
 
     if (rangeChanged || oldSelectionState != selection.state() || oldSelectedElements != selection.elements()) {
@@ -344,6 +429,8 @@ void NotationSelection::select(const std::vector<EngravingItem*>& elements, Sele
     } else {
         score()->setSelectionChanged(false);
     }
+
+    return make_ret(Ret::Code::Ok);
 }
 
 void NotationSelection::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)

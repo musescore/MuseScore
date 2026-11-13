@@ -469,6 +469,12 @@ bool EngravingItem::onTabStaff() const
     return stt ? stt->isTabStaff() : false;
 }
 
+bool EngravingItem::onJianpuStaff() const
+{
+    const Staff* st = staff();
+    return st ? st->isJianpuStaff(tick()) : false;
+}
+
 bool EngravingItem::hasGrips() const
 {
     return gripsCount() > 0;
@@ -666,6 +672,12 @@ Part* EngravingItem::part() const
 {
     Staff* s = staff();
     return s ? s->part() : 0;
+}
+
+Part* EngravingItem::originPart() const
+{
+    Part* p = part();
+    return p ? p->originPart(track(), tick()) : nullptr;
 }
 
 void EngravingItem::setColor(const Color& c)
@@ -1545,7 +1557,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
     } else {
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
         if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
-            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
+            if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && originPart()->instrument(tick())->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {
                 newPlacement = PlacementV::BELOW;
@@ -1752,9 +1764,8 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     }
     case Pid::SELECTED:
         return false;
-    case Pid::OFFSET: {
+    case Pid::OFFSET:
         return PropertyValue::fromValue(PointF());
-    }
     case Pid::MIN_DISTANCE: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {
@@ -2276,7 +2287,7 @@ bool EngravingItem::isUserModified() const
 
 void EngravingItem::triggerLayout() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayout(tick(), staffIdx(), this);
     }
 }
@@ -2291,14 +2302,14 @@ void EngravingItem::triggerLayout() const
 
 void EngravingItem::triggerLayoutAll() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayoutAll(staffIdx(), this);
     }
 }
 
 void EngravingItem::triggerLayoutToEnd() const
 {
-    if (ownershipParent()) {
+    if (isInScoreTree()) {
         score()->setLayout(tick(), score()->endTick(), staffIdx(), staffIdx(), this);
     }
 }
@@ -2944,6 +2955,35 @@ void EngravingItem::LayoutData::disconnectItemSnappedAfter()
     }
     m_itemSnappedAfter->mutldata()->m_itemSnappedBefore = nullptr;
     m_itemSnappedAfter = nullptr;
+}
+
+void EngravingItem::LayoutData::scanConnectedItemsInSnappingChain(const System* system,
+                                                                  const std::function<void(EngravingItem*)>& func) const
+{
+    EngravingItem* item = const_cast<EngravingItem*>(m_item);
+    func(item);
+
+    std::vector<EngravingItem*> visited = { item }; // To break out of circular snap chains
+
+    EngravingItem* snappedBefore = m_itemSnappedBefore;
+    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedBefore)) {
+            break;
+        }
+        visited.push_back(snappedBefore);
+        func(snappedBefore);
+        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
+    }
+
+    EngravingItem* snappedAfter = m_itemSnappedAfter;
+    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
+        IF_ASSERT_FAILED(!muse::contains(visited, snappedAfter)) {
+            break;
+        }
+        visited.push_back(snappedAfter);
+        func(snappedAfter);
+        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
+    }
 }
 
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const

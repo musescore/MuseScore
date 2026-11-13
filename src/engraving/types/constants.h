@@ -109,6 +109,9 @@ struct Constants
     constexpr static BeatsPerSecond MAX_TEMPO = 999.0 / 60.0;
     constexpr static int TEMPO_PRECISION = 6;
 };
+
+static constexpr size_t MAX_DOTS = 4;
+static constexpr size_t MAX_VOICES = 4;
 }
 
 #endif // MU_ENGRAVING_CONSTANTS_H

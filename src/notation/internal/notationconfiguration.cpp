@@ -60,6 +60,8 @@ static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_nam
 
 static const Settings::Key THIN_NOTE_INPUT_CURSOR(module_name, "ui/canvas/thinNoteInputCursor");
 
+static const Settings::Key ENABLE_JIANPU(module_name, "notation/enableJianpu");
+
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
@@ -67,7 +69,7 @@ static const Settings::Key DEFAULT_ZOOM(module_name, "ui/canvas/zoomDefaultLevel
 static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionKeyboard");
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
-static const Settings::Key CURRENT_AUTOMATION_TYPE(module_name, "notation/automation/currentType");
+static const Settings::Key CURRENT_AUTOMATION_LANE(module_name, "notation/automation/currentLane");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
@@ -76,6 +78,7 @@ static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/default
 
 static const Settings::Key ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED(module_name,
                                                                                   "score/addAccidentalDotsArticulationsToNextNoteEntered");
+static const Settings::Key TUPLET_COMMANDS_SELECTED_DURATION_AS(module_name, "score/tupletCommandsSelectedDurationAs");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY(module_name,
@@ -212,6 +215,8 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(THIN_NOTE_INPUT_CURSOR, Val(false)); // accessible via DevTools/Settings
 
+    settings()->setDefaultValue(ENABLE_JIANPU, Val(false));
+
     settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
     settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
         m_foregroundChanged.notify();
@@ -231,9 +236,9 @@ void NotationConfiguration::init()
         m_mouseZoomPrecisionChanged.notify();
     });
 
-    settings()->setDefaultValue(CURRENT_AUTOMATION_TYPE, Val(engraving::AutomationType::Dynamics));
-    settings()->valueChanged(CURRENT_AUTOMATION_TYPE).onReceive(this, [this](const Val&) {
-        m_currentAutomationTypeChanged.notify();
+    settings()->setDefaultValue(CURRENT_AUTOMATION_LANE, Val(AutomationLane::Dynamics));
+    settings()->valueChanged(CURRENT_AUTOMATION_LANE).onReceive(this, [this](const Val&) {
+        m_currentAutomationLaneChanged.notify();
     });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
@@ -269,6 +274,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED, Val(true));
     settings()->valueChanged(ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERED).onReceive(this, [this](const Val&) {
         m_addAccidentalDotsArticulationsToNextNoteEnteredChanged.notify();
+    });
+
+    settings()->setDefaultValue(TUPLET_COMMANDS_SELECTED_DURATION_AS, Val(engraving::TupletSelectedDuration::SUBDIVISION));
+    settings()->valueChanged(TUPLET_COMMANDS_SELECTED_DURATION_AS).onReceive(this, [this](const Val&) {
+        m_tupletCommandsSelectedDurationAsChanged.notify();
     });
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
@@ -623,6 +633,11 @@ bool NotationConfiguration::thinNoteInputCursor() const
     return settings()->value(THIN_NOTE_INPUT_CURSOR).toBool();
 }
 
+bool NotationConfiguration::enableJianpu() const
+{
+    return settings()->value(ENABLE_JIANPU).toBool();
+}
+
 QColor NotationConfiguration::loopMarkerColor() const
 {
     return QColor(0x2456AA);
@@ -712,19 +727,19 @@ QList<int> NotationConfiguration::possibleZoomPercentageList() const
     };
 }
 
-engraving::AutomationType NotationConfiguration::currentAutomationType() const
+AutomationLane NotationConfiguration::currentAutomationLane() const
 {
-    return settings()->value(CURRENT_AUTOMATION_TYPE).toEnum<engraving::AutomationType>();
+    return settings()->value(CURRENT_AUTOMATION_LANE).toEnum<AutomationLane>();
 }
 
-void NotationConfiguration::setCurrentAutomationType(engraving::AutomationType type)
+void NotationConfiguration::setCurrentAutomationLane(AutomationLane lane)
 {
-    settings()->setSharedValue(CURRENT_AUTOMATION_TYPE, Val(type));
+    settings()->setSharedValue(CURRENT_AUTOMATION_LANE, Val(lane));
 }
 
-Notification NotationConfiguration::currentAutomationTypeChanged() const
+Notification NotationConfiguration::currentAutomationLaneChanged() const
 {
-    return m_currentAutomationTypeChanged;
+    return m_currentAutomationLaneChanged;
 }
 
 int NotationConfiguration::mouseZoomPrecision() const
@@ -842,6 +857,21 @@ void NotationConfiguration::setAddAccidentalDotsArticulationsToNextNoteEntered(b
 muse::async::Notification NotationConfiguration::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
 {
     return m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
+}
+
+engraving::TupletSelectedDuration NotationConfiguration::tupletCommandsSelectedDurationAs() const
+{
+    return settings()->value(TUPLET_COMMANDS_SELECTED_DURATION_AS).toEnum<engraving::TupletSelectedDuration>();
+}
+
+void NotationConfiguration::setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs)
+{
+    settings()->setSharedValue(TUPLET_COMMANDS_SELECTED_DURATION_AS, Val(selectedDurationAs));
+}
+
+muse::async::Notification NotationConfiguration::tupletCommandsSelectedDurationAsChanged() const
+{
+    return m_tupletCommandsSelectedDurationAsChanged;
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

@@ -34,15 +34,14 @@
 
 #include "internal/ielementrepositoryservice.h"
 #include "notation/inotation.h"
-#include "context/iglobalcontext.h"
-#include "actions/iactionsdispatcher.h"
-#include "shortcuts/ishortcutsregister.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 #include "propertyitem.h"
 #include "pointfpropertyitem.h"
 #include "ui/view/iconcodes.h"
-#include "ui/iuiactionsregister.h"
 #include "types/commontypes.h"
+#include "rcommand/icommanddispatcher.h"
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 namespace mu::propertiespanel {
 using MeasurementUnits = CommonTypes::MeasurementUnits;
@@ -64,19 +63,18 @@ class PropertiesPanelAbstractModel : public QObject, public muse::async::Asyncab
     QML_UNCREATABLE("Not creatable as it is abstract base class")
 
 public:
-    muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
+    muse::ContextInject<project::IProjectSession> context = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     enum class PropertiesPanelSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_MEASURES,
+        SECTION_NOTATION,
         SECTION_SYSTEM_PAGE_LAYOUT,
         SECTION_EMPTY_STAVES,
-        SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE,
@@ -175,7 +173,7 @@ public:
     static PropertiesPanelModelType modelTypeByElementKey(const ElementKey& elementKey);
     static std::set<PropertiesPanelModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static std::set<PropertiesPanelSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
-                                                                          const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
+                                                                          const QList<mu::engraving::EngravingItem*>& elementList = {});
     virtual bool isEmpty() const;
 
     virtual void createProperties() = 0;
@@ -261,7 +259,7 @@ protected:
 
     QList<mu::engraving::EngravingItem*> m_elementList;
 
-    QString shortcutsForActionCode(std::string code) const;
+    QString shortcutsForCommand(const muse::rcommand::Command& command) const;
 
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
@@ -273,7 +271,7 @@ protected slots:
     void updatemeasurementUnits();
 
 private:
-    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
+    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& elementList);
 
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
                                                                          const QVariant& newValue)> onPropertyChangedCallBack = nullptr,

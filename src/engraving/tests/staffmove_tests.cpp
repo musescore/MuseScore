@@ -50,13 +50,13 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 {
     MasterScore* score = ScoreRW::readScore(STAFF_MOVE_DIR + u"hiddenStaff.mscx");
     // Get chord
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
-    EXPECT_TRUE(m);
+    ASSERT_TRUE(m);
     Segment* s = m->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s);
+    ASSERT_TRUE(s);
     Chord* c1 = toChord(s->element(4));
-    EXPECT_TRUE(c1);
+    ASSERT_TRUE(c1);
     Staff* staff = score->staff(0);
 
     // Move chord
@@ -93,15 +93,15 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 TEST_F(Engraving_StaffMoveTests, linkedStaff)
 {
     MasterScore* score = ScoreRW::readScore(STAFF_MOVE_DIR + u"linkedStaff.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
-    EXPECT_TRUE(m);
+    ASSERT_TRUE(m);
     Segment* s = m->first(SegmentType::ChordRest);
-    EXPECT_TRUE(s);
+    ASSERT_TRUE(s);
     Chord* c1 = toChord(s->element(0));
-    EXPECT_TRUE(c1);
+    ASSERT_TRUE(c1);
     Chord* c2 = toChord(s->element(8));
-    EXPECT_TRUE(c2);
+    ASSERT_TRUE(c2);
 
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     EditCrossStaff::moveDown(score->transactionManager()->currentOrDummyTransaction(), score, c1);

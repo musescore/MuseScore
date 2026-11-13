@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "modularity/ioc.h"
 
 namespace mu::notation {
@@ -38,7 +38,7 @@ class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, pub
 
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit UndoHistoryModel(QObject* parent = nullptr);

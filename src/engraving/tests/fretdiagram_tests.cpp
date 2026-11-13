@@ -41,20 +41,20 @@ protected:
 
 void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
 {
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* measure = score->firstMeasure();
-    EXPECT_TRUE(measure);
+    ASSERT_TRUE(measure);
     static const String FRET_PATTERN_REF = u"XO[4-O][2-O]OO";
 
     while (measure) {
         Segment* s1 = measure->first(SegmentType::ChordRest);
-        EXPECT_TRUE(s1);
+        ASSERT_TRUE(s1);
 
         Harmony* harmony = toHarmony(s1->findAnnotation(ElementType::HARMONY, 0, 0));
-        EXPECT_TRUE(harmony);
+        ASSERT_TRUE(harmony);
 
         FretDiagram* diagram = Factory::createFretDiagram(score->dummy());
-        EXPECT_TRUE(diagram);
+        ASSERT_TRUE(diagram);
         diagram->updateDiagram(harmony->harmonyName());
         String pattern = diagram->patternFromDiagram();
         EXPECT_EQ(pattern, FRET_PATTERN_REF);
@@ -66,6 +66,7 @@ void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
 TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
 
     testChordSymToFretDiagram(score);
 }
@@ -73,6 +74,7 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
 TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Fret diagram tests"));
     score->undoChangeStyleVal(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
@@ -84,6 +86,7 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 TEST_F(Engraving_FretDiagramTests, enharmonicFallbackRootAndBass)
 {
     MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    ASSERT_TRUE(score);
     FretDiagram* fd = Factory::createFretDiagram(score->dummy());
 
     // Root fallback: Fbdim7 -> Edim7 (Fb->E)

@@ -99,6 +99,8 @@ enum class Sid : short {
     sharedOnStaffNumeralsHyphenThreshold,
     staveSharingInstrChangePlayerNum,
 
+    staveSharingChangeMinDistance,
+
     windsNameByGroup,
     vocalsNameByGroup,
     stringsNameByGroup,
@@ -1123,6 +1125,21 @@ enum class Sid : short {
     articulationFrameBgColor,
     articulationOffset,
     articulationPosition,
+
+    jianpuNumberFontFace,
+    jianpuNumberFontSize,
+    jianpuNumberLineSpacing,
+    jianpuNumberFontSpatiumDependent,
+    jianpuNumberFontStyle,
+    jianpuNumberColor,
+    jianpuNumberAlign,
+    jianpuNumberOffset,
+    jianpuNumberFrameType,
+    jianpuNumberFramePadding,
+    jianpuNumberFrameWidth,
+    jianpuNumberFrameRound,
+    jianpuNumberFrameFgColor,
+    jianpuNumberFrameBgColor,
 
     longInstrumentFontFace,
     longInstrumentFontSize,
@@ -2277,6 +2294,14 @@ enum class Sid : short {
     palmMuteEndFilledArrowHeight,
     palmMuteEndFilledArrowWidth,
 
+    jianpuNumberVerticalDistance,
+    jianpuVoiceVerticalDistance,
+    jianpuOctaveDotRadius,
+    jianpuOctaveDotDistance,
+    jianpuDiminutionBeamThickness,
+    jianpuDiminutionBeamDistance,
+    jianpuDiminutionBeamPlacement,
+    jianpuDurationLineThickness,
     STYLES
 };
 

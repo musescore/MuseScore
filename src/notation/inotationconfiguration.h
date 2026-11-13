@@ -33,8 +33,7 @@
 
 #include "types/noteinputtypes.h"
 #include "types/zoomtype.h"
-
-#include "engraving/automation/automationtypes.h"
+#include "types/automationlane.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
@@ -98,6 +97,8 @@ public:
 
     virtual bool thinNoteInputCursor() const = 0;
 
+    virtual bool enableJianpu() const = 0;
+
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
     virtual QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
@@ -122,9 +123,9 @@ public:
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
-    virtual mu::engraving::AutomationType currentAutomationType() const = 0;
-    virtual void setCurrentAutomationType(mu::engraving::AutomationType type) = 0;
-    virtual muse::async::Notification currentAutomationTypeChanged() const = 0;
+    virtual AutomationLane currentAutomationLane() const = 0;
+    virtual void setCurrentAutomationLane(AutomationLane lane) = 0;
+    virtual muse::async::Notification currentAutomationLaneChanged() const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
@@ -152,6 +153,11 @@ public:
     virtual bool addAccidentalDotsArticulationsToNextNoteEntered() const = 0;
     virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
     virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
+
+    // what the tuplet commands (duplet to nonuplet) use the selected duration as (see TupletOptions::selectedDurationAs)
+    virtual engraving::TupletSelectedDuration tupletCommandsSelectedDurationAs() const = 0;
+    virtual void setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs) = 0;
+    virtual muse::async::Notification tupletCommandsSelectedDurationAsChanged() const = 0;
 
     virtual muse::io::path_t userMusicFontsPath() const = 0;
     virtual void setUserMusicFontsPath(const muse::io::path_t& path) = 0;

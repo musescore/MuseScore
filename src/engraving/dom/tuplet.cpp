@@ -296,20 +296,14 @@ void Tuplet::scanElements(std::function<void(EngravingItem*)> func)
 
 void Tuplet::add(EngravingItem* e)
 {
-#ifndef NDEBUG
-    for (DurationElement* el : m_currentElements) {
-        if (el == e) {
-            LOGD("%p: %p %s already there", this, e, e->typeName());
-            return;
-        }
-    }
-#endif
-
     switch (e->type()) {
     case ElementType::CHORD:
     case ElementType::REST:
     case ElementType::TUPLET: {
         DurationElement* de = toDurationElement(e);
+        IF_ASSERT_FAILED(!contains(de)) {
+            return;
+        }
         de->setTuplet(this);
 
         bool found = false;
@@ -633,6 +627,9 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::P2:
         m_userP2 = v.value<PointF>();
         break;
+    case Pid::TICK:
+        setTick(v.value<Fraction>());
+        break;
     default:
         return DurationElement::setProperty(propertyId, v);
     }
@@ -866,6 +863,21 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
         ratio = (totalDuration / baseLen).reduced();
     }
     return ratio.numerator();
+}
+
+int Tuplet::conventionalTupletDenominator(int numerator)
+{
+    if (numerator <= 0) {
+        return 0;
+    }
+    if (numerator == 2) {
+        return 3;
+    }
+    int normal = 1;
+    while (normal * 2 < numerator) {
+        normal *= 2;
+    }
+    return normal * 2 == numerator ? numerator * 3 / 4 : normal;
 }
 
 EngravingItem* Tuplet::nextElement()

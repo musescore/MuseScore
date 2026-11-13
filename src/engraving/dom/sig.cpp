@@ -326,8 +326,11 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
         return;
     }
     auto e = upper_bound(t);
-    if (empty() || e == begin()) {
-        ASSERT_X(String(u"tickValue(0x%1) not found").arg(t));
+    IF_ASSERT_FAILED_X(e != begin(), String(u"tickValue(0x%1) not found").arg(t)) {
+        *bar  = 0;
+        *beat = 0;
+        *tick = 0;
+        return;
     }
     --e;
     int delta  = t - e->first;

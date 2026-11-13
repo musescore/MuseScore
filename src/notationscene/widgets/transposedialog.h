@@ -27,7 +27,7 @@
 #include "ui_transposedialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "notation/notationtypes.h"
 
@@ -52,7 +52,7 @@ class TransposeDialog : public muse::ui::WidgetDialog, private Ui::TransposeDial
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
 

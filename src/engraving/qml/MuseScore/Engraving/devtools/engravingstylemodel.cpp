@@ -187,6 +187,8 @@ QString EngravingStyleModel::typeToString(P_TYPE pt) const
     case P_TYPE::LINE_TYPE:        return "Int";
     case P_TYPE::HOOK_TYPE:        return "Int";
     case P_TYPE::KEY_MODE:         return "Int";
+    case P_TYPE::KEY:              return "Int";
+    case P_TYPE::JIANPU_NUMBERING: return "Int";
     case P_TYPE::TEXT_STYLE:       return "Int";
     case P_TYPE::PLAYTECH_TYPE:    return "Int";
     case P_TYPE::TEMPOCHANGE_TYPE: return "Int";
@@ -210,6 +212,7 @@ QString EngravingStyleModel::typeToString(P_TYPE pt) const
     case P_TYPE::PLAY_COUNT_PRESET:   return "Int";
     case P_TYPE::MARKER_TYPE:         return "Int";
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return "Int";
+    case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return "Int";
     case P_TYPE::UNDEFINED: return "Undefined";
     default: break;
     }

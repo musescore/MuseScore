@@ -34,6 +34,7 @@
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
 
@@ -44,11 +45,13 @@ public:
     {
     }
 
-    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(
+        const notation::ScoreOrder& currentOrder) const override;
     muse::async::Promise<notation::InstrumentTemplate> selectInstrument(
         const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;
 
 private:
-    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(
+        const muse::ValMap& params, const notation::ScoreOrder& currentOrder) const;
 };
 }

@@ -61,14 +61,12 @@ protected:
     static MasterScore* loadScore(const String& filename)
     {
         MasterScore* score = ScoreRW::readScore(PAREN_DATA + filename);
-        EXPECT_TRUE(score);
         return score;
     }
 
     static Chord* findChordInMeasure(Measure* m, Fraction time, staff_idx_t staff)
     {
         Chord* chord = m->findChord(time, staff);
-        EXPECT_TRUE(chord);
         return chord;
     }
 
@@ -125,12 +123,15 @@ protected:
 TEST_F(Engraving_ParenthesesTests, addParen)
 {
     MasterScore* score = loadScore(u"single_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find note
     Measure* m1 = score->firstMeasure();
     Chord* singleNoteChord = findChordInMeasure(m1, Fraction(0, 1), 0);
+    ASSERT_TRUE(singleNoteChord);
+    ASSERT_FALSE(singleNoteChord->notes().empty());
     Note* note = singleNoteChord->notes().front();
-    EXPECT_TRUE(note);
+    ASSERT_TRUE(note);
 
     checkChordHasNoParens(singleNoteChord);
 
@@ -140,7 +141,7 @@ TEST_F(Engraving_ParenthesesTests, addParen)
     checkChordHasParens(singleNoteChord, 1);
 
     // Check that paren info has been created
-    EXPECT_TRUE(note->parenthesisInfo());
+    ASSERT_TRUE(note->parenthesisInfo());
 
     undoAndCheckRemoved(score, singleNoteChord);
 
@@ -151,15 +152,19 @@ TEST_F(Engraving_ParenthesesTests, addParen)
 TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
 {
     MasterScore* score = loadScore(u"linked_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find notes
     Measure* m1 = score->firstMeasure();
     Chord* singleNoteChordStd = findChordInMeasure(m1, Fraction(0, 1), 0);
+    ASSERT_TRUE(singleNoteChordStd);
+    ASSERT_FALSE(singleNoteChordStd->notes().empty());
     Chord* singleNoteChordTab = findChordInMeasure(m1, Fraction(0, 1), 4);
+    ASSERT_TRUE(singleNoteChordTab);
     Note* noteStd = singleNoteChordStd->notes().front();
-    EXPECT_TRUE(noteStd);
+    ASSERT_TRUE(noteStd);
     Note* noteTab = singleNoteChordTab->notes().front();
-    EXPECT_TRUE(noteTab);
+    ASSERT_TRUE(noteTab);
 
     checkChordHasNoParens(singleNoteChordStd);
 
@@ -168,8 +173,8 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     checkChordHasParens(singleNoteChordStd, 1);
     checkChordHasParens(singleNoteChordTab, 1);
 
-    EXPECT_TRUE(noteStd->parenthesisInfo());
-    EXPECT_TRUE(noteTab->parenthesisInfo());
+    ASSERT_TRUE(noteStd->parenthesisInfo());
+    ASSERT_TRUE(noteTab->parenthesisInfo());
 
     EXPECT_TRUE(noteStd->parenthesisInfo()->leftParen()->isLinked(noteTab->parenthesisInfo()->leftParen()));
     EXPECT_TRUE(noteStd->parenthesisInfo()->rightParen()->isLinked(noteTab->parenthesisInfo()->rightParen()));
@@ -184,10 +189,12 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
 TEST_F(Engraving_ParenthesesTests, addParensManyNotes)
 {
     MasterScore* score = loadScore(u"single_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find note
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Chord* chord = findChordInMeasure(m2, Fraction(1, 1), 0);
+    ASSERT_TRUE(chord);
     checkChordHasNoParens(chord);
 
     // Toggle parentheses
@@ -207,10 +214,12 @@ TEST_F(Engraving_ParenthesesTests, addParensManyNotes)
 TEST_F(Engraving_ParenthesesTests, removeParensBottomNotes)
 {
     MasterScore* score = loadScore(u"single_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find chord in second measure
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Chord* chord = findChordInMeasure(m2, Fraction(1, 1), 0);
+    ASSERT_TRUE(chord);
     checkChordHasNoParens(chord);
 
     // Toggle parentheses for all notes
@@ -235,12 +244,15 @@ TEST_F(Engraving_ParenthesesTests, removeParensBottomNotes)
 TEST_F(Engraving_ParenthesesTests, addParensManyNotesLinkedStaff)
 {
     MasterScore* score = loadScore(u"linked_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find note
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Chord* chordStd = findChordInMeasure(m2, Fraction(1, 1), 0);
+    ASSERT_TRUE(chordStd);
     checkChordHasNoParens(chordStd);
     Chord* chordTab = findChordInMeasure(m2, Fraction(1, 1), 4);
+    ASSERT_TRUE(chordTab);
     checkChordHasNoParens(chordTab);
 
     // Toggle parentheses
@@ -263,10 +275,12 @@ TEST_F(Engraving_ParenthesesTests, addParensManyNotesLinkedStaff)
 TEST_F(Engraving_ParenthesesTests, breakParenGroup)
 {
     MasterScore* score = loadScore(u"single_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find note
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Chord* chord = findChordInMeasure(m2, Fraction(1, 1), 0);
+    ASSERT_TRUE(chord);
     checkChordHasNoParens(chord);
 
     // Toggle parentheses
@@ -301,12 +315,15 @@ TEST_F(Engraving_ParenthesesTests, breakParenGroup)
 TEST_F(Engraving_ParenthesesTests, breakParenGroupLinkedStaff)
 {
     MasterScore* score = loadScore(u"linked_staff.mscx");
+    ASSERT_TRUE(score);
 
     // Find chords
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Chord* chordStd = findChordInMeasure(m2, Fraction(1, 1), 0);
+    ASSERT_TRUE(chordStd);
     checkChordHasNoParens(chordStd);
     Chord* chordTab = findChordInMeasure(m2, Fraction(1, 1), 4);
+    ASSERT_TRUE(chordTab);
     checkChordHasNoParens(chordTab);
 
     // Toggle parentheses for standard staff

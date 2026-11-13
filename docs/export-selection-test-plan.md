@@ -25,7 +25,7 @@ playback and mixer state afterwards.
 
 | Field | Value |
 |---|---|
-| Test date | 2026-09-14 manual validation; 2026-09-15 refreshed build and extended regression checks |
+| Test date | 2026-09-14 manual validation; 2026-09-15 refreshed build and extended regression checks; 2026-11-13 upstream integration pending build and manual retest |
 | Tester | User manual confirmations and development build; remaining boundary, accessibility, and failure cases tracked below |
 | Platform | Windows, x64 |
 | Build type | RelWithDebInfo |
@@ -41,7 +41,11 @@ playback and mixer state afterwards.
 | Code-style check | **PASS** — Uncrustify 0.74.0 checks all 13 framework and 35 application C++ files touched by the feature |
 | Audio unit-test build | **PASS** — isolated `muse_audio_tests` target compiled and linked |
 | Audio unit-test run | **BLOCKED** — Windows runner historically exits with `0xC0000005` before GoogleTest results; the rebuilt filtered test executable also exited without printed results, so no local PASS is claimed |
-| MuseScore PR unit-test CI | **FAIL (prior revision)** — [`run_tests` job](https://github.com/musescore/MuseScore/actions/runs/34966230344/job/104371224603) built successfully, but CTest #8 aborted on the framework test `Audio_SoundTrackSaveOptionsTests.RejectsNonFiniteValues`: it assigned NaN through `secs_t` and triggered `number_t::check_valid` before `isValid()`. The test-only correction in `561d436c5d` sets the raw value solely to exercise defensive validation; a CI rerun is pending |
+| MuseScore PR unit-test CI | **HISTORICAL FAIL** — [`run_tests` job](https://github.com/musescore/MuseScore/actions/runs/34966230344/job/104371224603) built successfully, but CTest #8 aborted on `Audio_SoundTrackSaveOptionsTests.RejectsNonFiniteValues`: it assigned NaN through `secs_t` and triggered `number_t::check_valid` before `isValid()`. Revision `561d436c5d` corrected that test-only setup. This row records the original failure, not the status of the November integration; the user will verify its remote checks. |
+| November 2026 local test build | **PASS** — `muse_audio_tests` and `playback_test` compile and link after updating the new audio API mocks. |
+| November 2026 playback-controller tests | **PASS** — 20/20 tests, including `KeepsSelectionExportMuteOnTempoChange`, run locally with Qt and codec DLL directories on `PATH`. |
+| November 2026 audio-unit test run | **BLOCKED** — `muse_audio_tests.exe` exits with Windows `0xC0000005` before printing GoogleTest output, matching the earlier local runner failure. No local PASS is claimed for these cases. |
+| November 2026 application build | **PASS** — complete Windows x64 RelWithDebInfo compile, link, and install against the refreshed MuseScore and framework branches. The built and installed `MuseScoreStudio5.exe` SHA-256 hashes match. Manual UI and audio smoke tests are pending. |
 
 ### Launching the local test build on Windows
 
@@ -85,6 +89,27 @@ in progress without a process crash. On the selection path, original tempo and
 instrument volumes were retained, but the partial MP3 remained and played only
 the portion rendered before cancellation. Exact mute/solo state after abort was
 not separately recorded.
+
+On 2026-11-13, the feature was integrated locally with newer upstream code.
+The framework's reorganized audio-test targets retain the save-option and RPC
+tests. MuseScore's export command now uses the current command registry, and
+its availability follows the active notation when switching between the score
+and parts. The export writer restores that active notation through the current
+project-session interface. Temporary instrument levels are applied on every
+track-control build,
+including automation resends and late track loads. A dedicated regression test
+for an export-muted instrument on a tempo change was added. The refreshed
+application has since compiled and linked, but it has not yet been manually
+retested, so the older PASS results below are historical evidence, not a claim
+about this integration.
+
+The first November local build exposed a framework API change: the current
+framework uses a one-argument enum-contract macro, while MuseScore `main`
+still uses the older two-argument form. The application branch now includes a
+compatibility updates to enum declarations and three percussion command call
+sites. A subsequent build reached the newer shortcut-resolver interface and
+required its registration method in MuseScore's resolver. The full application
+build now passes; manual functional validation remains pending.
 
 One test-score fragment exhibits the same sound-rendering anomaly during live
 playback and selection export. Because the exported result matches MuseScore's
@@ -155,12 +180,14 @@ sufficient.
 |---|---|---|---|---|
 | BUILD-01 | Configure, compile, link, and install the desktop application. | Build and install complete with exit code 0. | **PASS** | RelWithDebInfo refreshed build installed 2026-09-15 after retrying a transient final-link file lock. |
 | BUILD-02 | Launch the refreshed installed build and export one middle-score range with metronome Off, then another with metronome On, changed tempo and background level. | Both exports contain the requested range and settings; the first downbeat clicks when enabled; normal playback state remains unchanged. | **PASS** | User-confirmed on 2026-09-15: two correct MP3 fragments; first metronome tick, tempo and levels correct; normal playback settings restored. |
+| BUILD-03 | Compile, link, install, and smoke-test the November 2026 upstream integration. | No build errors; selected-range audio, export mix, metronome, and normal playback remain correct. | **PARTIAL** | Compile, link, and install passed locally on 2026-11-13; built and installed executable hashes match. User smoke test remains to be done. |
 | ACT-01 | Create a contiguous range selection and open the main File menu. | **Export selection…** is enabled and opens the selection export dialog. | **PASS** | Manually confirmed during development. |
 | ACT-02 | Right-click a contiguous range selection. | The context menu contains **Export selection…** and opens the same dialog. | **PASS** | Manually confirmed during development. |
 | ACT-03 | Test with no selection, a single note, and a list selection. | The command is unavailable; no invalid export starts. | **PASS** | User confirmed the unavailable-command behaviour with no valid range on 2026-09-15. |
 | ACT-04 | Open normal **Export…** without using selection export. | Existing formats, options, duration, and full-score rendering are unchanged. | **PASS** | Normal full-score export and dialog remain unchanged, user-confirmed 2026-09-15. |
 | ACT-05 | Open selection export and inspect the format list. | Only supported audio formats are offered. | **PASS** | Manually confirmed during development. |
 | ACT-06 | Inspect the normal and selection dialogs. | Normal-export-only text such as per-part export guidance is absent from selection mode. | **PASS** | Normal-export guidance remains only in the normal dialog, user-confirmed 2026-09-15. |
+| ACT-07 | Switch between the full score and an instrument part, selecting and clearing a measure range in each. | **Export selection…** follows the active notation and is enabled only while its current selection is a range. | READY | New current-notation subscription added during the November integration; manual retest pending. |
 
 ### Automated-test status
 
@@ -170,6 +197,7 @@ sufficient.
 | AUTO-02 | Run `Audio_SoundTrackSaveOptionsTests.*`. | Seven validation tests pass. | **BLOCKED** | Runner exits `0xC0000005` before test reporting. |
 | AUTO-03 | Run `Audio_RpcPackerTests.SoundTrackSaveOptions`. | Range and fade fields round-trip exactly. | **BLOCKED** | Same runner failure. |
 | AUTO-04 | Run a pre-existing audio baseline test. | Baseline test passes independently of feature code. | **BLOCKED** | `Audio_AlignmentBufferTests.*` has the identical runner failure. |
+| AUTO-05 | During selection export, mute one part and change the tempo of a score with track-volume automation. | The automation resend leaves the export-only mute in place. | **PASS** | `PlaybackControllerTests.KeepsSelectionExportMuteOnTempoChange` passed locally on 2026-11-13; the full 20-test controller suite passed. |
 
 ## B. Range and musical-context accuracy
 

@@ -41,6 +41,10 @@ void NoteInputPreferencesModel::load()
         emit addAccidentalDotsArticulationsToNextNoteEnteredChanged(addAccidentalDotsArticulationsToNextNoteEntered());
     });
 
+    notationConfiguration()->tupletCommandsSelectedDurationAsChanged().onNotify(this, [this]() {
+        emit tupletCommandsSelectedDurationAsChanged(tupletCommandsSelectedDurationAs());
+    });
+
     notationConfiguration()->useNoteInputCursorInInputByDurationChanged().onNotify(this, [this]() {
         emit useNoteInputCursorInInputByDurationChanged(useNoteInputCursorInInputByDuration());
     });
@@ -116,8 +120,8 @@ QVariantList NoteInputPreferencesModel::noteInputMethods() const
     using Method = mu::notation::NoteInputMethod;
 
     std::vector<std::pair<muse::rcommand::Command, Method > > noteInputCommands {
-        { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, Method::BY_NOTE_NAME },
-        { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, Method::BY_DURATION },
+        { ToggleNoteInputByNameCommand::id, Method::BY_NOTE_NAME },
+        { ToggleNoteInputByDurationCommand::id, Method::BY_DURATION },
     };
 
     QVariantList methods;
@@ -135,6 +139,16 @@ QVariantList NoteInputPreferencesModel::noteInputMethods() const
     return methods;
 }
 
+QVariantList NoteInputPreferencesModel::tupletCommandsSelectedDurationAsOptions() const
+{
+    using SelectedDuration = mu::engraving::TupletSelectedDuration;
+
+    return {
+        QVariantMap { { "value", int(SelectedDuration::SUBDIVISION) }, { "text", muse::qtrc("preferences", "Subdivision") } },
+        QVariantMap { { "value", int(SelectedDuration::TUPLET_LENGTH) }, { "text", muse::qtrc("preferences", "Tuplet length") } },
+    };
+}
+
 int NoteInputPreferencesModel::defaultNoteInputMethod() const
 {
     return static_cast<int>(notationConfiguration()->defaultNoteInputMethod());
@@ -143,6 +157,11 @@ int NoteInputPreferencesModel::defaultNoteInputMethod() const
 bool NoteInputPreferencesModel::addAccidentalDotsArticulationsToNextNoteEntered() const
 {
     return notationConfiguration()->addAccidentalDotsArticulationsToNextNoteEntered();
+}
+
+int NoteInputPreferencesModel::tupletCommandsSelectedDurationAs() const
+{
+    return static_cast<int>(notationConfiguration()->tupletCommandsSelectedDurationAs());
 }
 
 bool NoteInputPreferencesModel::useNoteInputCursorInInputByDuration() const
@@ -241,6 +260,15 @@ void NoteInputPreferencesModel::setAddAccidentalDotsArticulationsToNextNoteEnter
     }
 
     notationConfiguration()->setAddAccidentalDotsArticulationsToNextNoteEntered(value);
+}
+
+void NoteInputPreferencesModel::setTupletCommandsSelectedDurationAs(int value)
+{
+    if (value == tupletCommandsSelectedDurationAs()) {
+        return;
+    }
+
+    notationConfiguration()->setTupletCommandsSelectedDurationAs(static_cast<mu::engraving::TupletSelectedDuration>(value));
 }
 
 void NoteInputPreferencesModel::setUseNoteInputCursorInInputByDuration(bool value)

@@ -326,11 +326,9 @@ const ElementStyle chordSymbolStyle {
 //   Harmony
 //---------------------------------------------------------
 
-Harmony::Harmony(EngravingObject* parent)
+Harmony::Harmony(DummyParentOr<Segment, FretDiagram> parent)
     : TextBase(ElementType::HARMONY, parent, TextStyleType::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    assert(!parent || parent->isSegment() || parent->isFretDiagram() || parent->isType(ElementType::DUMMY));
-
     m_rootCase   = NoteCaseType::CAPITAL;
     m_bassCase   = NoteCaseType::CAPITAL;
     m_harmonyType = HarmonyType::STANDARD;
@@ -1126,7 +1124,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
         offset = capo.fretPosition;
     }
 
-    Interval interval = st->part()->instrument(tick)->transpose();
+    Interval interval = originPart()->instrument(tick)->transpose();
     if (!style().styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }
@@ -1439,7 +1437,8 @@ bool Harmony::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
-        return true;
+        EngravingObject* parent = ownershipParent();
+        return parent && parent->isSegment();
     } else if (e->isSymbol() || e->isFSymbol()) {
         // symbols can be added in edit mode
         if (data.getData(this)) {
@@ -1458,9 +1457,10 @@ bool Harmony::acceptDrop(EditData& data) const
 EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (e->isFretDiagram()) {
+    EngravingObject* parent = ownershipParent();
+    if (e->isFretDiagram() && parent && parent->isSegment()) {
         FretDiagram* fd = toFretDiagram(e);
-        fd->setOwnershipParent(ownershipParent());
+        fd->setOwnershipParent(toSegment(parent));
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {

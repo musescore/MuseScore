@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "iglobalconfiguration.h"
 #include "project/iopenprojectscenario.h"
 
@@ -41,7 +41,7 @@ class MainToolBarModel : public QAbstractListModel, public muse::Contextable, pu
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
 

@@ -35,7 +35,7 @@ class ISelectInstrumentsScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~ISelectInstrumentsScenario() = default;
 
-    virtual muse::async::Promise<PartInstrumentListScoreOrder> selectInstruments() const = 0;
+    virtual muse::async::Promise<PartInstrumentListScoreOrder> selectInstruments(const ScoreOrder& currentOrder) const = 0;
     virtual muse::async::Promise<InstrumentTemplate> selectInstrument(
         const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };

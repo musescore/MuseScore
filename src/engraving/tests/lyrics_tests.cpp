@@ -42,11 +42,11 @@ TEST_F(Engraving_LyricsTests, PartialLyricsLineVerse)
 
     Measure* m2 = score->first()->nextMeasure();
 
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
 
     ChordRest* endCR = m2->lastChordRest(0);
 
-    EXPECT_TRUE(endCR);
+    ASSERT_TRUE(endCR);
 
     Lyrics* l1 = nullptr;
     Lyrics* l2 = nullptr;
@@ -60,12 +60,12 @@ TEST_F(Engraving_LyricsTests, PartialLyricsLineVerse)
         }
     }
 
-    EXPECT_TRUE(l1);
-    EXPECT_TRUE(l2);
+    ASSERT_TRUE(l1);
+    ASSERT_TRUE(l2);
 
     PartialLyricsLine* pll = findPrevPartialLyricsLineDash(l1);
 
-    EXPECT_TRUE(pll);
+    ASSERT_TRUE(pll);
     EXPECT_EQ(pll->verse(), 0);
 
     score->startCmd(TranslatableString::untranslatable("Lyrics tests"));

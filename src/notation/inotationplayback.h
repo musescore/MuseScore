@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include <optional>
+#include <string>
+
 #include "types/retval.h"
 #include "midi/miditypes.h"
 #include "audio/common/audiotypes.h"
@@ -55,6 +58,9 @@ public:
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
     virtual engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const = 0;
     virtual bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const = 0;
+
+    //! NOTE nullopt for an unknown track
+    virtual std::optional<std::string> trackName(const engraving::InstrumentTrackId& trackId) const = 0;
 
     virtual const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
 

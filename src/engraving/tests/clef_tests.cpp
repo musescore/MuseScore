@@ -48,7 +48,7 @@ class Engraving_ClefTests : public ::testing::Test
 TEST_F(Engraving_ClefTests, clef1)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-1.mscx", CLEF_DATA_DIR + u"clef-1-ref.mscx"));
     delete score;

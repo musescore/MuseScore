@@ -41,8 +41,6 @@
 #include "translation.h"
 #include "types/bytearray.h"
 
-#include "actions/actiontypes.h"
-
 #include "draw/types/color.h"
 #include "draw/types/pen.h"
 
@@ -75,7 +73,6 @@ using namespace muse::io;
 using namespace mu::palette;
 using namespace mu::engraving;
 using namespace muse::draw;
-using namespace muse::actions;
 
 PaletteWidget::PaletteWidget(QWidget* parent, bool setIocContext)
     : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
@@ -191,9 +188,9 @@ PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& n
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendActionIcon(mu::engraving::ActionIconType type, ActionCode code)
+PaletteCellPtr PaletteWidget::appendActionIcon(mu::engraving::ActionIconType type)
 {
-    PaletteCellPtr cell = m_palette->appendActionIcon(type, code);
+    PaletteCellPtr cell = m_palette->appendActionIcon(type);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
@@ -469,7 +466,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (!notation) {
         return;
     }
@@ -901,14 +898,6 @@ void PaletteWidget::dropEvent(QDropEvent* event)
             if (element) {
                 rw::RWRegister::reader()->readItem(element.get(), xml);
                 element->setTrack(0);
-
-                if (element->isActionIcon()) {
-                    ActionIcon* icon = toActionIcon(element.get());
-                    const muse::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
-                    if (actionItem.isValid()) {
-                        icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
-                    }
-                }
             }
         }
     }

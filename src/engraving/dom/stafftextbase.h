@@ -44,6 +44,7 @@ class StaffTextBase : public TextBase
 
 public:
     StaffTextBase(const ElementType& type, DummyParentOr<Segment> parent, TextStyleType tid, ElementFlags = ElementFlag::ON_STAFF);
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     void clear();
 

@@ -33,7 +33,7 @@ Rectangle {
     property var filesModel: null
     property var fileRequirements: []
 
-    signal selectMoreFilesRequested(var existingPaths)
+    signal selectMoreFilesRequested()
     signal filesDropped(var urls)
     signal removeLastFileRequested()
 
@@ -264,8 +264,8 @@ Rectangle {
                     visible: Boolean(maxCountReachedLabel.text)
 
                     //: %1 is the number of files currently selected, %n is the maximum allowed, e.g. "3/5 max files"
-                    text: root.filesModel.maxFileCount > 0 && root.filesModel.count > 1
-                          ? qsTrc("project/convert", "%1/%n file(s) max.", "", root.filesModel.maxFileCount).arg(root.filesModel.count)
+                    text: root.filesModel.convertLimits.maxFileCount > 0 && root.filesModel.count > 1
+                          ? qsTrc("project/convert", "%1/%n file(s) max.", "", root.filesModel.convertLimits.maxFileCount).arg(root.filesModel.count)
                           : ""
                     horizontalAlignment: Text.AlignLeft
                     color: ui.theme.fontSecondaryColor
@@ -327,13 +327,13 @@ Rectangle {
                         text: qsTrc("global", "Select more")
                         accentButton: true
 
-                        enabled: root.filesModel.maxFileCount <= 0 || root.filesModel.count < root.filesModel.maxFileCount
+                        enabled: root.filesModel.convertLimits.maxFileCount <= 0 || root.filesModel.count < root.filesModel.convertLimits.maxFileCount
 
                         navigation.panel: root.navigationPanel
                         navigation.order: 3
 
                         onClicked: {
-                            root.selectMoreFilesRequested(root.filesModel.paths)
+                            root.selectMoreFilesRequested()
                         }
                     }
                 }

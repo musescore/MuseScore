@@ -572,7 +572,7 @@
               <eid>dB_dB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
-              <duration>4/4</duration>
+              <duration>16/4</duration>
               </Rest>
             </voice>
           </Measure>

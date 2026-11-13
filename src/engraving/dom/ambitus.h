@@ -51,6 +51,7 @@ public:
     static constexpr Spatium LINEOFFSET_DEFAULT = 0.8_sp;               // the distance between notehead and line
 
     Ambitus* clone() const override { return new Ambitus(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     double mag() const override;
 

@@ -53,6 +53,16 @@ muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
     return {};
 }
 
+muse::audio::secs_t PlaybackControllerStub::playbackPosition() const
+{
+    return 0.0;
+}
+
+muse::async::Channel<muse::audio::secs_t> PlaybackControllerStub::playbackPositionChanged() const
+{
+    return {};
+}
+
 muse::Ret PlaybackControllerStub::togglePlay()
 {
     return muse::make_ok();
@@ -195,6 +205,16 @@ const PlaybackControllerStub::SoloMuteState& PlaybackControllerStub::trackSoloMu
 
 void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTrackId&, const SoloMuteState&)
 {
+}
+
+muse::audio::ControlParams PlaybackControllerStub::currentTrackControlParams(const engraving::InstrumentTrackId&) const
+{
+    return {};
+}
+
+muse::audio::ControlParams PlaybackControllerStub::currentMasterControlParams() const
+{
+    return {};
 }
 
 void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)

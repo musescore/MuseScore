@@ -23,8 +23,6 @@
 #pragma once
 
 #include <vector>
-#include <set>
-#include <functional>
 
 namespace mu::engraving {
 class EngravingItem;
@@ -40,8 +38,6 @@ public:
     static void alignItemsForSystem(const std::vector<EngravingItem*>& elements, const System* system);
     static void alignItemsGroup(const std::vector<EngravingItem*>& elements, const System* system);
     static void alignHopoLetters(const HammerOnPullOff* hopo, const System* system);
-
-    static void scanConnectedItems(EngravingItem* item, const System* system, std::function<void(EngravingItem*)> func);
 
 private:
     static void moveItemToY(EngravingItem* item, double y, const System* system);

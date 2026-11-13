@@ -23,6 +23,8 @@
 
 #include <gmock/gmock.h>
 
+#include <QUrl>
+
 #include "project/iconvertfiletoscorescenario.h"
 
 namespace mu::project {
@@ -38,14 +40,14 @@ public:
     MOCK_METHOD(void, convertFiles, (const muse::io::paths_t&), (override));
     MOCK_METHOD((muse::async::Channel<muse::Ret, WatchedScore>), convertFinished, (), (const, override));
 
+    MOCK_METHOD(muse::ValNt<UploadingScoreList>, uploadingScores, (), (const, override));
     MOCK_METHOD(muse::ValNt<WatchedScoreList>, watchedScores, (), (const, override));
-
     MOCK_METHOD(bool, isAwaitingReview, (int), (const, override));
 
+    MOCK_METHOD(void, cancelUpload, (int), (override));
     MOCK_METHOD(void, cancelConversion, (ConvertType, int), (override));
 
-    MOCK_METHOD((muse::async::Channel<PollingFailure>), pollingFailed, (), (const, override));
-
+    MOCK_METHOD((muse::async::Channel<PollingStatus>), pollingStatusChanged, (), (const, override));
     MOCK_METHOD(void, retryPolling, (), (override));
 };
 }

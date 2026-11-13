@@ -528,7 +528,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
     .Times(1)
-    .WillOnce([newContext] { newContext.element->setSelected(true); });
+    .WillOnce([newContext] {
+        newContext.element->setSelected(true);
+        return muse::make_ok();
+    });
 
     //! [THEN] seek to the element before playing it
     {
@@ -754,7 +757,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
     .Times(1)
-    .WillOnce([newContext] { newContext.element->setSelected(true); });
+    .WillOnce([newContext] {
+        newContext.element->setSelected(true);
+        return muse::make_ok();
+    });
 
     //! [GIVEN] There is a range selection with two measures
     ON_CALL(*m_selection, isRange())
@@ -841,13 +847,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     EXPECT_CALL(*m_selection, elements())
     .WillRepeatedly(ReturnRef(selectElements));
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     //! Note: the context menu itself is shown by AbstractNotationPaintView::event
-#else
-    //! [THEN] Show context menu for measure
-    EXPECT_CALL(m_view, showContextMenu(contextMenuOnMeasureContext.element->type(), _))
-    .Times(1);
-#endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
@@ -887,11 +887,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_interaction, setHitElementContext(contextMenuOnMeasureContext))
     .WillOnce(Return());
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
-#endif
-    ;
-
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillRepeatedly(Return(false));
@@ -909,7 +904,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 
     std::vector<EngravingItem*> contextMenuSelectElements = { contextMenuOnMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(contextMenuSelectElements, _, _))
-    .WillOnce(Return());
+    .WillOnce(Return(muse::make_ok()));
 
     EXPECT_CALL(*m_selection, elements())
     .WillOnce(ReturnRef(selectElements))
@@ -929,13 +924,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_playbackController, seekElement(contextMenuOnMeasureContext.element, FLUSH_SOUND))
     .WillOnce(Return());
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     //! Note: the context menu itself is shown by AbstractNotationPaintView::event
-#else
-    //! [THEN] Show context menu for new measure
-    EXPECT_CALL(m_view, showContextMenu(contextMenuOnMeasureContext.element->type(), _))
-    .Times(1);
-#endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));

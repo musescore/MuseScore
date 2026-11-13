@@ -105,7 +105,10 @@ static void checkPitchBendInterval(EventsHolder& events, int startTick, int endT
 static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_BEND_TESTS_DIR + fileName);
-    EXPECT_TRUE(score);
+    if (!score) {
+        ADD_FAILURE() << "score is null";
+        return {};
+    }
 
     EventsHolder events;
     CompatMidiRendererInternal::Context ctx;

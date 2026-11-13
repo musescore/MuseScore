@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "iappshellconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
@@ -46,8 +46,8 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);

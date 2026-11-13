@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <QCursor>
 #include <QGuiApplication>
 
 #include "preferencesmodel.h"
@@ -33,96 +34,27 @@ using namespace mu::preferences;
 using namespace muse::ui;
 
 PreferencesModel::PreferencesModel(QObject* parent)
-    : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
+    : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
 PreferencesModel::~PreferencesModel()
 {
     cancel();
-
-    delete m_rootItem;
-    m_rootItem = nullptr;
-}
-
-QModelIndex PreferencesModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if (!hasIndex(row, column, parent)) {
-        return QModelIndex();
-    }
-
-    PreferencePageItem* parentItem = nullptr;
-
-    if (!parent.isValid()) {
-        parentItem = m_rootItem;
-    } else {
-        parentItem = modelIndexToItem(parent);
-    }
-
-    if (!parentItem) {
-        return QModelIndex();
-    }
-
-    PreferencePageItem* childItem = parentItem->childAtRow(row);
-
-    if (childItem) {
-        return createIndex(row, column, childItem);
-    }
-
-    return QModelIndex();
-}
-
-QModelIndex PreferencesModel::parent(const QModelIndex& child) const
-{
-    PreferencePageItem* childItem = modelIndexToItem(child);
-    if (!childItem) {
-        return QModelIndex();
-    }
-
-    PreferencePageItem* parentItem = qobject_cast<PreferencePageItem*>(childItem->parentItem());
-
-    if (parentItem == m_rootItem) {
-        return QModelIndex();
-    }
-
-    return createIndex(parentItem->row(), 0, parentItem);
 }
 
 int PreferencesModel::rowCount(const QModelIndex& parent) const
 {
-    PreferencePageItem* parentItem = nullptr;
-
-    if (!parent.isValid()) {
-        parentItem = m_rootItem;
-    } else {
-        parentItem = modelIndexToItem(parent);
-    }
-
-    if (!parentItem) {
-        return 0;
-    }
-
-    return parentItem->childCount();
-}
-
-int PreferencesModel::columnCount(const QModelIndex&) const
-{
-    return 1;
+    return parent.isValid() ? 0 : m_items.size();
 }
 
 QVariant PreferencesModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() && role != ItemRole) {
+    if (!index.isValid() || index.row() >= m_items.size() || role != ItemRole) {
         return QVariant();
     }
 
-    PreferencePageItem* item = modelIndexToItem(index);
-
-    if (!item) {
-        return QVariant();
-    }
-
-    return QVariant::fromValue(qobject_cast<QObject*>(item));
+    return QVariant::fromValue(qobject_cast<QObject*>(m_items.at(index.row())));
 }
 
 QHash<int, QByteArray> PreferencesModel::roleNames() const
@@ -152,9 +84,9 @@ void PreferencesModel::load(const QString& currentPageId)
         }
     }
 
-    m_rootItem = new PreferencePageItem();
+    qDeleteAll(m_items);
 
-    QList<PreferencePageItem*> items {
+    m_items = {
         makeItem("general", QT_TRANSLATE_NOOP("preferences", "General"), IconCode::Code::SETTINGS_COG,
                  "Preferences/GeneralPreferencesPage.qml"),
 
@@ -203,10 +135,6 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/BraillePreferencesPage.qml")
     };
 
-    for (PreferencePageItem* item: items) {
-        m_rootItem->appendChild(item);
-    }
-
     endResetModel();
 }
 
@@ -233,9 +161,15 @@ void PreferencesModel::askForConfirmationOfPreferencesReset()
 
 void PreferencesModel::resetFactorySettings()
 {
-    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     QGuiApplication::processEvents();
+
+    commandShortcutsRegister()->resetShortcuts();
+#ifdef MUSE_MODULE_MIDIREMOTE
+    midiRemote()->resetMidiMappings();
+#endif
+
+    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
 
     // Unreset the "First Launch Completed" setting so the first-time launch wizard does not appear.
@@ -255,53 +189,27 @@ void PreferencesModel::cancel()
     configuration()->rollbackSettings();
 }
 
-void PreferencesModel::selectRow(const QModelIndex& rowIndex)
+void PreferencesModel::selectRow(int row)
 {
-    QModelIndex parentItemIndex = parent(rowIndex);
-    PreferencePageItem* parentItem = nullptr;
-    if (!parentItemIndex.isValid()) {
-        parentItem = m_rootItem;
-    } else {
-        parentItem = modelIndexToItem(parentItemIndex);
-    }
-
-    QList<PreferencePageItem*> children = parentItem->childrenItems();
-    for (PreferencePageItem* child: children) {
-        child->setExpanded(false);
-    }
-
-    PreferencePageItem* selectedItem = parentItem->childAtRow(rowIndex.row());
-    if (!selectedItem) {
+    if (row < 0 || row >= m_items.size()) {
         return;
     }
 
-    selectedItem->setExpanded(true);
-    setCurrentPageId(selectedItem->id());
+    setCurrentPageId(m_items.at(row)->id());
 }
 
 QVariantList PreferencesModel::availablePages() const
 {
-    std::function<QVariantList(const PreferencePageItem*)> childPages;
-    childPages = [&childPages](const PreferencePageItem* item) {
-        QVariantList result;
+    QVariantList result;
 
-        for (int i = 0; i < item->childCount(); ++i) {
-            PreferencePageItem* child = item->childAtRow(i);
-            QVariantMap childObj;
-            childObj["id"] = child->id();
-            childObj["path"] = child->path();
-            result << childObj;
+    for (const PreferencePageItem* item : m_items) {
+        QVariantMap page;
+        page["id"] = item->id();
+        page["path"] = item->path();
+        result << page;
+    }
 
-            QVariantList pages = childPages(child);
-            for (const QVariant& page: pages) {
-                result << page;
-            }
-        }
-
-        return result;
-    };
-
-    return childPages(m_rootItem);
+    return result;
 }
 
 void PreferencesModel::setCurrentPageId(QString currentPageId)
@@ -316,28 +224,13 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
 }
 
 PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon,
-                                               const QString& path,
-                                               const QList<PreferencePageItem*>& children) const
+                                               const QString& path)
 {
-    PreferencePageItem* item = new PreferencePageItem();
+    PreferencePageItem* item = new PreferencePageItem(this);
     item->setId(id);
     item->setTitle(title);
     item->setIcon(icon);
     item->setPath(path);
-    item->setExpanded(id == currentPageId());
-
-    for (PreferencePageItem* child: children) {
-        item->appendChild(child);
-
-        if (child->id() == currentPageId()) {
-            item->setExpanded(true);
-        }
-    }
 
     return item;
-}
-
-PreferencePageItem* PreferencesModel::modelIndexToItem(const QModelIndex& index) const
-{
-    return static_cast<PreferencePageItem*>(index.internalPointer());
 }

@@ -28,7 +28,6 @@
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
 #include "internal/engravingpluginapihelper.h"
-#include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 #include "internal/openprojectscenario.h"
 #include "internal/saveprojectscenario.h"
@@ -40,7 +39,8 @@
 #include "internal/projectautosaver.h"
 #include "internal/convertfiletoscoreservice.h"
 #include "internal/convertfiletoscorescenario.h"
-
+#include "internal/deletecloudscorescenario.h"
+#include "internal/projectsession.h"
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 #include "internal/projectcommandsregister.h"
@@ -55,7 +55,6 @@
 #endif
 
 #include "rcommand/icommandsstate.h"
-#include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"
 
 using namespace mu::project;
@@ -97,6 +96,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
         ir->registerQmlUri(Uri("musescore://project/convert/selectfiles"), "MuseScore.Project", "ConvertFileToScoreDialog");
         ir->registerQmlUri(Uri("musescore://project/convert/processing"), "MuseScore.Project", "ConvertFileProcessingDialog");
+        ir->registerQmlUri(Uri("musescore://project/deletecloudscore"), "MuseScore.Project", "DeleteCloudScoreDialog");
     }
 
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
@@ -163,6 +163,8 @@ void ProjectContext::registerExports()
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
     ioc()->registerExport<IConvertFileToScoreService>(mname, m_convertFileToScoreService);
     ioc()->registerExport<IConvertFileToScoreScenario>(mname, m_convertFileToScoreScenario);
+    ioc()->registerExport<IDeleteCloudScoreScenario>(mname, new DeleteCloudScoreScenario(iocContext()));
+    ioc()->registerExport<IProjectSession>(mname, new ProjectSession());
 }
 
 void ProjectContext::resolveImports()
@@ -170,11 +172,6 @@ void ProjectContext::resolveImports()
     auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
     if (cs) {
         cs->reg(std::make_shared<ProjectCommandsState>(iocContext()));
-    }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
-    if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
     }
 }
 

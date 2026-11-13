@@ -174,6 +174,7 @@ FocusableItem {
                 visible: root.model ? !(root.model.isCrossStaffMoveAvailable) : true
 
                 titleText: qsTrc("propertiespanel", "Beam direction")
+                navigationName: "BeamDirection"
                 propertyItem: root.model ? root.model.stemDirection : null
 
                 navigationPanel: root.navigationPanel

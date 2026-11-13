@@ -84,6 +84,8 @@ public:
 
     MOCK_METHOD(bool, thinNoteInputCursor, (), (const, override));
 
+    MOCK_METHOD(bool, enableJianpu, (), (const, override));
+
     MOCK_METHOD(QColor, selectionColor, (engraving::voice_idx_t), (const, override));
     MOCK_METHOD(QColor, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
@@ -108,9 +110,9 @@ public:
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
 
-    MOCK_METHOD(engraving::AutomationType, currentAutomationType, (), (const, override));
-    MOCK_METHOD(void, setCurrentAutomationType, (engraving::AutomationType), (override));
-    MOCK_METHOD(muse::async::Notification, currentAutomationTypeChanged, (), (const, override));
+    MOCK_METHOD(AutomationLane, currentAutomationLane, (), (const, override));
+    MOCK_METHOD(void, setCurrentAutomationLane, (AutomationLane), (override));
+    MOCK_METHOD(muse::async::Notification, currentAutomationLaneChanged, (), (const, override));
 
     MOCK_METHOD(int, mouseZoomPrecision, (), (const, override));
     MOCK_METHOD(void, setMouseZoomPrecision, (int), (override));
@@ -138,6 +140,10 @@ public:
     MOCK_METHOD(bool, addAccidentalDotsArticulationsToNextNoteEntered, (), (const, override));
     MOCK_METHOD(void, setAddAccidentalDotsArticulationsToNextNoteEntered, (bool), (override));
     MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (), (const, override));
+
+    MOCK_METHOD(engraving::TupletSelectedDuration, tupletCommandsSelectedDurationAs, (), (const, override));
+    MOCK_METHOD(void, setTupletCommandsSelectedDurationAs, (engraving::TupletSelectedDuration), (override));
+    MOCK_METHOD(muse::async::Notification, tupletCommandsSelectedDurationAsChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, userMusicFontsPath, (), (const, override));
     MOCK_METHOD(void, setUserMusicFontsPath, (const muse::io::path_t&), (override));

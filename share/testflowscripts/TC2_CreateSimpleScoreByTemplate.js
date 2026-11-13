@@ -20,16 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Score = require("steps/Score.js")
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC2: Create Score by Template",
     description: "Just create a simple score by template, a few notes, play it and save the project",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -44,30 +47,31 @@ var testCase = {
         }},
         {name: "Turn on note input", func: function() {
             NoteInput.chooseDefaultMode()
-            NoteInput.chooseNoteDuration("pad-note-8")
+            NoteInput.chooseNoteDuration(Commands.SET_DURATION_EIGHTH_COMMAND)
         }},
         {name: "Put notes", func: function() {
-            NoteInput.putNote("note-c")
-            NoteInput.putNote("note-d")
-            NoteInput.putNote("note-e")
-            NoteInput.putNote("note-f")
-            NoteInput.putNote("note-g")
-            NoteInput.putNote("note-a")
-            NoteInput.putNote("note-b")
+            NoteInput.putNote(Commands.ENTER_NOTE_C_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_D_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_E_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_F_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_G_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_A_COMMAND)
+            NoteInput.putNote(Commands.ENTER_NOTE_B_COMMAND)
         }},
         {name: "Play", func: function() {
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            Score.firstElement()
+            api.dispatcher.dispatch(Commands.PLAY_COMMAND)
         }},
         {name: "Stop", func: function() {
             // wait interval + 5 sec
             api.testflow.sleep(5000)
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            api.dispatcher.dispatch(Commands.PAUSE_COMMAND)
         }},
         {name: "Save", func: function() {
             api.testflow.saveProject("TC2_CreateSimpleScoreByTemplate.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             Home.goToHome()

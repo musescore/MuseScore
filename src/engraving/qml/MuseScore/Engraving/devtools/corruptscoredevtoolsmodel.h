@@ -26,7 +26,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::engraving {
 class CorruptScoreDevToolsModel : public QObject, public muse::Contextable
@@ -35,7 +35,7 @@ class CorruptScoreDevToolsModel : public QObject, public muse::Contextable
 
     QML_ELEMENT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit CorruptScoreDevToolsModel(QObject* parent = nullptr);

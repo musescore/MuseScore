@@ -54,6 +54,7 @@ PropertyView {
         currentValue: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value : undefined
 
         navigationPanel: root.navigationPanel
+        navigationNamePrefix: root.navigationName
         navigationRowStart: root.navigationRowStart
         accessibleName: root.accessibleName
 

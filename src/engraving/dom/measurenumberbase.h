@@ -38,6 +38,7 @@ class MeasureNumberBase : public TextBase
 public:
     MeasureNumberBase(const ElementType& type, DummyParentOr<Measure> parent, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
+    void setOwnershipParent(DummyParentOr<Measure> parent) { EngravingItem::setOwnershipParent(parent); }
 
     Measure* measure() const { return toMeasure(ownershipParent()); }
 

@@ -21,6 +21,9 @@
  */
 
 #include "alignmentlayout.h"
+
+#include <set>
+
 #include "systemlayout.h"
 
 #include "dom/dynamic.h"
@@ -117,8 +120,8 @@ void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<Engravi
             continue;
         }
         firstItem = true;
-        scanConnectedItems(item, system, computeOutermostY);
-        scanConnectedItems(item, system, moveElementsToOutermostY);
+        item->ldata()->scanConnectedItemsInSnappingChain(system, computeOutermostY);
+        item->ldata()->scanConnectedItemsInSnappingChain(system, moveElementsToOutermostY);
     }
 }
 
@@ -212,23 +215,6 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
         break;
     }
     return curY;
-}
-
-void AlignmentLayout::scanConnectedItems(EngravingItem* item, const System* system, std::function<void(EngravingItem*)> func)
-{
-    func(item);
-
-    EngravingItem* snappedBefore = item->ldata()->itemSnappedBefore();
-    while (snappedBefore && snappedBefore->findAncestor(ElementType::SYSTEM) == system) {
-        func(snappedBefore);
-        snappedBefore = snappedBefore->ldata()->itemSnappedBefore();
-    }
-
-    EngravingItem* snappedAfter = item->ldata()->itemSnappedAfter();
-    while (snappedAfter && snappedAfter->findAncestor(ElementType::SYSTEM) == system) {
-        func(snappedAfter);
-        snappedAfter = snappedAfter->ldata()->itemSnappedAfter();
-    }
 }
 
 bool AlignmentLayout::isAbove(const EngravingItem* item)

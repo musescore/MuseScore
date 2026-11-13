@@ -120,9 +120,7 @@ void PartialTiePopupModel::toggleItemChecked(const QString& id)
         if (item->id() != id) {
             continue;
         }
-        UiActionState state = item->state();
-        state.checked = !state.checked;
-        item->setState(state);
+        item->setChecked(!item->checked());
         break;
     }
 
@@ -190,16 +188,9 @@ muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving
 {
     MenuItem* item = new MenuItem(this);
     item->setId(jumpPoint->id());
-
-    UiAction action;
-    action.title = jumpPoint->menuTitle();
-    action.checkable = Checkable::Yes;
-    item->setAction(action);
-
-    UiActionState state;
-    state.enabled = true;
-    state.checked = jumpPoint->active();
-    item->setState(state);
+    item->setTitle(jumpPoint->menuTitle());
+    item->setCheckable(true);
+    item->setChecked(jumpPoint->active());
 
     return item;
 }

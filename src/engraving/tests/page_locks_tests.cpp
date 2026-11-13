@@ -42,7 +42,7 @@ class Engraving_PageLocksTests : public ::testing::Test
 TEST_F(Engraving_PageLocksTests, readLocksFromFile)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     std::vector<const RangeLock*> locks = score->pageLocks()->allLocks();
     EXPECT_FALSE(locks.empty());
@@ -69,7 +69,7 @@ TEST_F(Engraving_PageLocksTests, readLocksFromFile)
 TEST_F(Engraving_PageLocksTests, lockMeasuresPerPage)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     const RangeLocks* pagelocks = score->pageLocks();
     std::vector<const RangeLock*> allLocks = pagelocks->allLocks();
@@ -123,12 +123,12 @@ TEST_F(Engraving_PageLocksTests, lockMeasuresPerPage)
 TEST_F(Engraving_PageLocksTests, makeIntoPage)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
-    MeasureBase* thirdMeasure = score->first()->next()->next();
-    EXPECT_TRUE(thirdMeasure);
-    MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
-    EXPECT_TRUE(sixthMeasure);
+    MeasureBase* thirdMeasure = score->measure(2);
+    ASSERT_TRUE(thirdMeasure);
+    MeasureBase* sixthMeasure = score->measure(5);
+    ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
@@ -149,12 +149,12 @@ TEST_F(Engraving_PageLocksTests, makeIntoPage)
 TEST_F(Engraving_PageLocksTests, moveToPreviousNext)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
-    MeasureBase* thirdMeasure = score->first()->next()->next();
-    EXPECT_TRUE(thirdMeasure);
-    MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
-    EXPECT_TRUE(sixthMeasure);
+    MeasureBase* thirdMeasure = score->measure(2);
+    ASSERT_TRUE(thirdMeasure);
+    MeasureBase* sixthMeasure = score->measure(5);
+    ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
@@ -178,7 +178,7 @@ TEST_F(Engraving_PageLocksTests, moveToPreviousNext)
 TEST_F(Engraving_PageLocksTests, togglePageLock)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EXPECT_TRUE(score->pages().front()->isLocked());
 
@@ -246,7 +246,7 @@ TEST_F(Engraving_PageLocksTests, removePageLockOnExpandMMRest)
 TEST_F(Engraving_PageLocksTests, lockSystemAtStartOfPageLock)
 {
     MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // The second page lock, and the first two measures in it
     std::vector<const RangeLock*> pageLocks = score->pageLocks()->allLocks();

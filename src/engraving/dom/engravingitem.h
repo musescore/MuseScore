@@ -340,7 +340,9 @@ public:
     bool hasStaff() const;
     const StaffType* staffType() const;
     bool onTabStaff() const;
+    bool onJianpuStaff() const;
     Part* part() const;
+    Part* originPart() const; // Delegates to an origin part for items in shared parts
 
     virtual void add(EngravingItem*);
     virtual void remove(EngravingItem*);
@@ -600,6 +602,7 @@ public:
         void disconnectSnappedItems() { disconnectItemSnappedBefore(); disconnectItemSnappedAfter(); }
         EngravingItem* itemSnappedBefore() const { return m_itemSnappedBefore; }
         EngravingItem* itemSnappedAfter() const { return m_itemSnappedAfter; }
+        void scanConnectedItemsInSnappingChain(const System* system, const std::function<void(EngravingItem*)>& func) const;
 
         void dump(std::stringstream& ss) const;
 

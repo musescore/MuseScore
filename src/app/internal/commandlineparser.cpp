@@ -27,6 +27,11 @@
 #include "global/internal/baseapplication.h"
 
 #include "app_config.h"
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/testflowcmdline.h"
+#endif
 
 #include "log.h"
 
@@ -93,6 +98,10 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
+    m_parser.addOption(QCommandLineOption("audio-output-disabled",
+                                          "Do not use an audio device, the audio is discarded: true|false", "value"));
+    m_parser.addOption(QCommandLineOption("user-data-dir",
+                                          "Use the given directory for all user data (settings, logs, session, scores, ...)", "dir"));
     m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
     m_parser.addOption(QCommandLineOption({ "P", "export-score-parts" }, "Use with '-o <file>.pdf', export score and parts"));
     m_parser.addOption(QCommandLineOption({ "f", "force" },
@@ -173,11 +182,9 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("diagnostic-drawdiff-to-png", "Convert draw diff to png"));
 
     // Testflow
-    m_parser.addOption(QCommandLineOption("test-case", "Run test case by name or file", "nameOrFile"));
-    m_parser.addOption(QCommandLineOption("test-case-context", "Set test case context by name or file", "nameOrFile"));
-    m_parser.addOption(QCommandLineOption("test-case-context-value", "Set test case context value", "value"));
-    m_parser.addOption(QCommandLineOption("test-case-func", "Call test case function", "name"));
-    m_parser.addOption(QCommandLineOption("test-case-func-args", "Call test case function args", "args"));
+#ifdef MUSE_MODULE_TESTFLOW
+    muse::testflow::addCmdOptions(m_parser);
+#endif
 
     // Audio plugins
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
@@ -249,6 +256,14 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("d")) {
         m_options->global.loggerLevel = logger::Level::Debug;
+    }
+
+    if (m_parser.isSet("audio-output-disabled")) {
+        m_options->audio.outputDisabled = m_parser.value("audio-output-disabled") == "true";
+    }
+
+    if (m_parser.isSet("user-data-dir")) {
+        m_options->global.userDataDir = QDir(m_parser.value("user-data-dir")).absolutePath();
     }
 
     if (m_parser.isSet("D")) {
@@ -523,26 +538,9 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     // Testflow
-    if (m_parser.isSet("test-case")) {
-        m_options->runMode = IApplication::RunMode::ConsoleApp;
-        m_options->testflow.testCaseNameOrFile = fromUserInputPath(m_parser.value("test-case"));
-    }
-
-    if (m_parser.isSet("test-case-context")) {
-        m_options->testflow.testCaseContextNameOrFile = fromUserInputPath(m_parser.value("test-case-context"));
-    }
-
-    if (m_parser.isSet("test-case-context-value")) {
-        m_options->testflow.testCaseContextValue = m_parser.value("test-case-context-value");
-    }
-
-    if (m_parser.isSet("test-case-func")) {
-        m_options->testflow.testCaseFunc = m_parser.value("test-case-func");
-    }
-
-    if (m_parser.isSet("test-case-func-args")) {
-        m_options->testflow.testCaseFuncArgs = m_parser.value("test-case-func-args");
-    }
+#ifdef MUSE_MODULE_TESTFLOW
+    m_options->testflow = muse::testflow::parseCmdOptions(m_parser, *m_options);
+#endif
 
     // Startup
     if (m_options->runMode == IApplication::RunMode::GuiApp) {

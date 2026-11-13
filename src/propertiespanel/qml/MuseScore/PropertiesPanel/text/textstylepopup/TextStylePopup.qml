@@ -422,7 +422,6 @@ AbstractElementPopup {
 
                 icon: IconCode.FLAT
                 text: qsTrc("propertiespanel", "Add symbols")
-                maximumLineCount: 2
 
                 visible: textStyleModel.textSettingsModel.isSpecialCharactersInsertionAvailable
 

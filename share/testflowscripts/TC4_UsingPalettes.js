@@ -20,18 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("steps/Navigation.js")
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Palette = require("steps/Palette.js")
 var Score = require("steps/Score.js")
 var Home = require("steps/Home.js")
+var Project = require("steps/Project.js")
+var Commands = require("steps/Commands.js")
 
 var testCase = {
     name: "TC4: Using palettes",
     description: "Let's check the functionality of the palettes",
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
+            Project.closeIfOpened()
             Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
@@ -46,7 +49,7 @@ var testCase = {
         }},
         {name: "Change Clefs", skip: false, func: function() {
             //! NOTE First, we need to select the current Clef
-            api.navigation.goToControl("NotationView", "ScoreView", "Score")
+            Navigation.goToControl("NotationView", "ScoreView", "Score")
             Score.firstElement()
             api.shortcuts.activate("Alt+Right") // select Clef
             seeChanges()
@@ -58,7 +61,7 @@ var testCase = {
         }},
         {name: "Change Key signatures", skip: false, func: function() {
             //! NOTE To change Key sig, we need to select the first Chord on score
-            api.navigation.goToControl("NotationView", "ScoreView", "Score")
+            Navigation.goToControl("NotationView", "ScoreView", "Score")
             api.shortcuts.activate("Alt+Right") // select Time sig
             api.shortcuts.activate("Alt+Right") // select Rest
 
@@ -122,9 +125,9 @@ var testCase = {
         {name: "Add Arpeggios", skip: false, func: function() {
             Score.nextChord()
 
-            Palette.togglePalette("Arpeggios & glissandi") // open
+            Palette.togglePalette("Arpeggios & glissandos") // open
             applyArpeggios(6)
-            Palette.togglePalette("Arpeggios & glissandi") // close
+            Palette.togglePalette("Arpeggios & glissandos") // close
         }},
         {name: "Add Ornaments", skip: false, func: function() {
             Score.nextChord()
@@ -138,7 +141,7 @@ var testCase = {
             api.testflow.saveProject("TC4_UsingPalettes.mscz")
         }},
         {name: "Close", func: function() {
-            api.dispatcher.dispatch("file-close")
+            api.dispatcher.dispatch(Commands.PROJECT_CLOSE_COMMAND)
         }},
         {name: "Home", func: function() {
             Home.goToHome()

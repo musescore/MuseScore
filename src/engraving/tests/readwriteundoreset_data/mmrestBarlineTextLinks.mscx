@@ -116,6 +116,11 @@
       <Measure>
         <eid>F_F</eid>
         <voice>
+          <TimeSig>
+            <eid>G_G</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <eid>I_I</eid>
             <durationType>measure</durationType>
@@ -132,11 +137,6 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <TimeSig>
-            <eid>G_G</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <StaffText>
             <eid>H_H</eid>
             <offset x="-12.5239" y="-3.69242"/>

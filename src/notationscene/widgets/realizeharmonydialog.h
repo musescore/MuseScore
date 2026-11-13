@@ -28,7 +28,7 @@
 #include "ui_realizeharmonydialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 namespace mu::engraving {
 class Harmony;
@@ -39,7 +39,7 @@ class RealizeHarmonyDialog : public muse::ui::WidgetDialog, private Ui::RealizeH
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     RealizeHarmonyDialog(QWidget* parent = nullptr);

@@ -164,7 +164,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             for (Part* p : ctx.dom().parts()) {
                 if (p->isSharedPart()) {
                     SharedPart* sp = toSharedPart(p);
-                    prevMeasureState.sharedTrackMaps[sp] = sp->trackMapAtTick(ctx.mutState().curMeasure()->tick());
+                    prevMeasureState.staveSharingStates[sp] = sp->exactStaveSharingStateAtTick(ctx.mutState().curMeasure()->tick());
                 }
             }
 
@@ -241,10 +241,17 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 system->removeLastMeasure();
                 ctx.mutState().curMeasure()->setSystem(oldSystem);
             }
+            // re-align voice offsets for the evicted measures' real system, in case it never gets rebuilt in this pass
+            for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                ChordLayout::layoutVoiceOffsets(oldSystem, staffIdx, ctx);
+            }
 
             if (sharedTrackMapChanged) {
                 // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
-                StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx);
+                // If this causes another change to the track map, relayout measures within the system
+                if (StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx)) {
+                    StaveSharingLayout::relayoutMeasuresOnTrackMapChanged(system, ctx);
+                }
             }
 
             break;
@@ -469,6 +476,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
+    // re-align voice offsets now that the system's final measure set is known
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        ChordLayout::layoutVoiceOffsets(system, staffIdx, ctx);
+    }
+
     layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
 
@@ -534,7 +546,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setTrack(0);
     system->addSystemLockIndicator(lockIndicator);
 
-    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutSystemIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 void SystemLayout::layoutPageLockIndicators(System* system)
@@ -1263,6 +1275,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         GraceNotesGroup& graceAfter = chord->graceNotesAfter();
         TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
         TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
+        if (TabDurationSymbol* symbol = chord->tabDur()) {
+            TLayout::layoutTabDurationSymbol2(symbol, symbol->mutldata());
+            ChordLayout::fillShape(chord, chord->mutldata());
+        }
     }
 
     for (ChordRest* cr : elementsToLayout.chordRests) {
@@ -1295,6 +1311,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         ChordLayout::layoutArticulations(c, ctx);
         ChordLayout::layoutArticulations2(c, ctx);
         ChordLayout::layoutChordBaseFingering(c, system, ctx);
+        ChordLayout::layoutJianpuDurationLines(c, ctx);
     }
 
     layoutTuplets(elementsToLayout.chordRests, ctx);
@@ -1435,6 +1452,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         TLayout::layoutItem(image, ctx);
     }
 
+    for (StaveSharingChange* ssc : elementsToLayout.staveSharingChanges) {
+        TLayout::layoutItem(ssc, ctx);
+    }
+
     layoutParenthesisAndBigTimeSigs(elementsToLayout);
 }
 
@@ -1572,6 +1593,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             case ElementType::STAFF_TEXT:
             case ElementType::STAVE_SHARING_LABEL:
                 elements.staffText.push_back(toStaffTextBase(item));
+                break;
+            case ElementType::STAVE_SHARING_CHANGE:
+                elements.staveSharingChanges.push_back(toStaveSharingChange(item));
                 break;
             case ElementType::INSTRUMENT_CHANGE:
                 elements.instrChanges.push_back(toInstrumentChange(item));
@@ -2674,6 +2698,13 @@ void SystemLayout::collectCenterableItems(const System* system, std::vector<Gap>
         Shape shape = shapeRelativeToStaff(item, systemX);
         shape.remove_if([](ShapeElement& shapeEl) { return shapeEl.ignoreForLayout(); });
 
+        // Items left out of the skyline (e.g. invisible) must not take up space in the gap
+        const bool takesSpace = item->isLyricsLineSegment() ? toLyricsLineSegment(item)->lyricsAddToSkyline()
+                                : item->addToSkyline();
+        if (!takesSpace) {
+            shape.clear();
+        }
+
         Gap& gap = gaps[gapIdx];
         if (above) {
             // Inside a gap, everything is expressed relative to its upper staff
@@ -2792,7 +2823,7 @@ bool SystemLayout::snapChainShouldBeCenteredBetweenStaves(EngravingItem* item, c
 {
     // Snapped items are centered as one, so if any of them cannot be centered, none of them can
     bool allCenterable = true;
-    AlignmentLayout::scanConnectedItems(item, system, [&allCenterable, system](EngravingItem* chainItem) {
+    item->ldata()->scanConnectedItemsInSnappingChain(system, [&allCenterable, system](EngravingItem* chainItem) {
         allCenterable = allCenterable && elementShouldBeCenteredBetweenStaves(chainItem, system, chainItem->placeAbove());
     });
 
@@ -2961,8 +2992,9 @@ void SystemLayout::centerItemsInGap(const Gap& gap, const System* system, double
                 canCenterGroup = false;
 
                 // Snapped items stay together:
-                AlignmentLayout::scanConnectedItems(gapItem.item, system,
-                                                    [&movableItems](EngravingItem* chainItem) { movableItems.erase(chainItem); });
+                gapItem.item->ldata()->scanConnectedItemsInSnappingChain(system, [&movableItems](EngravingItem* chainItem) {
+                    movableItems.erase(chainItem);
+                });
 
                 // A lyrics verse stays together:
                 if (gapItem.isLyrics) {
@@ -3189,18 +3221,24 @@ void SystemLayout::MeasureState::clear()
     measurePos = 0.0;
     elementPositions.clear();
     elementWidths.clear();
-    sharedTrackMaps.clear();
+    staveSharingStates.clear();
 }
 
 void SystemLayout::MeasureState::restoreMeasure(LayoutContext& ctx)
 {
     bool mapChanged = false;
     Fraction tick = measure->tick();
-    for (auto& [sharedPart, sharedTrackMap] : sharedTrackMaps) {
-        if (sharedPart->trackMapAtTick(tick) != sharedTrackMap) {
-            sharedPart->setTrackMapAtTick(sharedTrackMap, tick);
-            mapChanged = true;
+    for (auto& [sharedPart, savedState] : staveSharingStates) {
+        std::optional<StaveSharingState> curState = sharedPart->exactStaveSharingStateAtTick(tick);
+        if (curState == savedState) {
+            continue;
         }
+        if (savedState) {
+            sharedPart->setStaveSharingStateAtTick(*savedState, tick);
+        } else {
+            sharedPart->removeStaveSharingStateAtTick(tick);
+        }
+        mapChanged = true;
     }
     if (mapChanged) {
         StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(measure, ctx);

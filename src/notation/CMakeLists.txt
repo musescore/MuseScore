@@ -50,6 +50,7 @@ target_sources(notation PRIVATE
     iinstrumentsrepository.h
 
     notationtypes.h
+    types/automationlane.h
     types/instrumentstypes.h
     types/loopboundaries.h
     types/noteinputtypes.h
@@ -118,6 +119,7 @@ target_sources(notation PRIVATE
     internal/searchcommandsparser.cpp
     internal/searchcommandsparser.h
 
+    utilities/offsetutilities.h
     utilities/scorerangeutilities.cpp
     utilities/scorerangeutilities.h
 )

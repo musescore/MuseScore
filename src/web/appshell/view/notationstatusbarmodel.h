@@ -36,7 +36,7 @@
 #include "ui/iuiactionsregister.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "global/iglobalconfiguration.h"
 
@@ -57,11 +57,11 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     Q_PROPERTY(int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
 
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
-    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);

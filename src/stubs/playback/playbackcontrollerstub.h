@@ -37,6 +37,9 @@ public:
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
     muse::Ret playFromSelection(bool showErrors = true) override;
@@ -76,6 +79,9 @@ public:
 
     const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
+
+    muse::audio::ControlParams currentTrackControlParams(const engraving::InstrumentTrackId& trackId) const override;
+    muse::audio::ControlParams currentMasterControlParams() const override;
 
     void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;

@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
@@ -37,6 +37,7 @@
 #include "engraving/style/textstyle.h"
 
 #include "inotationsceneconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 class QQuickView;
 
@@ -49,9 +50,10 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
 
     muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
+    muse::GlobalInject<mu::notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::ui::IUiEngine> uiEngine = { this };
     muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };

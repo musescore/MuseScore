@@ -30,7 +30,7 @@
 #include "project/iprojectconfiguration.h"
 #include "project/iprojectcreator.h"
 #include "notation/notationtypes.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::project {
@@ -43,7 +43,7 @@ class NewScoreModel : public QObject, public muse::Contextable
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<IProjectCreator> notationCreator;
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

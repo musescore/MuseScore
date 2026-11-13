@@ -27,14 +27,16 @@
 #include "log.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
-#include "notation/inotationautomation.h"
 #include "notation/inotationplayback.h"
 
 #include "project/inotationproject.h"
 
+#include "vst/vstcommands.h"
+
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::vst;
 using namespace mu::project;
 
 static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = volume_dbfs_t::make(0.f);   // 100%
@@ -43,9 +45,6 @@ static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = volume_dbfs_t::make(-60.f); 
 static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
 static constexpr int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
-
-static const std::string VSTFX_EDITOR_ACTION("action://vst/fx_editor");
-static const std::string VSTI_EDITOR_ACTION("action://vst/instrument_editor");
 
 static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
@@ -543,25 +542,43 @@ void MixerChannelItem::setMuted(bool mute)
 
 mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
 {
-    project::INotationProjectPtr project = context()->currentProject();
+    project::INotationProjectPtr project = context()->project();
     return project ? project->masterNotation()->playback() : nullptr;
+}
+
+std::optional<notation::AutomationCurveKey> MixerChannelItem::automationCurveKey(notation::AutomationType type) const
+{
+    if (m_type == Type::Master) {
+        return notation::AutomationCurveKey::global(type);
+    }
+
+    if (m_instrumentTrackId.isValid()) {
+        return notation::AutomationCurveKey::instrument(type, m_instrumentTrackId);
+    }
+
+    return std::nullopt;
+}
+
+bool MixerChannelItem::hasAutomationCurve(notation::AutomationType type) const
+{
+    const std::optional<notation::AutomationCurveKey> key = automationCurveKey(type);
+    if (!key) {
+        return false;
+    }
+
+    const INotationProjectPtr project = context()->project();
+    if (!project) {
+        return false;
+    }
+
+    const notation::AutomationDataConstPtr automationData = project->masterNotation()->automation()->automationData();
+    return automationData && !automationData->curve(*key).empty();
 }
 
 void MixerChannelItem::updateHasAutomationFlags()
 {
-    bool hasVolumeAutomation = false;
-    bool hasBalanceAutomation = false;
-
-    INotationProjectPtr project = context()->currentProject();
-    const notation::AutomationDataConstPtr automationData
-        = (project && m_instrumentTrackId.isValid()) ? project->masterNotation()->automation()->automationData() : nullptr;
-
-    if (automationData) {
-        hasVolumeAutomation = !automationData->curve(
-            notation::AutomationCurveKey::instrument(notation::AutomationType::Volume, m_instrumentTrackId)).empty();
-        hasBalanceAutomation = !automationData->curve(
-            notation::AutomationCurveKey::instrument(notation::AutomationType::Pan, m_instrumentTrackId)).empty();
-    }
+    const bool hasVolumeAutomation = hasAutomationCurve(notation::AutomationType::Volume);
+    const bool hasBalanceAutomation = hasAutomationCurve(notation::AutomationType::Pan);
 
     if (m_hasVolumeAutomation != hasVolumeAutomation) {
         m_hasVolumeAutomation = hasVolumeAutomation;
@@ -663,7 +680,7 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
             return;
         }
 
-        actions::ActionQuery aq(VSTI_EDITOR_ACTION);
+        rcommand::CommandQuery aq(VST_OPEN_INSTRUMENT_EDITOR_COMMAND);
         aq.addParam(TRACK_ID_KEY, Val(m_trackId));
         aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
 
@@ -700,7 +717,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
             return;
         }
 
-        actions::ActionQuery aq(VSTFX_EDITOR_ACTION);
+        rcommand::CommandQuery aq(VST_OPEN_FX_EDITOR_COMMAND);
 
         aq.addParam(TRACK_ID_KEY, Val(m_trackId));
         aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
@@ -746,32 +763,32 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     return newItem;
 }
 
-void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const actions::ActionQuery& action)
+void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const rcommand::CommandQuery& command)
 {
-    if (item->editorAction() != action) {
-        if (item->editorAction().isValid()) {
+    if (item->editorCommand() != command) {
+        if (item->editorCommand().isValid()) {
             // make and send close
-            actions::ActionQuery closeAction = item->editorAction();
-            closeAction.addParam("operation", Val("close"));
-            closeAction.addParam("sync", Val(true));
-            dispatcher()->dispatch(closeAction);
+            rcommand::CommandQuery closeCommand = item->editorCommand();
+            closeCommand.addParam("operation", Val("close"));
+            closeCommand.addParam("sync", Val(true));
+            commandDispatcher()->dispatch(closeCommand);
         }
         // set new action
-        item->setEditorAction(action);
+        item->setEditorCommand(command);
     }
 
-    dispatcher()->dispatch(action);
+    commandDispatcher()->dispatch(command);
 }
 
 void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
 {
     // make and send close
-    actions::ActionQuery closeAction = item->editorAction();
-    closeAction.addParam("operation", Val("close"));
-    closeAction.addParam("sync", Val(true));
-    dispatcher()->dispatch(closeAction);
+    rcommand::CommandQuery closeCommand = item->editorCommand();
+    closeCommand.addParam("operation", Val("close"));
+    closeCommand.addParam("sync", Val(true));
+    commandDispatcher()->dispatch(closeCommand);
 
-    item->setEditorAction(UriQuery());
+    item->setEditorCommand({});
 }
 
 bool MixerChannelItem::askAboutChangingSound()

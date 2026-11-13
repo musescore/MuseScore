@@ -110,6 +110,8 @@ enum class P_TYPE : unsigned char {
     LINE_TYPE,
     HOOK_TYPE,
     KEY_MODE,
+    KEY,
+    JIANPU_NUMBERING,
     TEXT_STYLE,
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
@@ -118,6 +120,7 @@ enum class P_TYPE : unsigned char {
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
     MARKER_TYPE,
+    ACTION_TYPE,
 
     LH_TAPPING_SYMBOL,
     RH_TAPPING_SYMBOL,
@@ -133,6 +136,7 @@ enum class P_TYPE : unsigned char {
 
     INSTRUMENT_NAMES_ALIGN,
     INSTRUMENT_NAMES_FORMAT,
+    INSTRUMENT_LABEL_VISIBILITY,
 
     // Other
     GROUPS,
@@ -311,6 +315,12 @@ public:
     PropertyValue(KeyMode v)
         : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
 
+    PropertyValue(Key v)
+        : m_type(P_TYPE::KEY), m_data(make_data<Key>(v)) {}
+
+    PropertyValue(JianpuNumbering v)
+        : m_type(P_TYPE::JIANPU_NUMBERING), m_data(make_data<JianpuNumbering>(v)) {}
+
     PropertyValue(TextStyleType v)
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
 
@@ -325,6 +335,9 @@ public:
 
     PropertyValue(const NoteLineEndPlacement& v)
         : m_type(P_TYPE::NOTELINE_PLACEMENT_TYPE), m_data(make_data<NoteLineEndPlacement>(v)) {}
+
+    PropertyValue(ActionIconType v)
+        : m_type(P_TYPE::ACTION_TYPE), m_data(make_data<ActionIconType>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)
@@ -374,6 +387,9 @@ public:
 
     PropertyValue(const InstrumentNamesFormat& v)
         : m_type(P_TYPE::INSTRUMENT_NAMES_FORMAT), m_data(make_data<InstrumentNamesFormat>(v)) {}
+
+    PropertyValue(InstrumentLabelVisibility v)
+        : m_type(P_TYPE::INSTRUMENT_LABEL_VISIBILITY), m_data(make_data<InstrumentLabelVisibility>(v)) {}
 
     bool isValid() const;
 

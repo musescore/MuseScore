@@ -25,14 +25,14 @@
 #include "accessibility/iaccessibilitycontroller.h"
 #include "async/asyncable.h"
 #include "async/notification.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "global/iglobalconfiguration.h"
 #include "ibrailleconfiguration.h"
 #include "inotationbraille.h"
 #include "modularity/ioc.h"
 #include "notation/types/noteinputtypes.h"
 #include "playback/iplaybackcontroller.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 
 #include "braille.h"
 #include "brailleinput.h"
@@ -47,9 +47,9 @@ class NotationBraille : public mu::braille::INotationBraille, public muse::Conte
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     NotationBraille(const muse::modularity::ContextPtr& iocCtx)

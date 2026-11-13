@@ -43,7 +43,7 @@ class Engraving_SystemLocksTests : public ::testing::Test
 TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
     EXPECT_FALSE(locks.empty());
@@ -70,7 +70,7 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
 TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     const RangeLocks* systemLocks = score->systemLocks();
     std::vector<const RangeLock*> allLocks = systemLocks->allLocks();
@@ -124,12 +124,12 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
 TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     MeasureBase* thirdMeasure = score->first()->next()->next();
-    EXPECT_TRUE(thirdMeasure);
+    ASSERT_TRUE(thirdMeasure);
     MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
-    EXPECT_TRUE(sixthMeasure);
+    ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
@@ -150,12 +150,12 @@ TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
 TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     MeasureBase* thirdMeasure = score->first()->next()->next();
-    EXPECT_TRUE(thirdMeasure);
+    ASSERT_TRUE(thirdMeasure);
     MeasureBase* sixthMeasure = thirdMeasure->next()->next()->next();
-    EXPECT_TRUE(sixthMeasure);
+    ASSERT_TRUE(sixthMeasure);
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
@@ -179,7 +179,7 @@ TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
 TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
 {
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EXPECT_TRUE(score->systems().front()->isLocked());
 

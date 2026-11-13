@@ -42,6 +42,7 @@
 #include "notationerrors.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -158,6 +159,32 @@ engraving::InstrumentTrackId NotationPlayback::chordSymbolsTrackId(const ID& par
 bool NotationPlayback::isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const
 {
     return m_playbackModel.isChordSymbolsTrack(trackId);
+}
+
+std::optional<std::string> NotationPlayback::trackName(const engraving::InstrumentTrackId& trackId) const
+{
+    if (trackId == metronomeTrackId()) {
+        return muse::trc("playback", "Metronome");
+    }
+
+    const Part* part = score() ? score()->partById(trackId.partId) : nullptr;
+    if (!part) {
+        return std::nullopt;
+    }
+
+    if (isChordSymbolsTrack(trackId)) {
+        return muse::trc("playback", "Chords") + "." + part->partName().toStdString();
+    }
+
+    if (trackId.instrumentId == part->instrument()->id()) {
+        return part->partName().toStdString();
+    }
+
+    if (const Instrument* instrument = part->instrumentById(trackId.instrumentId)) {
+        return "(" + instrument->trackName().toStdString() + ")";
+    }
+
+    return std::nullopt;
 }
 
 const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const

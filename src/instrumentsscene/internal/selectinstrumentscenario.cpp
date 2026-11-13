@@ -28,13 +28,13 @@ using namespace muse::async;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
+muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const ScoreOrder& currentOrder) const
 {
     ValMap params {
         { "canSelectMultipleInstruments", Val(true) }
     };
 
-    return selectInstruments(params);
+    return selectInstruments(params, currentOrder);
 }
 
 muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
@@ -45,7 +45,7 @@ muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstru
     };
 
     return async::make_promise<InstrumentTemplate>([this, params](auto resolve, auto reject) {
-        Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
+        Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params, ScoreOrder());
         selectedInstruments.onResolve(this, [resolve](const PartInstrumentListScoreOrder& selectedInstruments) {
             const InstrumentTemplate& tpl = selectedInstruments.instruments.first().instrumentTemplate;
             (void)resolve(tpl);
@@ -58,9 +58,10 @@ muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstru
     });
 }
 
-muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const ValMap& params) const
+muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const ValMap& params,
+                                                                                                const ScoreOrder& currentOrder) const
 {
-    return async::make_promise<PartInstrumentListScoreOrder>([this, params](auto resolve, auto reject) {
+    return async::make_promise<PartInstrumentListScoreOrder>([this, params, currentOrder](auto resolve, auto reject) {
         static const Uri SELECT_INSTRUMENT_URI = Uri("musescore://instruments/select");
         if (interactive()->isOpened(SELECT_INSTRUMENT_URI).val) {
             Ret ret = muse::make_ret(Ret::Code::Cancel);
@@ -71,9 +72,9 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
         q.set(params);
 
         auto promise = interactive()->open(q);
-        promise.onResolve(this, [this, resolve, reject](const Val& val) {
+        promise.onResolve(this, [this, currentOrder, resolve, reject](const Val& val) {
             ValMap content = val.toMap();
-            ValList instruments = content["instruments"].toList();
+            const ValList instruments = content["instruments"].toList();
 
             IF_ASSERT_FAILED(!instruments.empty()) {
                 Ret ret = muse::make_ret(Ret::Code::UnknownError);
@@ -82,23 +83,28 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
             }
 
             PartInstrumentListScoreOrder result;
+            result.instruments.reserve(instruments.size());
 
             for (const Val& obj: instruments) {
                 ValMap map = obj.toMap();
-                PartInstrument pi;
 
+                PartInstrument pi;
                 pi.partId = ID(map["partId"].toString());
                 pi.isExistingPart = map["isExistingPart"].toBool();
                 pi.isSoloist = map["isSoloist"].toBool();
 
-                String instrumentId = String::fromStdString(map["instrumentId"].toString());
+                const String instrumentId = String::fromStdString(map["instrumentId"].toString());
                 pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
                 result.instruments << pi;
             }
 
             ValMap order = content["scoreOrder"].toMap();
-            result.scoreOrder = instrumentsRepository()->order(String::fromStdString(order["id"].toString()));
+            const String orderId = String::fromStdString(order["id"].toString());
+            const ScoreOrder& builtInOrder = instrumentsRepository()->order(orderId);
+
+            // Orders that aren't built in (e.g. those that come with templates) are the score's own
+            result.scoreOrder = (builtInOrder.id != orderId && currentOrder.id == orderId) ? currentOrder : builtInOrder;
             result.scoreOrder.customized = order["customized"].toBool();
 
             (void)resolve(result);
@@ -109,5 +115,5 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
         });
 
         return Promise<PartInstrumentListScoreOrder>::dummy_result();
-    }, PromiseType::AsyncByBody);
+    });
 }

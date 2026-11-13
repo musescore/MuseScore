@@ -501,6 +501,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                    || tag == "RehearsalMark"
                    || tag == "InstrumentChange"
                    || tag == "StaffState"
+                   || tag == "StaveSharingChange"
                    || tag == "FiguredBass"
                    || tag == "HarpPedalDiagram"
                    ) {

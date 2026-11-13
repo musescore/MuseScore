@@ -31,7 +31,7 @@
 #include "draw/types/geometry.h"
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 #include "abstractnotationpaintview.h"
@@ -65,7 +65,7 @@ class NotationNavigator : public AbstractNotationPaintView
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     NotationNavigator(QQuickItem* parent = nullptr);

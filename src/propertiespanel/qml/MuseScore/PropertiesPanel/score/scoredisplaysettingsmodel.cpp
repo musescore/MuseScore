@@ -23,6 +23,7 @@
 #include "scoredisplaysettingsmodel.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 #include "translation.h"
 
@@ -109,7 +110,7 @@ void ScoreDisplaySettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
         return;
     }
 
-    dispatcher()->dispatch("show-invisible");
+    commandDispatcher()->dispatch(SHOW_INVISIBLE_COMMAND);
     updateShouldShowInvisible(shouldShowInvisible);
 }
 
@@ -119,7 +120,7 @@ void ScoreDisplaySettingsModel::setShouldShowFormatting(bool shouldShowFormattin
         return;
     }
 
-    dispatcher()->dispatch("show-unprintable");
+    commandDispatcher()->dispatch(SHOW_UNPRINTABLE_COMMAND);
     updateShouldShowFormatting(shouldShowFormatting);
 }
 
@@ -129,7 +130,7 @@ void ScoreDisplaySettingsModel::setShouldShowFrames(bool shouldShowFrames)
         return;
     }
 
-    dispatcher()->dispatch("show-frames");
+    commandDispatcher()->dispatch(SHOW_FRAMES_COMMAND);
     updateShouldShowFrames(shouldShowFrames);
 }
 
@@ -139,7 +140,7 @@ void ScoreDisplaySettingsModel::setShouldShowPageMargins(bool shouldShowPageMarg
         return;
     }
 
-    dispatcher()->dispatch("show-pageborders");
+    commandDispatcher()->dispatch(SHOW_PAGEBORDERS_COMMAND);
     updateShouldShowPageMargins(shouldShowPageMargins);
 }
 
@@ -149,7 +150,7 @@ void ScoreDisplaySettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlag
         return;
     }
 
-    dispatcher()->dispatch("show-soundflags");
+    commandDispatcher()->dispatch(SHOW_SOUNDFLAGS_COMMAND);
     updateShouldShowSoundFlags(shouldShowSoundFlags);
 }
 

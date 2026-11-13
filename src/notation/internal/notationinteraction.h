@@ -102,9 +102,9 @@ public:
     // Select
     INotationSelectionPtr selection() const override;
     muse::async::Notification selectionChanged() const override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
-    void select(SelectionTarget target) override;
-    void addToSelection(SelectionTarget target) override;
+    muse::Ret select(const std::vector<EngravingItem*>& items, SelectType type = SelectType::REPLACE, staff_idx_t staffIdx = 0) override;
+    muse::Ret select(SelectionTarget target) override;
+    muse::Ret addToSelection(SelectionTarget target) override;
 
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
 
@@ -115,7 +115,6 @@ public:
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) override;
-    void expandSelection(ExpandSelectionMode mode) override;
 
     EngravingItem* contextItem() const override;
 
@@ -184,6 +183,7 @@ public:
 
     // Grip edit
     bool isGripEditStarted() const override;
+    bool isStartEndGripSelected() const override;
     bool isHitGrip(const muse::PointF& pos) const override;
     void startEditGrip(const muse::PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
@@ -344,7 +344,7 @@ public:
     void changeAccidental(mu::engraving::AccidentalType) override;
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
-    void getLocation() override;
+    void showLocation() override;
     void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
@@ -464,7 +464,7 @@ private:
     bool prepareDropMeasureBaseAnchorElement(const muse::PointF& pos);
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     std::vector<muse::RectF> dropHighlightRects(const mu::engraving::EngravingItem* dropElem,
-                                                const mu::engraving::MeasureBase* targetMeasureBase, const muse::RectF& staffRect,
+                                                const mu::engraving::EngravingItem* targetElem,
                                                 mu::engraving::KeyboardModifiers modifiers) const;
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
@@ -479,8 +479,11 @@ private:
 
     void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
 
-    void doAddSlur(const mu::engraving::Slur* slurTemplate = nullptr);
-    void doAddSlur(EngravingItem* firstItem, EngravingItem* secondItem, const mu::engraving::Slur* slurTemplate);
+    void doAddSlur(mu::engraving::Transaction& tx, const mu::engraving::Slur* slurTemplate = nullptr);
+    void doAddSlur(mu::engraving::Transaction& tx, EngravingItem* firstItem, EngravingItem* secondItem,
+                   const mu::engraving::Slur* slurTemplate);
+    void endEditSlurToReplace(const mu::engraving::Slur* slurTemplate);
+    void selectAddedSlur(mu::engraving::Slur* slur, bool replacedSlur, bool toNextChord);
 
     void doAutoFlipHairpinsType(mu::engraving::Dynamic* dynamic);
 

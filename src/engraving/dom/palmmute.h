@@ -57,9 +57,10 @@ class PalmMute final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::PALM_MUTE)
 
 public:
-    PalmMute(DummyParentOr<EngravingItem> parent);
+    PalmMute(DummyParent* parent);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
+    void setOwnershipParent(EngravingObject*) = delete;
 
 //      virtual void write(XmlWriter& xml) const override;
 

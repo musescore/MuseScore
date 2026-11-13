@@ -150,7 +150,7 @@ void MidiInputOutputController::onMidiEventReceived(const muse::midi::tick_t tic
         return;
     }
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = projectSession()->currentNotation();
     if (notation) {
         notation->midiInput()->onMidiEventReceived(event);
     }

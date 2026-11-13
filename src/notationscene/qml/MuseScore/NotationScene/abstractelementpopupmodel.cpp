@@ -61,6 +61,7 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE },
+    { mu::engraving::ElementType::STAVE_SHARING_CHANGE, PopupModelType::TYPE_STAVE_SHARING_CHANGE },
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -85,6 +86,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::TEMPO_TEXT,
         mu::engraving::ElementType::PLAY_COUNT_TEXT } },
     { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
+    { PopupModelType::TYPE_STAVE_SHARING_CHANGE, { mu::engraving::ElementType::STAVE_SHARING_CHANGE } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -201,7 +203,7 @@ void AbstractElementPopupModel::updateNotation()
 
 INotationPtr AbstractElementPopupModel::currentNotation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value)
@@ -236,7 +238,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
 
 INotationInteractionPtr AbstractElementPopupModel::interaction() const
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = projectSession()->currentNotation();
     return notation ? notation->interaction() : nullptr;
 }
 

@@ -31,6 +31,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
+#include "notation/utilities/offsetutilities.h"
+
 #include "ui/view/widgetstatestore.h"
 
 #include "log.h"
@@ -188,9 +190,11 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     bool bStandard    = !(instrument.drumset() != nullptr);
     bool bPerc        = (instrument.drumset() != nullptr);
     bool bTab = (instrument.stringData()->frettedStrings() > 0);
+    const bool enableJianpu = notationConfiguration()->enableJianpu();
     int idx           = 0;
     for (const mu::engraving::StaffType& t : mu::engraving::StaffType::presets()) {
         if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
+            || (t.group() == mu::engraving::StaffGroup::JIANPU && bStandard && enableJianpu)
             || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
             || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.staffTypeName(), idx);
@@ -216,7 +220,7 @@ void EditStaffType::enablePresets()
     fretFontSize->setValue(staffType.fretFontSize());
     // Displayed: positive = up, negative = down
     // Internal:  negative = up, positive = down
-    fretY->setValue(-staffType.fretFontUserY());
+    fretY->setValue(OffsetUtils::flipSign(staffType.fretFontUserY()));
 }
 
 void EditStaffType::enableTextStyles()
@@ -310,7 +314,8 @@ void EditStaffType::setValues()
 
     mu::engraving::StaffGroup group = staffType.group();
     int i = int(group);
-    stack->setCurrentIndex(i);
+    // Jianpu has no dedicated settings page yet; use the Standard page for now.
+    stack->setCurrentIndex(group == mu::engraving::StaffGroup::JIANPU ? int(mu::engraving::StaffGroup::STANDARD) : i);
     groupName->setText(TConv::translatedUserName(group));
 
     name->setText(staffType.staffTypeName());
@@ -322,6 +327,7 @@ void EditStaffType::setValues()
 
     switch (group) {
     case mu::engraving::StaffGroup::STANDARD:
+    case mu::engraving::StaffGroup::JIANPU:
         genKeysigPitched->setChecked(staffType.genKeysig());
         showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
         stemlessPitched->setChecked(staffType.stemless());
@@ -357,7 +363,7 @@ void EditStaffType::setValues()
         durFontSize->setValue(staffType.durationFontSize());
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        durY->setValue(-staffType.durationFontUserY());
+        durY->setValue(OffsetUtils::flipSign(staffType.durationFontUserY()));
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
         // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
@@ -437,7 +443,7 @@ void EditStaffType::durFontNameChanged(int idx)
         durFontSize->setValue(size);
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        durY->setValue(-yOff);
+        durY->setValue(OffsetUtils::flipSign(yOff));
     }
     updatePreview();
 }
@@ -449,7 +455,7 @@ void EditStaffType::fretFontNameChanged(int idx)
         fretFontSize->setValue(size);
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        fretY->setValue(-yOff);
+        fretY->setValue(OffsetUtils::flipSign(yOff));
     }
     updatePreview();
 }
@@ -523,7 +529,8 @@ void EditStaffType::setFromDlg()
     staffType.setGenClef(genClef->isChecked());
     staffType.setShowBarlines(showBarlines->isChecked());
     staffType.setGenTimesig(genTimesig->isChecked());
-    if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+    if (staffType.group() == mu::engraving::StaffGroup::STANDARD
+        || staffType.group() == mu::engraving::StaffGroup::JIANPU) {
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
@@ -539,7 +546,7 @@ void EditStaffType::setFromDlg()
         staffType.setDurationFontSize(durFontSize->value());
         // Displayed: positive = up, negative = down
         // Internal:  negative = up, positive = down
-        staffType.setDurationFontUserY(-durY->value());
+        staffType.setDurationFontUserY(OffsetUtils::flipSign(durY->value()));
         staffType.setFretUseTextStyle(textStyleRadioButton->isChecked());
         if (staffType.fretUseTextStyle()) {
             staffType.setFretTextStyle(getTextStyle(textStyleComboBox->currentText()));
@@ -548,7 +555,7 @@ void EditStaffType::setFromDlg()
             staffType.setFretFontSize(fretFontSize->value());
             // Displayed: positive = up, negative = down
             // Internal:  negative = up, positive = down
-            staffType.setFretFontUserY(-fretY->value());
+            staffType.setFretFontUserY(OffsetUtils::flipSign(fretY->value()));
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
@@ -719,7 +726,8 @@ void EditStaffType::updatePreview()
     ExampleView* preview = nullptr;
     if (staffType.group() == mu::engraving::StaffGroup::TAB) {
         preview = tabPreview;
-    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD) {
+    } else if (staffType.group() == mu::engraving::StaffGroup::STANDARD
+               || staffType.group() == mu::engraving::StaffGroup::JIANPU) {
         preview = standardPreview;
     }
     if (preview) {
@@ -742,6 +750,9 @@ QString EditStaffType::createUniqueStaffTypeName(mu::engraving::StaffGroup group
         switch (group) {
         case mu::engraving::StaffGroup::STANDARD:
             sn = QString("Standard-%1 [*]").arg(idx);
+            break;
+        case mu::engraving::StaffGroup::JIANPU:
+            sn = QString("Jianpu-%1 [*]").arg(idx);
             break;
         case mu::engraving::StaffGroup::PERCUSSION:
             sn = QString("Perc-%1 [*]").arg(idx);

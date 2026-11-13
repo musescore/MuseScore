@@ -202,21 +202,21 @@
         <source>Daegeum</source>
         <comment>daegeum trackName</comment>
         <extracomment>trackName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daegeum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
         <source>Daegeum</source>
         <comment>daegeum longName</comment>
         <extracomment>longName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daegeum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="281"/>
         <source>Dg.</source>
         <comment>daegeum shortName</comment>
         <extracomment>shortName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dg.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="284"/>
@@ -776,21 +776,21 @@
         <source>Hichiriki</source>
         <comment>hichiriki trackName</comment>
         <extracomment>trackName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hichiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
         <source>Hichiriki</source>
         <comment>hichiriki longName</comment>
         <extracomment>longName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hichiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
         <source>Hch.</source>
         <comment>hichiriki shortName</comment>
         <extracomment>shortName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hch.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="467"/>
@@ -6019,14 +6019,14 @@
         <source>Horn</source>
         <comment>c-horn-alto trackName</comment>
         <extracomment>trackName for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Horn</translation>
+        <translation>Ħorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2140"/>
         <source>Horn</source>
         <comment>c-horn-alto longName</comment>
         <extracomment>longName for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Horn</translation>
+        <translation>Ħorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2142"/>
@@ -6068,14 +6068,14 @@
         <source>Horn</source>
         <comment>bb-horn-alto trackName</comment>
         <extracomment>trackName for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Horn</translation>
+        <translation>Ħorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2155"/>
         <source>Horn</source>
         <comment>bb-horn-alto longName</comment>
         <extracomment>longName for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Horn</translation>
+        <translation>Ħorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2157"/>
@@ -15523,7 +15523,7 @@
         <source>Hch.</source>
         <comment>harpsichord shortName</comment>
         <extracomment>shortName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hch.</translation>
     </message>
     <message>
         <source>Virginal.</source>
@@ -16916,21 +16916,21 @@
         <source>Soprano guitar.</source>
         <comment>soprano-guitar description</comment>
         <extracomment>description for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra soprana.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5517"/>
         <source>Soprano Guitar</source>
         <comment>soprano-guitar trackName</comment>
         <extracomment>trackName for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra Soprana</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5519"/>
         <source>Soprano Guitar</source>
         <comment>soprano-guitar longName</comment>
         <extracomment>longName for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra Soprana</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5521"/>
@@ -16958,21 +16958,21 @@
         <source>Alto guitar.</source>
         <comment>alto-guitar description</comment>
         <extracomment>description for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra alto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5530"/>
         <source>Alto Guitar</source>
         <comment>alto-guitar trackName</comment>
         <extracomment>trackName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5532"/>
         <source>Alto Guitar</source>
         <comment>alto-guitar longName</comment>
         <extracomment>longName for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kitarra Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5534"/>
@@ -21278,7 +21278,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="81"/>
         <source>Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Banda tal-Marċ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="82"/>
@@ -21379,7 +21379,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6758"/>
         <source>Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Banda tal-Marċ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6759"/>
@@ -21587,7 +21587,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
         <source>Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Banda tal-Marċ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>

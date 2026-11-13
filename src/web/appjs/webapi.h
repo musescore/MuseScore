@@ -25,17 +25,20 @@
 
 #include "global/modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
+#include "project/iopenprojectscenario.h"
+#include "project/icloseprojectscenario.h"
+#include "project/inotationproject.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
 
 namespace mu::appjs {
-class WebApi : public muse::async::Asyncable
+class WebApi : public muse::Contextable, public muse::async::Asyncable
 {
-    inline static muse::GlobalInject<muse::IInteractive> interactive;
-    inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
-    inline static muse::GlobalInject<mu::context::IGlobalContext> globalContext;
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
+    muse::ContextInject<mu::project::IOpenProjectScenario> openProjectScenario = { this };
+    muse::ContextInject<mu::project::ICloseProjectScenario> closeProjectScenario = { this };
     inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
     inline static muse::GlobalInject<muse::audio::ISoundFontController> soundFontController;
 
@@ -43,7 +46,7 @@ public:
 
     static WebApi* instance();
 
-    void init();
+    void init(const muse::modularity::ContextPtr& ctx);
     void deinit();
 
     void load(const void* source, unsigned int len);
@@ -52,10 +55,15 @@ public:
 
 private:
 
-    WebApi() = default;
+    WebApi()
+        : muse::Contextable(muse::modularity::ContextPtr()) {}
 
     void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
 
     project::INotationProjectPtr m_currentProject;
+
+    //! NOTE The file of the opened project, it's needed while the project is open
+    muse::io::path_t m_projectFilePath;
+    int m_loadCount = 0;
 };
 }

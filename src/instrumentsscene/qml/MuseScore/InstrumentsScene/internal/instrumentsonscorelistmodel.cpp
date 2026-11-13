@@ -37,11 +37,11 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 namespace mu::instrumentsscene {
-class InstrumentsOnScoreListModel::InstrumentItem : public SelectableItemListModel::Item
+class InstrumentsOnScoreListModel::InstrumentItem : public QObject
 {
 public:
     InstrumentItem(QObject* parent)
-        : Item(parent)
+        : QObject(parent)
     {
     }
 
@@ -139,10 +139,10 @@ void InstrumentsOnScoreListModel::load()
 {
     TRACEFUNC;
 
-    IMasterNotationPtr master = context()->currentMasterNotation();
+    IMasterNotationPtr master = context()->masterNotation();
     auto parts = master ? master->parts()->partList() : NotifyList<const Part*>();
 
-    QList<Item*> instruments;
+    ItemList instruments;
 
     for (const Part* part : parts) {
         if (part->isSharedPart()) {
@@ -253,7 +253,7 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
 
     QVariantList result;
 
-    for (const Item* item : items()) {
+    for (const QObject* item : items()) {
         auto instrument = dynamic_cast<const InstrumentItem*>(item);
         if (!instrument) {
             continue;
@@ -301,7 +301,7 @@ void InstrumentsOnScoreListModel::sortInstruments(ItemList& instruments)
 
     const ScoreOrder& currentOrder = currentScoreOrder();
 
-    std::sort(instruments.begin(), instruments.end(), [currentOrder](const Item* item1, const Item* item2) {
+    std::sort(instruments.begin(), instruments.end(), [currentOrder](const QObject* item1, const QObject* item2) {
         auto instrument1 = dynamic_cast<const InstrumentItem*>(item1);
         auto instrument2 = dynamic_cast<const InstrumentItem*>(item2);
 
@@ -358,7 +358,7 @@ bool InstrumentsOnScoreListModel::matchesScoreOrder() const
     const ScoreOrder currentOrder = currentScoreOrder();
 
     std::vector<int> instrumentIndices;
-    for (const Item* item : items()) {
+    for (const QObject* item : items()) {
         auto instrument = dynamic_cast<const InstrumentItem*>(item);
         if (!instrument) {
             continue;

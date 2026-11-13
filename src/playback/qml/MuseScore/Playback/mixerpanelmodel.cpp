@@ -43,6 +43,18 @@ using namespace mu::project;
 
 static constexpr int INVALID_INDEX = -1;
 
+static ControlParams withEnvelopesOf(ControlParams params, const ControlParams& current)
+{
+    // Automated controls are disabled, so an envelope is never the param being edited
+    if (current.volume.hasAutomation()) {
+        params.volume = current.volume;
+    }
+    if (current.balance.hasAutomation()) {
+        params.balance = current.balance;
+    }
+    return params;
+}
+
 MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -351,22 +363,25 @@ void MixerPanelModel::subscribeOnAutomationChanges()
         }
 
         InstrumentTrackIdSet affectedTrackIds;
+        bool masterAffected = false;
+
         for (const AutomationCurveKey& key : changes.affectedKeys) {
             if (key.type != AutomationType::Volume && key.type != AutomationType::Pan) {
                 continue;
             }
 
-            if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+            if (key.isGlobal()) {
+                masterAffected = true;
+            } else if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
                 affectedTrackIds.insert(*trackId);
             }
         }
 
-        if (affectedTrackIds.empty()) {
-            return;
-        }
-
         for (MixerChannelItem* item : m_mixerChannelList) {
-            if (muse::contains(affectedTrackIds, item->instrumentTrackId())) {
+            const bool affected = item->type() == MixerChannelItem::Type::Master
+                                  ? masterAffected
+                                  : muse::contains(affectedTrackIds, item->instrumentTrackId());
+            if (affected) {
                 item->updateHasAutomationFlags();
             }
         }
@@ -517,8 +532,10 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
         playback()->setSourceParams(trackId, params);
     });
 
-    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
-        playback()->setControlParams(trackId, params.control());
+    connect(item, &MixerChannelItem::controlParamsChanged, this,
+            [this, trackId, instrumentTrackId](const AudioOutputParams& params) {
+        const ControlParams current = controller()->currentTrackControlParams(instrumentTrackId);
+        playback()->setControlParams(trackId, withEnvelopesOf(params.control(), current));
     });
 
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
@@ -600,6 +617,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     item->setTitle(muse::qtrc("playback", "Master"));
 
     AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
+    item->updateHasAutomationFlags();
     loadOutputParams(item, outParams);
 
     playback()->masterSignalChanges()
@@ -613,8 +631,20 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
                << ", " << text;
     });
 
+    playback()->automatedControlParamsChanges(MASTER_TRACK_ID)
+    .onResolve(this, [this, item](AutomatedControlParamsChanges changes) {
+        if (m_masterChannelItem && item == m_masterChannelItem) {
+            item->subscribeOnAutomatedControlParamsChanges(changes);
+        }
+    })
+    .onReject(this, [](int errCode, std::string text) {
+        LOGE() << "unable to subscribe on automated control params changes from master channel, error code: " << errCode
+               << ", " << text;
+    });
+
     connect(item, &MixerChannelItem::controlParamsChanged, this, [this](const AudioOutputParams& params) {
-        playback()->setMasterControlParams(params.control());
+        const ControlParams current = controller()->currentMasterControlParams();
+        playback()->setMasterControlParams(withEnvelopesOf(params.control(), current));
     });
 
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this](const AudioOutputParams& params) {
@@ -675,7 +705,7 @@ void MixerPanelModel::updateOutputResourceItemCount()
 
 INotationProjectPtr MixerPanelModel::currentProject() const
 {
-    return context()->currentProject();
+    return context()->project();
 }
 
 IProjectAudioSettingsPtr MixerPanelModel::audioSettings() const

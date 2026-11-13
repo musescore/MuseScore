@@ -22,8 +22,6 @@
 
 #include "tupletdialog.h"
 
-#include "engraving/dom/tuplet.h"
-
 #include "notation/inotation.h"
 #include "notation/inotationstyle.h"
 #include "notationcommands.h"
@@ -34,6 +32,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::ui;
 using namespace muse;
+using namespace muse::rcommand;
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -53,8 +52,14 @@ void TupletDialog::componentComplete()
 
     defaultToStyleSettings();
 
+    const TupletSelectedDuration selectedDurationAsPreference = configuration()->tupletCommandsSelectedDurationAs();
+    subdivision->setChecked(selectedDurationAsPreference == TupletSelectedDuration::SUBDIVISION);
+    tupletLength->setChecked(selectedDurationAsPreference == TupletSelectedDuration::TUPLET_LENGTH);
+
     numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
     bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
+    subdivision->setAccessibleName(useSelectedDurationAsLabel->text() + " " + subdivision->text());
+    tupletLength->setAccessibleName(useSelectedDurationAsLabel->text() + " " + tupletLength->text());
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
@@ -104,6 +109,15 @@ TupletBracketType TupletDialog::bracketType() const
     return TupletBracketType::AUTO_BRACKET;
 }
 
+TupletSelectedDuration TupletDialog::selectedDurationAs() const
+{
+    if (tupletLength->isChecked()) {
+        return TupletSelectedDuration::TUPLET_LENGTH;
+    }
+
+    return TupletSelectedDuration::SUBDIVISION;
+}
+
 void TupletDialog::showEvent(QShowEvent* event)
 {
     WidgetStateStore::restoreGeometry(this);
@@ -123,17 +137,19 @@ INotationStylePtr TupletDialog::style() const
 
 INotationPtr TupletDialog::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 void TupletDialog::apply()
 {
-    rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
-    query.addParam("ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()));
-    query.addParam("number-type", Val(engraving::str_conv(numberType())));
-    query.addParam("bracket-type", Val(engraving::str_conv(bracketType())));
+    AddTupletCommand cmd;
+    cmd.ratio = Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString();
+    cmd.numberType = numberType();
+    cmd.bracketType = bracketType();
+    cmd.selectedDurationAs = selectedDurationAs();
+    cmd.autoBaseLen = false;
 
-    dispatcher()->dispatch(query);
+    dispatcher()->dispatch(cmd);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)

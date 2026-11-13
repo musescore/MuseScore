@@ -47,6 +47,7 @@ public:
 
     ~Arpeggio() override;
     Arpeggio* clone() const override { return new Arpeggio(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
 
     ArpeggioType arpeggioType() const { return m_arpeggioType; }
     void setArpeggioType(ArpeggioType v) { m_arpeggioType = v; }

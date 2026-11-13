@@ -26,7 +26,7 @@
 
 #include "ui_measureproperties.h"
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "notation/inotation.h"
 
 namespace mu::engraving {
@@ -39,7 +39,7 @@ class MeasurePropertiesDialog : public muse::ui::WidgetDialog, private Ui::Measu
 {
     Q_OBJECT
 
-    muse::ContextInject<mu::context::IGlobalContext> context = { this };
+    muse::ContextInject<mu::project::IProjectSession> context = { this };
 
 public:
     MeasurePropertiesDialog(QWidget* parent = nullptr);

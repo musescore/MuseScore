@@ -22,7 +22,7 @@
 
 #include "engravingcompat.h"
 
-#include <vector>
+#include <set>
 
 #include "dom/beam.h"
 #include "dom/box.h"
@@ -76,6 +76,10 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
     if (mscVersion < 470) {
         pre470TextCompat(score);
         migrateNoteParens(score);
+    }
+
+    if (mscVersion < 500) {
+        resetIneffectiveCenterBetweenStaves(score);
     }
 }
 
@@ -169,6 +173,46 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
             Spanner* spanner = pair.second;
             if (spanner->isHairpin()) {
                 migrateVoiceAssignmentAndPosition(spanner);
+            }
+        }
+    }
+}
+
+void EngravingCompat::resetIneffectiveCenterBetweenStaves(MasterScore* masterScore)
+{
+    /* Before 5.0, dynamics and hairpins could only be centered between staves of their own part, but
+     * they could carry the property, e.g. if the item was copied from a piano part into a vocal part,
+     * even if it visually had no effect. Now it can also center between vocal staves, so we need to
+     * reset it to keep the old layout. */
+    auto resetIfIneffective = [](EngravingItem* item) {
+        const Part* part = item->part();
+        if (part && part->nstaves() <= 1
+            && item->getProperty(Pid::CENTER_BETWEEN_STAVES).value<AutoOnOff>() == AutoOnOff::ON) {
+            item->resetProperty(Pid::CENTER_BETWEEN_STAVES);
+        }
+    };
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            for (Segment& segment : toMeasure(mb)->segments()) {
+                if (!segment.isChordRestType() && !segment.isTimeTickType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.annotations()) {
+                    if (item && (item->isDynamic() || item->isExpression())) {
+                        resetIfIneffective(item);
+                    }
+                }
+            }
+        }
+
+        for (auto pair : score->spanner()) {
+            Spanner* spanner = pair.second;
+            if (spanner->isHairpin()) {
+                resetIfIneffective(spanner);
             }
         }
     }
@@ -602,30 +646,6 @@ void AlignmentMigration500::alignItemOffsetGroup(const std::vector<EngravingItem
     }
 }
 
-void AlignmentMigration500::scanConnectedItemsInSnappingChain(EngravingItem* item, const System* system, std::set<EngravingItem*>& visited,
-                                                              std::vector<EngravingItem*>& group)
-{
-    if (muse::contains(visited, item)) {
-        return;
-    }
-    visited.insert(item);
-    group.push_back(item);
-
-    EngravingItem* before = item->ldata()->itemSnappedBefore();
-    while (before && before->findAncestor(ElementType::SYSTEM) == system && !muse::contains(visited, before)) {
-        visited.insert(before);
-        group.push_back(before);
-        before = before->ldata()->itemSnappedBefore();
-    }
-
-    EngravingItem* after = item->ldata()->itemSnappedAfter();
-    while (after && after->findAncestor(ElementType::SYSTEM) == system && !muse::contains(visited, after)) {
-        visited.insert(after);
-        group.push_back(after);
-        after = after->ldata()->itemSnappedAfter();
-    }
-}
-
 void AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(MasterScore* masterScore)
 {
     // For items aligned by AlignmentLayout::alignItemsWithTheirSnappingChain
@@ -691,7 +711,11 @@ void AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(MasterScore* 
             }
             const System* system = toSystem(item->findAncestor(ElementType::SYSTEM));
             std::vector<EngravingItem*> group;
-            scanConnectedItemsInSnappingChain(item, system, visited, group);
+            item->ldata()->scanConnectedItemsInSnappingChain(system, [&visited, &group](EngravingItem* chainItem) {
+                if (visited.insert(chainItem).second) {
+                    group.push_back(chainItem);
+                }
+            });
             alignItemOffsetGroup(group);
         }
 

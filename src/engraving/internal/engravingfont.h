@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <memory>
 #include <unordered_map>
 
 #include "iengravingfont.h"
@@ -29,6 +30,7 @@
 #include "draw/types/geometry.h"
 #include "iengravingfontsprovider.h"
 
+#include "io/iodevice.h"
 #include "io/path.h"
 
 #include "infrastructure/smufl.h"
@@ -55,6 +57,8 @@ class EngravingFont : public IEngravingFont
 public:
     EngravingFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
                   const muse::io::path_t& metadataPath);
+    EngravingFont(const std::string& name, const std::string& family, std::shared_ptr<muse::io::IODevice> font,
+                  std::shared_ptr<muse::io::IODevice> metadata);
     EngravingFont(const EngravingFont& other);
 
     const std::string& name() const override;
@@ -137,8 +141,8 @@ private:
 
     std::string m_name;
     std::string m_family;
-    muse::io::path_t m_fontPath;
-    muse::io::path_t m_metadataPath;
+    std::shared_ptr<muse::io::IODevice> m_fontDevice;
+    std::shared_ptr<muse::io::IODevice> m_metadataDevice;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;

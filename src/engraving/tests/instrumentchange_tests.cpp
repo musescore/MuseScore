@@ -72,6 +72,7 @@ void Engraving_InstrumentChangeTests::test_post(MasterScore* score, const char16
 TEST_F(Engraving_InstrumentChangeTests, testAdd)
 {
     MasterScore* score = test_pre(u"add");
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = new InstrumentChange(s);
@@ -86,6 +87,7 @@ TEST_F(Engraving_InstrumentChangeTests, testAdd)
 TEST_F(Engraving_InstrumentChangeTests, testDelete)
 {
     MasterScore* score = test_pre(u"delete");
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
@@ -97,6 +99,7 @@ TEST_F(Engraving_InstrumentChangeTests, testDelete)
 TEST_F(Engraving_InstrumentChangeTests, testChange)
 {
     MasterScore* score   = test_pre(u"change");
+    ASSERT_TRUE(score);
     Measure* m           = score->firstMeasure()->nextMeasure();
     Segment* s           = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
@@ -113,6 +116,7 @@ TEST_F(Engraving_InstrumentChangeTests, testChange)
 TEST_F(Engraving_InstrumentChangeTests, testMixer)
 {
     MasterScore* score = test_pre(u"mixer");
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
@@ -135,6 +139,7 @@ TEST_F(Engraving_InstrumentChangeTests, testMixer)
 TEST_F(Engraving_InstrumentChangeTests, testCopy)
 {
     MasterScore* score = test_pre(u"copy");
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);

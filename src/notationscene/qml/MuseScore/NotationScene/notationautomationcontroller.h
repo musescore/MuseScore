@@ -29,7 +29,7 @@
 #include <QPointF>
 #include <QQuickItem>
 
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuicontextconfiguration.h"
@@ -49,9 +49,11 @@ struct ScoreChanges;
 }
 
 namespace mu::notation {
+struct DynamicsDisplayRange;
+
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IUiContextConfiguration> uiContextConfiguration = { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
@@ -133,6 +135,7 @@ private:
                                          int endTick) const;
 
     mu::engraving::AutomationType currentAutomationType() const;
+    mu::engraving::AutomationCurveKey currentCurveKey(const mu::engraving::Staff* staff) const;
 
     void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
     void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
@@ -161,17 +164,28 @@ private:
 
     const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
 
+    const DynamicsDisplayRange& dynamicsDisplayRange(const mu::engraving::Staff* staff, int tick) const;
+    double automationValueToDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
+                                    muse::real_t value) const;
+    muse::real_t automationValueFromDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
+                                            double displayValue, std::optional<muse::real_t> existingValue = std::nullopt) const;
+
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
     INotationPtr currentNotation() const;
     mu::engraving::Score* score() const;
 
     QQuickItem* m_linesParent = nullptr;
+
     SysStaffToPolylinesMap m_stavesToLinesMap;
     PointsDataMap m_pointsDataByStaff;
+
     muse::draw::Transform m_viewMatrix;
+
     mu::engraving::AutomationChanges m_pendingChanges;
     PendingScoreState m_pendingScoreState;
     bool m_updateScheduled = false;
+
+    muse::uicomponents::PolylinePlot* m_currentlyEditedPolyline = nullptr;
 };
 }

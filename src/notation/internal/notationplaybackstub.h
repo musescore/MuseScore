@@ -41,6 +41,7 @@ public:
     void setIsMetronomeEnabled(bool enabled) override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
     bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const override;
+    std::optional<std::string> trackName(const engraving::InstrumentTrackId& trackId) const override;
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
 

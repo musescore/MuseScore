@@ -281,7 +281,7 @@ std::vector<int> Chord::noteDistances() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(DummyParentOr<Segment> parent)
+Chord::Chord(DummyParentOr<Segment, Chord> parent)
     : ChordRest(ElementType::CHORD, parent)
 {
     m_stem             = 0;
@@ -671,9 +671,6 @@ void Chord::add(EngravingItem* e)
     case ElementType::TREMOLO_SINGLECHORD:
         setTremoloSingleChord(item_cast<TremoloSingleChord*>(e));
         break;
-    case ElementType::GLISSANDO:
-        m_endsNoteAnchoredLine = true;
-        break;
     case ElementType::STEM:
         assert(!m_stem);
         m_stem = toStem(e);
@@ -777,9 +774,6 @@ void Chord::remove(EngravingItem* e)
         break;
     case ElementType::TREMOLO_SINGLECHORD:
         setTremoloSingleChord(nullptr);
-        break;
-    case ElementType::GLISSANDO:
-        m_endsNoteAnchoredLine = false;
         break;
     case ElementType::STEM:
         m_stem = 0;
@@ -1073,7 +1067,8 @@ bool Chord::shouldHaveStem() const
            && !(durationType().type() == DurationType::V_HALF && staffType && staffType->isTabStaff()
                 && staffType->minimStyle() == TablatureMinimStyle::NONE)
            && !(measure() && measure()->stemless(staffIdx()))
-           && !(staffType && staffType->isTabStaff() && staffType->stemless());
+           && !(staffType && staffType->isTabStaff() && staffType->stemless())
+           && !(staff && staff->isJianpuStaff(tick()));
 }
 
 bool Chord::shouldHaveHook() const
@@ -1153,7 +1148,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
     StaffGroup staffGroup = st->staffTypeForElement(this)->group();
     if (staffGroup == StaffGroup::TAB) {
         Fraction tick = this->tick();
-        const StringData* stringData = part()->stringData(tick, st->idx());
+        const StringData* stringData = originPart()->stringData(tick, st->idx());
         for (Chord* ch : graceNotes()) {
             stringData->fretChords(ch);
         }
@@ -1161,7 +1156,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
         return;
     } else {
         // if not tablature, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
-        staffGroup = st->part()->instrument(this->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+        staffGroup = originPart()->instrument(this->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
     }
 
     // PITCHED_ and PERCUSSION_STAFF can go note by note
@@ -1222,7 +1217,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
             ch->sortNotes();
         }
     } else if (staffGroup == StaffGroup::PERCUSSION) {
-        const Instrument* instrument = part()->instrument(this->tick());
+        const Instrument* instrument = originPart()->instrument(this->tick());
         const Drumset* drumset = instrument->drumset();
         if (!drumset) {
             LOGW("no drumset");
@@ -1928,7 +1923,7 @@ void Chord::setSlash(bool flag, bool stemless)
                 dot->undoChangeProperty(Pid::VISIBLE, true);
             }
             if (staff()->isDrumStaff(tick())) {
-                const Drumset* ds = part()->instrument(tick())->drumset();
+                const Drumset* ds = originPart()->instrument(tick())->drumset();
                 int pitch = n->pitch();
                 if (ds && ds->isValid(pitch)) {
                     undoChangeProperty(Pid::STEM_DIRECTION, ds->stemDirection(pitch));

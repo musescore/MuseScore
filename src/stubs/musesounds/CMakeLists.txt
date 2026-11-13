@@ -27,10 +27,10 @@ target_sources(musesounds PRIVATE
     musesoundscheckupdatescenariostub.h
     musesoundscheckupdateservicestub.cpp
     musesoundscheckupdateservicestub.h
-    musesamplercheckupdatescenariostub.cpp
-    musesamplercheckupdatescenariostub.h
-    musesamplercheckupdateservicestub.cpp
-    musesamplercheckupdateservicestub.h
+    musesamplercheckstatusscenariostub.cpp
+    musesamplercheckstatusscenariostub.h
+    musesamplercheckstatusservicestub.cpp
+    musesamplercheckstatusservicestub.h
 )
 
 if (MUE_BUILD_MUSESOUNDS_QML)

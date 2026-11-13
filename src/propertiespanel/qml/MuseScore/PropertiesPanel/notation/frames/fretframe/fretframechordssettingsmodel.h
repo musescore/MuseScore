@@ -25,7 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "propertiespanelabstractmodel.h"
 #include "fretframechordlistmodel.h"
@@ -47,7 +47,7 @@ class FretFrameChordsSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(bool hasInvisibleChords READ hasInvisibleChords NOTIFY hasInvisibleChordsChanged)
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
 
 public:
     explicit FretFrameChordsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,

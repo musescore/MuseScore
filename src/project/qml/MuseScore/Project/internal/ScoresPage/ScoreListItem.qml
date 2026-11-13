@@ -43,10 +43,20 @@ ListItemBlank {
     signal revealInFileBrowserRequested(string scorePath)
     signal viewOnlineRequested(int scoreId)
     signal removeFromRecentFilesRequested(string scorePath)
+    signal deleteScoreRequested(int scoreId, string scoreName)
     signal retryRequested()
-    signal cancelRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
+    signal cancelConversionRequested(int convertType, int convertId)
 
     readonly property bool isProcessing: root.score.processingStatus !== undefined
+
+    function requestCancel() {
+        if (Boolean(root.score.uploadId)) {
+            root.cancelUploadRequested(root.score.uploadId)
+        } else {
+            root.cancelConversionRequested(root.score.convertType, root.score.convertId)
+        }
+    }
 
     implicitHeight: 64
 
@@ -127,7 +137,7 @@ ListItemBlank {
                     iconSize: 16
 
                     onRetryRequested: root.retryRequested()
-                    onCancelRequested: root.cancelRequested(root.score.convertType, root.score.convertId)
+                    onCancelRequested: root.requestCancel()
                 }
             }
 
@@ -179,7 +189,7 @@ ListItemBlank {
                             if (root.score.processingStatus === ScoreProcessingPlaceholder.Failed) {
                                 root.retryRequested()
                             } else {
-                                root.cancelRequested(root.score.convertType, root.score.convertId)
+                                root.requestCancel()
                             }
                         }
                     }
@@ -283,11 +293,13 @@ ListItemBlank {
         isCloud: root.score.isCloud ?? false
         showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
 
-        visible: root.mouseArea.containsMouse
-                 || mouseArea.containsMouse
-                 || root.navigation.active
-                 || navigation.active
-                 || isMenuOpenedByButton
+        readonly property bool isHovered: root.mouseArea.containsMouse
+                                           || contextMenu.mouseArea.containsMouse
+                                           || root.navigation.active
+                                           || contextMenu.navigation.active
+                                           || contextMenu.isMenuOpenedByButton
+
+        visible: !root.isProcessing && contextMenu.isHovered
 
         navigation.panel: root.navigation.panel
         navigation.row: root.navigation.row
@@ -297,6 +309,7 @@ ListItemBlank {
         onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
         onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
         onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
+        onDeleteScoreRequested: root.deleteScoreRequested(root.score.scoreId ?? 0, root.score.name ?? "")
     }
 
     SeparatorLine {

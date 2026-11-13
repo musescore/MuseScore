@@ -27,8 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "engraving/types/types.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationconfiguration.h"
@@ -54,7 +53,7 @@ class PlaybackController : public IPlaybackController, public muse::async::Async
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
@@ -65,14 +64,20 @@ public:
     void init();
     void deinit();
 
+    // IPlaybackState
+    bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
+
+    muse::audio::secs_t playbackPosition() const override;
+    muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+    // --------------
+
+    // IPlaybackController
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
     bool isPlayAllowed() const override;
     muse::async::Channel<bool> isPlayAllowedChanged() const override;
-
-    bool isPlaying() const override;
-    muse::async::Channel<bool> isPlayingChanged() const override;
 
     muse::Ret togglePlay() override;
     muse::Ret play(bool showErrors = true) override;
@@ -114,6 +119,9 @@ public:
     const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
 
+    muse::audio::ControlParams currentTrackControlParams(const engraving::InstrumentTrackId& trackId) const override;
+    muse::audio::ControlParams currentMasterControlParams() const override;
+
     void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;
     void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
@@ -147,8 +155,6 @@ public:
     void setIsExportingAudio(bool exporting) override;
     void setSelectionExportTrackVolumes(const PartVolumeMap& partVolumes) override;
     void setSelectionExportMetronomeEnabled(bool enabled) override;
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
@@ -227,16 +233,30 @@ private:
     void addAuxTrack(muse::audio::aux_channel_idx_t index, bool projectHadNoAudioSettings, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
-    project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
 
+    project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    bool resolveTrackMuted(const engraving::InstrumentTrackId& instrumentTrackId, bool savedMuted) const;
     muse::audio::ControlParams trackControlParams(const engraving::InstrumentTrackId& instrumentTrackId,
                                                   const project::AudioOutputParams& outParams, bool rebuildVolume = true,
                                                   bool rebuildPan = true);
+
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
+    struct AutomationEnvelopes {
+        std::optional<muse::audio::AutomationEnvelope> volume;
+        std::optional<muse::audio::AutomationEnvelope> pan;
+    };
+
     void onAutomationDataChanged(const notation::AutomationChanges& changes);
-    void resendAutomatedControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
-                                      std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
+
+    void resendAutomationEnvelopes();
+    void collectEnvelopeTrackIds(engraving::InstrumentTrackIdSet& volumeTrackIds, engraving::InstrumentTrackIdSet& panTrackIds) const;
+    void resendTrackControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
+                                  std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
+    void resendMasterControlParams(bool rebuildVolume = true, bool rebuildPan = true);
+
+    std::optional<muse::audio::AutomationEnvelope> buildAutomationEnvelope(const notation::AutomationCurveKey& key) const;
+    static void applyEnvelopes(const AutomationEnvelopes& envelopes, muse::audio::ControlParams& control);
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
@@ -251,6 +271,7 @@ private:
 
     muse::async::Channel<bool> m_isPlayAllowedChanged;
     muse::async::Channel<bool> m_isPlayingChanged;
+    muse::async::Channel<muse::audio::secs_t> m_playbackPositionChanged;
     muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
@@ -268,7 +289,8 @@ private:
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;
 
-    std::unordered_map<engraving::InstrumentTrackId, muse::audio::ControlParams> m_automatedControlParamsCache;
+    std::unordered_map<engraving::InstrumentTrackId, AutomationEnvelopes> m_automationEnvelopesCache; // only tracks with automation
+    AutomationEnvelopes m_masterAutomationEnvelopes;
 
     muse::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;

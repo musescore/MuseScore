@@ -93,7 +93,8 @@ void ChangeClefType::flip()
     clef->staff()->setClef(clef);
     Segment* segment = clef->segment();
     updateNoteLines(segment, clef->track());
-    clef->triggerLayoutAll(); // TODO: reduce layout to clef range
+    clef->triggerLayout();
+    clef->score()->setLayout(clef->staff()->nextClefTick(segment->tick()), clef->staffIdx());
 
     concertClef     = ocl;
     transposingClef = otc;
@@ -206,7 +207,9 @@ void EditClef::undoChangeClef(Transaction&, Score* score, Staff* ostaff, Engravi
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
+        const StaffGroup clefStaffGroup = ClefInfo::staffGroup(ct);
+        const bool compatibleJianpuClef = staffGroup == StaffGroup::JIANPU && clefStaffGroup == StaffGroup::STANDARD;
+        if (clefStaffGroup != staffGroup && !compatibleJianpuClef && !forInstrumentChange) {
             continue;
         }
 

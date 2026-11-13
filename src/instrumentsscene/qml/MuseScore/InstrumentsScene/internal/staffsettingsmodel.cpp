@@ -109,11 +109,14 @@ QVariantList StaffSettingsModel::allStaffTypes() const
         isPercussion = instrument->useDrumset();
     }
 
-    auto isTypeAllowed = [maxLines, isPercussion](const mu::engraving::StaffType& type) {
+    const bool enableJianpu = notationConfiguration()->enableJianpu();
+
+    auto isTypeAllowed = [maxLines, isPercussion, enableJianpu](const mu::engraving::StaffType& type) {
         switch (type.group()) {
         case mu::engraving::StaffGroup::PERCUSSION: return isPercussion;
         case mu::engraving::StaffGroup::TAB: return type.lines() <= maxLines;
         case mu::engraving::StaffGroup::STANDARD: return true;
+        case mu::engraving::StaffGroup::JIANPU: return enableJianpu;
         }
 
         return false;
@@ -183,7 +186,7 @@ INotationPtr StaffSettingsModel::currentNotation() const
 
 INotationPtr StaffSettingsModel::currentMasterNotation() const
 {
-    return context()->currentMasterNotation()->notation();
+    return context()->masterNotation()->notation();
 }
 
 bool StaffSettingsModel::isSmallStaff() const
@@ -371,7 +374,7 @@ INotationPartsPtr StaffSettingsModel::notationParts() const
 
 INotationPartsPtr StaffSettingsModel::masterNotationParts() const
 {
-    if (IMasterNotationPtr master = context()->currentMasterNotation()) {
+    if (IMasterNotationPtr master = context()->masterNotation()) {
         return master->parts();
     }
 

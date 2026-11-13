@@ -34,7 +34,7 @@ void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
 
 void AbstractAudioResourceItem::requestToCloseNativeEditorView()
 {
-    if (m_editorAction.isValid()) {
+    if (m_editorCommand.isValid()) {
         emit nativeEditorViewCloseRequested();
     }
 }
@@ -118,12 +118,12 @@ bool AbstractAudioResourceItem::hasNativeEditorSupport() const
     return false;
 }
 
-const actions::ActionQuery& AbstractAudioResourceItem::editorAction() const
+const rcommand::CommandQuery& AbstractAudioResourceItem::editorCommand() const
 {
-    return m_editorAction;
+    return m_editorCommand;
 }
 
-void AbstractAudioResourceItem::setEditorAction(const actions::ActionQuery& action)
+void AbstractAudioResourceItem::setEditorCommand(const rcommand::CommandQuery& command)
 {
-    m_editorAction = action;
+    m_editorCommand = command;
 }

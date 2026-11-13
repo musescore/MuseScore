@@ -20,14 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("Navigation.js")
+
 function doOpenPropertiesPanel()
 {
-    api.navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Properties")
+    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Properties")
 }
 
 function doGoToSection(name)
 {
-    api.navigation.goToControl("NavigationLeftPanel", name, name)
+    Navigation.goToControl("NavigationLeftPanel", name, name)
 }
 
 module.exports = {

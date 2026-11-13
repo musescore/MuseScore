@@ -23,7 +23,7 @@
 #pragma once
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
@@ -37,7 +37,7 @@ class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:
@@ -66,11 +66,10 @@ private:
     muse::uicomponents::MenuItemList makeHairpinItems();
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
     muse::uicomponents::MenuItemList makeTextItems();
-    muse::uicomponents::MenuItemList makeAutomationTypeItems();
+    muse::uicomponents::MenuItemList makeAutomationLaneItems();
 
     muse::uicomponents::MenuItem* makeEditStyle(const engraving::EngravingItem* element);
-    muse::uicomponents::MenuItem* makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
-                                                         const muse::TranslatableString& title);
+    muse::uicomponents::MenuItem* makeAutomationLaneItem(AutomationLane lane, const muse::TranslatableString& title);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;

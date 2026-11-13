@@ -27,10 +27,8 @@
 #include "rcommand/icommandsregister.h"
 #include "rcommand/icommandsstate.h"
 #include "interactive/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
 
 #include "internal/selectinstrumentscenario.h"
-#include "internal/instrumentsuiactions.h"
 #include "internal/instrumentsactionscontroller.h"
 #include "internal/instrumentscommandsregister.h"
 #include "internal/instrumentscommandsstate.h"
@@ -75,11 +73,6 @@ void InstrumentsSceneContext::registerExports()
 
 void InstrumentsSceneContext::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
-    if (ar) {
-        ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
-    }
-
     auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
     if (cs) {
         cs->reg(std::make_shared<InstrumentsCommandsState>(iocContext()));

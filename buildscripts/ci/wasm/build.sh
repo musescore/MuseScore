@@ -78,10 +78,10 @@ bash ./buildscripts/ci/tools/make_branch_env.sh
 
 echo "=== BUILD MuseAudio ==="
 
-mkdir -p build.audio.release
-cd build.audio.release
+mkdir -p $BUILD_DIR/museaudio
+cd $BUILD_DIR/museaudio
 
-cmake ../src/web/audioengine -GNinja -DCMAKE_BUILD_TYPE="Release" 
+cmake ../../src/web/audioengine -GNinja -DCMAKE_BUILD_TYPE="Release" 
 
 if [ $(which nproc) ]; then
     JOBS=$(nproc --all)

@@ -163,6 +163,7 @@ class Staff;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaveSharingChange;
 class StaveSharingLabel;
 class StaffTextBase;
 class StaffTypeChange;
@@ -174,6 +175,7 @@ class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
+class SystemIndicatorIcon;
 class SystemLockIndicator;
 class SystemText;
 class SoundFlag;
@@ -223,18 +225,25 @@ using EngravingItemList = std::vector<EngravingItem*>;
 template<typename ... ParentTypes>
 class DummyParentOr
 {
+    template<typename T>
+    static constexpr bool accepts = std::is_same_v<T, DummyParent> || (std::is_base_of_v<ParentTypes, T> || ...);
+
 public:
-    template<typename T, std::enable_if_t<std::is_same_v<T, DummyParent>
-                                          || (std::is_base_of_v<ParentTypes, T> || ...), int> = 0>
+    template<typename T, std::enable_if_t<accepts<T>, int> = 0>
     DummyParentOr(T* parent)
         : m_parent(parent) {}
+
+    //! From a DummyParentOr that accepts no more than this one does.
+    template<typename ... OtherParentTypes, std::enable_if_t<(accepts<OtherParentTypes> && ...), int> = 0>
+    DummyParentOr(DummyParentOr<OtherParentTypes...> other)
+        : m_parent(other) {}
 
     operator EngravingObject*() const {
         return m_parent;
     }
 
-    //! The parent as one of the accepted types, or null when it is the dummy - i.e.
-    //! when there is no parent to speak to yet.
+    //! The parent as the given type, or null when it is not of that type - which
+    //! includes the dummy, i.e. when there is no parent to speak to yet.
     template<typename T>
     T* as() const;
 
@@ -272,6 +281,9 @@ public:
     //! ownershipParent(), which reports "not attached to anything" as null.
     EngravingObject* parent() const;
 
+    //! A class whose constructor names the parent types it accepts hides this with an
+    //! overload that takes the same, so that no other parent can be set by accident.
+    //! One that never has a parent deletes it.
     void setOwnershipParent(EngravingObject* p);
     //! The parent this object is attached to. Null while it is parked on the dummy,
     //! i.e. not attached to anything.
@@ -289,6 +301,7 @@ public:
     Score* score() const;
     MasterScore* masterScore() const;
     bool onSameScore(const EngravingObject* other) const;
+    bool isInScoreTree() const;
     const MStyle& style() const;
 
     virtual EngravingObject* propertyDelegate(Pid) const { return nullptr; }
@@ -486,6 +499,7 @@ public:
     CONVERT(MeasureNumber, MEASURE_NUMBER)
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
+    CONVERT(StaveSharingChange, STAVE_SHARING_CHANGE)
     CONVERT(StaveSharingLabel, STAVE_SHARING_LABEL)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(SoundFlag,     SOUND_FLAG)
@@ -511,6 +525,7 @@ public:
     CONVERT(Tapping, TAPPING)
     CONVERT(TappingHalfSlur, TAPPING_HALF_SLUR)
     CONVERT(TappingHalfSlurSegment, TAPPING_HALF_SLUR_SEGMENT)
+    CONVERT(JianpuOctaveDot, JIANPU_OCTAVE_DOT)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -631,14 +646,20 @@ public:
         return isArticulationFamily() || isFermata();
     }
 
-    bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isSystemIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isIndicatorIcon() const { return isSystemIndicatorIcon() || isStaveSharingChange(); }
 };
 
 template<typename ... ParentTypes>
 template<typename T>
 T* DummyParentOr<ParentTypes...>::as() const
 {
-    return m_parent && !m_parent->isType(ElementType::DUMMY) ? static_cast<T*>(m_parent) : nullptr;
+    if constexpr (std::is_same_v<std::remove_const_t<T>, EngravingObject>) {
+        if (!m_parent || m_parent->isType(ElementType::DUMMY)) {
+            return nullptr;
+        }
+    }
+    return dynamic_cast<T*>(m_parent);
 }
 
 //---------------------------------------------------
@@ -726,6 +747,7 @@ CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(StaveSharingChange)
 CONVERT(StaveSharingLabel);
 CONVERT(StaffTextBase)
 CONVERT(TextBase)
@@ -737,6 +759,7 @@ CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(IndicatorIcon)
+CONVERT(SystemIndicatorIcon)
 CONVERT(StaffVisibilityIndicator)
 CONVERT(SystemLockIndicator)
 CONVERT(Segment)

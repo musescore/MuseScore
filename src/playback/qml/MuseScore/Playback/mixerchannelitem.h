@@ -28,14 +28,15 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
+#include "rcommand/icommanddispatcher.h"
+#include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
 #include "iplaybackconfiguration.h"
 
 #include "ui/qml/Muse/Ui/navigationpanel.h"
 
 #include "audio/common/audiotypes.h"
+#include "notation/inotationautomation.h"
 #include "project/iprojectaudiosettings.h"
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
@@ -78,8 +79,8 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     enum class Type {
@@ -205,10 +206,13 @@ protected:
 
     muse::audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
-    void openEditor(AbstractAudioResourceItem* item, const muse::actions::ActionQuery& action);
+    void openEditor(AbstractAudioResourceItem* item, const muse::rcommand::CommandQuery& command);
     void closeEditor(AbstractAudioResourceItem* item);
 
     bool askAboutChangingSound();
+
+    std::optional<notation::AutomationCurveKey> automationCurveKey(notation::AutomationType type) const;
+    bool hasAutomationCurve(notation::AutomationType type) const;
 
     void setDisplayedVolumeLevel(float volumeLevel);
     void setDisplayedBalance(int balance);

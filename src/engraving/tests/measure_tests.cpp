@@ -22,14 +22,22 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/breath.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/mmrest.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/editing/edittimesig.h"
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
 
@@ -48,7 +56,7 @@ class Engraving_MeasureTests : public ::testing::Test
 TEST_F(Engraving_MeasureTests, insertMeasureMiddle)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -62,7 +70,7 @@ TEST_F(Engraving_MeasureTests, insertMeasureMiddle)
 TEST_F(Engraving_MeasureTests, insertMeasureBegin)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     Measure* m = score->firstMeasure();
@@ -76,7 +84,7 @@ TEST_F(Engraving_MeasureTests, insertMeasureBegin)
 TEST_F(Engraving_MeasureTests, insertMeasureEnd)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->insertMeasure(0);
@@ -89,7 +97,7 @@ TEST_F(Engraving_MeasureTests, insertMeasureEnd)
 TEST_F(Engraving_MeasureTests, insertAtBeginning)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_beginning.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     Measure* m = score->firstMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->insertMeasure(m);
@@ -102,7 +110,7 @@ TEST_F(Engraving_MeasureTests, insertAtBeginning)
 TEST_F(Engraving_MeasureTests, insertBfClefChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -134,7 +142,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 TEST_F(Engraving_MeasureTests, insertBfKeyChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -179,7 +187,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
 TEST_F(Engraving_MeasureTests, spanner_a)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -201,7 +209,7 @@ TEST_F(Engraving_MeasureTests, spanner_a)
 TEST_F(Engraving_MeasureTests, spanner_b)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-4.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -222,7 +230,7 @@ TEST_F(Engraving_MeasureTests, spanner_b)
 TEST_F(Engraving_MeasureTests, spanner_A)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-6.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->select(score->firstMeasure());
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -245,7 +253,7 @@ TEST_F(Engraving_MeasureTests, spanner_A)
 TEST_F(Engraving_MeasureTests, spanner_B)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-7.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -268,7 +276,7 @@ TEST_F(Engraving_MeasureTests, spanner_B)
 TEST_F(Engraving_MeasureTests, spanner_C)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-8.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -291,7 +299,7 @@ TEST_F(Engraving_MeasureTests, spanner_C)
 TEST_F(Engraving_MeasureTests, spanner_D)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-9.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -310,7 +318,7 @@ TEST_F(Engraving_MeasureTests, spanner_D)
 TEST_F(Engraving_MeasureTests, deleteLast)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-10.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->lastMeasure();
     score->select(m);
@@ -329,7 +337,7 @@ TEST_F(Engraving_MeasureTests, deleteLast)
 TEST_F(Engraving_MeasureTests, gap)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"gaps.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EngravingItem* tst = 0;
 
@@ -343,7 +351,7 @@ TEST_F(Engraving_MeasureTests, gap)
     score->endCmd();
 
     tst = s->element(1);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -359,7 +367,7 @@ TEST_F(Engraving_MeasureTests, gap)
     score->endCmd();
 
     tst = s->element(3);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -374,7 +382,7 @@ TEST_F(Engraving_MeasureTests, gap)
     score->endCmd();
 
     tst = s->element(3);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -394,14 +402,14 @@ TEST_F(Engraving_MeasureTests, gap)
 TEST_F(Engraving_MeasureTests, checkMeasure)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"checkMeasure.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     EngravingItem* tst = 0;
     Measure* m = score->firstMeasure()->nextMeasure();
 
     Segment* s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(2880));
     tst = s->element(1);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -418,7 +426,7 @@ TEST_F(Engraving_MeasureTests, checkMeasure)
     m = m->nextMeasure();
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6240));
     tst = s->element(1);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -427,7 +435,7 @@ TEST_F(Engraving_MeasureTests, checkMeasure)
 
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6480));
     tst = s->element(1);
-    EXPECT_TRUE(tst);
+    ASSERT_TRUE(tst);
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
@@ -448,7 +456,7 @@ TEST_F(Engraving_MeasureTests, checkMeasure)
 TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"undoDelInitialVBox_269919.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // 1. delete initial VBox
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -484,7 +492,7 @@ TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
 TEST_F(Engraving_MeasureTests, mmrest)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
@@ -503,7 +511,7 @@ TEST_F(Engraving_MeasureTests, mmrest)
 TEST_F(Engraving_MeasureTests, measureNumbers)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measurenumber.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Place measure numbers below
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -564,7 +572,7 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
 
 TEST_F(Engraving_MeasureTests, changeMeasureLen) {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"changeMeasureLen.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
 
@@ -581,14 +589,14 @@ TEST_F(Engraving_MeasureTests, changeMeasureLen) {
 
 TEST_F(Engraving_MeasureTests, measureSplit) {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measureSplit.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     TestUtils::createParts(score, 2);
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
         Measure* m = score->firstMeasure()->nextMeasure();
-        EXPECT_TRUE(m);
+        ASSERT_TRUE(m);
         ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
-        EXPECT_TRUE(cr);
+        ASSERT_TRUE(cr);
 
         SplitJoinMeasure::splitMeasure(tx, score->masterScore(), cr->tick());
 
@@ -600,14 +608,16 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
 
 TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrEndOfMeasureTimeSig.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m3 = score->crMeasure(2);
-    EXPECT_TRUE(m3 && !m3->isMMRest());
+    ASSERT_TRUE(m3);
+    EXPECT_FALSE(m3->isMMRest());
     Segment* tsSeg = m3->findSegmentR(SegmentType::TimeSig, m3->ticks());
-    EXPECT_TRUE(tsSeg);
+    ASSERT_TRUE(tsSeg);
     EngravingItem* tsItem = tsSeg->element(0);
-    EXPECT_TRUE(tsItem && tsItem->isTimeSig());
+    ASSERT_TRUE(tsItem);
+    EXPECT_TRUE(tsItem->isTimeSig());
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
@@ -615,47 +625,55 @@ TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
     score->endCmd();
 
     Measure* m3MMR = m3->mmRest();
-    EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
+    ASSERT_TRUE(m3MMR);
+    EXPECT_TRUE(m3MMR->isMMRest());
     Segment* tsSegMMR = m3MMR->findSegmentR(SegmentType::TimeSig, m3MMR->ticks());
-    EXPECT_TRUE(tsSegMMR && tsSegMMR->endOfMeasureChange());
+    ASSERT_TRUE(tsSegMMR);
+    EXPECT_TRUE(tsSegMMR->endOfMeasureChange());
     EngravingItem* tsItemMMR = tsSegMMR->element(0);
-    EXPECT_TRUE(tsItemMMR && tsItemMMR->isTimeSig());
+    ASSERT_TRUE(tsItemMMR);
+    EXPECT_TRUE(tsItemMMR->isTimeSig());
 }
 
 TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrContinuationCourtesies.mscz");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     auto checkSegmentsAndItems = [](Measure* m, bool continuationRepeat) {
         Fraction tick = continuationRepeat ? Fraction(0, 0) : m->ticks();
 
         SegmentType timeSegType = continuationRepeat ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
         Segment* tsSeg = m->findSegmentR(timeSegType, tick);
-        EXPECT_TRUE(tsSeg);
+        ASSERT_TRUE(tsSeg);
         EngravingItem* tsItem = tsSeg->element(0);
-        EXPECT_TRUE(tsItem && tsItem->isTimeSig());
+        ASSERT_TRUE(tsItem);
+        EXPECT_TRUE(tsItem->isTimeSig());
 
         SegmentType keySegType = continuationRepeat ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
         Segment* ksSeg = m->findSegmentR(keySegType, tick);
-        EXPECT_TRUE(ksSeg);
+        ASSERT_TRUE(ksSeg);
         EngravingItem* ksItem = ksSeg->element(0);
-        EXPECT_TRUE(ksItem && ksItem->isKeySig());
+        ASSERT_TRUE(ksItem);
+        EXPECT_TRUE(ksItem->isKeySig());
 
         SegmentType clefSegType = continuationRepeat ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
         Segment* clefSeg = m->findSegmentR(clefSegType, tick);
-        EXPECT_TRUE(clefSeg);
+        ASSERT_TRUE(clefSeg);
         EngravingItem* clefItem = clefSeg->element(0);
-        EXPECT_TRUE(clefItem && clefItem->isClef());
+        ASSERT_TRUE(clefItem);
+        EXPECT_TRUE(clefItem->isClef());
     };
 
     // Check end of measure courtesies
     Measure* m2 = score->crMeasure(1);
-    EXPECT_TRUE(m2 && !m2->isMMRest());
+    ASSERT_TRUE(m2);
+    EXPECT_FALSE(m2->isMMRest());
     checkSegmentsAndItems(m2, false);
 
     // Check continuation courtesies
     Measure* m3 = m2->nextMeasure();
-    EXPECT_TRUE(m3 && !m3->isMMRest());
+    ASSERT_TRUE(m3);
+    EXPECT_FALSE(m3->isMMRest());
     checkSegmentsAndItems(m3, true);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -664,18 +682,20 @@ TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
     score->endCmd();
 
     Measure* m2MMR = m2->mmRest();
-    EXPECT_TRUE(m2MMR && m2MMR->isMMRest());
+    ASSERT_TRUE(m2MMR);
+    EXPECT_TRUE(m2MMR->isMMRest());
     checkSegmentsAndItems(m2MMR, false);
 
     Measure* m3MMR = m3->mmRest();
-    EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
+    ASSERT_TRUE(m3MMR);
+    EXPECT_TRUE(m3MMR->isMMRest());
     checkSegmentsAndItems(m3MMR, true);
 }
 
 TEST_F(Engraving_MeasureTests, deleteBreathInMMRest)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest-breath.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
@@ -683,12 +703,13 @@ TEST_F(Engraving_MeasureTests, deleteBreathInMMRest)
     score->endCmd();
 
     Measure* m2 = score->crMeasure(2);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m2);
     Measure* m2MM = m2->coveringMMRestOrThis();
     Segment* breathSeg2 = m2MM->findSegmentR(SegmentType::Breath, m2MM->ticks());
-    EXPECT_TRUE(breathSeg2);
+    ASSERT_TRUE(breathSeg2);
     EngravingItem* breath2 = breathSeg2->element(0);
-    EXPECT_TRUE(breath2 && breath2->isBreath());
+    ASSERT_TRUE(breath2);
+    EXPECT_TRUE(breath2->isBreath());
 
     score->select(breath2);
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -696,30 +717,33 @@ TEST_F(Engraving_MeasureTests, deleteBreathInMMRest)
     score->endCmd();
 
     Measure* m4 = score->crMeasure(4);
-    EXPECT_TRUE(m4);
+    ASSERT_TRUE(m4);
     Measure* m4MM = m4->coveringMMRestOrThis();
     Segment* breathSeg4 = m4MM->findSegmentR(SegmentType::Breath, m4MM->ticks());
-    EXPECT_TRUE(breathSeg4);
+    ASSERT_TRUE(breathSeg4);
     EngravingItem* breath4 = breathSeg4->element(0);
-    EXPECT_TRUE(breath4 && breath4->isBreath());
+    ASSERT_TRUE(breath4);
+    EXPECT_TRUE(breath4->isBreath());
 
     score->undoRedo(true, 0);
 
     Measure* m2After = score->crMeasure(2);
-    EXPECT_TRUE(m2After);
+    ASSERT_TRUE(m2After);
     Measure* m2MMAfter = m2After->coveringMMRestOrThis();
     Segment* breathSeg2After = m2MMAfter->findSegmentR(SegmentType::Breath, m2MMAfter->ticks());
-    EXPECT_TRUE(breathSeg2After);
+    ASSERT_TRUE(breathSeg2After);
     EngravingItem* breath2After = breathSeg2After->element(0);
-    EXPECT_TRUE(breath2After && breath2After->isBreath());
+    ASSERT_TRUE(breath2After);
+    EXPECT_TRUE(breath2After->isBreath());
 
     Measure* m4After = score->crMeasure(4);
-    EXPECT_TRUE(m4After);
+    ASSERT_TRUE(m4After);
     Measure* m4MMAfter = m4After->coveringMMRestOrThis();
     Segment* breathSeg4After = m4MMAfter->findSegmentR(SegmentType::Breath, m4MMAfter->ticks());
-    EXPECT_TRUE(breathSeg4After);
+    ASSERT_TRUE(breathSeg4After);
     EngravingItem* breath4After = breathSeg4After->element(0);
-    EXPECT_TRUE(breath4After && breath4After->isBreath());
+    ASSERT_TRUE(breath4After);
+    EXPECT_TRUE(breath4After->isBreath());
 
     delete score;
 }
@@ -736,17 +760,17 @@ TEST_F(Engraving_MeasureTests, breathInPart)
     };
 
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"breath-parts.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Score* partScore = TestUtils::createPart(score);
-    EXPECT_TRUE(partScore);
+    ASSERT_TRUE(partScore);
 
     // Add a breath to measure 2
     {
         Measure* m = score->crMeasure(2);
-        EXPECT_TRUE(m);
+        ASSERT_TRUE(m);
         ChordRest* cr = m->findChordRest(m->tick(), 0);
-        EXPECT_TRUE(cr);
+        ASSERT_TRUE(cr);
         Breath* b = Factory::createBreath(score->dummy());
         b->setSymId(SymId::breathMarkComma);
         EditData dd(nullptr);
@@ -759,20 +783,20 @@ TEST_F(Engraving_MeasureTests, breathInPart)
     // Check breath at measure 2 in score and part
     {
         Breath* scoreBreath = findBreath(score, 2);
-        EXPECT_TRUE(scoreBreath);
+        ASSERT_TRUE(scoreBreath);
         EXPECT_EQ(scoreBreath->symId(), SymId::breathMarkComma);
 
         Breath* partBreath = findBreath(partScore, 2);
-        EXPECT_TRUE(partBreath);
+        ASSERT_TRUE(partBreath);
         EXPECT_EQ(partBreath->symId(), SymId::breathMarkComma);
     }
 
     // Add breath with different symbol to measure 4
     {
         Measure* m = score->crMeasure(4);
-        EXPECT_TRUE(m);
+        ASSERT_TRUE(m);
         ChordRest* cr = m->findChordRest(m->tick(), 0);
-        EXPECT_TRUE(cr);
+        ASSERT_TRUE(cr);
         Breath* b = Factory::createBreath(score->dummy());
         b->setSymId(SymId::breathMarkTick);
         EditData dd(nullptr);
@@ -785,18 +809,18 @@ TEST_F(Engraving_MeasureTests, breathInPart)
     {
         // Check breath at measure 4 in score and part
         Breath* scoreBreath = findBreath(score, 4);
-        EXPECT_TRUE(scoreBreath);
+        ASSERT_TRUE(scoreBreath);
         EXPECT_EQ(scoreBreath->symId(), SymId::breathMarkTick);
 
         Breath* partBreath = findBreath(partScore, 4);
-        EXPECT_TRUE(partBreath);
+        ASSERT_TRUE(partBreath);
         EXPECT_EQ(partBreath->symId(), SymId::breathMarkTick);
     }
 
     // Delete breath at measure 2
     {
         EngravingItem* b = findBreath(score, 2);
-        EXPECT_TRUE(b);
+        ASSERT_TRUE(b);
         score->select(b);
         score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
         score->cmdDeleteSelection();
@@ -808,12 +832,12 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         Breath* scoreBreath1 = findBreath(score, 2);
         Breath* scoreBreath2 = findBreath(score, 4);
         EXPECT_FALSE(scoreBreath1);
-        EXPECT_TRUE(scoreBreath2);
+        ASSERT_TRUE(scoreBreath2);
         EXPECT_EQ(scoreBreath2->symId(), SymId::breathMarkTick);
         Breath* partBreath1 = findBreath(partScore, 2);
         Breath* partBreath2 = findBreath(partScore, 4);
         EXPECT_FALSE(partBreath1);
-        EXPECT_TRUE(partBreath2);
+        ASSERT_TRUE(partBreath2);
         EXPECT_EQ(partBreath2->symId(), SymId::breathMarkTick);
     }
 
@@ -824,17 +848,268 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         // Check both breaths present in master score and part
         Breath* scoreBreath1 = findBreath(score, 2);
         Breath* scoreBreath2 = findBreath(score, 4);
-        EXPECT_TRUE(scoreBreath1);
+        ASSERT_TRUE(scoreBreath1);
         EXPECT_EQ(scoreBreath1->symId(), SymId::breathMarkComma);
-        EXPECT_TRUE(scoreBreath2);
+        ASSERT_TRUE(scoreBreath2);
         EXPECT_EQ(scoreBreath2->symId(), SymId::breathMarkTick);
         Breath* partBreath1 = findBreath(partScore, 2);
         Breath* partBreath2 = findBreath(partScore, 4);
-        EXPECT_TRUE(partBreath1);
+        ASSERT_TRUE(partBreath1);
         EXPECT_EQ(partBreath1->symId(), SymId::breathMarkComma);
-        EXPECT_TRUE(partBreath2);
+        ASSERT_TRUE(partBreath2);
         EXPECT_EQ(partBreath2->symId(), SymId::breathMarkTick);
     }
 
     delete score;
+}
+
+//---------------------------------------------------------
+///   mmrestResize
+///    a reused MM-rest that grows or shrinks must resize its MMRest symbols too
+//---------------------------------------------------------
+TEST_F(Engraving_MeasureTests, mmrestResize)
+{
+    // one staff, 10 empty 4/4 measures
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr));
+    Part* part = new Part(score.get());
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->appendMeasures(10);
+    score->endCmd();
+    ASSERT_EQ(score->nmeasures(), 10u);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m4 = score->crMeasure(3);
+    Measure* m5 = score->crMeasure(4);
+    ASSERT_TRUE(m1 && m4 && m5);
+
+    auto mmRestSymbol = [m1]() -> MMRest* {
+        Measure* mmr = m1->mmRest();
+        EXPECT_TRUE(mmr);
+        if (!mmr) {
+            return nullptr;
+        }
+        Segment* seg = mmr->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        EXPECT_TRUE(seg && seg->element(0) && seg->element(0)->isMMRest());
+        return seg && seg->element(0) ? toMMRest(seg->element(0)) : nullptr;
+    };
+
+    // 10-bar MM rest
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(10, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(10, 1));
+
+    // shrink to 4 bars
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    m5->undoChangeProperty(Pid::BREAK_MMR, true);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(4, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(4, 1));
+
+    // grow back to 10 bars
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    m5->undoChangeProperty(Pid::BREAK_MMR, false);
+    score->endCmd();
+    EXPECT_EQ(m1->mmRest()->ticks(), Fraction(10, 1));
+    EXPECT_EQ(mmRestSymbol()->ticks(), Fraction(10, 1));
+}
+
+/**
+ *  A time signature change at the start of an MM rest survives save and reload.
+ *  See issue #35000
+ */
+TEST_F(Engraving_MeasureTests, mmrestTimeSigSaveReload)
+{
+    // [GIVEN] A 4/4 score with two staves, a time sig change to 3/4 at measure 2, followed by some empty measures
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
+    for (int i = 0; i < 2; ++i) {
+        Part* part = new Part(score.get());
+        score->appendPart(part);
+        score->appendStaff(Factory::createStaff(part));
+    }
+    score->appendMeasures(4);
+
+    TimeSig* ts = Factory::createTimeSig(score->dummy());
+    ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score.get(), score->crMeasure(1), 0, ts, false);
+    score->endCmd();
+
+    // [WHEN] MM rests are turned on
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    // [THEN] Layout moves the 3/4 time signatures onto the MM rest starting at measure 2
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2->mmRest());
+    Segment* tsSeg = m2->mmRest()->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    ASSERT_TRUE(tsSeg);
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        EXPECT_TRUE(tsSeg->element(staff2track(staffIdx)));
+    }
+
+    // [WHEN] The score is saved and reloaded
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"mmrest-timesig-test.mscx"));
+
+    std::unique_ptr<MasterScore> reopened(ScoreRW::readScore(u"mmrest-timesig-test.mscx", true));
+    ASSERT_TRUE(reopened);
+
+    // [THEN] The score isn't corrupted
+    EXPECT_TRUE(reopened->sanityCheck());
+
+    // [THEN] Measure 2 is still in 3/4
+    m2 = reopened->firstMeasure()->nextMeasure();
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    EXPECT_EQ(m2->timesig(), Fraction(3, 4));
+
+    // [THEN] The MM rest starting at measure 2 shows the 3/4 time signatures again
+    ASSERT_TRUE(m2->mmRest());
+    tsSeg = m2->mmRest()->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    ASSERT_TRUE(tsSeg);
+    for (staff_idx_t staffIdx = 0; staffIdx < reopened->nstaves(); ++staffIdx) {
+        EngravingItem* reopenedTs = tsSeg->element(staff2track(staffIdx));
+        ASSERT_TRUE(reopenedTs);
+        EXPECT_EQ(toTimeSig(reopenedTs)->sig(), Fraction(3, 4));
+    }
+}
+
+/**
+ *  Deleting the time of a note at the start of a measure, then undoing it,
+ *  restores the measure's segments in their original order.
+ */
+TEST_F(Engraving_MeasureTests, timeDeleteNoteAtMeasureStartUndo)
+{
+    // [GIVEN] A 4/4 score of quarter notes on two staves
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx"));
+    ASSERT_TRUE(score);
+
+    // Layout may replace segments (e.g. end barlines), so compare type and tick rather than pointers
+    using SegmentInfo = std::pair<SegmentType, Fraction>;
+    auto collectSegments = [&score]() {
+        std::vector<SegmentInfo> segments;
+        for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
+            segments.emplace_back(s->segmentType(), s->tick());
+        }
+        return segments;
+    };
+
+    auto expectTicksInOrder = [](const std::vector<SegmentInfo>& segments) {
+        for (size_t i = 1; i < segments.size(); ++i) {
+            EXPECT_LE(segments[i - 1].second, segments[i].second);
+        }
+    };
+
+    const std::vector<SegmentInfo> segmentsBefore = collectSegments();
+    expectTicksInOrder(segmentsBefore);
+
+    // [WHEN] The first note of measure 2 is selected and its time is deleted
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2);
+    ChordRest* cr = m2->findChordRest(m2->tick(), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    score->select(toChord(cr)->upNote());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->cmdTimeDelete();
+    score->endCmd();
+    score->doLayout();
+
+    // [THEN] Measure 2 is shortened and the segment ticks are still in order
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    expectTicksInOrder(collectSegments());
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, 0);
+    score->doLayout();
+
+    // [THEN] The segments are back in their original order, with ticks in order
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4));
+    const std::vector<SegmentInfo> segmentsAfter = collectSegments();
+    EXPECT_EQ(segmentsAfter, segmentsBefore);
+    expectTicksInOrder(segmentsAfter);
+}
+
+/**
+ *  Deleting the time of a note with an annotation at the start of a measure moves the annotation to the
+ *  next segment instead of leaving it on an empty segment, and undo restores the original segments.
+ */
+TEST_F(Engraving_MeasureTests, timeDeleteNoteWithAnnotationUndo)
+{
+    // [GIVEN] A 4/4 score of quarter notes on two staves, with staff text on the first note of measure 2
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-3.mscx"));
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(m2);
+    Segment* firstSeg = m2->findSegment(SegmentType::ChordRest, m2->tick());
+    ASSERT_TRUE(firstSeg);
+
+    StaffText* text = Factory::createStaffText(firstSeg);
+    text->setTrack(0);
+    text->setXmlText(u"Text");
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoAddElement(text);
+    score->endCmd();
+
+    using SegmentInfo = std::pair<SegmentType, Fraction>;
+    auto collectSegments = [m2]() {
+        std::vector<SegmentInfo> segments;
+        for (Segment* s = m2->first(); s; s = s->next()) {
+            segments.emplace_back(s->segmentType(), s->tick());
+        }
+        return segments;
+    };
+
+    auto staffTextTicks = [m2]() {
+        std::vector<Fraction> ticks;
+        for (Segment* s = m2->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* a : s->annotations()) {
+                if (a->isStaffText()) {
+                    ticks.push_back(s->tick());
+                }
+            }
+        }
+        return ticks;
+    };
+
+    const std::vector<SegmentInfo> segmentsBefore = collectSegments();
+
+    // [WHEN] The time of the first note of measure 2 is deleted
+    ChordRest* cr = m2->findChordRest(m2->tick(), 0);
+    ASSERT_TRUE(cr && cr->isChord());
+    score->select(toChord(cr)->upNote());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->cmdTimeDelete();
+    score->endCmd();
+    score->doLayout();
+
+    // [THEN] Measure 2 is shortened, and every ChordRest segment still has ChordRests
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(3, 4));
+    for (Segment* s = m2->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EXPECT_TRUE(s->hasElements()) << "Tick " << s->tick().toString().toStdString();
+    }
+
+    // [THEN] The staff text has moved to the next note, which is now at the start of measure 2
+    EXPECT_EQ(staffTextTicks(), std::vector<Fraction>({ m2->tick() }));
+
+    // [WHEN] The deletion is undone
+    score->undoRedo(true, 0);
+    score->doLayout();
+
+    // [THEN] The segments are back in their original order, with the staff text back on the first note
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(m2->ticks(), Fraction(4, 4));
+    EXPECT_EQ(collectSegments(), segmentsBefore);
+    EXPECT_EQ(staffTextTicks(), std::vector<Fraction>({ m2->tick() }));
+    const Segment* textSeg = m2->findSegment(SegmentType::ChordRest, m2->tick());
+    ASSERT_TRUE(textSeg);
+    EXPECT_TRUE(textSeg->element(0) && textSeg->element(0)->isChord());
 }

@@ -75,6 +75,10 @@ ScoresView {
                 root.viewOnlineRequested(scoreId)
             }
 
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
+            }
+
             onRemoveFromRecentFilesRequested: function(scorePath) {
                 recentScoresModel.removeRecentScore(scorePath)
             }
@@ -117,6 +121,10 @@ ScoresView {
 
             onViewOnlineRequested: function(scoreId) {
                 root.viewOnlineRequested(scoreId)
+            }
+
+            onDeleteScoreRequested: function(scoreId, scoreName) {
+                root.deleteScoreRequested(scoreId, scoreName)
             }
 
             onRemoveFromRecentFilesRequested: function(scorePath) {

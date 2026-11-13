@@ -26,7 +26,6 @@ import QtQuick
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.UiComponents.LegacyTreeView
 
 import MuseScore.InstrumentsScene
 
@@ -34,11 +33,12 @@ FocusableControl {
     id: root
 
     required property AbstractLayoutPanelTreeItem item
-    required property LegacyTreeView treeView
+    required property TreeView treeView
     required property var modelIndex
+    required property int row
     required property int depth
     required property bool isExpanded
-    property string filterKey
+    property bool isDragged: false
 
     property bool isEnabled: item && item.isEnabled
 
@@ -46,12 +46,12 @@ FocusableControl {
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool settingsAvailable: item && item.settingsAvailable
-    readonly property bool settingsEnabled: item && item.settingsEnabled
+    readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
 
     property int sideMargin: 0
+    property int cardRadius: 0
 
-    property alias isPopupOpened: popupLoader.isPopupOpened
+    readonly property alias isPopupOpened: row.isPopupOpened
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
@@ -62,60 +62,47 @@ FocusableControl {
     signal changeEnabledOfSelectedRowsRequested(bool enable)
     signal changeEnabledRequested(var modelIndex, bool enable)
 
-    signal dragStarted()
-    signal dropped()
+    signal expandRequested(bool expand)
+
+    signal mousePressed()
+    signal mouseReleased()
 
     QtObject {
         id: prv
 
-        property bool dragged: root.mouseArea.drag.active && root.mouseArea.pressed
+        readonly property bool isExpandedPart: root.isExpanded && root.type === LayoutPanelItemType.PART
 
-        onDraggedChanged: {
-            if (dragged) {
-                root.dragStarted()
-                if (root.isExpanded) {
-                    root.treeView.collapse(root.modelIndex)
-                }
-            } else {
-                root.dropped()
-            }
-        }
+        readonly property bool isCardTop: root.depth === 0 || root.isDragged
+        readonly property bool isCardBottom: (root.depth === 0 && !prv.isExpandedPart) || root.isDragged
+        readonly property bool isInExpandedCard: root.depth > 0 || prv.isExpandedPart
     }
 
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
-
-    implicitHeight: 38
+    implicitHeight: 30
     implicitWidth: 248
-
-    Drag.keys: [ root.filterKey ]
-    Drag.active: prv.dragged && root.isSelectable
-    Drag.source: root
-    Drag.hotSpot.x: width / 2
-    Drag.hotSpot.y: height / 2
 
     navigation.name: "LayoutPanelItemDelegate"
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: visibilityControls.title
+    navigation.accessible.name: row.title
 
     onNavigationTriggered: { root.clicked(null) }
 
-    mouseArea.preventStealing: true
     mouseArea.propagateComposedEvents: true
 
     mouseArea.hoverEnabled: root.visible
 
     mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.onPressed: { root.mousePressed() }
+    mouseArea.onReleased: { root.mouseReleased() }
+    mouseArea.onCanceled: { root.mouseReleased() }
     mouseArea.enabled: root.isSelectable
 
-    mouseArea.drag.target: root
-    mouseArea.drag.axis: Drag.YAxis
+    background.topLeftRadius: prv.isCardTop ? root.cardRadius : 0
+    background.topRightRadius: prv.isCardTop ? root.cardRadius : 0
+    background.bottomLeftRadius: prv.isCardBottom ? root.cardRadius : 0
+    background.bottomRightRadius: prv.isCardBottom ? root.cardRadius : 0
 
     Keys.onShortcutOverride: function(event) {
         switch (event.key) {
@@ -137,166 +124,42 @@ FocusableControl {
         z: -1
     }
 
-    Loader {
-        id: popupLoader
-
-        readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
-        readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
-
-        function openPopup(comp: Component, btn: FlatButton, item) {
-            popupLoader.sourceComponent = comp
-            if (!openedPopup) {
-                return
-            }
-
-            openedPopup.parent = btn
-            openedPopup.needActiveFirstItem = btn.navigation.highlight
-
-            openedPopup.load(item)
-
-            openedPopup.closed.connect(function() {
-                sourceComponent = null
-            })
-
-            openedPopup.open()
-        }
-
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                openedPopup.close()
-            }
-        }
-    }
-
-    Component {
-        id: instrumentSettingsComp
-
-        InstrumentSettingsPopup {
-            onReplaceInstrumentRequested: {
-                // The popup would close when the dialog to select the new
-                // instrument is shown; when it closes, it is unloaded, i.e.
-                // deleted, which means that it is deleted while a signal
-                // handler inside it is being executed. This causes a crash.
-                // To prevent that, let the popup close itself, and perform the
-                // actual operation "later", i.e. not (directly or indirectly)
-                // inside the signal handler in the popup.
-                Qt.callLater((root.item as PartTreeItem).replaceInstrument)
-            }
-
-            onResetAllFormattingRequested: {
-                // Same as above
-                Qt.callLater((root.item as PartTreeItem).resetAllFormatting)
-            }
-        }
-    }
-
-    Component {
-        id: staffSettingsComp
-
-        StaffSettingsPopup {}
-    }
-
-    Component {
-        id: systemObjectsLayerSettingsComp
-
-        SystemObjectsLayerSettingsPopup {}
-    }
-
-    VisibilityControls {
-        id: visibilityControls
+    LayoutPanelItemRow {
+        id: row
 
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
         anchors.rightMargin: root.sideMargin
 
+        item: root.item
+        isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
+        isHovered: root.mouseArea.containsMouse
+        isHighlighted: root.isSelected || root.isPressed || root.navigation.highlight
+
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
-        title: root.item ? root.item.title : ""
-        isRootControl: Boolean(root.item) && (root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART)
-
-        useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-        isVisible: Boolean(root.item) && root.item.isVisible
-        onVisibilityButtonClicked: function(isVisible) {
-            if (root.isSelected) {
-                root.changeVisibilityOfSelectedRowsRequested(!isVisible)
-            } else {
-                root.changeVisibilityRequested(root.modelIndex, !isVisible)
-            }
-        }
-
-        showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-
+        depth: root.depth
+        isExpanded: root.isExpanded
         isEnabled: root.isEnabled
 
-        isExpandable: root.isExpandable
-        isExpanded: root.isExpanded
-        expandableDepth: root.depth
-        onExpandButtonClicked: function(expand) {
-            if (expand) {
-                root.treeView.expand(root.modelIndex)
+        onVisibilityToggled: function(visible) {
+            if (root.isSelected) {
+                root.changeVisibilityOfSelectedRowsRequested(visible)
             } else {
-                root.treeView.collapse(root.modelIndex)
+                root.changeVisibilityRequested(root.modelIndex, visible)
             }
         }
 
-        FlatButton {
-            id: settingsButton
-
-            visible: root.settingsAvailable
-            enabled: root.visible && root.settingsEnabled
-
-            objectName: "SettingsBtn"
-            navigation.panel: visibilityControls.navigationPanel
-            navigation.row: visibilityControls.navigationRow
-            navigation.column: 3
-            navigation.accessible.name: qsTrc("layoutpanel", "Settings")
-
-            icon: IconCode.SETTINGS_COG
-
-            onClicked: {
-                if (popupLoader.isPopupOpened) {
-                    popupLoader.closeOpenedPopup()
-                    return
-                }
-
-                let comp = null
-                let item = {}
-
-                if (root.type === LayoutPanelItemType.PART) {
-                    comp = instrumentSettingsComp
-
-                    item["partId"] = root.item.id
-                    item["instrumentId"] = (root.item as PartTreeItem).instrumentId()
-                } else if (root.type === LayoutPanelItemType.STAFF) {
-                    comp = staffSettingsComp
-
-                    item["id"] = root.item.id
-                } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
-                    comp = systemObjectsLayerSettingsComp
-
-                    item["staffId"] = (root.item as SystemObjectsLayerTreeItem).staffId()
-                }
-
-                popupLoader.openPopup(comp, this, item)
-            }
-
-            Behavior on opacity {
-                NumberAnimation { duration: 150 }
-            }
+        onExpandToggled: function(expand) {
+            root.expandRequested(expand)
         }
 
-        ToggleButton {
-            id: sharedPartToggle
-            visible: root.type === LayoutPanelItemType.SHARED_PART
-            enabled: root.treeView.model.isStaveSharingEnabled
-            checked: root.item && root.item.isEnabled
-            onToggled: function() {
-                if (root.isSelected) {
-                    root.changeEnabledOfSelectedRowsRequested(!checked)
-                } else {
-                    root.changeEnabledRequested(root.modelIndex, !checked)
-                }
+        onEnabledToggled: function(enabled) {
+            if (root.isSelected) {
+                root.changeEnabledOfSelectedRowsRequested(enabled)
+            } else {
+                root.changeEnabledRequested(root.modelIndex, enabled)
             }
         }
     }
@@ -319,7 +182,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.mouseArea.containsMouse && !root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.mouseArea.containsMouse && !root.isPressed && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -330,7 +193,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.mouseArea.pressed && !root.isSelected && !prv.dragged
+            when: root.mouseArea.pressed && !root.isSelected && !root.isDragged
 
             PropertyChanges {
                 target: root.background
@@ -341,7 +204,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: root.isSelected && !root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.isSelected && !root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -352,7 +215,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.isSelected && root.mouseArea.containsMouse && !root.mouseArea.pressed
+            when: root.isSelected && root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -363,7 +226,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: root.isSelected && root.mouseArea.pressed
+            when: root.isSelected && root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -373,22 +236,8 @@ FocusableControl {
         },
 
         State {
-            name: "PART_EXPANDED"
-            when: root.isExpanded && !root.isSelected &&
-                  root.type === LayoutPanelItemType.PART
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
-            }
-        },
-
-        State {
-            name: "PARENT_EXPANDED"
-            when: root.visible && !root.isSelected &&
-                  (root.type === LayoutPanelItemType.INSTRUMENT ||
-                   root.type === LayoutPanelItemType.STAFF)
+            name: "IN_EXPANDED_CARD"
+            when: prv.isInExpandedCard && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -400,25 +249,17 @@ FocusableControl {
 
     states: [
         State {
-            when: prv.dragged
+            when: root.isDragged
             name: "DRAGGED"
-
-            ParentChange {
-                target: root
-                parent: root.treeView.contentItem
-            }
 
             PropertyChanges {
                 target: shadow
                 visible: true
             }
 
-            AnchorChanges {
+            PropertyChanges {
                 target: root
-                anchors {
-                    verticalCenter: undefined
-                    horizontalCenter: undefined
-                }
+                opacity: 0.9
             }
         }
     ]

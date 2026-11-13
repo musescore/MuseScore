@@ -85,6 +85,7 @@ EditStaff::EditStaff(QWidget* parent)
     connect(showTimesig,      &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
     connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
     connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(instrumentLabelVisibility, &QComboBox::currentIndexChanged, this, &EditStaff::instrumentLabelVisibilityChanged);
 
     connect(useDefaultName, &QRadioButton::clicked, this, [&]() {
         useCustomNameChanged(!useDefaultName->isChecked());
@@ -213,6 +214,7 @@ void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
     showTimesig->setChecked(staffType.genTimesig());
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
+    instrumentLabelVisibility->setCurrentIndex(static_cast<int>(staffType.instrumentLabelVisibility()));
     staffGroupName->setText(staffType.translatedGroupName());
 
     longStaffName->setPlainText(TextBase::unEscape(staffType.longName()));
@@ -446,6 +448,11 @@ void EditStaff::invisibleChanged()
     m_staff->staffType(m_tick)->setInvisible(invisible->isChecked());
 }
 
+void EditStaff::instrumentLabelVisibilityChanged(int index)
+{
+    m_staff->staffType(m_tick)->setInstrumentLabelVisibility(static_cast<InstrumentLabelVisibility>(index));
+}
+
 void EditStaff::colorChanged()
 {
     m_staff->staffType(m_tick)->setColor(color->color());
@@ -500,12 +507,12 @@ void EditStaff::useCustomIndividualNameChanged(bool useCustomIndividual)
 
 INotationPtr EditStaff::notation() const
 {
-    return globalContext()->currentNotation();
+    return projectSession()->currentNotation();
 }
 
 IMasterNotationPtr EditStaff::masterNotation() const
 {
-    return globalContext()->currentMasterNotation();
+    return projectSession()->masterNotation();
 }
 
 INotationPartsPtr EditStaff::notationParts() const

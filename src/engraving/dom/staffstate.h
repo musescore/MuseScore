@@ -51,6 +51,7 @@ public:
     ~StaffState();
 
     StaffState* clone() const override { return new StaffState(*this); }
+    void setOwnershipParent(DummyParentOr<Segment> parent) { EngravingItem::setOwnershipParent(parent); }
 
     void setStaffStateType(const String&);
     void setStaffStateType(StaffStateType st) { m_staffStateType = st; }
@@ -74,7 +75,7 @@ public:
 private:
 
     friend class Factory;
-    StaffState(DummyParentOr<EngravingItem> parent);
+    StaffState(DummyParentOr<Segment> parent);
     StaffState(const StaffState&);
 
     StaffStateType m_staffStateType = StaffStateType::INVISIBLE;

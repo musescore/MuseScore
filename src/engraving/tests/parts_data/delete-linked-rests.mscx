@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<museScore version="5.00">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <createMultiMeasureRests>0</createMultiMeasureRests>
+    </Style>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <Instrument>
+        <trackName>Piano</trackName>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>quarter</durationType>
+          </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+          </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+          </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

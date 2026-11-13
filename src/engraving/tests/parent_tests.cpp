@@ -191,6 +191,40 @@ TEST_F(Engraving_ParentTests, deletingOwnerParksChildrenOnDummy)
     delete note;
 }
 
+//! An item is in the score's tree when its chain of owners reaches the score. Having an
+//! owner is not enough: the owner itself may be unattached
+TEST_F(Engraving_ParentTests, isInScoreTreeFollowsTheWholeOwnershipChain)
+{
+    Segment* segment = someSegment();
+    ASSERT_TRUE(segment);
+
+    // items in the score, reached through segment -> measure -> score
+    ASSERT_TRUE(segment->element(0));
+    EXPECT_TRUE(segment->isInScoreTree());
+    EXPECT_TRUE(segment->measure()->isInScoreTree());
+    EXPECT_TRUE(segment->element(0)->isInScoreTree());
+
+    // attached to an item in the score
+    Chord* chord = Factory::createChord(segment, false /*isAccessibleEnabled*/);
+    Note* note = Factory::createNote(chord, false /*isAccessibleEnabled*/);
+    EXPECT_TRUE(chord->isInScoreTree());
+    EXPECT_TRUE(note->isInScoreTree());
+
+    // the chord is unattached, so the note is out of the tree despite having an owner
+    chord->moveToDummy();
+    ASSERT_EQ(note->ownershipParent(), chord);
+    EXPECT_FALSE(chord->isInScoreTree());
+    EXPECT_FALSE(note->isInScoreTree());
+
+    delete note;
+    delete chord;
+
+    // created on the dummy, i.e. not attached to anything
+    Dynamic* dynamic = Factory::createDynamic(m_score->dummy(), false /*isAccessibleEnabled*/);
+    EXPECT_FALSE(dynamic->isInScoreTree());
+    delete dynamic;
+}
+
 //! Accessibility walks the layout hierarchy, but unattached items are not placed in
 //! it: they form a tree of their own, headed by the dummy's root item.
 TEST_F(Engraving_ParentTests, accessibleParentFallsBackToTheDummysRoot)
@@ -255,7 +289,8 @@ TEST_F(Engraving_ParentTests, layoutParentDefaultsToTheOwner)
     ASSERT_TRUE(measure);
     Segment* segment = measure->first(SegmentType::ChordRest);
     ASSERT_TRUE(segment);
-    ASSERT_TRUE(segment->element(0) && segment->element(0)->isChord());
+    ASSERT_TRUE(segment->element(0));
+    ASSERT_TRUE(segment->element(0)->isChord());
     Chord* chord = toChord(segment->element(0));
     Note* note = chord->notes().front();
 

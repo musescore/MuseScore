@@ -5642,6 +5642,7 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="238"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="87"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="88"/>
         <source>Copy</source>
         <translation>拷贝</translation>
@@ -5654,6 +5655,7 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="246"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="86"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="95"/>
         <source>Cut</source>
         <translation>剪切</translation>
@@ -5666,6 +5668,7 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="254"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="88"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="102"/>
         <source>Paste</source>
         <translation>粘贴</translation>
@@ -5673,7 +5676,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="261"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="262"/>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="282"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="281"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2662"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2663"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="76"/>
@@ -5684,7 +5687,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="269"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="270"/>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="288"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="287"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2669"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2670"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="84"/>
@@ -5705,19 +5708,19 @@ followed by dashes</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="216"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="215"/>
         <source>Parts…</source>
         <translation>分谱…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="283"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="282"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="77"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="160"/>
         <source>Undo ‘%1’</source>
         <translation>撤消“%1”</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="289"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="288"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="85"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="166"/>
         <source>Redo ‘%1’</source>
@@ -6391,6 +6394,7 @@ followed by dashes</source>
         <translation>全选 (&amp;A)</translation>
     </message>
     <message>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/textinputmenumodel.cpp" line="90"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="367"/>
         <source>Select all</source>
         <translation>全选</translation>
@@ -9692,51 +9696,57 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
+        <source>Convert &amp;file…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
+        <source>Convert file</source>
+        <translation>转换文件</translation>
+    </message>
+    <message>
         <source>Import P&amp;DF…</source>
         <translation>导入PDF… (&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Import PDF</source>
         <translation>导入 PDF</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
         <translation>导入音频到乐谱 (&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
         <translation>导入音频到乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="128"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project propert&amp;ies…</source>
         <translation>项目属性… (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Project properties</source>
         <translation>项目属性</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="134"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
         <source>&amp;Print…</source>
         <translation>打印 (&amp;P)…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="135"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="141"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>&amp;Clear list of recent files</source>
         <translation>清空最近文件列表 (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectuiactions.cpp" line="142"/>
+        <location filename="../../src/project/internal/projectuiactions.cpp" line="131"/>
         <source>Clear list of recent files</source>
         <translation>清空最近文件列表</translation>
     </message>
@@ -9795,29 +9805,33 @@ followed by dashes</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/MainToolBar.qml" line="67"/>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/WindowContent.qml" line="67"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/WindowContent.qml" line="68"/>
         <source>Main toolbar</source>
         <translation>主工具栏</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="121"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationReviewPage/NotationReviewPage.qml" line="50"/>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/PublishPage.qml" line="56"/>
         <source>Notation toolbar</source>
         <translation>记谱工具栏</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="143"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationReviewPage/NotationReviewPage.qml" line="74"/>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/PublishPage.qml" line="78"/>
         <source>Playback controls</source>
         <translation>播放控件</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="170"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationReviewPage/NotationReviewPage.qml" line="106"/>
         <source>Extensions toolbar</source>
         <translation>扩展包工具栏</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="198"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationReviewPage/NotationReviewPage.qml" line="140"/>
         <source>Undo/redo</source>
         <translation>撤销/恢复</translation>
     </message>
@@ -9908,71 +9922,71 @@ followed by dashes</source>
         <translation>若接收器支持则生成MIDI 2.0输出</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="343"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="360"/>
         <source>Are you sure you want to revert to factory settings?</source>
         <translation>您确定要恢复到初始设置吗？</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="344"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="361"/>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>此操作将会重置您的所有应用程序偏好，并删除所有自定义面板和自定义快捷键。最近打开的乐谱列表也会被清除。
+        <translation>此操作将会重置所有您的应用偏好设置，并删除所有自定义面板和自定义快捷键。最近打开的乐谱列表也会被清除。
 
 此操作不会删除您的任何乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="354"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="371"/>
         <source>Revert</source>
         <translation>还原</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="356"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="373"/>
         <source>Revert to factory settings</source>
         <translation>恢复初始设置</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="368"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="385"/>
         <source>Would you like to restart MuseScore Studio now?</source>
         <translation>您是否要立即重启MuseScore Studio？</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="369"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="386"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
         <translation>MuseScore Studio需要重新启动以使这些更改生效。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="374"/>
+        <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="391"/>
         <source>Restart</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="332"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="330"/>
         <source>The previous session quit unexpectedly.</source>
         <translation>上一次的项目进度意外中止。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/startupscenario.cpp" line="333"/>
+        <location filename="../../src/appshell/internal/startupscenario.cpp" line="331"/>
         <source>Do you want to restore the session?</source>
         <translation>您是否要恢复进度？</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="90"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="105"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="91"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="106"/>
         <source>Score</source>
         <translation>乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="92"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="107"/>
         <source>Publish</source>
         <translation>发布</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="95"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="110"/>
         <source>DevTools</source>
         <translation>开发工具</translation>
     </message>
@@ -10006,9 +10020,9 @@ This action will not delete any of your scores.</source>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>此操作将会重置您的所有应用偏好和删除所有自定义快捷键。但这不会删除您的任何乐谱。
+        <translation>此操作将会重置所有您的应用偏好设置，并删除所有自定义快捷键。但不会删除您的任何乐谱。
 
-此操作不能撤销。</translation>
+此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="225"/>
@@ -10053,8 +10067,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>版权所有 © 1999-2026 MuseScore 有限公司等。
-依照 &lt;a href=&quot;%1&quot;&gt;GNU 通用公共许可协议第 3 版&lt;/a&gt; 发布。</translation>
+        <translation>版权所有 © 1999-2026 MuseScore Limited 及其他。
+根据 &lt;a href=&quot;%1&quot;&gt;GNU 通用公共许可协议第 3 版&lt;/a&gt; 发布。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10069,7 +10083,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="72"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>版权所有 © 2004-2021《MusicXML 规范》的贡献者，由 W3C 社区最终规范协议（FSA）下的 Music Notation Community Group 发布</translation>
+        <translation>版权所有 © 2004-2021 MusicXML 规范的贡献者，由 Music Notation Community Group 根据 W3C 社区最终规范协议（FSA）发布：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="96"/>
@@ -10167,7 +10181,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>为保护您的隐私，MuseScore Studio不收集任何个人信息。详情请阅&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt; 。</translation>
+        <translation>为保护您的隐私，MuseScore Studio 不收集任何个人信息。更多信息请参阅我们的&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt; 。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="103"/>
@@ -10193,54 +10207,54 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/add</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="334"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="333"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="205"/>
         <source>&amp;Notes</source>
         <translation>音符 (&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="335"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="334"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="206"/>
         <source>&amp;Intervals</source>
         <translation>音程 (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="336"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="335"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="207"/>
         <source>T&amp;uplets</source>
         <translation>连音 (&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="338"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="337"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="209"/>
         <source>&amp;Measures</source>
         <translation>小节 (&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="339"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="338"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="210"/>
         <source>&amp;Frames</source>
         <translation>框体 (&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="340"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="339"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="211"/>
         <source>&amp;Text</source>
         <translation>文本 (&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="341"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="340"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="212"/>
         <source>&amp;Lines</source>
         <translation>线性记号 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="342"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
         <translation>和弦和品格图 (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="346"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="345"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="215"/>
         <source>&amp;Add</source>
         <translation>添加 (&amp;A)</translation>
@@ -10257,52 +10271,52 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostics</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="498"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="497"/>
         <source>&amp;System</source>
         <translation>系统 (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="510"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="509"/>
         <source>&amp;MuseSampler</source>
         <translation>&amp;Muse采样器</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="567"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="566"/>
         <source>A&amp;ctions</source>
         <translation>操作 (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="568"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="567"/>
         <source>&amp;Accessibility</source>
         <translation>无障碍 (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="569"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="568"/>
         <source>&amp;Engraving</source>
         <translation>雕版 (&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="569"/>
         <source>E&amp;xtensions</source>
         <translation>扩展 (&amp;X)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="571"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
         <source>Auto&amp;bot</source>
         <translation>机器人 (&amp;B)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="574"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="573"/>
         <source>&amp;VST</source>
         <translation>&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="577"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="576"/>
         <source>&amp;Audio</source>
         <translation>音频 (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="581"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="580"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
         <translation>诊断 (&amp;D)</translation>
@@ -10311,7 +10325,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/edit</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="266"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="265"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="143"/>
         <source>&amp;Edit</source>
         <translation>编辑 (&amp;E)</translation>
@@ -10335,7 +10349,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>在线发布 (&amp;B)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="223"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="222"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="120"/>
         <source>&amp;File</source>
         <translation>文件 (&amp;F)</translation>
@@ -10344,13 +10358,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/format</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="362"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="361"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="231"/>
         <source>Str&amp;etch</source>
         <translation>小节宽度 (&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="373"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="372"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="239"/>
         <source>F&amp;ormat</source>
         <translation>格式 (&amp;O)</translation>
@@ -10359,7 +10373,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="484"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="483"/>
         <source>&amp;Help</source>
         <translation>帮助 (&amp;H)</translation>
     </message>
@@ -10367,7 +10381,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/plugins</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="431"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="430"/>
         <source>&amp;Plugins</source>
         <translation>插件 (&amp;P)</translation>
     </message>
@@ -10375,24 +10389,24 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/tools</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="404"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="403"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="264"/>
         <source>&amp;Voices</source>
         <translation>声部 (&amp;V)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="405"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="404"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="265"/>
         <source>&amp;Measures</source>
         <translation>小节 (&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="413"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="412"/>
         <source>Enharmonic spelling</source>
         <translation>异名同音记谱</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="426"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="425"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="282"/>
         <source>&amp;Tools</source>
         <translation>工具 (&amp;T)</translation>
@@ -10401,25 +10415,25 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/view</name>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="316"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="315"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="187"/>
         <source>&amp;Toolbars</source>
         <translation>工具栏 (&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="320"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="319"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="191"/>
         <source>W&amp;orkspaces</source>
         <translation>工作区 (&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="324"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="323"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="195"/>
         <source>&amp;Show</source>
         <translation>显示 (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="328"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="327"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="199"/>
         <source>&amp;View</source>
         <translation>视图 (&amp;V)</translation>
@@ -10468,7 +10482,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="52"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation>在 MuseScore.com 上保存你的私人乐谱，以访问它们的历史版本、或者邀请他人来查看和评价。当你准备好的时候，将你的音乐分享到全世界！</translation>
+        <translation>在 MuseScore.com 上保存您的私人乐谱，以便回顾它们的过往版本，并邀请他人来查看和评论——当您准备好时，再将您的音乐分享给全世界。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="54"/>
@@ -10498,7 +10512,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation>包括必不可少的新记谱工具、针对回放系统的重大优化、视频导出、吉他下压记号，以及一些为了提效工作流而设计的新特性。</translation>
+        <translation>包括必不可少的新制谱工具、回放系统的重大改进、视频导出、吉他下压记号，以及一些为加速工作流而设计的新特性。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="46"/>
@@ -10628,19 +10642,19 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>我的账户</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="177"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="206"/>
         <source>Sign in buttons</source>
         <translation>登录按钮</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="184"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="213"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="187"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="75"/>
         <source>Create account</source>
         <translation>创建账户</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="194"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="223"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="159"/>
         <source>Sign in</source>
         <translation>登录</translation>
@@ -10680,7 +10694,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>debugOption</name>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8437"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8441"/>
         <source>Toggle show gap rests</source>
         <translation>切换显示间隙休止符</translation>
     </message>
@@ -10753,22 +10767,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>运音法记号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1029"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1131"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1142"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3504"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3516"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2543"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2553"/>
         <source>Start of %1</source>
         <translation>%1的起点</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1032"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1134"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1144"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3508"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3524"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2558"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2568"/>
         <source>End of %1</source>
         <translation>%1之终</translation>
     </message>
@@ -10802,21 +10816,27 @@ Fret %1 on strings %2</source>
         <translation>分谱：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="191"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="190"/>
         <source>&lt;b&gt;Corrupted measure&lt;/b&gt;: %1, measure %2, staff %3.</source>
         <translation>&lt;b&gt;错乱小节&lt;/b&gt;：%3谱表，%2节，%1。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="199"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="198"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
         <translation>&lt;b&gt;不完整小节&lt;/b&gt;：%3谱表，%2节，%1。理应：%5，实际：%4。</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/check.cpp" line="213"/>
+        <location filename="../../src/engraving/dom/check.cpp" line="212"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
         <translation>&lt;b&gt;声部过长&lt;/b&gt;：%3谱表，%2节，%1，%4声部。理应：%6，实际：%5。</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/check.cpp" line="223"/>
+        <source>&lt;b&gt;Element outside measure&lt;/b&gt;: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.</source>
+        <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
@@ -10970,7 +10990,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1295"/>
         <source>and ending string %1</source>
-        <translation>结束弦 %1</translation>
+        <translation>终止弦 %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1298"/>
@@ -11130,12 +11150,12 @@ Fret %1 on strings %2</source>
         <translation>对业余者过高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="386"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="389"/>
         <source>Note input will remove measure repeat</source>
         <translation>音符输入将移除小节反复号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="387"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="390"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation>该小节包含一个小节反复号。若您在这里输入音符，它将被删除。您想继续吗？</translation>
     </message>
@@ -11155,7 +11175,7 @@ Fret %1 on strings %2</source>
         <translation>%1；时值：%2；%3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2517"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2527"/>
         <source>Annotations:</source>
         <translation>注释：</translation>
     </message>
@@ -11193,7 +11213,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
-        <translation>终拍：%1</translation>
+        <translation>终止拍：%1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1126"/>
@@ -11444,28 +11464,28 @@ Fret %1 on strings %2</source>
         <translation>无法创建比例为%1时值为%2的连音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7976"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8156"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7980"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8160"/>
         <source>Remove stale partial tie</source>
         <translation>移除失效的局部延音线</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8042"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8046"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation>移除非法的圆滑线进入部分</translation>
+        <translation>移除无效的圆滑线进入部分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8050"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8054"/>
         <source>Reset incoming partial slur</source>
         <translation>重置圆滑线的进入部分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8065"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8069"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation>移除非法的圆滑线引出部分</translation>
+        <translation>移除无效的圆滑线引出部分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8073"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8077"/>
         <source>Reset outgoing partial slur</source>
         <translation>重置圆滑线的引出部分</translation>
     </message>
@@ -20711,8 +20731,9 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="107"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="261"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="212"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="194"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="56"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="593"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -20731,22 +20752,24 @@ Fret %1 on strings %2</source>
         <translation>下一步</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="248"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="142"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="202"/>
+        <location filename="../../src/project/internal/deletecloudscorescenario.cpp" line="73"/>
+        <location filename="../../src/project/tests/deletecloudscorescenario_tests.cpp" line="248"/>
         <source>Please check your internet connection or try again later.</source>
         <translation>请检查您的互联网连接或稍后再试。</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="210"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="145"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="220"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="179"/>
         <source>Size</source>
         <comment>file size</comment>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="231"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="166"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="241"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="200"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.cpp" line="63"/>
         <source>Unknown</source>
         <translation>未知</translation>
@@ -20756,11 +20779,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/ProgressDialog.qml" line="98"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="87"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ConvertButtonBox.qml" line="34"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="166"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="93"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="147"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="69"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="350"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="385"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="356"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="413"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -20774,7 +20799,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="80"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="284"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="285"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="184"/>
         <source>Clear</source>
         <translation>清除</translation>
@@ -20805,28 +20830,28 @@ Fret %1 on strings %2</source>
         <translation>显示详情</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="92"/>
+        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="97"/>
         <source>Question</source>
         <translation>问题</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="93"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="98"/>
+        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="103"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="94"/>
+        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="99"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="95"/>
+        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="100"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="204"/>
+        <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="209"/>
         <source>Don’t show this message again</source>
         <translation>不再显示此消息</translation>
     </message>
@@ -20840,6 +20865,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml" line="82"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="142"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="68"/>
         <source>Close</source>
@@ -20905,7 +20931,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/WorkspacesDialog.qml" line="113"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="150"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="151"/>
         <source>Select</source>
         <translation>选择</translation>
     </message>
@@ -21222,9 +21248,9 @@ Fret %1 on strings %2</source>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="215"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="129"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TitleListView.qml" line="129"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="312"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="203"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="272"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="384"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="251"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="310"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/filteredflyoutmodel.cpp" line="130"/>
         <source>No results found</source>
         <translation>未找到结果</translation>
@@ -21237,6 +21263,8 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml" line="90"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="156"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="80"/>
         <source>Processing…</source>
         <translation>处理中…</translation>
     </message>
@@ -21295,7 +21323,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1407"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1429"/>
         <source>Success!</source>
         <translation>成功！</translation>
     </message>
@@ -21412,7 +21440,11 @@ Fret %1 on strings %2</source>
         <translation>中止</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="165"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="137"/>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="66"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="610"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="633"/>
         <source>Retry</source>
         <translation>重试</translation>
     </message>
@@ -21479,17 +21511,17 @@ Fret %1 on strings %2</source>
         <translation>详细…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="263"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="298"/>
         <source>Move up</source>
         <translation>向上移动</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="277"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="312"/>
         <source>Move down</source>
         <translation>向下移动</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="292"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="327"/>
         <source>Select more</source>
         <translation>选择更多</translation>
     </message>
@@ -21503,20 +21535,25 @@ Fret %1 on strings %2</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="223"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="324"/>
         <source>Proceed</source>
         <translation>处理</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="407"/>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="434"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="570"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="609"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="632"/>
         <source>Dismiss</source>
         <translation>忽略</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="437"/>
         <source>Try again</source>
         <translation>重试</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="121"/>
+        <source>Go back</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -26622,7 +26659,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.cpp" line="259"/>
         <source>This action can not be undone</source>
-        <translation>此操作不能撤消</translation>
+        <translation>此操作无法撤销</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffcontroltreeitem.cpp" line="33"/>
@@ -26767,7 +26804,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="272"/>
         <source>Linked staves contain identical notation (e.g. for guitar tablature)</source>
-        <translation>联动谱表包含等同记谱（譬如供吉他指法谱）</translation>
+        <translation>联动谱表包含相同的记谱（例如用于吉他的指法谱）</translation>
     </message>
 </context>
 <context>
@@ -26834,13 +26871,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation>欢迎来到《精通 MuseScore》——这里有学习全世界最流行的音乐记谱软件：Musescore 的最全面的资源！我的名字是马克·萨巴泰拉。MuseScore 首次发布后的十多年里，我一直致力于帮助开发、支持和宣传 MuseScore。
+        <translation>欢迎来到精通MuseScore——这里有学习全球最受欢迎的音乐记谱软件的最全面资源！我的名字是Marc Sabatella，在MuseScore首次发布后的十多年里，我一直参与着其开发、支持和宣传工作。
 
-无论您是音乐记谱软件的初学者，还是渴望探索进阶排版和声音播放技巧的高级用户，我旗舰的在线课程《精通 MuseScore》里拥有您需要知晓的有关 MuseScore 的一切。
+无论您是刚上手音乐记谱软件的初学者，还是想要探索更深入的制谱与播放技术的资深用户，我的旗舰在线课程“精通MuseScore”都涵盖了您充分利用MuseScore所需了解的一切。
 
-此外，《精通 MuseScore》的特色在于它有一个支持性的音乐人社区，带有讨论空间、现场直播和其他相关课程和服务，以帮助您创建您最棒的音乐。抓住机会，从其最受公认的专家之一那里学习 MuseScore！
+此外，精通MuseScore还有一个互帮互助的音乐人社区，提供讨论区、直播以及其他相关课程和服务，帮助您创作出最出色的音乐。抓住这个机会，从最知名的MuseScore专家之一那里学习MuseScore吧！
 
-（注意：《精通 MuseScore》只提供英文版本）</translation>
+（注：精通MuseScore仅提供英文版本）</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/learnpagemodel.cpp" line="97"/>
@@ -26870,11 +26907,16 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
+        <source>MuseSampler library could not be initialized, version %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
         <source>Installed MuseSampler library is not supported, version %1</source>
         <translation>不支持所安装的 MuseSampler 库，版本为 %1</translation>
     </message>
     <message>
-        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
+        <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="63"/>
         <source>MuseSampler library is not found</source>
         <translation>未找到Muse采样库</translation>
     </message>
@@ -26897,57 +26939,91 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>抱歉，我们现在无法加载这些音色</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="64"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="92"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="78"/>
+        <source>Troubleshoot</source>
+        <translation>疑难解答</translation>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="83"/>
+        <source>Open MuseSounds Manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="85"/>
+        <source>To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="90"/>
+        <source>Open MuseHub</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="92"/>
+        <source>To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
+
+If the issue persists, follow the steps at the troubleshooting link below.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="103"/>
+        <source>MuseSounds could not be loaded</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="122"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="150"/>
         <source>Not now</source>
         <translation>暂不</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="126"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="154"/>
         <source>Quit &amp; launch MuseSounds Manager</source>
         <translation>退出并启动MuseSounds管理器</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="70"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="128"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>为了应用此更新，MuseScore Studio 需要暂时关闭并打开 MuseSounds 管理器。更新完成后，您的 MuseSounds 库才能正常工作。</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="103"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="132"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="161"/>
         <source>Quit &amp; launch MuseHub</source>
         <translation>退出并启动MuseHub</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="76"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="134"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
         <translation>为了应用此更新，MuseScore Studio 需要暂时关闭并打开 MuseHub。更新完成后，您的 MuseSounds 库才能正常工作。</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="138"/>
         <source>MuseSounds needs an update</source>
         <translation>MuseSounds需要更新</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="98"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="156"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
         <translation>为了保证 MuseSounds 运行顺畅，MuseScore Studio 需要暂时关闭，以便 MuseHub 应用更新。更新完成后将提示您重启 MuseScore Studio。</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="105"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="163"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
         <translation>为了保证 MuseSounds 运行顺畅，MuseScore Studio 需要暂时关闭，以便 MuseHub 应用更新。更新完成后将提示您重启 MuseScore Studio。</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="110"/>
+        <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="168"/>
         <source>An update for MuseSounds is available</source>
         <translation>可获取MuseSounds的更新</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="136"/>
         <source>Take me to MuseHub</source>
-        <translation>转至Muse Hub</translation>
+        <translation>转至MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="142"/>
@@ -26955,7 +27031,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>不用，谢谢</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="59"/>
+        <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="62"/>
         <source>Show occasional MuseHub promotions</source>
         <translation>偶尔显示 MuseHub 促销信息</translation>
     </message>
@@ -27967,41 +28043,41 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>缩放菜单</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="705"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="704"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
         <translation>在所选区域后插入…  (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="704"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="703"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="368"/>
         <source>Insert &amp;before selection…</source>
         <translation>在所选区域前插入…  (&amp;B)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="701"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="700"/>
         <source>&amp;Insert one measure before selection</source>
         <translation>在选区前插入一个小节 (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="702"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="701"/>
         <source>Insert &amp;one measure at end of score</source>
         <translation>在乐谱末尾插入一个小节 (&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="707"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="706"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="370"/>
         <source>Insert at &amp;start of score…</source>
         <translation>在乐谱开头插入… (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="708"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="707"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
         <translation>在乐谱末尾插入… (&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="722"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="721"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="685"/>
         <source>Insert at end of score</source>
         <translation>在乐谱末尾插入</translation>
@@ -28198,7 +28274,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Please select all notes that are part of this tremolo and try again.</source>
-        <translation>请选中该震音的所有音符然后重试</translation>
+        <translation>请选中该震音的所有音符后重试</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
@@ -28229,7 +28305,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="159"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation>这份乐谱已经有分谱了。尚不支持在有分谱时更改局部拍号。</translation>
+        <translation>此乐谱已有分谱。暂不支持在有分谱时更改局部拍号。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="163"/>
@@ -28264,7 +28340,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="175"/>
         <source>Make a list selection of notes or rests on the same beat or any range selection and retry.</source>
-        <translation>使用相同节拍上的音符或休止符的列表选区或任意范围选区，再重试。</translation>
+        <translation>使用相同节拍上的音符或休止符的列表选区或进行任意范围选区后重试。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="178"/>
@@ -28446,47 +28522,47 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="993"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1000"/>
         <source>Cannot create tuplet</source>
         <translation>无法创建连音</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="993"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1000"/>
         <source>Note value is too short</source>
         <translation>音符时值过短</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1492"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1499"/>
         <source>All Supported Files</source>
         <translation>所有受支持的文件</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1493"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1500"/>
         <source>Scalable Vector Graphics</source>
         <translation>可缩放矢量图像（SVG）</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1494"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1501"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1495"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1502"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG位图</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1496"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1503"/>
         <source>Bitmap</source>
         <translation>位图</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1497"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1504"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1498"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1505"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="51"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/notesinchordselectionfiltermodel.cpp" line="147"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="49"/>
@@ -28494,53 +28570,53 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1500"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1507"/>
         <source>Insert Image</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1835"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1842"/>
         <source>MuseScore style files</source>
         <translation>MuseScore样式文件</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1836"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1843"/>
         <source>MuseScore style file</source>
         <translation>MuseScore样式文件</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1839"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1846"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="123"/>
         <source>Load style</source>
         <translation>加载样式</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1840"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1847"/>
         <source>Save style</source>
         <translation>保存样式</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1850"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1857"/>
         <source>The style file could not be loaded.</source>
         <translation>无法加载样式文件。</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1856"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1863"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>由于此样式文件来自不同版本的 MuseScore Studio，因此无法保证您的乐谱能正常显示。</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1858"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1865"/>
         <source>Click OK to load anyway.</source>
         <translation>点击确定以继续加载。</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1876"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1883"/>
         <source>The style file could not be saved.</source>
         <translation>无法保存样式文件。</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1877"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1884"/>
         <source>An error occurred.</source>
         <translation>发生了一个错误。</translation>
     </message>
@@ -28941,7 +29017,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="222"/>
         <source>Always open</source>
-        <translation>常开音</translation>
+        <translation>常空弦</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="223"/>
@@ -28951,7 +29027,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;始终开放&lt;/b&gt;&lt;br&gt;在指法谱上，除了标有‘0’的弦位置外，不能在其他标记为“始终开放”的弦上录入品位。适用于带有不在品格上的弦的乐器，例如短双颈琉特琴。</translation>
+        <translation>&lt;b&gt;常空弦&lt;/b&gt;&lt;br&gt;在指法谱中，被标记为“常空弦”的弦不能输入“0”以外的品位。这对带有不在指板上的弦的乐器很有用，例如西奥伯琴。</translation>
     </message>
 </context>
 <context>
@@ -29159,7 +29235,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1409"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation>本乐谱上次保存时的MuseScore Studio修订号</translation>
+        <translation>此乐谱上次保存时所用的 MuseScore Studio 修订号</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1411"/>
@@ -30356,7 +30432,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="120"/>
         <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
-        <translation>您还想移动触发这些声音的MIDI音符和键盘快捷键吗？</translation>
+        <translation>您也想移动用于触发这些声音的MIDI音符和键盘快捷键吗？</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="132"/>
@@ -30660,12 +30736,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
         <source>Metronome real-time input mode</source>
-        <translation>实时（节拍器）输入模式</translation>
+        <translation>节拍器实时输入模式</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="54"/>
         <source>Pedal real-time input mode</source>
-        <translation>实时（踏板）输入模式</translation>
+        <translation>踏板实时输入模式</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="55"/>
@@ -33440,7 +33516,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="627"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation>当你在工作时，音频会在后台进行处理。如果您想自己触发音频处理，请在 偏好设置 &gt; 音频与MIDI &gt; 在线音色 中禁用此功能。</translation>
+        <translation>当您工作时，音频会在后台进行处理。如果您想自己触发音频处理，请在 偏好设置 &gt; 音频与MIDI &gt; 在线音色 中禁用此功能。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="641"/>
@@ -33631,7 +33707,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="220"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation>您已经达到了您目前的 %1 限额。您暂时无法使用在线音色处理，直到您的限额在 %2 重置。更多信息请参考：&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;。</translation>
+        <translation>您已经达到当前 %1 的限额。您将暂时无法使用在线音色处理，直到您的限额在 %2 重置。更多信息：&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="227"/>
@@ -33650,28 +33726,28 @@ failed: %2</source>
         <translation>这将会删除在您的计算机中存储的此乐谱的在线音色数据。在线音色处理服务将随后尝试重启。</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="93"/>
         <source>Reverb</source>
         <translation>混响</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="97"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="99"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>辅助通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1073"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1076"/>
         <source>Metronome</source>
         <translation>节拍器</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1083"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1086"/>
         <source>Chords</source>
         <translation>和弦</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1410"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1414"/>
         <source>Loading audio samples</source>
         <translation>加载音频采样</translation>
     </message>
@@ -33681,28 +33757,28 @@ failed: %2</source>
         <translation>获取更多音色</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="393"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="394"/>
         <source>SoundFonts</source>
         <translation>声音字体</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="436"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="437"/>
         <source>Bank %1, preset %2</source>
         <translation>音色库 %1，预设 %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="491"/>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="556"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="492"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="557"/>
         <source>Choose automatically</source>
         <translation>自动选择</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="537"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="538"/>
         <source>Preset %1</source>
         <translation>预设 %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="547"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="548"/>
         <source>Bank %1</source>
         <translation>音色库 %1</translation>
     </message>
@@ -33724,7 +33800,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="687"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>这可能会重置此乐器上的音色标志，但会保留谱表文本。此操作不能撤销。</translation>
+        <translation>此乐器上的音色标志可能会被重置，但谱表文本会被保留。此操作无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -33754,7 +33830,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation>您已经达到了您目前的 %1 限额。您暂时无法使用在线音色处理，直到您的限额在 %2 重置。</translation>
+        <translation>您已经达到当前 %1 的限额。您将暂时无法使用在线音色处理，直到您的限额在 %2 重置。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="132"/>
@@ -33809,7 +33885,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="165"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>这可能会重置音色标志，但会保留谱表文本。此操作不能撤销。</translation>
+        <translation>音色标志可能会被重置，但谱表文本会被保留。此操作无法撤销。</translation>
     </message>
 </context>
 <context>
@@ -33884,7 +33960,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>检查软件更新需要访问网络。为了保护您的隐私，MuseScore Studio 不存储任何个人信息。更多信息请参阅我们的《&lt;a href=&quot;%1&quot;&gt;隐私政策&lt;/a&gt;》。</translation>
+        <translation>检查更新需要访问网络。为保护您的隐私，MuseScore Studio 不存储任何个人信息。更多信息请参阅我们的&lt;a href=&quot;%1&quot;&gt;隐私条款&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -34754,7 +34830,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation>所选的音频驱动没有任何可用设备。MuseScore Studio 将会使用默认音频驱动作为替代。要想使用 %1，请确保你的硬件已正确配置，随后重启 MuseScore Studio 并重试。</translation>
+        <translation>所选的音频驱动没有任何可用的音频设备。MuseScore Studio 将会使用默认音频驱动来替代。若要使用 %1，请确保您的硬件已正确设置，随后重启 MuseScore Studio 并重试。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PlaybackQualitySection.qml" line="30"/>
@@ -34788,27 +34864,27 @@ failed: %2</source>
 <context>
     <name>project</name>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="129"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="158"/>
         <source>You don’t have any online scores yet</source>
         <translation>您尚无任何在线乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="159"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
         <translation>当您将文件保存到云或在 &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; 上发布乐谱时，乐谱将会在此出现。</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="154"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="183"/>
         <source>You are not signed in</source>
         <translation>您尚未登录</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="184"/>
         <source>Log in or create a new account on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
         <translation>在 &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; 上登录或创建新账户以查看在线乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="218"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="247"/>
         <source>Unable to load online scores</source>
         <translation>无法载入在线乐谱</translation>
     </message>
@@ -34823,14 +34899,14 @@ failed: %2</source>
         <translation>在线乐谱列表</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="171"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="106"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="181"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="140"/>
         <source>Modified</source>
         <extracomment>Stands for &quot;Last time that this score was modified&quot;. Used as the header of this column in the scores list.</extracomment>
         <translation>修改于</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="252"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="262"/>
         <source>Views</source>
         <comment>number of views</comment>
         <extracomment>Stands for &quot;The number of times this score was viewed on MuseScore.com&quot;. Used as the header of this column in the scores list.</extracomment>
@@ -34844,7 +34920,8 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="199"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="188"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="349"/>
         <source>Untitled score</source>
         <translation>未命名乐谱</translation>
     </message>
@@ -34889,19 +34966,19 @@ failed: %2</source>
         <translation>下载乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="59"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="60"/>
         <source>Recent scores grid</source>
         <translation>最近乐谱网格视图</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="90"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="108"/>
         <source>Recent scores list</source>
         <translation>最近乐谱列表</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="105"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="79"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/recentscoresmodel.cpp" line="73"/>
         <source>New score</source>
         <translation>新建乐谱</translation>
     </message>
@@ -34946,84 +35023,89 @@ failed: %2</source>
         <translation>在线查看乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="85"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="93"/>
         <source>Scores grid</source>
         <translation>乐谱网格视图</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="87"/>
         <source>Scores list</source>
         <translation>乐谱列表</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="150"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="159"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="109"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="116"/>
         <source>Scores</source>
         <translation>乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="129"/>
         <source>Search recent scores</source>
         <translation>搜索最近乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="164"/>
         <source>Scores tab bar</source>
         <translation>乐谱选项卡栏</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="175"/>
         <source>New &amp; recent</source>
         <translation>新乐谱与最近文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="162"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="183"/>
         <source>My online scores</source>
         <translation>我的在线乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="198"/>
         <source>View buttons</source>
         <translation>视图按钮</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="189"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="210"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="201"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="222"/>
         <source>Grid view</source>
         <translation>网格视图</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="202"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="223"/>
         <source>List view</source>
         <translation>列表视图</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="367"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
         <translation>乐谱命令</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="380"/>
         <source>Score manager (online)</source>
         <translation>乐谱管理器（在线）</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="400"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="412"/>
+        <source>Convert…</source>
+        <translation>转换...</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="424"/>
         <source>Open other…</source>
         <translation>打开其他文件</translation>
     </message>
@@ -35033,274 +35115,306 @@ failed: %2</source>
         <translation>在线保存...</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2355"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2362"/>
         <source>File “%1” seems not corrupted</source>
         <translation>文件“%1”似乎没有损坏</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2356"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2363"/>
         <source>This file does not seem to contain errors.</source>
         <translation>此文件似乎不包含损坏。</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2359"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2366"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1817"/>
         <source>File “%1” is corrupted</source>
         <translation>文件“%1”错乱</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2361"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2368"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation>此文件包含可致 MuseScore Studio 发生故障的错误。请首先修复这些错误，以防止崩溃和进一步的损坏。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="107"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="113"/>
         <source>MuseScore file</source>
         <translation>MuseScore文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="108"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="114"/>
         <source>Uncompressed MuseScore folder (experimental)</source>
         <translation>未压缩的MuseScore文件夹（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="485"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
         <source>Your score could not be opened</source>
         <translation>无法打开您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="490"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="496"/>
         <source>This score is invalid.</source>
         <translation>此乐谱无效。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="751"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="773"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>您想在关闭前保存乐谱“%1”的更改吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="754"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="776"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>若不进行保存，您所有的更改都将遗失。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1531"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1553"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1645"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>您的乐谱无法上传到云端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1534"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1556"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
         <translation>此乐谱已损坏且包含错误。您可以手动修复这些错误，或将乐谱保存到您的计算机里并到 MuseScore.org 上获取此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1542"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1564"/>
         <source>Save as…</source>
         <translation>另存为...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1547"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1589"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1569"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1611"/>
         <source>Revert to last saved</source>
         <translation>恢复到上次存档</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1592"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>此乐谱已错乱且包含错误</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1596"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，但您仍然可以继续将其保存到本地。您可以尝试手动修复这些错误，或到 MuseScore.org 上获取此问题的帮助。</translation>
+        <translation>您可以继续将其保存到本地，但文件可能无法使用。您可以尝试手动修复这些错误，或到 MuseScore.org 上获取此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1598"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，但您仍然可以继续将其保存到本地。为了妥善地保留您的乐谱，请恢复它到上次保存的版本，或手动修复错误。您也可以到 MuseScore.org 上获取此问题的帮助。</translation>
+        <translation>您可以继续将其保存到本地，但文件可能无法使用。为了保护您的乐谱，请恢复它到上次保存的版本，或手动修复错误。您也可以到 MuseScore.org 上获取此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1584"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1606"/>
         <source>Save anyway</source>
         <translation>仍要保存</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1644"/>
         <source>Your score cannot be saved</source>
         <translation>无法保存您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1648"/>
         <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
         <translation>该乐谱已损坏。您可在MuseScore.org上获取对于此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1629"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1817"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1651"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
         <source>Get help</source>
         <translation>获取帮助</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1679"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1701"/>
         <source>Try again</source>
         <translation>重试</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1694"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1716"/>
         <source>Revert to last saved?</source>
         <translation>是否恢复上次的存档？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1695"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1717"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>您所做的修改将会丢失。此操作无法撤消。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1775"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1800"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1822"/>
         <source>Open anyway</source>
         <translation>仍然打开</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1831"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>Cannot read file %1</source>
         <translation>无法读取文件 %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1810"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
         <translation>此文件使用 MuseScore Studio 的新版本保存。请访问 &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; 以获取最新版本。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1819"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation>此文件包含错误，可致MuseScore Studio发生故障。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1812"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1834"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>文件“%1”已损坏且无法打开。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1814"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1836"/>
         <source>Get help for this issue on MuseScore.org.</source>
         <translation>在MuseScore.org上获取有关此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1836"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1858"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>此文件不存在或此时无法访问。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1861"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation>无法打开此文件。请确保 MuseScore Studio 有权限来读此文件。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1868"/>
         <source>An error occurred while reading this file.</source>
         <translation>读取本文件时发生错误。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1913"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="422"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1925"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="395"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="76"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1926"/>
         <source>MuseScore files</source>
         <translation>MuseScore文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
         <source>MusicXML files</source>
         <translation>MusicXML 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1916"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
         <source>MIDI files</source>
         <translation>MIDI 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1917"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
         <source>MNX files (experimental)</source>
         <translation>MNX 文件（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1918"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1930"/>
         <source>MuseData files</source>
         <translation>MuseData 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1919"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
         <source>Capella files</source>
         <translation>Capella 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1920"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1932"/>
         <source>BB files (experimental)</source>
         <translation>BB文件（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1921"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1933"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer文件（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1922"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1934"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer文件（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1923"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1935"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1924"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1936"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor文件（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1925"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1937"/>
         <source>MEI files</source>
         <translation>MEI 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1926"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1938"/>
         <source>TablEdit files (experimental)</source>
         <translation>TablEdit 文件（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1927"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1939"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>未压缩的MuseScore文件夹（实验）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1928"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1940"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore开发文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1929"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1941"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore 备份文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1931"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="68"/>
+        <source>Show in Explorer</source>
+        <translation>在资源管理器中显示</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="69"/>
+        <source>Show in Finder</source>
+        <translation>在访达中显示</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="70"/>
+        <source>Show in File Manager</source>
+        <translation>在文件管理器中显示</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="80"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1943"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="139"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="84"/>
+        <source>View online</source>
+        <translation>在线查看</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="94"/>
+        <source>Remove from recent files list</source>
+        <translation>从最近文件列表中移除</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="98"/>
+        <source>Delete score</source>
+        <translation>删除乐谱</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="142"/>
         <source>Create backup of file on disk before saving new changes</source>
         <translation>在保存新更改之前，在磁盘上创建文件备份</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="386"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="389"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
@@ -35360,14 +35474,15 @@ failed: %2</source>
         <translation>Audio.com URL</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="55"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="47"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="74"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="73"/>
         <source>Processing %1</source>
         <extracomment>%1 is the name of the score being converted</extracomment>
         <translation>正在处理 %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="423"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="396"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="77"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -35375,7 +35490,7 @@ failed: %2</source>
 <context>
     <name>project/cloud</name>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="97"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="107"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="186"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="199"/>
         <source>Visibility</source>
@@ -35383,17 +35498,17 @@ failed: %2</source>
         <translation>公开性设置</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="115"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="125"/>
         <source>Private</source>
         <translation>仅自己可见</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="117"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="127"/>
         <source>Unlisted</source>
         <translation>不公开列出</translation>
     </message>
     <message>
-        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="119"/>
+        <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="129"/>
         <source>Public</source>
         <translation>完全公开</translation>
     </message>
@@ -35408,23 +35523,23 @@ failed: %2</source>
         <translation>在这个免费流媒体平台上与数百万听众分享您的乐谱音频</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="438"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="444"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="450"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="456"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="462"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <source>MuseScore.com returned an error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned; this might contain english text that is deliberately not translated</extracomment>
         <translation>MuseScore.com 返回了错误代码：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="474"/>
         <source>MuseScore.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned, which is a number.</extracomment>
         <translation>MuseScore.com返回了未知的错误代码：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="471"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <source>MuseScore.com returned an unknown error code.</source>
         <translation>MuseScore.com返回了未知的错误代码。</translation>
     </message>
@@ -35433,42 +35548,69 @@ failed: %2</source>
         <translation>请稍后再试，或在MuseScore.org上获取此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="483"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="615"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
         <translation>请稍后再试，或在 MuseScore.com 上获取此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="499"/>
         <source>The file could not be downloaded to your disk.</source>
         <translation>无法将该文件下载到您的硬盘。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="496"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="563"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="502"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="569"/>
         <source>Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
         <translation>需要先验证您的MuseScore.com账户。请通过激活电子邮件中的链接激活您的账户。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="500"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="506"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
         <translation>此乐谱不属于此账户。欲访问此乐谱，请确保您已用此乐谱所属的账户登录到此桌面应用程序。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="504"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="510"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
         <translation>找不到乐谱，又或无法通过您的账户访问乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="517"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="604"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="523"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="610"/>
         <source>Could not connect to &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
         <translation>无法连接到 &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;。请检查您的互联网连接或稍后再尝试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="522"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="528"/>
         <source>Please try again later.</source>
         <translation>请稍后再试。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="82"/>
+        <source>Are you sure you want to delete “%1”?</source>
+        <extracomment>%1 is the name of the score that is about to be deleted</extracomment>
+        <translation>您确定要删除 “%1” 吗?</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="83"/>
+        <source>Are you sure you want to delete this score?</source>
+        <translation>您确定要删除此乐谱吗？</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="95"/>
+        <source>I understand that deleting is permanent and can’t be undone.</source>
+        <translation>我明白删除无法被撤销。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="130"/>
+        <source>Delete score</source>
+        <translation>删除乐谱</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/deletecloudscorescenario.cpp" line="72"/>
+        <location filename="../../src/project/tests/deletecloudscorescenario_tests.cpp" line="247"/>
+        <source>Unable to delete the score</source>
+        <translation>无法删除乐谱</translation>
     </message>
 </context>
 <context>
@@ -35479,12 +35621,23 @@ failed: %2</source>
         <translation>将文件转换为乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="55"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="60"/>
         <source>Convert audio to score (beta)</source>
         <translation>将音频转换为乐谱（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="115"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="62"/>
+        <source>Convert PDF to score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="64"/>
+        <source>Convert images to score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="69"/>
         <source>Convert a file to score</source>
         <translation>从单一文件转换乐谱</translation>
     </message>
@@ -35495,7 +35648,7 @@ failed: %2</source>
         <translation>文件要求</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SaveAsField.qml" line="45"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SaveAsField.qml" line="47"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
@@ -35511,188 +35664,291 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="125"/>
+        <source>Use a PDF, images, or an audio file (beta)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Use a PDF, images, or MP3 (beta)</source>
         <translation>支持 PDF、图片或 MP3 文件（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="177"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="765"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="250"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="827"/>
         <source>Log in or create a free account on MuseScore.com to convert a file.</source>
         <translation>登录到 MuseScore.com 或创建一个免费账户即可转换文件。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="226"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1028"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1077"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1125"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="327"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1306"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1355"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1403"/>
         <source>Would you like to convert this file to a score?</source>
         <translation>您想将此文件转换为乐谱吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="227"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1029"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1078"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1126"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="328"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1307"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1356"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1404"/>
         <source>This file needs to be converted online before it can be edited. Would you like to proceed?</source>
         <translation>此文件需要经过在线转换才可被编辑。您希望继续处理吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="294"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="719"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="800"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="426"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="627"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="450"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="783"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="860"/>
         <source>Unable to connect to MuseScore.com</source>
         <translation>无法连接到MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="295"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="720"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="801"/>
         <source>An internet connection is required to convert a file. Please check your internet connection or try again later.</source>
-        <translation>文件转换要求有互联网连接。请检查您的互联网连接并稍后重试。</translation>
+        <translation>文件转换需要有互联网连接。请检查您的互联网连接或稍后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="302"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="497"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1000"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="434"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="566"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1153"/>
         <source>Something went wrong</source>
         <translation>发生了一些问题</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="303"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="498"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1001"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="435"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="567"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1154"/>
         <source>Check your internet connection and try again.</source>
         <translation>请检查您的互联网连接后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="310"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="528"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="539"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="455"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="597"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="608"/>
         <source>The maximum file size is %1. Reduce the size of your file and try again.</source>
         <translation>允许的文件大小最大为 %1，请您减小文件大小后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="312"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="531"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="542"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="457"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="600"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="611"/>
         <source>This file is too large</source>
         <translation>所选的文件过大</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="329"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="505"/>
         <source>Make sure you’re importing a suitable PDF, image or MP3 file.</source>
-        <translation>确保您在导入合适的 PDF、图片或 MP3 文件。</translation>
+        <translation>请确保您在导入合适的 PDF、图像或 MP3 文件。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="368"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="561"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="512"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="630"/>
         <source>You can convert up to %n audio file(s) at a time. Remove some files and try again.</source>
-        <translation><numerusform>您最多只能同时转换 %1 个音频文件。请您移除一些文件后重试。</numerusform></translation>
+        <translation><numerusform>您最多只能同时转换 %n 个音频文件。请移除一些文件后重试。</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="376"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="572"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="520"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="641"/>
         <source>You can convert up to %n image(s) at a time. Remove some images and try again.</source>
-        <translation><numerusform>您最多只能同时转换 %1 个图片文件。请您移除一些图片后重试。</numerusform></translation>
+        <translation><numerusform>您最多只能同时转换 %n 个图片文件。请移除一些图片后重试。</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="218"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="240"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="220"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="242"/>
         <source>Uploading guidelines</source>
         <translation>上传指引</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="319"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="550"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="464"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="619"/>
         <source>The maximum combined file size for all images is %1. Choose a smaller file or remove some images to continue.</source>
         <translation>允许的图片文件大小总和为 %1，请选择更小的文件或移除一些图片后继续。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="322"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="554"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="467"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="623"/>
         <source>Maximum file size exceeded</source>
         <translation>超出最大文件大小限制</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="328"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="504"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="473"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="573"/>
         <source>This file type is not compatible</source>
         <translation>不兼容的文件类型</translation>
     </message>
     <message>
         <source>Make sure you’ve selected a PDF, image or MP3 file.</source>
-        <translation>确保您选择了 PDF、图片或 MP3 文件。</translation>
+        <translation>请确保您选择了 PDF、图像或 MP3 文件。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="340"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="608"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="635"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="191"/>
+        <source>Continue converting</source>
+        <translation>继续转换</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="198"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1464"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1511"/>
+        <source>Are you sure you want to cancel this file conversion?</source>
+        <translation>您确定要取消转换此文件吗？</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="199"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1465"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1512"/>
+        <source>Processing will be canceled and this score will be removed from your scores.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="427"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="628"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="451"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="784"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="861"/>
+        <source>An internet connection is required for file conversion. Please check your internet connection or try again later.</source>
+        <translation>文件转换需要有互联网连接。请检查您的互联网连接或稍后重试。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="442"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1123"/>
+        <source>One or more files could not be read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="443"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1124"/>
+        <source>Make sure the files still exist and that you have permission to open them.</source>
+        <translation>请确保这些文件仍然存在且您有权限打开它们。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="446"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1088"/>
+        <source>This file could not be read</source>
+        <translation>该文件无法被读取</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1089"/>
+        <source>Make sure the file still exists and that you have permission to open it.</source>
+        <translation>请确保文件仍然存在且您有权限打开它。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="474"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="574"/>
+        <source>Make sure you’re importing a suitable PDF, image or audio file.</source>
+        <translation>请确保您在导入合适的 PDF、图像或音频文件。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="484"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="677"/>
         <source>Make sure you’re using a valid link from YouTube or Audio.com.</source>
         <translation>请确保您提供的是来自 YouTube 或 Audio.com 的有效链接。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="342"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="662"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="486"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="728"/>
         <source>Make sure you’re using a valid link from YouTube.</source>
         <translation>请确保您提供的是来自 YouTube 的有效链接。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="344"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="689"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="488"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="754"/>
         <source>Make sure you’re using a valid link from Audio.com.</source>
         <translation>请确保您提供的是来自 Audio.com 的有效链接。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="347"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="607"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="634"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="661"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="688"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="491"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="676"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="702"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="727"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="753"/>
         <source>Please use a compatible URL</source>
         <translation>请提供兼容的 URL</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="353"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="511"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="497"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="580"/>
         <source>Please select files of the same type</source>
         <translation>请选择相同类型的文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="354"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="512"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="498"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="581"/>
+        <source>Per conversion, you may select either one audio file, one PDF file, or multiple image files.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
+        <source>Upload limit reached</source>
+        <translation>已达到上传限额</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
+        <source>You’ve reached the limit for file conversions. Please try again later.</source>
+        <translation>您已达到文件转换的限额。请稍后再试。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
+        <source>Try another file</source>
+        <translation>尝试别的文件</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1185"/>
+        <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="606"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1184"/>
+        <source>Error uploading score</source>
+        <translation>上传乐谱时出错</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="621"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="431"/>
+        <source>We’re having trouble connecting to MuseScore.com.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="622"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="432"/>
+        <source>We’ll keep trying intermittently.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
         <translation>您只能上传单个 MP3 文件、单个 PDF 文件或多个图片文件用于每轮转换。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="361"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="519"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="505"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="588"/>
         <source>Please select a single PDF file</source>
         <translation>请选择单个 PDF 文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="362"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="520"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="506"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="589"/>
         <source>Only one PDF file can be converted at a time.</source>
         <translation>每轮只能转换一个 PDF 文件。</translation>
     </message>
     <message>
         <source>You can convert up to %1 audio files at a time. Remove some files and try again.</source>
-        <translation>您最多只能同时转换 %1 个音频文件。请您移除一些文件后重试。</translation>
+        <translation>您最多只能同时转换 %1 个音频文件。请移除一些文件后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="370"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="565"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="514"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="634"/>
         <source>Too many files selected</source>
         <translation>所选文件数量过多</translation>
     </message>
     <message>
         <source>You can convert up to %1 images at a time. Remove some images and try again.</source>
-        <translation>您最多只能同时转换 %1 个图片文件。请您移除一些图片后重试。</translation>
+        <translation>您最多只能同时转换 %1 个图片文件。请移除一些图片后重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="378"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="575"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="522"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="644"/>
         <source>Too many images selected</source>
         <translation>所选图片数量过多</translation>
     </message>
@@ -35701,9 +35957,13 @@ failed: %2</source>
         <translation>上传更多</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
         <source>Home &gt; Scores</source>
         <translation>主页 &gt; 乐谱</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
+        <source>Home &gt; Scores &gt; My online scores</source>
+        <translation>主页 &gt; 乐谱 &gt; 我的在线乐谱</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="44"/>
@@ -35711,12 +35971,12 @@ failed: %2</source>
         <translation>我们将在乐谱已准备好打开时通知您。您可以在 %1 中检查乐谱的状态。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="194"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="203"/>
         <source>Convert more</source>
         <translation>转换更多</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="203"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="212"/>
         <source>Go to scores</source>
         <translation>前往浏览乐谱</translation>
     </message>
@@ -35730,7 +35990,7 @@ failed: %2</source>
         <translation>您的乐谱正在处理中</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="404"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="571"/>
         <source>Open score</source>
         <translation>打开乐谱</translation>
     </message>
@@ -35739,63 +35999,64 @@ failed: %2</source>
         <translation>忽略</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="411"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="234"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="564"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="243"/>
         <source>‘%1’ has finished processing and is ready to open.</source>
         <translation>‘%1’ 已处理完成且已准备好打开。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="415"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="233"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="567"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="242"/>
         <source>Your score is ready!</source>
         <translation>您的乐谱已就绪！</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="440"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="277"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="586"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="343"/>
         <source>We weren’t able to convert ‘%1’. Please try again with a better quality file.</source>
-        <translation>我们无法转换 ‘%1’。请您使用质量更好的文件重试。</translation>
+        <translation>我们无法转换 ‘%1’。请使用质量更好的文件重试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="444"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="276"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="589"/>
+        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="342"/>
         <source>Error processing score</source>
         <translation>转换乐谱时出现错误</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="459"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="84"/>
         <source>Good</source>
         <extracomment>Button to rate the quality of a converted score as good</extracomment>
-        <translation>良好</translation>
+        <translation>很好</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="461"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="99"/>
         <source>Bad</source>
         <extracomment>Button to rate the quality of a converted score as bad</extracomment>
-        <translation>糟糕</translation>
+        <translation>很差</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="465"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="385"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="417"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="36"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="64"/>
         <source>How does your score look?</source>
         <translation>您的乐谱看起来怎么样？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="466"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="386"/>
-        <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="418"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="37"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="72"/>
         <source>We’re always improving our score conversion accuracy. Let us know how we did with this one.</source>
-        <translation>我们一直致力于提升乐谱转换的准确率。请让我们知道这次我们做的如何。</translation>
+        <translation>我们一直都在不断地提升乐谱转换的准确率。请让我们知道这次我们做的如何。</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="60"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="62"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="389"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="403"/>
         <source>%1 max</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max&quot;; shown as a short label/badge</extracomment>
         <translation>最多 %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="67"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="69"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="397"/>
         <source>%1 max combined</source>
         <extracomment>%1 is a pre-formatted file size including units, e.g. &quot;20 MB max combined&quot;; shown as a short label/badge</extracomment>
         <translation>总计最多 %1</translation>
@@ -35805,7 +36066,10 @@ failed: %2</source>
         <translation>最多 %1 页</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="231"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="220"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="378"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="420"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="438"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
@@ -35818,23 +36082,28 @@ failed: %2</source>
         <translation>图片将依照您的上传顺序来组合成单张乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="145"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="156"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/filelistmodel_tests.cpp" line="325"/>
         <source>Images will be combined into one score in the order shown here</source>
         <translation>图片将依照此处所示的顺序来组合成单张乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="269"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/filelistmodel.cpp" line="298"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/filelistmodel_tests.cpp" line="448"/>
         <source>%1/%2 used</source>
         <extracomment>%1 and %2 are pre-formatted file sizes including units, e.g. &quot;15 MB/20 MB used&quot;</extracomment>
         <translation>已使用 %1/%2</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="258"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="248"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="379"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="426"/>
         <source>Images</source>
         <translation>图像</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="267"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="257"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="402"/>
         <source>%1 format</source>
         <extracomment>%1 is one or more file format names, e.g. &quot;MP3 format&quot; or &quot;MP3, WAV format&quot;</extracomment>
         <translation>%1 格式</translation>
@@ -35848,18 +36117,26 @@ failed: %2</source>
         <translation>每次上传 %1 个文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="280"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="270"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="380"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="432"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="556"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="557"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="569"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="570"/>
         <source>Paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>粘贴一个来自 %1 的链接（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="108"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="543"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="545"/>
         <source>Paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;; may include HTML markup (bold/link) depending on where this text is shown</extracomment>
         <translation>粘贴一个来自 %1 或 %2 的链接（实验性）</translation>
@@ -35873,13 +36150,16 @@ failed: %2</source>
         <translation>每次转换 %1 个文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="350"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="327"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="541"/>
         <source>Or paste a link from %1 or %2 (beta)</source>
         <extracomment>%1 and %2 are source names, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>或者粘贴一个来自 %1 或 %2 的链接（实验性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="355"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="332"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="555"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="568"/>
         <source>Or paste a link from %1 (beta)</source>
         <extracomment>%1 is a source name, e.g. &quot;YouTube&quot;, with HTML markup (bold/link)</extracomment>
         <translation>或者粘贴一个来自 %1 的链接（实验性）</translation>
@@ -35897,56 +36177,67 @@ failed: %2</source>
         <translation>选择文件</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="532"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="554"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="486"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="508"/>
         <source>No, stay here</source>
         <translation>否，留在这</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="535"/>
+        <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="194"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="489"/>
         <source>Yes, cancel</source>
         <translation>是，取消</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="539"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="493"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="825"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="842"/>
         <source>Are you sure you want to cancel?</source>
         <translation>您确定要取消吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="557"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="511"/>
         <source>Yes, go back</source>
         <translation>是，返回</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="561"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="515"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="859"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="878"/>
         <source>Are you sure you want to go back?</source>
         <translation>您确认要返回吗？</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="540"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="562"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="494"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="516"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="149"/>
         <source>Your current selection will be lost.</source>
         <translation>您当前已选中的内容将丢失。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="224"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="213"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="390"/>
         <source>%n page(s) max.</source>
         <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
         <translation><numerusform>最多 %n 页。</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="228"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="275"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="217"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="265"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="391"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="404"/>
         <source>%n file(s) per conversion</source>
         <translation><numerusform>每次转换 %n 个文件</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="254"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="244"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="398"/>
         <source>Max. %n image(s)</source>
         <translation><numerusform>最多 %n 张图片</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="521"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="475"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="812"/>
         <source>“%1” cannot be used as a file name. Please choose a different name.</source>
         <translation>“%1” 不能用作文件名称。请选择一个其他名称。</translation>
     </message>
@@ -35956,27 +36247,28 @@ failed: %2</source>
         <translation>从链接转换</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="120"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="123"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkPastePanel.qml" line="82"/>
         <source>Link</source>
         <translation>链接</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="131"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="279"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/LinkEntryPage.qml" line="134"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="269"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="405"/>
         <source>Recommended for solo arrangements only</source>
         <translation>仅推荐用于独奏乐器</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="84"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="116"/>
         <source>Selected files</source>
         <translation>已选文件</translation>
     </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="233"/>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="268"/>
         <source>%1/%n file(s) max.</source>
-        <extracomment>%1 is the number of files currently selected, %2 is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation>最多 %1/%n 页。</translation>
+        <extracomment>%1 is the number of files currently selected, %n is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
+        <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
@@ -35985,6 +36277,58 @@ failed: %2</source>
     <message>
         <source>Maximum files selected (%1)</source>
         <translation>已选择了最大数量的文件（%1）</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="37"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="73"/>
+        <source>Help us improve score processing with your thoughts on what went wrong</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="82"/>
+        <source>Tell us how your score could look better</source>
+        <translation>请告诉我们怎样还能让您的乐谱看起来更好。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="89"/>
+        <source>Feedback</source>
+        <translation>反馈</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
+        <source>%1/%2 characters</source>
+        <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
+        <source>Submit feedback</source>
+        <translation>提交反馈</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="70"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="69"/>
+        <source>Processing failed: %1</source>
+        <extracomment>%1 is the name of the score whose conversion failed</extracomment>
+        <translation>处理失败: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="155"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="124"/>
+        <source>Processing failed</source>
+        <extracomment>Status label shown on a score's thumbnail when its conversion failed</extracomment>
+        <translation>处理失败</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
+        <source>Terms of Use</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
+        <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
+        <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -36458,7 +36802,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation>要导出为此文件格式，需安装FFmpeg。您也可在“偏好设置”&gt;“视频”中对其进行配置。</translation>
+        <translation>要导出为此文件格式，需安装FFmpeg。您也可在 偏好设置 &gt; 视频 中对其进行配置。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -36919,8 +37263,8 @@ failed: %2</source>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="75"/>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="98"/>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="248"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="408"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="552"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="414"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="558"/>
         <source>Save to computer</source>
         <translation>保存到本机</translation>
     </message>
@@ -37031,12 +37375,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation>将此乐谱及其音频在MuseScore.com上分享</translation>
+        <translation>将此乐谱及其音频分享到MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation>将此乐谱的音频在Audio.com上分享</translation>
+        <translation>将此乐谱的音频分享到Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="162"/>
@@ -37071,8 +37415,8 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="195"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="351"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="386"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="357"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="392"/>
         <source>Publish</source>
         <translation>发布</translation>
     </message>
@@ -37108,188 +37452,188 @@ failed: %2</source>
         <translation>“%1”有错误或已损坏</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="93"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="99"/>
         <source>Save score</source>
         <translation>保存乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="98"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="104"/>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="101"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="107"/>
         <source>selection</source>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - selection&quot;</extracomment>
         <translation>节选</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="183"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="189"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
         <translation>在Audio.com上登录或创建新账户以共享您的音乐。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1034"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="241"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1056"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
         <translation>登录MuseScore.com以将此乐谱保存到云端。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="236"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="242"/>
         <source>Log in to MuseScore.com to publish this score.</source>
         <translation>登录到MuseScore.com以发布此乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="357"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="390"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="363"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="396"/>
         <source>Publish changes online?</source>
         <translation>是否在线发布更改？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="358"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="364"/>
         <source>We will need to generate a new MP3 for web playback.</source>
         <translation>需要生成一个新的MP3以用于在线播放。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="360"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="366"/>
         <source>Publish this score online?</source>
         <translation>在线发布此乐谱？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="361"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="367"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
         <translation>所有既存更改都将在MuseScore.com上公开可见。若您想经常更改此谱，我们建议将其保存为私密，直到其准备好问世。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="397"/>
         <source>Your saved changes will be publicly visible. We will also need to generate a new MP3 for public playback.</source>
         <translation>您保存的更改将公开可见。我们同时将生成一个新的 MP3 以便提供公开播放。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="407"/>
         <source>Unable to connect to MuseScore.com</source>
         <translation>无法连接到MuseScore.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="412"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="426"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="408"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="418"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="432"/>
         <source>Please check your internet connection or try again later.</source>
         <translation>请检查您的互联网连接或稍后再试。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="411"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1479"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="417"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1501"/>
         <source>Unable to connect to the cloud</source>
         <translation>无法连接到云端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="425"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="431"/>
         <source>Unable to connect to Audio.com</source>
         <translation>无法连接Audio.com</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="535"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="541"/>
         <source>Your score could not be published</source>
         <translation>无法发布您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="536"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="542"/>
         <source>Your score could not be saved to the cloud</source>
         <translation>你的乐谱无法保存到云端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="539"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="545"/>
         <source>Your score cannot be published</source>
         <translation>无法发布您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="540"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="546"/>
         <source>Your score cannot be saved to the cloud</source>
         <translation>无法在云端保存您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="559"/>
         <source>Get help</source>
         <translation>获取帮助</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="568"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="574"/>
         <source>There are conflicting changes in the online score</source>
         <translation>在线乐谱存在冲突变更</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="570"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="576"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
         <translation>您可以用它覆盖现有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将它发布为新的乐谱以避免丢失当前在线版本中的更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="576"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="582"/>
         <source>Publish as new score</source>
         <translation>发布为新乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="588"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="583"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
         <source>Replace</source>
         <translation>覆盖</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="581"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="587"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
         <translation>您可以用它覆盖现有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;，或将它另存为新文件以避免丢失当前在线版本中的更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="587"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1675"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="593"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1697"/>
         <source>Save as…</source>
         <translation>另存为...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="466"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="559"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="488"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="581"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
         <translation>在 MuseScore.com 上登录或创建一个免费账户以打开此乐谱。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1401"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1423"/>
         <source>View online</source>
         <translation>在线查看</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1404"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1426"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
         <translation>所有既存更改现在都会更新到云端。您能在 MuseScore.com 上的乐谱管理器中管理此文件。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1480"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1502"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>您的更改在连接恢复前将保存到一个本地文件。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1495"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1517"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>请至少添加一个乐器才能保存。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1645"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1667"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>在保存此文件时发生了未知错误。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1653"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1675"/>
         <source>Your score could not be saved</source>
         <translation>无法保存您的乐谱</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1663"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1685"/>
         <source>An error occurred while saving your score</source>
         <translation>保存您的乐谱时出现错误</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1665"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1687"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
         <translation>为了保护您的乐谱，请试着重新保存一次。如果仍出现此消息，请将您的乐谱另存为新副本。您也可以在 %1 上获取对于此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求帮助时请提供）：%2</translation>
     </message>
@@ -37297,34 +37641,34 @@ failed: %2</source>
 <context>
     <name>project/share</name>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="633"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="639"/>
         <source>Your audio could not be shared</source>
         <translation>无法分享您的音频</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="641"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="647"/>
         <source>Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
         <translation>您的 Audio.com 账户需要先进行验证。请访问电子邮件中的链接来激活您的账户。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="647"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="653"/>
         <source>Audio.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that audio.com returned, which is a number.</extracomment>
         <translation>Audio.com 返回了未知的错误代码：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="650"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="656"/>
         <source>Audio.com returned an unknown error code.</source>
         <translation>Audio.com 返回了未知错误代码。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="652"/>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="659"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="658"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="665"/>
         <source>Please try again later, or get help for this problem on Audio.com.</source>
         <translation>请稍后再试，或在 Audio.com 上获取有关此问题的帮助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="655"/>
+        <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="661"/>
         <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
         <translation>无法连接到 Audio.com。请检查您的互联网连接或稍后再试。</translation>
     </message>
@@ -37590,6 +37934,62 @@ failed: %2</source>
     </message>
 </context>
 <context>
+    <name>toast</name>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="98"/>
+        <source>%1 of %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
+        <source>Dismiss</source>
+        <translation>忽略</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="69"/>
+        <source>%n hour(s) remaining</source>
+        <comment>amount of time left until the requested operation is finished</comment>
+        <translation type="unfinished"><numerusform></numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="72"/>
+        <source>%n minute(s) remaining</source>
+        <comment>amount of time left until the requested operation is finished</comment>
+        <translation type="unfinished"><numerusform></numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="75"/>
+        <source>%n second(s) remaining</source>
+        <comment>amount of time left until the requested operation is finished</comment>
+        <translation type="unfinished"><numerusform></numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="43"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="45"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="47"/>
+        <source>Information</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="49"/>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="106"/>
+        <source>Press F6 to go to the notification.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>tours</name>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="142"/>
@@ -37621,8 +38021,9 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="131"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="450"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="453"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="401"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="404"/>
+        <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="694"/>
         <source>Choose file</source>
         <translation>选择文件</translation>
     </message>
@@ -37697,6 +38098,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="93"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/MenuButton.qml" line="50"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="112"/>
         <source>Menu</source>
         <extracomment>a type of ui item</extracomment>
         <translation>菜单</translation>
@@ -38070,13 +38472,13 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/generalsettingsmodel.cpp" line="162"/>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="501"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="503"/>
         <source>Make element(s) visible</source>
         <translation>使元素可见</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/generalsettingsmodel.cpp" line="163"/>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="503"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="505"/>
         <source>Make element(s) invisible</source>
         <translation>使元素不可见</translation>
     </message>
@@ -38456,7 +38858,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5720"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8277"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8281"/>
         <source>Toggle articulation</source>
         <translation>切换运音法记号</translation>
     </message>
@@ -38725,102 +39127,102 @@ failed: %2</source>
         <translation>添加唱词衔接短横线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7137"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7141"/>
         <source>Navigate to verse</source>
         <translation>导航到段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7194"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7284"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7198"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7288"/>
         <source>Navigate to next chord symbol</source>
         <translation>导航到下一个和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7327"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7331"/>
         <source>Navigate to chord symbol</source>
         <translation>导航到和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7384"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7430"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7388"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7434"/>
         <source>Navigate to next figured bass</source>
         <translation>导航到下一个数字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7478"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7482"/>
         <source>Navigate to figured bass</source>
         <translation>导航到数字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7776"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7805"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7866"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7926"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7780"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7809"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7870"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7930"/>
         <source>Enter lyrics extension line</source>
         <translation>输入唱词延长线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7951"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7955"/>
         <source>Add lyrics verse</source>
         <translation>添加唱词段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7991"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7995"/>
         <source>Enter guitar bend</source>
         <translation>输入吉他弯音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8060"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8064"/>
         <source>Add fretboard diagram</source>
         <translation>添加品格图</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8201"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8205"/>
         <source>Format text</source>
         <translation>格式化文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8221"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8225"/>
         <source>Toggle subscript</source>
         <translation>切换下标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8223"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8227"/>
         <source>Toggle superscript</source>
         <translation>切换上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8225"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8229"/>
         <source>Toggle subscript/superscript</source>
         <translation>切换下/上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8282"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8286"/>
         <source>Toggle ornament</source>
         <translation>切换装饰音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8291"/>
         <source>Toggle automatic placement</source>
         <translation>切换自动排布</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8298"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8302"/>
         <source>Add clef</source>
         <translation>添加谱号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8303"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8307"/>
         <source>Add accidental</source>
         <translation>添加变音号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8308"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8312"/>
         <source>Transpose semitone</source>
         <translation>半音移调</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8315"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8319"/>
         <source>Transpose diatonically</source>
         <translation>按全音移调</translation>
     </message>
@@ -38974,32 +39376,32 @@ failed: %2</source>
         <translation>加载样式</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="479"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="481"/>
         <source>Toggle multimeasure rests</source>
         <translation>切换多节休止</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="481"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="483"/>
         <source>Toggle empty staves</source>
         <translation>切换空谱表</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="484"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="486"/>
         <source>Mirror notehead</source>
         <translation>镜像翻转符头</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="499"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="501"/>
         <source>Enter full-measure rest</source>
         <translation>输入全小节休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2179"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2186"/>
         <source>Display concert pitch</source>
         <translation>显示标准音高</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2180"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2187"/>
         <source>Display transposed</source>
         <translation>显示移调音高</translation>
     </message>
@@ -39074,7 +39476,7 @@ failed: %2</source>
         <translation>切换“对所有谱表应用音色标志”</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1226"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="1231"/>
         <source>Edit project properties</source>
         <translation>编辑项目属性</translation>
     </message>

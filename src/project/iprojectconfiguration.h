@@ -147,6 +147,7 @@ public:
     virtual QUrl dotComBugReportUrl() const = 0;
 
     virtual QUrl scoreUploadingGuidelinesUrl() const = 0;
+    virtual QUrl termsOfUseUrl() const = 0;
 
     virtual bool openDetailedProjectUploadedDialog() const = 0;
     virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;

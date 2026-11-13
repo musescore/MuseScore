@@ -109,9 +109,9 @@ public:
 
     QList<int> possibleZoomPercentageList() const override;
 
-    engraving::AutomationType currentAutomationType() const override;
-    void setCurrentAutomationType(engraving::AutomationType type) override;
-    muse::async::Notification currentAutomationTypeChanged() const override;
+    AutomationLane currentAutomationLane() const override;
+    void setCurrentAutomationLane(AutomationLane lane) override;
+    muse::async::Notification currentAutomationLaneChanged() const override;
 
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;
     int zoomPercentageFromScaling(qreal scaling) const override;
@@ -142,6 +142,10 @@ public:
     bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
     void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
     muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
+
+    engraving::TupletSelectedDuration tupletCommandsSelectedDurationAs() const override;
+    void setTupletCommandsSelectedDurationAs(engraving::TupletSelectedDuration selectedDurationAs) override;
+    muse::async::Notification tupletCommandsSelectedDurationAsChanged() const override;
 
     muse::io::path_t userMusicFontsPath() const override;
     void setUserMusicFontsPath(const muse::io::path_t& path) override;

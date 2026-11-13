@@ -251,6 +251,7 @@ jobs:
     - name: Show ccache stats
       run: |
         ccache -sv
+        echo "ccache: restored '${{ steps.restore-ccache.outputs.cache-matched-key || 'nothing' }}', $(ccache -s | grep -m1 -E '^ *Hits:' | sed -E 's/^ *Hits: *//')" | tee -a $GITHUB_STEP_SUMMARY
 
     # Must run before Package: macdeployqt strips the binary and package.sh
     # deletes the dSYM bundles
@@ -305,7 +306,7 @@ jobs:
 
     - name: Checksum
       run: |
-        bash ./buildscripts/ci/tools/checksum.sh
+        bash ./muse/buildscripts/ci/tools/checksum.sh
 
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
@@ -321,12 +322,13 @@ jobs:
 
     - name: Prepare ccache files for saving
       id: prepare-save-ccache
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       run: |
         ccache --recompress 10
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
+
     - name: Save ccache files
-      if: always()
+      if: always() && github.event_name != 'pull_request'
       uses: actions/cache/save@v6
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}

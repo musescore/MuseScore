@@ -31,14 +31,17 @@ class PlaybackControllerMock : public IPlaybackController
 {
 public:
 
+    MOCK_METHOD(bool, isPlaying, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
+
+    MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
+
     MOCK_METHOD(bool, isPlaybackInited, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, playbackInitedChanged, (), (const, override));
 
     MOCK_METHOD(bool, isPlayAllowed, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, isPlayAllowedChanged, (), (const, override));
-
-    MOCK_METHOD(bool, isPlaying, (), (const, override));
-    MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
 
     MOCK_METHOD(muse::Ret, togglePlay, (), (override));
     MOCK_METHOD(muse::Ret, play, (bool), (override));
@@ -82,6 +85,9 @@ public:
                 (const, override));
     MOCK_METHOD(void, setTrackSoloMuteState, (const engraving::InstrumentTrackId&, const SoloMuteState&),
                 (override));
+
+    MOCK_METHOD(muse::audio::ControlParams, currentTrackControlParams, (const engraving::InstrumentTrackId&), (const, override));
+    MOCK_METHOD(muse::audio::ControlParams, currentMasterControlParams, (), (const, override));
 
     MOCK_METHOD(void, playElements, (const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool), (override));
     MOCK_METHOD(void, playNotes, (const engraving::NoteValList&, engraving::staff_idx_t, const engraving::Segment*, const PlayParams&),

@@ -398,6 +398,9 @@ TEST_F(MusicXml_Tests, backupRoundingError) {
 TEST_F(MusicXml_Tests, barlineFermatas) {
     musicXmlIoTest("testBarlineFermatas");
 }
+TEST_F(MusicXml_Tests, barlineJump) {
+    musicXmlImportTestRef("testBarlineJump");
+}
 TEST_F(MusicXml_Tests, barlineLoc) {
     musicXmlImportTestRef("testBarlineLoc");
 }
@@ -683,6 +686,9 @@ TEST_F(MusicXml_Tests, fractionTicks) {
 }
 TEST_F(MusicXml_Tests, glissandoLines) {
     musicXmlIoTest("testGlissandoLines");
+}
+TEST_F(MusicXml_Tests, glissandoStyle) {
+    musicXmlImportTestRef("testGlissandoStyle");
 }
 TEST_F(MusicXml_Tests, glissFall) {
     musicXmlImportTestRef("testGlissFall");

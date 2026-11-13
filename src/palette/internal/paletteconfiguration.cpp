@@ -25,8 +25,6 @@
 #include "settings.h"
 #include "translation.h"
 
-#include "ui/internal/uiengine.h"
-
 using namespace mu;
 using namespace mu::palette;
 using namespace muse;

@@ -27,7 +27,6 @@
 #include <QAccessibleInterface>
 
 #include "modularity/ioc.h"
-#include "ui/iuiactionsregister.h"
 #include "engraving/ipalettescoreprovider.h"
 
 namespace mu::engraving {
@@ -67,7 +66,6 @@ private:
 class PaletteCell : public QObject, public muse::Contextable
 {
     Q_OBJECT
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     explicit PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);

@@ -22,13 +22,15 @@
 
 #include "systempagelayoutsettingsmodel.h"
 
+#include "global/translation.h"
+
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
 
-#include "translation.h"
+#include "notationscene/notationcommands.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;
@@ -47,8 +49,13 @@ void SystemPageLayoutSettingsModel::loadProperties()
     updateAllSystemsAreLocked();
     updateAllPagesAreLocked();
     updateScoreIsInPageView();
-    updateIsMakeIntoSystemAvailable();
-    updateIsMakeIntoPageAvailable();
+
+    const QSet<BoxType> boxTypes = boxTypesInSelection();
+    updateIsBoxOnlySelection(boxTypes);
+    updateIsSystemTabAvailable(boxTypes);
+    updateIsMakeIntoSystemAvailable(boxTypes);
+    updateIsMakeIntoPageAvailable(boxTypes);
+
     updateSystemCount();
     updatePageCount();
 }
@@ -83,17 +90,17 @@ void SystemPageLayoutSettingsModel::moveSystemUpPage()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveSystemUpPage() const
 {
-    return shortcutsForActionCode("move-system-to-prev-page");
+    return shortcutsForCommand(MOVE_SYSTEM_TO_PREV_PAGE_COMMAND);
 }
 
 QString SystemPageLayoutSettingsModel::shortcutMoveSystemDownPage() const
 {
-    return shortcutsForActionCode("move-system-to-next-page");
+    return shortcutsForCommand(MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND);
 }
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoPage() const
 {
-    return shortcutsForActionCode("make-into-page");
+    return shortcutsForCommand(MAKE_INTO_PAGE_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::makeIntoPage()
@@ -114,6 +121,8 @@ bool SystemPageLayoutSettingsModel::isEmpty() const
     if (selection->isRange()) {
         return false;
     }
+    //! NOTE: element will be null for a list selection. This is fine though since (for
+    //! now) the actions in this model are incompatible with a list of elements...
     const EngravingItem* element = selection->element();
     return !element || !element->isBox();
 }
@@ -129,7 +138,7 @@ void SystemPageLayoutSettingsModel::moveMeasureUpSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveMeasureUpSystem() const
 {
-    return shortcutsForActionCode("move-measure-to-prev-system");
+    return shortcutsForCommand(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::moveMeasureDownSystem()
@@ -143,7 +152,7 @@ void SystemPageLayoutSettingsModel::moveMeasureDownSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMoveMeasureDownSystem() const
 {
-    return shortcutsForActionCode("move-measure-to-next-system");
+    return shortcutsForCommand(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::toggleSystemLock()
@@ -157,7 +166,7 @@ void SystemPageLayoutSettingsModel::toggleSystemLock()
 
 QString SystemPageLayoutSettingsModel::shortcutToggleSystemLock() const
 {
-    return shortcutsForActionCode("toggle-system-lock");
+    return shortcutsForCommand(TOGGLE_SYSTEM_LOCK_COMMAND);
 }
 
 void SystemPageLayoutSettingsModel::togglePageLock()
@@ -171,7 +180,7 @@ void SystemPageLayoutSettingsModel::togglePageLock()
 
 QString SystemPageLayoutSettingsModel::shortcutTogglePageLock() const
 {
-    return shortcutsForActionCode("toggle-page-lock");
+    return shortcutsForCommand(TOGGLE_PAGE_LOCK_COMMAND);
 }
 
 bool SystemPageLayoutSettingsModel::allSystemsAreLocked() const
@@ -233,6 +242,11 @@ bool SystemPageLayoutSettingsModel::scoreIsInPageView() const
     return m_scoreIsInPageView;
 }
 
+bool SystemPageLayoutSettingsModel::isBoxOnlySelection() const
+{
+    return m_isBoxOnlySelection;
+}
+
 bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
 {
     return m_isMakeIntoSystemAvailable;
@@ -241,6 +255,11 @@ bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
 bool SystemPageLayoutSettingsModel::isMakeIntoPageAvailable() const
 {
     return m_isMakeIntoPageAvailable;
+}
+
+bool SystemPageLayoutSettingsModel::isSystemTabAvailable() const
+{
+    return m_isSystemTabAvailable;
 }
 
 int SystemPageLayoutSettingsModel::systemCount() const
@@ -267,7 +286,16 @@ void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
+void SystemPageLayoutSettingsModel::updateIsBoxOnlySelection(const QSet<BoxType>& boxTypes)
+{
+    const bool boxOnlySelection = !isEmpty() && !boxTypes.contains(BoxType::Measure);
+    if (m_isBoxOnlySelection != boxOnlySelection) {
+        m_isBoxOnlySelection = boxOnlySelection;
+        emit isBoxOnlySelectionChanged(m_isBoxOnlySelection);
+    }
+}
+
+void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable(const QSet<BoxType>& boxTypes)
 {
     if (isEmpty()) {
         return;
@@ -279,10 +307,11 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
         return;
     }
 
-    bool available = true;
-    if (startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock() && startMB->systemLock() == endMB->systemLock()) {
-        available = false;
-    }
+    const bool selectionHasMeasures = boxTypes.contains(BoxType::Measure);
+    const bool systemAlreadyExists = startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock()
+                                     && startMB->systemLock() == endMB->systemLock();
+
+    const bool available = selectionHasMeasures && !systemAlreadyExists;
 
     if (m_isMakeIntoSystemAvailable != available) {
         m_isMakeIntoSystemAvailable = available;
@@ -290,14 +319,55 @@ void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
     }
 }
 
-void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable()
+void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable(const QSet<BoxType>& boxTypes)
 {
-    bool available = !isEmpty();
+    const bool available = boxTypes.contains(BoxType::Measure);
 
     if (m_isMakeIntoPageAvailable != available) {
         m_isMakeIntoPageAvailable = available;
         emit isMakeIntoPageAvailableChanged(m_isMakeIntoPageAvailable);
     }
+}
+
+void SystemPageLayoutSettingsModel::updateIsSystemTabAvailable(const QSet<BoxType>& boxTypes)
+{
+    const bool available = boxTypes.contains(BoxType::Measure)
+                           || boxTypes.contains(BoxType::Horizontal);
+
+    if (m_isSystemTabAvailable != available) {
+        m_isSystemTabAvailable = available;
+        emit isSystemTabAvailableChanged(m_isSystemTabAvailable);
+    }
+}
+
+QSet<BoxType> SystemPageLayoutSettingsModel::boxTypesInSelection() const
+{
+    QSet<BoxType> boxTypes;
+
+    if (isEmpty()) {
+        return boxTypes;
+    }
+
+    const auto checkBoxType = [&boxTypes](const EngravingItem* item) {
+        if (item->isMeasure()) {
+            boxTypes.insert(BoxType::Measure);
+        } else if (item->isHBox()) {
+            boxTypes.insert(BoxType::Horizontal);
+        } else if (item->isVBoxBase()) {
+            // Slight hack - for these purposes we'll take "Vertical" to mean VBoxBase...
+            boxTypes.insert(BoxType::Vertical);
+        }
+    };
+
+    if (selection()->isRange()) {
+        for (const MeasureBase* mb : selection()->measureBasesInSelection()) {
+            checkBoxType(mb);
+        }
+    } else {
+        checkBoxType(selection()->element());
+    }
+
+    return boxTypes;
 }
 
 void SystemPageLayoutSettingsModel::updateSystemCount()
@@ -337,5 +407,5 @@ void SystemPageLayoutSettingsModel::makeIntoSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoSystem() const
 {
-    return shortcutsForActionCode("make-into-system");
+    return shortcutsForCommand(MAKE_INTO_SYSTEM_COMMAND);
 }

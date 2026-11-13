@@ -30,6 +30,8 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chordbracket.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/engravingitem.h"
@@ -42,6 +44,7 @@
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"
@@ -50,6 +53,7 @@
 #include "engraving/dom/marker.h"
 #include "engraving/dom/tapping.h"
 #include "engraving/dom/whammybar.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/types/symid.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/dom/layoutbreak.h"
@@ -126,7 +130,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         }
 
         Articulation* oldOrnament = toArticulation(item);
-        Ornament* newOrnament = Factory::createOrnament((ChordRest*)(paletteScore->dummy()));
+        Ornament* newOrnament = Factory::createOrnament(paletteScore->dummy());
         newOrnament->setSymId(oldOrnament->symId());
         cell->element.reset(newOrnament);
         return;
@@ -220,6 +224,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
         return;
     }
 
+    if (palette.type() == Palette::Type::Bracket) {
+        addNewBracketItems(palette, paletteScore);
+        return;
+    }
+
     if (palette.type() == Palette::Type::Line) {
         addNewLineItems(palette, paletteScore);
         return;
@@ -306,18 +315,18 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
 
     if (!containsGuitarDives) {
         int defaultPosition = std::min(6, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, "scoop", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, "dip", 1.4);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, "pre-dive", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, "dive", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SCOOP, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIP, 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_DIVE, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::DIVE, 1.5);
     }
 
     if (!containsGuitarBends) {
         int defaultPosition = std::min(10, guitarPalette.cellsCount());
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.5);
-        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, 1.4);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, 1.5);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, 1.5);
     }
 
     if (!containsTapping) {
@@ -354,8 +363,49 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsFFrame) {
-        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, COMPAT_FRAME_MAG);
     }
+}
+
+void PaletteCompat::addNewBracketItems(Palette& bracketsPalette, Score* paletteScore)
+{
+    bool containsGroupBracket = false;
+    staff_idx_t bracketStaffIdx = muse::nidx;
+
+    for (const PaletteCellPtr& cell : bracketsPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element || !element->isBracket()) {
+            continue;
+        }
+
+        BracketItem* bracketItem = toBracket(element.get())->bracketItem();
+        if (bracketStaffIdx == muse::nidx) {
+            bracketStaffIdx = bracketItem->startStaffIdx();
+        }
+
+        if (bracketItem->bracketType() == BracketType::GROUP) {
+            containsGroupBracket = true;
+        }
+    }
+
+    if (containsGroupBracket) {
+        return;
+    }
+
+    if (bracketStaffIdx == muse::nidx) {
+        Part* bracketItemOwnerPart = new Part(paletteScore);
+        Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
+        paletteScore->appendStaff(bracketItemOwner);
+        bracketStaffIdx = bracketItemOwner->idx();
+    }
+
+    size_t groupBracketIdx = paletteScore->brackets(bracketStaffIdx).size();
+    EditStaffBrackets::setBracketType(paletteScore, bracketStaffIdx, groupBracketIdx, BracketType::GROUP);
+    BracketItem* groupBracketItem = paletteScore->brackets(bracketStaffIdx)[groupBracketIdx];
+
+    auto groupBracket = Factory::makeBracket(paletteScore->dummy());
+    groupBracket->setBracketItem(groupBracketItem);
+    bracketsPalette.appendElement(groupBracket, QT_TRANSLATE_NOOP("palette", "Group bracket"));
 }
 
 void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
@@ -405,7 +455,7 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
 
     if (!containsNoteAnchoredLine) {
         int defaultPosition = std::min(22, linesPalette.cellsCount());
-        linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+        linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, 2);
     }
 
     if (!containsChordBrackets) {
@@ -464,6 +514,8 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
     bool containsFFrame = false;
     bool containsLock = false;
     bool containsNoBreak = false;
+    bool containsStaveSharingChange = false;
+    bool containsResetStaveSharingChange = false;
     for (const PaletteCellPtr& cell : layoutPalette.cells()) {
         const ElementPtr element = cell->element;
         if (!element) {
@@ -479,11 +531,17 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
         if (element->isLayoutBreak() && toLayoutBreak(element.get())->layoutBreakType() == LayoutBreakType::NOBREAK) {
             containsNoBreak = true;
         }
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::STAVE_SHARING_CHANGE) {
+            containsStaveSharingChange = true;
+        }
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::RESET_STAVE_SHARING_CHANGE) {
+            containsResetStaveSharingChange = true;
+        }
     }
 
     if (!containsFFrame) {
         int defaultPosition = std::min(10, layoutPalette.cellsCount());
-        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, COMPAT_FRAME_MAG);
     }
 
     if (!containsNoBreak) {
@@ -495,7 +553,17 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* 
 
     if (!containsLock) {
         int defaultPosition = std::min(5, layoutPalette.cellsCount());
-        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK, "toggle-page-lock");
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK);
+    }
+
+    if (!containsStaveSharingChange) {
+        int defaultPosition = std::min(15, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::STAVE_SHARING_CHANGE);
+    }
+
+    if (!containsResetStaveSharingChange) {
+        int defaultPosition = std::min(16, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::RESET_STAVE_SHARING_CHANGE);
     }
 }
 

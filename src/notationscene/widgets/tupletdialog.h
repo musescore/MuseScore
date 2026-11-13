@@ -26,12 +26,14 @@
 #include "ui_tupletdialog.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "rcommand/icommanddispatcher.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::engraving {
 enum class TupletNumberType : unsigned char;
 enum class TupletBracketType : unsigned char;
+enum class TupletSelectedDuration : unsigned char;
 }
 
 namespace mu::notation {
@@ -39,8 +41,9 @@ class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
 {
     Q_OBJECT
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
+    muse::GlobalInject<INotationConfiguration> configuration;
 
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
@@ -54,6 +57,7 @@ public:
 
     engraving::TupletNumberType numberType() const;
     engraving::TupletBracketType bracketType() const;
+    engraving::TupletSelectedDuration selectedDurationAs() const;
 
     INotationStylePtr style() const;
     INotationPtr notation() const;

@@ -30,8 +30,6 @@ target_sources(playback PRIVATE
     playbackcommands.h
 
     internal/iplaybackcommandscontroller.h
-    internal/playbackuiactions.cpp
-    internal/playbackuiactions.h
     internal/playbackcommandscontroller.cpp
     internal/playbackcommandscontroller.h
     internal/playbackcontroller.cpp

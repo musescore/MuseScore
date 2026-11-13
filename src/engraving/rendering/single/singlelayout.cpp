@@ -82,6 +82,7 @@
 #include "dom/spacer.h"
 #include "dom/staff.h"
 #include "dom/stafftext.h"
+#include "dom/stavesharingchange.h"
 #include "dom/stafftypechange.h"
 #include "dom/sticking.h"
 #include "dom/stringtunings.h"
@@ -217,6 +218,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::SPACER:       layout(toSpacer(item), ctx);
         break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
+        break;
+    case ElementType::STAVE_SHARING_CHANGE: layout(toStaveSharingChange(item), ctx);
         break;
     case ElementType::STAVE_SHARING_LABEL: layout(toStaveSharingLabel(item), ctx);
         break;
@@ -876,31 +879,7 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
 {
     ChordLine::LayoutData* ldata = item->mutldata();
     ldata->setMag(1.0);
-    if (!item->modified()) {
-        double x2 = 0;
-        double y2 = 0;
-        double baseLength = item->spatium();
-        double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
-        x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
-        y2 += item->isBelow() ? baseLength : -baseLength;
-        if (item->chordLineType() != ChordLineType::NOTYPE && !item->isWavy()) {
-            PainterPath path;
-            if (!item->isToTheLeft()) {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(x2 / 2, 0.0, x2, y2 / 2, x2, y2);
-                }
-            } else {
-                if (item->isStraight()) {
-                    path.lineTo(x2, y2);
-                } else {
-                    path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
-                }
-            }
-            ldata->path = path;
-        }
-    }
+    TLayout::layoutChordLinePath(item, ldata, item->spatium(), item->chordMag());
 
     ldata->setPos(0.0, 0.0);
 
@@ -1621,6 +1600,17 @@ void SingleLayout::layout(StaffText* item, const Context& ctx)
             }
         }
     }
+}
+
+void SingleLayout::layout(StaveSharingChange* item, const Context&)
+{
+    const FontMetrics metrics(item->font());
+    const RectF iconBox = metrics.boundingRect(item->iconCode());
+
+    Shape shape;
+    shape.add(iconBox, item);
+    item->mutldata()->setShape(shape);
+    item->mutldata()->setPos(PointF());
 }
 
 void SingleLayout::layout(StaveSharingLabel* item, const Context& ctx)

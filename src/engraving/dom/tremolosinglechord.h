@@ -41,6 +41,7 @@ public:
 
     TremoloSingleChord& operator=(const TremoloSingleChord&) = delete;
     TremoloSingleChord* clone() const override { return new TremoloSingleChord(*this); }
+    void setOwnershipParent(DummyParentOr<Chord> parent) { EngravingItem::setOwnershipParent(parent); }
     ~TremoloSingleChord() override;
 
     Chord* chord() const { return toChord(ownershipParent()); }
@@ -54,7 +55,6 @@ public:
     TremoloType tremoloType() const { return m_tremoloType; }
 
     double minHeight() const;
-    void reset() override;
 
     double chordMag() const;
     RectF drag(EditData&) override;
@@ -81,8 +81,6 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     bool isMovable() const override { return true; }
-    bool isEditable() const override { return true; }
-    void endEdit(EditData&) override;
 
     muse::draw::PainterPath basePath(double stretch = 0) const;
     const muse::draw::PainterPath& path() const { return m_path; }

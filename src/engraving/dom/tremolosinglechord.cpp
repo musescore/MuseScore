@@ -204,17 +204,6 @@ void TremoloSingleChord::computeShape()
     }
 }
 
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void TremoloSingleChord::reset()
-{
-    EngravingItem::reset();
-    undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
-    resetProperty(Pid::BEAM_NO_SLOPE);
-}
-
 TDuration TremoloSingleChord::durationType() const
 {
     return m_durationType;
@@ -254,11 +243,6 @@ Fraction TremoloSingleChord::tremoloLen() const
     return f;
 }
 
-void TremoloSingleChord::endEdit(EditData&)
-{
-    UNREACHABLE;
-}
-
 //---------------------------------------------------------
 //   subtypeName
 //---------------------------------------------------------
@@ -286,9 +270,6 @@ PropertyValue TremoloSingleChord::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
         return int(m_tremoloType);
-    case Pid::TREMOLO_STYLE:
-        UNREACHABLE;
-        return int(-1);
     case Pid::PLAY:
         return m_playTremolo;
     default:
@@ -307,18 +288,6 @@ bool TremoloSingleChord::setProperty(Pid propertyId, const PropertyValue& val)
     case Pid::TREMOLO_TYPE:
         setTremoloType(TremoloType(val.toInt()));
         break;
-    case Pid::TREMOLO_STYLE:
-        UNREACHABLE;
-        break;
-    case Pid::STEM_DIRECTION:
-        UNREACHABLE;
-        break;
-    case Pid::USER_MODIFIED:
-        UNREACHABLE;
-        break;
-    case Pid::BEAM_POS:
-        UNREACHABLE;
-        break;
     case Pid::PLAY:
         setPlayTremolo(val.toBool());
         break;
@@ -336,8 +305,6 @@ bool TremoloSingleChord::setProperty(Pid propertyId, const PropertyValue& val)
 PropertyValue TremoloSingleChord::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::TREMOLO_STYLE:
-        return style().styleI(Sid::tremoloStyle);
     case Pid::PLAY:
         return true;
     default:

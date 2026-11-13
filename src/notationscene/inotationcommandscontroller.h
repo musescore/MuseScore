@@ -46,6 +46,8 @@ public:
     virtual INotationViewController* viewController() const = 0;
 
     virtual bool hasSelection() const = 0;
+    virtual bool isSingleSelection() const = 0;
+    virtual bool isRangeSelection() const = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual bool selectionHasTie() const = 0;
     virtual bool selectionHasLaissezVib() const = 0;
@@ -74,6 +76,7 @@ public:
 
     virtual bool isNoteInputActionAllowed() const = 0;
     virtual bool isNoteOrRestSelected() const = 0;
+    virtual bool isHairpinSelected() const = 0;
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
 
     virtual bool isToggleLayoutBreakAvailable() const = 0;

@@ -148,6 +148,10 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/interval.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interval.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpudurationline.h
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jianpuoctavedot.h
     ${CMAKE_CURRENT_LIST_DIR}/jump.cpp
     ${CMAKE_CURRENT_LIST_DIR}/jump.h
     ${CMAKE_CURRENT_LIST_DIR}/key.cpp
@@ -292,6 +296,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharingchange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharingchange.h
     ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.h
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.cpp
@@ -324,6 +330,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.h
+    ${CMAKE_CURRENT_LIST_DIR}/systemindicatoricon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/systemindicatoricon.h
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp

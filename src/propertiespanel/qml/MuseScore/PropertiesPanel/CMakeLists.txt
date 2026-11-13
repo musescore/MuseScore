@@ -233,6 +233,7 @@ qt_add_qml_module(propertiespanel_qml
         types/noteheadtypes.h
         types/ornamenttypes.h
         types/slurtietypes.h
+        types/stafftypelabeltypes.h
         types/texttypes.h
         types/tremolobartypes.h
         types/tremolotypes.h
@@ -380,6 +381,11 @@ qt_add_qml_module(propertiespanel_qml
 )
 
 fixup_qml_module_dependencies(propertiespanel_qml)
+
+target_link_libraries(propertiespanel_qml PRIVATE
+    muse::uicomponents_qml
+    notationscene_qml
+)
 
 # Necessary for the auto-generated sources
 target_include_directories(propertiespanel_qml PRIVATE

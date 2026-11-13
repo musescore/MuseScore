@@ -38,6 +38,7 @@
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
+#include "jianpudurationline.h"
 #include "keysig.h"
 #include "lyrics.h"
 #include "marker.h"
@@ -61,6 +62,7 @@
 #include "editing/editkeysig.h"
 #include "editing/editrehearsalmark.h"
 #include "editing/navigation.h"
+#include "editing/editstavesharing.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
@@ -77,7 +79,7 @@ namespace mu::engraving {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment> parent)
+ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment, Chord> parent)
     : DurationElement(type, parent)
 {
     m_staffMove    = 0;
@@ -134,6 +136,7 @@ ChordRest::~ChordRest()
 {
     muse::DeleteAll(m_lyrics);
     muse::DeleteAll(m_el);
+    muse::DeleteAll(m_jianpuDurationLines);
     delete m_tabDur;
 
     if (m_beam) {
@@ -186,6 +189,9 @@ bool ChordRest::acceptDrop(EditData& data) const
         case ActionIconType::BEAM_BREAK_INNER_16TH:
         case ActionIconType::BEAM_JOIN:
             return true;
+        case ActionIconType::STAVE_SHARING_CHANGE:
+        case ActionIconType::RESET_STAVE_SHARING_CHANGE:
+            return part() && part()->isSharedPart();
         default: break;
         }
         break;
@@ -351,9 +357,9 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
             r->setXmlText(EditRehearsalMark::createRehearsalMarkText(score(), r));
-        } else if (e->isHarpPedalDiagram() && fromPalette && part()) {
+        } else if (e->isHarpPedalDiagram() && fromPalette && originPart()) {
             // Match pedal config with previous diagram's
-            if (HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick())) {
+            if (HarpPedalDiagram* prevDiagram = originPart()->prevHarpDiagram(segment()->tick())) {
                 toHarpPedalDiagram(e)->setPedalState(prevDiagram->getPedalState());
             }
         }
@@ -415,6 +421,12 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
         };
         if (muse::contains(beamModeTable, actionType)) {
             undoChangeProperty(Pid::BEAM_MODE, muse::value(beamModeTable, actionType));
+            delete e;
+            return nullptr;
+        }
+        if (actionType == ActionIconType::STAVE_SHARING_CHANGE || actionType == ActionIconType::RESET_STAVE_SHARING_CHANGE) {
+            bool reset = actionType == ActionIconType::RESET_STAVE_SHARING_CHANGE;
+            EditStaveSharing::addStaveSharingChange(tx, segment(), part(), reset);
             delete e;
             return nullptr;
         }
@@ -683,7 +695,10 @@ void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, Proper
 {
     if (id == Pid::BEAM_MODE) {
         if (isChord() && m_durationType.hooks() == 0) {
-            return;
+            const StaffType* tab = staffType();
+            if (!tab || !tab->isTabStaff() || !tab->genDurations()) {
+                return;
+            }
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
         if ((newBeamMode == BeamMode::BEGIN16 && m_durationType.hooks() < 2)
@@ -872,6 +887,9 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     }
     for (EngravingItem* e : m_el) {
         func(e);
+    }
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
+        func(dl);
     }
 }
 
@@ -1095,6 +1113,9 @@ void ChordRest::scanElements(std::function<void(EngravingItem*)> func)
     }
     if (m_tabDur) {
         func(m_tabDur);
+    }
+    for (JianpuDurationLine* dl : m_jianpuDurationLines) {
+        func(dl);
     }
 }
 
@@ -1362,5 +1383,20 @@ bool ChordRest::hasPrecedingJumpItem() const
     std::vector<Measure*> precedingRepeatMeasures = findPreviousRepeatMeasures(measure);
 
     return !precedingRepeatMeasures.empty();
+}
+
+void ChordRest::setJianpuDurationLineCount(size_t count)
+{
+    while (m_jianpuDurationLines.size() < count) {
+        JianpuDurationLine* dl = new JianpuDurationLine(this);
+        dl->setOwnershipParent(this);
+        dl->setTrack(track());
+        m_jianpuDurationLines.push_back(dl);
+    }
+
+    while (m_jianpuDurationLines.size() > count) {
+        delete m_jianpuDurationLines.back();
+        m_jianpuDurationLines.pop_back();
+    }
 }
 }

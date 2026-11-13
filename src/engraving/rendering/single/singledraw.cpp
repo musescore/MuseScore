@@ -116,6 +116,7 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/stavesharingchange.h"
 #include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
@@ -306,6 +307,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter, opt);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
+        break;
+    case ElementType::STAVE_SHARING_CHANGE:  draw(item_cast<const StaveSharingChange*>(item), painter, opt);
         break;
     case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
         break;
@@ -575,7 +578,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
         // by coloring the notehead
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && MScore::warnPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            const Instrument* in = item->originPart()->instrument(item->chord()->tick());
             int i = item->ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
                 painter->setPen(
@@ -587,7 +590,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
         // Warn if notes are unplayable based on previous harp diagram setting
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
+            HarpPedalDiagram* prevDiagram = item->originPart()->currentHarpDiagram(item->chord()->segment()->tick());
             if (prevDiagram && !prevDiagram->isTpcPlayable(item->tpc())) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }
@@ -2274,6 +2277,18 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     if (item->hasSoundFlag()) {
         draw(item->soundFlag(), painter, opt);
     }
+}
+
+void SingleDraw::draw(const StaveSharingChange* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    if (opt.isPrinting || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Pen pen(item->configuration()->formattingColor());
+    painter->setPen(pen);
+    painter->setFont(item->font());
+    painter->drawSymbol(PointF(), item->iconCode());
 }
 
 void SingleDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)

@@ -32,10 +32,7 @@ class IndicatorIcon : public EngravingItem
     OBJECT_ALLOCATOR(engraving, IndicatorIcon)
 
 public:
-    IndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags = ElementFlag::NOTHING);
-    IndicatorIcon* clone() const override { return new IndicatorIcon(*this); }
-
-    System* system() const { return toSystem(ownershipParent()); }
+    IndicatorIcon(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<RectF> rangeRect = { "[IndicatorIcon] rangeRect", RectF() };
@@ -44,9 +41,7 @@ public:
 
     muse::draw::Font font() const;
 
-    Fraction tick() const override;
-
-    virtual char16_t iconCode() const { return 0x000; }
+    virtual char16_t iconCode() const = 0;
 
     void undoChangeProperty(Pid, const PropertyValue&, PropertyFlags) override { return; } // not editable
 };

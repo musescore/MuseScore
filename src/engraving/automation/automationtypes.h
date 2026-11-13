@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include "global/containers.h"
 #include "global/types/id.h"
 #include "global/types/number.h"
 #include "global/types/sharedmap.h"
@@ -68,6 +69,23 @@ inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve
     const std::optional<muse::real_t> prevOutValue = it == curve.begin()
                                                      ? std::nullopt : std::optional(std::prev(it)->second.value.outValue);
     return muse::mpe::resolveInValue(it->second.value, prevOutValue);
+}
+
+//! NOTE: nullopt if there's no point at or before tick
+inline std::optional<muse::real_t> evaluateCurveAt(const AutomationCurve& curve, utick_t tick)
+{
+    const AutomationCurve::const_iterator it = muse::findLessOrEqual(curve, tick);
+    if (it == curve.cend()) {
+        return std::nullopt;
+    }
+
+    const AutomationCurve::const_iterator next = std::next(it);
+    if (next == curve.cend()) {
+        return it->second.value.outValue;
+    }
+
+    const muse::real_t t = static_cast<muse::real_t>(tick - it->first) / static_cast<muse::real_t>(next->first - it->first);
+    return muse::mpe::evaluateAt(next->second.value, it->second.value.outValue, t);
 }
 
 enum class AutomationType : unsigned char {

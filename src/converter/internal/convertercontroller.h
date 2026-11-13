@@ -26,10 +26,11 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
+#include "io/ifilesystem.h"
 #include "notation/notationtypes.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 #include "extensions/iextensionsprovider.h"
 
 #include "types/retval.h"
@@ -37,9 +38,11 @@
 namespace mu::converter {
 class ConverterController : public IConverterController, public muse::Contextable
 {
+public:
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<project::IProjectCreator> notationCreator;
     muse::GlobalInject<project::INotationWritersRegister> writers;
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
@@ -111,6 +114,9 @@ private:
                           const muse::io::path_t& filePath, const muse::io::path_t& dirPath = {}) const;
     muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
                                   const project::INotationWriter::Options& options = {}) const;
+
+    muse::Ret writeNotationToFile(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& filePath,
+                                  const project::INotationWriter::Options& options = {}, const muse::io::path_t& dirPath = {}) const;
 
     muse::Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                      const muse::io::path_t& out) const;

@@ -1,12 +1,16 @@
 #include "guiapp.h"
 
+#include <QCoreApplication>
+
 #include "modularity/ioc.h"
 #include "appshell/internal/istartupscenario.h"
 
-#include "commandlineparser.h"
-
 #include "muse_framework_config.h"
 #include "app_config.h"
+
+#ifdef MUE_ENABLE_CONSOLEAPP
+#include "commandlineparser.h"
+#endif
 
 #include "log.h"
 
@@ -76,6 +80,7 @@ void MuseScoreGuiApp::showContextSplash(const muse::modularity::ContextPtr& ctxI
 
 std::shared_ptr<muse::CmdOptions> MuseScoreGuiApp::makeContextOptions(const muse::StringList& args) const
 {
+#ifdef MUE_ENABLE_CONSOLEAPP
     if (args.size() > 0) {
         std::vector<std::string> args_ = args.toStdStringList();
         args_.insert(args_.begin(), "dummy/path/to/app.exe");  // for compatibility
@@ -90,9 +95,12 @@ std::shared_ptr<muse::CmdOptions> MuseScoreGuiApp::makeContextOptions(const muse
         commandLineParser.init();
         commandLineParser.parse(argc, argv.data());
         return commandLineParser.options();
-    } else {
-        return m_appOptions;
     }
+#else
+    UNUSED(args);
+#endif
+
+    return m_appOptions;
 }
 
 QString MuseScoreGuiApp::mainWindowQmlPath(const QString& platform) const
@@ -122,9 +130,16 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         startupScenario->setStartupScoreFile(file);
     }
 
+#ifdef MUSE_MODULE_TESTFLOW
+    //! NOTE Nobody answers dialogs during a test case run, they are skipped from the startup
+    if (options->testflow.has_value()) {
+        testflowCmdRunner()->prepare(ctxId, options->testflow.value());
+    }
+#endif
+
     startupScenario->runOnSplashScreen();
 
-    QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario]() {
+    QMetaObject::invokeMethod(qApp, [this, ctxId, startupScenario, options]() {
 #ifdef MUE_ENABLE_SPLASHSCREEN
         if (m_splashScreen) {
             m_splashScreen->close();
@@ -133,7 +148,16 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
         }
 #endif
 
-        startupScenario->runAfterSplashScreen();
+        muse::async::Promise<muse::Ret> startup = startupScenario->runAfterSplashScreen();
+
+#ifdef MUSE_MODULE_TESTFLOW
+        //! NOTE Run the test case requested from the command line when the startup page is opened
+        if (options->testflow.has_value()) {
+            startup.onResolve(this, [this, ctxId](const muse::Ret&) {
+                testflowCmdRunner()->run(ctxId);
+            });
+        }
+#endif
     }, Qt::QueuedConnection);
 }
 
@@ -144,6 +168,14 @@ void MuseScoreGuiApp::applyCommandLineOptions(const std::shared_ptr<CmdOptions>&
     std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(opt);
     IF_ASSERT_FAILED(options) {
         return;
+    }
+
+    if (options->network.offline) {
+        networkConfiguration()->setOffline(options->network.offline.value());
+    }
+
+    if (options->audio.outputDisabled) {
+        audioConfiguration()->setOutputDisabled(options->audio.outputDisabled.value());
     }
 
     if (options->app.revertToFactorySettings) {

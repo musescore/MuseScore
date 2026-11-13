@@ -53,7 +53,7 @@ static const ElementStyle fermataStyle {
 //   Fermata
 //---------------------------------------------------------
 
-Fermata::Fermata(EngravingObject* parent)
+Fermata::Fermata(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(PlacementV::ABOVE);

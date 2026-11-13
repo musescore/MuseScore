@@ -28,6 +28,7 @@
 #include "interactive/iinteractive.h"
 
 #include "engraving/dom/stafftype.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::engraving {
 class Instrument;
@@ -39,6 +40,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Co
     Q_OBJECT
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
     mu::engraving::StaffType staffType;
 

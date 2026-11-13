@@ -46,6 +46,8 @@ PreferencesPage {
             noteInputMethods: noteInputModel.noteInputMethods()
             defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
             addAccidentalDotsArticulationsToNextNoteEntered: noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered
+            tupletCommandsSelectedDurationAsOptions: noteInputModel.tupletCommandsSelectedDurationAsOptions()
+            tupletCommandsSelectedDurationAs: noteInputModel.tupletCommandsSelectedDurationAs
             useNoteInputCursorInInputByDuration: noteInputModel.useNoteInputCursorInInputByDuration
 
             navigation.section: root.navigationSection
@@ -57,6 +59,10 @@ PreferencesPage {
 
             onAddAccidentalDotsArticulationsToNextNoteEnteredChangeRequested: function(add) {
                 noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered = add
+            }
+
+            onTupletCommandsSelectedDurationAsChangeRequested: function(selectedDurationAs) {
+                noteInputModel.tupletCommandsSelectedDurationAs = selectedDurationAs
             }
 
             onUseNoteInputCursorInInputByDurationChangeRequested: function(use) {

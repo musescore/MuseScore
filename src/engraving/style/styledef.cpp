@@ -88,6 +88,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(sharedOnStaffNumeralsHyphenThreshold,           1),
     styleDef(staveSharingInstrChangePlayerNum,               true),
 
+    styleDef(staveSharingChangeMinDistance,              0.5_sp),
+
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),
     styleDef(stringsNameByGroup,                         false),
@@ -1113,6 +1115,21 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(articulationFrameBgColor,                      PropertyValue::fromValue(Color::transparent)),
     styleDef(articulationOffset,                            PointF()),
     styleDef(articulationPosition,                          AlignH::LEFT),
+
+    styleDef(jianpuNumberFontFace,                      "FreeSans"),
+    styleDef(jianpuNumberFontSize,                      9.0),
+    styleDef(jianpuNumberLineSpacing,                   1.0),
+    styleDef(jianpuNumberFontSpatiumDependent,          true),
+    styleDef(jianpuNumberFontStyle,                     int(FontStyle::Normal)),
+    styleDef(jianpuNumberColor,                         PropertyValue::fromValue(Color::BLACK)),
+    styleDef(jianpuNumberAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(jianpuNumberOffset,                        PointF()),
+    styleDef(jianpuNumberFrameType,                     int(FrameType::NO_FRAME)),
+    styleDef(jianpuNumberFramePadding,                  0.2_sp),
+    styleDef(jianpuNumberFrameWidth,                    0.1_sp),
+    styleDef(jianpuNumberFrameRound,                    0.0_sp),
+    styleDef(jianpuNumberFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
+    styleDef(jianpuNumberFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
 
     styleDef(longInstrumentFontFace,                     "Edwin"),
     styleDef(longInstrumentFontSize,                     10.0),
@@ -2258,6 +2275,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
     styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
     styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
+
+    styleDef(jianpuNumberVerticalDistance,               0.5_sp),
+    styleDef(jianpuVoiceVerticalDistance,                0.8_sp),
+    styleDef(jianpuOctaveDotRadius,                      0.1_sp),
+    styleDef(jianpuOctaveDotDistance,                    0.3_sp),
+    styleDef(jianpuDiminutionBeamThickness,              0.1_sp),
+    styleDef(jianpuDiminutionBeamDistance,               0.3_sp),
+    styleDef(jianpuDiminutionBeamPlacement,              PlacementV::BELOW),
+    styleDef(jianpuDurationLineThickness,                0.1_sp),
 } };
 
 #undef styleDef

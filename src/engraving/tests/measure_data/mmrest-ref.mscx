@@ -123,8 +123,13 @@
       <Measure>
         <eid>H_H</eid>
         <voice>
-          <Rest>
+          <TimeSig>
             <eid>I_I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -132,14 +137,9 @@
         </Measure>
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <mmRestLast>H_H</mmRestLast>
         <voice>
-          <TimeSig>
-            <eid>K_K</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Rest>
             <eid>L_L</eid>
             <placement>above</placement>

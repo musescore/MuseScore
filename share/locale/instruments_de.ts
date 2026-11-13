@@ -19734,7 +19734,7 @@
         <source>Violins</source>
         <comment>violins longName</comment>
         <extracomment>longName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violine</translation>
+        <translation>Violinen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6466"/>
@@ -19825,14 +19825,14 @@
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violas (Gruppe)</translation>
+        <translation>Violen (Gruppe)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6494"/>
         <source>Violas</source>
         <comment>violas longName</comment>
         <extracomment>longName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola</translation>
+        <translation>Violen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6496"/>
@@ -19923,14 +19923,14 @@
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violoncellos (Gruppe)</translation>
+        <translation>Violoncelli (Gruppe)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6524"/>
         <source>Violoncellos</source>
         <comment>violoncellos longName</comment>
         <extracomment>longName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Violoncello</translation>
+        <translation>Violoncelli</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6526"/>
@@ -20021,14 +20021,14 @@
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasse (Gruppe)</translation>
+        <translation>Kontrabässe (Gruppe)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6554"/>
         <source>Contrabasses</source>
         <comment>contrabasses longName</comment>
         <extracomment>longName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabass</translation>
+        <translation>Kontrabässe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6556"/>

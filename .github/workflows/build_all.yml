@@ -136,6 +136,27 @@ jobs:
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
       dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
+  wasm:
+    name: Wasm
+    if: ${{ contains(inputs.platforms, 'wasm') }}
+    uses: $/.github/workflows/build_wasm.yml
+    secrets: inherit
+    with:
+      build_mode: ${{ inputs.build_mode }}
+      publish_web_build: ${{ inputs.publish == 'on' }}
+
+  utest:
+    name: Unit Tests
+    if: ${{ contains(inputs.platforms, 'utest') }}
+    uses: $/.github/workflows/check_unit_tests.yml
+    secrets: inherit
+
+  vtest:
+    name: Visual Tests
+    if: ${{ contains(inputs.platforms, 'vtest') }}
+    uses: $/.github/workflows/check_visual_tests.yml
+    secrets: inherit
+
   # Dummy build for testing purposes.
   dummy:
     if: ${{ contains(inputs.platforms, 'dummy') }}
@@ -184,7 +205,7 @@ jobs:
         ARTIFACT_NAME="$(<"${ARTIFACTS_DIR}/env/artifact_name.env")"
 
         echo "Hello, world!" >"${ARTIFACTS_DIR}/${ARTIFACT_NAME}"
-        buildscripts/ci/tools/checksum.sh
+        muse/buildscripts/ci/tools/checksum.sh
 
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy-${{ matrix.os }}_${BUILD_BRANCH}")"
         echo "UPLOAD_ARTIFACT_NAME=${UPLOAD_ARTIFACT_NAME}" | tee -a "${GITHUB_ENV}"

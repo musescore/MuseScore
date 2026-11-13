@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "iappshellconfiguration.h"
 #include "isessionsmanager.h"
@@ -37,7 +37,7 @@
 
 #include "update/iappupdatescenario.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
-#include "musesounds/imusesamplercheckupdatescenario.h"
+#include "musesounds/imusesamplercheckstatusscenario.h"
 
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Contextable, public muse::async::Asyncable
@@ -45,9 +45,9 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
-    muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
+    muse::ContextInject<musesounds::IMuseSamplerCheckStatusScenario> museSamplerCheckStatusScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<ISessionsManager> sessionsManager = { this };
     muse::ContextInject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
@@ -65,7 +65,7 @@ public:
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void runOnSplashScreen() override;
-    void runAfterSplashScreen() override;
+    muse::async::Promise<muse::Ret> runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:
@@ -76,7 +76,7 @@ private:
     void onStartupPageOpened(StartupModeType modeType);
 
     void showStartupDialogsIfNeed(StartupModeType modeType);
-    void checkAndShowMuseSamplerUpdateIfNeed();
+    void checkAndShowMuseSamplerStatusIfNeed();
     bool shouldShowWelcomeDialog(StartupModeType modeType) const;
 
     void openScore(const project::ProjectFile& file);

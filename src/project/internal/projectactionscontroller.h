@@ -29,13 +29,10 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "context/iglobalcontext.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
+#include "project/iprojectsession.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "rcommand/commandable.h"
-#include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "print/iprintprovider.h"
@@ -50,7 +47,7 @@
 
 namespace mu::project {
 class ProjectActionsController : public IProjectCommandsController, public muse::mi::IProjectProvider, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+    public muse::async::Asyncable, public muse::rcommand::Commandable
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -59,10 +56,9 @@ public:
     muse::ContextInject<ISaveProjectScenario> saveProjectScenario = { this };
     muse::ContextInject<ICloseProjectScenario> closeProjectScenario = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<print::IPrintProvider> printProvider = { this };
 
     ProjectActionsController(const muse::modularity::ContextPtr& iocCtx)
@@ -82,8 +78,6 @@ public:
     muse::async::Notification hasSelectionChanged() const override;
     // --------
 
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
@@ -92,7 +86,6 @@ private:
     void setupConnections();
 
     project::INotationProjectPtr currentNotationProject() const;
-    notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
@@ -132,5 +125,6 @@ private:
 
     muse::async::Notification m_needSaveChanged;
     muse::async::Notification m_hasSelectionChanged;
+    notation::INotationPtr m_observedNotation;
 };
 }

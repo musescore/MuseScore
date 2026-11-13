@@ -30,6 +30,7 @@ class Factory;
 class System;
 class Transaction;
 enum class BracketType : signed char;
+enum class InstrumentNameType : char;
 
 //---------------------------------------------------------
 //   @@ Bracket
@@ -45,6 +46,7 @@ public:
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
+    void setOwnershipParent(DummyParentOr<System> parent) { EngravingItem::setOwnershipParent(parent); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
@@ -59,6 +61,9 @@ public:
     size_t firstStaff() const { return m_firstStaff; }
     size_t lastStaff() const { return m_lastStaff; }
     void setStaffSpan(size_t a, size_t b);
+
+    InstrumentNameType labelType() const { return m_labelType; }
+    void setLabelType(InstrumentNameType t) { m_labelType = t; }
 
     SymId braceSymbol() const { return m_braceSymbol; }
     void setBraceSymbol(const SymId& sym) { m_braceSymbol = sym; }
@@ -123,13 +128,15 @@ public:
 private:
     friend class Factory;
 
-    Bracket(DummyParentOr<EngravingItem> parent);
+    Bracket(DummyParentOr<System> parent);
 
     BracketItem* m_bi = nullptr;
     double m_ay1 = 0.0;
 
     size_t m_firstStaff = 0;
     size_t m_lastStaff = 0;
+
+    InstrumentNameType m_labelType;
 
     SymId m_braceSymbol = SymId::noSym;
 

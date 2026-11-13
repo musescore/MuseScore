@@ -25,7 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "project/iprojectsession.h"
 
 #include "uicomponents/qml/Muse/UiComponents/abstracttoolbarmodel.h"
 
@@ -35,7 +35,7 @@ class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
 
 public:
     Q_INVOKABLE void load() override;

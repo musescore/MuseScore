@@ -25,10 +25,11 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
-#include "actions/iactionsdispatcher.h"
+
+#include "modularity/ioc.h"
+#include "rcommand/icommanddispatcher.h"
+#include "project/iprojectsession.h"
 
 namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
@@ -36,8 +37,8 @@ class NotationSwitchListModel : public QAbstractListModel, public muse::Contexta
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<project::IProjectSession> context = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);

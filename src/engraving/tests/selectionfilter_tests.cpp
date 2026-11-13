@@ -46,11 +46,11 @@ public:
 void Engraving_SelectionFilterTests::testFilter(int idx, const SelectionFilterTypesVariant& type)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter%1.mscx").arg(idx));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     score->select(m1);
 
@@ -74,14 +74,14 @@ void Engraving_SelectionFilterTests::testFilter(int idx, const SelectionFilterTy
 void Engraving_SelectionFilterTests::testFilterSpanner(int idx, const SelectionFilterTypesVariant& type)
 {
     Score* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String("selectionfilter%1.mscx").arg(idx));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = score->firstMeasure()->nextMeasure();
 
-    EXPECT_TRUE(m1);
-    EXPECT_TRUE(m2);
+    ASSERT_TRUE(m1);
+    ASSERT_TRUE(m2);
 
     score->select(m1);
     score->select(m2, SelectType::RANGE);
@@ -223,7 +223,7 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
 {
     //! [GIVEN] A score with a mixture of chords, single notes, and tuplets...
     MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     const auto prepareSelectionRange = [score](MeasureBase* rangeStart, MeasureBase* rangeEnd){
         score->deselectAll();
@@ -238,7 +238,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     MeasureBase* rangeStart = score->measure(0);
     MeasureBase* rangeEnd = score->measure(4);
     MeasureBase* auxMeasure = score->measure(25);
-    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+    ASSERT_TRUE(rangeStart);
+    ASSERT_TRUE(rangeEnd);
+    ASSERT_TRUE(auxMeasure);
 
     score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(true);
@@ -253,7 +255,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     rangeStart = score->measure(5);
     rangeEnd = score->measure(9);
     auxMeasure = score->measure(30);
-    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+    ASSERT_TRUE(rangeStart);
+    ASSERT_TRUE(rangeEnd);
+    ASSERT_TRUE(auxMeasure);
 
     score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(true);
@@ -269,7 +273,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     rangeStart = score->measure(10);
     rangeEnd = score->measure(14);
     auxMeasure = score->measure(35);
-    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+    ASSERT_TRUE(rangeStart);
+    ASSERT_TRUE(rangeEnd);
+    ASSERT_TRUE(auxMeasure);
 
     score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::ALL, true);
     score->selectionFilter().setIncludeSingleNotes(false);
@@ -283,7 +289,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     rangeStart = score->measure(15);
     rangeEnd = score->measure(19);
     auxMeasure = score->measure(40);
-    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+    ASSERT_TRUE(rangeStart);
+    ASSERT_TRUE(rangeEnd);
+    ASSERT_TRUE(auxMeasure);
 
     score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::NONE, true);
     score->selectionFilter().setIncludeSingleNotes(false);
@@ -299,7 +307,9 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
     rangeStart = score->measure(20);
     rangeEnd = score->measure(24);
     auxMeasure = score->measure(45);
-    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+    ASSERT_TRUE(rangeStart);
+    ASSERT_TRUE(rangeEnd);
+    ASSERT_TRUE(auxMeasure);
 
     score->selectionFilter().setFiltered(NotesInChordSelectionFilterTypes::NONE, true);
     score->selectionFilter().setIncludeSingleNotes(false);
@@ -361,7 +371,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
 {
     //! [GIVEN] A score with a grace notes and slurs
     MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_gracesandslurs.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Clear selection filter...
     score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::ALL, false);
@@ -371,7 +381,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
     // Measure 1
     //! [WHEN] Performing a delete with nothing filtered...
     MeasureBase* currentMeasure = score->measure(0);
-    EXPECT_TRUE(currentMeasure);
+    ASSERT_TRUE(currentMeasure);
     score->deselectAll();
     score->select(currentMeasure, SelectType::SINGLE);
 
@@ -385,7 +395,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
     score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::GRACE_NOTE, true);
 
     currentMeasure = score->measure(1);
-    EXPECT_TRUE(currentMeasure);
+    ASSERT_TRUE(currentMeasure);
     score->deselectAll();
     score->select(currentMeasure, SelectType::SINGLE);
 
@@ -398,7 +408,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
     score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::SLUR, false);
 
     currentMeasure = score->measure(2);
-    EXPECT_TRUE(currentMeasure);
+    ASSERT_TRUE(currentMeasure);
     score->deselectAll();
     score->select(currentMeasure, SelectType::SINGLE);
 
@@ -412,7 +422,7 @@ TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
     score->selectionFilter().setFiltered(ElementsSelectionFilterTypes::SLUR, true);
 
     currentMeasure = score->measure(3);
-    EXPECT_TRUE(currentMeasure);
+    ASSERT_TRUE(currentMeasure);
     score->deselectAll();
     score->select(currentMeasure, SelectType::SINGLE);
 
