@@ -35,5 +35,6 @@ public:
 
     MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
     MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
+    MOCK_METHOD(int, playFromSelectionStartTick, (), (const, override));
 };
 }

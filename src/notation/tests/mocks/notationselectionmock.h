@@ -49,6 +49,7 @@ public:
     MOCK_METHOD(INotationSelectionRangePtr, range, (), (const, override));
 
     MOCK_METHOD(EngravingItem*, lastElementHit, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, lastElementHitChanged, (), (const, override));
 
     MOCK_METHOD(mu::engraving::MeasureBase*, startMeasureBase, (), (const, override));
     MOCK_METHOD(mu::engraving::MeasureBase*, endMeasureBase, (), (const, override));

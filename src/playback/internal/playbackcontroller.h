@@ -70,6 +70,8 @@ public:
 
     muse::audio::secs_t playbackPosition() const override;
     muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const override;
+
+    int playFromSelectionStartTick() const override;
     // --------------
 
     // IPlaybackController

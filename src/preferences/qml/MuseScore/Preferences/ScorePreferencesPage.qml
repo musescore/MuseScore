@@ -37,12 +37,48 @@ PreferencesPage {
         scorePreferencesModel.load()
     }
 
-    DefaultStyleSection {
+    Column {
         width: parent.width
+        spacing: root.sectionsSpacing
 
-        model: scorePreferencesModel
+        DefaultStyleSection {
+            width: parent.width
 
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+            model: scorePreferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+        }
+
+        SeparatorLine { }
+
+        PlaybackCursorsSection {
+            width: parent.width
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            isShowingPlaybackCueInNormalMode: scorePreferencesModel.showPlaybackCueInNormalMode
+            isShowingPlaybackCursorInNormalMode: scorePreferencesModel.showPlaybackCursorInNormalMode
+
+            onShowPlaybackCueInNormalModeChangeRequested: function(show: bool) {
+                scorePreferencesModel.showPlaybackCueInNormalMode = show
+            }
+
+            onShowPlaybackCursorInNormalModeChangeRequested: function(show: bool) {
+                scorePreferencesModel.showPlaybackCursorInNormalMode = show
+            }
+
+            playbackCueColor: scorePreferencesModel.playbackCueColor
+            playbackCursorColor: scorePreferencesModel.playbackCursorColor
+
+            onPlaybackCueColorChangeRequested: function(newColor: color) {
+                scorePreferencesModel.playbackCueColor = newColor
+            }
+
+            onPlaybackCursorColorChangeRequested: function(newColor: color) {
+                scorePreferencesModel.playbackCursorColor = newColor
+            }
+        }
     }
 }

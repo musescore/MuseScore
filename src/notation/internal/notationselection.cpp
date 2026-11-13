@@ -159,7 +159,21 @@ Score* NotationSelection::score() const
 
 void NotationSelection::onElementHit(EngravingItem* el)
 {
+    if (m_lastElementHit == el) {
+        return;
+    }
+
     m_lastElementHit = el;
+    m_lastElementHitChanged.notify();
+}
+
+void NotationSelection::onElementDestroyed(const EngravingItem* el)
+{
+    // Not notified: listeners would query the score while it may be mid-edit or being torn down.
+    // Any edit that destroys elements ends with notationChanged anyway.
+    if (m_lastElementHit == el) {
+        m_lastElementHit = nullptr;
+    }
 }
 
 MeasureBase* NotationSelection::startMeasureBase() const
@@ -190,6 +204,11 @@ std::vector<mu::engraving::Page*> NotationSelection::pagesContainingSelection() 
 EngravingItem* NotationSelection::lastElementHit() const
 {
     return m_lastElementHit;
+}
+
+muse::async::Notification NotationSelection::lastElementHitChanged() const
+{
+    return m_lastElementHitChanged;
 }
 
 bool NotationSelection::elementsSelected(const mu::engraving::ElementTypeSet& types) const

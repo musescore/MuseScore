@@ -76,8 +76,10 @@ public:
     INotationSelectionRangePtr range() const override;
 
     engraving::EngravingItem* lastElementHit() const override;
+    muse::async::Notification lastElementHitChanged() const override;
 
     void onElementHit(engraving::EngravingItem*);
+    void onElementDestroyed(const engraving::EngravingItem*);
 
     mu::engraving::MeasureBase* startMeasureBase() const override;
     mu::engraving::MeasureBase* endMeasureBase() const override;
@@ -127,5 +129,6 @@ private:
     IInteractionForSelection* m_interaction = nullptr;
     INotationSelectionRangePtr m_range;
     muse::async::Notification m_selectionChanged;
+    muse::async::Notification m_lastElementHitChanged;
 };
 }

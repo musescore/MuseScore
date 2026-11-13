@@ -63,6 +63,11 @@ muse::async::Channel<muse::audio::secs_t> PlaybackControllerStub::playbackPositi
     return {};
 }
 
+int PlaybackControllerStub::playFromSelectionStartTick() const
+{
+    return 0;
+}
+
 muse::Ret PlaybackControllerStub::togglePlay()
 {
     return muse::make_ok();

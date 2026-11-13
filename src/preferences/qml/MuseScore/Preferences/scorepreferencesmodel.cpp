@@ -38,6 +38,22 @@ void ScorePreferencesModel::load()
     notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t&) {
         emit defaultPartStylePathChanged();
     });
+
+    notationConfiguration()->showPlaybackCueInNormalModeChanged().onReceive(this, [this](bool show) {
+        emit showPlaybackCueInNormalModeChanged(show);
+    });
+
+    notationConfiguration()->showPlaybackCursorInNormalModeChanged().onReceive(this, [this](bool show) {
+        emit showPlaybackCursorInNormalModeChanged(show);
+    });
+
+    notationConfiguration()->playbackCueColorChanged().onNotify(this, [this]() {
+        emit playbackCueColorChanged();
+    });
+
+    notationConfiguration()->playbackCursorColorChanged().onNotify(this, [this]() {
+        emit playbackCursorColorChanged();
+    });
 }
 
 QString ScorePreferencesModel::defaultStylePath() const
@@ -66,4 +82,48 @@ void ScorePreferencesModel::setDefaultPartStylePath(const QString& path)
     }
 
     notationConfiguration()->setPartStyleFilePath(path.toStdString());
+}
+
+bool ScorePreferencesModel::showPlaybackCueInNormalMode() const
+{
+    return notationConfiguration()->showPlaybackCueInNormalMode();
+}
+
+void ScorePreferencesModel::setShowPlaybackCueInNormalMode(bool show)
+{
+    notationConfiguration()->setShowPlaybackCueInNormalMode(show);
+}
+
+bool ScorePreferencesModel::showPlaybackCursorInNormalMode() const
+{
+    return notationConfiguration()->showPlaybackCursorInNormalMode();
+}
+
+void ScorePreferencesModel::setShowPlaybackCursorInNormalMode(bool show)
+{
+    notationConfiguration()->setShowPlaybackCursorInNormalMode(show);
+}
+
+QColor ScorePreferencesModel::playbackCueColor() const
+{
+    return notationConfiguration()->playbackCueColor();
+}
+
+void ScorePreferencesModel::setPlaybackCueColor(const QColor& color)
+{
+    if (color != playbackCueColor()) {
+        notationConfiguration()->setPlaybackCueColor(color);
+    }
+}
+
+QColor ScorePreferencesModel::playbackCursorColor() const
+{
+    return notationConfiguration()->playbackCursorColor();
+}
+
+void ScorePreferencesModel::setPlaybackCursorColor(const QColor& color)
+{
+    if (color != playbackCursorColor()) {
+        notationConfiguration()->setPlaybackCursorColor(color);
+    }
 }

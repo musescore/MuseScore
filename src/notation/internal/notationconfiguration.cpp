@@ -111,6 +111,12 @@ static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/
 
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
+static const Settings::Key SHOW_PLAYBACK_CUE_IN_NORMAL_MODE(module_name, "ui/canvas/showPlaybackCueInNormalMode");
+static const Settings::Key PLAYBACK_CUE_COLOR(module_name, "ui/canvas/playbackCueColor");
+
+static const Settings::Key SHOW_PLAYBACK_CURSOR_IN_NORMAL_MODE(module_name, "ui/canvas/showPlaybackCursorInNormalMode");
+static const Settings::Key PLAYBACK_CURSOR_COLOR(module_name, "ui/canvas/playbackCursorColor");
+
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 static const std::string BY_NOTE_NAME_INPUT_METHOD("BY_NOTE_NAME");
@@ -375,6 +381,30 @@ void NotationConfiguration::init()
         m_midiInputUseWrittenPitch.set(val.toBool());
     });
 
+    settings()->setDefaultValue(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE, Val(false));
+    settings()->valueChanged(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE).onReceive(this, [this](const Val& val) {
+        m_showPlaybackCueInNormalModeChanged.send(val.toBool());
+    });
+
+    settings()->setDefaultValue(SHOW_PLAYBACK_CURSOR_IN_NORMAL_MODE, Val(false));
+    settings()->valueChanged(SHOW_PLAYBACK_CURSOR_IN_NORMAL_MODE).onReceive(this, [this](const Val& val) {
+        m_showPlaybackCursorInNormalModeChanged.send(val.toBool());
+    });
+
+    settings()->setDefaultValue(PLAYBACK_CUE_COLOR, Val(QColor(255, 187, 0, 128) /* translucent orange */));
+    settings()->setCanBeManuallyEdited(PLAYBACK_CUE_COLOR, true);
+    settings()->setDescription(PLAYBACK_CUE_COLOR, muse::trc("notation", "Playback cue color"));
+    settings()->valueChanged(PLAYBACK_CUE_COLOR).onReceive(this, [this](const Val&) {
+        m_playbackCueColorChanged.notify();
+    });
+
+    settings()->setDefaultValue(PLAYBACK_CURSOR_COLOR, Val(QColor(0, 153, 221, 128) /* translucent light blue */));
+    settings()->setCanBeManuallyEdited(PLAYBACK_CURSOR_COLOR, true);
+    settings()->setDescription(PLAYBACK_CURSOR_COLOR, muse::trc("notation", "Playback cursor color"));
+    settings()->valueChanged(PLAYBACK_CURSOR_COLOR).onReceive(this, [this](const Val&) {
+        m_playbackCursorColorChanged.notify();
+    });
+
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
 
@@ -616,11 +646,64 @@ int NotationConfiguration::borderWidth() const
     }
 }
 
+bool NotationConfiguration::showPlaybackCueInNormalMode() const
+{
+    return settings()->value(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE).toBool();
+}
+
+void NotationConfiguration::setShowPlaybackCueInNormalMode(bool show)
+{
+    settings()->setSharedValue(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE, Val(show));
+}
+
+async::Channel<bool> NotationConfiguration::showPlaybackCueInNormalModeChanged() const
+{
+    return m_showPlaybackCueInNormalModeChanged;
+}
+
+bool NotationConfiguration::showPlaybackCursorInNormalMode() const
+{
+    return settings()->value(SHOW_PLAYBACK_CURSOR_IN_NORMAL_MODE).toBool();
+}
+
+void NotationConfiguration::setShowPlaybackCursorInNormalMode(bool show)
+{
+    settings()->setSharedValue(SHOW_PLAYBACK_CURSOR_IN_NORMAL_MODE, Val(show));
+}
+
+async::Channel<bool> NotationConfiguration::showPlaybackCursorInNormalModeChanged() const
+{
+    return m_showPlaybackCursorInNormalModeChanged;
+}
+
+QColor NotationConfiguration::playbackCueColor() const
+{
+    return settings()->value(PLAYBACK_CUE_COLOR).toQColor();
+}
+
+void NotationConfiguration::setPlaybackCueColor(const QColor& color)
+{
+    settings()->setSharedValue(PLAYBACK_CUE_COLOR, Val(color));
+}
+
+muse::async::Notification NotationConfiguration::playbackCueColorChanged() const
+{
+    return m_playbackCueColorChanged;
+}
+
 QColor NotationConfiguration::playbackCursorColor() const
 {
-    QColor color = selectionColor();
-    color.setAlpha(178);
-    return color;
+    return settings()->value(PLAYBACK_CURSOR_COLOR).toQColor();
+}
+
+void NotationConfiguration::setPlaybackCursorColor(const QColor& color)
+{
+    settings()->setSharedValue(PLAYBACK_CURSOR_COLOR, Val(color));
+}
+
+muse::async::Notification NotationConfiguration::playbackCursorColorChanged() const
+{
+    return m_playbackCursorColorChanged;
 }
 
 int NotationConfiguration::cursorOpacity() const

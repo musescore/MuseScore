@@ -111,8 +111,10 @@ void AbstractNotationPaintView::load()
     });
 
     m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+
+    m_playbackCue = std::make_unique<PlaybackCue>(iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
-    m_playbackCursor->setVisible(false);
+
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
 
@@ -152,6 +154,12 @@ void AbstractNotationPaintView::load()
     playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         m_lastPlaybackPosition = secs;
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
+
+        if (!playbackState()->isPlaying()) {
+            if (const INotationPlaybackPtr playback = notationPlayback()) {
+                movePlaybackCursor(playback->secToTick(secs));
+            }
+        }
     }, async::Asyncable::Mode::SetReplace);
 
     playbackState()->isPlayingChanged().onReceive(this, [this](bool) {
@@ -279,6 +287,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_pageCache.clear();
         updateLoopMarkers();
         updateShadowNoteVisibility();
+        refreshPlaybackCursors();
         scheduleRedraw(updateRect.isValid() ? fromLogical(updateRect) : RectF());
     });
 
@@ -305,7 +314,14 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
+        updatePlaybackCue();
         scheduleRedraw();
+    });
+
+    // With nothing selected, playing from selection starts at the last element clicked, which can change
+    // without the selection changing (e.g. clicking a note during playback only seeks)
+    interaction->selection()->lastElementHitChanged().onNotify(this, [this]() {
+        updatePlaybackCue();
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -366,6 +382,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     // FIXME: only un-/re-subscribe when master notation changes
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoopMarkers();
+        updatePlaybackCue();
         scheduleRedraw();
     });
 
@@ -407,6 +424,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         forceFocusIn();
     });
 
+    movePlaybackCursor(notationPlayback()->secToTick(playbackState()->playbackPosition()));
+    updatePlaybackCue();
+    updatePlaybackCursorsVisibility();
+
     scheduleRedraw();
 
     emit horizontalScrollChanged();
@@ -425,6 +446,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->noteInput()->stateChanged().disconnect(this);
     interaction->noteInput()->noteInputStarted().disconnect(this);
     interaction->selectionChanged().disconnect(this);
+    interaction->selection()->lastElementHitChanged().disconnect(this);
     interaction->showItemRequested().disconnect(this);
     interaction->textEditingStarted().disconnect(this);
     interaction->textEditingEnded().disconnect(this);
@@ -490,7 +512,8 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
     emit matrixChanged();
     emit viewportChanged();
 
-    onPlaybackCursorRectChanged();
+    // Where the playback cursors appear in the view depends on its transform and size
+    updatePlaybackCursorItemsGeometry();
 }
 
 void AbstractNotationPaintView::onViewSizeChanged()
@@ -517,7 +540,8 @@ void AbstractNotationPaintView::onViewSizeChanged()
     emit verticalScrollChanged();
     emit viewportChanged();
 
-    onPlaybackCursorRectChanged();
+    // Where the playback cursors appear in the view depends on its transform and size
+    updatePlaybackCursorItemsGeometry();
 }
 
 void AbstractNotationPaintView::updateLoopMarkers()
@@ -556,6 +580,16 @@ void AbstractNotationPaintView::updateShadowNoteVisibility()
         m_previewMeasureRect = RectF();
         return;
     }
+}
+
+bool AbstractNotationPaintView::showPlaybackCursorInNormalMode() const
+{
+    return notationConfiguration()->showPlaybackCursorInNormalMode();
+}
+
+bool AbstractNotationPaintView::showPlaybackCueInNormalMode() const
+{
+    return notationConfiguration()->showPlaybackCueInNormalMode();
 }
 
 NotationViewInputController* AbstractNotationPaintView::inputController() const
@@ -615,6 +649,8 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
     setAcceptHoverEvents(isNoteEnterMode());
     updateLoopMarkers();
     updateShadowNoteVisibility();
+    updatePlaybackCursorsVisibility();
+
     scheduleRedraw();
 }
 
@@ -822,6 +858,28 @@ void AbstractNotationPaintView::onNotationSetup()
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         scheduleRedraw();
+    });
+
+    notationConfiguration()->showPlaybackCueInNormalModeChanged().onReceive(this, [this](bool) {
+        updatePlaybackCursorsVisibility();
+        emit showPlaybackCueInNormalModeChanged();
+    });
+
+    notationConfiguration()->showPlaybackCursorInNormalModeChanged().onReceive(this, [this](bool) {
+        updatePlaybackCursorsVisibility();
+        emit showPlaybackCursorInNormalModeChanged();
+    });
+
+    notationConfiguration()->playbackCueColorChanged().onNotify(this, [this]() {
+        if (m_playbackCueItem) {
+            m_playbackCueItem->setProperty("color", notationConfiguration()->playbackCueColor());
+        }
+    });
+
+    notationConfiguration()->playbackCursorColorChanged().onNotify(this, [this]() {
+        if (m_playbackCursorItem) {
+            m_playbackCursorItem->setProperty("color", notationConfiguration()->playbackCursorColor());
+        }
     });
 }
 
@@ -1487,9 +1545,14 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 
     if (m_loadCalled) {
         m_continuousPanel->setNotation(m_notation);
+        m_playbackCue->setNotation(m_notation);
         m_playbackCursor->setNotation(m_notation);
         m_loopInMarker->setNotation(m_notation);
         m_loopOutMarker->setNotation(m_notation);
+
+        // The cursors' QML items are separate from this view's painting, so they must be updated explicitly,
+        // e.g. to hide them when the score is closed
+        updatePlaybackCursorItemsGeometry();
     }
 }
 
@@ -1572,11 +1635,8 @@ void AbstractNotationPaintView::onPlayingChanged()
     TRACEFUNC;
 
     bool isPlaying = playbackState()->isPlaying();
-    m_playbackCursor->setVisible(isPlaying);
 
-    if (m_playbackCursorItem) {
-        m_playbackCursorItem->setVisible(isPlaying);
-    }
+    updatePlaybackCursorsVisibility();
 
     m_autoScrollEnabled = true;
     m_enableAutoScrollTimer.stop();
@@ -1588,7 +1648,60 @@ void AbstractNotationPaintView::onPlayingChanged()
         m_updatePlaybackCursorInterpolatedTimer.start(23); // ~43 FPS (1024 buffer + 44100)
     } else {
         m_updatePlaybackCursorInterpolatedTimer.stop();
+
+        // Snap to the exact position playback stopped at, since the interpolation may have overshot
+        if (const INotationPlaybackPtr playback = notationPlayback()) {
+            movePlaybackCursor(playback->secToTick(playbackState()->playbackPosition()));
+        }
+
         scheduleRedraw();
+    }
+}
+
+void AbstractNotationPaintView::updatePlaybackCursorsVisibility()
+{
+    if (!m_playbackCursor || !m_playbackCue) {
+        return;
+    }
+
+    const bool isPlaying = playbackState()->isPlaying();
+    const bool isNormalMode = !isNoteEnterMode();
+
+    // Outside of playback, both cursors are only ever shown in normal mode (never in any note input mode)
+    m_playbackCursor->setIsRenderable(isPlaying || (isNormalMode && showPlaybackCursorInNormalMode()));
+    m_playbackCue->setIsRenderable(isNormalMode && showPlaybackCueInNormalMode());
+
+    if (m_playbackCursorItem) {
+        m_playbackCursorItem->setVisible(m_playbackCursor->isVisible());
+    }
+
+    if (m_playbackCueItem) {
+        m_playbackCueItem->setVisible(m_playbackCue->isVisible());
+    }
+
+    // Whether the playback cue is drawn as flags depends on both cursors being visible
+    updatePlaybackCursorItemsGeometry();
+}
+
+void AbstractNotationPaintView::updatePlaybackCue()
+{
+    movePlaybackCue(playbackState()->playFromSelectionStartTick());
+}
+
+void AbstractNotationPaintView::refreshPlaybackCursors()
+{
+    if (!m_playbackCursor || !m_playbackCue) {
+        return;
+    }
+
+    // Edits can shift the selection's tick without changing the selection (e.g. measures inserted before it),
+    // so the cue's tick must be queried again, not just its rect
+    const bool cueChanged = m_playbackCue->refresh(playbackState()->playFromSelectionStartTick());
+    const bool cursorChanged = m_playbackCursor->refresh();
+
+    // One update covers both: their layouts depend on each other
+    if (cueChanged || cursorChanged) {
+        updatePlaybackCursorItemsGeometry();
     }
 }
 
@@ -1607,19 +1720,31 @@ void AbstractNotationPaintView::updatePlaybackCursorInterpolated()
     movePlaybackCursor(estimatedTick);
 }
 
-void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
+void AbstractNotationPaintView::movePlaybackCue(midi::tick_t newTick)
+{
+    TRACEFUNC;
+
+    RectF oldCursorRect = m_playbackCue->rect();
+    m_playbackCue->move(newTick);
+
+    if (m_playbackCue->rect() != oldCursorRect) {
+        onPlaybackCueRectChanged();
+    }
+}
+
+void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t newTick)
 {
     TRACEFUNC;
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    m_playbackCursor->move(newTick);
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (newCursorRect != oldCursorRect) {
         onPlaybackCursorRectChanged();
     }
 
-    if (!m_playbackCursor->visible() || newCursorRect.isNull()) {
+    if (!playbackState()->isPlaying() || newCursorRect.isNull()) {
         return;
     }
 
@@ -1670,21 +1795,102 @@ bool AbstractNotationPaintView::shouldAdjustCanvasVerticallyDuringPlayback(const
     return m_pageCache.adjustVerticallyDuringPlayback.value();
 }
 
+// The two cursors' layouts depend on each other (see updatePlaybackCursorItemsGeometry), so a change to either
+// one re-lays out both
+void AbstractNotationPaintView::onPlaybackCueRectChanged()
+{
+    updatePlaybackCursorItemsGeometry();
+}
+
 void AbstractNotationPaintView::onPlaybackCursorRectChanged()
 {
-    if (!m_playbackCursor || !m_playbackCursorItem) {
+    updatePlaybackCursorItemsGeometry();
+}
+
+//! Cursor rect in view (pixel) coordinates, not yet clipped to the view. Empty if the cursor has no position.
+QRectF AbstractNotationPaintView::cursorViewRect(const SystemCursor* cursor) const
+{
+    if (!cursor || cursor->rect().isNull()) {
+        return QRectF();
+    }
+
+    QRectF cursorRect = fromLogical(cursor->rect()).toQRectF();
+    cursorRect.setWidth(std::max(std::round(cursorRect.width()), 1.0)); // makes it move more smoothly
+
+    return cursorRect;
+}
+
+static void setItemGeometry(QQuickItem* item, const QRectF& rect)
+{
+    item->setX(rect.x());
+    item->setY(rect.y());
+    item->setSize(rect.size());
+}
+
+//! Normally the playback cursor and the playback cue are each drawn as a full-height bar. When both are visible
+//! and they overlap (which is the usual case after selecting something, since the playback position follows the
+//! selection), drawing both bars would either hide one or blend their colors. Instead, the playback cue is drawn as
+//! two short "flags" covering the top and bottom ends of the playback cursor's bar, and the playback cursor keeps
+//! the middle. Together they take the same space as the playback cursor alone. If an end is outside the view, its
+//! flag is pinned to the view's edge.
+void AbstractNotationPaintView::updatePlaybackCursorItemsGeometry()
+{
+    // Each flag's share of the playback cursor's full height, so the flags scale with zoom
+    static constexpr qreal FLAG_HEIGHT_RATIO = 0.1; // a percentage
+
+    const QRectF viewRect(0.0, 0.0, width(), height());
+    const QRectF cueRect = cursorViewRect(m_playbackCue.get());
+    const QRectF headRect = cursorViewRect(m_playbackCursor.get());
+
+    const bool bothVisible = m_playbackCue && m_playbackCue->isVisible()
+                             && m_playbackCursor && m_playbackCursor->isVisible();
+
+    // A cursor's rect spans its whole system, so two cursors in the same system have the same top and bottom.
+    // Merely intersecting isn't enough: the rects of cursors in neighboring systems can overlap in the margin
+    // between the systems.
+    static constexpr qreal SAME_Y_TOLERANCE = 0.5; // in view pixels
+
+    const bool sameSystem = (std::abs(cueRect.top() - headRect.top()) < SAME_Y_TOLERANCE)
+                            && (std::abs(cueRect.bottom() - headRect.bottom()) < SAME_Y_TOLERANCE);
+    const bool sameSpot = sameSystem
+                          && (cueRect.left() < headRect.right())
+                          && (headRect.left() < cueRect.right());
+
+    // Both must be at least partly on screen, or the flags would mark a cursor that isn't in view
+    const bool flagged = bothVisible
+                         && sameSpot
+                         && headRect.intersects(viewRect)
+                         && cueRect.intersects(viewRect);
+
+    if (!flagged) {
+        if (m_playbackCueItem) {
+            m_playbackCueItem->setProperty("flagged", false);
+            setItemGeometry(m_playbackCueItem, cueRect.intersected(viewRect));
+        }
+
+        if (m_playbackCursorItem) {
+            setItemGeometry(m_playbackCursorItem, headRect.intersected(viewRect));
+        }
+
         return;
     }
 
-    QRectF cursorRect = fromLogical(m_playbackCursor->rect()).toQRectF();
-    cursorRect.setWidth(std::max(std::round(cursorRect.width()), 1.0)); // makes it move more smoothly
+    // The flags take the two ends of the playback cursor's bar; the cursor keeps the middle.
+    // Clipping first keeps both flags on screen when the cursor runs off the view's edge.
+    const QRectF visibleHead = headRect.intersected(viewRect);
+    // Sized from the full height, so the flags don't shrink as the cursor scrolls out of view.
+    // The cap keeps a mostly off-screen bar in three parts.
+    const qreal flagHeight = std::min(headRect.height() * FLAG_HEIGHT_RATIO, visibleHead.height() / 3);
 
-    QRectF viewRect(0.0, 0.0, width(), height());
-    QRectF newRect = cursorRect.intersected(viewRect);
+    if (m_playbackCursorItem) {
+        setItemGeometry(m_playbackCursorItem, visibleHead.adjusted(0, flagHeight, 0, -flagHeight));
+    }
 
-    m_playbackCursorItem->setX(newRect.x());
-    m_playbackCursorItem->setY(newRect.y());
-    m_playbackCursorItem->setSize(newRect.size());
+    if (m_playbackCueItem) {
+        m_playbackCueItem->setProperty("flagged", true);
+        m_playbackCueItem->setProperty("flagHeight", flagHeight);
+        setItemGeometry(m_playbackCueItem, visibleHead);
+    }
 }
 
 const Page* AbstractNotationPaintView::pageByPoint(const PointF& point) const
@@ -1777,12 +1983,35 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
     m_playbackCursorItem = cursor;
 
     if (m_playbackCursorItem) {
-        m_playbackCursorItem->setVisible(playbackState()->isPlaying());
+        m_playbackCursorItem->setVisible(m_playbackCursor && m_playbackCursor->isVisible());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", notationConfiguration()->playbackCursorColor());
 
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
         });
+
+        onPlaybackCursorRectChanged();
+    }
+}
+
+void AbstractNotationPaintView::setPlaybackCueItem(QQuickItem* cursor)
+{
+    if (m_playbackCueItem == cursor) {
+        return;
+    }
+
+    m_playbackCueItem = cursor;
+
+    if (m_playbackCueItem) {
+        m_playbackCueItem->setVisible(m_playbackCue && m_playbackCue->isVisible());
+        m_playbackCueItem->setEnabled(false); // ignore mouse & keyboard events
+        m_playbackCueItem->setProperty("color", notationConfiguration()->playbackCueColor());
+
+        connect(m_playbackCueItem, &QObject::destroyed, this, [this]() {
+            m_playbackCueItem = nullptr;
+        });
+
+        onPlaybackCueRectChanged();
     }
 }
