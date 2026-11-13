@@ -19,30 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 import Muse.Interactive
+import Muse.Dock
 
 import MuseScore.AppShell
-import MuseScore.Playback
 
 AppWindow {
     id: root
 
     flags: Qt.FramelessWindowHint
-
-    InteractiveProvider {
-        id: interactiveProvider
-        topParent: root
-
-        onRequestedDockPage: function(uri, params) {
-            Qt.callLater(interactiveProvider.onPageOpened)
-        }
-    }
 
     AppMenuBar {
         id: appMenuBar
@@ -51,49 +41,92 @@ AppWindow {
         anchors.right: parent.right
     }
 
-    Item {
-        id: contentItem
+    DockWindow {
+        id: dockWindow
+
         anchors.top: appMenuBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        StyledTabBar {
-            id: bar
-            anchors.left: parent.left
-            anchors.margins: 16
-            width: 300
+        objectName: "WindowContent"
 
-            StyledTabButton {
-                text: "Notation"
-            }
-            StyledTabButton {
-                text: "Dev"
+        Component.onCompleted: {
+            dockWindow.init()
+        }
+
+        onPageLoaded: {
+            interactiveProvider.onPageOpened()
+        }
+
+        InteractiveProvider {
+            id: interactiveProvider
+            topParent: dockWindow
+
+            onRequestedDockPage: function(uri, params) {
+                dockWindow.loadPage(uri, params)
             }
         }
 
-        PlaybackToolBar {
-            anchors.left: bar.right
-            anchors.right: parent.right
-            anchors.leftMargin: 16
+        NavigationSection {
+            id: topToolbarKeyNavSec
+            name: "TopTool"
+            order: 1
         }
 
-        StackLayout {
-            anchors.top: bar.bottom
-            anchors.topMargin: 8
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            currentIndex: bar.currentIndex
+        toolBars: [
+            DockToolBar {
+                id: mainToolBar
 
-            NotationFrame {
+                objectName: "mainToolBar"
+                title: qsTrc("appshell", "Main toolbar")
 
+                floatable: false
+                closable: false
+
+                navigationSection: topToolbarKeyNavSec
+
+                PageTabBar {
+                    id: toolBar
+
+                    model: MainToolBarModel {}
+
+                    navigation.name: "MainToolBar"
+                    accessibleName: qsTrc("appshell", "Main toolbar")
+
+                    navigation.section: mainToolBar.navigationSection
+                    navigation.order: 1
+
+                    currentUri: dockWindow.currentPageUri
+
+                    navigation.onActiveChanged: {
+                        if (navigation.active) {
+                            mainToolBar.forceActiveFocus()
+                        }
+                    }
+
+                    onSelected: function(uri) {
+                        dockWindow.openPage(uri)
+                    }
+
+                    Component.onCompleted: {
+                        toolBar.focusOnFirst()
+                    }
+                }
             }
+        ]
 
-            DevFrame {
+        pages: [
+            NotationPage {
+                topToolbarKeyNavSec: topToolbarKeyNavSec
+            },
 
+            DockPage {
+                objectName: "DevTools"
+                uri: "musescore://devtools"
+
+                central: DevFrame {}
             }
-
-        }
+        ]
     }
 }

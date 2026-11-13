@@ -45,6 +45,7 @@ private:
     std::shared_ptr<AppShellConfiguration> m_appShellConfiguration;
 };
 
+class AppShortcutsScopes;
 class AppShellContext : public muse::modularity::IContextSetup
 {
 public:
@@ -52,5 +53,9 @@ public:
         : muse::modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<AppShortcutsScopes> m_shortcutsScopes;
 };
 }

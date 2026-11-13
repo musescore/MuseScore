@@ -22,56 +22,39 @@
 
 #pragma once
 
-#include <QAbstractListModel>
+#include <memory>
+
 #include <qqmlintegration.h>
 
-#include "async/asyncable.h"
+#include "uicomponents/qml/Muse/UiComponents/pagetabsmodel.h"
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "project/iprojectsession.h"
 #include "iglobalconfiguration.h"
-#include "project/iopenprojectscenario.h"
+
+namespace mu::project {
+class NotationPageInfo;
+}
 
 namespace mu::appshell {
-class MainToolBarModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
+class MainToolBarModel : public muse::uicomponents::PageTabsModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString currentUri READ currentUri WRITE setCurrentUri NOTIFY currentUriChanged)
-
     QML_ELEMENT
 
-    muse::ContextInject<project::IProjectSession> context = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::ContextInject<project::IOpenProjectScenario> openProjectScenario = { this };
 
 public:
     explicit MainToolBarModel(QObject* parent = nullptr);
+    ~MainToolBarModel() override;
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE void load();
-
-    QString currentUri() const;
-    void setCurrentUri(const QString& uri);
-
-signals:
-    void currentUriChanged();
+    void load() override;
 
 private:
-    enum Roles {
-        TitleRole = Qt::UserRole + 1,
-        UriRole,
-        IsTitleBoldRole,
-        IsCheckedRole
-    };
+    muse::uicomponents::PageTab notationTab() const;
 
-    void updateNotationPageItem();
-    void updateCheckedState();
-
-    QList<QVariantMap> m_items;
-    QString m_currentUri;
+    std::unique_ptr<project::NotationPageInfo> m_notationPage;
+    int m_notationTabIndex = -1;
 };
 }

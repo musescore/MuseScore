@@ -45,7 +45,6 @@
 #include "notationscene/notationcommands.h"
 #include "workspace/workspacecommands.h"
 
-using namespace mu::appshell;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::rcommand;
@@ -99,7 +98,11 @@ void NotationStatusBarModel::init()
     TRACEFUNC;
 
     m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_COMMAND);
+#ifdef MUSE_MODULE_WORKSPACE
     m_currentWorkspaceItem = makeMenuItem(WORKSPACES_CONFIGURE_COMMAND);
+#else
+    m_currentWorkspaceItem = new MenuItem(this);
+#endif
 
     setNotation(context()->currentNotation());
 
@@ -136,6 +139,15 @@ void NotationStatusBarModel::updateConcertPitchItem()
     m_concertPitchItem->setChecked(m_notation ? m_notation->style()->styleValue(StyleId::concertPitch).toBool() : false);
 }
 
+bool NotationStatusBarModel::isWorkspaceAvailable() const
+{
+#ifdef MUSE_MODULE_WORKSPACE
+    return true;
+#else
+    return false;
+#endif
+}
+
 MenuItem* NotationStatusBarModel::currentWorkspaceItem()
 {
     return m_currentWorkspaceItem;
@@ -143,12 +155,12 @@ MenuItem* NotationStatusBarModel::currentWorkspaceItem()
 
 void NotationStatusBarModel::updateCurrentWorkspaceItem()
 {
+#ifdef MUSE_MODULE_WORKSPACE
     m_currentWorkspaceItem->setTitle(
         muse::TranslatableString::untranslatable("%1 %2")
         .arg(muse::TranslatableString("workspace", "Workspace:"),
              String::fromStdString(workspaceConfiguration()->currentWorkspaceName())));
 
-#ifdef MUSE_MODULE_WORKSPACE
     m_currentWorkspaceItem->setSubitems(m_workspacesMenuModel->items());
 #endif
 }
