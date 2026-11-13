@@ -87,7 +87,7 @@ static void dumpPickups(const std::vector<TefMeasure>& tefMeasures)
 
 static int nominalSize(const std::vector<TefMeasure>& tefMeasures, const size_t idx)
 {
-    return 64 * tefMeasures.at(idx).numerator / tefMeasures.at(idx).denominator;
+    return WHOLE_DIVISION * tefMeasures.at(idx).numerator / tefMeasures.at(idx).denominator;
 }
 
 // return the actual size of measure idx
@@ -127,7 +127,7 @@ size_t MeasureHandler::measureIndex(int tstart, const std::vector<TefMeasure>& t
 {
     for (size_t i = 0; i < tefMeasures.size(); ++i) {
         auto start { nominalMeasureStarts.at(i) };
-        auto size { 64 * tefMeasures.at(i).numerator / tefMeasures.at(i).denominator };
+        auto size { WHOLE_DIVISION* tefMeasures.at(i).numerator / tefMeasures.at(i).denominator };
         if (start <= tstart && tstart < start + size) {
             return i;
         }
@@ -177,9 +177,9 @@ void MeasureHandler::updateGapRight(std::vector<int>& gapRight, const TefNote& n
         auto offset { offsetInMeasure(pos, tefMeasures) };
         LOGN("pos %d index %zu offset %d", pos, index, offset);
         if (0 <= offset) {
-            auto dur { durationToInt(note.duration) };
+            auto dur { note.tablEditLength() };
             auto end { offset + dur };
-            auto size { 64 * tefMeasures.at(index).numerator / tefMeasures.at(index).denominator };
+            auto size { WHOLE_DIVISION* tefMeasures.at(index).numerator / tefMeasures.at(index).denominator };
             auto gap { size - end };
             LOGN("dur %d end %d size %d gap %d", dur, end, size, gap);
             if (gap < gapRight[index]) {
