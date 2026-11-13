@@ -397,11 +397,16 @@ void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument&
     }
 }
 
-bool EditPart::replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick,
-                                       const Instrument& newInstrument)
+bool EditPart::replaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+                                 const StaffType* newStaffType)
 {
     if (!score || !part) {
         return false;
+    }
+
+    if (tick == Part::MAIN_INSTRUMENT_TICK) {
+        replacePartInstrument(score, part, newInstrument, newStaffType);
+        return true;
     }
 
     InstrumentChange* instrumentChange = findInstrumentChange(score, part, tick);

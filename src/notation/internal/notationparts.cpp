@@ -769,13 +769,9 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit(TranslatableString("undoableAction", "Replace instrument"));
 
-    if (isMainInstrumentForPart(instrumentKey, part)) {
-        mu::engraving::EditPart::replacePartInstrument(score(), part, newInstrument, newStaffType);
-    } else {
-        if (!mu::engraving::EditPart::replaceInstrumentAtTick(score(), part, instrumentKey.tick, newInstrument)) {
-            rollback();
-            return;
-        }
+    if (!mu::engraving::EditPart::replaceInstrument(score(), part, instrumentKey.tick, newInstrument, newStaffType)) {
+        rollback();
+        return;
     }
 
     apply();

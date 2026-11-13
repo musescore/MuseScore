@@ -254,7 +254,8 @@ class EditPart
 public:
     static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr);
 
-    static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
+    static bool replaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+                                  const StaffType* newStaffType = nullptr);
 
     static void setPartVisible(Score* score, Part* part, bool visible);
     static void setStaffVisible(Score* score, Staff* staff, bool visible);
