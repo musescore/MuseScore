@@ -26,12 +26,8 @@
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/excerpt.h"
-#include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
-#include "engraving/editing/addremoveelement.h"
-#include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editstaff.h"
@@ -202,7 +198,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 
     doSetScoreOrder(order);
     removeMissingParts(parts);
-    insertNewParts(parts);
+    insertNewParts(parts, score()->keyList());
     updateSoloist(parts);
     sortParts(parts);
     setBracketsAndBarlines();
@@ -730,11 +726,7 @@ void NotationParts::insertPart(Part* part, size_t index)
 
     startEdit(TranslatableString("undoableAction", "Add instrument"));
 
-    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-    EditPageLocks::removePageLocksContainingMMRests(tx, score());
-    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
-
-    doInsertPart(part, index);
+    EditPart::insertPart(score(), part, index);
 
     apply();
 
@@ -752,9 +744,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     startEdit(TranslatableString("undoableAction", "Reset instrument formatting"));
 
-    size_t partIndex = muse::indexOf(score()->parts(), part);
-    score()->cmdRemovePart(part);
-    doInsertPart(newPart, partIndex);
+    EditPart::replacePart(score(), part, newPart);
 
     apply();
 
@@ -965,47 +955,6 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fr
     score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType, tick));
 }
 
-void NotationParts::doInsertPart(Part* part, size_t index)
-{
-    TRACEFUNC;
-
-    std::vector<Staff*> stavesCopy(part->staves());
-    part->clearStaves();
-
-    mu::engraving::InstrumentList instrumentsCopy = part->instruments();
-    part->setInstruments({});
-
-    if (Excerpt* excerpt = score()->excerpt()) {
-        score()->undo(new AddPartToExcerpt(excerpt, part, index));
-    } else {
-        score()->undoInsertPart(part, index);
-    }
-
-    for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
-        part->setInstrument(new Instrument(*it->second), it->first);
-    }
-
-    mu::engraving::Fraction startTick = score()->firstMeasure()->tick();
-    mu::engraving::Fraction endTick = score()->lastMeasure()->endTick();
-
-    for (size_t staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
-        Staff* staff = stavesCopy[staffIndex];
-
-        Staff* staffCopy = engraving::Factory::createStaff(part);
-        staffCopy->setId(staff->id());
-        staffCopy->setScore(score());
-        staffCopy->setPart(part);
-        staffCopy->init(staff);
-
-        insertStaff(staffCopy, static_cast<int>(staffIndex), /* createRests = */ false);
-        score()->undo(new mu::engraving::Link(staffCopy, staff));
-
-        mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
-    }
-
-    score()->remapBracketsAndBarlines();
-}
-
 void NotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
@@ -1070,41 +1019,6 @@ void NotationParts::reorderStaves(const IDList& staffIds)
     apply();
 }
 
-void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList)
-{
-    TRACEFUNC;
-
-    IF_ASSERT_FAILED(part) {
-        return;
-    }
-
-    for (staff_idx_t staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
-        Staff* staff = engraving::Factory::createStaff(part);
-        const mu::engraving::StaffType* staffType = templ.staffTypePreset;
-        if (!staffType) {
-            staffType = mu::engraving::StaffType::preset(StaffTypeId::STANDARD);
-        }
-
-        insertStaff(staff, staffIndex);
-        staff->init(&templ, staffType, staffIndex);
-    }
-
-    if (!part->nstaves()) {
-        return;
-    }
-
-    staff_idx_t firstStaffIndex = part->staff(0)->idx();
-    staff_idx_t endStaffIndex = firstStaffIndex + part->nstaves();
-    score()->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
-}
-
-void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex, bool createRest)
-{
-    TRACEFUNC;
-
-    score()->undoInsertStaff(staff, destinationStaffIndex, createRest);
-}
-
 void NotationParts::removeMissingParts(const PartInstrumentList& newParts)
 {
     TRACEFUNC;
@@ -1152,39 +1066,13 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
             continue;
         }
 
-        Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
-        const String& longN = instrument.longName();
-        const String& shortN = instrument.shortName();
-
-        InstrumentTrait trait = instrument.trait();
-        const String& transp = trait.type == TraitType::Transposition && !trait.isHiddenOnScore ? trait.name : String();
-
-        Part* part = new Part(score());
+        Part* part = EditPart::insertPart(score(), pi.instrumentTemplate, partIdx, keyList);
         part->setSoloist(pi.isSoloist);
-        part->setInstrument(instrument);
-
-        part->setLongName(muse::qtrc("notation", longN));
-        part->setShortName(muse::qtrc("notation", shortN));
-        part->setTransposition(muse::qtrc("notation", transp));
-
         part->setNumber(std::max(instrumentNumber, 0));
-
-        if (Excerpt* excerpt = score()->excerpt()) {
-            score()->undo(new AddPartToExcerpt(excerpt, part, partIdx));
-        } else {
-            score()->undoInsertPart(part, partIdx);
-        }
-        appendStaves(part, pi.instrumentTemplate, keyList);
         ++partIdx;
 
         m_partChangedNotifier.itemAdded(part);
     }
-}
-
-void NotationParts::insertNewParts(const PartInstrumentList& parts)
-{
-    TRACEFUNC;
-    insertNewParts(parts, score()->keyList());
 }
 
 void NotationParts::updateSoloist(const PartInstrumentList& parts)

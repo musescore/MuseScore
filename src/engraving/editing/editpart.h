@@ -295,16 +295,24 @@ public:
 
     static void appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart);
 
+    static void appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
+
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
     static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset);
 
     static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
+    static Part* insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
+    static void insertPart(Score* score, Part* part, size_t index);
+
     static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
+    static void replacePart(Score* score, Part* oldPart, Part* newPart);
 
     static void setScoreOrder(Score* score, const ScoreOrder& order);
 
 private:
+    static void doInsertPart(Score* score, Part* part, size_t index);
+    static void insertPartCopy(Score* score, Part* part, size_t index);
     static bool moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
 };
 }

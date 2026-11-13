@@ -123,7 +123,6 @@ private:
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
-    void doInsertPart(Part* part, size_t index);
 
     Staff* staffModifiable(const muse::ID& staffId) const;
 
@@ -131,12 +130,8 @@ private:
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
     std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
 
-    void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
-    void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex, bool createRests=true);
-
     void removeMissingParts(const PartInstrumentList& newParts);
     void insertNewParts(const PartInstrumentList& parts, const mu::engraving::KeyList& keyList);
-    void insertNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts);
 

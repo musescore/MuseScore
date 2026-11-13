@@ -24,9 +24,15 @@
 
 #include <algorithm>
 
+#include "containers.h"
+#include "translation.h"
+
 #include "addremoveelement.h"
+#include "editexcerpt.h"
+#include "editpagelocks.h"
 #include "editscoreproperties.h"
 #include "editstaff.h"
+#include "editsystemlocks.h"
 #include "transaction/transaction.h"
 #include "transpose.h"
 
@@ -920,6 +926,32 @@ void EditPart::appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* mast
     Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score->endTick());
 }
 
+void EditPart::appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    const StaffType* staffType = templ.staffTypePreset;
+    if (!staffType) {
+        staffType = StaffType::preset(StaffTypes::STANDARD);
+    }
+
+    for (staff_idx_t staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
+        Staff* staff = Factory::createStaff(part);
+        score->undoInsertStaff(staff, staffIndex);
+        staff->init(&templ, staffType, staffIndex);
+    }
+
+    if (!part->nstaves()) {
+        return;
+    }
+
+    staff_idx_t firstStaffIndex = part->staff(0)->idx();
+    staff_idx_t endStaffIndex = firstStaffIndex + part->nstaves();
+    score->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
+}
+
 bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible)
 {
     if (!score || !staff) {
@@ -944,18 +976,91 @@ void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t 
         return;
     }
 
-    Part* part = new Part(score);
-    part->initFromInstrTemplate(templ);
+    insertPart(score, *templ, index, score->keyList());
+    score->masterScore()->rebuildMidiMapping();
+}
 
-    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
-        Staff* staff = Factory::createStaff(part);
-        StaffType* stt = staff->staffType(Fraction(0, 1));
-        score->undoInsertStaff(staff, i);
-        staff->init(templ, stt, int(i));
+Part* EditPart::insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList)
+{
+    if (!score) {
+        return nullptr;
     }
 
-    score->undoInsertPart(part, index);
-    score->masterScore()->rebuildMidiMapping();
+    Instrument instrument = Instrument::fromTemplate(&templ);
+    const String& longName = instrument.longName();
+    const String& shortName = instrument.shortName();
+
+    const Trait trait = instrument.trait();
+    const String& transposition = trait.type == TraitType::Transposition && !trait.isHiddenOnScore ? trait.name : String();
+
+    Part* part = new Part(score);
+    part->setInstrument(instrument);
+
+    part->setLongName(muse::mtrc("notation", longName));
+    part->setShortName(muse::mtrc("notation", shortName));
+    part->setTransposition(muse::mtrc("notation", transposition));
+
+    doInsertPart(score, part, index);
+    appendStaves(score, part, templ, keyList);
+
+    return part;
+}
+
+void EditPart::insertPart(Score* score, Part* part, size_t index)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPageLocks::removePageLocksContainingMMRests(tx, score);
+    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
+
+    insertPartCopy(score, part, index);
+}
+
+void EditPart::doInsertPart(Score* score, Part* part, size_t index)
+{
+    if (Excerpt* excerpt = score->excerpt()) {
+        score->undo(new AddPartToExcerpt(excerpt, part, index));
+    } else {
+        score->undoInsertPart(part, index);
+    }
+}
+
+void EditPart::insertPartCopy(Score* score, Part* part, size_t index)
+{
+    std::vector<Staff*> stavesCopy(part->staves());
+    part->clearStaves();
+
+    InstrumentList instrumentsCopy = part->instruments();
+    part->setInstruments({});
+
+    doInsertPart(score, part, index);
+
+    for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
+        part->setInstrument(new Instrument(*it->second), it->first);
+    }
+
+    Fraction startTick = score->firstMeasure()->tick();
+    Fraction endTick = score->lastMeasure()->endTick();
+
+    for (size_t staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
+        Staff* staff = stavesCopy[staffIndex];
+
+        Staff* staffCopy = Factory::createStaff(part);
+        staffCopy->setId(staff->id());
+        staffCopy->setScore(score);
+        staffCopy->setPart(part);
+        staffCopy->init(staff);
+
+        score->undoInsertStaff(staffCopy, staffIndex, /* createRests = */ false);
+        score->undo(new Link(staffCopy, staff));
+
+        Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
+    }
+
+    score->remapBracketsAndBarlines();
 }
 
 void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ)
@@ -967,6 +1072,17 @@ void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate
     size_t partIndex = muse::indexOf(score->parts(), oldPart);
     score->cmdRemovePart(oldPart);
     insertPart(score, templ, partIndex);
+}
+
+void EditPart::replacePart(Score* score, Part* oldPart, Part* newPart)
+{
+    if (!score || !oldPart || !newPart) {
+        return;
+    }
+
+    size_t partIndex = muse::indexOf(score->parts(), oldPart);
+    score->cmdRemovePart(oldPart);
+    insertPartCopy(score, newPart, partIndex);
 }
 
 void EditPart::replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset)
