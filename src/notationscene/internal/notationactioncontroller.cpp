@@ -131,6 +131,8 @@ void NotationActionController::init()
     registerCommand<AddTupletCommand>(&Controller::putTuplet);
     registerCommand<OpenTupletConfigureCommand>([this]() { return openTupletOtherDialog(); });
 
+    registerCommand<AddBoxesCommand>(&Controller::addBoxes);
+
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -181,15 +183,6 @@ void NotationActionController::init()
     registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
 
     registerCommand(ENTER_REST_COMMAND, &Interaction::putRestToSelection);
-
-    registerCommand(INSERT_HBOX_COMMAND, [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
-    registerCommand(INSERT_VBOX_COMMAND, [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
-    registerCommand(INSERT_TEXTFRAME_COMMAND, [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
-    registerCommand(INSERT_FRETFRAME_COMMAND, [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); });
-    registerCommand(APPEND_HBOX_COMMAND, [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
-    registerCommand(APPEND_VBOX_COMMAND, [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
-    registerCommand(APPEND_TEXTFRAME_COMMAND, [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
-    registerCommand(APPEND_FRETFRAME_COMMAND, [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::AtEndOfScore); });
 
     registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
 
@@ -360,23 +353,6 @@ void NotationActionController::init()
 
     registerCommand(SPLIT_MEASURE_COMMAND, &Interaction::splitSelectedMeasure);
     registerCommand(JOIN_MEASURES_COMMAND, &Interaction::joinSelectedMeasures);
-    registerCommand(INSERT_MEASURE_COMMAND, [this]() { addBoxes(BoxType::Measure, 1, AddBoxesTarget::BeforeSelection); });
-    registerCommandWithParams(INSERT_MEASURES_COMMAND, [this](const muse::rcommand::Params& params) {
-        return addMeasures(params, AddBoxesTarget::BeforeSelection);
-    });
-    registerCommandWithParams(INSERT_MEASURES_AFTER_SELECTION_COMMAND, [this](const muse::rcommand::Params& params) {
-        return addMeasures(params, AddBoxesTarget::AfterSelection);
-    });
-    registerCommandWithParams(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, [this](const muse::rcommand::Params& params) {
-        return addMeasures(params, AddBoxesTarget::AtStartOfScore);
-    });
-    registerCommand(APPEND_MEASURE_COMMAND, [this]() {
-        addBoxes(BoxType::Measure, 1, AddBoxesTarget::AtEndOfScore);
-    });
-    registerCommandWithParams(APPEND_MEASURES_COMMAND, [this](const muse::rcommand::Params& params) {
-        return addMeasures(params, AddBoxesTarget::AtEndOfScore);
-    });
-
     registerCommand(STRETCH_DECREASE_COMMAND, [this]() { addStretch(-STRETCH_STEP); });
     registerCommand(STRETCH_INCREASE_COMMAND, [this]() { addStretch(STRETCH_STEP); });
     registerCommand(STRETCH_RESET_COMMAND, &Controller::resetStretch);
@@ -2173,31 +2149,24 @@ muse::Ret NotationActionController::startEditSelectedText(const muse::rcommand::
     return muse::make_ok();
 }
 
-muse::Ret NotationActionController::addMeasures(const muse::rcommand::Params& params, AddBoxesTarget target)
-{
-    if (params.contains("count")) {
-        int count = params.at("count").toInt();
-        addBoxes(BoxType::Measure, count, target);
-    } else {
-        interactive()->open("musescore://notation/selectmeasurescount")
-        .onResolve(this, [this, target](const Val& v) {
-            int count = v.toInt();
-            addBoxes(BoxType::Measure, count, target);
-        });
-    }
-
-    return muse::make_ok();
-}
-
-void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
+muse::Ret NotationActionController::addBoxes(const AddBoxesCommand& command)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    interaction->addBoxes(boxType, count, target);
+    if (command.needInputCount) {
+        interactive()->open("musescore://notation/selectmeasurescount")
+        .onResolve(this, [interaction, command](const Val& v) {
+            int count = v.toInt();
+            interaction->addBoxes(command.boxType, count, command.target);
+        });
+    } else {
+        interaction->addBoxes(command.boxType, command.count, command.target);
+    }
+    return muse::make_ok();
 }
 
 void NotationActionController::unrollRepeats()

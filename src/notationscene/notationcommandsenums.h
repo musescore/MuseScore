@@ -199,6 +199,29 @@ struct AccidentalTypeContract {
         { "sharp2", AccidentalType::SHARP2, "double sharp" },
     } };
 };
+
+struct BoxTypeContract {
+    static constexpr std::string_view key = "box-type";
+    static constexpr BoxType def = BoxType::Unknown;
+    static constexpr EnumTable<BoxType, 5> table { {
+        { "vertical", BoxType::Vertical, "vertical" },
+        { "horizontal", BoxType::Horizontal, "horizontal" },
+        { "measure", BoxType::Measure, "measure" },
+        { "text", BoxType::Text, "text" },
+        { "fret", BoxType::Fret, "fret" },
+    } };
+};
+
+struct AddBoxesTargetContract {
+    static constexpr std::string_view key = "target";
+    static constexpr AddBoxesTarget def = AddBoxesTarget::BeforeSelection;
+    static constexpr EnumTable<AddBoxesTarget, 4> table { {
+        { "after-selection", AddBoxesTarget::AfterSelection, "after selection" },
+        { "before-selection", AddBoxesTarget::BeforeSelection, "before selection" },
+        { "at-start-of-score", AddBoxesTarget::AtStartOfScore, "at start of score" },
+        { "at-end-of-score", AddBoxesTarget::AtEndOfScore, "at end of score" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -213,4 +236,6 @@ DECLARE_ENUM_CONTRACT(mu::notation::TupletSelectedDuration, mu::notation::Tuplet
 DECLARE_ENUM_CONTRACT(mu::notation::SelectionTarget, mu::notation::SelectionTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PlayMode, mu::notation::PlayModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AccidentalType, mu::notation::AccidentalTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::BoxType, mu::notation::BoxTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTarget, mu::notation::AddBoxesTargetContract);
 }

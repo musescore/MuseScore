@@ -1209,6 +1209,144 @@ struct OpenTupletConfigureCommand {
     cprop_decl availabilities = Availability::UI;
 };
 
+struct AddBoxesCommand {
+    cprop_decl id = Command("command://notation/add-boxes");
+    cprop_decl title = MnemonicString("action", "Add boxes");
+    cprop_decl description = TranslatableString("action", "Add boxes");
+    cprop_decl availabilities = Availability::API;
+
+    BoxType boxType = BoxType::Unknown;
+    AddBoxesTarget target = AddBoxesTarget::BeforeSelection;
+    int count = 1;
+    bool needInputCount = false;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddBoxesCommand::boxType, "Box type" },
+        Field{ "target", &AddBoxesCommand::target, "Target" },
+        Field{ "count", &AddBoxesCommand::count, "Count", Presence::Optional },
+        Field{ "need-input-count", &AddBoxesCommand::needInputCount, "Need input count (interactive mode)", Presence::Optional },
+    };
+
+    AddBoxesCommand() = default;
+    AddBoxesCommand(BoxType boxType, AddBoxesTarget target, int count = 1, bool needInputCount = false)
+        : boxType(boxType), target(target), count(count), needInputCount(needInputCount) {}
+};
+
+// aliases for add boxes command
+
+struct InsertHBoxCommand {
+    cprop_decl id = Command("command://notation/insert-hbox");
+    cprop_decl title = MnemonicString("action", "Insert &horizontal frame");
+    cprop_decl description = TranslatableString("action", "Insert horizontal frame");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Horizontal, AddBoxesTarget::BeforeSelection);
+};
+
+struct InsertVBoxCommand {
+    cprop_decl id = Command("command://notation/insert-vbox");
+    cprop_decl title = MnemonicString("action", "Insert &vertical frame");
+    cprop_decl description = TranslatableString("action", "Insert vertical frame");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Vertical, AddBoxesTarget::BeforeSelection);
+};
+
+struct InsertTextFrameCommand {
+    cprop_decl id = Command("command://notation/insert-textframe");
+    cprop_decl title = MnemonicString("action", "Insert &text frame");
+    cprop_decl description = TranslatableString("action", "Insert text frame");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Text, AddBoxesTarget::BeforeSelection);
+};
+
+struct InsertFretFrameCommand {
+    cprop_decl id = Command("command://notation/insert-fretframe");
+    cprop_decl title = MnemonicString("action", "Insert &fretboard diagram legend");
+    cprop_decl description = TranslatableString("action", "Insert fretboard diagram legend");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Fret, AddBoxesTarget::BeforeSelection);
+};
+
+struct AppendHBoxCommand {
+    cprop_decl id = Command("command://notation/append-hbox");
+    cprop_decl title = MnemonicString("action", "&Horizontal frame");
+    cprop_decl description = TranslatableString("action", "Insert horizontal frame at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Horizontal, AddBoxesTarget::AtEndOfScore);
+};
+
+struct AppendVBoxCommand {
+    cprop_decl id = Command("command://notation/append-vbox");
+    cprop_decl title = MnemonicString("action", "&Vertical frame");
+    cprop_decl description = TranslatableString("action", "Insert vertical frame at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Vertical, AddBoxesTarget::AtEndOfScore);
+};
+
+struct AppendTextFrameCommand {
+    cprop_decl id = Command("command://notation/append-textframe");
+    cprop_decl title = MnemonicString("action", "&Text frame");
+    cprop_decl description = TranslatableString("action", "Insert text frame at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Text, AddBoxesTarget::AtEndOfScore);
+};
+
+struct AppendFretFrameCommand {
+    cprop_decl id = Command("command://notation/append-fretframe");
+    cprop_decl title = MnemonicString("action", "&Fretboard diagram legend");
+    cprop_decl description = TranslatableString("action", "Insert fretboard diagram legend at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Fret, AddBoxesTarget::AtEndOfScore);
+};
+
+struct InsertMeasureCommand {
+    cprop_decl id = Command("command://notation/insert-measure");
+    cprop_decl title = MnemonicString("action", "&Insert one measure before selection");
+    cprop_decl description = TranslatableString("action", "Insert one measure before selection");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::INSERT_ONE_MEASURE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::BeforeSelection);
+};
+
+struct AppendMeasureCommand {
+    cprop_decl id = Command("command://notation/append-measure");
+    cprop_decl title = MnemonicString("action", "Insert &one measure at end of score");
+    cprop_decl description = TranslatableString("action", "Insert one measure at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::AtEndOfScore);
+};
+
+struct InsertMeasuresAfterSelectionCommand {
+    cprop_decl id = Command("command://notation/insert-measures-after-selection");
+    cprop_decl title = MnemonicString("action", "Insert &after selection…");
+    cprop_decl description = TranslatableString("action", "Insert measures after selection");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::AfterSelection, -1, true);
+};
+
+struct InsertMeasuresAtStartOfScoreCommand {
+    cprop_decl id = Command("command://notation/insert-measures-at-start-of-score");
+    cprop_decl title = MnemonicString("action", "Insert at &start of score…");
+    cprop_decl description = TranslatableString("action", "Insert measures at start of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::AtStartOfScore, -1, true);
+};
+
+struct InsertMeasuresCommand {
+    cprop_decl id = Command("command://notation/insert-measures");
+    cprop_decl title = MnemonicString("action", "Insert &before selection…");
+    cprop_decl description = TranslatableString("action", "Insert measures before selection");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::BeforeSelection, -1, true);
+};
+
+struct AppendMeasuresCommand {
+    cprop_decl id = Command("command://notation/append-measures");
+    cprop_decl title = MnemonicString("action", "Insert at &end of score…");
+    cprop_decl description = TranslatableString("action", "Insert measures at end of score");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::AtEndOfScore, -1, true);
+};
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1285,15 +1423,6 @@ inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://not
 inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notation/enter-rest");
 
 // add commands
-
-inline static const muse::rcommand::Command INSERT_HBOX_COMMAND("command://notation/insert-hbox");
-inline static const muse::rcommand::Command INSERT_VBOX_COMMAND("command://notation/insert-vbox");
-inline static const muse::rcommand::Command INSERT_TEXTFRAME_COMMAND("command://notation/insert-textframe");
-inline static const muse::rcommand::Command INSERT_FRETFRAME_COMMAND("command://notation/insert-fretframe");
-inline static const muse::rcommand::Command APPEND_HBOX_COMMAND("command://notation/append-hbox");
-inline static const muse::rcommand::Command APPEND_VBOX_COMMAND("command://notation/append-vbox");
-inline static const muse::rcommand::Command APPEND_TEXTFRAME_COMMAND("command://notation/append-textframe");
-inline static const muse::rcommand::Command APPEND_FRETFRAME_COMMAND("command://notation/append-fretframe");
 
 inline static const muse::rcommand::Command ADD_FRETBOARD_DIAGRAM_COMMAND("command://notation/add-fretboard-diagram");
 
@@ -1446,13 +1575,6 @@ inline static const muse::rcommand::Command MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND(
 inline static const muse::rcommand::Command MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND("command://notation/move-measure-to-next-system");
 inline static const muse::rcommand::Command SPLIT_MEASURE_COMMAND("command://notation/split-measure");
 inline static const muse::rcommand::Command JOIN_MEASURES_COMMAND("command://notation/join-measures");
-inline static const muse::rcommand::Command INSERT_MEASURE_COMMAND("command://notation/insert-measure");
-inline static const muse::rcommand::Command INSERT_MEASURES_COMMAND("command://notation/insert-measures"); // with params
-inline static const muse::rcommand::Command INSERT_MEASURES_AFTER_SELECTION_COMMAND("command://notation/insert-measures-after-selection"); // with params
-inline static const muse::rcommand::Command INSERT_MEASURES_AT_START_OF_SCORE_COMMAND(
-    "command://notation/insert-measures-at-start-of-score"); // with params
-inline static const muse::rcommand::Command APPEND_MEASURE_COMMAND("command://notation/append-measure");
-inline static const muse::rcommand::Command APPEND_MEASURES_COMMAND("command://notation/append-measures"); // with params
 
 // layout commands: section
 inline static const muse::rcommand::Command TOGGLE_SECTION_BREAK_COMMAND("command://notation/toggle-section-break");

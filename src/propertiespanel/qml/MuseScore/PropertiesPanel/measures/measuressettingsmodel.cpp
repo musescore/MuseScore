@@ -61,22 +61,27 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    const Params params = { { "count", muse::Val(numberOfMeasures) } };
+    auto boxTarget = [](InsertMeasuresTarget target) {
+        switch (target) {
+        case InsertMeasuresTarget::AfterSelection:
+            return AddBoxesTarget::AfterSelection;
+        case InsertMeasuresTarget::BeforeSelection:
+            return AddBoxesTarget::BeforeSelection;
+        case InsertMeasuresTarget::AtStartOfScore:
+            return AddBoxesTarget::AtStartOfScore;
+        case InsertMeasuresTarget::AtEndOfScore:
+            return AddBoxesTarget::AtEndOfScore;
+        }
+        UNREACHABLE;
+        return AddBoxesTarget::AtEndOfScore;
+    };
 
-    switch (target) {
-    case InsertMeasuresTarget::AfterSelection:
-        commandDispatcher()->dispatch(INSERT_MEASURES_AFTER_SELECTION_COMMAND, params);
-        break;
-    case InsertMeasuresTarget::BeforeSelection:
-        commandDispatcher()->dispatch(INSERT_MEASURES_COMMAND, params);
-        break;
-    case InsertMeasuresTarget::AtStartOfScore:
-        commandDispatcher()->dispatch(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, params);
-        break;
-    case InsertMeasuresTarget::AtEndOfScore:
-        commandDispatcher()->dispatch(APPEND_MEASURES_COMMAND, params);
-        break;
-    }
+    AddBoxesCommand cmd;
+    cmd.boxType = BoxType::Measure;
+    cmd.count = numberOfMeasures;
+    cmd.target = boxTarget(target);
+
+    commandDispatcher()->dispatch(cmd);
 }
 
 void MeasuresSettingsModel::deleteSelectedMeasures()

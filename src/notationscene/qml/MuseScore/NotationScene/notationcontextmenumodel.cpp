@@ -312,11 +312,11 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND, TranslatableString("notation", "After selection…")),
-        makeMenuItem(INSERT_MEASURES_COMMAND, TranslatableString("notation", "Before selection…")),
+        makeMenuItem(InsertMeasuresAfterSelectionCommand::id, TranslatableString("notation", "After selection…")),
+        makeMenuItem(InsertMeasuresCommand::id, TranslatableString("notation", "Before selection…")),
         makeSeparator(),
-        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, TranslatableString("notation", "At start of score…")),
-        makeMenuItem(APPEND_MEASURES_COMMAND, TranslatableString("notation", "At end of score…"))
+        makeMenuItem(InsertMeasuresAtStartOfScoreCommand::id, TranslatableString("notation", "At start of score…")),
+        makeMenuItem(AppendMeasuresCommand::id, TranslatableString("notation", "At end of score…"))
     };
 
     return items;

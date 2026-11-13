@@ -261,6 +261,22 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddNonupletCommand>(),
     makeCommandInfo<OpenTupletConfigureCommand>(),
 
+    makeCommandInfo<AddBoxesCommand>(),
+    makeCommandInfo<InsertHBoxCommand>(),
+    makeCommandInfo<InsertVBoxCommand>(),
+    makeCommandInfo<InsertTextFrameCommand>(),
+    makeCommandInfo<InsertFretFrameCommand>(),
+    makeCommandInfo<AppendHBoxCommand>(),
+    makeCommandInfo<AppendVBoxCommand>(),
+    makeCommandInfo<AppendTextFrameCommand>(),
+    makeCommandInfo<AppendFretFrameCommand>(),
+    makeCommandInfo<InsertMeasureCommand>(),
+    makeCommandInfo<AppendMeasureCommand>(),
+    makeCommandInfo<InsertMeasuresCommand>(),
+    makeCommandInfo<InsertMeasuresAfterSelectionCommand>(),
+    makeCommandInfo<InsertMeasuresAtStartOfScoreCommand>(),
+    makeCommandInfo<AppendMeasuresCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -747,112 +763,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         JOIN_MEASURES_COMMAND,
         TranslatableString("action", "&Join selected measures"),
         TranslatableString("action", "Join selected measures"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_MEASURE_COMMAND,
-        TranslatableString("action", "&Insert one measure before selection"),
-        TranslatableString("action", "Insert one measure before selection"),
-        InputSchema(),
-        Decoration(IconCode::Code::INSERT_ONE_MEASURE)
-    },
-    CommandInfo{
-        INSERT_MEASURES_COMMAND,
-        TranslatableString("action", "Insert &before selection…"),
-        TranslatableString("action", "Insert measures before selection"),
-        InputSchema({
-            { "count", Arg(DataType::Int, u"Number of measures to insert") },
-        }),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_MEASURES_AFTER_SELECTION_COMMAND,
-        TranslatableString("action", "Insert &after selection…"),
-        TranslatableString("action", "Insert measures after selection"),
-        InputSchema({
-            { "count", Arg(DataType::Int, u"Number of measures to insert") },
-        }),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_MEASURES_AT_START_OF_SCORE_COMMAND,
-        TranslatableString("action", "Insert at &start of score…"),
-        TranslatableString("action", "Insert measures at start of score"),
-        InputSchema({
-            { "count", Arg(DataType::Int, u"Number of measures to insert") },
-        }),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_MEASURE_COMMAND,
-        TranslatableString("action", "Insert &one measure at end of score"),
-        TranslatableString("action", "Insert one measure at end of score"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_MEASURES_COMMAND,
-        TranslatableString("action", "Insert at &end of score…"),
-        TranslatableString("action", "Insert measures at end of score"),
-        InputSchema({
-            { "count", Arg(DataType::Int, u"Number of measures to insert") },
-        }),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_HBOX_COMMAND,
-        TranslatableString("action", "Insert &horizontal frame"),
-        TranslatableString("action", "Insert horizontal frame"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_VBOX_COMMAND,
-        TranslatableString("action", "Insert &vertical frame"),
-        TranslatableString("action", "Insert vertical frame"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_TEXTFRAME_COMMAND,
-        TranslatableString("action", "Insert &text frame"),
-        TranslatableString("action", "Insert text frame"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        INSERT_FRETFRAME_COMMAND,
-        TranslatableString("action", "Insert &fretboard diagram legend"),
-        TranslatableString("action", "Insert fretboard diagram legend"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_HBOX_COMMAND,
-        TranslatableString("action", "&Horizontal frame"),
-        TranslatableString("action", "Insert horizontal frame at end of score"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_VBOX_COMMAND,
-        TranslatableString("action", "&Vertical frame"),
-        TranslatableString("action", "Insert vertical frame at end of score"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_TEXTFRAME_COMMAND,
-        TranslatableString("action", "&Text frame"),
-        TranslatableString("action", "Insert text frame at end of score"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPEND_FRETFRAME_COMMAND,
-        TranslatableString("action", "&Fretboard diagram legend"),
-        TranslatableString("action", "Insert fretboard diagram legend at end of score"),
         InputSchema(),
         Decoration()
     },
