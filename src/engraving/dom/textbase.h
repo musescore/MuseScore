@@ -515,6 +515,8 @@ public:
 
     bool hasSymbolScale() const;
     bool hasSymbolSize() const { return !hasSymbolScale(); }
+    // for a text that isn't in the score, e.g. a preview, whose owner would scale its symbols
+    void setForceSymbolScale(bool v) { m_forceSymbolScale = v; }
 
     double spatiumScaling() const;
 
@@ -588,6 +590,7 @@ private:
 
     double m_symbolSize = 18.0;
     double m_symbolScale = 1.0;
+    bool m_forceSymbolScale = false;
 
     TextCursor* m_cursor = nullptr;
 
