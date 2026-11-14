@@ -1736,6 +1736,33 @@ TEST_F(Engraving_TupletTests, pendingTupletDoesNotFit)
     }
 }
 
+TEST_F(Engraving_TupletTests, pendingTupletCannotDivide)
+{
+    for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {
+        MasterScore* score = pendingTupletScore(method);
+        ASSERT_TRUE(score);
+        InputState& is = score->inputState();
+
+        // 7:6 dividing a quarter: a quarter can't be divided into six, so nothing is entered and it keeps waiting
+        setPendingTuplet(score, Fraction(7, 6), false);
+        PendingTuplet pending = *is.pendingTuplet();
+        pending.autoBaseLen = false;
+        is.setPendingTuplet(pending);
+        pressDuration(score, DurationType::V_QUARTER);
+        EXPECT_EQ(MScore::_error, MsError::CANNOT_DIVIDE_TUPLET_DURATION);
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "R");
+        EXPECT_TRUE(is.pendingTupletHere());
+
+        // a dotted quarter can: seven sixteenths in the time of six
+        is.setDots(1);
+        pressDuration(score, DurationType::V_QUARTER);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "7:6[16 r16 r16 r16 r16 r16 r16] r8 r2");
+
+        delete score;
+    }
+}
+
 TEST_F(Engraving_TupletTests, pendingTupletMovedAway)
 {
     for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {

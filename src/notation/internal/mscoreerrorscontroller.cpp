@@ -27,6 +27,12 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 
+static muse::String cannotDivideTupletDurationMessage()
+{
+    return muse::mtrc("notation", "The selected duration can’t be divided into this tuplet. "
+                                  "Choose another duration, or press Escape to cancel it.");
+}
+
 MScoreErrorsController::MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx)
 {
@@ -50,6 +56,8 @@ void MScoreErrorsController::checkAndShowMScoreError()
                                                                        "Choose a shorter duration, or press Escape to cancel it."));
         } else if (err == MsError::TUPLET_NOTE_VALUE_TOO_SHORT) {
             accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: note value is too short"));
+        } else if (err == MsError::CANNOT_DIVIDE_TUPLET_DURATION) {
+            accessibilityController()->announce(cannotDivideTupletDurationMessage());
         }
         return;
     }
@@ -198,6 +206,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::TUPLET_NOTE_VALUE_TOO_SHORT:
         title = muse::trc("notation", "Cannot create tuplet");
         message = muse::trc("notation", "Note value is too short");
+        break;
+    case MsError::CANNOT_DIVIDE_TUPLET_DURATION:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = cannotDivideTupletDurationMessage().toStdString();
         break;
     }
 

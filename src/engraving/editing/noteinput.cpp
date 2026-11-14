@@ -1501,7 +1501,7 @@ std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
 //   addPendingTuplet
 //    Create the tuplet waiting at the input position, sized
 //    by the input duration, and make its note value the input
-//    duration
+//    duration. If it can't, set the error.
 //---------------------------------------------------------
 
 static bool addPendingTuplet(Transaction& tx, Score* score)
@@ -1514,7 +1514,12 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
 
     const PendingTuplet pending = *is.pendingTuplet();
     const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, is.duration());
-    if (!shape || !pendingTupletFits(score, is.duration())) {
+    if (!shape) {
+        MScore::setError(MsError::CANNOT_DIVIDE_TUPLET_DURATION);
+        return false;
+    }
+    if (!pendingTupletFits(score, is.duration())) {
+        MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
         return false;
     }
 
@@ -1537,6 +1542,7 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
     Tuplet* tuplet = cr && score->canAddTuplet(cr, shape->ratio, shape->baseLen)
                      ? score->addTuplet(cr, shape->ratio, shape->baseLen, pending.numberType, pending.bracketType) : nullptr;
     if (!tuplet || tuplet->elements().empty()) {
+        MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
         return false;
     }
 
@@ -1586,7 +1592,6 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
 
             // a tuplet waiting for this duration takes the note or rest; if it can't, nothing is entered
             if (is.pendingTuplet() && !addPendingTuplet(tx, score)) {
-                MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
                 is.setDuration(oldDuration);
                 return;
             }
