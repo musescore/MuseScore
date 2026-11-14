@@ -91,6 +91,7 @@ public:
     NoteInputMethod noteInputMethod() const override;
     engraving::DurationType currentDurationType() const override;
     int currentDotCount() const override;
+    bool tupletPending() const override;
     bool currentIsRest() const override;
     engraving::AccidentalType currentAccidentalType() const override;
     std::set<engraving::SymId> currentArticulations() const override;
@@ -215,6 +216,7 @@ private:
     void addFullMeasureRest();
 
     void resetState();
+    void undo();
     void resetStretch();
     void resetBeamMode();
 

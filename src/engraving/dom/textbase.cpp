@@ -3407,7 +3407,8 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
 
 bool mu::engraving::TextBase::hasSymbolScale() const
 {
-    bool hasSymbolScale = isDynamic()
+    bool hasSymbolScale = m_forceSymbolScale
+                          || isDynamic()
                           || isStringTunings()
                           || isPlayTechAnnotation()
                           || (isHarpPedalDiagram() && toHarpPedalDiagram(this)->isDiagram())

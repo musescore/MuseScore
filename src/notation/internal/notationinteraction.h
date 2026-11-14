@@ -451,6 +451,7 @@ private:
 
     bool shouldDrawInputPreview() const;
     void drawInputPreview(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);
+    void drawTupletPreview(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt, const muse::RectF& previewRect);
 
     void drawAnchorLines(muse::draw::Painter* painter);
     void drawTextEditMode(muse::draw::Painter* painter, const engraving::rendering::PaintOptions& opt);

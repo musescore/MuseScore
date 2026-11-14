@@ -99,7 +99,7 @@ void NotationActionController::init()
 
     // global commands
     registerCommand(CANCEL_COMMAND, &Controller::resetState);
-    registerCommand(UNDO_COMMAND, &Interaction::undo);
+    registerCommand(UNDO_COMMAND, &Controller::undo);
     registerCommand(REDO_COMMAND, &Interaction::redo);
 
     // navigation and selection commands
@@ -690,6 +690,14 @@ void NotationActionController::resetState()
     }
 
     if (noteInput->isNoteInputMode()) {
+        noteInput->forgetPendingTuplets();
+
+        // the first Escape cancels a pending tuplet, the next one ends note input
+        if (noteInput->tupletPending()) {
+            noteInput->cancelPendingTuplet();
+            return;
+        }
+
         noteInput->endNoteInput();
         return;
     }
@@ -1112,6 +1120,12 @@ int NotationActionController::currentDotCount() const
     return interaction->noteInput()->state().duration().dots();
 }
 
+bool NotationActionController::tupletPending() const
+{
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    return noteInput && noteInput->tupletPending();
+}
+
 bool NotationActionController::currentIsRest() const
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
@@ -1499,6 +1513,13 @@ muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
     if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
         const int numerator = options.ratio.numerator();
         options.ratio.setDenominator(Tuplet::conventionalTupletDenominator(numerator));
+    }
+
+    // in By duration and Rhythm input, the next duration sizes the tuplet
+    if (noteInput->isNoteInputMode()
+        && (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION) || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM))) {
+        noteInput->setPendingTuplet(options);
+        return muse::make_ok();
     }
 
     if (noteInput->isNoteInputMode()) {
@@ -2739,9 +2760,24 @@ bool NotationActionController::elementHasPopup(const EngravingItem* e) const
     return AbstractElementPopupModel::hasElementEditPopup(e);
 }
 
+void NotationActionController::undo()
+{
+    // the first undo cancels a pending tuplet, as Escape does
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    if (noteInput && noteInput->tupletPending()) {
+        noteInput->cancelPendingTuplet();
+        return;
+    }
+
+    if (INotationInteractionPtr interaction = currentNotationInteraction()) {
+        interaction->undo();
+        seekSelectedElement();
+    }
+}
+
 bool NotationActionController::canUndo() const
 {
-    return currentNotationUndoStack() ? currentNotationUndoStack()->canUndo() : false;
+    return tupletPending() || (currentNotationUndoStack() ? currentNotationUndoStack()->canUndo() : false);
 }
 
 bool NotationActionController::canRedo() const

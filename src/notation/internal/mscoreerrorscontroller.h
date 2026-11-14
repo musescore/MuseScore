@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "framework/accessibility/iaccessibilitycontroller.h"
 #include "../inotationconfiguration.h"
 
 namespace mu::notation {
@@ -33,6 +34,7 @@ class MScoreErrorsController : public muse::Contextable, public muse::async::Asy
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx);

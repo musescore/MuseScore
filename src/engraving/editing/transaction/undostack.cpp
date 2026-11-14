@@ -390,7 +390,7 @@ void UndoableTransaction::undo()
         (*it)->undo();
     }
 
-    m_score->setInputState(m_undoInputState);
+    m_score->inputState().restoreFromUndoStack(m_undoInputState);
     if (m_undoSelectionInfo.isValid()) {
         m_score->deselectAll();
         applySelectionInfo(m_undoSelectionInfo, m_score->selection());
@@ -408,7 +408,7 @@ void UndoableTransaction::redo()
         command->redo();
     }
 
-    m_score->setInputState(m_redoInputState);
+    m_score->inputState().restoreFromUndoStack(m_redoInputState);
     if (m_redoSelectionInfo.isValid()) {
         m_score->deselectAll();
         applySelectionInfo(m_redoSelectionInfo, m_score->selection());

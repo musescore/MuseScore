@@ -69,6 +69,7 @@ public:
     virtual NoteInputMethod noteInputMethod() const = 0;
     virtual engraving::DurationType currentDurationType() const = 0;
     virtual int currentDotCount() const = 0;
+    virtual bool tupletPending() const = 0;
     virtual bool currentIsRest() const = 0;
     virtual engraving::AccidentalType currentAccidentalType() const = 0;
     virtual std::set<engraving::SymId> currentArticulations() const = 0;

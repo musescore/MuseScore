@@ -70,6 +70,12 @@ public:
 
     void addTuplet(const TupletOptions& options) override;
 
+    bool tupletPending() const override;
+    void setPendingTuplet(const TupletOptions& options) override;
+    void cancelPendingTuplet() override;
+    void forgetPendingTuplets() override;
+    muse::String pendingTupletInfo() const override;
+
     void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;
     void addTie() override;
@@ -105,6 +111,9 @@ private:
     EngravingItem* resolveNoteInputStartPosition() const;
 
     bool shouldSetupInputNote() const;
+
+    void cancelPendingTupletIfMoved();
+    void announcePendingTupletChange();
     void setupInputNote();
 
     NoteVal noteValForLine(int line) const;
@@ -128,6 +137,13 @@ private:
     muse::async::Notification m_noteInputEnded;
 
     std::function<muse::RectF()> m_getViewRectFunc;
+
+    // a tuplet was pending at the last state change
+    bool m_tupletWasPending = false;
+    // the type of the pending tuplet that moving elsewhere or switching the input method cancelled, for the next announcement
+    muse::String m_cancelledTuplet;
+    // the input method just switched to, named first in the next announcement
+    std::optional<NoteInputMethod> m_newNoteInputMethod;
 };
 }
 

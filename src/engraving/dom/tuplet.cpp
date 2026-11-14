@@ -22,6 +22,8 @@
 
 #include "tuplet.h"
 
+#include "translation.h"
+
 #include "../editing/elementeditdata.h"
 #include "style/textstyle.h"
 
@@ -195,6 +197,60 @@ void Tuplet::resetNumberProperty(Text* number)
     for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::POSITION, Pid::SIZE_SPATIUM_DEPENDENT }) {
         number->resetProperty(p);
     }
+}
+
+//---------------------------------------------------------
+//   typeUserName
+//    "Triplet" etc., from the number of notes in the tuplet
+//---------------------------------------------------------
+
+String Tuplet::typeUserName(int numerator)
+{
+    switch (numerator) {
+    case 2:
+        return muse::mtrc("engraving", "Duplet");
+    case 3:
+        return muse::mtrc("engraving", "Triplet");
+    case 4:
+        return muse::mtrc("engraving", "Quadruplet");
+    case 5:
+        return muse::mtrc("engraving", "Quintuplet");
+    case 6:
+        return muse::mtrc("engraving", "Sextuplet");
+    case 7:
+        return muse::mtrc("engraving", "Septuplet");
+    case 8:
+        return muse::mtrc("engraving", "Octuplet");
+    case 9:
+        return muse::mtrc("engraving", "Nonuplet");
+    default:
+        //: %1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)
+        return muse::mtrc("engraving", "%1 note tuplet").arg(numerator);
+    }
+}
+
+//---------------------------------------------------------
+//   numberText
+//    The number shown above a tuplet, as XML text
+//---------------------------------------------------------
+
+String Tuplet::numberText(const Fraction& ratio, TupletNumberType numberType, bool useSymbols)
+{
+    String numberString = (numberType == TupletNumberType::SHOW_NUMBER)
+                          ? String(u"%1").arg(ratio.numerator())
+                          : String(u"%1:%2").arg(ratio.numerator(), ratio.denominator());
+    if (!useSymbols) {
+        return numberString;
+    }
+
+    String smuflNum;
+    for (size_t i = 0; i < numberString.size(); ++i) {
+        smuflNum.append(u"<sym>tuplet");
+        smuflNum.append(numberString.at(i).unicode());
+        smuflNum.append(u"</sym>");
+    }
+    smuflNum.replace(String(u":"), String(u"Colon"));
+    return smuflNum;
 }
 
 //---------------------------------------------------------
