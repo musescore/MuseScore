@@ -216,6 +216,7 @@ private:
     void addFullMeasureRest();
 
     void resetState();
+    void undo();
     void resetStretch();
     void resetBeamMode();
 

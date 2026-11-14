@@ -366,6 +366,8 @@ void NotationCommandsState::init()
 
     controller()->noteInputStateChanged().onNotify(this, [this]() {
         updateCommandStates(NOTE_INPUT_COMMANDS);
+        // undo cancels a pending tuplet
+        updateCommandStates(UNDO_REDO_COMMANDS);
         updateCommandStates(commands(DURATION_COMMANDS));
         updateCommandStates(commands(DOT_COUNT_COMMANDS));
         updateCommandStates({ ToggleRestCommand::id });

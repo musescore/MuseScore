@@ -99,7 +99,7 @@ void NotationActionController::init()
 
     // global commands
     registerCommand(CANCEL_COMMAND, &Controller::resetState);
-    registerCommand(UNDO_COMMAND, &Interaction::undo);
+    registerCommand(UNDO_COMMAND, &Controller::undo);
     registerCommand(REDO_COMMAND, &Interaction::redo);
 
     // navigation and selection commands
@@ -2760,9 +2760,24 @@ bool NotationActionController::elementHasPopup(const EngravingItem* e) const
     return AbstractElementPopupModel::hasElementEditPopup(e);
 }
 
+void NotationActionController::undo()
+{
+    // the first undo cancels a pending tuplet, as Escape does
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    if (noteInput && noteInput->tupletPending()) {
+        noteInput->cancelPendingTuplet();
+        return;
+    }
+
+    if (INotationInteractionPtr interaction = currentNotationInteraction()) {
+        interaction->undo();
+        seekSelectedElement();
+    }
+}
+
 bool NotationActionController::canUndo() const
 {
-    return currentNotationUndoStack() ? currentNotationUndoStack()->canUndo() : false;
+    return tupletPending() || (currentNotationUndoStack() ? currentNotationUndoStack()->canUndo() : false);
 }
 
 bool NotationActionController::canRedo() const
