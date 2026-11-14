@@ -1959,7 +1959,11 @@ TEST_F(Engraving_TupletTests, pendingTupletDrums)
     EXPECT_TRUE(score->sanityCheck());
     EXPECT_EQ(rhythm(measureAt(score, 0)), "3:2[8 r8 r8] r4 r2");
 
-    // a bass drum (voice 2) cancels it, as a voice change does: no empty tuplet in voice 1
+    // a bass drum (voice 2) takes it to its own voice: no empty tuplet in voice 1
+    auto crAt = [score](const Fraction& tick, track_idx_t track) -> const ChordRest* {
+        const Segment* s = score->tick2segment(tick, false, SegmentType::ChordRest);
+        return s ? toChordRest(s->element(track)) : nullptr;
+    };
     is.setTrack(0);
     is.setSegment(score->tick2segment(Fraction(1, 2), false, SegmentType::ChordRest));
     is.setNotes({ NoteVal(36) });
@@ -1968,12 +1972,14 @@ TEST_F(Engraving_TupletTests, pendingTupletDrums)
     EXPECT_TRUE(score->sanityCheck());
     EXPECT_FALSE(is.pendingTuplet());
     EXPECT_EQ(rhythm(measureAt(score, 0)), "3:2[8 r8 r8] r4 r2");
-    const Segment* s = score->tick2segment(Fraction(1, 2), false, SegmentType::ChordRest);
-    ASSERT_TRUE(s && s->element(1));
-    EXPECT_TRUE(s->element(1)->isChord());
-    EXPECT_FALSE(toChordRest(s->element(1))->tuplet());
+    const ChordRest* bassDrum = crAt(Fraction(1, 2), 1);
+    ASSERT_TRUE(bassDrum && bassDrum->isChord() && bassDrum->tuplet());
+    EXPECT_EQ(bassDrum->tuplet()->ratio(), Fraction(3, 2));
+    EXPECT_EQ(toChord(bassDrum)->upNote()->pitch(), 36);
+    EXPECT_EQ(is.track(), 1);
+    EXPECT_EQ(is.tick(), Fraction(7, 12));
 
-    // where the tuplet doesn't fit, a snare is refused, but a bass drum isn't: it cancels the tuplet
+    // where the tuplet doesn't fit, a snare is refused, and so is a bass drum in its own voice: it keeps waiting there
     is.setTrack(0);
     is.setSegment(score->tick2segment(Fraction(1, 2), false, SegmentType::ChordRest));
     setPendingTriplet(score, true);
@@ -1984,13 +1990,28 @@ TEST_F(Engraving_TupletTests, pendingTupletDrums)
     EXPECT_TRUE(is.pendingTupletHere());
     is.setNotes({ NoteVal(36) });
     pressDuration(score, DurationType::V_HALF);
-    EXPECT_EQ(MScore::_error, MsError::MS_NO_ERROR);
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_TRUE(is.pendingTupletHere());
+    EXPECT_EQ(is.track(), 1);
+
+    // and back: a snare takes it to voice 1
+    is.setNotes({ NoteVal(38) });
+    pressDuration(score, DurationType::V_EIGHTH);
     EXPECT_TRUE(score->sanityCheck());
     EXPECT_FALSE(is.pendingTuplet());
-    EXPECT_EQ(rhythm(measureAt(score, 0)), "3:2[8 r8 r8] r4 r2");
-    const Segment* half = score->tick2segment(Fraction(1, 2), false, SegmentType::ChordRest);
-    ASSERT_TRUE(half && half->element(1) && half->element(1)->isChord());
-    EXPECT_EQ(toChordRest(half->element(1))->ticks(), Fraction(1, 2));
+    EXPECT_EQ(rhythm(measureAt(score, 0)), "3:2[8 r8 r8] r4 3:2[8 r8 r8] r4");
+    EXPECT_EQ(is.track(), 0);
+
+    // picking a drum while the tuplet waits, as in By duration input: the tuplet goes with it, at the same tick
+    is.setSegment(score->tick2segment(Fraction(1, 1), false, SegmentType::ChordRest));
+    setPendingTriplet(score, true);
+    is.moveToDrumVoice(1);
+    EXPECT_TRUE(is.pendingTupletHere());
+    EXPECT_EQ(is.track(), 1);
+    EXPECT_EQ(is.tick(), Fraction(1, 1));
+    is.moveToDrumVoice(0);
+    EXPECT_TRUE(is.pendingTupletHere());
+    EXPECT_EQ(is.track(), 0);
 
     delete score;
 }

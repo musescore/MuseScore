@@ -164,6 +164,22 @@ void InputState::movePendingTupletHere()
 }
 
 //---------------------------------------------------------
+//   moveToDrumVoice
+//    A drum goes into its own voice. A tuplet waiting at the
+//    input position goes with it, at the same tick.
+//---------------------------------------------------------
+
+void InputState::moveToDrumVoice(voice_idx_t v)
+{
+    if (!pendingTupletHere() || v >= VOICES) {
+        setVoice(v);
+        return;
+    }
+    setTrack(trackZeroVoice(m_track) + v);
+    movePendingTupletHere();
+}
+
+//---------------------------------------------------------
 //   setPendingTuplet
 //    A tuplet that starts waiting gets the next number
 //---------------------------------------------------------

@@ -158,6 +158,7 @@ public:
     void setPendingTuplet(const std::optional<PendingTuplet>& t);
     bool pendingTupletHere() const;
     void movePendingTupletHere();
+    void moveToDrumVoice(voice_idx_t v);
     void forgetPendingTuplets();
     void restoreFromUndoStack(const InputState& state);
 

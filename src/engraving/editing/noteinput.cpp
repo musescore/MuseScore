@@ -1387,18 +1387,25 @@ static bool durationTooShortForDots(const TDuration& duration, int dots)
 }
 
 //---------------------------------------------------------
-//   drumInOtherVoice
-//    Whether the next note is a drum that goes into another
-//    voice than the input position's
+//   otherDrumVoice
+//    The voice of the next note, if it's a drum that goes
+//    into another voice than the input position's
 //---------------------------------------------------------
 
-static bool drumInOtherVoice(const InputState& is)
+static std::optional<voice_idx_t> otherDrumVoice(const InputState& is)
 {
     if (is.rest() || !is.drumset() || is.notes().empty()) {
-        return false;
+        return std::nullopt;
     }
     const int pitch = is.notes().front().pitch;
-    return is.drumset()->isValid(pitch) && static_cast<voice_idx_t>(is.drumset()->voice(pitch)) != is.voice();
+    if (!is.drumset()->isValid(pitch)) {
+        return std::nullopt;
+    }
+    const voice_idx_t voice = is.drumset()->voice(pitch);
+    if (voice == is.voice()) {
+        return std::nullopt;
+    }
+    return voice;
 }
 
 //---------------------------------------------------------
@@ -1571,9 +1578,10 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
                 toggleDots(tx, score, oldDuration.dots());
             }
 
-            // a drum in another voice cancels a tuplet waiting here, as a voice change does
-            if (drumInOtherVoice(is)) {
-                is.setPendingTuplet(std::nullopt);
+            // a drum in another voice takes a tuplet waiting here to that voice
+            const std::optional<voice_idx_t> drumVoice = otherDrumVoice(is);
+            if (drumVoice && is.pendingTupletHere()) {
+                is.moveToDrumVoice(*drumVoice);
             }
 
             // a tuplet waiting for this duration takes the note or rest; if it can't, nothing is entered
