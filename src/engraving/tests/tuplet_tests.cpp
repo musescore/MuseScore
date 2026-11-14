@@ -1787,6 +1787,36 @@ TEST_F(Engraving_TupletTests, pendingTupletCannotDivide)
     }
 }
 
+TEST_F(Engraving_TupletTests, pendingTupletPitchAlreadyInChord)
+{
+    for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {
+        MasterScore* score = pendingTupletScore(method);
+        ASSERT_TRUE(score);
+        InputState& is = score->inputState();
+
+        // a triplet waiting on the second of three eighths, whose pitch is the input pitch: the eighth is the
+        // triplet's first note, and it's selected, so that the status bar describes it
+        for (int i = 0; i < 3; ++i) {
+            pressDuration(score, DurationType::V_EIGHTH);
+        }
+        is.setSegment(score->tick2segment(Fraction(1, 8), false, SegmentType::ChordRest));
+        setPendingTriplet(score, true);
+        pressDuration(score, DurationType::V_EIGHTH);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "8 3:2[8 r8 r8] r8 r2");
+        const ChordRest* first = chordRestAt(measureAt(score, 0), 1);
+        ASSERT_TRUE(first && first->isChord() && first->tuplet());
+        const EngravingItem* selected = score->selection().element();
+        ASSERT_TRUE(selected && selected->isNote());
+        EXPECT_EQ(toNote(selected)->chord(), first);
+        EXPECT_EQ(is.tick(), Fraction(5, 24));
+        // Alt+letter and T act on the triplet's first chord
+        EXPECT_EQ(is.lastSegment(), first->segment());
+
+        delete score;
+    }
+}
+
 TEST_F(Engraving_TupletTests, pendingTupletMovedAway)
 {
     for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {

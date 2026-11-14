@@ -1609,6 +1609,7 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
             }
 
             // a tuplet waiting for this duration takes the note or rest; if it can't, nothing is entered
+            const bool pendingTupletHere = is.pendingTupletHere();
             if (is.pendingTuplet() && !addPendingTuplet(tx, score)) {
                 is.setDuration(oldDuration);
                 return;
@@ -1639,6 +1640,10 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
 
                 for (const NoteVal& nval : is.notes()) {
                     if (chord && chord->findNote(nval.pitch)) {
+                        // the tuplet's first note is already there: select it, as when it's entered
+                        if (pendingTupletHere) {
+                            score->select(chord->findNote(nval.pitch), SelectType::SINGLE, 0);
+                        }
                         is.moveToNextInputPos();
                         continue;
                     }
