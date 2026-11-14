@@ -2702,6 +2702,8 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
             note->setPitch(oldNote->pitch());
             note->setTpc1(oldNote->tpc1());
             note->setTpc2(oldNote->tpc2());
+            note->setString(oldNote->string());
+            note->setFret(oldNote->fret());
             cr->add(note);
         }
     } else {
