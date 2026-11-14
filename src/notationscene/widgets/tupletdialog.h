@@ -29,6 +29,7 @@
 #include "project/iprojectsession.h"
 #include "rcommand/icommanddispatcher.h"
 #include "notation/inotationconfiguration.h"
+#include "engraving/types/fraction.h"
 
 namespace mu::engraving {
 enum class TupletNumberType : unsigned char;
@@ -37,6 +38,15 @@ enum class TupletSelectedDuration : unsigned char;
 }
 
 namespace mu::notation {
+// The choices last confirmed with OK, kept until the score closes
+struct TupletDialogState {
+    std::weak_ptr<IMasterNotation> masterNotation;
+    engraving::Fraction ratio;
+    engraving::TupletSelectedDuration selectedDurationAs {};
+    engraving::TupletNumberType numberType {};
+    engraving::TupletBracketType bracketType {};
+};
+
 class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
 {
     Q_OBJECT
@@ -66,5 +76,14 @@ public:
 
 private slots:
     void bboxClicked(QAbstractButton* button);
+
+private:
+    void setNumberType(engraving::TupletNumberType type);
+    void setBracketType(engraving::TupletBracketType type);
+    void setSelectedDurationAs(engraving::TupletSelectedDuration value);
+
+    static TupletDialogState& previousState();
+    void saveState();
+    void restorePreviousState();
 };
 }
