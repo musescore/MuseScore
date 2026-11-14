@@ -2469,6 +2469,16 @@ TEST_F(Engraving_TupletTests, tupletPreviewPending)
         ASSERT_TRUE(preview);
         EXPECT_EQ(preview->levels[0].ratio, Fraction(3, 3));
 
+        // a duration it can't divide still shows its number: 7:6 dividing a quarter
+        is.setDuration(DurationType::V_QUARTER);
+        setPendingTuplet(score, Fraction(7, 6), false);
+        PendingTuplet pending = *is.pendingTuplet();
+        pending.autoBaseLen = false;
+        is.setPendingTuplet(pending);
+        preview = NoteInput::tupletPreview(score);
+        ASSERT_TRUE(preview);
+        EXPECT_EQ(preview->levels[0].ratio, Fraction(7, 6));
+
         delete score;
     }
 }

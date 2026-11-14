@@ -750,6 +750,21 @@ static std::optional<voice_idx_t> otherDrumVoice(const InputState& is)
 }
 
 //---------------------------------------------------------
+//   pendingTupletRatio
+//    The ratio of the pending tuplet when `duration` sizes
+//    it, also when it can't divide `duration`
+//---------------------------------------------------------
+
+static Fraction pendingTupletRatio(const PendingTuplet& pending, const TDuration& duration)
+{
+    Fraction ratio = pending.ratio;
+    if (!pending.durationAsSubdivision && pending.autoBaseLen) {
+        ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), duration.fraction()));
+    }
+    return ratio;
+}
+
+//---------------------------------------------------------
 //   pendingTupletShape
 //    The ratio and subdivision of the pending tuplet when
 //    `duration` sizes it: `duration` is its subdivision, or
@@ -767,10 +782,7 @@ static std::optional<PendingTupletShape> pendingTupletShape(const PendingTuplet&
         return PendingTupletShape { pending.ratio, duration };
     }
 
-    Fraction ratio = pending.ratio;
-    if (pending.autoBaseLen) {
-        ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), duration.fraction()));
-    }
+    const Fraction ratio = pendingTupletRatio(pending, duration);
     if (ratio.denominator() <= 0) {
         return std::nullopt;
     }
@@ -823,13 +835,9 @@ std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
     }
 
     const PendingTuplet& pending = *is.pendingTuplet();
-    // its ratio as if the input duration sized it
-    const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, is.duration());
-    if (!shape) {
-        return std::nullopt;
-    }
     TupletPreview::Level level;
-    level.ratio = shape->ratio;
+    // its ratio as if the input duration sized it, also when that duration can't
+    level.ratio = pendingTupletRatio(pending, is.duration());
     level.numberType = pending.numberType;
 
     TupletPreview preview;
