@@ -411,6 +411,8 @@ void NotationNoteInput::endNoteInput(bool resetState)
     InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
     is.setPendingTuplet(std::nullopt);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
 
     if (is.slur()) {
         const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
@@ -461,6 +463,8 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     }
 
     is.setNoteEntryMethod(method);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
     if (is.pendingTuplet()) {
         m_cancelledTuplet = Tuplet::typeUserName(is.pendingTuplet()->ratio.numerator());
         is.setPendingTuplet(std::nullopt);
