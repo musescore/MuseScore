@@ -67,7 +67,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation>Layout bei X Takten pro System verriegeln</translation>
+        <translation>Layout mit X Takten pro System sperren</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="34"/>
@@ -78,13 +78,13 @@
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation>Systemverriegelungen zu allen Systemen hinzufügen</translation>
+        <translation>Systemsperre zu allen Systemen hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation>Aktuelle Systemverriegelung entfernen</translation>
+        <translation>Aktuelle Systemsperren entfernen</translation>
     </message>
 </context>
 <context>
@@ -6829,7 +6829,7 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="649"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="650"/>
         <source>Add/remove system lock</source>
-        <translation>Systemverriegelung hinzufügen/entfernen</translation>
+        <translation>Systemsperre hinzufügen/entfernen</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="655"/>
@@ -7629,7 +7629,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1410"/>
         <source>Tempo &amp;marking</source>
-        <translation>Tempo&amp;markierung</translation>
+        <translation>Te&amp;mpoangabe</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1411"/>
@@ -7979,13 +7979,13 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1657"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1658"/>
         <source>Lock/unlock all systems</source>
-        <translation>Alle Systeme ver-/entriegeln</translation>
+        <translation>Alle Systeme sperren/entsperren</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1663"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1664"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>Ausgewählte(s) System(e) ver-/entriegeln</translation>
+        <translation>Ausgewählte(s) System(e) sperren/entsperren</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1670"/>
@@ -12484,12 +12484,12 @@ Bund %1 auf Saiten %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>system lock(s)</source>
-        <translation><numerusform>Systemverriegelung</numerusform><numerusform>Systemverriegelungen</numerusform></translation>
+        <translation><numerusform>Systemsperre</numerusform><numerusform>Systemsperren</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>System lock(s)</source>
-        <translation><numerusform>Systemverriegelung</numerusform><numerusform>Systemverriegelungen</numerusform></translation>
+        <translation><numerusform>Systemsperre</numerusform><numerusform>Systemsperren</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
@@ -23626,27 +23626,27 @@ Leerraum</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
         <source>Unlock selected systems</source>
-        <translation>Ausgewählte Systeme entriegeln</translation>
+        <translation>Ausgewählte Systeme entsprerren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Unlock selected system</source>
-        <translation>Ausgewähltes System entriegeln</translation>
+        <translation>Ausgewähltes System entsperren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="166"/>
         <source>Lock selected systems</source>
-        <translation>Ausgewählte Systeme verriegeln</translation>
+        <translation>Ausgewählte Systeme sperren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="167"/>
         <source>Lock selected system</source>
-        <translation>Ausgewähltes System verriegeln</translation>
+        <translation>Ausgewähltes System sperren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="170"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>Ausgewählte(s) System(e) ver-/entriegeln</translation>
+        <translation>Ausgewählte(s) System(e) sperren/entsperren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="171"/>
@@ -26606,7 +26606,7 @@ Leerraum</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml" line="50"/>
         <source>System markings (tempo, rehearsal marks, etc.)</source>
-        <translation>Systemmarkierungen (Tempo, Übungsmarken, etc.)</translation>
+        <translation>Systemmarkierungen (Tempoangaben, Übungsmarken, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml" line="247"/>
@@ -29009,7 +29009,7 @@ Wenn das Problem weiterhin besteht, den Schritten zu den Fehlerbehebungen im Lin
         <location filename="../../src/notationscene/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation>Layout bei %s Takt(en) pro System verriegeln</translation>
+        <translation>Layout mit %s Takt(en) pro System sperren</translation>
     </message>
 </context>
 <context>
@@ -38932,12 +38932,12 @@ musikalische Symbole</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5972"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation>Ausgewählte(s) System(e) ver-/entriegeln</translation>
+        <translation>Ausgewählte(s) System(e) sperren/entsperren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5979"/>
         <source>Lock/unlock all systems</source>
-        <translation>Alle Systeme ver-/entriegeln</translation>
+        <translation>Alle Systeme sperren/entsperren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5992"/>
@@ -38947,7 +38947,7 @@ musikalische Symbole</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5999"/>
         <source>Apply system lock to selection</source>
-        <translation>Systemverriegelung auf Auswahl anwenden</translation>
+        <translation>Systemsperren auf Auswahl anwenden</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6009"/>

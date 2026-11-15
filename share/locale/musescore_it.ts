@@ -29539,7 +29539,7 @@ If the issue persists, follow the steps at the troubleshooting link below.</sour
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="77"/>
         <source>Legacy MuseScore</source>
-        <translation>MuseScore obsoleto</translation>
+        <translation>MuseScore classico</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="80"/>

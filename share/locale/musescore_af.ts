@@ -1671,7 +1671,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="609"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="629"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Lang naam</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="619"/>
@@ -2363,7 +2363,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4249"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4472"/>
         <source>Horizontal alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Horisontale belyning</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4259"/>
@@ -6590,7 +6590,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="489"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Herskryf note met kruise</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="494"/>
@@ -6600,7 +6600,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="495"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Herskryf note met molle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="500"/>
@@ -23397,12 +23397,12 @@ opslagmaat</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="68"/>
         <source>Hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vesteek leë balke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="87"/>
         <source>Show empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Wys leë balke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="66"/>
@@ -26709,7 +26709,7 @@ opslagmaat</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="132"/>
         <source>Hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vesteek leë balke</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="144"/>
@@ -26768,7 +26768,7 @@ opslagmaat</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="200"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="224"/>
         <source>Hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vesteek leë balke</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="212"/>
@@ -30543,7 +30543,7 @@ If the issue persists, follow the steps at the troubleshooting link below.</sour
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="85"/>
         <source>Hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vesteek leë balke</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="93"/>
@@ -36913,7 +36913,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="132"/>
         <source>Create from template</source>
-        <translation>Kies van palet</translation>
+        <translation>Skep vanaf sjabloon</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="70"/>
@@ -36972,7 +36972,7 @@ oop te maak, het misluk: %2</translation>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="60"/>
         <source>%Ln measure(s),</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%Ln maat,</numerusform><numerusform>%Ln mate,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="103"/>
@@ -36982,7 +36982,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="149"/>
         <source>Initial number of measures</source>
-        <translation>Aanvanklike nommer mate</translation>
+        <translation>Aanvanklike aantal mate</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="190"/>
@@ -37222,7 +37222,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>Weergawe van MuseScore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -37305,7 +37305,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="65"/>
         <source>Never</source>
-        <translation>Doen nooit</translation>
+        <translation>Nooit</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="66"/>
@@ -37369,12 +37369,12 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Deel dié partituur en sy klank op MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Deel dié partituur se klank op MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="162"/>
@@ -37604,7 +37604,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1502"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
-        <translation>U veranderinge word na ’n lokale lêer bewaar tot die koppeling hervat is.</translation>
+        <translation>U veranderinge word in ’n plaaslike lêer gestoor tot die koppeling hervat is.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1517"/>
@@ -37619,7 +37619,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1675"/>
         <source>Your score could not be saved</source>
-        <translation>U partituur kon nie bewaar word nie</translation>
+        <translation>Die partituur kon nie gestoor word nie</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1685"/>
@@ -38452,17 +38452,17 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="85"/>
         <source>Hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Versteek leë balke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="108"/>
         <source>Show empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Wys leë balke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="131"/>
         <source>Reset empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Herstel sigbaarheid van leë balke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/generalsettingsmodel.cpp" line="162"/>
@@ -38789,7 +38789,7 @@ oop te maak, het misluk: %2</translation>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
         <source>Add %Ln measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Voeg %Ln maat by</numerusform><numerusform>Voeg %Ln mate by</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5265"/>
@@ -38843,7 +38843,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5650"/>
         <source>Add parentheses</source>
-        <translation>Voegronde hakies toe</translation>
+        <translation>Voeg ronde hakies toe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5677"/>
@@ -38880,12 +38880,12 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5831"/>
         <source>Decrease duration</source>
-        <translation>Verminder duur</translation>
+        <translation>Verkort</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5832"/>
         <source>Increase duration</source>
-        <translation>Vermeerder duur</translation>
+        <translation>Verleng</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5849"/>
@@ -39022,7 +39022,7 @@ oop te maak, het misluk: %2</translation>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6444"/>
         <source>Delete %Ln measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Skrap %Ln maat</numerusform><numerusform>Skrap %Ln mate</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6455"/>
@@ -39057,12 +39057,12 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6505"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Herskryf note met kruise</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6512"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Herskryf note met molle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6519"/>
@@ -39392,12 +39392,12 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2186"/>
         <source>Display concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>Wys op konserthoogte</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2187"/>
         <source>Display transposed</source>
-        <translation type="unfinished"/>
+        <translation>Wys getransponeerd</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="196"/>
@@ -39422,7 +39422,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/stringtuningssettingsmodel.cpp" line="283"/>
         <source>Set number of strings</source>
-        <translation type="unfinished"/>
+        <translation>Stel aantal snare</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/stringtuningssettingsmodel.cpp" line="354"/>
@@ -39485,7 +39485,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="81"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>&apos;n Nuwe weergawe van MuseScore Studio is beskikbaar!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="88"/>
