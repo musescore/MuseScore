@@ -382,9 +382,17 @@ void Score::onElementDestruction(EngravingItem* e)
         onBracketItemDestruction(score, toBracketItem(e));
     }
 
-    score->selection().remove(e);
+    score->selection().removeLostWith(e);
     score->cmdState().unsetElement(e);
     score->elementDestroyed().send(e);
+}
+
+/// Whether `item` must not be used anymore once `destroyed` is destroyed: when it is that item, or one of
+/// its segments if it is a spanner, because a spanner does not delete its segments.
+bool Score::isLostWith(const EngravingItem* item, const EngravingItem* destroyed)
+{
+    return item == destroyed
+           || (destroyed->isSpanner() && item && item->isSpannerSegment() && toSpannerSegment(item)->spanner() == destroyed);
 }
 
 //---------------------------------------------------------

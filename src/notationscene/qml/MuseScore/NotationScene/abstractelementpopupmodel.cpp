@@ -266,7 +266,7 @@ void AbstractElementPopupModel::init()
     m_item = selection->element();
 
     score->elementDestroyed().onReceive(this, [this](EngravingItem* destroyed) {
-        if (m_item == destroyed) {
+        if (engraving::Score::isLostWith(m_item, destroyed)) {
             onItemDestroyed();
         }
     });

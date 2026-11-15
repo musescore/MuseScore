@@ -483,6 +483,22 @@ void Selection::remove(EngravingItem* el)
     }
 }
 
+/// Deselects the items that are lost with the destroyed item (see Score::isLostWith()).
+void Selection::removeLostWith(const EngravingItem* destroyed)
+{
+    const auto isLost = [destroyed](const EngravingItem* el) {
+        return Score::isLostWith(el, destroyed);
+    };
+    for (EngravingItem* el : m_el) {
+        if (isLost(el)) {
+            el->setSelected(false);
+        }
+    }
+    if (muse::remove_if(m_el, isLost)) {
+        updateState();
+    }
+}
+
 void Selection::add(EngravingItem* el)
 {
     IF_ASSERT_FAILED(!isLocked()) {
