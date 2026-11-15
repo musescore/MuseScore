@@ -42,10 +42,7 @@ BaseSection {
     signal playbackCursorColorChangeRequested(color newColor)
 
     readonly property string playbackCueTooltip: qsTrc("preferences",
-        "The playback cue is set along with either the selection of score elements or the use of the \"Pause and select playback position\" keyboard shortcut to pause playback. The \"Play from position\" keyboard shortcut uses the playback cue as its starting point.")
-
-    readonly property string normalModeTooltip: qsTrc("preferences",
-        "Normal mode is the mode you transition to after hitting Esc in any other mode.")
+        "The playback cue is set along with either the selection of score elements or the use of the “Pause and select playback position” keyboard shortcut to pause playback.\n\nThe “Play from position” keyboard shortcut uses the playback cue as its starting point.")
 
     readonly property string playbackCursorTooltip: qsTrc("preferences",
         "The playback cursor is always at the current playback head position.")
@@ -92,11 +89,11 @@ BaseSection {
 
         text: qsTrc("preferences", "Show playback cue in normal mode")
 
-        navigation.accessible.description: root.normalModeTooltip
+        navigation.accessible.description: root.playbackCueTooltip
 
         onHoveredChanged: {
             if (hovered) {
-                ui.tooltip.show(showPlaybackCueInNormalModeCheckbox, root.normalModeTooltip)
+                ui.tooltip.show(showPlaybackCueInNormalModeCheckbox, root.playbackCueTooltip)
             } else {
                 ui.tooltip.hide(showPlaybackCueInNormalModeCheckbox)
             }
