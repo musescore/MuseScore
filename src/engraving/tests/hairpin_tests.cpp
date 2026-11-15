@@ -102,3 +102,44 @@ TEST_F(Engraving_HairpinTests, addHairpinWithPart)
 
     delete score;
 }
+
+// Undoing the addition of a hairpin in the main score removes its linked clone from a part, where it can
+// still be selected. Discarding the redo stack then deletes that clone, but not its segments, so the part's
+// selection must not keep them (see Score::isLostWith()).
+TEST_F(Engraving_HairpinTests, hairpinSelectedInPartIsDeselectedWhenDeleted)
+{
+    MasterScore* score = createScore();
+    Score* part = TestUtils::createPart(score, 0);
+    ASSERT_TRUE(part);
+
+    const auto addHairpin = [score]() {
+        ChordRest* cr = score->firstMeasure()->first(SegmentType::ChordRest)->cr(0);
+        ASSERT_TRUE(cr && cr->isChord());
+        score->select(toChord(cr)->upNote());
+        score->startCmd(TranslatableString::untranslatable("Engraving hairpin tests"));
+        score->addHairpins(HairpinType::CRESC_HAIRPIN);
+        score->endCmd();
+    };
+
+    addHairpin();
+    part->doLayout();
+
+    Hairpin* partHairpin = nullptr;
+    for (const auto& [tick, spanner] : part->spanner()) {
+        if (spanner->isHairpin()) {
+            partHairpin = toHairpin(spanner);
+        }
+    }
+    ASSERT_TRUE(partHairpin);
+    ASSERT_FALSE(partHairpin->spannerSegments().empty());
+    part->select(partHairpin->frontSegment());
+    ASSERT_EQ(part->selection().elements().size(), 1);
+
+    score->undoRedo(true, nullptr);
+
+    // Discards the redo stack, deleting the undone hairpin
+    addHairpin();
+    EXPECT_TRUE(part->selection().elements().empty());
+
+    delete score;
+}
