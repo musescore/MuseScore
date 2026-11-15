@@ -9697,12 +9697,12 @@ följda av bindestreck</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Convert &amp;file…</source>
-        <translation type="unfinished"/>
+        <translation>Konvertera &amp;fil …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Convert file</source>
-        <translation type="unfinished"/>
+        <translation>Konvertera fil</translation>
     </message>
     <message>
         <source>Import P&amp;DF…</source>
@@ -10403,7 +10403,7 @@ Utgiven i enlighet med &lt;a href=&quot;%1&quot;&gt;GNU General Public License v
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="412"/>
         <source>Enharmonic spelling</source>
-        <translation>Enharmonisk stavning</translation>
+        <translation>Enharmonisk notering</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="425"/>
@@ -10836,7 +10836,7 @@ Band %1 på strängar %2</translation>
         <location filename="../../src/engraving/dom/check.cpp" line="223"/>
         <source>&lt;b&gt;Element outside measure&lt;/b&gt;: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Element utanför takt&lt;/b&gt;: %1, takt %2, system %3. Hittades vid: %4. Förväntades mellan 0 och %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
@@ -21553,7 +21553,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="121"/>
         <source>Go back</source>
-        <translation type="unfinished"/>
+        <translation>Gå tillbaka</translation>
     </message>
 </context>
 <context>
@@ -26907,7 +26907,7 @@ Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, me
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>MuseSampler library could not be initialized, version %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler-biblioteket kunde inte initialiseras, version %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -26940,36 +26940,40 @@ Därutöver mönstrar Bemästra MuseScore en stödjande gemenskap av musiker, me
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="78"/>
         <source>Troubleshoot</source>
-        <translation type="unfinished"/>
+        <translation>Felsök</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="83"/>
         <source>Open MuseSounds Manager</source>
-        <translation type="unfinished"/>
+        <translation>Öppna MuseSounds-hanteraren</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="85"/>
         <source>To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>För att ladda MuseSounds, öppna MuseSounds-hanteraren och kontrollera att du kör den senaste versionen. Uppdatera vid behov och starta om din enhet.
+
+Om problemet kvarstår, följ stegen i felsökningslänken nedan.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="90"/>
         <source>Open MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Öppna MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="92"/>
         <source>To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>För att ladda MuseSounds, öppna MuseHub och kontrollera att du kör den senaste versionen. Uppdatera vid behov och starta om din enhet.
+
+Om problemet kvarstår, följ stegen i felsäkningslänken nedan.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="103"/>
         <source>MuseSounds could not be loaded</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds kunde inte laddas</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="122"/>
@@ -35101,7 +35105,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="412"/>
         <source>Convert…</source>
-        <translation type="unfinished"/>
+        <translation>Konvertera …</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="424"/>
@@ -35374,17 +35378,17 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="68"/>
         <source>Show in Explorer</source>
-        <translation type="unfinished"/>
+        <translation>Visa i Utforskaren</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="69"/>
         <source>Show in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Visa i Finder</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="70"/>
         <source>Show in File Manager</source>
-        <translation type="unfinished"/>
+        <translation>Visa i Filhanteraren</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="80"/>
@@ -35395,17 +35399,17 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="84"/>
         <source>View online</source>
-        <translation>Visa online</translation>
+        <translation>Visa på nätet</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="94"/>
         <source>Remove from recent files list</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort från listan med senaste filer</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="98"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Radera partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="142"/>
@@ -35588,28 +35592,28 @@ misslyckades: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="82"/>
         <source>Are you sure you want to delete “%1”?</source>
         <extracomment>%1 is the name of the score that is about to be deleted</extracomment>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill radera ”%1”?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="83"/>
         <source>Are you sure you want to delete this score?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill radera detta partitur?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="95"/>
         <source>I understand that deleting is permanent and can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Jag förstår att radering är permanent och inte kan ångras.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="130"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Radera partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/deletecloudscorescenario.cpp" line="72"/>
         <location filename="../../src/project/tests/deletecloudscorescenario_tests.cpp" line="247"/>
         <source>Unable to delete the score</source>
-        <translation type="unfinished"/>
+        <translation>Kunde inte radera partituret</translation>
     </message>
 </context>
 <context>
@@ -35628,12 +35632,12 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="62"/>
         <source>Convert PDF to score</source>
-        <translation type="unfinished"/>
+        <translation>Konvertera PDF till partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="64"/>
         <source>Convert images to score</source>
-        <translation type="unfinished"/>
+        <translation>Konvertera bilder till partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="69"/>
@@ -35664,7 +35668,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="125"/>
         <source>Use a PDF, images, or an audio file (beta)</source>
-        <translation type="unfinished"/>
+        <translation>Använd en PDF-fil, bilder, eller en ljudfil (beta)</translation>
     </message>
     <message>
         <source>Use a PDF, images, or MP3 (beta)</source>
@@ -35780,21 +35784,21 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="191"/>
         <source>Continue converting</source>
-        <translation type="unfinished"/>
+        <translation>Fortsätt konvertering</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="198"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1464"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1511"/>
         <source>Are you sure you want to cancel this file conversion?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker på att du vill avbryta denna filkonvertering?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="199"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1465"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1512"/>
         <source>Processing will be canceled and this score will be removed from your scores.</source>
-        <translation type="unfinished"/>
+        <translation>Behandlingen kommer att avbrytas och partituret kommer att tas bort från dina partitur.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="427"/>
@@ -35803,37 +35807,37 @@ misslyckades: %2</translation>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="784"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="861"/>
         <source>An internet connection is required for file conversion. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>En internetanslutning krävs för filkonvertering. Kontrollera din internetanslutning eller försök igen senare.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="442"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1123"/>
         <source>One or more files could not be read</source>
-        <translation type="unfinished"/>
+        <translation>En eller flera filer kunde inte läsas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="443"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1124"/>
         <source>Make sure the files still exist and that you have permission to open them.</source>
-        <translation type="unfinished"/>
+        <translation>Se till att filerna fortfarande finns och att du har tillstånd att öppna dem.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="446"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1088"/>
         <source>This file could not be read</source>
-        <translation type="unfinished"/>
+        <translation>Denna fil kunde inte läsas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1089"/>
         <source>Make sure the file still exists and that you have permission to open it.</source>
-        <translation type="unfinished"/>
+        <translation>Se till att filen fortfarande finns och att du har tillstånd att öppna den.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="474"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="574"/>
         <source>Make sure you’re importing a suitable PDF, image or audio file.</source>
-        <translation type="unfinished"/>
+        <translation>Se till att du importerar en passande PDF-fil, bild eller ljudfil.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="484"/>
@@ -35872,48 +35876,48 @@ misslyckades: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="498"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="581"/>
         <source>Per conversion, you may select either one audio file, one PDF file, or multiple image files.</source>
-        <translation type="unfinished"/>
+        <translation>För varje konvertering kan du välja antingen en ljudfil, en PDF-fil, eller ett antal bildfiler.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
         <source>Upload limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Uppladdningsgräns nådd</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
         <source>You’ve reached the limit for file conversions. Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Du har nått gränsen för filkonverteringar. Vänligen försök igen senare.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
         <source>Try another file</source>
-        <translation type="unfinished"/>
+        <translation>Pröva en annan fil</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1185"/>
         <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Vi kunde inte ladda upp ’%1’. Kontrollera din internetanslutning och försök igen.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="606"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1184"/>
         <source>Error uploading score</source>
-        <translation type="unfinished"/>
+        <translation>Fel vid uppladdning av partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="621"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="431"/>
         <source>We’re having trouble connecting to MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Vi har problem med att ansluta till MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="622"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="432"/>
         <source>We’ll keep trying intermittently.</source>
-        <translation type="unfinished"/>
+        <translation>Vi kommer att försöka igen med jämna mellanrum.</translation>
     </message>
     <message>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
@@ -35962,7 +35966,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="39"/>
         <source>Home &gt; Scores &gt; My online scores</source>
-        <translation type="unfinished"/>
+        <translation>Hem &gt; Dokument &gt; Mina nätdokument</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="44"/>
@@ -36267,7 +36271,7 @@ misslyckades: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="268"/>
         <source>%1/%n file(s) max.</source>
         <extracomment>%1 is the number of files currently selected, %n is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Max %1/%n fil.</numerusform><numerusform>Max %1/%n filer.</numerusform></translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
@@ -36281,53 +36285,53 @@ misslyckades: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="37"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="73"/>
         <source>Help us improve score processing with your thoughts on what went wrong</source>
-        <translation type="unfinished"/>
+        <translation>Hjälp oss att förbättra dokumentbehandlingen med dina tankar om vad som blev fel</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="82"/>
         <source>Tell us how your score could look better</source>
-        <translation type="unfinished"/>
+        <translation>Berätta för oss hur ditt partitur kunde se bättre ut</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="89"/>
         <source>Feedback</source>
-        <translation type="unfinished"/>
+        <translation>Synpunkter</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
         <source>%1/%2 characters</source>
         <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1/%2 tecken</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
         <source>Submit feedback</source>
-        <translation type="unfinished"/>
+        <translation>Skicka synpunkter</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="70"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="69"/>
         <source>Processing failed: %1</source>
         <extracomment>%1 is the name of the score whose conversion failed</extracomment>
-        <translation type="unfinished"/>
+        <translation>Behandling misslyckades: %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml" line="155"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreProcessingPlaceholder.qml" line="124"/>
         <source>Processing failed</source>
         <extracomment>Status label shown on a score's thumbnail when its conversion failed</extracomment>
-        <translation type="unfinished"/>
+        <translation>Behandling misslyckades</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>Användarvillkor</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jag godkänner %1 och bekräftar att min användning inte kommer att göra intrång på någons upphovsrätt eller andra rättigheter.</translation>
     </message>
 </context>
 <context>
@@ -37937,7 +37941,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="98"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 av %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
@@ -37948,19 +37952,19 @@ misslyckades: %2</translation>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="69"/>
         <source>%n hour(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n timme återstår</numerusform><numerusform>%n timmar återstår</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="72"/>
         <source>%n minute(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n minut återstår</numerusform><numerusform>%n minuter återstår</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="75"/>
         <source>%n second(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n sekund återstår</numerusform><numerusform>%n sekunder återstår</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="43"/>
@@ -37980,12 +37984,12 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="49"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Lyckades</translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="106"/>
         <source>Press F6 to go to the notification.</source>
-        <translation type="unfinished"/>
+        <translation>Tryck F6 för att gå till aviseringen.</translation>
     </message>
 </context>
 <context>
@@ -39052,7 +39056,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6491"/>
         <source>Change enharmonic spelling</source>
-        <translation>Ändra enharmonisk stavning</translation>
+        <translation>Ändra enharmonisk notering</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6498"/>

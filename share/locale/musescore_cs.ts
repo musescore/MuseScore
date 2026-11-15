@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="57"/>
         <source>Spacing</source>
-        <translation>Rozestup</translation>
+        <translation>Rozmístění</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="62"/>
@@ -1753,7 +1753,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="969"/>
         <source>Vertical spacing</source>
-        <translation>Svislý rozestup</translation>
+        <translation>Svislé rozmístění</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="998"/>
@@ -1839,7 +1839,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1477"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>Obnovit největší rozestup pro vyplnění strany</translation>
+        <translation>Obnovit hodnotu „Největší vzdálenost pro vyplnění strany”</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1506"/>
@@ -1855,7 +1855,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1529"/>
         <source>Max. page fill distance:</source>
-        <translation>Největší rozestup pro vyplnění strany:</translation>
+        <translation>Největší vzdálenost pro vyplnění strany:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="1555"/>
@@ -1922,7 +1922,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2023"/>
         <source>Horizontal spacing</source>
-        <translation>Vodorovný rozestup</translation>
+        <translation>Vodorovné rozmístění</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2041"/>
@@ -2097,7 +2097,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2722"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>Obnovit rozestupy</translation>
+        <translation>Obnovit hodnotu „Rozmístění”</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2732"/>
@@ -2132,7 +2132,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2889"/>
         <source>Spacing ratio:</source>
-        <translation>Poměr rozestupu:</translation>
+        <translation>Poměr rozmístění:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2899"/>
@@ -2152,7 +2152,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2963"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation>Zmenšit rytmický rozestup u malých not</translation>
+        <translation>Zmenšit rytmické rozestupy pro malé noty</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2973"/>
@@ -27653,7 +27653,7 @@ Pokud problém přetrvává, postupujte podle pokynů uvedených v odkazu na ře
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="580"/>
         <source>Divider spacing:</source>
-        <translation>Rozestupy oddělovačů:</translation>
+        <translation>Vzdálenost oddělovačů:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="640"/>
@@ -27855,12 +27855,12 @@ Pokud problém přetrvává, postupujte podle pokynů uvedených v odkazu na ře
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
-        <translation>Rozestup strun:</translation>
+        <translation>Vzdálenost strun:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
-        <translation>Rozestup pražců:</translation>
+        <translation>Vzdálenost pražců:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="50"/>
@@ -36848,7 +36848,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Vezměte prosím na vědomí, že vzhled vašeho notového zápisu se změní kvůli vylepšením, která jsme provedli ve výchozím nastavení pro trámce, ligatury, legatové obloučky, systémové prvky a vodorovné rozestupy.</translation>
+        <translation>Vezměte prosím na vědomí, že vzhled vašeho notového zápisu se změní kvůli vylepšením, která jsme provedli ve výchozím nastavení pro trámce, ligatury, legatové obloučky, systémové prvky a vodorovné rozmístění.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>

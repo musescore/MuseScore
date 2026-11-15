@@ -5556,7 +5556,7 @@ ki jim sledi vezaj</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="111"/>
         <source>Show/hide braille panel</source>
-        <translation>Prikaži/skrij podokno z zapisom brajice</translation>
+        <translation>Prikaži/skrij brajično podokno</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="184"/>
@@ -34001,7 +34001,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleSection.qml" line="40"/>
         <source>Show braille panel</source>
-        <translation>Prikaži podokno z zapisom brajice</translation>
+        <translation>Prikaži brajično podokno</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CharsetsSection.qml" line="29"/>
@@ -35885,13 +35885,13 @@ je spodletelo: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
         <source>Upload limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Dosežena omejitev nalaganja</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
         <source>You’ve reached the limit for file conversions. Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Dosegli ste omejitev pri pretvarjanju datotek. Poskusite kasneje.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
@@ -36328,13 +36328,13 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>Pogoji uporabe</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation type="unfinished"/>
+        <translation>Strinjam se s %1 in potrjujem, da moja uporaba ne krši nikakršnih avtorskih ali drugih pravic.</translation>
     </message>
 </context>
 <context>

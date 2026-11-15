@@ -9697,7 +9697,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Convert &amp;file…</source>
-        <translation type="unfinished"/>
+        <translation>转换文件... (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
@@ -10784,7 +10784,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3524"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2568"/>
         <source>End of %1</source>
-        <translation>%1之终</translation>
+        <translation>%1的终点</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="147"/>
@@ -10818,25 +10818,25 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="190"/>
         <source>&lt;b&gt;Corrupted measure&lt;/b&gt;: %1, measure %2, staff %3.</source>
-        <translation>&lt;b&gt;错乱小节&lt;/b&gt;：%3谱表，%2节，%1。</translation>
+        <translation>&lt;b&gt;错乱小节&lt;/b&gt;：%3 谱表，第 %2 小节，%1。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="198"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;不完整小节&lt;/b&gt;：%3谱表，%2节，%1。理应：%5，实际：%4。</translation>
+        <translation>&lt;b&gt;不完整小节&lt;/b&gt;：%3 谱表，第 %2 小节，%1。预期为 %5，实际为 %4。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="212"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;声部过长&lt;/b&gt;：%3谱表，%2节，%1，%4声部。理应：%6，实际：%5。</translation>
+        <translation>&lt;b&gt;声部过长&lt;/b&gt;：%4 声部，%3 谱表，第 %2 小节，%1。预期为 %6，实际为 %5。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="223"/>
         <source>&lt;b&gt;Element outside measure&lt;/b&gt;: %1, measure %2, staff %3. Found at: %4. Expected between 0 and %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;小节外元素&lt;/b&gt;：谱表 %3，小节 %2，%1。预期位于 0 到 %5 之间，实际位于 %4。</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
@@ -21553,7 +21553,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="121"/>
         <source>Go back</source>
-        <translation type="unfinished"/>
+        <translation>返回</translation>
     </message>
 </context>
 <context>
@@ -26908,7 +26908,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="57"/>
         <source>MuseSampler library could not be initialized, version %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler 库无法初始化，版本为 %1。</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="60"/>
@@ -26946,31 +26946,35 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="83"/>
         <source>Open MuseSounds Manager</source>
-        <translation type="unfinished"/>
+        <translation>打开MuseSounds管理器</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="85"/>
         <source>To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>若要加载MuseSounds，请打开MuseSounds管理器并检查您是否在运行最新版本。如果需要请更新并重启您的机器
+
+如果问题仍然存在，请按照下方疑难解答链接中的步骤解决。</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="90"/>
         <source>Open MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>打开MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="92"/>
         <source>To load MuseSounds, open MuseHub and check that you’re running the latest version. Update if needed and restart your machine.
 
 If the issue persists, follow the steps at the troubleshooting link below.</source>
-        <translation type="unfinished"/>
+        <translation>若要加载MuseSounds，请打开MuseHub并检查您是否在运行最新版本。如果需要请更新并重启您的机器
+
+如果问题仍然存在，请按照下方疑难解答链接中的步骤解决。</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="103"/>
         <source>MuseSounds could not be loaded</source>
-        <translation type="unfinished"/>
+        <translation>无法加载MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckstatusscenario.cpp" line="122"/>
@@ -34401,7 +34405,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="102"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation>欲处理在线音色，点击应用窗口底部状态栏中的“处理在线音色”</translation>
+        <translation>若要处理在线音色，请点击应用窗口底部状态栏中的“处理在线音色”</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="113"/>
@@ -35599,7 +35603,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="95"/>
         <source>I understand that deleting is permanent and can’t be undone.</source>
-        <translation>我明白删除无法被撤销。</translation>
+        <translation>我明白此删除操作是永久的且无法撤销。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="130"/>
@@ -35629,12 +35633,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="62"/>
         <source>Convert PDF to score</source>
-        <translation type="unfinished"/>
+        <translation>将PDF转换为乐谱</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="64"/>
         <source>Convert images to score</source>
-        <translation type="unfinished"/>
+        <translation>将图像转换为乐谱</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileToScoreDialog.qml" line="69"/>
@@ -35665,11 +35669,11 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="125"/>
         <source>Use a PDF, images, or an audio file (beta)</source>
-        <translation type="unfinished"/>
+        <translation>支持 PDF、图像或音频文件（实验性）</translation>
     </message>
     <message>
         <source>Use a PDF, images, or MP3 (beta)</source>
-        <translation>支持 PDF、图片或 MP3 文件（实验性）</translation>
+        <translation>支持 PDF、图像或 MP3 文件（实验性）</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="250"/>
@@ -35795,7 +35799,7 @@ failed: %2</source>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1465"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1512"/>
         <source>Processing will be canceled and this score will be removed from your scores.</source>
-        <translation type="unfinished"/>
+        <translation>乐谱处理将会取消，并且会从您的乐谱列表中移除。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="427"/>
@@ -35810,7 +35814,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="442"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1123"/>
         <source>One or more files could not be read</source>
-        <translation type="unfinished"/>
+        <translation>无法读取部分文件</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="443"/>
@@ -35822,7 +35826,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="446"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1088"/>
         <source>This file could not be read</source>
-        <translation>该文件无法被读取</translation>
+        <translation>无法读取此文件</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
@@ -35873,7 +35877,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="498"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="581"/>
         <source>Per conversion, you may select either one audio file, one PDF file, or multiple image files.</source>
-        <translation type="unfinished"/>
+        <translation>您可以上传单个音频文件、单个 PDF 文件或多个图像文件用于每轮转换。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
@@ -35896,7 +35900,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1185"/>
         <source>We weren’t able to upload ‘%1’. Check your internet connection and try again.</source>
-        <translation type="unfinished"/>
+        <translation>我们无法上传 ‘%1’。请检查您的互联网连接后重试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="606"/>
@@ -35908,17 +35912,17 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="621"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="431"/>
         <source>We’re having trouble connecting to MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>我们在连接 MuseScore.com 时遇到问题。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="622"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="432"/>
         <source>We’ll keep trying intermittently.</source>
-        <translation type="unfinished"/>
+        <translation>我们会间歇性地继续尝试。</translation>
     </message>
     <message>
         <source>Per conversion, you may select either one MP3 file, one PDF file, or multiple image files.</source>
-        <translation>您只能上传单个 MP3 文件、单个 PDF 文件或多个图片文件用于每轮转换。</translation>
+        <translation>您可以上传单个 MP3 文件、单个 PDF 文件或多个图像文件用于每轮转换。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="505"/>
@@ -36020,7 +36024,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="589"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="342"/>
         <source>Error processing score</source>
-        <translation>转换乐谱时出现错误</translation>
+        <translation>处理乐谱时出错</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityRatingPanel.qml" line="84"/>
@@ -36205,7 +36209,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="859"/>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="878"/>
         <source>Are you sure you want to go back?</source>
-        <translation>您确认要返回吗？</translation>
+        <translation>您确定要返回吗？</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="494"/>
@@ -36219,7 +36223,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/tests/convertfiletoscoremodel_tests.cpp" line="390"/>
         <source>%n page(s) max.</source>
         <extracomment>%n is the maximum number of pages; shown as a short label/badge, e.g. &quot;20 pages max&quot;</extracomment>
-        <translation><numerusform>最多 %n 页。</numerusform></translation>
+        <translation><numerusform>最多 %n 页</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/convertfiletoscoremodel.cpp" line="217"/>
@@ -36268,7 +36272,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/MultipleFilesPanel.qml" line="268"/>
         <source>%1/%n file(s) max.</source>
         <extracomment>%1 is the number of files currently selected, %n is the maximum allowed, e.g. &quot;3/5 max files&quot;</extracomment>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>最多 %1/%n 个文件</numerusform></translation>
     </message>
     <message>
         <source>%1/%2 max files</source>
@@ -36282,7 +36286,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="37"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="73"/>
         <source>Help us improve score processing with your thoughts on what went wrong</source>
-        <translation type="unfinished"/>
+        <translation>请告诉我们哪里有问题以帮助我们改进乐谱处理。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="82"/>
@@ -36298,7 +36302,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="114"/>
         <source>%1/%2 characters</source>
         <extracomment>%1 is the current number of characters typed, %2 is the maximum allowed</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1/%2 个字符</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ScoreQualityFeedbackPanel.qml" line="119"/>
@@ -36322,13 +36326,13 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="32"/>
         <source>Terms of Use</source>
-        <translation type="unfinished"/>
+        <translation>使用条款</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/TermsOfUseCheckBox.qml" line="35"/>
         <source>I agree to the %1 and confirm my use doesn’t infringe anyone’s copyright or other rights.</source>
         <extracomment>%1 is the &quot;Terms of Use&quot; link</extracomment>
-        <translation type="unfinished"/>
+        <translation>我同意 %1 并确认我的使用不会侵犯到任何人的版权或其他权利。</translation>
     </message>
 </context>
 <context>
@@ -36802,7 +36806,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation>要导出为此文件格式，需安装FFmpeg。您也可在 偏好设置 &gt; 视频 中对其进行配置。</translation>
+        <translation>若要导出为此文件格式，需安装FFmpeg。您也可在 偏好设置 &gt; 视频 中对其进行配置。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -36978,7 +36982,7 @@ failed: %2</source>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="60"/>
         <source>%Ln measure(s),</source>
-        <translation><numerusform>%Ln个小节，</numerusform></translation>
+        <translation><numerusform>%Ln 个小节，</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="103"/>
@@ -37854,7 +37858,7 @@ failed: %2</source>
         <location filename="../../src/framework/midiremote/midiremotetypes.h" line="62"/>
         <source>CC %1</source>
         <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
-        <translation>控制更改 %1</translation>
+        <translation>CC %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/midiremote/midiremotetypes.h" line="66"/>
@@ -37938,7 +37942,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="98"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"/>
+        <translation>%2 中的 %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
@@ -37949,19 +37953,19 @@ failed: %2</source>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="69"/>
         <source>%n hour(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>剩余 %n 小时</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="72"/>
         <source>%n minute(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>剩余 %n 分钟</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="75"/>
         <source>%n second(s) remaining</source>
         <comment>amount of time left until the requested operation is finished</comment>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>剩余 %n 秒</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="43"/>
@@ -37986,7 +37990,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/toastlistmodel.cpp" line="106"/>
         <source>Press F6 to go to the notification.</source>
-        <translation type="unfinished"/>
+        <translation>按下 F6 以转到通知。</translation>
     </message>
 </context>
 <context>
@@ -38666,7 +38670,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="603"/>
         <source>Toggle visible</source>
-        <translation>切换为可见</translation>
+        <translation>切换可见性</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1205"/>
@@ -38676,7 +38680,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1963"/>
         <source>Drop element: %1</source>
-        <translation>放下元素：%1</translation>
+        <translation>放置元素：%1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2211"/>
