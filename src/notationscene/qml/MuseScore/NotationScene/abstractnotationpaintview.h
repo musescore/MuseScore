@@ -71,6 +71,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
 
     Q_PROPERTY(bool readOnly READ readonly WRITE setReadonly NOTIFY readonlyChanged)
 
+    Q_PROPERTY(bool showPlaybackCue READ showPlaybackCue NOTIFY showPlaybackCueChanged)
     Q_PROPERTY(bool showPlaybackCueInNormalMode READ showPlaybackCueInNormalMode NOTIFY showPlaybackCueInNormalModeChanged)
     Q_PROPERTY(bool showPlaybackCursorInNormalMode READ showPlaybackCursorInNormalMode NOTIFY showPlaybackCursorInNormalModeChanged)
 
@@ -168,6 +169,7 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
+    bool showPlaybackCue() const;
     bool showPlaybackCueInNormalMode() const;
     bool showPlaybackCursorInNormalMode() const;
 
@@ -196,6 +198,7 @@ signals:
 
     void readonlyChanged();
 
+    void showPlaybackCueChanged();
     void showPlaybackCueInNormalModeChanged();
     void showPlaybackCursorInNormalModeChanged();
 

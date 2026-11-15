@@ -587,6 +587,11 @@ bool AbstractNotationPaintView::showPlaybackCursorInNormalMode() const
     return notationConfiguration()->showPlaybackCursorInNormalMode();
 }
 
+bool AbstractNotationPaintView::showPlaybackCue() const
+{
+    return notationConfiguration()->showPlaybackCue();
+}
+
 bool AbstractNotationPaintView::showPlaybackCueInNormalMode() const
 {
     return notationConfiguration()->showPlaybackCueInNormalMode();
@@ -858,6 +863,11 @@ void AbstractNotationPaintView::onNotationSetup()
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
         scheduleRedraw();
+    });
+
+    notationConfiguration()->showPlaybackCueChanged().onReceive(this, [this](bool) {
+        updatePlaybackCursorsVisibility();
+        emit showPlaybackCueChanged();
     });
 
     notationConfiguration()->showPlaybackCueInNormalModeChanged().onReceive(this, [this](bool) {
@@ -1667,9 +1677,11 @@ void AbstractNotationPaintView::updatePlaybackCursorsVisibility()
     const bool isPlaying = playbackState()->isPlaying();
     const bool isNormalMode = !isNoteEnterMode();
 
-    // Outside of playback, both cursors are only ever shown in normal mode (never in any note input mode)
+    // Outside of playback, both cursors are only ever shown in normal mode (never in any note input mode).
+    // Unlike the playback cursor, the playback cue is optional even during playback, and showing it in normal mode
+    // depends on showing it at all.
     m_playbackCursor->setIsRenderable(isPlaying || (isNormalMode && showPlaybackCursorInNormalMode()));
-    m_playbackCue->setIsRenderable(isNormalMode && showPlaybackCueInNormalMode());
+    m_playbackCue->setIsRenderable(showPlaybackCue() && (isPlaying || (isNormalMode && showPlaybackCueInNormalMode())));
 
     if (m_playbackCursorItem) {
         m_playbackCursorItem->setVisible(m_playbackCursor->isVisible());

@@ -58,8 +58,13 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
+            isShowingPlaybackCue: scorePreferencesModel.showPlaybackCue
             isShowingPlaybackCueInNormalMode: scorePreferencesModel.showPlaybackCueInNormalMode
             isShowingPlaybackCursorInNormalMode: scorePreferencesModel.showPlaybackCursorInNormalMode
+
+            onShowPlaybackCueChangeRequested: function(show: bool) {
+                scorePreferencesModel.showPlaybackCue = show
+            }
 
             onShowPlaybackCueInNormalModeChangeRequested: function(show: bool) {
                 scorePreferencesModel.showPlaybackCueInNormalMode = show

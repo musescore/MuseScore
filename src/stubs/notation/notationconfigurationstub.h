@@ -82,6 +82,10 @@ public:
     void setPlaybackCueColor(const QColor& color) override;
     muse::async::Notification playbackCueColorChanged() const override;
 
+    bool showPlaybackCue() const override;
+    void setShowPlaybackCue(bool show) override;
+    muse::async::Channel<bool> showPlaybackCueChanged() const override;
+
     bool showPlaybackCueInNormalMode() const override;
     void setShowPlaybackCueInNormalMode(bool show) override;
     muse::async::Channel<bool> showPlaybackCueInNormalModeChanged() const override;

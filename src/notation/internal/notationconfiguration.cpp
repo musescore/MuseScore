@@ -111,6 +111,7 @@ static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/
 
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
+static const Settings::Key SHOW_PLAYBACK_CUE(module_name, "ui/canvas/showPlaybackCue");
 static const Settings::Key SHOW_PLAYBACK_CUE_IN_NORMAL_MODE(module_name, "ui/canvas/showPlaybackCueInNormalMode");
 static const Settings::Key PLAYBACK_CUE_COLOR(module_name, "ui/canvas/playbackCueColor");
 
@@ -381,6 +382,11 @@ void NotationConfiguration::init()
         m_midiInputUseWrittenPitch.set(val.toBool());
     });
 
+    settings()->setDefaultValue(SHOW_PLAYBACK_CUE, Val(false));
+    settings()->valueChanged(SHOW_PLAYBACK_CUE).onReceive(this, [this](const Val& val) {
+        m_showPlaybackCueChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE, Val(false));
     settings()->valueChanged(SHOW_PLAYBACK_CUE_IN_NORMAL_MODE).onReceive(this, [this](const Val& val) {
         m_showPlaybackCueInNormalModeChanged.send(val.toBool());
@@ -644,6 +650,21 @@ int NotationConfiguration::borderWidth() const
     } else {
         return 1;
     }
+}
+
+bool NotationConfiguration::showPlaybackCue() const
+{
+    return settings()->value(SHOW_PLAYBACK_CUE).toBool();
+}
+
+void NotationConfiguration::setShowPlaybackCue(bool show)
+{
+    settings()->setSharedValue(SHOW_PLAYBACK_CUE, Val(show));
+}
+
+async::Channel<bool> NotationConfiguration::showPlaybackCueChanged() const
+{
+    return m_showPlaybackCueChanged;
 }
 
 bool NotationConfiguration::showPlaybackCueInNormalMode() const

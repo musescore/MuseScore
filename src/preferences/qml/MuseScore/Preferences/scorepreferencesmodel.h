@@ -40,6 +40,10 @@ class ScorePreferencesModel : public QObject, public muse::Contextable, public m
 
     Q_PROPERTY(QString defaultStylePath READ defaultStylePath WRITE setDefaultStylePath NOTIFY defaultStylePathChanged)
     Q_PROPERTY(QString defaultPartStylePath READ defaultPartStylePath WRITE setDefaultPartStylePath NOTIFY defaultPartStylePathChanged)
+    Q_PROPERTY(bool showPlaybackCue
+               READ showPlaybackCue
+               WRITE setShowPlaybackCue
+               NOTIFY showPlaybackCueChanged)
     Q_PROPERTY(bool showPlaybackCueInNormalMode
                READ showPlaybackCueInNormalMode
                WRITE setShowPlaybackCueInNormalMode
@@ -64,6 +68,9 @@ public:
     QString defaultPartStylePath() const;
     void setDefaultPartStylePath(const QString& path);
 
+    bool showPlaybackCue() const;
+    void setShowPlaybackCue(bool show);
+
     bool showPlaybackCueInNormalMode() const;
     void setShowPlaybackCueInNormalMode(bool show);
 
@@ -79,6 +86,7 @@ public:
 signals:
     void defaultStylePathChanged();
     void defaultPartStylePathChanged();
+    void showPlaybackCueChanged(bool show);
     void showPlaybackCueInNormalModeChanged(bool show);
     void showPlaybackCursorInNormalModeChanged(bool show);
     void playbackCueColorChanged();

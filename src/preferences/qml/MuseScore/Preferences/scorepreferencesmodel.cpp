@@ -39,6 +39,10 @@ void ScorePreferencesModel::load()
         emit defaultPartStylePathChanged();
     });
 
+    notationConfiguration()->showPlaybackCueChanged().onReceive(this, [this](bool show) {
+        emit showPlaybackCueChanged(show);
+    });
+
     notationConfiguration()->showPlaybackCueInNormalModeChanged().onReceive(this, [this](bool show) {
         emit showPlaybackCueInNormalModeChanged(show);
     });
@@ -82,6 +86,16 @@ void ScorePreferencesModel::setDefaultPartStylePath(const QString& path)
     }
 
     notationConfiguration()->setPartStyleFilePath(path.toStdString());
+}
+
+bool ScorePreferencesModel::showPlaybackCue() const
+{
+    return notationConfiguration()->showPlaybackCue();
+}
+
+void ScorePreferencesModel::setShowPlaybackCue(bool show)
+{
+    notationConfiguration()->setShowPlaybackCue(show);
 }
 
 bool ScorePreferencesModel::showPlaybackCueInNormalMode() const

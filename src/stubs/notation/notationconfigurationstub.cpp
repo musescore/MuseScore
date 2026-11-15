@@ -192,6 +192,20 @@ muse::async::Notification NotationConfigurationStub::playbackCueColorChanged() c
     return {};
 }
 
+bool NotationConfigurationStub::showPlaybackCue() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setShowPlaybackCue(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::showPlaybackCueChanged() const
+{
+    return {};
+}
+
 bool NotationConfigurationStub::showPlaybackCueInNormalMode() const
 {
     return false;

@@ -96,6 +96,10 @@ public:
     virtual void setPlaybackCueColor(const QColor& color) = 0;
     virtual muse::async::Notification playbackCueColorChanged() const = 0;
 
+    virtual bool showPlaybackCue() const = 0;
+    virtual void setShowPlaybackCue(bool show) = 0;
+    virtual muse::async::Channel<bool> showPlaybackCueChanged() const = 0;
+
     virtual bool showPlaybackCueInNormalMode() const = 0;
     virtual void setShowPlaybackCueInNormalMode(bool show) = 0;
     virtual muse::async::Channel<bool> showPlaybackCueInNormalModeChanged() const = 0;

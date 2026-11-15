@@ -28,30 +28,91 @@ import Muse.UiComponents
 BaseSection {
     id: root
 
+    property alias isShowingPlaybackCue: showPlaybackCueCheckbox.checked
     property alias isShowingPlaybackCueInNormalMode: showPlaybackCueInNormalModeCheckbox.checked
     property alias isShowingPlaybackCursorInNormalMode: showPlaybackCursorInNormalModeCheckbox.checked
 
     property alias playbackCueColor: playbackCueColorPicker.color
     property alias playbackCursorColor: playbackCursorColorPicker.color
 
+    signal showPlaybackCueChangeRequested(bool show)
     signal showPlaybackCueInNormalModeChangeRequested(bool show)
     signal showPlaybackCursorInNormalModeChangeRequested(bool show)
     signal playbackCueColorChangeRequested(color newColor)
     signal playbackCursorColorChangeRequested(color newColor)
+
+    readonly property string playbackCueTooltip: qsTrc("preferences",
+        "The playback cue is set along with either the selection of score elements or the use of the \"Pause and select playback position\" keyboard shortcut to pause playback. The \"Play from position\" keyboard shortcut uses the playback cue as its starting point.")
+
+    readonly property string normalModeTooltip: qsTrc("preferences",
+        "Normal mode is the mode you transition to after hitting Esc in any other mode.")
+
+    readonly property string playbackCursorTooltip: qsTrc("preferences",
+        "The playback cursor is always at the current playback head position.")
 
     navigation.direction: NavigationPanel.Both
 
     title: qsTrc("preferences", "Playback cursors")
 
     CheckBox {
+        id: showPlaybackCueCheckbox
+        width: parent.width
+
+        text: qsTrc("preferences", "Show playback cue")
+
+        navigation.accessible.description: root.playbackCueTooltip
+
+        onHoveredChanged: {
+            if (hovered) {
+                ui.tooltip.show(showPlaybackCueCheckbox, root.playbackCueTooltip)
+            } else {
+                ui.tooltip.hide(showPlaybackCueCheckbox)
+            }
+        }
+
+        onPressedChanged: {
+            if (pressed) {
+                ui.tooltip.hide(showPlaybackCueCheckbox)
+            }
+        }
+
+        navigation.name: "ShowPlaybackCueCheckbox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onClicked: {
+            root.showPlaybackCueChangeRequested(!checked)
+        }
+    }
+
+    // Depends on the playback cue being shown at all, hence indented under it
+    CheckBox {
         id: showPlaybackCueInNormalModeCheckbox
         width: parent.width
 
         text: qsTrc("preferences", "Show playback cue in normal mode")
 
+        navigation.accessible.description: root.normalModeTooltip
+
+        onHoveredChanged: {
+            if (hovered) {
+                ui.tooltip.show(showPlaybackCueInNormalModeCheckbox, root.normalModeTooltip)
+            } else {
+                ui.tooltip.hide(showPlaybackCueInNormalModeCheckbox)
+            }
+        }
+
+        onPressedChanged: {
+            if (pressed) {
+                ui.tooltip.hide(showPlaybackCueInNormalModeCheckbox)
+            }
+        }
+
+        enabled: showPlaybackCueCheckbox.checked
+
         navigation.name: "ShowPlaybackCueInNormalModeCheckbox"
         navigation.panel: root.navigation
-        navigation.row: 0
+        navigation.row: 1
 
         onClicked: {
             root.showPlaybackCueInNormalModeChangeRequested(!checked)
@@ -64,9 +125,25 @@ BaseSection {
 
         text: qsTrc("preferences", "Show playback cursor in normal mode")
 
+        navigation.accessible.description: root.playbackCursorTooltip
+
+        onHoveredChanged: {
+            if (hovered) {
+                ui.tooltip.show(showPlaybackCursorInNormalModeCheckbox, root.playbackCursorTooltip)
+            } else {
+                ui.tooltip.hide(showPlaybackCursorInNormalModeCheckbox)
+            }
+        }
+
+        onPressedChanged: {
+            if (pressed) {
+                ui.tooltip.hide(showPlaybackCursorInNormalModeCheckbox)
+            }
+        }
+
         navigation.name: "ShowPlaybackCursorInNormalModeCheckbox"
         navigation.panel: root.navigation
-        navigation.row: 1
+        navigation.row: 2
 
         onClicked: {
             root.showPlaybackCursorInNormalModeChangeRequested(!checked)
@@ -83,6 +160,7 @@ BaseSection {
             Layout.preferredWidth: root.columnWidth
             text: qsTrc("preferences", "Playback cue color")
             horizontalAlignment: Text.AlignLeft
+            enabled: showPlaybackCueCheckbox.checked
         }
 
         ColorPicker {
@@ -91,10 +169,11 @@ BaseSection {
 
             navigation.name: "PlaybackCueColorPicker"
             navigation.panel: root.navigation
-            navigation.row: 2
+            navigation.row: 3
             navigation.accessible.name: playbackCueColorLabel.text
 
             allowAlpha: true
+            enabled: showPlaybackCueCheckbox.checked
 
             onNewColorSelected: function(newColor: color) {
                 root.playbackCueColorChangeRequested(newColor)
@@ -114,7 +193,7 @@ BaseSection {
 
             navigation.name: "PlaybackCursorColorPicker"
             navigation.panel: root.navigation
-            navigation.row: 3
+            navigation.row: 4
             navigation.accessible.name: playbackCursorColorLabel.text
 
             allowAlpha: true

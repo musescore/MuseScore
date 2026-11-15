@@ -82,6 +82,10 @@ public:
     MOCK_METHOD(void, setPlaybackCueColor, (const QColor&), (override));
     MOCK_METHOD(muse::async::Notification, playbackCueColorChanged, (), (const, override));
 
+    MOCK_METHOD(bool, showPlaybackCue, (), (const, override));
+    MOCK_METHOD(void, setShowPlaybackCue, (bool), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, showPlaybackCueChanged, (), (const, override));
+
     MOCK_METHOD(bool, showPlaybackCueInNormalMode, (), (const, override));
     MOCK_METHOD(void, setShowPlaybackCueInNormalMode, (bool), (override));
     MOCK_METHOD(muse::async::Channel<bool>, showPlaybackCueInNormalModeChanged, (), (const, override));

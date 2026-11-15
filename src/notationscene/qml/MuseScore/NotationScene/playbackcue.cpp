@@ -31,5 +31,6 @@ QColor PlaybackCue::color() const
 
 bool PlaybackCue::isShownInNormalMode() const
 {
-    return configuration()->showPlaybackCueInNormalMode();
+    // The normal mode option only applies when the cue is shown at all
+    return configuration()->showPlaybackCue() && configuration()->showPlaybackCueInNormalMode();
 }
