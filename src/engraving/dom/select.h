@@ -123,6 +123,7 @@ public:
     void add(EngravingItem*);
     void deselectAll();
     void remove(EngravingItem*);
+    void removeLostWith(const EngravingItem* destroyed);
     void clear();
     EngravingItem* element() const;
     ChordRest* cr() const;

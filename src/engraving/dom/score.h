@@ -349,6 +349,7 @@ public:
     virtual bool readOnly() const;
 
     static void onElementDestruction(EngravingItem* se);
+    static bool isLostWith(const EngravingItem* item, const EngravingItem* destroyed);
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
