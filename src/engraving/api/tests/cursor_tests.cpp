@@ -377,3 +377,39 @@ TEST(Engraving_ApiCursorTests, addTupletAcrossBarlineInEmptyVoice)
 
     delete score;
 }
+
+// in voice 2, on m1's second eighth, inside a half note that starts on the first: refused, voice 2 is unchanged
+TEST(Engraving_ApiCursorTests, addTupletInsideLongerChord)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 0);
+    cursor.setVoice(1);
+    cursor.setDuration(1, 2);
+    score->startCmd(TranslatableString::untranslatable("Engraving API cursor tests"));
+    cursor.addNote(67);
+    score->endCmd();
+
+    cursor.setVoice(0);
+    rewindTo(cursor, 1);
+    ASSERT_EQ(cursor.tick(), Fraction(1, 8).ticks());
+    cursor.setVoice(1);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 4));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        const ChordRest* cr = toChordRest(s->element(1));
+        EXPECT_FALSE(cr && cr->tuplet()) << "tuplet in voice 2 at tick " << s->tick().toString().toStdString();
+    }
+    ChordRest* half = chordRestAt(score, Fraction(0, 1), 1);
+    ASSERT_TRUE(half);
+    EXPECT_TRUE(half->isChord());
+    EXPECT_FALSE(half->tuplet());
+    EXPECT_EQ(half->ticks(), Fraction(1, 2));
+    EXPECT_FALSE(chordRestAt(score, Fraction(1, 8), 1));
+
+    delete score;
+}

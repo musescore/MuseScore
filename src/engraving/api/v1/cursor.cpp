@@ -515,8 +515,9 @@ void Cursor::addRest()
 ///   \ref DurationElement.duration "duration" value as
 ///   a parameter.
 ///   \note If the tuplet doesn't fit where the cursor is (it would end after
-///   the barline, or after the end of the tuplet it starts in), nothing
-///   changes and a warning is logged.
+///   the barline, or after the end of the tuplet it starts in), or the cursor
+///   is inside a longer chord or rest of its voice, nothing changes and a
+///   warning is logged.
 ///   \since MuseScore 3.5
 ///   \see \ref DurationElement.tuplet
 //---------------------------------------------------------
@@ -560,7 +561,8 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
 
     m_score->expandVoice(inputState().segment(), inputState().track());
     mu::engraving::ChordRest* cr = inputState().cr();
-    if (!cr) { // shouldn't happen?
+    if (!cr) { // inside a longer chord/rest of this voice: expandVoice() can't start one here
+        LOGW("Cursor::addTuplet: cannot add a tuplet inside a longer chord or rest");
         return;
     }
 
