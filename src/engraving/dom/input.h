@@ -28,7 +28,6 @@
 #include "accidental.h"
 #include "chord.h"
 #include "durationtype.h"
-#include "mscore.h"
 #include "noteval.h"
 
 #include "../types/types.h"
@@ -92,7 +91,7 @@ public:
     const NoteValList& notes() const { return m_notes; }
     void setNotes(const NoteValList& v) { m_notes = v; }
 
-    voice_idx_t voice() const { return m_track == muse::nidx ? 0 : (m_track % VOICES); }
+    voice_idx_t voice() const { return m_track == muse::nidx ? 0 : (m_track % MAX_VOICES); }
     void setVoice(voice_idx_t v);
     track_idx_t track() const { return m_track; }
     void setTrack(track_idx_t v) { m_prevTrack = m_track; m_track = v; }

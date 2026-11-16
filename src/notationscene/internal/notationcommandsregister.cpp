@@ -287,6 +287,27 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddGrace16AfterCommand>(),
     makeCommandInfo<AddGrace32AfterCommand>(),
 
+    makeCommandInfo<AddIntervalCommand>(),
+    makeCommandInfo<AddInterval1Command>(),
+    makeCommandInfo<AddInterval2Command>(),
+    makeCommandInfo<AddInterval3Command>(),
+    makeCommandInfo<AddInterval4Command>(),
+    makeCommandInfo<AddInterval5Command>(),
+    makeCommandInfo<AddInterval6Command>(),
+    makeCommandInfo<AddInterval7Command>(),
+    makeCommandInfo<AddInterval8Command>(),
+    makeCommandInfo<AddInterval9Command>(),
+    makeCommandInfo<AddInterval10Command>(),
+    makeCommandInfo<AddIntervalMinus2Command>(),
+    makeCommandInfo<AddIntervalMinus3Command>(),
+    makeCommandInfo<AddIntervalMinus4Command>(),
+    makeCommandInfo<AddIntervalMinus5Command>(),
+    makeCommandInfo<AddIntervalMinus6Command>(),
+    makeCommandInfo<AddIntervalMinus7Command>(),
+    makeCommandInfo<AddIntervalMinus8Command>(),
+    makeCommandInfo<AddIntervalMinus9Command>(),
+    makeCommandInfo<AddIntervalMinus10Command>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -1637,142 +1658,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         ADD_FULL_MEASURE_REST_COMMAND,
         TranslatableString("action", "Full measure rest"),
         TranslatableString("action", "Insert full measure rest"),
-        InputSchema(),
-        Decoration()
-    },
-
-    // interval commands
-    CommandInfo{
-        ADD_INTERVAL_PLUS_1_COMMAND,
-        TranslatableString("action", "&Unison"),
-        TranslatableString("action", "Enter interval: unison"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_2_COMMAND,
-        TranslatableString("action", "Se&cond above"),
-        TranslatableString("action", "Enter interval: second above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_3_COMMAND,
-        TranslatableString("action", "Thir&d above"),
-        TranslatableString("action", "Enter interval: third above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_4_COMMAND,
-        TranslatableString("action", "Fou&rth above"),
-        TranslatableString("action", "Enter interval: fourth above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_5_COMMAND,
-        TranslatableString("action", "Fift&h above"),
-        TranslatableString("action", "Enter interval: fifth above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_6_COMMAND,
-        TranslatableString("action", "Si&xth above"),
-        TranslatableString("action", "Enter interval: sixth above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_7_COMMAND,
-        TranslatableString("action", "Seve&nth above"),
-        TranslatableString("action", "Enter interval: seventh above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_8_COMMAND,
-        TranslatableString("action", "Octave &above"),
-        TranslatableString("action", "Enter interval: octave above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_9_COMMAND,
-        TranslatableString("action", "Ninth abov&e"),
-        TranslatableString("action", "Enter interval: ninth above"),
-
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_PLUS_10_COMMAND,
-        TranslatableString("action", "Tenth above"),
-        TranslatableString("action", "Enter interval: tenth above"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_2_COMMAND,
-        TranslatableString("action", "&Second below"),
-        TranslatableString("action", "Enter interval: second below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_3_COMMAND,
-        TranslatableString("action", "&Third below"),
-        TranslatableString("action", "Enter interval: third below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_4_COMMAND,
-        TranslatableString("action", "F&ourth below"),
-        TranslatableString("action", "Enter interval: fourth below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_5_COMMAND,
-        TranslatableString("action", "&Fifth below"),
-        TranslatableString("action", "Enter interval: fifth below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_6_COMMAND,
-        TranslatableString("action", "S&ixth below"),
-        TranslatableString("action", "Enter interval: sixth below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_7_COMMAND,
-        TranslatableString("action", "Se&venth below"),
-        TranslatableString("action", "Enter interval: seventh below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_8_COMMAND,
-        TranslatableString("action", "Octave &below"),
-        TranslatableString("action", "Enter interval: octave below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_9_COMMAND,
-        TranslatableString("action", "Ninth belo&w"),
-        TranslatableString("action", "Enter interval: ninth below"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INTERVAL_MINUS_10_COMMAND,
-        TranslatableString("action", "Tenth below"),
-        TranslatableString("action", "Enter interval: tenth below"),
         InputSchema(),
         Decoration()
     },

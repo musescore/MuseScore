@@ -24,29 +24,28 @@
 
 #include "global/containers.h"
 
+#include "engraving/types/constants.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-static constexpr size_t VOICES = 4;
-
 inline constexpr track_idx_t staff2track(staff_idx_t staffIdx, voice_idx_t voiceIdx = 0)
 {
-    return staffIdx != muse::nidx ? staffIdx * VOICES + voiceIdx : muse::nidx;
+    return staffIdx != muse::nidx ? staffIdx * MAX_VOICES + voiceIdx : muse::nidx;
 }
 
 inline constexpr staff_idx_t track2staff(track_idx_t track)
 {
-    return track != muse::nidx ? track / VOICES : muse::nidx;
+    return track != muse::nidx ? track / MAX_VOICES : muse::nidx;
 }
 
 inline constexpr voice_idx_t track2voice(track_idx_t track)
 {
-    return track != muse::nidx ? track % VOICES : muse::nidx;
+    return track != muse::nidx ? track % MAX_VOICES : muse::nidx;
 }
 
 inline constexpr track_idx_t trackZeroVoice(track_idx_t track)
 {
-    return track != muse::nidx ? (track / VOICES) * VOICES : muse::nidx;
+    return track != muse::nidx ? (track / MAX_VOICES) * MAX_VOICES : muse::nidx;
 }
 
 inline constexpr bool isUpVoice(voice_idx_t voiceIdx)

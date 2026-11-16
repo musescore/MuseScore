@@ -301,26 +301,26 @@ MenuItemList NoteInputBarModel::makeNotesItems()
 MenuItemList NoteInputBarModel::makeIntervalsItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_INTERVAL_PLUS_1_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_2_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_3_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_4_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_5_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_6_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_7_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_8_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_9_COMMAND),
-        makeMenuItem(ADD_INTERVAL_PLUS_10_COMMAND),
+        makeMenuItem(AddInterval1Command::id),
+        makeMenuItem(AddInterval2Command::id),
+        makeMenuItem(AddInterval3Command::id),
+        makeMenuItem(AddInterval4Command::id),
+        makeMenuItem(AddInterval5Command::id),
+        makeMenuItem(AddInterval6Command::id),
+        makeMenuItem(AddInterval7Command::id),
+        makeMenuItem(AddInterval8Command::id),
+        makeMenuItem(AddInterval9Command::id),
+        makeMenuItem(AddInterval10Command::id),
         makeSeparator(),
-        makeMenuItem(ADD_INTERVAL_MINUS_2_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_3_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_4_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_5_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_6_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_7_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_8_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_9_COMMAND),
-        makeMenuItem(ADD_INTERVAL_MINUS_10_COMMAND)
+        makeMenuItem(AddIntervalMinus2Command::id),
+        makeMenuItem(AddIntervalMinus3Command::id),
+        makeMenuItem(AddIntervalMinus4Command::id),
+        makeMenuItem(AddIntervalMinus5Command::id),
+        makeMenuItem(AddIntervalMinus6Command::id),
+        makeMenuItem(AddIntervalMinus7Command::id),
+        makeMenuItem(AddIntervalMinus8Command::id),
+        makeMenuItem(AddIntervalMinus9Command::id),
+        makeMenuItem(AddIntervalMinus10Command::id)
     };
 
     return items;
