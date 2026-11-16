@@ -479,6 +479,7 @@ void EditPart::renameExcerptOfPart(MasterScore* master, const Part* part)
     for (Excerpt* excerpt : master->excerpts()) {
         if (excerpt->initialPartId() == part->id()) {
             excerptOfPart = excerpt;
+            continue;
         }
         allExcerptLowerNames.push_back(excerpt->name().toLower());
     }

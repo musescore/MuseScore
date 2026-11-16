@@ -510,6 +510,32 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_MainInstrument_UpdatesExcerpts
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, ReplaceInstrument_SameName_KeepsExcerptName)
+{
+    // [GIVEN] A flute with a part score named after it
+    MasterScore* score = createMasterScore({ u"flute" });
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_EQ(parts.size(), 1u);
+
+    Part* flute = parts.at(0);
+    const Excerpt* excerpt = addExcerptOfPart(score, flute);
+    const String oldExcerptName = excerpt->name();
+    ASSERT_EQ(oldExcerptName, flute->partName());
+
+    Instrument newFlute = Instrument::fromTemplate(searchTemplate(u"flute"));
+    newFlute.setLongName(flute->instrument()->longName());
+
+    // [WHEN] The main instrument is replaced with one that has the same name
+    edit(score, [score, flute, &newFlute]() {
+        EditPart::replaceInstrument(score, flute, Part::MAIN_INSTRUMENT_TICK, newFlute);
+    });
+
+    // [THEN] The part score keeps its name
+    EXPECT_EQ(excerpt->name(), oldExcerptName);
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, ReplaceInstrument_DifferentClef_ChangesClefAndStaffType)
 {
     // [GIVEN] A flute with a part score
