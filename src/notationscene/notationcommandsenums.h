@@ -195,6 +195,20 @@ struct AddBoxesTargetContract {
         { "at-end-of-score", AddBoxesTarget::AtEndOfScore, "at end of score" },
     } };
 };
+
+struct GraceNoteTypeContract {
+    static constexpr EnumTable<GraceNoteType, 9> table { {
+        { "normal", GraceNoteType::NORMAL, "normal" },
+        { "acciaccatura", GraceNoteType::ACCIACCATURA, "acciaccatura" },
+        { "appoggiatura", GraceNoteType::APPOGGIATURA, "appoggiatura" },
+        { "grace4", GraceNoteType::GRACE4, "grace4" },
+        { "grace16", GraceNoteType::GRACE16, "grace16" },
+        { "grace32", GraceNoteType::GRACE32, "grace32" },
+        { "grace8-after", GraceNoteType::GRACE8_AFTER, "grace8 after" },
+        { "grace16-after", GraceNoteType::GRACE16_AFTER, "grace16 after" },
+        { "grace32-after", GraceNoteType::GRACE32_AFTER, "grace32 after" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -211,4 +225,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::PlayModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AccidentalTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BoxTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTargetContract);
+DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 }

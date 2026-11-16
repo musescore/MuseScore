@@ -277,6 +277,16 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<InsertMeasuresAtStartOfScoreCommand>(),
     makeCommandInfo<AppendMeasuresCommand>(),
 
+    makeCommandInfo<AddGraceNoteCommand>(),
+    makeCommandInfo<AddAcciaccaturaCommand>(),
+    makeCommandInfo<AddAppoggiaturaCommand>(),
+    makeCommandInfo<AddGrace4Command>(),
+    makeCommandInfo<AddGrace16Command>(),
+    makeCommandInfo<AddGrace32Command>(),
+    makeCommandInfo<AddGrace8AfterCommand>(),
+    makeCommandInfo<AddGrace16AfterCommand>(),
+    makeCommandInfo<AddGrace32AfterCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -1201,64 +1211,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Implode"),
         InputSchema(),
         Decoration()
-    },
-
-    // add grace notes commands
-    CommandInfo{
-        ADD_ACCIACCATURA_COMMAND,
-        TranslatableString("action", "Acciaccatura"),
-        TranslatableString("action", "Add grace note: acciaccatura"),
-        InputSchema(),
-        Decoration(IconCode::Code::ACCIACCATURA)
-    },
-    CommandInfo{
-        ADD_APPOGGIATURA_COMMAND,
-        TranslatableString("action", "Appoggiatura"),
-        TranslatableString("action", "Add grace note: appoggiatura"),
-        InputSchema(),
-        Decoration(IconCode::Code::APPOGGIATURA)
-    },
-    CommandInfo{
-        ADD_GRACE4_COMMAND,
-        TranslatableString("action", "Grace: quarter"),
-        TranslatableString("action", "Add grace note: quarter"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE4)
-    },
-    CommandInfo{
-        ADD_GRACE16_COMMAND,
-        TranslatableString("action", "Grace: 16th"),
-        TranslatableString("action", "Add grace note: 16th"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE16)
-    },
-    CommandInfo{
-        ADD_GRACE32_COMMAND,
-        TranslatableString("action", "Grace: 32nd"),
-        TranslatableString("action", "Add grace note: 32nd"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE32)
-    },
-    CommandInfo{
-        ADD_GRACE8_AFTER_COMMAND,
-        TranslatableString("action", "Grace: 8th after"),
-        TranslatableString("action", "Add grace note: eighth after"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE8_AFTER)
-    },
-    CommandInfo{
-        ADD_GRACE16_AFTER_COMMAND,
-        TranslatableString("action", "Grace: 16th after"),
-        TranslatableString("action", "Add grace note: 16th after"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE16_AFTER)
-    },
-    CommandInfo{
-        ADD_GRACE32_AFTER_COMMAND,
-        TranslatableString("action", "Grace: 32nd after"),
-        TranslatableString("action", "Add grace note: 32nd after"),
-        InputSchema(),
-        Decoration(IconCode::Code::GRACE32_AFTER)
     },
 
     // add beam commands
