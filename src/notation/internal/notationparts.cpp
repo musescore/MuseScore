@@ -92,7 +92,7 @@ bool NotationParts::hasParts() const
 
 const Part* NotationParts::part(const ID& partId) const
 {
-    return partModifiable(partId);
+    return score()->partById(partId);
 }
 
 bool NotationParts::partExists(const ID& partId) const
@@ -102,7 +102,7 @@ bool NotationParts::partExists(const ID& partId) const
 
 const Staff* NotationParts::staff(const ID& staffId) const
 {
-    return staffModifiable(staffId);
+    return score()->staffById(staffId);
 }
 
 bool NotationParts::staffExists(const ID& staffId) const
@@ -113,12 +113,12 @@ bool NotationParts::staffExists(const ID& staffId) const
 StaffConfig NotationParts::staffConfig(const ID& staffId, Fraction tick) const
 {
     StaffConfig config;
-    Staff* staff = staffModifiable(staffId);
+    const Staff* staff = score()->staffById(staffId);
     if (!staff) {
         return config;
     }
 
-    mu::engraving::StaffType* staffType = staff->staffType(tick);
+    const mu::engraving::StaffType* staffType = staff->staffType(tick);
     if (!staffType) {
         return config;
     }
@@ -139,16 +139,6 @@ StaffConfig NotationParts::staffConfig(const ID& staffId, Fraction tick) const
 ScoreOrder NotationParts::scoreOrder() const
 {
     return score()->scoreOrder();
-}
-
-Part* NotationParts::partModifiable(const ID& partId) const
-{
-    return score()->partById(partId.toUint64());
-}
-
-Staff* NotationParts::staffModifiable(const ID& staffId) const
-{
-    return score()->staffById(staffId.toUint64());
 }
 
 std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
@@ -188,7 +178,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     transaction(TranslatableString("undoableAction", "Add/remove instruments"), [&](engraving::Transaction&) {
         const EditPart::SetPartsResult result = EditPart::setParts(score(), partEntries(parts), order);
 
-        for (Part* part : result.addedParts) {
+        for (const Part* part : result.addedParts) {
             m_partChangedNotifier.itemAdded(part);
         }
 
@@ -215,7 +205,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(partId);
+    Part* part = score()->partById(partId);
     if (!part) {
         return;
     }
@@ -239,7 +229,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(partId);
+    Part* part = score()->partById(partId);
     if (!part) {
         return;
     }
@@ -383,7 +373,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(instrumentKey.partId);
+    Part* part = score()->partById(instrumentKey.partId);
     if (!part) {
         return;
     }
@@ -409,7 +399,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(instrumentKey.partId);
+    Part* part = score()->partById(instrumentKey.partId);
     if (!part) {
         return;
     }
@@ -439,7 +429,7 @@ void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKe
 
     transaction(TranslatableString("undoableAction", "Set instrument custom group name"), [&](engraving::Transaction&) {
         for (const InstrumentKey& key : instruments) {
-            Part* part = partModifiable(key.partId);
+            Part* part = score()->partById(key.partId);
             if (EditPart::setInstrumentGroupNameOptions(score(), part, key.tick, useCustom, name, shortName)) {
                 changedParts.push_back(part);
             }
@@ -455,7 +445,7 @@ void NotationParts::setInstrumentNumber(const InstrumentKey& instrumentKey, int 
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(instrumentKey.partId);
+    Part* part = score()->partById(instrumentKey.partId);
     if (!part) {
         return;
     }
@@ -480,7 +470,7 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 {
     TRACEFUNC;
 
-    Staff* staff = staffModifiable(staffId);
+    Staff* staff = score()->staffById(staffId);
     if (!staff) {
         return false;
     }
@@ -502,7 +492,7 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     m_ignoreUndoStackChanges = false;
 
     if (result) {
-        notifyAboutStaffChanged(staffModifiable(staffId));
+        notifyAboutStaffChanged(score()->staffById(staffId));
     }
 
     return result;
@@ -512,7 +502,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 {
     TRACEFUNC;
 
-    Staff* staff = staffModifiable(staffId);
+    Staff* staff = score()->staffById(staffId);
     if (!staff) {
         return;
     }
@@ -539,7 +529,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 {
     TRACEFUNC;
 
-    Staff* staff = staffModifiable(staffId);
+    Staff* staff = score()->staffById(staffId);
     const mu::engraving::StaffType* staffType = mu::engraving::StaffType::preset(type);
 
     if (!staff || !staffType) {
@@ -561,7 +551,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config,
 {
     TRACEFUNC;
 
-    Staff* staff = staffModifiable(staffId);
+    Staff* staff = score()->staffById(staffId);
     if (!staff) {
         return;
     }
@@ -581,7 +571,7 @@ void NotationParts::setSharedPartEnabled(const muse::ID& partId, bool enable)
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(partId);
+    Part* part = score()->partById(partId);
     if (!part) {
         return;
     }
@@ -609,7 +599,7 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    Part* destinationPart = partModifiable(destinationPartId);
+    Part* destinationPart = score()->partById(destinationPartId);
     if (!destinationPart) {
         return false;
     }
@@ -629,8 +619,8 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
         return false;
     }
 
-    Staff* sourceStaff = staffModifiable(sourceStaffId);
-    Part* destinationPart = partModifiable(destinationPartId);
+    Staff* sourceStaff = score()->staffById(sourceStaffId);
+    Part* destinationPart = score()->partById(destinationPartId);
     if (!sourceStaff || !destinationPart) {
         return false;
     }
@@ -661,7 +651,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(partId);
+    Part* part = score()->partById(partId);
     if (!part || !newPart) {
         return;
     }
@@ -677,7 +667,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 {
     TRACEFUNC;
 
-    Part* part = partModifiable(instrumentKey.partId);
+    Part* part = score()->partById(instrumentKey.partId);
     if (!part) {
         return;
     }
@@ -695,14 +685,14 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
 void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable)
 {
-    Part* part = partModifiable(instrumentKey.partId);
+    Part* part = score()->partById(instrumentKey.partId);
     if (!part) {
         return;
     }
 
     auto replace = [this, part, &instrumentKey, &newDrumset, undoable]() {
-        for (auto pair : part->instruments()) {
-            Instrument* instrument = pair.second;
+        for (const auto& pair : part->instruments()) {
+            const Instrument* instrument = pair.second;
             if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
                 EditPart::replaceDrumset(score(), part, Fraction::fromTicks(pair.first), newDrumset, undoable);
             }
@@ -854,7 +844,7 @@ std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMov
     result.reserve(moves.size());
 
     for (const SystemObjectsMove& move : moves) {
-        result.push_back({ staffModifiable(move.staffId), staffModifiable(move.destinationStaffId), move.belowBottomStaff });
+        result.push_back({ score()->staffById(move.staffId), score()->staffById(move.destinationStaffId), move.belowBottomStaff });
     }
 
     return result;

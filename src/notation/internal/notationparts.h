@@ -102,8 +102,6 @@ private:
     mu::engraving::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
-    Part* partModifiable(const muse::ID& partId) const;
-
     void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
 
     void listenUndoStackChanges();
@@ -111,8 +109,6 @@ private:
     void listenStyleChanges();
 
     std::vector<engraving::EditPart::PartEntry> partEntries(const PartInstrumentList& parts) const;
-
-    Staff* staffModifiable(const muse::ID& staffId) const;
 
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
