@@ -775,7 +775,7 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
     for (auto& pair : changes.changedObjects) {
         if (muse::contains(pair.second, CommandType::SortStaves)) {
             stavesSorted = true;
-            break;
+            continue;
         }
 
         if (!pair.first->isStaff()) {
