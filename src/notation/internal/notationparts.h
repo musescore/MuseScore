@@ -100,7 +100,6 @@ public:
 
 private:
     mu::engraving::Score* score() const;
-    INotationUndoStackPtr undoStack() const;
 
     void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
 

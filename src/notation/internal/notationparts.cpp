@@ -38,7 +38,26 @@ using namespace muse::async;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
+static StaffConfig makeStaffConfig(const Staff* staff, const Fraction& tick = Fraction(0, 1))
+{
+    StaffConfig config;
+
+    const mu::engraving::StaffType* staffType = staff->staffType(tick);
+    if (!staffType) {
+        return config;
+    }
+
+    config.visible = staff->visible();
+    config.userDistance = staff->userDist();
+    config.cutaway = staff->cutaway();
+    config.hideSystemBarline = staff->hideSystemBarLine();
+    config.mergeMatchingRests = staff->mergeMatchingRests();
+    config.clefTypeList = staff->defaultClefType();
+    config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
+    config.staffType = *staffType;
+
+    return config;
+}
 
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
                              INotationStylePtr style)
@@ -112,28 +131,12 @@ bool NotationParts::staffExists(const ID& staffId) const
 
 StaffConfig NotationParts::staffConfig(const ID& staffId, Fraction tick) const
 {
-    StaffConfig config;
     const Staff* staff = score()->staffById(staffId);
     if (!staff) {
-        return config;
+        return StaffConfig();
     }
 
-    const mu::engraving::StaffType* staffType = staff->staffType(tick);
-    if (!staffType) {
-        return config;
-    }
-
-    config.visible = staff->visible();
-    config.userDistance = staff->userDist();
-    config.cutaway = staff->cutaway();
-    config.hideSystemBarline = staff->hideSystemBarLine();
-    config.mergeMatchingRests = staff->mergeMatchingRests();
-    config.clefTypeList = staff->defaultClefType();
-    config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
-
-    config.staffType = *staffType;
-
-    return config;
+    return makeStaffConfig(staff, tick);
 }
 
 ScoreOrder NotationParts::scoreOrder() const
@@ -179,7 +182,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
         const EditPart::SetPartsResult result = EditPart::setParts(score(), partEntries(parts), order);
 
         for (const Part* part : result.addedParts) {
-            m_partChangedNotifier.itemAdded(part);
+            notifyAboutPartAdded(part);
         }
 
         m_scoreOrderChanged.notify();
@@ -507,7 +510,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
         return;
     }
 
-    StaffConfig config = staffConfig(staffId);
+    StaffConfig config = makeStaffConfig(staff);
     if (config.visible == visible) {
         return;
     }
@@ -536,7 +539,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
         return;
     }
 
-    if (staff->staffType(DEFAULT_TICK) == staffType) {
+    if (*staff->staffType() == *staffType) {
         return;
     }
 
@@ -556,7 +559,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config,
         return;
     }
 
-    if (staffConfig(staffId) == config) {
+    if (makeStaffConfig(staff, tick) == config) {
         return;
     }
 
@@ -772,17 +775,12 @@ mu::engraving::Score* NotationParts::score() const
     return m_getScore->score();
 }
 
-INotationUndoStackPtr NotationParts::undoStack() const
-{
-    return m_undoStack;
-}
-
 void NotationParts::transaction(const TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func)
 {
-    if (undoStack()->isLocked()) {
+    if (m_undoStack->isLocked()) {
         func(score()->transactionManager()->currentOrDummyTransaction());
     } else {
-        undoStack()->transaction(actionName, func);
+        m_undoStack->transaction(actionName, func);
     }
 
     m_partsChanged.notify();
