@@ -135,6 +135,9 @@ void NotationActionController::init()
     registerCommand<AddGraceNoteCommand>(&Controller::addGraceNotes);
     registerCommand<AddIntervalCommand>(&Controller::addInterval);
     registerCommand<AddTextCommand>(&Controller::addText);
+    registerCommand<AddBeamCommand>(&Controller::addBeam);
+
+    registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -205,15 +208,6 @@ void NotationActionController::init()
     registerCommand(ADD_DOWN_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
 
     registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
-
-    // add beam commands
-    registerCommand(ADD_BEAM_AUTO_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
-    registerCommand(ADD_BEAM_NONE_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
-    registerCommand(ADD_BEAM_BEGIN_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
-    registerCommand(ADD_BEAM_BEGIN16_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN16);
-    registerCommand(ADD_BEAM_BEGIN32_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
-    registerCommand(ADD_BEAM_MID_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
-    registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
 
     // add brackets commands
     registerCommand(ADD_BRACKETS_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Brackets);
@@ -2137,6 +2131,17 @@ muse::Ret NotationActionController::addText(const AddTextCommand& command)
     }
 
     interaction->addText(command.type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addBeam(const AddBeamCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->addBeamToSelectedChordRests(command.mode);
     return muse::make_ok();
 }
 

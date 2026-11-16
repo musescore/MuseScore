@@ -232,6 +232,17 @@ struct TextStyleTypeContract {
         { "tempo", TextStyleType::TEMPO, "tempo" },
     } };
 };
+
+struct BeamModeContract {
+    static constexpr EnumTable<BeamMode, 6> table { {
+        { "auto", BeamMode::AUTO, "auto" },
+        { "none", BeamMode::NONE, "none" },
+        { "begin", BeamMode::BEGIN, "begin" },
+        { "begin16", BeamMode::BEGIN16, "begin16" },
+        { "begin32", BeamMode::BEGIN32, "begin32" },
+        { "mid", BeamMode::MID, "mid" }
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -250,4 +261,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::BoxTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 }

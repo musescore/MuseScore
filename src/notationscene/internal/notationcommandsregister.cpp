@@ -328,6 +328,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddLyricsCommand>(),
     makeCommandInfo<AddTempoCommand>(),
 
+    makeCommandInfo<AddBeamCommand>(),
+    makeCommandInfo<AddBeamAutoCommand>(),
+    makeCommandInfo<AddBeamNoneCommand>(),
+    makeCommandInfo<AddBeamBeginCommand>(),
+    makeCommandInfo<AddBeamBegin16Command>(),
+    makeCommandInfo<AddBeamBegin32Command>(),
+    makeCommandInfo<AddBeamMidCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -1127,49 +1135,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // add beam commands
-    CommandInfo{
-        ADD_BEAM_AUTO_COMMAND,
-        TranslatableString("action", "Auto beam"),
-        TranslatableString("action", "Add beam: auto"),
-        InputSchema(),
-        Decoration(IconCode::Code::AUTO_TEXT)
-    },
-    CommandInfo{
-        ADD_BEAM_NONE_COMMAND,
-        TranslatableString("action", "No beam"),
-        TranslatableString("action", "Add beam: none"),
-        InputSchema(),
-        Decoration(IconCode::Code::BEAM_NONE)
-    },
-    CommandInfo{
-        ADD_BEAM_BEGIN_COMMAND,
-        TranslatableString("action", "Break beam left"),
-        TranslatableString("action", "Break beam left"),
-        InputSchema(),
-        Decoration(IconCode::Code::BEAM_BREAK_LEFT)
-    },
-    CommandInfo{
-        ADD_BEAM_BEGIN16_COMMAND,
-        TranslatableString("action", "Break inner beams (8th)"),
-        TranslatableString("action", "Break inner beams (eighth)"),
-        InputSchema(),
-        Decoration(IconCode::Code::BEAM_BREAK_INNER_8TH)
-    },
-    CommandInfo{
-        ADD_BEAM_BEGIN32_COMMAND,
-        TranslatableString("action", "Break inner beams (16th)"),
-        TranslatableString("action", "Break inner beams (16th)"),
-        InputSchema(),
-        Decoration(IconCode::Code::BEAM_BREAK_INNER_16TH)
-    },
-    CommandInfo{
-        ADD_BEAM_MID_COMMAND,
-        TranslatableString("action", "Join beams"),
-        TranslatableString("action", "Join beams"),
-        InputSchema(),
-        Decoration(IconCode::Code::BEAM_JOIN)
-    },
     CommandInfo{
         ADD_BEAM_SELECTED_RANGE_COMMAND,
         TranslatableString("action", "Beam selected range"),
