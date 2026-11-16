@@ -35,6 +35,7 @@ class ScoreComp
 public:
     static bool saveCompareScore(Score*, const String& saveName, const String& compareWithLocalPath);
     static bool saveCompareMimeData(muse::ByteArray mimeData, const String& saveName, const String& compareWithLocalPath);
+    static bool saveCompareWithSavedScore(Score*, const String& saveName, const String& savedName);
     static bool compareFiles(const String& fullPath1, const String& fullPath2);
 };
 }

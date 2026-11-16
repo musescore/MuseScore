@@ -128,6 +128,15 @@ bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String
     return ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
 }
 
+// Compares with a file this test saved earlier, e.g. the score before a command that was then undone
+bool ScoreComp::saveCompareWithSavedScore(Score* score, const String& saveName, const String& savedName)
+{
+    if (!ScoreRW::saveScore(score, saveName)) {
+        return false;
+    }
+    return ScoreComp::compareFiles(savedName, saveName);
+}
+
 bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
 {
     TRACEFUNC;
