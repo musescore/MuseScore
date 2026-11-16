@@ -232,6 +232,7 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     m_ignoreUndoStackChanges = false;
 
     if (result) {
+        updatePartsAndSystemObjectStaves();
         notifyAboutStaffChanged(score()->staffById(staffId));
     }
 
