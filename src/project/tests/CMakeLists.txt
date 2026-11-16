@@ -34,12 +34,16 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectautosavermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectcreatormock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/saveprojectscenariomock.h
+
     ${CMAKE_CURRENT_LIST_DIR}/utils/promisetest.h
     ${CMAKE_CURRENT_LIST_DIR}/utils/testutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscoreservice_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/convertfiletoscorescenario_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/deletecloudscorescenario_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/exportprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/openprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/saveprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/closeprojectscenariotests.cpp
@@ -55,6 +59,7 @@ set(MODULE_TEST_DATA_ROOT "${CMAKE_CURRENT_LIST_DIR}/data")
 
 set(MODULE_TEST_LINK
     project
+    engraving
     Qt::Qml
 )
 
