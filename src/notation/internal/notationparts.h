@@ -107,7 +107,7 @@ protected:
 
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
-    void rollback();
+    void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
 
 private:
     friend class MasterNotationParts;

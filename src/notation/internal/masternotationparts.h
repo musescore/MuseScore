@@ -47,9 +47,6 @@ public:
                            const StaffType* newStaffType = nullptr) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
-    void addSystemObjects(const muse::IDList& stavesIds) override;
-    void removeSystemObjects(const muse::IDList& stavesIds) override;
-
 private:
     void startGlobalEdit(const muse::TranslatableString& actionName);
     void endGlobalEdit();

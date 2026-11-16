@@ -267,32 +267,6 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
     }
 }
 
-void MasterNotationParts::addSystemObjects(const muse::IDList& stavesIds)
-{
-    if (stavesIds.empty()) {
-        return;
-    }
-
-    startGlobalEdit(TranslatableString("undoableAction", "Add system markings"));
-
-    NotationParts::addSystemObjects(stavesIds);
-
-    endGlobalEdit();
-}
-
-void MasterNotationParts::removeSystemObjects(const muse::IDList& stavesIds)
-{
-    if (stavesIds.empty()) {
-        return;
-    }
-
-    startGlobalEdit(TranslatableString("undoableAction", "Remove system markings"));
-
-    NotationParts::removeSystemObjects(stavesIds);
-
-    endGlobalEdit();
-}
-
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
 {
     std::vector<INotationPartsPtr> result;
