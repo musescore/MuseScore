@@ -1461,6 +1461,37 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
     EXPECT_TRUE(ret);
 }
 
+TEST_F(SaveProjectScenarioTests, Publish_AnotherScoreBecomesCurrentDuringTheAudioExport_UploadsThePublishedOne)
+{
+    //! [GIVEN] A publish, during whose audio export another score becomes the current one...
+    givenReachableCloud();
+    givenUserConfirmsCloudDialog();
+    givenUploadFinishesWith(make_ok(), ValMap());
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+
+    auto otherProject = std::make_shared<NiceMock<NotationProjectMock> >();
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
+    .WillByDefault([this, otherProject](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(otherProject));
+
+        m_exportedMp3Paths.push_back(destinationPath.toQString());
+        QFile file(destinationPath.toQString());
+        bool ok = file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
+        return resolvedPromise(ok ? make_ok() : make_ret(Ret::Code::UnknownError));
+    });
+
+    //! [THEN] The published score is uploaded, not the one that became current
+    EXPECT_CALL(*m_project, writeToDevice(_)).Times(1);
+    EXPECT_CALL(*otherProject, writeToDevice(_)).Times(0);
+
+    //! [WHEN] Publishing...
+    Ret ret = await(m_scenario->publish());
+
+    EXPECT_TRUE(ret);
+
+    release(otherProject);
+}
+
 TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesThereAndStops)
 {
     //! [GIVEN] A reachable cloud whose login dialog is answered with "Save to computer"...

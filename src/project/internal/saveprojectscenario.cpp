@@ -224,13 +224,13 @@ Promise<Ret> SaveProjectScenario::publish()
                 return resolve(info.ret);
             }
 
-            exportMp3(project->masterNotation()->notation()).onResolve(this, [this, info, resolve](const AudioFile& audio) {
+            exportMp3(project->masterNotation()->notation()).onResolve(this, [this, project, info, resolve](const AudioFile& audio) {
                 if (!audio.isValid()) {
                     (void)resolve(make_ret(Ret::Code::BadData));
                     return;
                 }
 
-                uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true)
+                uploadProject(project, info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true)
                 .onResolve(this, [resolve](const Ret& ret) {
                     (void)resolve(ret);
                 });
@@ -558,13 +558,13 @@ Promise<Ret> SaveProjectScenario::doSaveAndUploadProject(const INotationProjectP
                                               ? exportMp3(project->masterNotation()->notation())
                                               : resolvedPromise(AudioFile());
 
-            audioPromise.onResolve(this, [this, info, isPublic, generateAudio, resolve](const AudioFile& audio) {
+            audioPromise.onResolve(this, [this, project, info, isPublic, generateAudio, resolve](const AudioFile& audio) {
                 if (generateAudio && !audio.isValid()) {
                     (void)resolve(make_ret(Ret::Code::BadData));
                     return;
                 }
 
-                uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false)
+                uploadProject(project, info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false)
                 .onResolve(this, [this, resolve](const Ret& ret) {
                     if (ret) {
                         m_numberOfSavesToCloud++;
@@ -789,10 +789,10 @@ void SaveProjectScenario::closeUploadProgressDialog()
     }
 }
 
-Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+Promise<Ret> SaveProjectScenario::uploadProject(INotationProjectPtr project, const CloudProjectInfo& info, const AudioFile& audio,
+                                                bool openEditUrl, bool publishMode)
 {
-    return async::make_promise<Ret>([this, info, audio, openEditUrl, publishMode](auto resolve) {
-        INotationProjectPtr project = projectSession()->project();
+    return async::make_promise<Ret>([this, project, info, audio, openEditUrl, publishMode](auto resolve) {
         if (!project) {
             return resolve(make_ret(Err::NoProjectError));
         }
@@ -831,7 +831,8 @@ Promise<Ret> SaveProjectScenario::uploadProject(const CloudProjectInfo& info, co
 
             if (!res.ret) {
                 LOGE() << res.ret.toString();
-                onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& failRet) {
+                onProjectUploadFailed(project, res.ret, info, audio, openEditUrl, publishMode)
+                .onResolve(this, [resolve](const Ret& failRet) {
                     (void)resolve(failRet);
                 });
                 return;
@@ -977,8 +978,8 @@ Promise<Ret> SaveProjectScenario::onProjectSuccessfullyUploaded(const QUrl& urlT
     });
 }
 
-Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
-                                                        bool openEditUrl, bool publishMode)
+Promise<Ret> SaveProjectScenario::onProjectUploadFailed(INotationProjectPtr project, const Ret& ret, const CloudProjectInfo& info,
+                                                        const AudioFile& audio, bool openEditUrl, bool publishMode)
 {
     setBusy(BusyStatus::Uploading, false);
 
@@ -990,7 +991,7 @@ Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const Cl
     auto audioHolder = std::make_shared<AudioFile>(audio);
 
     return showCloudSaveError(ret, info, publishMode, true)
-           .then<Ret>(this, [this, ret, info, audioHolder, openEditUrl, publishMode](const Ret& userResponse, auto resolve) {
+           .then<Ret>(this, [this, project, ret, info, audioHolder, openEditUrl, publishMode](const Ret& userResponse, auto resolve) {
         const AudioFile audio = *audioHolder;
         *audioHolder = AudioFile();
 
@@ -1009,7 +1010,7 @@ Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const Cl
                 CloudProjectInfo newInfo = info;
                 newInfo.sourceUrl = QUrl();
 
-                uploadProject(newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
+                uploadProject(project, newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
                     (void)resolve(uploadRet);
                 });
 
@@ -1017,7 +1018,7 @@ Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const Cl
             }
             case RET_CODE_CONFLICT_RESPONSE_REPLACE: {
                 museScoreComService()->downloadScoreInfo(info.sourceUrl)
-                .onResolve(this, [this, ret, info, audio, openEditUrl, publishMode,
+                .onResolve(this, [this, project, ret, info, audio, openEditUrl, publishMode,
                                   resolve](const RetVal<muse::cloud::ScoreInfo>& scoreInfo) {
                     if (!scoreInfo.ret) {
                         LOGE() << scoreInfo.ret.toString();
@@ -1029,7 +1030,7 @@ Promise<Ret> SaveProjectScenario::onProjectUploadFailed(const Ret& ret, const Cl
                     CloudProjectInfo newInfo = info;
                     newInfo.revisionId = scoreInfo.val.revisionId;
 
-                    uploadProject(newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
+                    uploadProject(project, newInfo, audio, openEditUrl, publishMode).onResolve(this, [resolve](const Ret& uploadRet) {
                         (void)resolve(uploadRet);
                     });
                 });

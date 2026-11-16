@@ -300,10 +300,10 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
 }
 
 std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFiles(const INotationPtrList& notations,
-                                                                                const muse::io::path_t& destinationPath,
-                                                                                INotationWriterPtr writer,
-                                                                                INotationWriter::UnitType unitType,
-                                                                                bool isCreatingOnlyOneFile) const
+                                                                                  const muse::io::path_t& destinationPath,
+                                                                                  INotationWriterPtr writer,
+                                                                                  INotationWriter::UnitType unitType,
+                                                                                  bool isCreatingOnlyOneFile) const
 {
     std::vector<ExportFile> files;
 
@@ -328,8 +328,8 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                                                        static_cast<int>(page));
 
                 files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
-                    } });
+                            return writer->write(notation, destinationDevice, options);
+                        } });
             }
         }
     } break;
@@ -341,14 +341,14 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                                                        notation), isExportingOnlyOneScore);
 
             files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                    return writer->write(notation, destinationDevice, options);
-                } });
+                        return writer->write(notation, destinationDevice, options);
+                    } });
         }
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
         files.push_back({ destinationPath, [writer, notations, options](IODevice& destinationDevice) {
-                return writer->writeList(notations, destinationDevice, options);
-            } });
+                    return writer->writeList(notations, destinationDevice, options);
+                } });
     } break;
     }
 
@@ -451,24 +451,24 @@ void ExportProjectScenario::askForReplaceFile(const ExportStatePtr& state) const
         muse::trc("project/export", "File already exists"),
         muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
         .arg(filename).toStdString(), {
-            IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
-            IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
-            IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
-            IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
-        })
+        IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
+        IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
+        IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
+        IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
+    })
     .onResolve(this, [this, state](const IInteractive::Result& result) {
         switch (result.button()) {
-        case ReplaceAll:
-            state->fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
-        case Replace:
-            state->isCurrentFileConfirmed = true;
-            break;
-        case SkipAll:
-            state->fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
-        case Skip:
-        default:
-            state->moveToNextFile();
-            break;
+            case ReplaceAll:
+                state->fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
+            case Replace:
+                state->isCurrentFileConfirmed = true;
+                break;
+            case SkipAll:
+                state->fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
+            case Skip:
+            default:
+                state->moveToNextFile();
+                break;
         }
 
         continueExportLater(state);
