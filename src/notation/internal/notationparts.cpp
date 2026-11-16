@@ -180,17 +180,21 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 
     endInteractionWithScore();
 
-    transaction(TranslatableString("undoableAction", "Add/remove instruments"), [&](engraving::Transaction&) {
-        const EditPart::SetPartsResult result = EditPart::setParts(score(), partEntries(parts), order);
+    EditPart::SetPartsResult result;
 
-        for (const Part* part : result.addedParts) {
+    transaction(TranslatableString("undoableAction", "Add/remove instruments"), [&](engraving::Transaction&) {
+        result = EditPart::setParts(score(), partEntries(parts), order);
+    });
+
+    const std::vector<Part*>& currentParts = score()->parts();
+    for (Part* part : result.addedParts) {
+        if (muse::contains(currentParts, part)) {
             notifyAboutPartAdded(part);
         }
+    }
 
-        m_scoreOrderChanged.notify();
-
-        updatePartsAndSystemObjectStaves();
-    });
+    m_scoreOrderChanged.notify();
+    updatePartsAndSystemObjectStaves();
 }
 
 void NotationParts::setScoreOrder(const ScoreOrder& order)
