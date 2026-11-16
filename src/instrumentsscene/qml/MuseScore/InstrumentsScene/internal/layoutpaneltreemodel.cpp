@@ -1205,6 +1205,9 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSharedPartItem(const Par
     auto sharedPartItem = new SharedPartTreeItem(m_masterNotation, m_notation, m_rootItem);
     sharedPartItem->init(part);
 
+    connect(sharedPartItem, &AbstractLayoutPanelTreeItem::isEnabledChanged,
+            this, &LayoutPanelTreeModel::sharedGroupEnabledChanged);
+
     return sharedPartItem;
 }
 

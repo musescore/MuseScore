@@ -40,9 +40,17 @@ Item {
     property int sideMargin: 0
 
     function expandCollapseAll(expand) {
+        let groups = Object.assign({}, prv.expandedGroups)
+
         for (let i = 0; i < root.model.rowCount(); ++i) {
             const modelIndex = root.model.index(i, 0)
-            if (!root.model.modelIndexToItem(modelIndex).isExpandable) {
+            const item = root.model.modelIndexToItem(modelIndex)
+            if (!item.isExpandable) {
+                continue
+            }
+
+            if (item.type === LayoutPanelItemType.SHARED_PART) {
+                groups[item.id] = expand
                 continue
             }
 
@@ -53,6 +61,9 @@ Item {
                 layoutPanelTreeView.collapse(row)
             }
         }
+
+        prv.expandedGroups = groups
+        layoutPanelTreeView.forceLayout()
     }
 
     QtObject {
@@ -79,6 +90,14 @@ Item {
         property int focusedColumn: -1
         property bool focusedHighlight: false
 
+        property var expandedGroups: ({})
+
+        //! NOTE Only combined groups can be collapsed
+        function isGroupCollapsed(part) {
+            const header = part?.sharedGroupHeader ?? null
+            return Boolean(header) && header.isEnabled && !prv.expandedGroups[header.id]
+        }
+
         function setExpanded(delegate, expand) {
             if (treeNavigationPanel.active) {
                 const navigation = prv.findNavigation(delegate, function(nav) { return nav.active })
@@ -87,6 +106,15 @@ Item {
                     prv.focusedColumn = navigation.column
                     prv.focusedHighlight = navigation.highlight
                 }
+            }
+
+            if (delegate.type === LayoutPanelItemType.SHARED_PART) {
+                let groups = Object.assign({}, prv.expandedGroups)
+                groups[delegate.item.id] = expand
+                prv.expandedGroups = groups
+
+                layoutPanelTreeView.forceLayout()
+                return
             }
 
             if (expand) {
@@ -225,6 +253,11 @@ Item {
         function onModelAboutToBeReset() {
             prv.cancelDrag()
         }
+
+        //! NOTE Combining a group on or off changes no rows, so the view isn't relaid out by itself
+        function onSharedGroupEnabledChanged() {
+            Qt.callLater(layoutPanelTreeView.forceLayout)
+        }
     }
 
     StyledTreeView {
@@ -242,6 +275,15 @@ Item {
 
         columnWidthProvider: function(column) {
             return layoutPanelTreeView.width
+        }
+
+        // 0 hides a collapsed group's instruments and their staves; -1 keeps the delegate's implicitHeight
+        rowHeightProvider: function(row) {
+            const index = layoutPanelTreeView.index(row, 0)
+            const part = root.model.modelIndexToItem(index.parent.valid ? index.parent : index) as PartTreeItem
+            const isMember = Boolean(part) && part.type === LayoutPanelItemType.PART
+
+            return isMember && prv.isGroupCollapsed(part) ? 0 : -1
         }
 
         // Blank space below the last row; sits behind the rows
@@ -296,6 +338,7 @@ Item {
 
             readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
             readonly property bool isDragged: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem
+            readonly property bool isGroupHeader: dropArea.item?.type === LayoutPanelItemType.SHARED_PART
 
             readonly property bool isCardBottom: dropArea.depth === 0
                                                  ? !dropArea.expanded
@@ -310,7 +353,15 @@ Item {
 
             readonly property bool isInGroup: dropArea.groupRole !== LayoutPanelItemType.NOT_IN_GROUP
             readonly property bool isGroupTop: dropArea.depth === 0 && dropArea.groupRole === LayoutPanelItemType.GROUP_HEADER
-            readonly property bool isGroupBottom: dropArea.isCardBottom && dropArea.groupRole === LayoutPanelItemType.GROUP_LAST_MEMBER
+            readonly property bool isGroupCollapsed: dropArea.isGroupHeader && prv.isGroupCollapsed(dropArea.item as PartTreeItem)
+            readonly property bool isGroupBottom: {
+                if (!dropArea.isCardBottom) {
+                    return false
+                }
+
+                // A collapsed group ends at its header
+                return dropArea.groupRole === LayoutPanelItemType.GROUP_LAST_MEMBER || dropArea.isGroupCollapsed
+            }
 
             implicitHeight: {
                 let height = content.anchors.topMargin + prv.rowContentHeight
@@ -390,7 +441,7 @@ Item {
                             modelIndex: dropArea.modelIndex
                             row: dropArea.row
                             depth: dropArea.depth
-                            isExpanded: dropArea.expanded
+                            isExpanded: dropArea.isGroupHeader ? !dropArea.isGroupCollapsed : dropArea.expanded
 
                             sideMargin: root.sideMargin
                             cardRadius: prv.cardRadius

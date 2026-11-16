@@ -131,6 +131,7 @@ signals:
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
     void isHideEmptyStavesEnabledChanged(bool enabled);
+    void sharedGroupEnabledChanged();
     void scoreChanged();
 
 private slots:

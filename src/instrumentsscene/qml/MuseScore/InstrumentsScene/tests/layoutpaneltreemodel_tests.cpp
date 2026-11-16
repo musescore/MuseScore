@@ -1374,6 +1374,24 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_UpdatesSetting
     EXPECT_EQ(*hideChanges, 1);
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_SharedGroupEnabledChanged)
+{
+    // [GIVEN] An instrument and a shared-staves group, stave sharing off
+    addPart(u"A");
+    addSharedPart(u"S");
+    createModel(); // [A:0] A S
+
+    std::shared_ptr<int> groupChanges = countEmits(&LayoutPanelTreeModel::sharedGroupEnabledChanged);
+
+    // [WHEN] The score turns on stave sharing
+    m_score->style().set(Sid::enableStaveSharing, true);
+    m_scoreChanges.send(ScoreChanges());
+
+    // [THEN] The panel reports that the group is now combined
+    EXPECT_TRUE(item(2)->isEnabled());
+    EXPECT_EQ(*groupChanges, 1);
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetupNotationConnections_TextEditingIgnored)
 {
     // [GIVEN] An instrument

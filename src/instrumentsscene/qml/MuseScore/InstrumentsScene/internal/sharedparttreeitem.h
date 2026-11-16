@@ -41,6 +41,7 @@ private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
     void listenEnabledChanged();
+    void updateEnabled();
     bool isTitleAffected(const mu::engraving::ScoreChanges& changes) const;
     QString groupTitle() const;
 
