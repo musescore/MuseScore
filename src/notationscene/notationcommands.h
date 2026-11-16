@@ -1830,6 +1830,133 @@ struct AddBeamMidCommand {
     cprop_decl redirect = AddBeamCommand(BeamMode::MID);
 };
 
+struct AddOrnamentCommand {
+    cprop_decl id = Command("command://notation/add-ornament");
+    cprop_decl title = MnemonicString("action", "Add ornament");
+    cprop_decl description = TranslatableString("action", "Add ornament");
+    cprop_decl availabilities = Availability::API;
+
+    OrnamentType type = OrnamentType::UNDEFINED;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddOrnamentCommand::type, "Ornament type" },
+    };
+};
+
+// add ornament commands
+
+struct AddOrnamentTurnCommand {
+    cprop_decl id = Command("command://notation/add-ornament/turn");
+    cprop_decl title = MnemonicString("action", "Toggle turn");
+    cprop_decl description = TranslatableString("action", "Add ornament: turn");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TURN);
+};
+
+struct AddOrnamentTurnInvertedCommand {
+    cprop_decl id = Command("command://notation/add-ornament/turn-inverted");
+    cprop_decl title = MnemonicString("action", "Toggle inverted turn");
+    cprop_decl description = TranslatableString("action", "Add ornament: inverted turn");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TURN_INVERTED);
+};
+
+struct AddOrnamentTurnSlashCommand {
+    cprop_decl id = Command("command://notation/add-ornament/turn-slash");
+    cprop_decl title = MnemonicString("action", "Toggle turn with slash");
+    cprop_decl description = TranslatableString("action", "Add ornament: turn with slash");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TURN_SLASH);
+};
+
+struct AddOrnamentTurnUpCommand {
+    cprop_decl id = Command("command://notation/add-ornament/turn-up");
+    cprop_decl title = MnemonicString("action", "Toggle turn up");
+    cprop_decl description = TranslatableString("action", "Add ornament: turn up");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TURN_UP);
+};
+
+struct AddOrnamentTurnInvertedUpCommand {
+    cprop_decl id = Command("command://notation/add-ornament/turn-inverted-up");
+    cprop_decl title = MnemonicString("action", "Toggle vertical inverted turn");
+    cprop_decl description = TranslatableString("action", "Add ornament: vertical inverted turn");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TURN_INVERTED_UP);
+};
+
+struct AddOrnamentTrillCommand {
+    cprop_decl id = Command("command://notation/add-ornament/trill");
+    cprop_decl title = MnemonicString("action", "Toggle trill");
+    cprop_decl description = TranslatableString("action", "Add ornament: trill");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TRILL);
+};
+
+struct AddOrnamentShortTrillCommand {
+    cprop_decl id = Command("command://notation/add-ornament/short-trill");
+    cprop_decl title = MnemonicString("action", "Toggle short trill");
+    cprop_decl description = TranslatableString("action", "Add ornament: short trill");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::SHORT_TRILL);
+};
+
+struct AddOrnamentMordentCommand {
+    cprop_decl id = Command("command://notation/add-ornament/mordent");
+    cprop_decl title = MnemonicString("action", "Toggle mordent");
+    cprop_decl description = TranslatableString("action", "Add ornament: mordent");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::MORDENT);
+};
+
+struct AddOrnamentHaydnCommand {
+    cprop_decl id = Command("command://notation/add-ornament/haydn");
+    cprop_decl title = MnemonicString("action", "Toggle Haydn ornament");
+    cprop_decl description = TranslatableString("action", "Add ornament: Haydn ornament");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::HAYDN);
+};
+
+struct AddOrnamentTremblementCommand {
+    cprop_decl id = Command("command://notation/add-ornament/tremblement");
+    cprop_decl title = MnemonicString("action", "Toggle tremblement");
+    cprop_decl description = TranslatableString("action", "Add ornament: tremblement");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TREMBLEMENT);
+};
+
+struct AddOrnamentPrallMordentCommand {
+    cprop_decl id = Command("command://notation/add-ornament/prall-mordent");
+    cprop_decl title = MnemonicString("action", "Toggle prall mordent");
+    cprop_decl description = TranslatableString("action", "Add ornament: prall mordent");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::PRALL_MORDENT);
+};
+
+struct AddOrnamentShakeCommand {
+    cprop_decl id = Command("command://notation/add-ornament/shake");
+    cprop_decl title = MnemonicString("action", "Toggle shake");
+    cprop_decl description = TranslatableString("action", "Add ornament: shake");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::SHAKE);
+};
+
+struct AddOrnamentShakeMuffatCommand {
+    cprop_decl id = Command("command://notation/add-ornament/shake-muffat");
+    cprop_decl title = MnemonicString("action", "Toggle shake (Muffat)");
+    cprop_decl description = TranslatableString("action", "Add ornament: shake (Muffat)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::SHAKE_MUFFAT);
+};
+
+struct AddOrnamentTremblementCouperinCommand {
+    cprop_decl id = Command("command://notation/add-ornament/tremblement-couperin");
+    cprop_decl title = MnemonicString("action", "Toggle tremblement appuyé (Couperin)");
+    cprop_decl description = TranslatableString("action", "Add ornament: tremblement appuyé (Couperin)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOrnamentCommand(OrnamentType::TREMBLEMENT_COUPERIN);
+};
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1936,22 +2063,6 @@ inline static const muse::rcommand::Command ADD_BEAM_SELECTED_RANGE_COMMAND("com
 inline static const muse::rcommand::Command ADD_BRACKETS_COMMAND("command://notation/add-brackets");
 inline static const muse::rcommand::Command ADD_PARENTHESES_COMMAND("command://notation/add-parentheses");
 inline static const muse::rcommand::Command ADD_BRACES_COMMAND("command://notation/add-braces");
-
-// add ornament commands
-inline static const muse::rcommand::Command ADD_TURN_COMMAND("command://notation/add-turn");
-inline static const muse::rcommand::Command ADD_TURN_INVERTED_COMMAND("command://notation/add-turn-inverted");
-inline static const muse::rcommand::Command ADD_TURN_SLASH_COMMAND("command://notation/add-turn-slash");
-inline static const muse::rcommand::Command ADD_TURN_UP_COMMAND("command://notation/add-turn-up");
-inline static const muse::rcommand::Command ADD_TURN_INVERTED_UP_COMMAND("command://notation/add-turn-inverted-up");
-inline static const muse::rcommand::Command ADD_TRILL_COMMAND("command://notation/add-trill");
-inline static const muse::rcommand::Command ADD_SHORT_TRILL_COMMAND("command://notation/add-short-trill");
-inline static const muse::rcommand::Command ADD_MORDENT_COMMAND("command://notation/add-mordent");
-inline static const muse::rcommand::Command ADD_HAYDN_COMMAND("command://notation/add-haydn");
-inline static const muse::rcommand::Command ADD_TREMBLEMENT_COMMAND("command://notation/add-tremblement");
-inline static const muse::rcommand::Command ADD_PRALL_MORDENT_COMMAND("command://notation/add-prall-mordent");
-inline static const muse::rcommand::Command ADD_SHAKE_COMMAND("command://notation/add-shake");
-inline static const muse::rcommand::Command ADD_SHAKE_MUFFAT_COMMAND("command://notation/add-shake-muffat");
-inline static const muse::rcommand::Command ADD_TREMBLEMENT_COUPERIN_COMMAND("command://notation/add-tremblement-couperin");
 
 // clef commands
 inline static const muse::rcommand::Command ADD_CLEF_VIOLIN_COMMAND("command://notation/add-clef-violin");

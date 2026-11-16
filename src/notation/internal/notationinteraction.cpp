@@ -8278,9 +8278,10 @@ void NotationInteraction::toggleArticulation(mu::engraving::SymId symId)
     apply();
 }
 
-void NotationInteraction::toggleOrnament(mu::engraving::SymId symId)
+void NotationInteraction::toggleOrnament(OrnamentType type)
 {
     startEdit(TranslatableString("undoableAction", "Toggle ornament"));
+    SymId symId = static_cast<SymId>(type);
     mu::engraving::EditNote::toggleOrnament(score(), symId);
     apply();
 }

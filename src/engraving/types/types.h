@@ -1609,6 +1609,24 @@ enum class TupletBracketType : unsigned char {
 enum class TupletSelectedDuration : unsigned char {
     SUBDIVISION, TUPLET_LENGTH, DEFAULT /*from configuration*/
 };
+
+enum class OrnamentType {
+    UNDEFINED = (int)SymId::noSym,
+    TURN = (int)SymId::ornamentTurn,
+    TURN_INVERTED = (int)SymId::ornamentTurnInverted,
+    TURN_SLASH = (int)SymId::ornamentTurnSlash,
+    TURN_UP = (int)SymId::ornamentTurnUp,
+    TURN_INVERTED_UP = (int)SymId::ornamentTurnUpS,
+    TRILL = (int)SymId::ornamentTrill,
+    SHORT_TRILL = (int)SymId::ornamentShortTrill,
+    MORDENT = (int)SymId::ornamentMordent,
+    HAYDN = (int)SymId::ornamentHaydn,
+    TREMBLEMENT = (int)SymId::ornamentTremblement,
+    PRALL_MORDENT = (int)SymId::ornamentPrallMordent,
+    SHAKE = (int)SymId::ornamentShake3,
+    SHAKE_MUFFAT = (int)SymId::ornamentShakeMuffat1,
+    TREMBLEMENT_COUPERIN = (int)SymId::ornamentTremblementCouperin,
+};
 } // mu::engraving
 
 template<>

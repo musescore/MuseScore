@@ -97,6 +97,7 @@ using VoiceAssignment = mu::engraving::VoiceAssignment;
 using TupletNumberType = mu::engraving::TupletNumberType;
 using TupletBracketType = mu::engraving::TupletBracketType;
 using TupletSelectedDuration = mu::engraving::TupletSelectedDuration;
+using OrnamentType = mu::engraving::OrnamentType;
 
 enum class DragMode : unsigned char
 {

@@ -336,6 +336,22 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddBeamBegin32Command>(),
     makeCommandInfo<AddBeamMidCommand>(),
 
+    makeCommandInfo<AddOrnamentCommand>(),
+    makeCommandInfo<AddOrnamentTurnCommand>(),
+    makeCommandInfo<AddOrnamentTurnInvertedCommand>(),
+    makeCommandInfo<AddOrnamentTurnSlashCommand>(),
+    makeCommandInfo<AddOrnamentTurnUpCommand>(),
+    makeCommandInfo<AddOrnamentTurnInvertedUpCommand>(),
+    makeCommandInfo<AddOrnamentTrillCommand>(),
+    makeCommandInfo<AddOrnamentShortTrillCommand>(),
+    makeCommandInfo<AddOrnamentMordentCommand>(),
+    makeCommandInfo<AddOrnamentHaydnCommand>(),
+    makeCommandInfo<AddOrnamentTremblementCommand>(),
+    makeCommandInfo<AddOrnamentPrallMordentCommand>(),
+    makeCommandInfo<AddOrnamentShakeCommand>(),
+    makeCommandInfo<AddOrnamentShakeMuffatCommand>(),
+    makeCommandInfo<AddOrnamentTremblementCouperinCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -1164,107 +1180,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Add parentheses to element"),
         InputSchema(),
         Decoration(IconCode::Code::BRACKET_PARENTHESES)
-    },
-
-    // add ornament commands
-    CommandInfo{
-        ADD_TURN_COMMAND,
-        TranslatableString("action", "Toggle turn"),
-        TranslatableString("action", "Add ornament: turn"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TURN_INVERTED_COMMAND,
-        TranslatableString("action", "Toggle inverted turn"),
-        TranslatableString("action", "Add ornament: inverted turn"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TURN_SLASH_COMMAND,
-        TranslatableString("action", "Toggle turn with slash"),
-        TranslatableString("action", "Add ornament: turn with slash"),
-        InputSchema(),
-        Decoration()
-    },
-
-    CommandInfo{
-        ADD_TURN_UP_COMMAND,
-        TranslatableString("action", "Toggle turn up"),
-        TranslatableString("action", "Add ornament: turn up"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TURN_INVERTED_UP_COMMAND,
-        TranslatableString("action", "Toggle vertical inverted turn"),
-        TranslatableString("action", "Add ornament: vertical inverted turn"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TRILL_COMMAND,
-        TranslatableString("action", "Toggle trill"),
-        TranslatableString("action", "Add ornament: trill"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SHORT_TRILL_COMMAND,
-        TranslatableString("action", "Toggle short trill"),
-        TranslatableString("action", "Add ornament: short trill"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_MORDENT_COMMAND,
-        TranslatableString("action", "Toggle mordent"),
-        TranslatableString("action", "Add ornament: mordent"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_HAYDN_COMMAND,
-        TranslatableString("action", "Toggle Haydn ornament"),
-        TranslatableString("action", "Add ornament: Haydn ornament"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TREMBLEMENT_COMMAND,
-        TranslatableString("action", "Toggle tremblement"),
-        TranslatableString("action", "Add ornament: tremblement"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_PRALL_MORDENT_COMMAND,
-        TranslatableString("action", "Toggle prall mordent"),
-        TranslatableString("action", "Add ornament: prall mordent"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SHAKE_COMMAND,
-        TranslatableString("action", "Toggle shake"),
-        TranslatableString("action", "Add ornament: shake"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SHAKE_MUFFAT_COMMAND,
-        TranslatableString("action", "Toggle shake (Muffat)"),
-        TranslatableString("action", "Add ornament: shake (Muffat)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TREMBLEMENT_COUPERIN_COMMAND,
-        TranslatableString("action", "Toggle tremblement appuyé (Couperin)"),
-        TranslatableString("action", "Add ornament: tremblement appuyé (Couperin)"),
-        InputSchema(),
-        Decoration()
     },
 
     // text editing commands
