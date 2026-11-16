@@ -27,9 +27,9 @@ using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-Err MusicXmlValidation::validate(const muse::String&, const muse::ByteArray&)
+muse::Ret MusicXmlValidation::validate(const muse::String&, const muse::ByteArray&)
 {
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 #else
@@ -37,7 +37,6 @@ Err MusicXmlValidation::validate(const muse::String&, const muse::ByteArray&)
 #include <QAbstractMessageHandler>
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
-#include <QMessageBox>
 #include <QDomDocument>
 
 #include "engraving/dom/mscore.h"
@@ -152,29 +151,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
     return true;
 }
 
-//---------------------------------------------------------
-//   musicXmlValidationErrorDialog
-//---------------------------------------------------------
-
-/**
- Show a dialog displaying the MusicXML validation error(s)
- and asks the user if he wants to try to load the file anyway.
- Return QMessageBox::Yes (try anyway) or QMessageBox::No (don't)
- */
-
-static int musicXmlValidationErrorDialog(QString text, QString detailedText)
-{
-    QMessageBox errorDialog;
-    errorDialog.setIcon(QMessageBox::Question);
-    errorDialog.setText(text);
-    errorDialog.setInformativeText(muse::qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
-    errorDialog.setDetailedText(detailedText);
-    errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    errorDialog.setDefaultButton(QMessageBox::No);
-    return errorDialog.exec();
-}
-
-Err MusicXmlValidation::validate(const String& name, const muse::ByteArray& data)
+muse::Ret MusicXmlValidation::validate(const String& name, const muse::ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
@@ -184,7 +161,7 @@ Err MusicXmlValidation::validate(const String& name, const muse::ByteArray& data
     QXmlSchema schema;
     schema.setMessageHandler(&messageHandler);
     if (!initMusicXmlSchema(schema)) {
-        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXmlSchema
+        return make_ret(Err::FileBadFormat, muse::io::path_t(name));      // appropriate error message has been printed by initMusicXmlSchema
     }
     // validate the data
     QXmlSchemaValidator validator(schema);
@@ -194,16 +171,17 @@ Err MusicXmlValidation::validate(const String& name, const muse::ByteArray& data
 
     if (!valid) {
         LOGD("importMusicXml() file '%s' is not a valid MusicXML file", muPrintable(name));
-        QString strErr = muse::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
-            return Err::NoError;         // might as well try anyhow in converter mode
+            return muse::make_ok();         // might as well try anyhow in converter mode
         }
-        if (musicXmlValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
-            return Err::UserAbort;
-        }
+
+        //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode, without the validation
+        QString text = muse::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
+        text += "\n\n" + messageHandler.getErrors();
+        return make_ret(Err::FileCorrupted, muse::String::fromQString(text));
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 #endif // MUSICXML_NO_VALIDATION

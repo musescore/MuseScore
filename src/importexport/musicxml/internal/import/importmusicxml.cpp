@@ -161,9 +161,9 @@ static Ret doValidateAndImport(Score* score, const String& name, const ByteArray
 {
     if (!forceMode) {
         // Validate the file
-        Err err = MusicXmlValidation::validate(name, data);
-        if (err != Err::NoError) {
-            return make_ret(err, io::path_t(name));
+        Ret ret = MusicXmlValidation::validate(name, data);
+        if (!ret) {
+            return ret;
         }
     }
 
