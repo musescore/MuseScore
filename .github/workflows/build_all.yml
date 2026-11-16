@@ -6,7 +6,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        default: 'backend linux_arm64 linux_x64 macos windows_arm64 windows_x64 windows_portable'
         required: true
       build_mode:
         description: 'Build mode: devel,nightly,testing,stable'
@@ -32,7 +32,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        default: 'backend linux_arm64 linux_x64 macos windows_arm64 windows_x64 windows_portable'
         type: string
         required: true
       build_mode:
@@ -169,6 +169,7 @@ jobs:
         - ubuntu-22.04 # linux_x64, backend, linux_arm64
         - xcode-27 # macos
         - windows-2025 # windows_x64, windows_portable
+        - windows-11-arm # windows_arm64
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository

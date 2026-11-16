@@ -121,7 +121,7 @@ if [ "$BUILD_MODE" == "nightly" ]; then
     num_branches=2      # master and release branch
     num_variants=1
     if [ "$OS" == "windows" ]; then
-        num_variants=2      # portable and normal
+        num_variants=3      # x86_64 (portable and normal), aarch64
     elif [ "$OS" == "linux" ]; then
         num_variants=2      # x86_64, aarch64
         ((num_today += 1))  # zsync file

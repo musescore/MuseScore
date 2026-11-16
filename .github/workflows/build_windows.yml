@@ -6,7 +6,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_portable'
+        default: 'windows_x64 windows_arm64 windows_portable'
         required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
@@ -28,7 +28,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_portable'
+        default: 'windows_x64 windows_arm64 windows_portable'
         type: string
         required: true
       build_mode:
@@ -84,9 +84,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  windows_x64:
-    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_x64')
-    runs-on: windows-2025
+  windows:
+    if: inputs.platforms == '' || contains(inputs.platforms, 'windows_x64') || contains(inputs.platforms, 'windows_arm64')
+    runs-on: ${{ matrix.platform == 'windows_arm64' && 'windows-11-arm' || 'windows-2025' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{
+          (inputs.platforms == ''
+           || (contains(inputs.platforms, 'windows_x64') && contains(inputs.platforms, 'windows_arm64')))
+          && fromJson('["windows_x64","windows_arm64"]')
+          || (contains(inputs.platforms, 'windows_x64') && fromJson('["windows_x64"]')
+          || (contains(inputs.platforms, 'windows_arm64') && fromJson('["windows_arm64"]')
+          || fromJson('[]')))
+          }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v7
@@ -176,7 +187,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Win${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Win${{ matrix.platform == 'windows_arm64' && '_aarch64' || '' }}${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -207,9 +218,9 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.11.2
-          host: 'windows'
+          host: ${{ matrix.platform == 'windows_arm64' && 'windows_arm64' || 'windows' }}
           target: 'desktop'
-          arch: 'win64_msvc2022_64'
+          arch: ${{ matrix.platform == 'windows_arm64' && 'win64_msvc2022_arm64' || 'win64_msvc2022_64' }}
           modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
           cache: true
           # https://github.com/miurahr/aqtinstall/pull/1000#issuecomment-4109913885
@@ -267,6 +278,14 @@ jobs:
 
         cmake -DFILES="$PDB;$EXE" -P ./muse/buildscripts/ci/tools/sentry/upload_debug_files.cmake
 
+    - name: Install WiX
+      # WiX (needed for the MSI) is not preinstalled on the ARM64 runner image
+      if: matrix.platform == 'windows_arm64' && (env.BUILD_MODE == 'testing' || env.BUILD_MODE == 'stable')
+      shell: cmd
+      run: |
+        choco install -y wixtoolset
+        CALL refreshenv
+        ECHO WIX=%WIX%>> "%GITHUB_ENV%"
     - name: Package
       shell: cmd
       env:
@@ -274,7 +293,7 @@ jobs:
         WIN_SIGN_S3_KEY: ${{ secrets.WIN_SIGN_S3_KEY }}
         WIN_MSI_GUID: ${{ env.BUILD_MODE == 'stable' && secrets.WIN_MSI_STABLE_MU4_GUID || secrets.WIN_MSI_TESTING_MU4_GUID }}
       run: |
-        buildscripts\ci\windows\package.bat --signsecret "%WIN_SIGN_S3_SECRET%" --signkey "%WIN_SIGN_S3_KEY%" --guid %WIN_MSI_GUID%
+        buildscripts\ci\windows\package.bat --arch ${{ matrix.platform == 'windows_arm64' && 'aarch64' || 'x86_64' }} --signsecret "%WIN_SIGN_S3_SECRET%" --signkey "%WIN_SIGN_S3_KEY%" --guid %WIN_MSI_GUID%
     - name: Checksum
       run: |
         bash ./muse/buildscripts/ci/tools/checksum.sh
@@ -285,7 +304,7 @@ jobs:
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
       run: |
-        bash ./buildscripts/ci/tools/osuosl/publish.sh -s "${OSUOSL_SSH_ENCRYPT_SECRET}" --os windows -v 4
+        bash ./buildscripts/ci/tools/osuosl/publish.sh -s "${OSUOSL_SSH_ENCRYPT_SECRET}" --os windows --arch ${{ matrix.platform == 'windows_arm64' && 'aarch64' || 'x86_64' }} -v 4
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v7

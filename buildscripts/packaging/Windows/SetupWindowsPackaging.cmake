@@ -51,6 +51,9 @@ set(CPACK_GENERATOR "WIX")
 
 file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
 set(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
+if(ARCH_IS_AARCH64)
+    set(CPACK_WIX_ARCHITECTURE "arm64")
+endif()
 
 # Use custom version of WIX.template.in
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/buildscripts/packaging/Windows/Installer" ${CMAKE_MODULE_PATH})
