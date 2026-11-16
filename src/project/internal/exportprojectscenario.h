@@ -98,7 +98,8 @@ private:
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    muse::Ret doExportLoop(const muse::io::path_t& path, std::function<muse::Ret(muse::io::IODevice&)> exportFunction) const;
+    muse::Ret doExportLoop(const ExportFile& file) const;
+    muse::Ret writeFile(const ExportFile& file) const;
 
     void showExportProgress(bool isAudioExport) const;
 

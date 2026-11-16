@@ -201,7 +201,7 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
     for (const ExportFile& file : files) {
-        Ret ret = doExportLoop(file.path, file.exportFunction);
+        Ret ret = doExportLoop(file);
         if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             return resolvedExportPromise(make_ret(Ret::Code::Cancel));
         }
@@ -398,77 +398,65 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::function<Ret(io::IODevice&)> exportFunction) const
+Ret ExportProjectScenario::doExportLoop(const ExportFile& file) const
 {
-    IF_ASSERT_FAILED(exportFunction) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    String filename = FileInfo(scorePath).fileName();
-    if (fileSystem()->exists(scorePath) && !shouldReplaceFile(filename)) {
+    String filename = FileInfo(file.path).fileName();
+    if (fileSystem()->exists(file.path) && !shouldReplaceFile(filename)) {
         return make_ret(Ret::Code::InternalError);
     }
 
     while (true) {
-        //! NOTE Most writers stream to the destination device (file on disk).
-        //! But there is one atypical case:
-        //! Export score to unpacked directory - creates a directory and writes files to it
-
-        // Remove previous file because we need to know whether
-        // exportFunction writes at scorePath
-        Ret ret = fileSystem()->remove(scorePath);
-        if (!ret) {
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
+        Ret ret = writeFile(file);
+        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return ret;
         }
 
-        FileStream outputFile(scorePath);
-        outputFile.setMeta("file_path", scorePath.toStdString());
-        if (!outputFile.open(IODevice::WriteOnly)) {
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
+        if (!askForRetry(filename)) {
+            return make_ret(Ret::Code::Cancel);
+        }
+    }
+}
+
+Ret ExportProjectScenario::writeFile(const ExportFile& file) const
+{
+    //! NOTE Most writers stream to the destination device (file on disk).
+    //! But there is one atypical case:
+    //! Export score to unpacked directory - creates a directory and writes files to it
+
+    // Remove previous file because we need to know whether
+    // exportFunction writes at path
+    Ret ret = fileSystem()->remove(file.path);
+    if (!ret) {
+        return ret;
+    }
+
+    FileStream outputFile(file.path);
+    outputFile.setMeta("file_path", file.path.toStdString());
+    if (!outputFile.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    ret = file.exportFunction(outputFile);
+    outputFile.close();
+
+    if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+        const bool isFileMode = fileSystem()->exists(file.path);
+        if (!isFileMode) {
+            return ret;
         }
 
-        ret = exportFunction(outputFile);
-        outputFile.close();
-
-        if (!ret) {
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                const bool isFileMode = fileSystem()->exists(scorePath);
-                if (!isFileMode) {
-                    return ret;
-                }
-
-                // On Windows, remove() may fail immediately after close()
-                // because the file lock has not been released yet
-                for (int i = 0; i < 10; ++i) {
-                    if (fileSystem()->remove(scorePath)) {
-                        return ret;
-                    }
-
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                }
-
+        // On Windows, remove() may fail immediately after close()
+        // because the file lock has not been released yet
+        for (int i = 0; i < 10; ++i) {
+            if (fileSystem()->remove(file.path)) {
                 return ret;
             }
 
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-
-        break;
     }
 
-    return muse::make_ok();
+    return ret;
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const
