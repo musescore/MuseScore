@@ -42,15 +42,17 @@ class Engraving_BreathTests : public ::testing::Test
 TEST_F(Engraving_BreathTests, breath)
 {
     String readFile(BREATH_DATA_DIR + u"breath.mscx");
+    String beforeFile(u"breath-before.mscx");
     String writeFile1(u"breath01-test.mscx");
     String reference1(BREATH_DATA_DIR + u"breath01-ref.mscx");
     String writeFile2(u"breath02-test.mscx");
-    String reference2(BREATH_DATA_DIR + u"breath02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     ASSERT_TRUE(score);
 
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving breath tests"), [&](Transaction& tx) {
@@ -69,7 +71,8 @@ TEST_F(Engraving_BreathTests, breath)
 
     // undo
     score->undoStack()->undo(0);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
 
     delete score;
 }

@@ -126,23 +126,23 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>N_N</eid>
         <voice>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>R_R</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               </Note>
@@ -164,17 +164,27 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>S_S</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>V_V</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>W_W</eid>
+        <voice>
+          <Rest>
+            <eid>X_X</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
@@ -192,16 +202,6 @@
         <voice>
           <Rest>
             <eid>b_b</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>c_c</eid>
-        <voice>
-          <Rest>
-            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -111,6 +111,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"measure-insert_bf_clef-before.mscx"));
 
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -123,7 +124,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -135,7 +136,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx"));
     delete score;
 }
 
@@ -143,6 +144,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-insert_bf_key.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"measure-insert_bf_key-before.mscx"));
 
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -157,8 +159,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
-                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -171,8 +172,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx",
-                                            MEASURE_DATA_DIR + u"measure-insert_bf_key_undo-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx"));
     delete score;
 }
 
@@ -457,6 +457,7 @@ TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"undoDelInitialVBox_269919.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"undoDelInitialVBox_269919-before.mscx"));
 
     // 1. delete initial VBox
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -479,8 +480,8 @@ TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
     // 4. Undo to restore initial VBox resulted in assert failure crash
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"undoDelInitialVBox_269919.mscx",
-                                            MEASURE_DATA_DIR + u"undoDelInitialVBox_269919-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"undoDelInitialVBox_269919.mscx",
+                                                     u"undoDelInitialVBox_269919-before.mscx"));
     delete score;
 }
 

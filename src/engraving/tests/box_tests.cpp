@@ -45,15 +45,17 @@ class Engraving_BoxTests : public ::testing::Test
 TEST_F(Engraving_BoxTests, undoRemoveVBox)
 {
     String readFile(BOX_DATA_DIR + u"undoRemoveVBox.mscx");
+    String beforeFile(u"undoRemoveVBox-before.mscx");
     String writeFile1(u"undoRemoveVBox1-test.mscx");
     String reference1(BOX_DATA_DIR + u"undoRemoveVBox1-ref.mscx");
     String writeFile2(u"undoRemoveVBox2-test.mscx");
-    String reference2(BOX_DATA_DIR + u"undoRemoveVBox2-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     ASSERT_TRUE(score);
 
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     System* s = score->systems()[0];
     VBox* box = toVBox(s->measure(0));
@@ -67,8 +69,9 @@ TEST_F(Engraving_BoxTests, undoRemoveVBox)
 
     // undo
     score->undoStack()->undo(nullptr);
+    score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
 
     delete score;
 }

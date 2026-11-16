@@ -36,18 +36,20 @@ static const String TRANSPOSE_DATA_DIR("transpose_data/");
 class Engraving_TransposeTests : public ::testing::Test
 {
 public:
-    void undoTransposeTest(String scoreName, int interval = 4) //! NOTE: major second by default
+    void undoTransposeTest(String scoreName, int interval = 4, bool undoRestoresScore = true) //! NOTE: major second by default
     {
         String readFile(TRANSPOSE_DATA_DIR + scoreName + ".mscx");
+        String beforeFile(scoreName + "-before.mscx");
         String writeFile1(scoreName + "01-test.mscx");
         String reference1(TRANSPOSE_DATA_DIR + scoreName + "01-ref.mscx");
         String writeFile2(scoreName + "02-test.mscx");
-        String reference2(TRANSPOSE_DATA_DIR + scoreName + "02-ref.mscx");
 
         MasterScore* score = ScoreRW::readScore(readFile);
 
         // select all
         score->cmdSelectAll();
+
+        EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
         // transpose up by interval
         score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
@@ -59,7 +61,12 @@ public:
         // undo
         EditData ed;
         score->transactionManager()->undoRedo(true, &ed);
-        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+        if (undoRestoresScore) {
+            EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+        } else {
+            // undo doesn't restore this score exactly yet
+            EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, TRANSPOSE_DATA_DIR + scoreName + "02-ref.mscx"));
+        }
 
         delete score;
     }
@@ -67,16 +74,18 @@ public:
     void undoDiatonicTransposeTest(String scoreName)
     {
         String readFile(TRANSPOSE_DATA_DIR + scoreName + ".mscx");
+        String beforeFile(scoreName + "-before.mscx");
         String writeFile1(scoreName + "01-test.mscx");
         String reference1(TRANSPOSE_DATA_DIR + scoreName + "01-ref.mscx");
         String writeFile2(scoreName + "02-test.mscx");
-        String reference2(TRANSPOSE_DATA_DIR + scoreName + "02-ref.mscx");
 
         MasterScore* score = ScoreRW::readScore(readFile);
         score->doLayout();
 
         // select all
         score->cmdSelectAll();
+
+        EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
         // transpose diatonic fourth down
         score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
@@ -88,7 +97,7 @@ public:
         // undo
         EditData ed;
         score->transactionManager()->undoRedo(true, &ed);
-        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+        EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
 
         delete score;
     }
@@ -96,7 +105,7 @@ public:
 
 TEST_F(Engraving_TransposeTests, undoTranspose)
 {
-    undoTransposeTest(u"undoTranspose");
+    undoTransposeTest(u"undoTranspose", /*interval*/ 4, /*undoRestoresScore*/ false);
 }
 
 TEST_F(Engraving_TransposeTests, undoTransposeChordSymbols)
