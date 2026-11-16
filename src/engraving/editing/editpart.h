@@ -271,6 +271,18 @@ public:
     static void moveParts(Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
     static void moveStaves(Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff, bool insertAfter);
 
+    struct SystemObjectsMove {
+        Staff* staff = nullptr;
+        Staff* destination = nullptr;
+        bool belowBottomStaff = false;
+    };
+
+    static bool reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+    static void reorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+
+    static bool reorderStavesChangesScore(const std::vector<Staff*>& staves);
+    static void reorderStaves(Score* score, const std::vector<Staff*>& staves);
+
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
@@ -289,5 +301,6 @@ public:
 
 private:
     static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
+    static bool moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
 };
 }

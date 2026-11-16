@@ -37,12 +37,8 @@ public:
 
     void init(const notation::Part* part) override;
 
-    MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
-
     void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
-
-    void moveChildrenOnScore(const MoveParams& params) override;
 
     void removeChildren(int row, int count, bool deleteChild) override;
 

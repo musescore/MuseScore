@@ -166,6 +166,11 @@ Item {
             }
         }
 
+        function cancelDrag() {
+            prv.draggedItem = null
+            prv.draggedIndex = null
+        }
+
         function moveDraggedItem(targetIndex) {
             const sourceIndex = prv.draggedIndex
             if (!sourceIndex || sourceIndex.row < 0 || targetIndex.row < 0) {
@@ -208,6 +213,14 @@ Item {
             } else {
                 prv.endDrag()
             }
+        }
+    }
+
+    Connections {
+        target: root.model
+
+        function onModelAboutToBeReset() {
+            prv.cancelDrag()
         }
     }
 

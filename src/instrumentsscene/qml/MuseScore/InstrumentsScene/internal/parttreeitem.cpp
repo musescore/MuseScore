@@ -170,51 +170,26 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
     return parts.size();
 }
 
-MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                                         int destinationRow) const
-{
-    MoveParams moveParams;
-
-    IDList stavesIds;
-
-    for (int i = sourceRow; i < sourceRow + count; ++i) {
-        stavesIds.push_back(childAtRow(i)->id());
-    }
-
-    moveParams.objectIdListToMove = stavesIds;
-
-    int destinationRowLast = destinationRow;
-    INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
-
-    // exclude the control item
-    if (destinationRow == destinationParent->childCount() - 1) {
-        destinationRowLast = destinationRow - 1;
-        moveMode = INotationParts::InsertMode::After;
-    }
-
-    AbstractLayoutPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
-
-    moveParams.destinationObjectId = destinationStaffItem->id();
-    moveParams.insertMode = moveMode;
-    moveParams.objectsType = LayoutPanelItemType::STAFF;
-
-    return moveParams;
-}
-
 void PartTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                 int destinationRow, bool updateNotation)
 {
-    if (updateNotation) {
-        MoveParams moveParams = buildMoveParams(sourceRow, count, destinationParent, destinationRow);
-        moveChildrenOnScore(moveParams);
-    }
-
     AbstractLayoutPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
+
+    if (updateNotation) {
+        applyToScore();
+    }
 }
 
-void PartTreeItem::moveChildrenOnScore(const MoveParams& params)
+void PartTreeItem::applyToScore()
 {
-    notation()->parts()->moveStaves(params.objectIdListToMove, params.destinationObjectId, params.insertMode);
+    IDList staffIds;
+    for (const AbstractLayoutPanelTreeItem* child : childItems()) {
+        if (child->type() == LayoutPanelItemType::STAFF) {
+            staffIds.push_back(child->id());
+        }
+    }
+
+    notation()->parts()->reorderStaves(staffIds);
 }
 
 void PartTreeItem::removeChildren(int row, int count, bool deleteChild)

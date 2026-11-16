@@ -57,21 +57,10 @@ void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& sc)
     m_ignoreEnabledChanged = false;
 }
 
-MoveParams SharedPartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                                               int destinationRow) const
-{
-    return PartTreeItem::buildMoveParams(sourceRow, count, destinationParent, destinationRow);
-}
-
 void SharedPartTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                       int destinationRow, bool updateNotation)
 {
     PartTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
-}
-
-void SharedPartTreeItem::moveChildrenOnScore(const MoveParams& params)
-{
-    PartTreeItem::moveChildrenOnScore(params);
 }
 
 void SharedPartTreeItem::removeChildren(int row, int count, bool deleteChild)

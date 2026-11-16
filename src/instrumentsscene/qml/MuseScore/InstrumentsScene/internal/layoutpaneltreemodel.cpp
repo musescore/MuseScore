@@ -401,6 +401,9 @@ void LayoutPanelTreeModel::clear()
 
 void LayoutPanelTreeModel::deleteItems()
 {
+    m_dragSourceParentItem = nullptr;
+    m_dragInProgress = false;
+
     m_selectionModel->clear();
     delete m_rootItem;
     m_rootItem = nullptr;
@@ -455,6 +458,8 @@ void LayoutPanelTreeModel::load()
     }
 
     endResetModel();
+
+    m_shouldUpdateSystemObjectLayers = false;
 
     setupPartsConnections();
     setupNotationConnections();
@@ -666,14 +671,13 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         return false;
     }
 
-    if (m_dragInProgress) {
-        MoveParams params = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
-        if (!params.isValid()) {
-            return false;
-        }
+    // Staves stay in their part
+    if (sourceParentItem != destinationParentItem && sourceParentItem != m_rootItem) {
+        return false;
+    }
 
+    if (m_dragInProgress) {
         m_dragSourceParentItem = sourceParentItem;
-        m_activeDragMoveParams = params;
     }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
@@ -699,11 +703,10 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(true);
 
     if (m_dragSourceParentItem) {
-        m_dragSourceParentItem->moveChildrenOnScore(m_activeDragMoveParams);
+        m_dragSourceParentItem->applyToScore();
     }
 
     m_dragSourceParentItem = nullptr;
-    m_activeDragMoveParams = MoveParams();
     m_dragInProgress = false;
 
     setLoadingBlocked(false);

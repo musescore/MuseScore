@@ -84,3 +84,7 @@ target_link_libraries(instrumentsscene_qml PRIVATE muse::uicomponents_qml)
 
 # Necessary for the auto-generated sources
 target_include_directories(instrumentsscene_qml PRIVATE internal)
+
+if (MUE_BUILD_INSTRUMENTSSCENE_TESTS)
+    add_subdirectory(tests)
+endif()
