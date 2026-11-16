@@ -1613,10 +1613,6 @@ struct AddTextCommand {
     cprop_decl input = FieldsScheme {
         Field{ "type", &AddTextCommand::type, "Text style type" },
     };
-
-    AddTextCommand() = default;
-    AddTextCommand(TextStyleType type)
-        : type(type) {}
 };
 
 // aliases for add text command
@@ -1765,6 +1761,75 @@ struct AddTempoCommand {
     cprop_decl redirect = AddTextCommand(TextStyleType::TEMPO);
 };
 
+struct AddBeamCommand {
+    cprop_decl id = Command("command://notation/add-beam");
+    cprop_decl title = MnemonicString("action", "Add beam");
+    cprop_decl description = TranslatableString("action", "Add beam");
+    cprop_decl availabilities = Availability::API;
+
+    BeamMode mode = BeamMode::AUTO;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "mode", &AddBeamCommand::mode, "Beam mode" },
+    };
+};
+
+// aliases for add beam command
+
+struct AddBeamAutoCommand {
+    cprop_decl id = Command("command://notation/add-beam/auto");
+    cprop_decl title = MnemonicString("action", "Auto beam");
+    cprop_decl description = TranslatableString("action", "Add beam: auto");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::AUTO_TEXT);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::AUTO);
+};
+
+struct AddBeamNoneCommand {
+    cprop_decl id = Command("command://notation/add-beam/none");
+    cprop_decl title = MnemonicString("action", "No beam");
+    cprop_decl description = TranslatableString("action", "Add beam: none");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_NONE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::NONE);
+};
+
+struct AddBeamBeginCommand {
+    cprop_decl id = Command("command://notation/add-beam/begin");
+    cprop_decl title = MnemonicString("action", "Break beam left");
+    cprop_decl description = TranslatableString("action", "Break beam left");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_LEFT);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN);
+};
+
+struct AddBeamBegin16Command {
+    cprop_decl id = Command("command://notation/add-beam/begin16");
+    cprop_decl title = MnemonicString("action", "Break inner beams (8th)");
+    cprop_decl description = TranslatableString("action", "Break inner beams (eighth)");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_INNER_8TH);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN16);
+};
+
+struct AddBeamBegin32Command {
+    cprop_decl id = Command("command://notation/add-beam/begin32");
+    cprop_decl title = MnemonicString("action", "Break inner beams (16th)");
+    cprop_decl description = TranslatableString("action", "Break inner beams (16th)");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_INNER_16TH);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN32);
+};
+
+struct AddBeamMidCommand {
+    cprop_decl id = Command("command://notation/add-beam/mid");
+    cprop_decl title = MnemonicString("action", "Join beams");
+    cprop_decl description = TranslatableString("action", "Join beams");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_JOIN);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddBeamCommand(BeamMode::MID);
+};
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1864,12 +1929,7 @@ inline static const muse::rcommand::Command ADD_DOWN_BOW_COMMAND("command://nota
 inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
 
 // add beam commands
-inline static const muse::rcommand::Command ADD_BEAM_AUTO_COMMAND("command://notation/add-beam-auto");
-inline static const muse::rcommand::Command ADD_BEAM_NONE_COMMAND("command://notation/add-beam-none");
-inline static const muse::rcommand::Command ADD_BEAM_BEGIN_COMMAND("command://notation/add-beam-begin");
-inline static const muse::rcommand::Command ADD_BEAM_BEGIN16_COMMAND("command://notation/add-beam-begin16");
-inline static const muse::rcommand::Command ADD_BEAM_BEGIN32_COMMAND("command://notation/add-beam-begin32");
-inline static const muse::rcommand::Command ADD_BEAM_MID_COMMAND("command://notation/add-beam-mid");
+
 inline static const muse::rcommand::Command ADD_BEAM_SELECTED_RANGE_COMMAND("command://notation/add-beam-selected-range");
 
 // add brackets commands
