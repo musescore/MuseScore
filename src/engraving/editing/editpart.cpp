@@ -837,12 +837,14 @@ void EditPart::removeSystemObjects(Score* score, const std::vector<Staff*>& stav
     std::vector<EngravingItem*> systemObjects = collectSystemObjects(score, staves);
 
     for (Staff* staff : staves) {
-        if (staff->isSystemObjectStaff()) {
-            score->undo(new RemoveSystemObjectStaff(staff));
-            if (staff->hasSystemObjectsBelowBottomStaff()) {
-                score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
-            }
+        if (!staff->isSystemObjectStaff()) {
+            continue;
         }
+
+        if (staff->hasSystemObjectsBelowBottomStaff()) {
+            score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
+        }
+        score->undo(new RemoveSystemObjectStaff(staff));
     }
 
     for (EngravingItem* obj : systemObjects) {
