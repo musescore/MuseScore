@@ -146,34 +146,6 @@ ScoreOrder NotationParts::scoreOrder() const
     return score()->scoreOrder();
 }
 
-std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
-{
-    std::vector<Staff*> staves;
-    staves.reserve(stavesIds.size());
-
-    for (const ID& staffId : stavesIds) {
-        if (Staff* staff = score()->staffById(staffId)) {
-            staves.push_back(staff);
-        }
-    }
-
-    return staves;
-}
-
-std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
-{
-    std::vector<Part*> parts;
-    parts.reserve(partsIds.size());
-
-    for (const ID& partId : partsIds) {
-        if (Part* part = score()->partById(partId)) {
-            parts.push_back(part);
-        }
-    }
-
-    return parts;
-}
-
 void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
 {
     TRACEFUNC;
@@ -234,6 +206,65 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     notifyAboutPartChanged(part);
 }
 
+bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
+{
+    TRACEFUNC;
+
+    Staff* staff = score()->staffById(staffId);
+    if (!staff) {
+        return false;
+    }
+
+    const TranslatableString actionName = visible
+                                          ? TranslatableString("undoableAction", "Show voice %1").arg(voiceIndex + 1)
+                                          : TranslatableString("undoableAction", "Hide voice %1").arg(voiceIndex + 1);
+
+    bool result = false;
+
+    //! HACK: Excerpt::setVoiceVisible recreates the staff,
+    //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
+    //! which will result in the wrong UI state in the Layout panel.
+    //! We should not recreate the staff here, only update it
+    m_ignoreUndoStackChanges = true;
+    transaction(actionName, [&](engraving::Transaction&) {
+        result = EditPart::setVoiceVisible(score(), staff, voiceIndex, visible);
+    });
+    m_ignoreUndoStackChanges = false;
+
+    if (result) {
+        notifyAboutStaffChanged(score()->staffById(staffId));
+    }
+
+    return result;
+}
+
+void NotationParts::setStaffVisible(const ID& staffId, bool visible)
+{
+    TRACEFUNC;
+
+    Staff* staff = score()->staffById(staffId);
+    if (!staff) {
+        return;
+    }
+
+    StaffConfig config = makeStaffConfig(staff);
+    if (config.visible == visible) {
+        return;
+    }
+
+    const TranslatableString actionName = visible
+                                          ? TranslatableString("undoableAction", "Show staff")
+                                          : TranslatableString("undoableAction", "Hide staff");
+
+    config.visible = visible;
+
+    transaction(actionName, [&](engraving::Transaction&) {
+        EditPart::setStaffConfig(score(), staff, config);
+    });
+
+    notifyAboutStaffChanged(staff);
+}
+
 void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat)
 {
     TRACEFUNC;
@@ -263,119 +294,6 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     });
 
     notifyAboutPartChanged(part);
-}
-
-void NotationParts::listenUndoStackChanges()
-{
-    if (!score()) {
-        return;
-    }
-
-    updatePartsAndSystemObjectStaves();
-
-    m_undoStack->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
-        if (changes.isTextEditing || changes.changedTypes.empty() || m_ignoreUndoStackChanges) {
-            return;
-        }
-
-        static const ElementTypeSet TYPES_TO_CHECK {
-            ElementType::SCORE,
-            ElementType::STAFF,
-            ElementType::PART,
-            ElementType::SHARED_PART,
-        };
-
-        for (ElementType type : TYPES_TO_CHECK) {
-            if (muse::contains(changes.changedTypes, type)) {
-                updatePartsAndSystemObjectStaves(changes);
-                return;
-            }
-        }
-    });
-}
-
-void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
-{
-    const bool partsChanged = m_parts != score()->parts();
-    m_parts = score()->parts();
-
-    std::vector<Staff*> newSystemObjectStaves = score()->systemObjectStavesWithTopStaff();
-    const bool systemObjectStavesChanged = m_systemObjectStaves != newSystemObjectStaves;
-    m_systemObjectStaves = std::move(newSystemObjectStaves);
-
-    if (partsChanged) {
-        m_partChangedNotifier.changed();
-    }
-
-    if (systemObjectStavesChanged) {
-        m_systemObjectStavesChanged.notify();
-    }
-
-    if (muse::contains(changes.changedTypes, ElementType::SHARED_PART)) {
-        m_sharedPartsChanged.notify();
-    }
-
-    std::vector<Staff*> removedStaves;
-    std::vector<Staff*> addedStaves;
-
-    bool stavesSorted = false;
-
-    for (auto& pair : changes.changedObjects) {
-        if (muse::contains(pair.second, CommandType::SortStaves)) {
-            stavesSorted = true;
-            break;
-        }
-
-        if (!pair.first->isStaff()) {
-            continue;
-        }
-
-        Staff* staff = toStaff(pair.first);
-
-        if (muse::contains(pair.second, CommandType::RemoveStaff)) {
-            removedStaves.push_back(staff);
-        } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
-            addedStaves.push_back(staff);
-        }
-    }
-
-    if (stavesSorted && !partsChanged) {
-        m_partChangedNotifier.changed();
-        return;
-    }
-
-    for (Staff* staff : removedStaves) {
-        notifyAboutStaffRemoved(staff);
-    }
-
-    for (Staff* staff: addedStaves) {
-        notifyAboutStaffAdded(staff);
-    }
-}
-
-void NotationParts::listenStyleChanges()
-{
-    if (!score()) {
-        return;
-    }
-
-    m_style->styleChanged().onNotify(this, [this]{ m_sharedPartsChanged.notify(); });
-}
-
-std::vector<EditPart::PartEntry> NotationParts::partEntries(const PartInstrumentList& parts) const
-{
-    std::vector<EditPart::PartEntry> entries;
-    entries.reserve(parts.size());
-
-    for (const PartInstrument& pi : parts) {
-        if (pi.isExistingPart) {
-            entries.push_back({ score()->partById(pi.partId), nullptr, pi.isSoloist });
-        } else {
-            entries.push_back({ nullptr, &pi.instrumentTemplate, pi.isSoloist });
-        }
-    }
-
-    return entries;
 }
 
 void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const QString& name)
@@ -475,65 +393,6 @@ void NotationParts::setInstrumentNumber(const InstrumentKey& instrumentKey, int 
     notifyAboutPartChanged(part);
 }
 
-bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
-{
-    TRACEFUNC;
-
-    Staff* staff = score()->staffById(staffId);
-    if (!staff) {
-        return false;
-    }
-
-    const TranslatableString actionName = visible
-                                          ? TranslatableString("undoableAction", "Show voice %1").arg(voiceIndex + 1)
-                                          : TranslatableString("undoableAction", "Hide voice %1").arg(voiceIndex + 1);
-
-    bool result = false;
-
-    //! HACK: Excerpt::setVoiceVisible recreates the staff,
-    //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
-    //! which will result in the wrong UI state in the Layout panel.
-    //! We should not recreate the staff here, only update it
-    m_ignoreUndoStackChanges = true;
-    transaction(actionName, [&](engraving::Transaction&) {
-        result = EditPart::setVoiceVisible(score(), staff, voiceIndex, visible);
-    });
-    m_ignoreUndoStackChanges = false;
-
-    if (result) {
-        notifyAboutStaffChanged(score()->staffById(staffId));
-    }
-
-    return result;
-}
-
-void NotationParts::setStaffVisible(const ID& staffId, bool visible)
-{
-    TRACEFUNC;
-
-    Staff* staff = score()->staffById(staffId);
-    if (!staff) {
-        return;
-    }
-
-    StaffConfig config = makeStaffConfig(staff);
-    if (config.visible == visible) {
-        return;
-    }
-
-    const TranslatableString actionName = visible
-                                          ? TranslatableString("undoableAction", "Show staff")
-                                          : TranslatableString("undoableAction", "Hide staff");
-
-    config.visible = visible;
-
-    transaction(actionName, [&](engraving::Transaction&) {
-        EditPart::setStaffConfig(score(), staff, config);
-    });
-
-    notifyAboutStaffChanged(staff);
-}
-
 void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
 {
     TRACEFUNC;
@@ -598,6 +457,71 @@ void NotationParts::setSharedPartEnabled(const muse::ID& partId, bool enable)
     });
 
     notifyAboutPartChanged(part);
+}
+
+void NotationParts::removeParts(const IDList& partsIds)
+{
+    TRACEFUNC;
+
+    std::vector<Part*> partsToRemove = parts(partsIds);
+    if (partsToRemove.empty()) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Remove instruments"), [&](engraving::Transaction&) {
+        EditPart::removeParts(score(), partsToRemove);
+    });
+
+    for (const Part* part : partsToRemove) {
+        notifyAboutPartRemoved(part);
+    }
+}
+
+void NotationParts::removeStaves(const IDList& stavesIds)
+{
+    TRACEFUNC;
+
+    std::vector<Staff*> stavesToRemove = staves(stavesIds);
+    if (stavesToRemove.empty()) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Remove staves"), [&](engraving::Transaction&) {
+        EditPart::removeStaves(score(), stavesToRemove);
+    });
+}
+
+void NotationParts::reorderParts(const IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves)
+{
+    TRACEFUNC;
+
+    const std::vector<Part*> orderedParts = parts(partIds);
+    const std::vector<EditPart::SystemObjectsMove> moves = editPartSystemObjectsMoves(systemObjectsMoves);
+    if (!EditPart::reorderPartsChangesScore(score(), orderedParts, moves)) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction&) {
+        EditPart::reorderParts(score(), orderedParts, moves);
+    });
+}
+
+void NotationParts::reorderStaves(const IDList& staffIds)
+{
+    TRACEFUNC;
+
+    const std::vector<Staff*> orderedStaves = staves(staffIds);
+    if (!EditPart::reorderStavesChangesScore(orderedStaves)) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Move staves"), [&](engraving::Transaction&) {
+        EditPart::reorderStaves(score(), orderedStaves);
+    });
 }
 
 bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
@@ -761,11 +685,6 @@ void NotationParts::toggleStaveSharing(bool on)
     });
 }
 
-Notification NotationParts::sharedPartsChanged() const
-{
-    return m_sharedPartsChanged;
-}
-
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;
@@ -774,6 +693,11 @@ Notification NotationParts::partsChanged() const
 Notification NotationParts::scoreOrderChanged() const
 {
     return m_scoreOrderChanged;
+}
+
+Notification NotationParts::sharedPartsChanged() const
+{
+    return m_sharedPartsChanged;
 }
 
 mu::engraving::Score* NotationParts::score() const
@@ -792,54 +716,145 @@ void NotationParts::transaction(const TranslatableString& actionName, const std:
     m_partsChanged.notify();
 }
 
-void NotationParts::removeParts(const IDList& partsIds)
+void NotationParts::listenUndoStackChanges()
 {
-    TRACEFUNC;
-
-    std::vector<Part*> partsToRemove = parts(partsIds);
-    if (partsToRemove.empty()) {
+    if (!score()) {
         return;
     }
 
-    endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Remove instruments"), [&](engraving::Transaction&) {
-        EditPart::removeParts(score(), partsToRemove);
-    });
+    updatePartsAndSystemObjectStaves();
 
-    for (const Part* part : partsToRemove) {
-        notifyAboutPartRemoved(part);
-    }
-}
+    m_undoStack->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing || changes.changedTypes.empty() || m_ignoreUndoStackChanges) {
+            return;
+        }
 
-void NotationParts::removeStaves(const IDList& stavesIds)
-{
-    TRACEFUNC;
+        static const ElementTypeSet TYPES_TO_CHECK {
+            ElementType::SCORE,
+            ElementType::STAFF,
+            ElementType::PART,
+            ElementType::SHARED_PART,
+        };
 
-    std::vector<Staff*> stavesToRemove = staves(stavesIds);
-    if (stavesToRemove.empty()) {
-        return;
-    }
-
-    endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Remove staves"), [&](engraving::Transaction&) {
-        EditPart::removeStaves(score(), stavesToRemove);
+        for (ElementType type : TYPES_TO_CHECK) {
+            if (muse::contains(changes.changedTypes, type)) {
+                updatePartsAndSystemObjectStaves(changes);
+                return;
+            }
+        }
     });
 }
 
-void NotationParts::reorderParts(const IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves)
+void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
 {
-    TRACEFUNC;
+    const bool partsChanged = m_parts != score()->parts();
+    m_parts = score()->parts();
 
-    const std::vector<Part*> orderedParts = parts(partIds);
-    const std::vector<EditPart::SystemObjectsMove> moves = editPartSystemObjectsMoves(systemObjectsMoves);
-    if (!EditPart::reorderPartsChangesScore(score(), orderedParts, moves)) {
+    std::vector<Staff*> newSystemObjectStaves = score()->systemObjectStavesWithTopStaff();
+    const bool systemObjectStavesChanged = m_systemObjectStaves != newSystemObjectStaves;
+    m_systemObjectStaves = std::move(newSystemObjectStaves);
+
+    if (partsChanged) {
+        m_partChangedNotifier.changed();
+    }
+
+    if (systemObjectStavesChanged) {
+        m_systemObjectStavesChanged.notify();
+    }
+
+    if (muse::contains(changes.changedTypes, ElementType::SHARED_PART)) {
+        m_sharedPartsChanged.notify();
+    }
+
+    std::vector<Staff*> removedStaves;
+    std::vector<Staff*> addedStaves;
+
+    bool stavesSorted = false;
+
+    for (auto& pair : changes.changedObjects) {
+        if (muse::contains(pair.second, CommandType::SortStaves)) {
+            stavesSorted = true;
+            break;
+        }
+
+        if (!pair.first->isStaff()) {
+            continue;
+        }
+
+        Staff* staff = toStaff(pair.first);
+
+        if (muse::contains(pair.second, CommandType::RemoveStaff)) {
+            removedStaves.push_back(staff);
+        } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
+            addedStaves.push_back(staff);
+        }
+    }
+
+    if (stavesSorted && !partsChanged) {
+        m_partChangedNotifier.changed();
         return;
     }
 
-    endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction&) {
-        EditPart::reorderParts(score(), orderedParts, moves);
-    });
+    for (Staff* staff : removedStaves) {
+        notifyAboutStaffRemoved(staff);
+    }
+
+    for (Staff* staff: addedStaves) {
+        notifyAboutStaffAdded(staff);
+    }
+}
+
+void NotationParts::listenStyleChanges()
+{
+    if (!score()) {
+        return;
+    }
+
+    m_style->styleChanged().onNotify(this, [this]{ m_sharedPartsChanged.notify(); });
+}
+
+std::vector<EditPart::PartEntry> NotationParts::partEntries(const PartInstrumentList& parts) const
+{
+    std::vector<EditPart::PartEntry> entries;
+    entries.reserve(parts.size());
+
+    for (const PartInstrument& pi : parts) {
+        if (pi.isExistingPart) {
+            entries.push_back({ score()->partById(pi.partId), nullptr, pi.isSoloist });
+        } else {
+            entries.push_back({ nullptr, &pi.instrumentTemplate, pi.isSoloist });
+        }
+    }
+
+    return entries;
+}
+
+std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
+{
+    std::vector<Staff*> staves;
+    staves.reserve(stavesIds.size());
+
+    for (const ID& staffId : stavesIds) {
+        if (Staff* staff = score()->staffById(staffId)) {
+            staves.push_back(staff);
+        }
+    }
+
+    return staves;
+}
+
+std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
+{
+    std::vector<Part*> parts;
+    parts.reserve(partsIds.size());
+
+    for (const ID& partId : partsIds) {
+        if (Part* part = score()->partById(partId)) {
+            parts.push_back(part);
+        }
+    }
+
+    return parts;
 }
 
 std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const
@@ -852,21 +867,6 @@ std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMov
     }
 
     return result;
-}
-
-void NotationParts::reorderStaves(const IDList& staffIds)
-{
-    TRACEFUNC;
-
-    const std::vector<Staff*> orderedStaves = staves(staffIds);
-    if (!EditPart::reorderStavesChangesScore(orderedStaves)) {
-        return;
-    }
-
-    endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Move staves"), [&](engraving::Transaction&) {
-        EditPart::reorderStaves(score(), orderedStaves);
-    });
 }
 
 void NotationParts::endInteractionWithScore()
