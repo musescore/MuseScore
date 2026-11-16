@@ -24,6 +24,7 @@
 
 #include "global/containers.h"
 
+#include "../compat/dummyelement.h"
 #include "../editing/undo.h"
 #include "../editing/addremoveelement.h"
 #include "../editing/editproperty.h"
@@ -212,10 +213,17 @@ void EngravingObject::setScore(Score* s)
         return;
     }
 
-    if (m_parent->isType(ElementType::DUMMY)) {
-        moveToDummy();
-    } else if (m_parent->isType(ElementType::SCORE)) {
+    if (m_parent->isType(ElementType::SCORE)) {
         setParent(s);
+        return;
+    }
+
+    // An item that hangs on the old score's dummy, or on one of its stand-ins, moves to the new
+    // score's dummy. Left there, it would be deleted along with the old score, which may outlive
+    // the new one (as the main score outlives its parts).
+    const compat::DummyElement* oldDummy = m_parent->score() ? m_parent->score()->dummy() : nullptr;
+    if (oldDummy && oldDummy->isDummyOrStandIn(m_parent)) {
+        moveToDummy();
     }
 }
 

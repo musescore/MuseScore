@@ -21,6 +21,8 @@
  */
 #include "dummyelement.h"
 
+#include <algorithm>
+
 #include "dom/barline.h"
 #include "dom/factory.h"
 #include "dom/score.h"
@@ -89,6 +91,15 @@ void DummyElement::init()
 
     m_bracketItem = Factory::createBracketItem(m_system);
     m_bracketItem->setParent(m_system);
+}
+
+bool DummyElement::isDummyOrStandIn(const EngravingObject* item) const
+{
+    const EngravingObject* const standIns[] = {
+        this, m_root, m_page, m_system, m_measure, m_segment, m_chord, m_note, m_bracketItem
+    };
+
+    return std::find(std::begin(standIns), std::end(standIns), item) != std::end(standIns);
 }
 
 RootItem* DummyElement::rootItem()
