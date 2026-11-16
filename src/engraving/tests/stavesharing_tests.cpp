@@ -1604,6 +1604,53 @@ TEST_F(Engraving_StaveSharingTests, testMultipleClefChangesAtEndOfSystemOnShared
     delete score;
 }
 
+TEST_F(Engraving_StaveSharingTests, testMultipleClefChangesMidSystemOnSharedStave)
+{
+    // [GIVEN] A score with 2 unison bass clef staves and a line break after bar 2
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_22.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m1 && m2);
+
+    // [WHEN] Stave sharing is enabled and both staves change to tenor clef at the start of bar 2, in the middle of the first system
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+
+    Staff* firstOriginStaff = originParts.at(0)->staff(0);
+    Staff* secondOriginStaff = originParts.at(1)->staff(0);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clefs"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, firstOriginStaff, m2, ClefType::C4);
+        EditClef::undoChangeClef(tx, score, secondOriginStaff, m2, ClefType::C4);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+    ASSERT_EQ(m1->system(), m2->system());
+
+    // [THEN] Both origin staves share a stave in bar 1
+    const Staff* sharedStaff = sharedStaffForOrigin(sharedPart, firstOriginStaff, m1->tick());
+    ASSERT_TRUE(sharedStaff);
+    EXPECT_EQ(sharedStaffForOrigin(sharedPart, secondOriginStaff, m1->tick()), sharedStaff);
+
+    // [THEN] The shared stave shows the tenor clef change at the end of bar 1
+    Segment* clefSeg = m1->findSegment(SegmentType::Clef, m1->endTick());
+    ASSERT_TRUE(clefSeg);
+    EngravingItem* sharedClef = clefSeg->element(staff2track(sharedStaff->idx()));
+    ASSERT_TRUE(sharedClef && sharedClef->isClef());
+    EXPECT_EQ(toClef(sharedClef)->clefType(), ClefType::C4);
+
+    delete score;
+}
+
 TEST_F(Engraving_StaveSharingTests, testPreferFlatsOnSharedStaves)
 {
     // [GIVEN] Flute and two clarinets preferring flats, with a key change to E major (concert) for all staves in m.2

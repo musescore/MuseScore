@@ -43,6 +43,11 @@
 using namespace mu::engraving;
 
 namespace mu::engraving::rendering::score {
+static bool clefsEqual(const EngravingItem* origin, const EngravingItem* shared)
+{
+    return toClef(shared)->clefType() == toClef(origin)->clefType();
+}
+
 bool StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx)
 {
     StaveSharingContext ssctx(firstMB, lastMB, ctx);
@@ -111,6 +116,57 @@ void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measu
 
     measure->mutldata()->setNeedLayout(true);
     MeasureLayout::layoutMeasure(measure, ctx);
+}
+
+void StaveSharingLayout::updateEndOfSystemClefs(System* system, LayoutContext& ctx)
+{
+    Measure* lastMeasure = system->lastMeasure();
+    Segment* seg = lastMeasure ? lastMeasure->findSegment(SegmentType::Clef, lastMeasure->endTick()) : nullptr;
+    if (!seg || seg->measure() != lastMeasure) {
+        return;
+    }
+
+    Score* score = seg->score();
+    const Fraction stateTick = lastMeasure->endTick() - Fraction::eps();
+
+    for (Part* p : ctx.dom().parts()) {
+        if (!p->isSharedPart() || !toSharedPart(p)->show()) {
+            continue;
+        }
+
+        const SharedTrackMap& trackMap = toSharedPart(p)->staveSharingStateAtTick(stateTick).sharedTrackMap();
+
+        std::map<staff_idx_t, std::vector<Clef*> > originClefsBySharedStaff;
+        for (const auto& [originTrack, sharedTrack] : trackMap) {
+            if (track2voice(sharedTrack) != 0) {
+                continue;
+            }
+            std::vector<Clef*>& originClefs = originClefsBySharedStaff[track2staff(sharedTrack)];
+            EngravingItem* originItem = seg->element(originTrack);
+            if (originItem && !originItem->generated()) {
+                originClefs.push_back(toClef(originItem));
+            }
+        }
+
+        for (const auto& [sharedStaffIdx, originClefs] : originClefsBySharedStaff) {
+            const track_idx_t sharedTrack = staff2track(sharedStaffIdx);
+            EngravingItem* sharedClef = seg->element(sharedTrack);
+
+            if (originClefs.size() == 1) {
+                if (sharedClef && sharedClef->originItems().size() == 1 && sharedClef->originItems().front() == originClefs.front()
+                    && clefsEqual(originClefs.front(), sharedClef)) {
+                    continue;
+                }
+                if (sharedClef) {
+                    EngravingItem::disconnectAllOriginItems(sharedClef);
+                }
+                makeSharedItem(originClefs.front(), sharedClef, sharedTrack, seg, clefsEqual);
+            } else if (sharedClef) {
+                EngravingItem::disconnectAllOriginItems(sharedClef);
+                score->undoRemoveElement(sharedClef);
+            }
+        }
+    }
 }
 
 void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
@@ -1135,10 +1191,6 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
     // Time signatures and key signatures applying to all staves already exist on the shared staves,
     // so these are reused when they match the origin's
 
-    auto clefsEqual = [](const EngravingItem* origin, const EngravingItem* shared) {
-        return toClef(shared)->clefType() == toClef(origin)->clefType();
-    };
-
     for (Segment* seg : ctx.segmentsToUpdate) {
         if (seg->header() || (!seg->isClefType() && !seg->isKeySigType() && !seg->isTimeSigType())) {
             continue;
@@ -1147,26 +1199,6 @@ void StaveSharingLayout::makeSharedClefKeyTimeSigs(StaveSharingContext& ctx)
         const Fraction stateTick = seg->tick() == ctx.eTick ? seg->tick() - Fraction::eps() : seg->tick();
         const SharedTrackMap& trackMap = ctx.curStaveSharingState(stateTick).sharedTrackMap();
         if (trackMap.empty()) {
-            continue;
-        }
-
-        if (seg->isClefType() && seg->tick() == ctx.eTick) {
-            // A clef change at the end of the system applies to the next system, where these staves may no longer be shared
-            // Only show it if a single origin stave changes clef, as a clef from multiple origin staves would be ambiguous
-            std::map<staff_idx_t, std::vector<Clef*> > originClefsBySharedStaff;
-            for (const auto& [originTrack, sharedTrack] : trackMap) {
-                EngravingItem* originItem = seg->element(originTrack);
-                if (originItem && !originItem->generated()) {
-                    originClefsBySharedStaff[track2staff(sharedTrack)].push_back(toClef(originItem));
-                }
-            }
-
-            for (const auto& [sharedStaffIdx, originClefs] : originClefsBySharedStaff) {
-                if (originClefs.size() == 1) {
-                    const track_idx_t sharedTrack = staff2track(sharedStaffIdx);
-                    makeSharedItem(originClefs.front(), seg->element(sharedTrack), sharedTrack, seg, clefsEqual);
-                }
-            }
             continue;
         }
 

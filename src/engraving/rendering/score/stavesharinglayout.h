@@ -36,6 +36,11 @@ public:
     static bool updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
     static void updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx);
 
+    // A clef change at the end of a system applies to the next system, where these staves may no longer be shared.
+    // Only show it on a shared stave if a single origin stave changes clef, as a clef from multiple origins would be ambiguous.
+    // Must be called once the system's measures are final, before the end barlines and trailer are laid out.
+    static void updateEndOfSystemClefs(System* system, LayoutContext& ctx);
+
     static void relayoutMeasuresOnTrackMapChanged(System* system, LayoutContext& ctx);
 
 private:
