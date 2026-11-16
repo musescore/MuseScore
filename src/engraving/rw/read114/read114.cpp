@@ -1727,7 +1727,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             e.readNext();
         } else if (tag == "Slur") {
-            Slur* sl = Factory::createSlur(m);
+            Slur* sl = Factory::createSlur(ctx.dummy());
             sl->setTick(ctx.tick());
             Read206::readSlur206(e, ctx, sl);
             //
