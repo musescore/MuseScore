@@ -47,6 +47,7 @@ RowLayout {
     readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
     readonly property string title: root.item ? root.item.title : ""
     readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
+    readonly property bool isSharedPart: root.type === LayoutPanelItemType.SHARED_PART
     readonly property alias isPopupOpened: settingsPopup.isOpened
 
     signal visibilityToggled(bool visible)
@@ -58,6 +59,8 @@ RowLayout {
     Loader {
         Layout.fillWidth: true
         Layout.fillHeight: true
+        // Keeps the title in line while a group's eye is hidden
+        Layout.leftMargin: root.isSharedPart && !root.isEnabled ? ui.theme.defaultButtonSize + root.spacing : 0
 
         sourceComponent: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? systemObjectsLayerTitleComp
                                                                                 : visibilityControlsComp
@@ -101,9 +104,16 @@ RowLayout {
 
     ToggleButton {
         id: sharedPartToggle
-        visible: root.type === LayoutPanelItemType.SHARED_PART
-        enabled: root.isStaveSharingEnabled
+
+        visible: root.isSharedPart && root.isStaveSharingEnabled
         checked: Boolean(root.item) && root.item.isEnabled
+
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow
+        navigation.column: 4
+        navigation.accessible.name: sharedPartToggle.toolTipTitle
+        toolTipTitle: qsTrc("layoutpanel", "Combine onto shared staves")
+
         onToggled: function() {
             root.enabledToggled(!sharedPartToggle.checked)
         }
@@ -117,7 +127,11 @@ RowLayout {
             navigationRow: root.navigationRow
 
             title: root.title
-            isRootControl: root.type === LayoutPanelItemType.PART || root.type === LayoutPanelItemType.SHARED_PART
+            isRootControl: root.type === LayoutPanelItemType.PART || root.isSharedPart
+
+            // A group that isn't combined has no eye and is dimmed
+            useVisibilityButton: !root.isSharedPart || root.isEnabled
+            opacity: root.isSharedPart && !root.isEnabled ? 0.7 : 1
 
             isVisible: root.isItemVisible
             onVisibilityButtonClicked: function(isVisible) {
