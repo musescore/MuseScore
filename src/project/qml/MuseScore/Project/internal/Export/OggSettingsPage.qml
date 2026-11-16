@@ -35,6 +35,7 @@ ExportSettingsPage {
     }
 
     StyledTextLabel {
+        visible: !root.model.selectionMode
         width: parent.width
         text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
         horizontalAlignment: Text.AlignLeft

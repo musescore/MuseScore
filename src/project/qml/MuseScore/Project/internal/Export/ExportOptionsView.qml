@@ -53,106 +53,114 @@ Column {
         direction: NavigationPanel.Vertical
     }
 
-    ExportOptionItem {
-        id: typeLabel
+    GridLayout {
         width: parent.width
-        text: qsTrc("project/export", "Format:")
+        columns: root.exportModel.selectionMode ? 3 : 1
+        columnSpacing: 12
+        rowSpacing: 12
 
-        StyledDropdown {
-            id: typeDropdown
+        ExportOptionItem {
+            id: typeLabel
             Layout.fillWidth: true
+            text: qsTrc("project/export", "Format:")
 
-            navigation.name: "ExportTypeDropdown"
-            navigation.panel: navPanel
-            navigation.row: 1
-            navigation.accessible.name: typeLabel.text + " " + currentText
+            StyledDropdown {
+                id: typeDropdown
+                Layout.fillWidth: true
 
-            model: root.exportModel.exportTypeList()
-            popupItemsCount: typeDropdown.count
+                navigation.name: "ExportTypeDropdown"
+                navigation.panel: navPanel
+                navigation.row: 1
+                navigation.accessible.name: typeLabel.text + " " + currentText
 
-            textRole: "name"
-            valueRole: "id"
+                model: root.exportModel.exportTypes
+                popupItemsCount: typeDropdown.count
 
-            currentIndex: {
-                // First, check if it's a subtype
-                const index = model.findIndex(function(type) {
-                    return type.subtypes.some(function(subtype) {
-                        return subtype.id === root.exportModel.selectedExportType.id
+                textRole: "name"
+                valueRole: "id"
+
+                currentIndex: {
+                    // First, check if it's a subtype
+                    const index = model.findIndex(function(type) {
+                        return type.subtypes.some(function(subtype) {
+                            return subtype.id === root.exportModel.selectedExportType.id
+                        })
                     })
-                })
 
-                if (index !== -1) {
-                    return index
+                    if (index !== -1) {
+                        return index
+                    }
+
+                    // Otherwise, it must be a toplevel type
+                    return typeDropdown.indexOfValue(root.exportModel.selectedExportType.id)
                 }
 
-                // Otherwise, it must be a toplevel type
-                return typeDropdown.indexOfValue(root.exportModel.selectedExportType.id)
-            }
-
-            onActivated: function(index, value) {
-                root.exportModel.selectExportTypeById(value)
+                onActivated: function(index, value) {
+                    root.exportModel.selectExportTypeById(value)
+                }
             }
         }
-    }
 
-    ExportOptionItem {
-        id: subtypeLabel
-        width: parent.width
-        visible: subtypeComboBox.count > 0
-        text: qsTrc("project/export", "File type:")
-
-        StyledDropdown {
-            id: subtypeComboBox
+        ExportOptionItem {
+            id: subtypeLabel
             Layout.fillWidth: true
+            visible: subtypeComboBox.count > 0
+            text: qsTrc("project/export", "File type:")
 
-            navigation.name: "ExportSubtypeDropdown"
-            navigation.panel: navPanel
-            navigation.row: 2
-            navigation.accessible.name: subtypeLabel.text + " " + currentText
+            StyledDropdown {
+                id: subtypeComboBox
+                Layout.fillWidth: true
 
-            model: {
-                if (typeDropdown.currentIndex > -1) {
-                    return typeDropdown.model[typeDropdown.currentIndex].subtypes
+                navigation.name: "ExportSubtypeDropdown"
+                navigation.panel: navPanel
+                navigation.row: 2
+                navigation.accessible.name: subtypeLabel.text + " " + currentText
+
+                model: {
+                    if (typeDropdown.currentIndex > -1) {
+                        return typeDropdown.model[typeDropdown.currentIndex].subtypes
+                    }
+
+                    return []
                 }
 
-                return []
-            }
+                textRole: "name"
+                valueRole: "id"
 
-            textRole: "name"
-            valueRole: "id"
+                currentIndex: subtypeComboBox.indexOfValue(root.exportModel.selectedExportType.id)
 
-            currentIndex: subtypeComboBox.indexOfValue(root.exportModel.selectedExportType.id)
-
-            onActivated: function(index, value) {
-                root.exportModel.selectExportTypeById(value)
+                onActivated: function(index, value) {
+                    root.exportModel.selectExportTypeById(value)
+                }
             }
         }
-    }
 
-    Loader {
-        id: pageLoader
-        width: parent.width
-        visible: status === Loader.Ready
+        Loader {
+            id: pageLoader
+            Layout.fillWidth: true
+            Layout.columnSpan: root.exportModel.selectionMode ? 2 : 1
+            visible: status === Loader.Ready
 
-        function refresh() {
-            if (!root.exportModel.selectedExportType.settingsPagePath) {
-                setSource("")
+            function refresh() {
+                if (!root.exportModel.selectedExportType.settingsPagePath) {
+                    setSource("")
+                }
+
+                var properties = {
+                    model: Qt.binding(() => root.exportModel),
+                    navigationPanel: navPanel,
+                    navigationOrder: 3
+                }
+
+                setSource(root.exportModel.selectedExportType.settingsPagePath, properties)
             }
 
-            var properties = {
-                model: Qt.binding(() => root.exportModel),
-                navigationPanel: navPanel,
-                navigationOrder: 3
-            }
+            Connections {
+                target: root.exportModel
 
-            setSource(root.exportModel.selectedExportType.settingsPagePath, properties)
-        }
-
-        Connections {
-            target: root.exportModel
-
-            function onSelectedExportTypeChanged() {
-                pageLoader.refresh()
+                function onSelectedExportTypeChanged() {
+                    pageLoader.refresh()
+                }
             }
         }
     }

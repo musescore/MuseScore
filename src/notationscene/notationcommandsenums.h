@@ -225,17 +225,17 @@ struct AddBoxesTargetContract {
 }
 
 namespace muse::rcommand {
-DECLARE_ENUM_CONTRACT(mu::notation::NoteName, mu::notation::NoteNameContract);
-DECLARE_ENUM_CONTRACT(mu::notation::NoteInputMethod, mu::notation::NoteInputMethodContract);
-DECLARE_ENUM_CONTRACT(mu::engraving::DurationType, mu::notation::DurationTypeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::ChangeDurationMode, mu::notation::ChangeDurationModeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::NoteAddingMode, mu::notation::NoteAddingModeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::TupletNumberType, mu::notation::TupletNumberTypeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::TupletBracketType, mu::notation::TupletBracketTypeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::TupletSelectedDuration, mu::notation::TupletSelectedDurationContract);
-DECLARE_ENUM_CONTRACT(mu::notation::SelectionTarget, mu::notation::SelectionTargetContract);
-DECLARE_ENUM_CONTRACT(mu::notation::PlayMode, mu::notation::PlayModeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::AccidentalType, mu::notation::AccidentalTypeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::BoxType, mu::notation::BoxTypeContract);
-DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTarget, mu::notation::AddBoxesTargetContract);
+DECLARE_ENUM_CONTRACT(mu::notation::NoteNameContract);
+DECLARE_ENUM_CONTRACT(mu::notation::NoteInputMethodContract);
+DECLARE_ENUM_CONTRACT(mu::notation::DurationTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ChangeDurationModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::NoteAddingModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletNumberTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletBracketTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TupletSelectedDurationContract);
+DECLARE_ENUM_CONTRACT(mu::notation::SelectionTargetContract);
+DECLARE_ENUM_CONTRACT(mu::notation::PlayModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::AccidentalTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::BoxTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTargetContract);
 }

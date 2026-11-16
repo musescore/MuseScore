@@ -887,7 +887,7 @@ muse::Ret NotationActionController::addDrumNote(const muse::rcommand::Params& pa
     TRACEFUNC;
 
     int pitch = params.at("pitch").toInt();
-    NoteAddingMode mode = EnumContract<NoteAddingMode>::get(params);
+    NoteAddingMode mode = EnumContract<NoteAddingMode>::enum_val(params.at("mode").toString()).value_or(NoteAddingModeContract::def);
 
     NoteInputParams noteInputParams;
     noteInputParams.drumPitch = pitch;

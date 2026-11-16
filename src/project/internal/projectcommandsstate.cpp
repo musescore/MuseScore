@@ -37,6 +37,7 @@ enum class PCondition {
     NeedSave,
     NotBusy,
     HasSelection,
+    HasRangeSelection,
 };
 
 static std::map<Command, PCondition> PROJECT_COMMAND_CONDITIONS = {
@@ -52,6 +53,7 @@ static std::map<Command, PCondition> PROJECT_COMMAND_CONDITIONS = {
     { PROJECT_PUBLISH_COMMAND, PCondition::NotBusy },
     { PROJECT_SHARE_AUDIO_COMMAND, PCondition::NotBusy },
     { PROJECT_EXPORT_COMMAND, PCondition::HasProject },
+    { PROJECT_EXPORT_SELECTION_COMMAND, PCondition::HasRangeSelection },
     { PROJECT_CONVERT_TO_SCORE_COMMAND, PCondition::Any },
     { PROJECT_PRINT_COMMAND, PCondition::HasProject },
     { PROJECT_CLEAR_RECENT_COMMAND, PCondition::Any },
@@ -109,6 +111,7 @@ void ProjectCommandsState::init()
 
     controller()->hasSelectionChanged().onNotify(this, [this]() {
         updateCommandStates(commands(PCondition::HasSelection));
+        updateCommandStates(commands(PCondition::HasRangeSelection));
     });
 
     updateCommandStates();
@@ -150,6 +153,9 @@ CommandState ProjectCommandsState::commandState(const Command& command) const
         return CommandState(controller()->hasProject() && !controller()->isBusy(PROJECT_COMMAND_BUSY_STATUSES.at(command)), false);
     }
     case PCondition::HasSelection: return CommandState(controller()->hasProject() && controller()->hasSelection(), false);
+    case PCondition::HasRangeSelection: {
+        return CommandState(controller()->hasProject() && controller()->hasRangeSelection(), false);
+    }
     }
     return CommandState(true, false);
 }

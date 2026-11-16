@@ -39,6 +39,7 @@ public:
     MOCK_METHOD(muse::async::Channel<engraving::InstrumentTrackIdSet>, tracksDataChanged, (), (const, override));
 
     MOCK_METHOD(const engraving::InstrumentTrackId&, metronomeTrackId, (), (const, override));
+    MOCK_METHOD(void, setIsMetronomeEnabled, (bool enabled), (override));
     MOCK_METHOD(engraving::InstrumentTrackId, chordSymbolsTrackId, (const muse::ID& partId), (const, override));
     MOCK_METHOD(bool, isChordSymbolsTrack, (const engraving::InstrumentTrackId& trackId), (const, override));
     MOCK_METHOD(std::optional<std::string>, trackName, (const engraving::InstrumentTrackId& trackId), (const, override));

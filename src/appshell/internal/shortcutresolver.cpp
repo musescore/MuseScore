@@ -57,6 +57,11 @@ static const QString NOTATION_PANEL_NAME("ScoreView");
 
 int ShortcutResolver::scopePriority(const std::string& scope) const
 {
+    auto customScope = m_scopes.find(strings::toUpper(scope));
+    if (customScope != m_scopes.end()) {
+        return customScope->second.isActive && !customScope->second.isActive() ? -1 : customScope->second.priority;
+    }
+
     if (m_scopePriorityMap.empty()) {
         m_scopePriorityMap = {
             { NAVIGATION_SCOPE, []() { return 1; } },
@@ -141,6 +146,11 @@ Shortcut ShortcutResolver::selectActive(const ShortcutList& list) const
 
 muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCode) const
 {
+    auto customScope = m_scopes.find(strings::toUpper(scopeCode));
+    if (customScope != m_scopes.end() && !customScope->second.title.isEmpty()) {
+        return customScope->second.title;
+    }
+
     const static std::map<std::string, TranslatableString> scopeTitles = {
         { NAVIGATION_SCOPE, TranslatableString("shortcuts", "NAVIGATION") },
         { PLAYBACK_SCOPE, TranslatableString("shortcuts", "PLAYBACK") },
@@ -173,4 +183,9 @@ muse::TranslatableString ShortcutResolver::scopeTitle(const std::string& scopeCo
     }
     LOGW() << "Unknown scope: " << scopeCode;
     return TranslatableString::untranslatable(String::fromStdString(upperScopeCode));
+}
+
+void ShortcutResolver::setScope(const Scope& scope)
+{
+    m_scopes[strings::toUpper(scope.code)] = scope;
 }
