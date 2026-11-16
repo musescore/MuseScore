@@ -101,12 +101,10 @@ private:
     void exportNextFiles(const ExportStatePtr& state) const;
     void finishExport(const ExportStatePtr& state, const muse::Ret& ret) const;
 
+    void askForReplaceFile(const ExportStatePtr& state) const;
+    void askForRetry(const ExportStatePtr& state) const;
     void continueExportLater(const ExportStatePtr& state) const;
 
-    bool shouldReplaceFile(const ExportStatePtr& state, const QString& filename) const;
-    bool askForRetry(const QString& filename) const;
-
-    muse::Ret doExportLoop(const ExportStatePtr& state, const ExportFile& file) const;
     muse::Ret writeFile(const ExportFile& file) const;
 
     void showExportProgress(bool isAudioExport) const;

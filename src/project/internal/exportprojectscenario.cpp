@@ -54,6 +54,7 @@ struct ExportProjectScenario::ExportState {
 
     std::vector<ExportFile> files;
     size_t currentFileIndex = 0;
+    bool isCurrentFileConfirmed = false; // the user agreed to replace or retry the current file
     FileConflictPolicy fileConflictPolicy = FileConflictPolicy::Undefined;
 
     muse::io::path_t destinationPath;
@@ -61,6 +62,12 @@ struct ExportProjectScenario::ExportState {
 
     Progress* writerProgress = nullptr;
     Promise<Ret>::Resolve resolve;
+
+    void moveToNextFile()
+    {
+        ++currentFileIndex;
+        isCurrentFileConfirmed = false;
+    }
 };
 
 static Promise<Ret> resolvedExportPromise(const Ret& ret)
@@ -353,12 +360,34 @@ muse::io::path_t ExportProjectScenario::completeExportPath(const muse::io::path_
 
 void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
 {
-    for (; state->currentFileIndex < state->files.size(); ++state->currentFileIndex) {
-        Ret ret = doExportLoop(state, state->files.at(state->currentFileIndex));
+    while (state->currentFileIndex < state->files.size()) {
+        const ExportFile& file = state->files.at(state->currentFileIndex);
+
+        if (!state->isCurrentFileConfirmed && fileSystem()->exists(file.path)) {
+            if (state->fileConflictPolicy == FileConflictPolicy::Undefined) {
+                askForReplaceFile(state);
+                return;
+            }
+
+            if (state->fileConflictPolicy == FileConflictPolicy::SkipAll) {
+                state->moveToNextFile();
+                continue;
+            }
+        }
+
+        Ret ret = writeFile(file);
+        if (ret) {
+            state->moveToNextFile();
+            continue;
+        }
+
         if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             finishExport(state, ret);
             return;
         }
+
+        askForRetry(state);
+        return;
     }
 
     finishExport(state, muse::make_ok());
@@ -382,79 +411,67 @@ void ExportProjectScenario::finishExport(const ExportStatePtr& state, const Ret&
     (void)state->resolve(ret);
 }
 
-bool ExportProjectScenario::shouldReplaceFile(const ExportStatePtr& state, const QString& filename) const
+void ExportProjectScenario::askForReplaceFile(const ExportStatePtr& state) const
 {
-    switch (state->fileConflictPolicy) {
-    case FileConflictPolicy::ReplaceAll:
-        return true;
-    case FileConflictPolicy::SkipAll:
-        return false;
-    case FileConflictPolicy::Undefined: {
-        constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
-        constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
-        constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
-        constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+    constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+    constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
+    constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
+    constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        IInteractive::Result result = interactive()->questionSync(
-            muse::trc("project/export", "File already exists"),
-            muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
-            .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
-                IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
-                IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
-            });
+    const String filename = FileInfo(state->files.at(state->currentFileIndex).path).fileName();
 
+    interactive()->question(
+        muse::trc("project/export", "File already exists"),
+        muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
+        .arg(filename).toStdString(), {
+            IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
+            IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
+            IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
+            IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
+        })
+    .onResolve(this, [this, state](const IInteractive::Result& result) {
         switch (result.button()) {
         case ReplaceAll:
             state->fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
         case Replace:
-            return true;
+            state->isCurrentFileConfirmed = true;
+            break;
         case SkipAll:
             state->fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
         case Skip:
         default:
-            return false;
+            state->moveToNextFile();
+            break;
         }
-    } break;
-    }
 
-    return false;
+        continueExportLater(state);
+    });
 }
 
-bool ExportProjectScenario::askForRetry(const QString& filename) const
+void ExportProjectScenario::askForRetry(const ExportStatePtr& state) const
 {
-    IInteractive::Result result = interactive()->questionSync(
+    const String filename = FileInfo(state->files.at(state->currentFileIndex).path).fileName();
+
+    interactive()->question(
         muse::trc("project/export", "Error"),
         muse::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
-        .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
-
-    return result.standardButton() == IInteractive::Button::Retry;
-}
-
-Ret ExportProjectScenario::doExportLoop(const ExportStatePtr& state, const ExportFile& file) const
-{
-    String filename = FileInfo(file.path).fileName();
-    if (fileSystem()->exists(file.path) && !shouldReplaceFile(state, filename)) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    while (true) {
-        Ret ret = writeFile(file);
-        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return ret;
+        .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort })
+    .onResolve(this, [this, state](const IInteractive::Result& result) {
+        if (result.standardButton() != IInteractive::Button::Retry) {
+            finishExport(state, make_ret(Ret::Code::Cancel));
+            return;
         }
 
-        if (!askForRetry(filename)) {
-            return make_ret(Ret::Code::Cancel);
-        }
-    }
+        state->isCurrentFileConfirmed = true;
+        continueExportLater(state);
+    });
 }
 
 void ExportProjectScenario::continueExportLater(const ExportStatePtr& state) const
 {
     //! NOTE The writers may process events deep inside (e.g. the audio export),
-    //! which can't be done in Async's callback, so continue the export on the next event loop
+    //! which can't be done neither in Async's callback nor while the question dialog is being closed,
+    //! so continue the export on the next event loop
     QTimer::singleShot(0, [this, state]() {
         exportNextFiles(state);
     });

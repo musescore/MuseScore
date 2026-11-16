@@ -154,6 +154,8 @@ protected:
             delete score->msScore;
 
             release(score->notation);
+            release(score->elements);
+            release(score->painting);
         }
 
         release(m_projectSession);
@@ -285,13 +287,13 @@ protected:
     //! The user answers the question about replacing an existing file with `btn`.
     void givenReplaceQuestionAnsweredWith(int btn)
     {
-        ON_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).WillByDefault(Return(IInteractive::Result(btn)));
+        ON_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).WillByDefault([btn] { return dialogResult(btn); });
     }
 
     //! The user answers the question about retrying a failed write with `btn`.
     void givenRetryQuestionAnsweredWith(IInteractive::Button btn)
     {
-        ON_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).WillByDefault(Return(IInteractive::Result(int(btn))));
+        ON_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _)).WillByDefault([btn] { return dialogResult(btn); });
     }
 
     //! Writing fails with `ret` every time.
@@ -546,7 +548,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_OnlyOneFile_IsReplacedWithoutAsk
     givenFileExists(path("Export.pdf"));
 
     //! [THEN] Nothing is asked again, the old file is removed, and the new one takes its place
-    EXPECT_CALL(*m_interactive, questionSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_fileSystem, remove(path("Export.pdf"), _)).Times(1);
 
     //! [WHEN] Exporting...
@@ -564,14 +566,14 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_SeveralFiles_AsksOnlyAboutTheExi
     givenReplaceQuestionAnsweredWith(REPLACE_BTN);
 
     //! [THEN] The user is asked once, about that file only
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _))
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _))
     .WillOnce([](const std::string&, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int,
                  const IInteractive::Options&, const std::string&) {
         //! [THEN] The question names the file, and offers to replace or to skip it, or all of them
         EXPECT_NE(text.text.find("Export-Violin.pdf"), std::string::npos);
         EXPECT_EQ(buttonIds(buttons), (std::vector<int> { REPLACE_BTN, REPLACE_ALL_BTN, SKIP_BTN, SKIP_ALL_BTN }));
 
-        return IInteractive::Result(REPLACE_BTN);
+        return dialogResult(REPLACE_BTN);
     });
 
     //! [WHEN] Exporting the score with the parts...
@@ -580,6 +582,32 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_SeveralFiles_AsksOnlyAboutTheExi
     //! [THEN] ...writes all of them
     std::vector<io::path_t> expected = { path("Export.pdf"), path("Export-Violin.pdf"), path("Export-Flute.pdf") };
     EXPECT_EQ(writtenPaths(), expected);
+}
+
+TEST_F(ExportProjectScenarioTests, ExistingFile_QuestionNotAnsweredYet_WaitsForTheAnswer)
+{
+    //! [GIVEN] The file of the score exists, and the user has not answered the question about it yet
+    ScorePtr violin = makePart("Violin");
+    givenFileExists(path("Export.pdf"));
+    ON_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).WillByDefault([] {
+        return async::make_promise<IInteractive::Result>([](auto, auto) {
+            return async::Promise<IInteractive::Result>::dummy_result();
+        });
+    });
+
+    //! [THEN] Nothing is written in the meantime, the files come in the chosen order
+    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+
+    //! [WHEN] Exporting the score with the part...
+    bool resolved = false;
+    m_scenario->exportScores({ m_main->notation, violin->notation }, path("Export.pdf"))
+    .onResolve(this, [&resolved](const Ret&) {
+        resolved = true;
+    });
+    drainDeferredCalls();
+
+    //! [THEN] ...has not finished, it is still waiting for the user
+    EXPECT_FALSE(resolved);
 }
 
 TEST_F(ExportProjectScenarioTests, ExistingFile_Replace_AsksAgainAboutTheNextOne)
@@ -591,7 +619,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_Replace_AsksAgainAboutTheNextOne
     givenReplaceQuestionAnsweredWith(REPLACE_BTN);
 
     //! [THEN] Replacing one file does not answer for the others
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(2);
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).Times(2);
 
     //! [WHEN] Exporting the score with the part...
     EXPECT_TRUE(exportScores({ m_main->notation, violin->notation }, path("Export.pdf")));
@@ -646,7 +674,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_ReplaceAll_ReplacesTheRestWithou
     givenReplaceQuestionAnsweredWith(REPLACE_ALL_BTN);
 
     //! [THEN] The user is asked once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the parts...
     EXPECT_TRUE(exportScores({ m_main->notation, violin->notation, flute->notation }, path("Export.pdf")));
@@ -666,7 +694,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_SkipAll_SkipsTheRestWithoutAskin
     givenReplaceQuestionAnsweredWith(SKIP_ALL_BTN);
 
     //! [THEN] The user is asked once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the parts...
     Ret ret = exportScores({ m_main->notation, violin->notation, flute->notation }, path("Export.pdf"));
@@ -684,7 +712,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_TheAnswerDoesNotOutliveTheExport
     givenReplaceQuestionAnsweredWith(SKIP_ALL_BTN);
 
     //! [THEN] The user is asked again by the next export
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(2);
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).Times(2);
 
     //! [WHEN] Exporting twice...
     EXPECT_TRUE(exportScores({ m_main->notation, violin->notation }, path("Export.pdf")));
@@ -700,14 +728,14 @@ TEST_F(ExportProjectScenarioTests, WriteFails_Retry_WritesAgain)
     givenRetryQuestionAnsweredWith(IInteractive::Button::Retry);
 
     //! [THEN] The user is asked once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _))
+    EXPECT_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _))
     .WillOnce([](const std::string&, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int,
                  const IInteractive::Options&, const std::string&) {
         //! [THEN] The question names the file, and offers to retry or to abort
         EXPECT_NE(text.text.find("Export.pdf"), std::string::npos);
         EXPECT_EQ(buttonIds(buttons), (std::vector<int> { int(IInteractive::Button::Retry), int(IInteractive::Button::Abort) }));
 
-        return IInteractive::Result(int(IInteractive::Button::Retry));
+        return dialogResult(IInteractive::Button::Retry);
     });
 
     //! [WHEN] Exporting...
@@ -730,8 +758,8 @@ TEST_F(ExportProjectScenarioTests, WriteFails_RetryAReplacedFile_DoesNotAskAbout
     givenRetryQuestionAnsweredWith(IInteractive::Button::Retry);
 
     //! [THEN] The user is asked about replacing it once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
-    EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
     EXPECT_TRUE(exportScores({ m_main->notation, violin->notation }, path("Export.pdf")));
@@ -766,7 +794,7 @@ TEST_F(ExportProjectScenarioTests, RemoveFails_Retry_RemovesAgain)
     givenRetryQuestionAnsweredWith(IInteractive::Button::Retry);
 
     //! [THEN] The user is asked once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting...
     Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
@@ -800,15 +828,15 @@ TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Retry_OpensAgain)
     const io::path_t filePath(dirPath + "/Export.pdf");
 
     //! [GIVEN] The user creates it, and retries
-    ON_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _))
+    ON_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _))
     .WillByDefault([dirPath](const std::string&, const IInteractive::Text&, const IInteractive::ButtonDatas&, int,
                              const IInteractive::Options&, const std::string&) {
         QDir().mkpath(dirPath);
-        return IInteractive::Result(int(IInteractive::Button::Retry));
+        return dialogResult(IInteractive::Button::Retry);
     });
 
     //! [THEN] The user is asked once
-    EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).Times(1);
+    EXPECT_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting there...
     Ret ret = exportScores({ m_main->notation }, filePath);
@@ -843,7 +871,7 @@ TEST_F(ExportProjectScenarioTests, WriteCancelled_StopsTheWholeExportWithoutAski
     givenWritingFailsWith(make_ret(Ret::Code::Cancel));
 
     //! [THEN] Nothing is asked, and the part is not even tried
-    EXPECT_CALL(*m_interactive, questionSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_writer, write(_, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
