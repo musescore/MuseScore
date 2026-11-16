@@ -1546,7 +1546,11 @@ TEST_F(MusicXml_Tests, importWithErrors_NotForced_ReportsTheErrors) {
     Ret ret = importXmlWithErrors(/*forceMode*/ false);
 
     EXPECT_EQ(ret.code(), int(Err::FileCorrupted));
-    EXPECT_NE(ret.text().find("import may be incomplete"), std::string::npos);
+
+    //! The summary tells how many errors are listed after it
+    const StringList lines = String::fromStdString(ret.text()).split(u'\n', SkipEmptyParts);
+    ASSERT_GE(lines.size(), 2);
+    EXPECT_EQ(lines.front(), String(u"%1 error(s) found, import may be incomplete.").arg(lines.size() - 1));
     EXPECT_NE(ret.text().find("expected token type and name ‘EndElement note’"), std::string::npos);
 }
 

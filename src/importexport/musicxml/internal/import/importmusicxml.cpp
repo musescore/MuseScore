@@ -76,9 +76,11 @@ Ret importMusicXmlfromBuffer(Score* score, const String& name, const ByteArray& 
 #ifndef MUSICXML_NO_INTERACTIVE
         //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode
         if (res == Err::NoError && !MScore::noGui && !forceMode) {
-            String text = muse::mtrc("iex_musicxml", "%Ln error(s) found, import may be incomplete.",
-                                     nullptr, int(pass1_errors.size() + pass2_errors.size()));
-            text += u"\n\n" + pass1_errors + pass2_errors;
+            const String errors = pass1_errors + pass2_errors;
+            const size_t errorCount = errors.split(u'\n', SkipEmptyParts).size(); // one error per line
+
+            String text = muse::mtrc("iex_musicxml", "%Ln error(s) found, import may be incomplete.", nullptr, int(errorCount));
+            text += u"\n\n" + errors;
             return make_ret(Err::FileCorrupted, text);
         }
 #endif
