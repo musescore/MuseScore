@@ -42,13 +42,14 @@
 
 #include "rcommand/commandtypes.h"
 
-namespace mu::appshell {
+namespace mu::notation {
 class NotationStatusBarModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
+    Q_PROPERTY(bool isWorkspaceAvailable READ isWorkspaceAvailable CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * currentWorkspaceItem READ currentWorkspaceItem CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * concertPitchItem READ concertPitchItem CONSTANT)
     Q_PROPERTY(muse::uicomponents::MenuItem * currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
@@ -60,7 +61,7 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     QML_ELEMENT
 
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
-    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<project::IProjectSession> context = { this };
@@ -71,6 +72,7 @@ public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
 
     QString accessibilityInfo() const;
+    bool isWorkspaceAvailable() const;
     muse::uicomponents::MenuItem* currentWorkspaceItem();
     muse::uicomponents::MenuItem* concertPitchItem();
     muse::uicomponents::MenuItem* currentViewMode();
