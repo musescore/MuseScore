@@ -134,6 +134,7 @@ void NotationActionController::init()
     registerCommand<AddBoxesCommand>(&Controller::addBoxes);
     registerCommand<AddGraceNoteCommand>(&Controller::addGraceNotes);
     registerCommand<AddIntervalCommand>(&Controller::addInterval);
+    registerCommand<AddTextCommand>(&Controller::addText);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -203,25 +204,6 @@ void NotationActionController::init()
     registerCommand(ADD_UP_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
     registerCommand(ADD_DOWN_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
 
-    // add text commands
-    registerCommand(ADD_TITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::TITLE); });
-    registerCommand(ADD_SUBTITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::SUBTITLE); });
-    registerCommand(ADD_COMPOSER_TEXT_COMMAND, [this]() { addText(TextStyleType::COMPOSER); });
-    registerCommand(ADD_LYRICIST_TEXT_COMMAND, [this]() { addText(TextStyleType::LYRICIST); });
-    registerCommand(ADD_PART_TEXT_COMMAND, [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
-    registerCommand(ADD_FRAME_TEXT_COMMAND, [this]() { addText(TextStyleType::FRAME); });
-    registerCommand(ADD_SYSTEM_TEXT_COMMAND, [this]() { addText(TextStyleType::SYSTEM); });
-    registerCommand(ADD_STAFF_TEXT_COMMAND, [this]() { addText(TextStyleType::STAFF); });
-    registerCommand(ADD_EXPRESSION_TEXT_COMMAND, [this]() { addText(TextStyleType::EXPRESSION); });
-    registerCommand(ADD_REHEARSALMARK_TEXT_COMMAND, [this]() { addText(TextStyleType::REHEARSAL_MARK); });
-    registerCommand(ADD_INSTRUMENT_CHANGE_TEXT_COMMAND, [this]() { addText(TextStyleType::INSTRUMENT_CHANGE); });
-    registerCommand(ADD_FINGERING_TEXT_COMMAND, [this]() { addText(TextStyleType::FINGERING); });
-    registerCommand(ADD_STICKING_TEXT_COMMAND, [this]() { addText(TextStyleType::STICKING); });
-    registerCommand(ADD_CHORD_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_A); });
-    registerCommand(ADD_ROMAN_NUMERAL_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_ROMAN); });
-    registerCommand(ADD_NASHVILLE_NUMBER_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
-    registerCommand(ADD_LYRICS_COMMAND, [this]() { addText(TextStyleType::LYRICS_ODD); });
-    registerCommand(ADD_TEMPO_COMMAND, [this]() { addText(TextStyleType::TEMPO); });
     registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
 
     // add beam commands
@@ -1920,35 +1902,6 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
     interaction->insertClef(type);
 }
 
-void NotationActionController::addText(TextStyleType type)
-{
-    TRACEFUNC;
-
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    EngravingItem* item = nullptr;
-
-    const INotationSelectionPtr sel = interaction->selection();
-    if (sel->isRange()) {
-        const INotationSelectionRangePtr range = sel->range();
-        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
-    } else {
-        item = interaction->contextItem();
-    }
-
-    if (isVerticalBoxTextStyle(type)) {
-        if (!item || !item->isVBox()) {
-            interaction->addTextToTopFrame(type);
-            return;
-        }
-    }
-
-    interaction->addTextToItem(type, item);
-}
-
 void NotationActionController::addImage()
 {
     auto interaction = currentNotationInteraction();
@@ -2171,6 +2124,19 @@ muse::Ret NotationActionController::addInterval(const AddIntervalCommand& comman
 
     seekSelectedElement();
 
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addText(const AddTextCommand& command)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->addText(command.type);
     return muse::make_ok();
 }
 

@@ -6022,9 +6022,35 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
     apply();
 }
 
+void NotationInteraction::addText(TextStyleType type)
+{
+    EngravingItem* item = nullptr;
+
+    const INotationSelectionPtr sel = selection();
+    if (sel->isRange()) {
+        const INotationSelectionRangePtr range = sel->range();
+        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
+    } else {
+        item = contextItem();
+    }
+
+    if (!item) {
+        return;
+    }
+
+    if (isVerticalBoxTextStyle(type)) {
+        if (!item->isVBox()) {
+            addTextToTopFrame(type);
+            return;
+        }
+    }
+
+    addTextToItem(type, item);
+}
+
 void NotationInteraction::addTextToTopFrame(TextStyleType type)
 {
-    addText(type);
+    doAddText(type);
 }
 
 bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingItem* item) const
@@ -6095,10 +6121,10 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
-    addText(type, item);
+    doAddText(type, item);
 }
 
-void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();

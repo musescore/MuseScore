@@ -234,7 +234,7 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
     const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(element);
     if (!fretDiagram->harmony()) {
         items << makeSeparator();
-        items << makeMenuItem(ADD_CHORD_TEXT_COMMAND, TranslatableString("notation", "Add c&hord symbol"));
+        items << makeMenuItem(AddChordTextCommand::id, TranslatableString("notation", "Add c&hord symbol"));
     }
 
     return items;
@@ -344,12 +344,12 @@ MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
 MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
 {
     MenuItemList addMenuItems;
-    addMenuItems << makeMenuItem(ADD_FRAME_TEXT_COMMAND);
-    addMenuItems << makeMenuItem(ADD_TITLE_TEXT_COMMAND);
-    addMenuItems << makeMenuItem(ADD_SUBTITLE_TEXT_COMMAND);
-    addMenuItems << makeMenuItem(ADD_COMPOSER_TEXT_COMMAND);
-    addMenuItems << makeMenuItem(ADD_LYRICIST_TEXT_COMMAND);
-    addMenuItems << makeMenuItem(ADD_PART_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(AddFrameTextCommand::id);
+    addMenuItems << makeMenuItem(AddTitleTextCommand::id);
+    addMenuItems << makeMenuItem(AddSubtitleTextCommand::id);
+    addMenuItems << makeMenuItem(AddComposerTextCommand::id);
+    addMenuItems << makeMenuItem(AddLyricistTextCommand::id);
+    addMenuItems << makeMenuItem(AddPartTextCommand::id);
     addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
 
     MenuItemList items = makeElementItems();
@@ -362,7 +362,7 @@ MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
 MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
 {
     MenuItemList addMenuItems;
-    addMenuItems << makeMenuItem(ADD_FRAME_TEXT_COMMAND);
+    addMenuItems << makeMenuItem(AddFrameTextCommand::id);
     addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
 
     MenuItemList items = makeElementItems();

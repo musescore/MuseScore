@@ -209,6 +209,29 @@ struct GraceNoteTypeContract {
         { "grace32-after", GraceNoteType::GRACE32_AFTER, "grace32 after" },
     } };
 };
+
+struct TextStyleTypeContract {
+    static constexpr EnumTable<TextStyleType, 18> table { {
+        { "title", TextStyleType::TITLE, "title" },
+        { "subtitle", TextStyleType::SUBTITLE, "subtitle" },
+        { "composer", TextStyleType::COMPOSER, "composer" },
+        { "lyricist", TextStyleType::LYRICIST, "lyricist" },
+        { "instrument-excerpt", TextStyleType::INSTRUMENT_EXCERPT, "instrument excerpt" },
+        { "frame", TextStyleType::FRAME, "frame" },
+        { "system", TextStyleType::SYSTEM, "system" },
+        { "staff", TextStyleType::STAFF, "staff" },
+        { "expression", TextStyleType::EXPRESSION, "expression" },
+        { "rehearsalmark", TextStyleType::REHEARSAL_MARK, "rehearsalmark" },
+        { "instrument-change", TextStyleType::INSTRUMENT_CHANGE, "instrument change" },
+        { "fingering", TextStyleType::FINGERING, "fingering" },
+        { "sticking", TextStyleType::STICKING, "sticking" },
+        { "chord", TextStyleType::HARMONY_A, "chord" },
+        { "roman-numeral", TextStyleType::HARMONY_ROMAN, "roman numeral" },
+        { "nashville-number", TextStyleType::HARMONY_NASHVILLE, "nashville number" },
+        { "lyrics", TextStyleType::LYRICS_ODD, "lyrics" },
+        { "tempo", TextStyleType::TEMPO, "tempo" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -226,4 +249,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::AccidentalTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BoxTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 }
