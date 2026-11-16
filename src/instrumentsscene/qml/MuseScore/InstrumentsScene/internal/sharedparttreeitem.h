@@ -37,17 +37,12 @@ public:
 
     void init(const notation::Part* part) override;
 
-    void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
-                      bool updateNotation) override;
-
-    void removeChildren(int row, int count, bool deleteChild) override;
-
-    void listenEnabledChanged();
-
-    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
-
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
+
+    void listenEnabledChanged();
+    bool isTitleAffected(const mu::engraving::ScoreChanges& changes) const;
+    QString groupTitle() const;
 
     bool m_ignoreEnabledChanged = true;
 };

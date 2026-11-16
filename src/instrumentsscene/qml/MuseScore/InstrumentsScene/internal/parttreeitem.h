@@ -76,6 +76,7 @@ signals:
 protected:
     void listenVisibilityChanged();
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
+    void updateVisibility();
 
 private:
     void createAndAddPart(const muse::ID& masterPartId);
