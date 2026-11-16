@@ -477,7 +477,7 @@ Ret OpenProjectScenario::finishOpening()
 
     //! Show MuseSounds / MuseSampler update if need
     auto showUpdateNotification = [this]() {
-        QTimer::singleShot(1000, [this]() {
+        QTimer::singleShot(1000, &m_timersContext, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
             } else if (!museSamplerCheckStatusScenario()->alreadyChecked()) {
