@@ -69,6 +69,7 @@ protected:
 
 TEST_F(Engraving_KeySigTests, keysig)
 {
+    String beforeFile("keysig-before.mscx");
     String writeFile1("keysig01-test.mscx");
     String reference1(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
     String writeFile2("keysig02-test.mscx");
@@ -76,17 +77,15 @@ TEST_F(Engraving_KeySigTests, keysig)
     String writeFile3("keysig03-test.mscx");
     String reference3(KEYSIG_DATA_DIR + "keysig03bis-ref.mscx");           // orig
     String writeFile4("keysig04-test.mscx");
-    String reference4(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
     String writeFile5("keysig05-test.mscx");
-    String reference5(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
     String writeFile6("keysig06-test.mscx");
-    String reference6(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
 
     // read file
     MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig.mscx");
     ASSERT_TRUE(score);
     Measure* m2 = score->firstMeasure()->nextMeasure();
     ASSERT_TRUE(m2);
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // add a key signature (D major) in measure 2
     KeySigEvent ke2;
@@ -115,15 +114,15 @@ TEST_F(Engraving_KeySigTests, keysig)
     // undo remove
     EditData ed;
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile4, reference4));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile4, writeFile2));
 
     // undo change
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile5, reference5));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile5, writeFile1));
 
     // undo add
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile6, reference6));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile6, beforeFile));
 
     delete score;
 }

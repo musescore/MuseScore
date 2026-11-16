@@ -90,6 +90,7 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx");
     ASSERT_TRUE(score);
     score->doLayout();
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"exchangevoices-range-before.mscx"));
 
     score->startCmd(TranslatableString::untranslatable("Exchange voices select all"));
     score->cmdSelectAll();
@@ -104,9 +105,9 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
 
     EditData ed;
     score->undoStack()->undo(&ed);
+    score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
-                                            EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"exchangevoices-range.mscx", u"exchangevoices-range-before.mscx"));
 }
 
 TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)

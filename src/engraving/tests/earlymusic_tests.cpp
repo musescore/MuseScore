@@ -49,6 +49,7 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     MasterScore* score = ScoreRW::readScore(EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx");
     ASSERT_TRUE(score);
     score->doLayout();
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"mensurstrich01-before.mscx"));
 
     // go to first chord and verify crossMeasure values
     Measure* msr   = score->firstMeasure();
@@ -96,6 +97,6 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_BREVE);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"mensurstrich01.mscx", u"mensurstrich01-before.mscx"));
     delete score;
 }

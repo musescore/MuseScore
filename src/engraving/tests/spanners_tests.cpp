@@ -382,6 +382,7 @@ TEST_F(Engraving_SpannersTests, spanners09)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline02.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"lyricsline02-before.mscx"));
 
     // DELETE SECOND MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
@@ -398,7 +399,7 @@ TEST_F(Engraving_SpannersTests, spanners09)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline02.mscx", SPANNERS_DATA_DIR + u"lyricsline02.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline02.mscx", u"lyricsline02-before.mscx"));
     delete score;
 }
 
@@ -415,6 +416,7 @@ TEST_F(Engraving_SpannersTests, spanners10)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline03.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"lyricsline03-before.mscx"));
 
     // DELETE SECOND MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
@@ -431,7 +433,7 @@ TEST_F(Engraving_SpannersTests, spanners10)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline03.mscx", SPANNERS_DATA_DIR + u"lyricsline03.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline03.mscx", u"lyricsline03-before.mscx"));
     delete score;
 }
 
@@ -448,6 +450,7 @@ TEST_F(Engraving_SpannersTests, spanners11)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline04.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"lyricsline04-before.mscx"));
 
     // DELETE SECOND MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
@@ -464,7 +467,7 @@ TEST_F(Engraving_SpannersTests, spanners11)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline04.mscx", SPANNERS_DATA_DIR + u"lyricsline04.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline04.mscx", u"lyricsline04-before.mscx"));
     delete score;
 }
 
@@ -481,6 +484,7 @@ TEST_F(Engraving_SpannersTests, spanners12)
 {
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline05.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"lyricsline05-before.mscx"));
 
     // DELETE SECOND MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
@@ -497,7 +501,7 @@ TEST_F(Engraving_SpannersTests, spanners12)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline05.mscx", SPANNERS_DATA_DIR + u"lyricsline05.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline05.mscx", u"lyricsline05-before.mscx"));
     delete score;
 }
 
@@ -513,6 +517,7 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
 
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline06.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"lyricsline06-before.mscx"));
 
     // DROP A BREAK AT FIRST MEASURE AND VERIFY
     Measure* msr   = score->firstMeasure();
@@ -537,7 +542,7 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();        // systems need to be re-computed
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline06.mscx", SPANNERS_DATA_DIR + u"lyricsline06.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline06.mscx", u"lyricsline06-before.mscx"));
     delete score;
 }
 
