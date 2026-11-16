@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <deque>
+
 #include <QObject>
 
 #include "modularity/ioc.h"
@@ -97,6 +99,11 @@ private:
     std::vector<ExportFile> exportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
                                         INotationWriterPtr writer, INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
 
+    void startNextExportLater() const;
+    void startExport(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                     INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                     const muse::async::Promise<muse::Ret>::Resolve& resolve) const;
+
     void exportNextFiles(const ExportStatePtr& state) const;
     void finishExport(const ExportStatePtr& state, const muse::Ret& ret) const;
 
@@ -116,6 +123,9 @@ private:
 
     mutable muse::Progress m_exportProgress;
     ExportInfo m_exportInfo;
+
+    mutable std::deque<std::function<void()> > m_pendingExports;
+    mutable bool m_isExporting = false;
 
     //! NOTE The context of the timers, so that they do not outlive the scenario
     mutable QObject m_timersContext;

@@ -996,6 +996,75 @@ TEST_F(ExportProjectScenarioTests, ViewModes_ExportCancelled_AreRestoredAnyway)
     EXPECT_EQ(*m_main->viewMode, notation::ViewMode::LINE);
 }
 
+// ─── Several exports at once ─────────────────────────────────────────────────
+
+TEST_F(ExportProjectScenarioTests, SeveralExports_GoOneAfterAnother)
+{
+    //! [GIVEN] The score is shown continuously
+    *m_main->viewMode = notation::ViewMode::LINE;
+
+    //! [WHEN] Exporting twice, before the first export is over (e.g. by a plugin)...
+    Ret first;
+    Ret second;
+    bool firstResolved = false;
+    bool secondResolved = false;
+
+    m_scenario->exportScores({ m_main->notation }, path("Export.pdf"), INotationWriter::UnitType::PER_PART, false)
+    .onResolve(this, [&first, &firstResolved](const Ret& ret) {
+        first = ret;
+        firstResolved = true;
+    });
+
+    m_scenario->exportScores({ m_main->notation }, path("Export.png"), INotationWriter::UnitType::PER_PAGE, false)
+    .onResolve(this, [&second, &secondResolved](const Ret& ret) {
+        second = ret;
+        secondResolved = true;
+    });
+
+    drainDeferredCalls();
+
+    //! [THEN] ...both succeed
+    EXPECT_TRUE(firstResolved);
+    EXPECT_TRUE(secondResolved);
+    EXPECT_TRUE(first);
+    EXPECT_TRUE(second);
+
+    //! [THEN] The second one is written after the first one, both in the page view mode
+    ASSERT_EQ(writtenPaths(), (std::vector<io::path_t> { path("Export.pdf"), path("Export.png") }));
+    EXPECT_EQ(m_writtenFiles[0].viewMode, notation::ViewMode::PAGE);
+    EXPECT_EQ(m_writtenFiles[1].viewMode, notation::ViewMode::PAGE);
+
+    //! [THEN] The score is given its own view mode back, not the one of the first export
+    EXPECT_EQ(*m_main->viewMode, notation::ViewMode::LINE);
+}
+
+TEST_F(ExportProjectScenarioTests, SeveralExports_TheFirstFails_TheNextOneGoesOn)
+{
+    //! [GIVEN] There is no writer for the first format
+    ON_CALL(*m_writers, writer("xyz")).WillByDefault(Return(nullptr));
+
+    //! [WHEN] Exporting to it, and then to a pdf, before the first export is over...
+    Ret first;
+    Ret second;
+
+    m_scenario->exportScores({ m_main->notation }, path("Export.xyz"), INotationWriter::UnitType::PER_PART, false)
+    .onResolve(this, [&first](const Ret& ret) {
+        first = ret;
+    });
+
+    m_scenario->exportScores({ m_main->notation }, path("Export.pdf"), INotationWriter::UnitType::PER_PART, false)
+    .onResolve(this, [&second](const Ret& ret) {
+        second = ret;
+    });
+
+    drainDeferredCalls();
+
+    //! [THEN] ...the first one fails, and the second one is written anyway
+    EXPECT_EQ(first.code(), int(Ret::Code::NotSupported));
+    EXPECT_TRUE(second);
+    EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export.pdf") });
+}
+
 // ─── Parts not initialized yet ───────────────────────────────────────────────
 
 TEST_F(ExportProjectScenarioTests, PotentialParts_OnlyTheExportedOnesAreInitialized)

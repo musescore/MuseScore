@@ -70,13 +70,6 @@ struct ExportProjectScenario::ExportState {
     }
 };
 
-static Promise<Ret> resolvedExportPromise(const Ret& ret)
-{
-    return async::make_promise<Ret>([ret](auto resolve) {
-        return resolve(ret);
-    });
-}
-
 std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes(const ExportType& exportType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
@@ -147,15 +140,54 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
 Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                                                  INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
+    return async::make_promise<Ret>([this, notations, destinationPath, unitType, openDestinationFolderOnExport](auto resolve) {
+        m_pendingExports.push_back([this, notations, destinationPath, unitType, openDestinationFolderOnExport, resolve]() {
+            startExport(notations, destinationPath, unitType, openDestinationFolderOnExport, resolve);
+        });
+
+        //! NOTE The exports go one after another, so that they do not change the view modes of each other.
+        //! The resolve is lost if it is called before the caller subscribes to the promise,
+        //! so an export always starts on the next event loop
+        if (!m_isExporting) {
+            m_isExporting = true;
+            startNextExportLater();
+        }
+
+        return Promise<Ret>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
+}
+
+void ExportProjectScenario::startNextExportLater() const
+{
+    QTimer::singleShot(0, &m_timersContext, [this]() {
+        if (m_pendingExports.empty()) {
+            m_isExporting = false;
+            return;
+        }
+
+        std::function<void()> start = std::move(m_pendingExports.front());
+        m_pendingExports.pop_front();
+        start();
+    });
+}
+
+void ExportProjectScenario::startExport(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                                        INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                                        const Promise<Ret>::Resolve& resolve) const
+{
     std::string suffix = io::suffix(destinationPath);
     INotationWriterPtr writer = writers()->writer(suffix);
 
     if (!writer) {
-        return resolvedExportPromise(make_ret(Ret::Code::NotSupported));
+        (void)resolve(make_ret(Ret::Code::NotSupported));
+        startNextExportLater();
+        return;
     }
 
     IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
-        return resolvedExportPromise(make_ret(Ret::Code::NotSupported));
+        (void)resolve(make_ret(Ret::Code::NotSupported));
+        startNextExportLater();
+        return;
     }
 
     // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
@@ -215,15 +247,8 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
         }, muse::async::Asyncable::Mode::SetReplace);
     }
 
-    return async::make_promise<Ret>([this, state](auto resolve) {
-        state->resolve = resolve;
-
-        //! NOTE The resolve is lost if it is called before the caller subscribes to the promise,
-        //! so the export always starts on the next event loop
-        continueExportLater(state);
-
-        return Promise<Ret>::dummy_result();
-    }, async::PromiseType::AsyncByBody);
+    state->resolve = resolve;
+    exportNextFiles(state);
 }
 
 const ExportInfo& ExportProjectScenario::exportInfo() const
@@ -409,6 +434,8 @@ void ExportProjectScenario::finishExport(const ExportStatePtr& state, const Ret&
     }
 
     (void)state->resolve(ret);
+
+    startNextExportLater();
 }
 
 void ExportProjectScenario::askForReplaceFile(const ExportStatePtr& state) const
