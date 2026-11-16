@@ -80,6 +80,27 @@ const Part* PartTreeItem::part() const
     return m_part;
 }
 
+LayoutPanelItemType::SharedGroupRole PartTreeItem::sharedGroupRole() const
+{
+    return m_sharedGroupRole;
+}
+
+PartTreeItem* PartTreeItem::sharedGroupHeader() const
+{
+    return m_sharedGroupHeader.data();
+}
+
+void PartTreeItem::setSharedGroup(LayoutPanelItemType::SharedGroupRole role, PartTreeItem* header)
+{
+    if (m_sharedGroupRole == role && m_sharedGroupHeader == header) {
+        return;
+    }
+
+    m_sharedGroupRole = role;
+    m_sharedGroupHeader = header;
+    emit sharedGroupChanged();
+}
+
 void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 {
     if (!m_part) {

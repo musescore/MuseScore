@@ -142,6 +142,7 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
     void updateIsStaveSharingEnabled();
     void updateIsHideEmptyStavesEnabled();
+    void updateSharedGroupRoles();
 
 private:
     void classBegin() override;
