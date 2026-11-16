@@ -33,6 +33,16 @@ target_link_libraries(braille PRIVATE
     liblouis
 )
 
+# Workaround for an MSVC 14.52 (VS 2026 18.12) ARM64 bug: the loop vectorizer crashes
+# with an internal compiler error (C1001) at /O2 on _lou_isValidMode() in liblouis utils.c.
+# Reported to Microsoft: https://developercommunity.visualstudio.com/t/MSVC-ARM64-O2-crashes-with-C1001-vector/11183091
+# Remove this once the fixed MSVC version is used on the windows-11-arm runners.
+if (MSVC AND ARCH_IS_AARCH64)
+    get_target_property(_liblouis_sources liblouis SOURCES)
+    list(FILTER _liblouis_sources INCLUDE REGEX "/utils\\.c$")
+    set_source_files_properties(${_liblouis_sources} TARGET_DIRECTORY liblouis PROPERTIES COMPILE_OPTIONS /Od)
+endif()
+
 get_property(_liblouis_tables GLOBAL PROPERTY liblouis_TABLES)
 install(FILES ${_liblouis_tables} DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/tables)
 
