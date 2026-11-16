@@ -76,7 +76,6 @@ public:
     void reorderStaves(const muse::IDList& staffIds) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
-    bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) override;
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;
@@ -99,24 +98,18 @@ public:
 
     muse::async::Notification sharedPartsChanged() const override;
 
-protected:
+private:
     mu::engraving::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
     Part* partModifiable(const muse::ID& partId) const;
 
-    void startEdit(const muse::TranslatableString& actionName);
-    void apply();
     void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
-
-private:
-    friend class MasterNotationParts;
 
     void listenUndoStackChanges();
     void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});
     void listenStyleChanges();
 
-    engraving::EditPart::SetPartsResult doSetParts(const PartInstrumentList& parts, const ScoreOrder& order);
     std::vector<engraving::EditPart::PartEntry> partEntries(const PartInstrumentList& parts) const;
 
     Staff* staffModifiable(const muse::ID& staffId) const;

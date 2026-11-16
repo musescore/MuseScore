@@ -298,11 +298,9 @@ public:
     static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
     static void appendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
 
-    static void appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart);
-
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
-    static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset);
+    static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable = true);
 
     static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
     static void insertPart(Score* score, Part* part, size_t index);
@@ -326,6 +324,16 @@ public:
     static void setScoreOrder(Score* score, const ScoreOrder& order);
 
 private:
+    static bool doReplaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+                                    const StaffType* newStaffType);
+    static void renameExcerptOfPart(MasterScore* master, const Part* part);
+    static void doRemoveParts(Score* score, const std::vector<Part*>& parts);
+    static void doRemoveStaves(Score* score, const std::vector<Staff*>& staves);
+    static void doReorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests);
+    static void doAppendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
+    static void doReplaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable);
+
     static void removeLocksContainingMMRests(Score* score);
     static void appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
     static Part* insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);

@@ -24,6 +24,7 @@
 
 #include <QFileInfo>
 
+#include "async/notifylist.h"
 #include "log.h"
 #include "realfn.h"
 #include "translation.h"
@@ -48,9 +49,9 @@
 #include "engraving/editing/transaction/transaction.h"
 
 #include "inotationelements.h" // IWYU pragma: keep
+#include "inotationparts.h"
 #include "inotationsolomutestate.h"
 #include "excerptnotation.h"
-#include "masternotationparts.h"
 #include "notationautomation.h"
 #include "types/scorecreateoptions.h"
 
@@ -84,8 +85,6 @@ static IExcerptNotationPtr createAndInitExcerptNotation(MasterNotation* master, 
 MasterNotation::MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx)
     : Notation(this, iocCtx), m_project(project)
 {
-    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack(), style());
-
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
     m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged, iocCtx);
 #else
@@ -93,10 +92,6 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
 #endif
 
     m_notationAutomation = std::make_shared<NotationAutomation>(undoStack());
-
-    m_parts->partsChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
 
     async::NotifyList<const Part*> partList = m_parts->partList();
 
@@ -617,8 +612,6 @@ void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
 
     m_excerpts = excerpts;
     m_excerptsChanged.notify();
-
-    static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 
     updatePotentialExcerpts();
 }

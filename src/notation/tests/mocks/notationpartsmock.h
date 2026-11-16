@@ -68,8 +68,6 @@ public:
     MOCK_METHOD(void, reorderStaves, (const muse::IDList& staffIds), (override));
 
     MOCK_METHOD(bool, appendStaff, (Staff * staff, const muse::ID& destinationPartId), (override));
-    MOCK_METHOD(bool, appendStaffLinkedToMaster, (Staff * staff, Staff * masterSourceStaff, const muse::ID& destinationPartId),
-                (override));
     MOCK_METHOD(bool, appendLinkedStaff, (Staff * staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId), (override));
 
     MOCK_METHOD(void, insertPart, (Part * part, size_t index), (override));

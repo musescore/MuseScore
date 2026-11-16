@@ -89,7 +89,6 @@ public:
     virtual void reorderStaves(const muse::IDList& staffIds) = 0;
 
     virtual bool appendStaff(Staff* staff, const muse::ID& destinationPartId) = 0;
-    virtual bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) = 0;
     virtual bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) = 0;
 
     virtual void insertPart(Part* part, size_t index) = 0;

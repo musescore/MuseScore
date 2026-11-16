@@ -356,6 +356,46 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
     return item ? toInstrumentChange(item) : nullptr;
 }
 
+static std::vector<Score*> excerptScores(const Score* score)
+{
+    std::vector<Score*> result;
+    if (!score->isMaster()) {
+        return result;
+    }
+
+    for (const Excerpt* excerpt : score->masterScore()->excerpts()) {
+        if (Score* excerptScore = excerpt->excerptScore()) {
+            result.push_back(excerptScore);
+        }
+    }
+
+    return result;
+}
+
+static std::vector<Part*> partsIn(const Score* score, const std::vector<Part*>& parts)
+{
+    std::vector<Part*> result;
+    for (const Part* part : parts) {
+        if (Part* scorePart = score->partById(part->id())) {
+            result.push_back(scorePart);
+        }
+    }
+
+    return result;
+}
+
+static std::vector<Staff*> stavesIn(const Score* score, const std::vector<Staff*>& staves)
+{
+    std::vector<Staff*> result;
+    for (const Staff* staff : staves) {
+        if (Staff* scoreStaff = staff->findLinkedInScore(score)) {
+            result.push_back(scoreStaff);
+        }
+    }
+
+    return result;
+}
+
 void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
                                      const StaffType* newStaffType)
 {
@@ -404,6 +444,56 @@ bool EditPart::replaceInstrument(Score* score, Part* part, const Fraction& tick,
         return false;
     }
 
+    if (!score->isMaster()) {
+        return doReplaceInstrument(score, part, tick, newInstrument, newStaffType);
+    }
+
+    const Interval oldTranspose = part->instrument()->transpose();
+
+    const bool replaced = doReplaceInstrument(score, part, tick, newInstrument, newStaffType);
+
+    for (Score* excerptScore : excerptScores(score)) {
+        if (Part* excerptPart = excerptScore->partById(part->id())) {
+            doReplaceInstrument(excerptScore, excerptPart, tick, newInstrument, newStaffType);
+        }
+    }
+
+    // also transposes all linked parts
+    if (newInstrument.transpose().reduced() != oldTranspose.reduced()) {
+        Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+        Transpose::transpositionChanged(tx, score, part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    }
+
+    if (tick == Part::MAIN_INSTRUMENT_TICK) {
+        renameExcerptOfPart(score->masterScore(), part);
+    }
+
+    return replaced;
+}
+
+void EditPart::renameExcerptOfPart(MasterScore* master, const Part* part)
+{
+    Excerpt* excerptOfPart = nullptr;
+    StringList allExcerptLowerNames;
+
+    for (Excerpt* excerpt : master->excerpts()) {
+        if (excerpt->initialPartId() == part->id()) {
+            excerptOfPart = excerpt;
+        }
+        allExcerptLowerNames.push_back(excerpt->name().toLower());
+    }
+
+    if (!excerptOfPart) {
+        return;
+    }
+
+    const String newName = formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
+    excerptOfPart->excerptScore()->undo(new ChangeExcerptTitle(excerptOfPart, newName));
+}
+
+bool EditPart::doReplaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+                                   const StaffType* newStaffType)
+{
     if (tick == Part::MAIN_INSTRUMENT_TICK) {
         replacePartInstrument(score, part, newInstrument, newStaffType);
         return true;
@@ -558,15 +648,27 @@ void EditPart::removeParts(Score* score, const std::vector<Part*>& parts)
         return;
     }
 
+    doRemoveParts(score, parts);
+
+    if (score->isMaster()) {
+        deleteExcerptsOfParts(score->masterScore(), parts);
+    }
+
+    for (Score* excerptScore : excerptScores(score)) {
+        const std::vector<Part*> excerptParts = partsIn(excerptScore, parts);
+        if (!excerptParts.empty()) {
+            doRemoveParts(excerptScore, excerptParts);
+        }
+    }
+}
+
+void EditPart::doRemoveParts(Score* score, const std::vector<Part*>& parts)
+{
     for (Part* part : parts) {
         score->cmdRemovePart(part);
     }
 
     score->setBracketsAndBarlines();
-
-    if (score->isMaster()) {
-        deleteExcerptsOfParts(score->masterScore(), parts);
-    }
 }
 
 void EditPart::deleteExcerptsOfParts(MasterScore* master, const std::vector<Part*>& parts)
@@ -595,6 +697,18 @@ void EditPart::removeStaves(Score* score, const std::vector<Staff*>& staves)
         return;
     }
 
+    doRemoveStaves(score, staves);
+
+    for (Score* excerptScore : excerptScores(score)) {
+        const std::vector<Staff*> excerptStaves = stavesIn(excerptScore, staves);
+        if (!excerptStaves.empty()) {
+            doRemoveStaves(excerptScore, excerptStaves);
+        }
+    }
+}
+
+void EditPart::doRemoveStaves(Score* score, const std::vector<Staff*>& staves)
+{
     for (Staff* staff : staves) {
         score->cmdRemoveStaff(staff->idx());
     }
@@ -832,6 +946,44 @@ void EditPart::reorderParts(Score* score, const std::vector<Part*>& parts, const
         return;
     }
 
+    doReorderParts(score, parts, moves);
+
+    Staff* scoreBottomStaff = score->staves().back();
+
+    // part scores keep their own instrument order, only the markings move
+    for (Score* excerptScore : excerptScores(score)) {
+        if (excerptScore->staves().empty()) {
+            continue;
+        }
+
+        const Staff* bottomStaff = excerptScore->staves().back();
+
+        std::vector<SystemObjectsMove> excerptMoves;
+        for (const SystemObjectsMove& move : moves) {
+            Staff* targetStaff = move.destination;
+            if (!targetStaff && move.belowBottomStaff) {
+                targetStaff = scoreBottomStaff;
+            }
+
+            if (!move.staff || !targetStaff) {
+                continue;
+            }
+
+            Staff* staff = move.staff->findLinkedInScore(excerptScore);
+            Staff* destination = targetStaff->findLinkedInScore(excerptScore);
+            if (!staff || !destination) {
+                continue;
+            }
+
+            excerptMoves.push_back({ staff, destination, move.belowBottomStaff && destination == bottomStaff });
+        }
+
+        doReorderParts(excerptScore, excerptScore->parts(), excerptMoves);
+    }
+}
+
+void EditPart::doReorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves)
+{
     // Sorting keeps the markings at their staff positions, so their indexes are taken first
     std::vector<std::pair<staff_idx_t, Staff*> > pendingMoves;
     pendingMoves.reserve(moves.size());
@@ -952,6 +1104,25 @@ void EditPart::appendStaff(Score* score, Staff* staff, Part* destinationPart, bo
         return;
     }
 
+    doAppendStaff(score, staff, destinationPart, createRests);
+
+    for (Score* excerptScore : excerptScores(score)) {
+        if (Part* excerptPart = excerptScore->partById(destinationPart->id())) {
+            Staff* excerptStaff = staff->clone();
+            doAppendStaff(excerptScore, excerptStaff, excerptPart, false);
+            excerptScore->undo(new Link(excerptStaff, staff));
+            Excerpt::cloneStaff2(staff, excerptStaff, Fraction(0, 1), excerptScore->endTick());
+        }
+    }
+}
+
+void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
+{
+    if (score->isMaster()) {
+        // assigned when added to the score, then shared with the part scores
+        staff->setId(INVALID_ID);
+    }
+
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
     Staff* lastStaff = staffLocalIndex > 0 ? destinationPart->staff(staffLocalIndex - 1) : nullptr;
     KeyList keyList = lastStaff ? *lastStaff->keyList() : score->keyList();
@@ -987,7 +1158,20 @@ void EditPart::appendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff,
         return;
     }
 
-    appendStaff(score, staff, destinationPart, false);
+    doAppendLinkedStaff(score, staff, sourceStaff, destinationPart);
+
+    for (Score* excerptScore : excerptScores(score)) {
+        Staff* excerptSourceStaff = sourceStaff->findLinkedInScore(excerptScore);
+        Part* excerptPart = excerptScore->partById(destinationPart->id());
+        if (excerptSourceStaff && excerptPart) {
+            doAppendLinkedStaff(excerptScore, staff->clone(), excerptSourceStaff, excerptPart);
+        }
+    }
+}
+
+void EditPart::doAppendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart)
+{
+    doAppendStaff(score, staff, destinationPart, false);
 
     staff->setLinks(nullptr);
     Excerpt::cloneStaff(sourceStaff, staff);
@@ -1002,18 +1186,6 @@ Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* desti
     Staff* staff = Factory::createStaff(destinationPart);
     appendLinkedStaff(score, staff, sourceStaff, destinationPart);
     return staff;
-}
-
-void EditPart::appendStaffLinkedToMaster(Score* score, Staff* staff, Staff* masterSourceStaff, Part* destinationPart)
-{
-    if (!score || !staff || !masterSourceStaff || !destinationPart) {
-        return;
-    }
-
-    appendStaff(score, staff, destinationPart, false);
-    score->undo(new Link(staff, masterSourceStaff));
-
-    Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score->endTick());
 }
 
 void EditPart::appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList)
@@ -1344,15 +1516,32 @@ void EditPart::replacePart(Score* score, Part* oldPart, Part* newPart)
     insertPartCopy(score, newPart, partIndex);
 }
 
-void EditPart::replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset)
+void EditPart::replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable)
 {
     if (!score || !part) {
         return;
     }
 
+    doReplaceDrumset(score, part, tick, newDrumset, undoable);
+
+    for (Score* excerptScore : excerptScores(score)) {
+        if (Part* excerptPart = excerptScore->partById(part->id())) {
+            doReplaceDrumset(excerptScore, excerptPart, tick, newDrumset, undoable);
+        }
+    }
+}
+
+void EditPart::doReplaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable)
+{
     Instrument* instrument = part->instrument(tick);
-    if (instrument) {
+    if (!instrument) {
+        return;
+    }
+
+    if (undoable) {
         score->undo(new ChangeDrumset(instrument, newDrumset, part));
+    } else {
+        instrument->setDrumset(&newDrumset);
     }
 }
 

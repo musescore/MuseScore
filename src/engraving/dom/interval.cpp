@@ -54,7 +54,7 @@ void Interval::reduce()
     chromatic = chromatic % 12;
 }
 
-Interval Interval::reduced()
+Interval Interval::reduced() const
 {
     Interval interval(diatonic, chromatic);
     interval.reduce();
