@@ -537,25 +537,25 @@ TEST_F(Engraving_LyricsTests, NavigateToVerse)
     delete score;
 }
 
-TEST_F(Engraving_LyricsTests, MoveLyrics)
+TEST_F(Engraving_LyricsTests, ChangeLyricsVerse)
 {
     MasterScore* score = ScoreRW::readScore(LYRICS_DATA_DIR + u"editLyrics.mscx");
     ASSERT_TRUE(score);
 
     Lyrics* a = lyricsAt(score, 0, 0);
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
-        EditLyrics::moveLyrics(tx, a, DirectionV::DOWN);
+        EditLyrics::shiftLyricsVerse(tx, a, DirectionV::DOWN);
     });
     EXPECT_EQ(a->verse(), 1);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
-        EditLyrics::moveLyrics(tx, a, DirectionV::UP);
+        EditLyrics::shiftLyricsVerse(tx, a, DirectionV::UP);
     });
     EXPECT_EQ(a->verse(), 0);
 
     // Not above the first verse
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving lyrics tests"), [&](Transaction& tx) {
-        EditLyrics::moveLyrics(tx, a, DirectionV::UP);
+        EditLyrics::shiftLyricsVerse(tx, a, DirectionV::UP);
     });
     EXPECT_EQ(a->verse(), 0);
 

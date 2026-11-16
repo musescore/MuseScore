@@ -494,9 +494,9 @@ private:
     void resetGripEdit();
     void resetHitElementContext() override;
 
-    void doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
-    void doNudgeAnchors(MoveDirection d);
-    void doMoveLyrics(engraving::Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements);
+    void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
+    void nudgeAnchors(MoveDirection d);
+    void shiftLyricsVerses(engraving::Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements);
 
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);

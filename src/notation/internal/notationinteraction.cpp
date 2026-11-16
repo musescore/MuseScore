@@ -3873,7 +3873,7 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     apply();
 }
 
-void NotationInteraction::doMoveLyrics(Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements)
+void NotationInteraction::shiftLyricsVerses(Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements)
 {
     const bool up = d == MoveDirection::Up;
 
@@ -3906,11 +3906,11 @@ void NotationInteraction::doMoveLyrics(Transaction& tx, MoveDirection d, const s
     });
 
     for (Lyrics* l : lyrics) {
-        EditLyrics::moveLyrics(tx, l, toDirection(d));
+        EditLyrics::shiftLyricsVerse(tx, l, toDirection(d));
     }
 }
 
-void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements)
+void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements)
 {
     const bool horizontal = d == MoveDirection::Left || d == MoveDirection::Right;
     const muse::Orientation orientation = horizontal ? muse::Orientation::Horizontal : muse::Orientation::Vertical;
@@ -3938,7 +3938,7 @@ void NotationInteraction::doNudge(MoveDirection d, bool quickly, const std::vect
     }
 }
 
-void NotationInteraction::doNudgeAnchors(MoveDirection d)
+void NotationInteraction::nudgeAnchors(MoveDirection d)
 {
     // TODO: Refactor grip editing to allow multiple selection and nudging (without rebasing anchors)
 
@@ -4070,9 +4070,9 @@ bool NotationInteraction::moveSelectedItems(MoveDirection d, bool quickly)
 
     transaction(TranslatableString("undoableAction", "Move items"), [&](Transaction& tx) {
         if (!lyrics.empty()) {
-            doMoveLyrics(tx, d, lyrics);
+            shiftLyricsVerses(tx, d, lyrics);
         } else {
-            doNudge(d, quickly, nudgeable);
+            nudge(d, quickly, nudgeable);
         }
     });
 
@@ -4259,7 +4259,7 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
     //: Means: an editing operation triggered by a keystroke
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
-    doNudgeAnchors(direction);
+    nudgeAnchors(direction);
     apply();
 
     return true;

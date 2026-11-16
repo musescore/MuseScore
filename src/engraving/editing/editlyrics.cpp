@@ -441,7 +441,7 @@ Lyrics* EditLyrics::navigateToVerse(Transaction&, Score* score, const InitialSta
     return lyrics;
 }
 
-void EditLyrics::moveLyrics(Transaction&, Lyrics* lyrics, DirectionV direction)
+void EditLyrics::shiftLyricsVerse(Transaction&, Lyrics* lyrics, DirectionV direction)
 {
     const int verse = lyrics->verse() + (direction == DirectionV::UP ? -1 : 1);
     if (verse < 0) {
