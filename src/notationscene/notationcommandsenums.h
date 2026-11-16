@@ -243,6 +243,25 @@ struct BeamModeContract {
         { "mid", BeamMode::MID, "mid" }
     } };
 };
+
+struct OrnamentTypeContract {
+    static constexpr EnumTable<OrnamentType, 14> table { {
+        { "turn", OrnamentType::TURN, "turn" },
+        { "turn-inverted", OrnamentType::TURN_INVERTED, "turn inverted" },
+        { "turn-slash", OrnamentType::TURN_SLASH, "turn slash" },
+        { "turn-up", OrnamentType::TURN_UP, "turn up" },
+        { "turn-inverted-up", OrnamentType::TURN_INVERTED_UP, "turn inverted up" },
+        { "trill", OrnamentType::TRILL, "trill" },
+        { "short-trill", OrnamentType::SHORT_TRILL, "short trill" },
+        { "mordent", OrnamentType::MORDENT, "mordent" },
+        { "haydn", OrnamentType::HAYDN, "haydn" },
+        { "tremblement", OrnamentType::TREMBLEMENT, "tremblement" },
+        { "prall-mordent", OrnamentType::PRALL_MORDENT, "prall mordent" },
+        { "shake", OrnamentType::SHAKE, "shake" },
+        { "shake-muffat", OrnamentType::SHAKE_MUFFAT, "shake muffat" },
+        { "tremblement-couperin", OrnamentType::TREMBLEMENT_COUPERIN, "tremblement couperin" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -262,4 +281,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::AddBoxesTargetContract);
 DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 }

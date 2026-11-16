@@ -136,6 +136,7 @@ void NotationActionController::init()
     registerCommand<AddIntervalCommand>(&Controller::addInterval);
     registerCommand<AddTextCommand>(&Controller::addText);
     registerCommand<AddBeamCommand>(&Controller::addBeam);
+    registerCommand<AddOrnamentCommand>(&Controller::addOrnament);
 
     registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
 
@@ -213,22 +214,6 @@ void NotationActionController::init()
     registerCommand(ADD_BRACKETS_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Brackets);
     registerCommand(ADD_BRACES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Braces);
     registerCommand(ADD_PARENTHESES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Parentheses);
-
-    // add ornament commands
-    registerCommand(ADD_TURN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurn);
-    registerCommand(ADD_TURN_INVERTED_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnInverted);
-    registerCommand(ADD_TURN_SLASH_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnSlash);
-    registerCommand(ADD_TURN_UP_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUp);
-    registerCommand(ADD_TURN_INVERTED_UP_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUpS);
-    registerCommand(ADD_TRILL_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
-    registerCommand(ADD_SHORT_TRILL_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
-    registerCommand(ADD_MORDENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
-    registerCommand(ADD_HAYDN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentHaydn);
-    registerCommand(ADD_TREMBLEMENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
-    registerCommand(ADD_PRALL_MORDENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
-    registerCommand(ADD_SHAKE_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);
-    registerCommand(ADD_SHAKE_MUFFAT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShakeMuffat1);
-    registerCommand(ADD_TREMBLEMENT_COUPERIN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblementCouperin);
 
     // clef commands
     registerCommand(ADD_CLEF_VIOLIN_COMMAND, [this]() { insertClef(mu::engraving::ClefType::G); });
@@ -2142,6 +2127,17 @@ muse::Ret NotationActionController::addBeam(const AddBeamCommand& command)
     }
 
     interaction->addBeamToSelectedChordRests(command.mode);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addOrnament(const AddOrnamentCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->toggleOrnament(command.type);
     return muse::make_ok();
 }
 
