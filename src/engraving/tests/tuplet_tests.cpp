@@ -2081,6 +2081,31 @@ TEST_F(Engraving_TupletTests, pendingTupletBeyondScore)
     }
 }
 
+TEST_F(Engraving_TupletTests, pendingTupletBeyondShortLastMeasure)
+{
+    MasterScore* score = pendingTupletScore();
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+
+    // a last measure of 1/4 in 4/4: the new measure is a whole 4/4 measure
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction&) {
+        score->lastMeasure()->adjustToLen(Fraction(1, 4));
+    });
+    ASSERT_EQ(score->lastMeasure()->ticks(), Fraction(1, 4));
+
+    // a quarter-note triplet doesn't fit in the last measure, but fits in the new one
+    const int measures = score->nmeasures();
+    is.setSegment(score->lastMeasure()->first(SegmentType::ChordRest));
+    is.setBeyondScore(true);
+    setPendingTriplet(score, true);
+    pressDuration(score, DurationType::V_QUARTER);
+    EXPECT_TRUE(score->sanityCheck());
+    ASSERT_EQ(score->nmeasures(), measures + 1);
+    EXPECT_EQ(rhythm(score->lastMeasure()), "3:2[4 r4 r4] r2");
+
+    delete score;
+}
+
 TEST_F(Engraving_TupletTests, pendingTupletNested)
 {
     for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {

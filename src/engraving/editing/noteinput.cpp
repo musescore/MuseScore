@@ -55,6 +55,7 @@
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/select.h"
+#include "../dom/sig.h"
 #include "../dom/slur.h"
 #include "../dom/staff.h"
 #include "../dom/stafftype.h"
@@ -836,9 +837,9 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
     }
 
     if (is.beyondScore()) {
-        // a new measure like the last one
-        const Measure* last = score->lastMeasure();
-        return last && shape->baseLen.fraction() * shape->ratio.denominator() <= last->ticks();
+        // a new measure of the nominal time signature there, as appendMeasures() adds
+        const Fraction measureLen = score->sigmap()->timesig(score->endTick()).nominal();
+        return shape->baseLen.fraction() * shape->ratio.denominator() <= measureLen;
     }
 
     // at a chord or rest, in an empty voice, or in a longer chord or rest that addPendingTuplet shortens
