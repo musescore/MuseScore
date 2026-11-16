@@ -120,6 +120,10 @@ void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measu
 
 void StaveSharingLayout::updateEndOfSystemClefs(System* system, LayoutContext& ctx)
 {
+    // A clef change at the end of a system applies to the next system, where these staves may no longer be shared.
+    // Only show it on a shared stave if all clefs match
+    // Must be called once the system's measures are final, before the end barlines and trailer are laid out.
+
     Measure* lastMeasure = system->lastMeasure();
     Segment* seg = lastMeasure ? lastMeasure->findSegment(SegmentType::Clef, lastMeasure->endTick()) : nullptr;
     if (!seg || seg->measure() != lastMeasure) {
@@ -152,7 +156,11 @@ void StaveSharingLayout::updateEndOfSystemClefs(System* system, LayoutContext& c
             const track_idx_t sharedTrack = staff2track(sharedStaffIdx);
             EngravingItem* sharedClef = seg->element(sharedTrack);
 
-            if (originClefs.size() == 1) {
+            bool allClefsMatch = !originClefs.empty() && std::all_of(originClefs.begin(), originClefs.end(), [&](const Clef* clef) {
+                return clefsEqual(originClefs.front(), clef);
+            });
+
+            if (allClefsMatch) {
                 if (sharedClef && sharedClef->originItems().size() == 1 && sharedClef->originItems().front() == originClefs.front()
                     && clefsEqual(originClefs.front(), sharedClef)) {
                     continue;

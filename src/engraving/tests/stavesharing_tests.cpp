@@ -1651,6 +1651,118 @@ TEST_F(Engraving_StaveSharingTests, testMultipleClefChangesMidSystemOnSharedStav
     delete score;
 }
 
+TEST_F(Engraving_StaveSharingTests, testMatchingClefChangesAtEndOfSystemOnSharedStave)
+{
+    // [GIVEN] A score with 2 unison bass clef staves and a line break after bar 2
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_22.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+
+    Staff* firstOriginStaff = originParts.at(0)->staff(0);
+    Staff* secondOriginStaff = originParts.at(1)->staff(0);
+
+    // [WHEN] Both staves change to treble clef at the start of the second system
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clefs"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, firstOriginStaff, m3, ClefType::G);
+        EditClef::undoChangeClef(tx, score, secondOriginStaff, m3, ClefType::G);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+    ASSERT_NE(m2->system(), m3->system());
+
+    const Staff* sharedStaffInFirstSystem = sharedStaffForOrigin(sharedPart, firstOriginStaff, m2->tick());
+    ASSERT_TRUE(sharedStaffInFirstSystem);
+    ASSERT_EQ(sharedStaffForOrigin(sharedPart, secondOriginStaff, m2->tick()), sharedStaffInFirstSystem);
+    const track_idx_t sharedTrack = staff2track(sharedStaffInFirstSystem->idx());
+
+    // [THEN] The shared stave on the first system shows the treble clef change at the end of the system
+    Segment* clefSeg = m2->findSegment(SegmentType::Clef, m2->endTick());
+    ASSERT_TRUE(clefSeg);
+    EngravingItem* courtesyClef = clefSeg->element(sharedTrack);
+    ASSERT_TRUE(courtesyClef && courtesyClef->isClef());
+    EXPECT_EQ(toClef(courtesyClef)->clefType(), ClefType::G);
+
+    // [WHEN] The second staff changes to a different clef, so the clefs no longer match
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clef"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, secondOriginStaff, m3, ClefType::C3);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+    ASSERT_NE(m2->system(), m3->system());
+    ASSERT_EQ(sharedStaffForOrigin(sharedPart, firstOriginStaff, m2->tick()), sharedStaffInFirstSystem);
+    ASSERT_EQ(sharedStaffForOrigin(sharedPart, secondOriginStaff, m2->tick()), sharedStaffInFirstSystem);
+
+    // [THEN] The previous shared clef at the end of the system is removed
+    clefSeg = m2->findSegment(SegmentType::Clef, m2->endTick());
+    ASSERT_TRUE(clefSeg);
+    EXPECT_FALSE(clefSeg->element(sharedTrack));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testEndOfSystemClefChangeOnOneOfSeveralSharedStaves)
+{
+    // [GIVEN] A score with 3 treble clef staves and a line break after bar 2, where on the first system
+    // the first two staves share the first shared stave and the third staff is on the second shared stave
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_21.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    Staff* firstOriginStaff = originParts.at(0)->staff(0);
+    Staff* secondOriginStaff = originParts.at(1)->staff(0);
+    Staff* thirdOriginStaff = originParts.at(2)->staff(0);
+
+    // [WHEN] Only the third staff changes clef at the start of the second system
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clef"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, thirdOriginStaff, m3, ClefType::F);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+    ASSERT_NE(m2->system(), m3->system());
+
+    const Staff* firstSharedStaff = sharedStaffForOrigin(sharedPart, firstOriginStaff, m2->tick());
+    const Staff* thirdSharedStaff = sharedStaffForOrigin(sharedPart, thirdOriginStaff, m2->tick());
+    ASSERT_TRUE(firstSharedStaff && thirdSharedStaff);
+    ASSERT_EQ(sharedStaffForOrigin(sharedPart, secondOriginStaff, m2->tick()), firstSharedStaff);
+    ASSERT_NE(firstSharedStaff, thirdSharedStaff);
+
+    // [THEN] Only the shared stave showing the third staff has the clef change at the end of the system
+    Segment* clefSeg = m2->findSegment(SegmentType::Clef, m2->endTick());
+    ASSERT_TRUE(clefSeg);
+    EXPECT_FALSE(clefSeg->element(staff2track(firstSharedStaff->idx())));
+    EngravingItem* courtesyClef = clefSeg->element(staff2track(thirdSharedStaff->idx()));
+    ASSERT_TRUE(courtesyClef && courtesyClef->isClef());
+    EXPECT_EQ(toClef(courtesyClef)->clefType(), ClefType::F);
+
+    delete score;
+}
+
 TEST_F(Engraving_StaveSharingTests, testPreferFlatsOnSharedStaves)
 {
     // [GIVEN] Flute and two clarinets preferring flats, with a key change to E major (concert) for all staves in m.2
