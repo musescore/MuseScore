@@ -21,15 +21,17 @@
  */
 #include "notationparts.h"
 
-#include "translation.h"
+#include "types/translatablestring.h"
 
 #include "engraving/dom/instrument.h"
-#include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "igetscore.h"
+#include "inotationinteraction.h"
 #include "inotationnoteinput.h" // IWYU pragma: keep
+#include "inotationstyle.h"
+#include "inotationundostack.h"
 
 #include "log.h"
 

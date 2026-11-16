@@ -22,16 +22,21 @@
 
 #pragma once
 
+#include <functional>
+#include <map>
+
 #include "async/asyncable.h"
 #include "async/notifylist.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/editing/editpart.h"
 
+#include "inotation_fwd.h"
 #include "inotationparts.h"
-#include "inotationstyle.h"
-#include "inotationundostack.h"
-#include "inotationinteraction.h"
+
+namespace muse {
+class TranslatableString;
+}
 
 namespace mu::notation {
 class IGetScore;

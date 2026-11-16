@@ -27,9 +27,9 @@
 
 #include "../compat/midi/midipatch.h"
 #include "../dom/drumset.h"
-#include "../dom/instrument.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
+#include "../dom/stringdata.h"
 
 namespace mu::engraving {
 class InsertPart : public UndoableCommand
@@ -244,11 +244,8 @@ public:
 };
 
 class InstrumentTemplate;
-struct ScoreOrder;
 class Staff;
 class StaffType;
-enum class PreferSharpFlat : char;
-enum class StaffTypes : signed char;
 
 class EditPart
 {
