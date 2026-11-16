@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <QObject>
+
 #include "modularity/ioc.h"
 
 #include "iexportprojectscenario.h"
@@ -38,8 +40,7 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable, public muse::Contextable
 {
-    friend class ExportProjectScenarioTests;
-
+public:
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
@@ -47,8 +48,6 @@ class ExportProjectScenario : public IExportProjectScenario, public muse::async:
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectSession> context = { this };
-
-public:
 
     ExportProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx)
@@ -117,5 +116,8 @@ private:
 
     mutable muse::Progress m_exportProgress;
     ExportInfo m_exportInfo;
+
+    //! NOTE The context of the timers, so that they do not outlive the scenario
+    mutable QObject m_timersContext;
 };
 }

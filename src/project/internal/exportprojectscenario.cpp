@@ -472,7 +472,7 @@ void ExportProjectScenario::continueExportLater(const ExportStatePtr& state) con
     //! NOTE The writers may process events deep inside (e.g. the audio export),
     //! which can't be done neither in Async's callback nor while the question dialog is being closed,
     //! so continue the export on the next event loop
-    QTimer::singleShot(0, [this, state]() {
+    QTimer::singleShot(0, &m_timersContext, [this, state]() {
         exportNextFiles(state);
     });
 }
