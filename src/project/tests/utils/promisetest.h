@@ -24,6 +24,8 @@
 
 #include <gmock/gmock.h>
 
+#include <QCoreApplication>
+
 #include "async/asyncable.h"
 #include "async/processevents.h"
 #include "async/promise.h"
@@ -36,12 +38,19 @@ class PromiseTest : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
     //! A deferred call may queue another one, and a flow can be many of them long, hence the repetition.
-    static void drainDeferredCalls()
+    void drainDeferredCalls()
     {
         for (int i = 0; i < 100; ++i) {
             muse::async::processMessages();
+
+            if (m_drainQtEvents) {
+                QCoreApplication::processEvents();
+            }
         }
     }
+
+    //! NOTE Some flows go on from the Qt event loop (e.g. by QTimer::singleShot), their tests turn this on
+    bool m_drainQtEvents = false;
 
     //! Subscribes to `promise`, drains the deferred calls and hands back the result.
     template<typename T>

@@ -22,11 +22,14 @@
 
 #include "exportprojectscenario.h"
 
+#include <thread>
+
+#include <QTimer>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
 #include "translation.h"
-#include "defer.h"
 #include "log.h"
 
 #include "engraving/dom/score.h"
@@ -44,6 +47,21 @@ using namespace muse::io;
 using namespace mu::project;
 using namespace mu::notation;
 using muse::async::Promise;
+
+struct ExportProjectScenario::ExportState {
+    INotationPtrList notations;
+    std::vector<ViewMode> viewModes;
+
+    std::vector<ExportFile> files;
+    size_t currentFileIndex = 0;
+    FileConflictPolicy fileConflictPolicy = FileConflictPolicy::Undefined;
+
+    muse::io::path_t destinationPath;
+    bool openDestinationFolderOnExport = false;
+
+    Progress* writerProgress = nullptr;
+    Promise<Ret>::Resolve resolve;
+};
 
 static Promise<Ret> resolvedExportPromise(const Ret& ret)
 {
@@ -160,23 +178,29 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
         }
     }
 
+    auto state = std::make_shared<ExportState>();
+    state->notations = notations;
+    state->destinationPath = destinationPath;
+    state->openDestinationFolderOnExport = openDestinationFolderOnExport;
+
     // Backup view modes
-    std::vector<ViewMode> viewModes = this->viewModes(notations);
+    state->viewModes = viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
-    const std::vector<ExportFile> files = exportFiles(notations, destinationPath, writer, unitType, isCreatingOnlyOneFile);
+    state->files = exportFiles(notations, destinationPath, writer, unitType, isCreatingOnlyOneFile);
 
-    Progress* writerProgress = writer->progress();
-    size_t fileCount = files.size();
-    size_t currentFileNum = 0;
+    // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
+    // any existing files. If the user cancels, the filepath will be empty, so we would
+    // not reach this point. But if we do, existing files should be overridden.
+    state->fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
-    if (writerProgress) {
+    state->writerProgress = writer->progress();
+    if (state->writerProgress) {
         showExportProgress(isAudioExport(suffix));
         m_exportProgress.start();
 
-        writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
-                                                                                             const std::string& status) {
-            m_exportProgress.progress(currentFileNum * total + current, fileCount * total, status);
+        state->writerProgress->progressChanged().onReceive(this, [this, state](int64_t current, int64_t total, const std::string& status) {
+            m_exportProgress.progress(state->currentFileIndex * total + current, state->files.size() * total, status);
         }, async::Asyncable::Mode::SetReplace);
 
         m_exportProgress.canceled().onNotify(this, [writer]() {
@@ -184,36 +208,15 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
         }, muse::async::Asyncable::Mode::SetReplace);
     }
 
-    DEFER {
-        // Restore view modes
-        setViewModes(notations, viewModes);
+    return async::make_promise<Ret>([this, state](auto resolve) {
+        state->resolve = resolve;
 
-        if (writerProgress) {
-            m_exportProgress.finish(muse::make_ok());
-            writerProgress->progressChanged().disconnect(this);
-            m_exportProgress.finished().disconnect(this);
-        }
-    };
+        //! NOTE The resolve is lost if it is called before the caller subscribes to the promise,
+        //! so the export always starts on the next event loop
+        continueExportLater(state);
 
-    // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
-    // any existing files. If the user cancels, the filepath will be empty, so we would
-    // not reach this point. But if we do, existing files should be overridden.
-    m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
-
-    for (const ExportFile& file : files) {
-        Ret ret = doExportLoop(file);
-        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return resolvedExportPromise(make_ret(Ret::Code::Cancel));
-        }
-
-        ++currentFileNum;
-    }
-
-    if (openDestinationFolderOnExport) {
-        openFolder(destinationPath);
-    }
-
-    return resolvedExportPromise(muse::make_ok());
+        return Promise<Ret>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
 }
 
 const ExportInfo& ExportProjectScenario::exportInfo() const
@@ -348,9 +351,40 @@ muse::io::path_t ExportProjectScenario::completeExportPath(const muse::io::path_
     return result;
 }
 
-bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
+void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
 {
-    switch (m_fileConflictPolicy) {
+    for (; state->currentFileIndex < state->files.size(); ++state->currentFileIndex) {
+        Ret ret = doExportLoop(state, state->files.at(state->currentFileIndex));
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            finishExport(state, ret);
+            return;
+        }
+    }
+
+    finishExport(state, muse::make_ok());
+}
+
+void ExportProjectScenario::finishExport(const ExportStatePtr& state, const Ret& ret) const
+{
+    // Restore view modes
+    setViewModes(state->notations, state->viewModes);
+
+    if (state->writerProgress) {
+        m_exportProgress.finish(muse::make_ok());
+        state->writerProgress->progressChanged().disconnect(this);
+        m_exportProgress.canceled().disconnect(this);
+    }
+
+    if (ret && state->openDestinationFolderOnExport) {
+        openFolder(state->destinationPath);
+    }
+
+    (void)state->resolve(ret);
+}
+
+bool ExportProjectScenario::shouldReplaceFile(const ExportStatePtr& state, const QString& filename) const
+{
+    switch (state->fileConflictPolicy) {
     case FileConflictPolicy::ReplaceAll:
         return true;
     case FileConflictPolicy::SkipAll:
@@ -373,11 +407,11 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 
         switch (result.button()) {
         case ReplaceAll:
-            m_fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
+            state->fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
         case Replace:
             return true;
         case SkipAll:
-            m_fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
+            state->fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
         case Skip:
         default:
             return false;
@@ -398,10 +432,10 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-Ret ExportProjectScenario::doExportLoop(const ExportFile& file) const
+Ret ExportProjectScenario::doExportLoop(const ExportStatePtr& state, const ExportFile& file) const
 {
     String filename = FileInfo(file.path).fileName();
-    if (fileSystem()->exists(file.path) && !shouldReplaceFile(filename)) {
+    if (fileSystem()->exists(file.path) && !shouldReplaceFile(state, filename)) {
         return make_ret(Ret::Code::InternalError);
     }
 
@@ -415,6 +449,15 @@ Ret ExportProjectScenario::doExportLoop(const ExportFile& file) const
             return make_ret(Ret::Code::Cancel);
         }
     }
+}
+
+void ExportProjectScenario::continueExportLater(const ExportStatePtr& state) const
+{
+    //! NOTE The writers may process events deep inside (e.g. the audio export),
+    //! which can't be done in Async's callback, so continue the export on the next event loop
+    QTimer::singleShot(0, [this, state]() {
+        exportNextFiles(state);
+    });
 }
 
 Ret ExportProjectScenario::writeFile(const ExportFile& file) const

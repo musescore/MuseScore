@@ -80,6 +80,9 @@ private:
         std::function<muse::Ret(muse::io::IODevice&)> exportFunction;
     };
 
+    struct ExportState;
+    using ExportStatePtr = std::shared_ptr<ExportState>;
+
     /// When the user is trying to export a part that is a "potential excerpt", the corresponding score
     /// is not initialized yet, so we can't be certain about the page count. We should not initialize
     /// these scores either, until the user really starts the export, because initializing these scores
@@ -95,10 +98,15 @@ private:
     std::vector<ExportFile> exportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
                                         INotationWriterPtr writer, INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
 
-    bool shouldReplaceFile(const QString& filename) const;
+    void exportNextFiles(const ExportStatePtr& state) const;
+    void finishExport(const ExportStatePtr& state, const muse::Ret& ret) const;
+
+    void continueExportLater(const ExportStatePtr& state) const;
+
+    bool shouldReplaceFile(const ExportStatePtr& state, const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    muse::Ret doExportLoop(const ExportFile& file) const;
+    muse::Ret doExportLoop(const ExportStatePtr& state, const ExportFile& file) const;
     muse::Ret writeFile(const ExportFile& file) const;
 
     void showExportProgress(bool isAudioExport) const;
@@ -109,7 +117,6 @@ private:
     void setViewModes(const notation::INotationPtrList& notations, const std::vector<notation::ViewMode>& viewModes) const;
     void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
 
-    mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
     ExportInfo m_exportInfo;
 };

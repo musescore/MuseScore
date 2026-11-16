@@ -92,6 +92,9 @@ protected:
     {
         ASSERT_TRUE(m_dir.isValid());
 
+        // The export goes on from the Qt event loop
+        m_drainQtEvents = true;
+
         m_scenario = std::make_shared<ExportProjectScenario>(modularity::globalCtx());
 
         m_fileSystem = std::make_shared<NiceMock<io::FileSystemMock> >();
