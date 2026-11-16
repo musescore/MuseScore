@@ -43,6 +43,14 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::project;
 using namespace mu::notation;
+using muse::async::Promise;
+
+static Promise<Ret> resolvedExportPromise(const Ret& ret)
+{
+    return async::make_promise<Ret>([ret](auto resolve) {
+        return resolve(ret);
+    });
+}
 
 std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes(const ExportType& exportType) const
 {
@@ -111,18 +119,18 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     return exportPath;
 }
 
-bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
+                                                 INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
     std::string suffix = io::suffix(destinationPath);
     INotationWriterPtr writer = writers()->writer(suffix);
 
     if (!writer) {
-        return false;
+        return resolvedExportPromise(make_ret(Ret::Code::NotSupported));
     }
 
     IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
-        return false;
+        return resolvedExportPromise(make_ret(Ret::Code::NotSupported));
     }
 
     // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
@@ -215,7 +223,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
                 Ret ret = doExportLoop(definitivePath, exportFunction);
                 if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                    return false;
+                    return resolvedExportPromise(make_ret(Ret::Code::Cancel));
                 }
 
                 ++currentFileNum;
@@ -235,7 +243,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
             Ret ret = doExportLoop(definitivePath, exportFunction);
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                return false;
+                return resolvedExportPromise(make_ret(Ret::Code::Cancel));
             }
 
             ++currentFileNum;
@@ -248,7 +256,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
         Ret ret = doExportLoop(destinationPath, exportFunction);
         if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return false;
+            return resolvedExportPromise(make_ret(Ret::Code::Cancel));
         }
     } break;
     }
@@ -257,7 +265,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         openFolder(destinationPath);
     }
 
-    return true;
+    return resolvedExportPromise(muse::make_ok());
 }
 
 const ExportInfo& ExportProjectScenario::exportInfo() const

@@ -158,11 +158,11 @@ protected:
         release(m_writer);
     }
 
-    bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false)
+    Ret exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+                     INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                     bool openDestinationFolderOnExport = false)
     {
-        return m_scenario->exportScores(notations, destinationPath, unitType, openDestinationFolderOnExport);
+        return await(m_scenario->exportScores(notations, destinationPath, unitType, openDestinationFolderOnExport));
     }
 
     ScorePtr makeScore(const QString& name, size_t pageCount = 1)
@@ -374,10 +374,10 @@ TEST_F(ExportProjectScenarioTests, ExportScores_WriterIsChosenBySuffix)
     EXPECT_CALL(*m_writers, writer("pdf")).WillOnce(Return(m_writer));
 
     //! [WHEN] Exporting to a pdf...
-    bool ok = exportScores({ m_main->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
 
     //! [THEN] ...succeeds
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(ExportProjectScenarioTests, ExportScores_NoWriterForSuffix_WritesNothing)
@@ -386,10 +386,11 @@ TEST_F(ExportProjectScenarioTests, ExportScores_NoWriterForSuffix_WritesNothing)
     ON_CALL(*m_writers, writer(_)).WillByDefault(Return(nullptr));
 
     //! [WHEN] Exporting to it...
-    bool ok = exportScores({ m_main->notation }, path("Export.xyz"));
+    Ret ret = exportScores({ m_main->notation }, path("Export.xyz"));
 
     //! [THEN] ...fails, and nothing is written
-    EXPECT_FALSE(ok);
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::NotSupported));
     EXPECT_TRUE(m_writtenFiles.empty());
 }
 
@@ -609,10 +610,10 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_Skip_LeavesItAndGoesOn)
     EXPECT_CALL(*m_fileSystem, remove(path("Export.pdf"), _)).Times(0);
 
     //! [WHEN] Exporting the score with the part...
-    bool ok = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
 
     //! [THEN] ...goes on, and writes the part only
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export-Violin.pdf") });
 }
 
@@ -624,10 +625,10 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_QuestionDismissed_IsSkipped)
     givenReplaceQuestionAnsweredWith(int(IInteractive::Button::Cancel));
 
     //! [WHEN] Exporting the score with the part...
-    bool ok = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
 
     //! [THEN] ...skips the file
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export-Violin.pdf") });
 }
 
@@ -665,10 +666,10 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_SkipAll_SkipsTheRestWithoutAskin
     EXPECT_CALL(*m_interactive, questionSync(_, IsReplaceQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the parts...
-    bool ok = exportScores({ m_main->notation, violin->notation, flute->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation, violin->notation, flute->notation }, path("Export.pdf"));
 
     //! [THEN] ...writes the new file only
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export-Violin.pdf") });
 }
 
@@ -707,10 +708,10 @@ TEST_F(ExportProjectScenarioTests, WriteFails_Retry_WritesAgain)
     });
 
     //! [WHEN] Exporting...
-    bool ok = exportScores({ m_main->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
 
     //! [THEN] ...writes the file the second time
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export.pdf") });
 }
 
@@ -748,10 +749,11 @@ TEST_F(ExportProjectScenarioTests, WriteFails_Abort_StopsTheWholeExport)
     EXPECT_CALL(*m_writer, write(_, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
-    bool ok = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
 
-    //! [THEN] ...fails
-    EXPECT_FALSE(ok);
+    //! [THEN] ...is cancelled
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
 }
 
 TEST_F(ExportProjectScenarioTests, RemoveFails_Retry_RemovesAgain)
@@ -764,10 +766,10 @@ TEST_F(ExportProjectScenarioTests, RemoveFails_Retry_RemovesAgain)
     EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting...
-    bool ok = exportScores({ m_main->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
 
     //! [THEN] ...writes the file after the retry
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { path("Export.pdf") });
 }
 
@@ -781,10 +783,11 @@ TEST_F(ExportProjectScenarioTests, RemoveFails_Abort_WritesNothing)
     EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
 
     //! [WHEN] Exporting...
-    bool ok = exportScores({ m_main->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
 
-    //! [THEN] ...fails
-    EXPECT_FALSE(ok);
+    //! [THEN] ...is cancelled
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
 }
 
 TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Retry_OpensAgain)
@@ -805,10 +808,10 @@ TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Retry_OpensAgain)
     EXPECT_CALL(*m_interactive, questionSync(_, IsRetryQuestion(), _, _, _, _)).Times(1);
 
     //! [WHEN] Exporting there...
-    bool ok = exportScores({ m_main->notation }, filePath);
+    Ret ret = exportScores({ m_main->notation }, filePath);
 
     //! [THEN] ...writes the file after the retry
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(ret);
     EXPECT_EQ(writtenPaths(), std::vector<io::path_t> { filePath });
 }
 
@@ -821,10 +824,11 @@ TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Abort_WritesNothing)
     EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
 
     //! [WHEN] Exporting there...
-    bool ok = exportScores({ m_main->notation }, path("NotExisting/Export.pdf"));
+    Ret ret = exportScores({ m_main->notation }, path("NotExisting/Export.pdf"));
 
-    //! [THEN] ...fails
-    EXPECT_FALSE(ok);
+    //! [THEN] ...is cancelled
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
 }
 
 // ─── When writing is cancelled ───────────────────────────────────────────────
@@ -840,10 +844,11 @@ TEST_F(ExportProjectScenarioTests, WriteCancelled_StopsTheWholeExportWithoutAski
     EXPECT_CALL(*m_writer, write(_, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
-    bool ok = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
+    Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
 
-    //! [THEN] ...fails
-    EXPECT_FALSE(ok);
+    //! [THEN] ...is cancelled
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
 }
 
 TEST_F(ExportProjectScenarioTests, WriteCancelled_RemovesThePartlyWrittenFile)

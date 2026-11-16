@@ -61,9 +61,9 @@ public:
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                                                  muse::io::path_t defaultDirPath = "") const override;
 
-    bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false) const override;
+    muse::async::Promise<muse::Ret> exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
+                                                 INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                                 bool openDestinationFolderOnExport = false) const override;
 
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
