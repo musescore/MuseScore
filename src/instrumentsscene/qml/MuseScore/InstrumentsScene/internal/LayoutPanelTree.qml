@@ -65,6 +65,9 @@ Item {
         readonly property int rowContentHeight: 30
         readonly property int itemSpacing: 8
 
+        readonly property int groupPadding: 4
+        readonly property int groupRadius: 6
+
         property LayoutPanelItemDelegate pressedDelegate: null
 
         property AbstractLayoutPanelTreeItem draggedItem: null
@@ -298,7 +301,29 @@ Item {
                                                  ? !dropArea.expanded
                                                  : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
 
-            implicitHeight: prv.rowContentHeight + (dropArea.isCardBottom ? prv.itemSpacing : 0)
+            // Staves and "Add staff" rows are in their part's group
+            readonly property int groupRole: {
+                const item = dropArea.depth > 0 ? root.model.modelIndexToItem(dropArea.modelIndex.parent) : dropArea.item
+                const part = item as PartTreeItem
+                return part ? part.sharedGroupRole : LayoutPanelItemType.NOT_IN_GROUP
+            }
+
+            readonly property bool isInGroup: dropArea.groupRole !== LayoutPanelItemType.NOT_IN_GROUP
+            readonly property bool isGroupTop: dropArea.depth === 0 && dropArea.groupRole === LayoutPanelItemType.GROUP_HEADER
+            readonly property bool isGroupBottom: dropArea.isCardBottom && dropArea.groupRole === LayoutPanelItemType.GROUP_LAST_MEMBER
+
+            implicitHeight: {
+                let height = content.anchors.topMargin + prv.rowContentHeight
+                if (!dropArea.isCardBottom) {
+                    return height
+                }
+
+                if (!dropArea.isInGroup) {
+                    return height + prv.itemSpacing
+                }
+
+                return height + prv.groupPadding + (dropArea.isGroupBottom ? prv.itemSpacing : 0)
+            }
 
             // The gaps between cards; clicks on the cards are handled by the rows
             MouseArea {
@@ -306,119 +331,146 @@ Item {
                 onClicked: root.model.clearSelection()
             }
 
-            // Where the dragged row will land; its slot follows the drag, as rows are moved live
+            // The group's background behind this row
             Rectangle {
-                width: parent.width
-                height: prv.rowContentHeight
+                anchors.fill: parent
+                anchors.bottomMargin: dropArea.isGroupBottom ? prv.itemSpacing : 0
 
-                visible: dropArea.isDragged
+                visible: dropArea.isInGroup
 
-                radius: prv.cardRadius
-                color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
-                border.width: 1.5
-                border.color: ui.theme.accentColor
+                topLeftRadius: dropArea.isGroupTop ? prv.groupRadius : 0
+                topRightRadius: dropArea.isGroupTop ? prv.groupRadius : 0
+                bottomLeftRadius: dropArea.isGroupBottom ? prv.groupRadius : 0
+                bottomRightRadius: dropArea.isGroupBottom ? prv.groupRadius : 0
+
+                color: ui.theme.buttonColor
+                opacity: 0.5
             }
 
-            Loader {
-                width: parent.width
+            Item {
+                id: content
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: dropArea.isGroupTop ? prv.groupPadding : 0
+                anchors.leftMargin: dropArea.isInGroup ? prv.groupPadding : 0
+                anchors.rightMargin: dropArea.isInGroup ? prv.groupPadding : 0
+
                 height: prv.rowContentHeight
 
-                opacity: dropArea.isDragged ? 0 : 1
+                // Where the dragged row will land; its slot follows the drag, as rows are moved live
+                Rectangle {
+                    anchors.fill: parent
 
-                sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
-                                 ? addStaffButtonComponent : treeItemDelegateComponent
+                    visible: dropArea.isDragged
 
-                Component {
-                    id: treeItemDelegateComponent
-
-                    LayoutPanelItemDelegate {
-                        id: itemDelegate
-
-                        treeView: layoutPanelTreeView
-                        item: dropArea.item
-                        modelIndex: dropArea.modelIndex
-                        row: dropArea.row
-                        depth: dropArea.depth
-                        isExpanded: dropArea.expanded
-
-                        sideMargin: root.sideMargin
-                        cardRadius: prv.cardRadius
-
-                        navigation.name: itemDelegate.item?.title || "LayoutPanelItemDelegate"
-                        navigation.panel: treeNavigationPanel
-                        navigation.row: dropArea.row
-                        navigation.onActiveChanged: {
-                            if (itemDelegate.navigation.active) {
-                                prv.currentItemNavigationName = itemDelegate.navigation.name
-                                layoutPanelTreeView.positionViewAtRow(dropArea.row, TableView.Contain)
-                            }
-                        }
-
-                        onClicked: {
-                            if (itemDelegate.isSelectable) {
-                                root.model.selectRow(dropArea.modelIndex)
-                            }
-                        }
-
-                        onDoubleClicked: {
-                            if (itemDelegate.isExpandable) {
-                                prv.setExpanded(itemDelegate, !itemDelegate.isExpanded)
-                            }
-                        }
-
-                        onExpandRequested: function(expand) {
-                            prv.setExpanded(itemDelegate, expand)
-                        }
-
-                        onRemoveSelectionRequested: {
-                            root.model.removeSelectedRows()
-                        }
-
-                        onChangeVisibilityOfSelectedRowsRequested: function(visible) {
-                            root.model.changeVisibilityOfSelectedRows(visible)
-                        }
-
-                        onChangeVisibilityRequested: function(modelIndex, visible) {
-                            root.model.changeVisibility(modelIndex, visible)
-                        }
-
-                        onChangeEnabledOfSelectedRowsRequested: function(enabled) {
-                            root.model.changeEnabledOfSelectedRows(enabled)
-                        }
-
-                        onChangeEnabledRequested: function(modelIndex, enabled) {
-                            root.model.changeEnabled(modelIndex, enabled)
-                        }
-
-                        onMousePressed: {
-                            prv.pressedDelegate = itemDelegate
-                        }
-
-                        onMouseReleased: {
-                            Qt.callLater(prv.releasePressedDelegate)
-                        }
-
-                        onIsPopupOpenedChanged: {
-                            prv.isPopupOpened = itemDelegate.isPopupOpened
-                        }
-                    }
+                    radius: prv.cardRadius
+                    color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
+                    border.width: 1.5
+                    border.color: ui.theme.accentColor
                 }
 
-                Component {
-                    id: addStaffButtonComponent
+                Loader {
+                    anchors.fill: parent
 
-                    LayoutPanelAddStaffButton {
-                        title: dropArea.item?.title || ""
+                    opacity: dropArea.isDragged ? 0 : 1
 
-                        navigation.panel: treeNavigationPanel
-                        navigation.row: dropArea.row
+                    sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
+                                     ? addStaffButtonComponent : treeItemDelegateComponent
 
-                        depth: dropArea.depth
-                        sideMargin: root.sideMargin
-                        cardRadius: prv.cardRadius
+                    Component {
+                        id: treeItemDelegateComponent
 
-                        onClicked: {
-                            dropArea.item.appendNewItem()
+                        LayoutPanelItemDelegate {
+                            id: itemDelegate
+
+                            treeView: layoutPanelTreeView
+                            item: dropArea.item
+                            modelIndex: dropArea.modelIndex
+                            row: dropArea.row
+                            depth: dropArea.depth
+                            isExpanded: dropArea.expanded
+
+                            sideMargin: root.sideMargin
+                            cardRadius: prv.cardRadius
+
+                            navigation.name: itemDelegate.item?.title || "LayoutPanelItemDelegate"
+                            navigation.panel: treeNavigationPanel
+                            navigation.row: dropArea.row
+                            navigation.onActiveChanged: {
+                                if (itemDelegate.navigation.active) {
+                                    prv.currentItemNavigationName = itemDelegate.navigation.name
+                                    layoutPanelTreeView.positionViewAtRow(dropArea.row, TableView.Contain)
+                                }
+                            }
+
+                            onClicked: {
+                                if (itemDelegate.isSelectable) {
+                                    root.model.selectRow(dropArea.modelIndex)
+                                }
+                            }
+
+                            onDoubleClicked: {
+                                if (itemDelegate.isExpandable) {
+                                    prv.setExpanded(itemDelegate, !itemDelegate.isExpanded)
+                                }
+                            }
+
+                            onExpandRequested: function(expand) {
+                                prv.setExpanded(itemDelegate, expand)
+                            }
+
+                            onRemoveSelectionRequested: {
+                                root.model.removeSelectedRows()
+                            }
+
+                            onChangeVisibilityOfSelectedRowsRequested: function(visible) {
+                                root.model.changeVisibilityOfSelectedRows(visible)
+                            }
+
+                            onChangeVisibilityRequested: function(modelIndex, visible) {
+                                root.model.changeVisibility(modelIndex, visible)
+                            }
+
+                            onChangeEnabledOfSelectedRowsRequested: function(enabled) {
+                                root.model.changeEnabledOfSelectedRows(enabled)
+                            }
+
+                            onChangeEnabledRequested: function(modelIndex, enabled) {
+                                root.model.changeEnabled(modelIndex, enabled)
+                            }
+
+                            onMousePressed: {
+                                prv.pressedDelegate = itemDelegate
+                            }
+
+                            onMouseReleased: {
+                                Qt.callLater(prv.releasePressedDelegate)
+                            }
+
+                            onIsPopupOpenedChanged: {
+                                prv.isPopupOpened = itemDelegate.isPopupOpened
+                            }
+                        }
+                    }
+
+                    Component {
+                        id: addStaffButtonComponent
+
+                        LayoutPanelAddStaffButton {
+                            title: dropArea.item?.title || ""
+
+                            navigation.panel: treeNavigationPanel
+                            navigation.row: dropArea.row
+
+                            depth: dropArea.depth
+                            sideMargin: root.sideMargin
+                            cardRadius: prv.cardRadius
+
+                            onClicked: {
+                                dropArea.item.appendNewItem()
+                            }
                         }
                     }
                 }
