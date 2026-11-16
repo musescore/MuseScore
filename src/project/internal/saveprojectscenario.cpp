@@ -224,14 +224,16 @@ Promise<Ret> SaveProjectScenario::publish()
                 return resolve(info.ret);
             }
 
-            AudioFile audio = exportMp3(project->masterNotation()->notation());
-            if (!audio.isValid()) {
-                return resolve(make_ret(Ret::Code::BadData));
-            }
+            exportMp3(project->masterNotation()->notation()).onResolve(this, [this, info, resolve](const AudioFile& audio) {
+                if (!audio.isValid()) {
+                    (void)resolve(make_ret(Ret::Code::BadData));
+                    return;
+                }
 
-            uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true)
-            .onResolve(this, [resolve](const Ret& ret) {
-                (void)resolve(ret);
+                uploadProject(info.val, audio, /*openEditUrl=*/ true, /*publishMode=*/ true)
+                .onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
             });
 
             return Promise<Ret>::dummy_result();
@@ -254,13 +256,19 @@ Promise<Ret> SaveProjectScenario::shareAudio(const AudioFile& existingAudio)
                 return resolve(info.ret);
             }
 
-            AudioFile audio = existingAudio.isValid() ? existingAudio : exportMp3(project->masterNotation()->notation());
-            if (!audio.isValid()) {
-                return resolve(make_ret(Ret::Code::BadData));
-            }
+            Promise<AudioFile> audioPromise = existingAudio.isValid()
+                                              ? resolvedPromise(existingAudio)
+                                              : exportMp3(project->masterNotation()->notation());
 
-            uploadAudioToAudioCom(audio, project, info.val).onResolve(this, [resolve](const Ret& ret) {
-                (void)resolve(ret);
+            audioPromise.onResolve(this, [this, project, info, resolve](const AudioFile& audio) {
+                if (!audio.isValid()) {
+                    (void)resolve(make_ret(Ret::Code::BadData));
+                    return;
+                }
+
+                uploadAudioToAudioCom(audio, project, info.val).onResolve(this, [resolve](const Ret& ret) {
+                    (void)resolve(ret);
+                });
             });
 
             return Promise<Ret>::dummy_result();
@@ -546,21 +554,23 @@ Promise<Ret> SaveProjectScenario::doSaveAndUploadProject(const INotationProjectP
                 return;
             }
 
-            AudioFile audio;
-            if (generateAudio) {
-                audio = exportMp3(project->masterNotation()->notation());
-                if (!audio.isValid()) {
+            Promise<AudioFile> audioPromise = generateAudio
+                                              ? exportMp3(project->masterNotation()->notation())
+                                              : resolvedPromise(AudioFile());
+
+            audioPromise.onResolve(this, [this, info, isPublic, generateAudio, resolve](const AudioFile& audio) {
+                if (generateAudio && !audio.isValid()) {
                     (void)resolve(make_ret(Ret::Code::BadData));
                     return;
                 }
-            }
 
-            uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false)
-            .onResolve(this, [this, resolve](const Ret& ret) {
-                if (ret) {
-                    m_numberOfSavesToCloud++;
-                }
-                (void)resolve(ret);
+                uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false)
+                .onResolve(this, [this, resolve](const Ret& ret) {
+                    if (ret) {
+                        m_numberOfSavesToCloud++;
+                    }
+                    (void)resolve(ret);
+                });
             });
         });
 
@@ -706,14 +716,14 @@ bool SaveProjectScenario::needGenerateAudioAccordingToSettings() const
     return false;
 }
 
-SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr notation) const
+Promise<SaveProjectScenario::AudioFile> SaveProjectScenario::exportMp3(const INotationPtr notation) const
 {
     QString mp3Path;
     {
         QTemporaryFile tempFile(configuration()->temporaryMp3FilePathTemplate().toQString());
         if (!tempFile.open()) {
             LOGE() << "Could not create a temp file";
-            return AudioFile();
+            return resolvedPromise(AudioFile());
         }
 
         mp3Path = QFileInfo(tempFile).absoluteFilePath();
@@ -723,7 +733,7 @@ SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr
 
     if (mp3Path.isEmpty()) {
         LOGE() << "mp3 path is empty";
-        return AudioFile();
+        return resolvedPromise(AudioFile());
     }
 
     // In the uploaded audio file, the repeats need to be expanded
@@ -732,34 +742,35 @@ SaveProjectScenario::AudioFile SaveProjectScenario::exportMp3(const INotationPtr
         notationConfiguration()->setIsPlayRepeatsEnabled(true);
     }
 
-    DEFER {
+    return exportProjectScenario()->exportScores({ notation }, mp3Path)
+           .then<AudioFile>(this, [this, mp3Path, wasExpandRepeats](const Ret& ret, auto resolve) {
         if (!wasExpandRepeats) {
             notationConfiguration()->setIsPlayRepeatsEnabled(false);
         }
-    };
 
-    if (!exportProjectScenario()->exportScores({ notation }, mp3Path)) {
-        LOGE() << "Could not export an mp3";
-        fileSystem()->remove(mp3Path);
-        return AudioFile();
-    }
+        if (!ret) {
+            LOGE() << "Could not export an mp3: " << ret.toString();
+            fileSystem()->remove(mp3Path);
+            return resolve(AudioFile());
+        }
 
-    std::shared_ptr<QFile> exportedFile(new QFile(mp3Path), [this](QFile* file) {
-        file->close();
-        fileSystem()->remove(file->fileName());
-        delete file;
+        std::shared_ptr<QFile> exportedFile(new QFile(mp3Path), [this](QFile* file) {
+            file->close();
+            fileSystem()->remove(file->fileName());
+            delete file;
+        });
+
+        if (!exportedFile->open(QIODevice::ReadOnly)) {
+            LOGE() << "Could not reopen exported mp3: " << mp3Path;
+            return resolve(AudioFile());
+        }
+
+        AudioFile audio;
+        audio.format = "mp3";
+        audio.device = exportedFile;
+
+        return resolve(audio);
     });
-
-    if (!exportedFile->open(QIODevice::ReadOnly)) {
-        LOGE() << "Could not reopen exported mp3: " << mp3Path;
-        return AudioFile();
-    }
-
-    AudioFile audio;
-    audio.format = "mp3";
-    audio.device = exportedFile;
-
-    return audio;
 }
 
 void SaveProjectScenario::showUploadProgressDialog()

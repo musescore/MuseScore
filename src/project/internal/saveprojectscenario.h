@@ -158,7 +158,7 @@ private:
     muse::async::Promise<muse::Ret> askAudioGenerationSettings() const;
     muse::async::Promise<muse::RetVal<bool> > needGenerateAudio(bool isPublic) const;
     bool needGenerateAudioAccordingToSettings() const;
-    AudioFile exportMp3(const notation::INotationPtr notation) const;
+    muse::async::Promise<AudioFile> exportMp3(const notation::INotationPtr notation) const;
 
     void showUploadProgressDialog();
     void closeUploadProgressDialog();
