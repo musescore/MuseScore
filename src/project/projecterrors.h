@@ -41,11 +41,29 @@ enum class Err {
 
     UnsupportedUrl,
     MalformedOpenScoreUrl,
+
+    ConvertValidationFailed,
+    ConvertUnsupportedFormat,
+    ConvertMixedFileTypes,
+    ConvertMultiplePdfFiles,
+    ConvertAudioFileTooLarge,
+    ConvertFileTooLarge,
+    ConvertCombinedImageTooLarge,
+    ConvertTooManyAudioFiles,
+    ConvertTooManyImages,
+    ConvertUnsupportedLink,
+    ConvertProcessingFailed,
+    ConvertUploadFailed,
 };
 
 inline muse::Ret make_ret(Err e)
 {
     return muse::Ret(static_cast<int>(e));
+}
+
+inline muse::Ret make_ret(Err e, const std::string& text)
+{
+    return muse::Ret(static_cast<int>(e), text);
 }
 }
 

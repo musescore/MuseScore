@@ -43,19 +43,13 @@ ECHO "TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
 ECHO "CRASH_LOG_SERVER_URL: %CRASH_LOG_SERVER_URL%"
 ECHO "BUILD_WIN_PORTABLE: %BUILD_WIN_PORTABLE%"
 
-XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
-ECHO "Finished copy dependencies"
-
-SET "JACK_DIR=C:\Program Files (x86)\Jack"
-SET "PATH=%JACK_DIR%;%PATH%"
-
 SET "MUSESCORE_BUILD_CONFIGURATION=app"
 IF %BUILD_WIN_PORTABLE% == ON (
     SET INSTALL_DIR=../build.install/App/MuseScore
     SET "MUSESCORE_BUILD_CONFIGURATION=app-portable"
 )
 
-bash ./buildscripts/ci/tools/make_revision_env.sh 
+bash ./buildscripts/ci/tools/make_revision_env.sh
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
 
 SET MUSESCORE_BUILD_CONFIGURATION=%MUSESCORE_BUILD_CONFIGURATION%

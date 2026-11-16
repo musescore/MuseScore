@@ -53,6 +53,16 @@ muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
     return {};
 }
 
+muse::audio::secs_t PlaybackControllerStub::playbackPosition() const
+{
+    return 0.0;
+}
+
+muse::async::Channel<muse::audio::secs_t> PlaybackControllerStub::playbackPositionChanged() const
+{
+    return {};
+}
+
 muse::Ret PlaybackControllerStub::togglePlay()
 {
     return muse::make_ok();

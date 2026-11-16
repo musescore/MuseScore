@@ -30,6 +30,7 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/select.h"
 
 #include "modularity/ioc.h"
@@ -887,7 +888,7 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 
     for (EngravingItem* e : sel.elements()) {
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         if (e->isChordRest()) {
             if (toChordRest(e)->beamMode() != bm) {

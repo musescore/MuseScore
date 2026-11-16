@@ -33,17 +33,16 @@ public:
     void dataChanged(const muse::RectF&) override;
     void updateAll() override;
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
-    qreal selectionProximity() const override;
+    double selectionProximity() const override;
     void setDropTarget(mu::engraving::EngravingItem* dropTarget) override;
-    void setDropRectangles(const std::vector<muse::RectF>& rects) override;
     void changeEditElement(mu::engraving::EngravingItem* newElement) override;
     void adjustCanvasPosition(const mu::engraving::EngravingItem*, int staffIdx = -1) override;
 
-    void setSelectionProximity(qreal proximity);
+    void setSelectionProximity(double proximity);
     void setNotationInteraction(INotationInteraction* interaction);
 
 private:
-    qreal m_selectionProximity = 0.0f;
+    double m_selectionProximity = 0.0;
 
     INotationInteraction* m_interaction = nullptr;
 };

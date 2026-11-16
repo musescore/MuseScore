@@ -48,7 +48,7 @@ public:
 
     ChordLine* clone() const override { return new ChordLine(*this); }
 
-    Chord* chord() const { return (Chord*)(explicitParent()); }
+    Chord* chord() const { return (Chord*)(ownershipParent()); }
 
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return m_chordLineType; }
@@ -103,7 +103,7 @@ private:
 
     friend class Factory;
 
-    ChordLine(Chord* parent);
+    ChordLine(DummyParentOr<Chord> parent);
     ChordLine(const ChordLine&);
 
     bool m_straight = false;

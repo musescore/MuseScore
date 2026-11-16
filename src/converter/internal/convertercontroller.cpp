@@ -190,13 +190,17 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
     }
 
     if (!copyright.text.isEmpty()) {
-        engraving::MStyle& style = notationProject->masterNotation()->masterScore()->style();
+        auto masterScore = notationProject->masterNotation()->masterScore();
+
+        engraving::MStyle& style = masterScore->style();
         String footerOdd = style.value(engraving::Sid::oddFooterC).value<String>();
         String footerEven = style.value(engraving::Sid::evenFooterC).value<String>();
         footerOdd += copyright.text;
         footerEven += copyright.text;
         style.set(engraving::Sid::oddFooterC, footerOdd);
         style.set(engraving::Sid::evenFooterC, footerEven);
+
+        masterScore->doLayout();
     }
 
     globalContext()->setCurrentProject(notationProject);
@@ -416,8 +420,11 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
                                             const muse::UriQuery& extensionUri)
 {
+    extensions::ExtensionUri uri = extensionUri.uri();
+    extensions::ExtensionActionCode actionCode = extensionUri.param("action", Val("main")).toString();
+
     //! NOTE First we do the extension, it can modify the notation (score)
-    Ret ret = extensionsProvider()->perform(extensionUri);
+    Ret ret = extensionsProvider()->perform(uri, actionCode);
     if (!ret) {
         return ret;
     }
@@ -673,28 +680,28 @@ Ret ConverterController::exportScoreMedia(const muse::io::path_t& in, const muse
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, openParams);
+    return BackendApi::exportScoreMedia(iocContext(), in, out, highlightConfigPath, openParams);
 }
 
 Ret ConverterController::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMeta(in, out, openParams);
+    return BackendApi::exportScoreMeta(iocContext(), in, out, openParams);
 }
 
 Ret ConverterController::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreParts(in, out, openParams);
+    return BackendApi::exportScoreParts(iocContext(), in, out, openParams);
 }
 
 Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScorePartsPdfs(in, out, openParams);
+    return BackendApi::exportScorePartsPdfs(iocContext(), in, out, openParams);
 }
 
 Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
@@ -702,7 +709,7 @@ Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const 
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreTranspose(in, out, optionsJson, openParams);
+    return BackendApi::exportScoreTranspose(iocContext(), in, out, optionsJson, openParams);
 }
 
 Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out,
@@ -710,7 +717,7 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreElements(in, out, openParams);
+    return BackendApi::exportScoreElements(iocContext(), in, out, openParams);
 }
 
 Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams,
@@ -752,5 +759,5 @@ Ret ConverterController::updateSource(const muse::io::path_t& in, const std::str
 {
     TRACEFUNC;
 
-    return BackendApi::updateSource(in, newSource, forceMode);
+    return BackendApi::updateSource(iocContext(), in, newSource, forceMode);
 }

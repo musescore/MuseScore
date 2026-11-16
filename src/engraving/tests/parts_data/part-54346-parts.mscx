@@ -153,8 +153,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Test</text>
           </Text>
         </VBox>
@@ -177,8 +177,8 @@
             </Rest>
           <SystemText>
             <swing unit="eighth" ratio="60"/>
-            <eid>K_K</eid>
             <style>tempo</style>
+            <eid>K_K</eid>
             <text>Swing</text>
             </SystemText>
           <Chord>
@@ -371,14 +371,14 @@
           <eid>l_l</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>m_m</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>n_n</eid>
             <style>instrument_excerpt</style>
+            <eid>n_n</eid>
             <text>B♭ Trumpet</text>
             </Text>
           </VBox>
@@ -405,9 +405,9 @@
               </Rest>
             <SystemText>
               <swing unit="eighth" ratio="60"/>
+              <style>tempo</style>
               <eid>s_s</eid>
               <linkedTo>K_K</linkedTo>
-              <style>tempo</style>
               <text>Swing</text>
               </SystemText>
             <Chord>
@@ -554,14 +554,14 @@
           <eid>7_7</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>8_8</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>9_9</eid>
             <style>instrument_excerpt</style>
+            <eid>9_9</eid>
             <text>C Trumpet</text>
             </Text>
           </VBox>
@@ -585,9 +585,9 @@
               </location>
             <SystemText>
               <swing unit="eighth" ratio="60"/>
+              <style>tempo</style>
               <eid>BB_BB</eid>
               <linkedTo>K_K</linkedTo>
-              <style>tempo</style>
               <text>Swing</text>
               </SystemText>
             </voice>

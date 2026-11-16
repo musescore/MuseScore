@@ -64,13 +64,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>Split Measure</text>
           </Text>
         </VBox>
@@ -149,6 +149,7 @@
         <beginHookHeight>-1.9</beginHookHeight>
         <endHookHeight>-1.9</endHookHeight>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>3/4</ticks>
         <eid>V_V</eid>
         <track>0</track>

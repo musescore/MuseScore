@@ -195,20 +195,20 @@
         <height>10</height>
         <eid>F_F</eid>
         <Text>
-          <eid>G_G</eid>
           <style>composer</style>
+          <eid>G_G</eid>
           <family>Times New Roman</family>
           <text><font size="12"/><font face="Times New Roman"/>Franz Liszt<br/>(1811 - 1886)</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <family>Times New Roman</family>
           <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>subtitle</style>
+          <eid>I_I</eid>
           <family>Times New Roman</family>
           <text><font size="14"/><font face="Times New Roman"/>S. 514</text>
           </Text>

@@ -38,8 +38,8 @@ class Marker final : public TextBase
     DECLARE_CLASSOF(ElementType::MARKER)
 
 public:
-    Marker(EngravingItem* parent);
-    Marker(EngravingItem* parent, TextStyleType);
+    Marker(DummyParentOr<EngravingItem> parent);
+    Marker(DummyParentOr<EngravingItem> parent, TextStyleType);
 
     void setMarkerType(MarkerType t);
     MarkerType markerType() const { return m_markerType; }
@@ -64,7 +64,7 @@ public:
     int subtype() const override { return int(m_markerType); }
     TranslatableString subtypeUserName() const override;
 
-    Measure* measure() const { return (Measure*)explicitParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent(); }
 
     String label() const { return m_label; }
     void setLabel(const String& s) { m_label = s; }

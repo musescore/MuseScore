@@ -39,7 +39,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="voice">
@@ -76,13 +76,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>D_D</eid>
         <Text>
-          <eid>E_E</eid>
           <style>subtitle</style>
+          <eid>E_E</eid>
           <text>Slant + Stem len</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Beam Test-G</text>
           </Text>
         </VBox>

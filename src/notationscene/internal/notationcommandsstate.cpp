@@ -70,6 +70,8 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     MIRROR_NOTEHEAD_COMMAND,
     MOVE_UP_COMMAND,
     MOVE_DOWN_COMMAND,
+    INCREASE_DYNAMIC_COMMAND,
+    DECREASE_DYNAMIC_COMMAND
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -257,6 +259,21 @@ static const std::vector<Command> TAB_COMMANDS = {
     SET_DURATION_512TH_TAB_COMMAND,
     SET_DURATION_1024TH_TAB_COMMAND,
     ENTER_REST_TAB_COMMAND,
+    ENTER_FRET_0_COMMAND,
+    ENTER_FRET_1_COMMAND,
+    ENTER_FRET_2_COMMAND,
+    ENTER_FRET_3_COMMAND,
+    ENTER_FRET_4_COMMAND,
+    ENTER_FRET_5_COMMAND,
+    ENTER_FRET_6_COMMAND,
+    ENTER_FRET_7_COMMAND,
+    ENTER_FRET_8_COMMAND,
+    ENTER_FRET_9_COMMAND,
+    ENTER_FRET_10_COMMAND,
+    ENTER_FRET_11_COMMAND,
+    ENTER_FRET_12_COMMAND,
+    ENTER_FRET_13_COMMAND,
+    ENTER_FRET_14_COMMAND,
     GOTO_STRING_ABOVE_COMMAND,
     GOTO_STRING_BELOW_COMMAND
 };
@@ -292,9 +309,11 @@ void NotationCommandsState::init()
         updateCommandStates();
     });
 
-    interactive()->opened().onReceive(this, [this](const muse::Uri&) {
-        updateCommandStates();
-    });
+    if (interactive()) {
+        interactive()->opened().onReceive(this, [this](const muse::Uri&) {
+            updateCommandStates();
+        });
+    }
 
     controller()->selectionChanged().onNotify(this, [this]() {
         updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
@@ -333,6 +352,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+        updateCommandStates(TAB_COMMANDS);
     });
 
     controller()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
@@ -357,7 +377,9 @@ void NotationCommandsState::init()
 void NotationCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
-    interactive()->opened().disconnect(this);
+    if (interactive()) {
+        interactive()->opened().disconnect(this);
+    }
     controller()->selectionChanged().disconnect(this);
     controller()->stackChanged().disconnect(this);
     controller()->textEditingChanged().disconnect(this);
@@ -460,6 +482,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
     }
 
+    if (command == ADD_DYNAMIC_COMMAND) {
+        return CommandState(controller()->isNoteOrRestSelected() || controller()->isHairpinSelected(), false);
+    }
+
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
     }
@@ -512,7 +538,7 @@ bool NotationCommandsState::isProjectOpened() const
         return false;
     }
 
-    if (!interactive()->isOpened(PROJECT_PAGE_URI).val) {
+    if (!interactive() || !interactive()->isOpened(PROJECT_PAGE_URI).val) {
         return false;
     }
 

@@ -131,31 +131,38 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>S_S</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>T_T</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>O_O</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>V_V</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
               <string>4</string>
               <Glissando>
                 <startElement>M_M</startElement>
-                <endElement>T_T</endElement>
-                <eid>U_U</eid>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
                 <track>0</track>
                 <diagonal>1</diagonal>
                 </Glissando>
               </Note>
             </Chord>
           <Rest>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -164,8 +171,8 @@
     <SpannerMap>
       <Slur>
         <startElement>L_L</startElement>
-        <endElement>S_S</endElement>
-        <eid>W_W</eid>
+        <endElement>U_U</endElement>
+        <eid>Y_Y</eid>
         <track>0</track>
         </Slur>
       </SpannerMap>

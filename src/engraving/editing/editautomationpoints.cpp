@@ -22,6 +22,9 @@
 
 #include "editautomationpoints.h"
 
+#include "engraving/automation/internal/scoreautomationcontroller.h"
+
+#include "engraving/dom/measure.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/staff.h"
 
@@ -52,7 +55,7 @@ static std::optional<ChangedRange> computeChangedRange(const Score* score, const
     }
     // else: Global/Instrument-scoped key - not tied to any staff, leave staffIdx as muse::nidx
 
-    const RepeatList& repeatList = score->repeatList();
+    const RepeatList& repeatList = score->expandedRepeatList();
 
     //! NOTE: utick2tick can be non-monotonic across repeat passes (e.g. D.S. al Coda),
     //! so the base-tick extremes aren't necessarily at the utick extremes
@@ -71,11 +74,30 @@ static std::optional<ChangedRange> computeChangedRange(const Score* score, const
     return ChangedRange { tickFrom, tickTo, staffIdx, staffIdx };
 }
 
-EditAutomationPoints::EditAutomationPoints(Score* score, AutomationDataPtr automationData, const AutomationCurveKey& key,
-                                           const AutomationPointEdits& edits)
-    : m_score(score), m_automationData(automationData), m_key(key)
+static void widenChangedRange(const Score* score, const AutomationCurveKey& key, const AutomationPointEdits& edits,
+                              ChangedRange& changedRange)
 {
-    assert(score && automationData && !edits.empty());
+    if (key.type == AutomationType::Tempo) {
+        const Measure* lastMeasure = score->lastMeasure();
+        if (lastMeasure) {
+            changedRange.tickTo = lastMeasure->endTick();
+        }
+        return;
+    }
+
+    const RepeatList& repeatList = score->expandedRepeatList();
+    for (const AutomationPointEdit& edit : edits) {
+        const Fraction tick = Fraction::fromTicks(repeatList.utick2tick(edit.tick));
+        changedRange.tickFrom = std::min(changedRange.tickFrom, tick);
+        changedRange.tickTo = std::max(changedRange.tickTo, tick);
+    }
+}
+
+EditAutomationPoints::EditAutomationPoints(Score* score, ScoreAutomationController* controller,
+                                           const AutomationCurveKey& key, const AutomationPointEdits& edits)
+    : m_score(score), m_controller(controller), m_key(key)
+{
+    assert(score && controller && !edits.empty());
 
     // Collapse the edit list into the final value to write at each touched tick,
     // replaying the same erase-then-write order AutomationData::editPoints itself would apply
@@ -102,11 +124,11 @@ void EditAutomationPoints::flip()
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(m_score && m_automationData) {
+    IF_ASSERT_FAILED(m_score && m_controller && m_controller->automationData()) {
         return;
     }
 
-    const AutomationCurve& curve = m_automationData->curve(m_key);
+    const AutomationCurve& curve = m_controller->automationData()->curve(m_key);
     m_changedRange = computeChangedRange(m_score, m_key, m_pointStates);
 
     std::map<utick_t, std::optional<AutomationPoint> > previousStates;
@@ -128,6 +150,10 @@ void EditAutomationPoints::flip()
         }
     }
 
-    m_automationData->editPoints(m_key, automationEdits);
+    if (m_changedRange) {
+        m_controller->editPoints(m_key, automationEdits);
+        widenChangedRange(m_score, m_key, automationEdits, *m_changedRange);
+    }
+
     m_pointStates = std::move(previousStates);
 }

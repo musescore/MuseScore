@@ -774,7 +774,6 @@ void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t 
     }
 
     score->undoInsertPart(part, index);
-    score->setUpTempoMapLater();
     score->masterScore()->rebuildMidiMapping();
 }
 

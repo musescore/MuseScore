@@ -118,6 +118,7 @@ enum class P_TYPE : unsigned char {
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
     MARKER_TYPE,
+    ACTION_TYPE,
 
     LH_TAPPING_SYMBOL,
     RH_TAPPING_SYMBOL,
@@ -133,6 +134,7 @@ enum class P_TYPE : unsigned char {
 
     INSTRUMENT_NAMES_ALIGN,
     INSTRUMENT_NAMES_FORMAT,
+    INSTRUMENT_LABEL_VISIBILITY,
 
     // Other
     GROUPS,
@@ -326,6 +328,9 @@ public:
     PropertyValue(const NoteLineEndPlacement& v)
         : m_type(P_TYPE::NOTELINE_PLACEMENT_TYPE), m_data(make_data<NoteLineEndPlacement>(v)) {}
 
+    PropertyValue(ActionIconType v)
+        : m_type(P_TYPE::ACTION_TYPE), m_data(make_data<ActionIconType>(v)) {}
+
     // Other
     PropertyValue(const GroupNodes& v)
         : m_type(P_TYPE::GROUPS), m_data(make_data<GroupNodes>(v)) {}
@@ -374,6 +379,9 @@ public:
 
     PropertyValue(const InstrumentNamesFormat& v)
         : m_type(P_TYPE::INSTRUMENT_NAMES_FORMAT), m_data(make_data<InstrumentNamesFormat>(v)) {}
+
+    PropertyValue(InstrumentLabelVisibility v)
+        : m_type(P_TYPE::INSTRUMENT_LABEL_VISIBILITY), m_data(make_data<InstrumentLabelVisibility>(v)) {}
 
     bool isValid() const;
 

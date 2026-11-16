@@ -26,6 +26,7 @@
 #include <functional>
 
 #include "modularity/ioc.h"
+#include "types/bytearray.h"
 #include "types/string.h"
 
 #include "engraving/engravingerrors.h"
@@ -47,6 +48,7 @@ public:
                                   const muse::modularity::ContextPtr& iocCtx = nullptr);
     static bool saveScore(Score* score, const String& name);
     static bool saveScore(Score* score, const String& name, ExportFunc exportFunc);
+    static muse::ByteArray writeElement(const EngravingItem* element);
     static EngravingItem* writeReadElement(EngravingItem* element);
     static bool saveMimeData(muse::ByteArray mimeData, const String& saveName);
 

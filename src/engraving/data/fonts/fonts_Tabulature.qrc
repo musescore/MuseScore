@@ -1,6 +1,16 @@
 <RCC>
     <qresource prefix="/">
-    <file alias="fonts/fonts_tablature.xml">../../../../fonts/fonts_tablature.xml</file>
     <file alias="fonts/fonts_figuredbass.xml">../../../../fonts/fonts_figuredbass.xml</file>
+    <file alias="fonts/MuseScoreTabRenaiss.ttf">../../../../fonts/MuseScoreTabRenaiss.ttf</file>
+    <file alias="fonts/MuseScoreTabPhalese.ttf">../../../../fonts/MuseScoreTabPhalese.ttf</file>
+    <file alias="fonts/MuseScoreTabBonneuilDeVisee.ttf">../../../../fonts/MuseScoreTabBonneuilDeVisee.ttf</file>
+    <file alias="fonts/MuseScoreTabBonneuilGaultier.ttf">../../../../fonts/MuseScoreTabBonneuilGaultier.ttf</file>
+    <file alias="fonts/MuseScoreTabDowland.ttf">../../../../fonts/MuseScoreTabDowland.ttf</file>
+    <file alias="fonts/MuseScoreTabLuteDidactic.ttf">../../../../fonts/MuseScoreTabLuteDidactic.ttf</file>
+    <file alias="fonts/MuseScoreTabModern.ttf">../../../../fonts/MuseScoreTabModern.ttf</file>
+    <file alias="fonts/MuseScoreTabItalian.ttf">../../../../fonts/MuseScoreTabItalian.ttf</file>
+    <file alias="fonts/MuseScoreTabFrench.ttf">../../../../fonts/MuseScoreTabFrench.ttf</file>
+    <file alias="fonts/MuseScoreTabFrenchBaroqueHeadless.ttf">../../../../fonts/MuseScoreTabFrenchBaroqueHeadless.ttf</file>
+    <file alias="fonts/MuseScoreTabFrenchBaroque.ttf">../../../../fonts/MuseScoreTabFrenchBaroque.ttf</file>
     </qresource>
 </RCC>

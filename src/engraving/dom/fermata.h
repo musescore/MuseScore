@@ -67,7 +67,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
     Measure* measure() const;
     System* system() const;
     Page* page() const;
@@ -82,14 +82,10 @@ public:
 
     Sid defaultPosSid() const override;
 
-protected:
-    void added() override;
-    void removed() override;
-
 private:
 
     friend class Factory;
-    Fermata(EngravingItem* parent);
+    Fermata(EngravingObject* parent);
 
     SymId m_symId = SymId::noSym;
     double m_timeStretch = -1.0;

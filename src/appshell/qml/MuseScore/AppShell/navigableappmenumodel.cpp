@@ -27,6 +27,8 @@
 
 #include <private/qkeymapper_p.h>
 
+#include "ui/navigationcommands.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -182,7 +184,7 @@ void NavigableAppMenuModel::setOpenedMenuId(QString openedMenuId)
 
     //! NOTE: after opening the menu, position on the first control
     if (navigationStarted && menuOpened) {
-        actionsDispatcher()->dispatch("command://navigation/first-control");
+        commandDispatcher()->dispatch(FIRST_CONTROL_COMMAND);
     }
 
     emit openedMenuIdChanged(m_openedMenuId);
@@ -492,7 +494,7 @@ QString NavigableAppMenuModel::openedMenuId() const
 
 bool NavigableAppMenuModel::menuItemMatchesSymbol(MenuItem* menuItem, const QChar& symbol)
 {
-    QString title = menuItem->action().title.qTranslatedWithMnemonicAmpersand();
+    QString title = menuItem->titleWithMnemonicAmpersand();
 
     int activateKeyIndex = title.indexOf('&');
     if (activateKeyIndex == -1) {
@@ -511,7 +513,7 @@ bool NavigableAppMenuModel::menuItemMatchesSymbol(MenuItem* menuItem, const QCha
 QString NavigableAppMenuModel::menuItemId(const MenuItemList& items, const QSet<int>& activatePossibleKeys)
 {
     for (const MenuItem* item : items) {
-        QString title = item->action().title.qTranslatedWithMnemonicAmpersand();
+        QString title = item->titleWithMnemonicAmpersand();
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {

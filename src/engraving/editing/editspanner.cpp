@@ -42,12 +42,12 @@ void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, const
 {
     staff_idx_t staffIdx = spanner->staffIdx();
     Segment* segment;
-    MeasureBase* mb = score->pos2measure(pos, &staffIdx, 0, &segment, 0);
+    Measure* measure = score->pos2measure(pos, &staffIdx, /*pitch*/ 0, &segment, /*offset*/ 0);
     if (systemStavesOnly) {
         staffIdx = 0;
     }
     // ignore if we do not have a measure
-    if (mb == 0 || !mb->isMeasure()) {
+    if (!measure) {
         LOGD("addSpanner: cannot put object here");
         delete spanner;
         return;
@@ -63,10 +63,9 @@ void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, const
         spanner->setTick(segment->tick());
         Fraction tick2 = std::min(segment->measure()->endTick(), score->lastMeasure()->endTick());
         spanner->setTick2(tick2);
-    } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
-        Measure* m = toMeasure(mb);
-        spanner->setTick(m->tick());
-        spanner->setTick2(m->endTick());
+    } else { // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
+        spanner->setTick(measure->tick());
+        spanner->setTick2(measure->endTick());
     }
     spanner->eraseSpannerSegments();
 

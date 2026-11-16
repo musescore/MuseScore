@@ -48,10 +48,11 @@ install(DIRECTORY
       02-Choral/05-SATB_Closed_Score_+_Organ
       02-Choral/06-SATB_Closed_Score_+_Piano
       02-Choral/07-Voice_+_Piano
-      02-Choral/08-Barbershop_Quartet_\(Men\)
-      02-Choral/09-Barbershop_Quartet_\(Women\)
-      02-Choral/10-Liturgical_Unmetrical
-      02-Choral/11-Liturgical_Unmetrical_+_Organ
+      02-Choral/08-Barbershop_Ensemble_\(TTBB\)
+      02-Choral/09-Barbershop_Ensemble_\(SSAA\)
+      02-Choral/10-Barbershop_Ensemble_\(SATB\)
+      02-Choral/11-Liturgical_Unmetrical
+      02-Choral/12-Liturgical_Unmetrical_+_Organ
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/templates/02-Choral
       )
 

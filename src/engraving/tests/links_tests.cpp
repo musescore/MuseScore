@@ -205,16 +205,16 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"voice");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    EXPECT_TRUE(nscore);
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
 
@@ -304,16 +304,16 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // create parts
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"Guitar");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    EXPECT_TRUE(nscore);
     //nscore->setName(parts.front()->partName());
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
@@ -409,16 +409,16 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts//
+    Score* nscore = score->createScore();
+    ASSERT_TRUE(nscore);
     score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
-    Score* nscore = score->createScore();
     Excerpt ex(score);
     ex.setExcerptScore(nscore);
     ex.setName(u"Guitar");
     ex.setParts(parts);
     Excerpt::createExcerpt(&ex);
-    EXPECT_TRUE(nscore);
     score->undo(new AddExcerpt(&ex));
     score->endCmd();
 
@@ -486,10 +486,10 @@ TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
     MeasureBase* measureBase2 = score->measure(2);
     Measure* measure2 = measureBase2->isMeasure() ? toMeasure(measureBase2) : nullptr;
 
-    EXPECT_TRUE(measure2);
+    ASSERT_TRUE(measure2);
 
     Segment* seg = measure2->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    EXPECT_TRUE(seg);
+    ASSERT_TRUE(seg);
 
     TempoText* tempoText = nullptr;
     for (EngravingItem* el : seg->annotations()) {
@@ -497,12 +497,10 @@ TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
             tempoText = toTempoText(el);
         }
     }
-    EXPECT_TRUE(tempoText);
+    ASSERT_TRUE(tempoText);
 
     // Make element invisible
-    if (tempoText) {
-        tempoText->undoSetVisible(false);
-    }
+    tempoText->undoSetVisible(false);
 
     // Check we have a linked item in the MMR
     EXPECT_EQ(tempoText->linkList().size(), 2);

@@ -58,7 +58,6 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
 
         m_dragElement = Factory::createItem(type, m_score->dummy());
         if (m_dragElement) {
-            m_dragElement->resetExplicitParent();
             rw::RWRegister::reader()->readItem(m_dragElement, e);
             engravingRender()->layoutItem(m_dragElement);
         }

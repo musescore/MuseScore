@@ -26,6 +26,7 @@
 
 #include "engraving/dom/beam.h"
 #include "engraving/dom/linkedobjects.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
@@ -111,7 +112,7 @@ void ReadContext::setSpatium(double v)
     m_score->style().set(Sid::spatium, v);
 }
 
-compat::DummyElement* ReadContext::dummy() const
+DummyParent* ReadContext::dummy() const
 {
     return m_score->dummy();
 }

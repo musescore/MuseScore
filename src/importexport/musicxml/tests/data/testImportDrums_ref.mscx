@@ -333,8 +333,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text><font size="24"/>drums</text>
           </Text>
         </VBox>
@@ -361,7 +361,7 @@
           <Chord>
             <eid>K_K</eid>
             <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
+            <StemDirection>up</StemDirection>
             <Note>
               <eid>L_L</eid>
               <pitch>36</pitch>

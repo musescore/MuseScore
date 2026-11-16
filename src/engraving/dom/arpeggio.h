@@ -55,7 +55,7 @@ public:
     int subtype() const override { return int(m_arpeggioType); }
     TranslatableString subtypeUserName() const override;
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
+    Chord* chord() const { return (Chord*)ownershipParent(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
@@ -117,7 +117,7 @@ public:
 protected:
     friend class Factory;
 
-    Arpeggio(Chord* parent, ElementType type = ElementType::ARPEGGIO);
+    Arpeggio(DummyParentOr<Chord> parent, ElementType type = ElementType::ARPEGGIO);
 
 private:
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;

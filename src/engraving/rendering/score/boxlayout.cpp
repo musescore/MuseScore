@@ -61,8 +61,8 @@ void BoxLayout::layoutBaseBox(const Box* item, Box::LayoutData* ldata, const Lay
 
 void BoxLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const LayoutContext& ctx)
 {
-    if (item->explicitParent() && item->explicitParent()->isVBox()) {
-        const VBox* parentVBox = toVBox(item->explicitParent());
+    if (item->ownershipParent() && item->ownershipParent()->isVBox()) {
+        const VBox* parentVBox = toVBox(item->ownershipParent());
 
         LD_CONDITION(parentVBox->ldata()->isSetBbox());
 
@@ -151,6 +151,8 @@ void BoxLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layo
             TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
         }
     }
+
+    layoutBaseBox(item, ldata, ctx);
 }
 
 void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)

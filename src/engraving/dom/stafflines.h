@@ -49,7 +49,7 @@ public:
     const std::vector<LineF>& lines() const { return m_lines; }
     void setLines(const std::vector<LineF>& l) { m_lines = l; }
 
-    Measure* measure() const { return (Measure*)explicitParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent(); }
     double y1() const;
 
     double lw() const { return m_lw; }
@@ -62,7 +62,7 @@ public:
 
 private:
     friend class Factory;
-    StaffLines(Measure* parent);
+    StaffLines(DummyParentOr<Measure> parent);
 
     double m_lw = 0.0;
     std::vector<LineF> m_lines;

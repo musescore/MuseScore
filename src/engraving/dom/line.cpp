@@ -26,8 +26,11 @@
 
 #include "containers.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "anchors.h"
 #include "barline.h"
@@ -49,13 +52,8 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-LineSegment::LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : SpannerSegment(type, sp, parent, f)
-{
-}
-
-LineSegment::LineSegment(const ElementType& type, System* parent, ElementFlags f)
-    : SpannerSegment(type, parent, f)
+LineSegment::LineSegment(const ElementType& type, SLine* sp, ElementFlags f)
+    : SpannerSegment(type, sp, f)
 {
 }
 
@@ -323,8 +321,8 @@ bool LineSegment::edit(EditData& ed)
         if (!note1 || !note2
             || !note1->isNote() || !note2->isNote()
             || note1->chord()->tick() >= note2->chord()->tick()
-            || note1->chord()->staff()->part()->instrument(note1->chord()->tick())
-            != note2->chord()->staff()->part()->instrument(note2->chord()->tick())) {
+            || note1->chord()->originPart()->instrument(note1->chord()->tick())
+            != note2->chord()->originPart()->instrument(note2->chord()->tick())) {
             return true;
         }
         if (note1 != oldNote1 || note2 != oldNote2) {
@@ -431,7 +429,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const double spacingFactor = 0.5;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = system();
-    const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+    const std::vector<System*> foundSystems = score()->searchSystem(pos, /*includeMeasurelessSystems*/ false, sys, spacingFactor);
 
     if (!foundSystems.empty() && !muse::contains(foundSystems, sys) && foundSystems[0]->staves().size()) {
         sys = foundSystems[0];
@@ -581,7 +579,6 @@ void LineSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, 
     if (grip == Grip::START) {
         setOffset(offset() + delta);
         m_offset2 -= delta;
-        setOffsetChanged(true);
     } else {
         m_offset2 += delta;
     }
@@ -724,7 +721,6 @@ void LineSegment::dragGrip(EditData& ed)
         // Only for moving, no y limitation
         const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
-        setOffsetChanged(true);
         rebaseAnchors(ed, ed.curGrip);
     }
     break;
@@ -811,7 +807,6 @@ std::vector<LineF> LineSegment::dragAnchorLines() const
 RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
-    setOffsetChanged(true);
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();
@@ -871,7 +866,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, 
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+SLine::SLine(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
@@ -957,7 +952,7 @@ PointF SLine::linePos(Grip grip, System** system) const
 void SLine::setLen(double l)
 {
     if (spannerSegments().empty()) {
-        add(createLineSegment(score()->dummy()->system()));
+        add(createLineSegment());
     }
     LineSegment* s = frontSegment();
     s->setPos(PointF());
@@ -1113,7 +1108,7 @@ Note* SLine::guessFinalNote(Note* startNote)
         }
     }
 
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 

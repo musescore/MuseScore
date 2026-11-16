@@ -87,12 +87,12 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>

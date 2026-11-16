@@ -27,8 +27,6 @@ target_sources(instrumentsscene PRIVATE
 
     internal/selectinstrumentscenario.cpp
     internal/selectinstrumentscenario.h
-    internal/instrumentsuiactions.cpp
-    internal/instrumentsuiactions.h
     internal/instrumentsactionscontroller.cpp
     internal/instrumentsactionscontroller.h
     internal/instrumentscommandsregister.cpp

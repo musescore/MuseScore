@@ -57,7 +57,7 @@ public:
 
     staff_idx_t vStaffIdx() const override;
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
     bool up() const;
 
     Spatium baseLength() const { return m_baseLength; }
@@ -87,7 +87,7 @@ public:
 
 private:
     friend class Factory;
-    Stem(Chord* parent = 0);
+    Stem(DummyParentOr<Chord> parent);
 
     Spatium m_baseLength = 0.0_sp;
 

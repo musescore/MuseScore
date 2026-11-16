@@ -23,7 +23,7 @@
 
 using namespace mu::engraving;
 
-BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags)
+BeamBase::BeamBase(const ElementType& type, EngravingObject* parent, ElementFlags flags)
     : EngravingItem(type, parent, flags)
 {
 }

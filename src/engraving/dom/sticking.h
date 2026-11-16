@@ -39,12 +39,12 @@ class Sticking final : public TextBase
     PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    Sticking(Segment* parent);
+    Sticking(DummyParentOr<Segment> parent);
 
     Sticking* clone() const override { return new Sticking(*this); }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 
     bool isEditAllowed(EditData&) const override;
 

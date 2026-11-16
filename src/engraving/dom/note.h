@@ -84,7 +84,7 @@ class NoteHead final : public Symbol
     DECLARE_CLASSOF(ElementType::NOTEHEAD)
 
 public:
-    NoteHead(Note* parent = 0);
+    NoteHead(DummyParentOr<Note> parent);
     NoteHead(const NoteHead&) = default;
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
@@ -157,8 +157,8 @@ public:
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
-    void setParent(Chord* ch);
+    Chord* chord() const { return (Chord*)ownershipParent(); }
+    void setOwnershipParent(DummyParentOr<Chord> ch);
 
     void undoUnlink() override;
 
@@ -466,7 +466,7 @@ public:
 private:
 
     friend class Factory;
-    Note(Chord* ch = 0);
+    Note(DummyParentOr<Chord> ch);
     Note(const Note&, bool link = false);
 
     void startDrag(EditData&) override;

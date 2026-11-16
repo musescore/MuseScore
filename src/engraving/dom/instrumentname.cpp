@@ -53,7 +53,7 @@ static const ElementStyle shortInstrumentStyle {
 //   InstrumentName
 //---------------------------------------------------------
 
-InstrumentName::InstrumentName(System* s)
+InstrumentName::InstrumentName(DummyParentOr<System> s)
     : TextBase(ElementType::INSTRUMENT_NAME, s, TextStyleType::INSTRUMENT_LONG, ElementFlag::NOTHING)
 {
     setFlag(ElementFlag::MOVABLE, false);
@@ -62,7 +62,7 @@ InstrumentName::InstrumentName(System* s)
 
 double InstrumentName::largestStaffSpatium() const
 {
-    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
+    if (systemFlag() || (layoutParent() && layoutParent()->systemFlag())) {
         return style().spatium();
     }
 

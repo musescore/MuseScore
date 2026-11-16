@@ -29,13 +29,16 @@ class GuitarBendSegment;
 class GuitarBendHoldSegment;
 class Note;
 class SLine;
+class System;
 }
 
 namespace mu::engraving::rendering::score {
 class GuitarBendLayout
 {
 public:
-    static void updateSegmentsAndLayout(SLine* item, LayoutContext& ctx);
+    /* If system is different from nullptr, only the segment belonging to it is laid out.
+     * Otherwise, all segments which have a system are laid out. */
+    static void updateSegmentsAndLayout(SLine* item, LayoutContext& ctx, System* system = nullptr);
 
     static void layoutStandardStaff(GuitarBendSegment* item, LayoutContext& ctx);
     static void layoutTabStaff(GuitarBendSegment* item, LayoutContext&);

@@ -22,13 +22,14 @@
 
 #pragma once
 
+#include <QObject>
 #include <QString>
+#include <qqmlintegration.h>
 
 #include "ui/view/iconcodes.h"
-#include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 namespace mu::notation {
-class NoteInputBarCustomiseItem : public muse::uicomponents::SelectableItemListModel::Item
+class NoteInputBarCustomiseItem : public QObject
 {
     Q_OBJECT
 

@@ -49,8 +49,8 @@ class Symbol : public BSymbol
     DECLARE_CLASSOF(ElementType::SYMBOL)
 
 public:
-    Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
-    Symbol(EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(const ElementType& type, EngravingObject* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(EngravingObject* parent, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(const Symbol&);
 
     Symbol& operator=(const Symbol&) = delete;
@@ -74,7 +74,7 @@ public:
     virtual PropertyValue propertyDefault(Pid) const override;
 
     double baseLine() const override { return 0.0; }
-    virtual Segment* segment() const { return (Segment*)explicitParent(); }
+    virtual Segment* segment() const { return (Segment*)ownershipParent(); }
 
     void reset() override;
 
@@ -96,7 +96,7 @@ class FSymbol final : public BSymbol
     DECLARE_CLASSOF(ElementType::FSYMBOL)
 
 public:
-    FSymbol(EngravingItem* parent);
+    FSymbol(DummyParentOr<EngravingItem> parent);
     FSymbol(const FSymbol&);
 
     FSymbol* clone() const override { return new FSymbol(*this); }
@@ -105,7 +105,7 @@ public:
     String accessibleInfo() const override;
 
     double baseLine() const override { return 0.0; }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
     const muse::draw::Font& font() const { return m_font; }
     char32_t code() const { return m_code; }
     void setFont(const muse::draw::Font& f);

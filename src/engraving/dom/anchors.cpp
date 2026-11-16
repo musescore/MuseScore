@@ -23,18 +23,19 @@
 #include <climits>
 
 #include "anchors.h"
-#include "dom/timesig.h"
-#include "dom/utils.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "fret.h"
 #include "harmony.h"
+#include "measure.h"
 #include "page.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
 #include "system.h"
-#include "textline.h"
+#include "textlinebase.h"
+#include "timesig.h"
+#include "utils.h"
 
 #include "rendering/score/measurelayout.h"
 
@@ -136,7 +137,6 @@ TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Frac
         TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
         if (!anchor) {
             anchor = Factory::createTimeTickAnchor(segment);
-            anchor->setParent(segment);
             anchor->setTrack(track);
             segment->add(anchor);
         }
@@ -159,7 +159,8 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
 
 void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
 {
-    Segment* segment = element->parentItem() && element->parentItem()->isSegment() ? toSegment(element->parentItem()) : nullptr;
+    EngravingObject* owner = element->ownershipParent();
+    Segment* segment = owner && owner->isSegment() ? toSegment(owner) : nullptr;
     if (!segment) {
         return;
     }
@@ -231,7 +232,8 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
 
 void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditData& ed)
 {
-    Segment* segment = element->explicitParent() && element->parent()->isSegment() ? toSegment(element->parent()) : nullptr;
+    EngravingObject* owner = element->ownershipParent();
+    Segment* segment = owner && owner->isSegment() ? toSegment(owner) : nullptr;
     if (!segment) {
         return;
     }
@@ -348,7 +350,7 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
 
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
-    Segment* curSeg = toSegment(element->parentItem());
+    Segment* curSeg = toSegment(element->ownershipParent());
     Segment* newSeg = getNewSegment(element, curSeg, forward);
 
     if (newSeg) {
@@ -568,7 +570,7 @@ void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const
  * TimeTickAnchor
  * *****************************************/
 
-TimeTickAnchor::TimeTickAnchor(Segment* parent)
+TimeTickAnchor::TimeTickAnchor(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::TIME_TICK_ANCHOR, parent,
                     ElementFlag::ON_STAFF
                     | ElementFlag::NOT_SELECTABLE

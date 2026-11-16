@@ -27,7 +27,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Alto Saxophone</trackName>
@@ -65,7 +65,7 @@
     <Part>
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Bagpipe</trackName>
@@ -103,7 +103,7 @@
     <Part>
       <Staff id="3">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Trombone</trackName>

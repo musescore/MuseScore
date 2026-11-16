@@ -83,7 +83,7 @@ public:
     void setBottomTpc(int val, bool applyLogic = true);
 
     // some utility functions
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
     SymId noteHead() const;
     double headWidth() const;
 
@@ -116,7 +116,7 @@ public:
 private:
 
     friend class Factory;
-    Ambitus(Segment* parent);
+    Ambitus(DummyParentOr<Segment> parent);
     Ambitus(const Ambitus& a);
 
     void normalize();

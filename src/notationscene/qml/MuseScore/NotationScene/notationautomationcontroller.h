@@ -134,8 +134,10 @@ private:
 
     mu::engraving::AutomationType currentAutomationType() const;
 
-    void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline) const;
-    void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline) const;
+    void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
+    void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
+    // TODO: apply within a range? (for efficiency)
+    void applyPolylineColorsUnderLine(muse::uicomponents::PolylinePlot* polyline, const SysStaffKey& key) const;
 
     QColor inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const;
 

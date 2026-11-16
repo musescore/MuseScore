@@ -32,7 +32,7 @@
 #include "modularity/ioc.h"
 #include "notation/types/noteinputtypes.h"
 #include "playback/iplaybackcontroller.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 
 #include "braille.h"
 #include "brailleinput.h"
@@ -49,7 +49,7 @@ class NotationBraille : public mu::braille::INotationBraille, public muse::Conte
     muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     NotationBraille(const muse::modularity::ContextPtr& iocCtx)

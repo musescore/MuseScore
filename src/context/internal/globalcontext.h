@@ -24,11 +24,15 @@
 
 #include "../iglobalcontext.h"
 
-#include "playbackstate.h"
+#include "global/async/asyncable.h"
+
+#include "global/modularity/ioc.h"
+#include "global/api/ifilesystemapirestriction.h"
 
 namespace mu::context {
-class GlobalContext : public IGlobalContext
+class GlobalContext : public IGlobalContext, public muse::async::Asyncable
 {
+    muse::GlobalInject<muse::api::IFileSystemApiRestriction> fsRestriction;
 public:
 
     GlobalContext();
@@ -44,9 +48,6 @@ public:
     notation::INotationPtr currentNotation() const override;
     muse::async::Notification currentNotationChanged() const override;
 
-    void setCurrentPlayer(const muse::audio::IPlayerPtr& player) override;
-    IPlaybackStatePtr playbackState() const override;
-
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
@@ -55,8 +56,6 @@ private:
 
     notation::INotationPtr m_currentNotation;
     muse::async::Notification m_currentNotationChanged;
-
-    std::shared_ptr<PlaybackState> m_playbackState;
 };
 }
 

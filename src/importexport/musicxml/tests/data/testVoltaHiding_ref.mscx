@@ -198,18 +198,18 @@
         <height>10</height>
         <eid>H_H</eid>
         <Text>
-          <eid>I_I</eid>
           <style>title</style>
+          <eid>I_I</eid>
           <text><font size="22"/>Volta Hiding</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>subtitle</style>
+          <eid>J_J</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>K_K</eid>
           <style>composer</style>
+          <eid>K_K</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>

@@ -27,6 +27,7 @@
 #include "utils/scorerw.h"
 
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
 
 #include "engraving/playback/renderingcontext.h"

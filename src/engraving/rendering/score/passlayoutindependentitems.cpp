@@ -30,8 +30,11 @@ using namespace mu::engraving::rendering::score;
 
 void PassLayoutIndependentItems::doRun(Score* score, LayoutContext& ctx)
 {
-    RootItem* rootItem = score->rootItem();
-    scan(rootItem, ctx);
+    for (EngravingObject* child : score->children()) {
+        if (child->isEngravingItem()) {
+            scan(toEngravingItem(child), ctx);
+        }
+    }
 }
 
 void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
@@ -65,9 +68,6 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     }
 
     for (EngravingItem* ch : item->childrenItems()) {
-        if (ch->isType(ElementType::DUMMY)) {
-            continue;
-        }
         scan(ch, ctx);
     }
 }

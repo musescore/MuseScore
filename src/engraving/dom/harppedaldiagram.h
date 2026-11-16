@@ -49,14 +49,14 @@ class HarpPedalDiagram final : public TextBase
     DECLARE_CLASSOF(ElementType::HARP_DIAGRAM)
 
 public:
-    HarpPedalDiagram(Segment* parent);
+    HarpPedalDiagram(DummyParentOr<Segment> parent);
     HarpPedalDiagram(const HarpPedalDiagram& h);
 
     HarpPedalDiagram* clone() const override { return new HarpPedalDiagram(*this); }
     bool isEditable() const override { return false; }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;

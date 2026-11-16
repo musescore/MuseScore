@@ -46,7 +46,7 @@ class Jump final : public TextBase
 
 public:
 
-    Jump(Measure* parent);
+    Jump(DummyParentOr<Measure> parent);
 
     void setJumpType(JumpType t);
     JumpType jumpType() const;
@@ -57,7 +57,7 @@ public:
     int subtype() const override { return int(jumpType()); }
     TranslatableString subtypeUserName() const override;
 
-    Measure* measure() const { return toMeasure(explicitParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()); }
 
     String jumpTo() const { return m_jumpTo; }
     String playUntil() const { return m_playUntil; }

@@ -24,6 +24,7 @@
 
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+#include "engraving/tests/utils/scorerw.h"
 
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/mscore.h"
@@ -38,6 +39,8 @@ static muse::testing::SuiteEnvironment importexport_se(
     nullptr,
     []() {
     LOGI() << "bb tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(muse::String::fromUtf8(iex_bb_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;

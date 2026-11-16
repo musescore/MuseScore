@@ -42,6 +42,7 @@
     <Ottava>
       <subtype>8va</subtype>
       <track2>0</track2>
+      <startTick>0/1</startTick>
       <ticks>3/4</ticks>
       <eid>J_J</eid>
       <track>0</track>

@@ -26,6 +26,9 @@
 #include "draw/fontmetrics.h"
 #include "draw/svgrenderer.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+#include "iengravingcontextconfiguration.h" // IWYU pragma: keep
+
 #include "rendering/paintoptions.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -136,6 +139,7 @@
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
+#include "dom/tabdurationsymbol.h"
 #include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -667,7 +671,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 
     double y1l;
     double y2l;
-    if (item->explicitParent() == 0) {      // for use in palette (always Bravura)
+    if (item->ownershipParent() == 0) {      // for use in palette (always Bravura)
         //Bravura shifted repeatDot symbol 0.5sp upper in the font itself (1.272)
         y1l = 1.5 * spatium;
         y2l = 2.5 * spatium;
@@ -733,8 +737,12 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     break;
 
     case BarLineType::BROKEN: {
-        double lw = item->style().styleAbsolute(Sid::barWidth) * item->mag();
-        painter->setPen(Pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap));
+        double lw = item->style().styleAbsolute(Sid::dashBarWidth) * item->mag();
+        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
+        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
+        Pen pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap);
+        pen.setDashPattern({ dl, gl });
+        painter->setPen(pen);
         painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
@@ -1410,6 +1418,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::FlatCap);
+    // Raise the miter limit so the triangle's apex isn't bevelled (needs ~2.24)
+    symPen.setJoinStyle(PenJoinStyle::MiterJoin);
+    symPen.setMiterLimit(3.0);
     double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
@@ -1442,9 +1453,8 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
                 painter->drawRect(RectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
-                painter->drawLine(LineF(x, y + dotd, x + .5 * dotd, y));
-                painter->drawLine(LineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                painter->drawLine(LineF(x + dotd, y + dotd, x, y + dotd));
+                painter->setBrush(BrushStyle::NoBrush);
+                painter->drawPolygon(PolygonF({ PointF(x, y + dotd), PointF(x + .5 * dotd, y), PointF(x + dotd, y + dotd) }));
                 break;
             case FretDotType::NORMAL:
             default:
@@ -2377,7 +2387,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         // by coloring the notehead
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && MScore::warnPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            const Instrument* in = item->originPart()->instrument(item->chord()->tick());
             int i = item->ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
@@ -2388,7 +2398,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         // Warn if notes are unplayable based on previous harp diagram setting
         if (item->chord() && item->chord()->segment() && item->staff() && !opt.isPrinting
             && !item->staff()->isDrumStaff(item->chord()->tick())) {
-            HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
+            HarpPedalDiagram* prevDiagram = item->originPart()->currentHarpDiagram(item->chord()->segment()->tick());
             if (prevDiagram && !prevDiagram->isTpcPlayable(item->tpc())) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }
@@ -2477,7 +2487,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
 {
     TRACE_DRAW_ITEM;
 
-    EngravingItem* parent = item->parentItem();
+    EngravingObject* parent = item->ownershipParent();
     TimeSig* parentTs = parent && parent->isTimeSig() ? toTimeSig(parent) : nullptr;
 
     if (parentTs && !parentTs->showOnThisStaff()) {
@@ -3055,7 +3065,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
     const TabDurationSymbol::LayoutData* ldata = item->ldata();
 
     if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
-        Chord* chord = toChord(item->explicitParent());
+        Chord* chord = toChord(item->ownershipParent());
         ChordRest* prevCR = Navigation::prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
             return;

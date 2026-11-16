@@ -55,18 +55,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Nardis</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>Ralph Towner<br/>solo concert</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Music by Miles Davis</text>
           </Text>
         </VBox>
@@ -603,9 +603,9 @@
         <track>1</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>nB_nB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>oB_oB</eid>
           <track>1</track>
@@ -618,9 +618,9 @@
         <track>1</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>qB_qB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>rB_rB</eid>
           <track>1</track>
@@ -633,14 +633,14 @@
         <track>1</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>tB_tB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <HammerOnPullOffText idx="1">
+            <style>hammer_on_pull_off</style>
             <eid>uB_uB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>vB_vB</eid>
           <track>1</track>
@@ -653,14 +653,14 @@
         <track>1</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>xB_xB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <HammerOnPullOffText idx="1">
+            <style>hammer_on_pull_off</style>
             <eid>yB_yB</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>zB_zB</eid>
           <track>1</track>
@@ -673,9 +673,9 @@
         <track>1</track>
         <HammerOnPullOffSegment no="0">
           <HammerOnPullOffText idx="0">
+            <style>hammer_on_pull_off</style>
             <eid>1B_1B</eid>
             <track>1</track>
-            <style>hammer_on_pull_off</style>
             </HammerOnPullOffText>
           <eid>2B_2B</eid>
           <track>1</track>

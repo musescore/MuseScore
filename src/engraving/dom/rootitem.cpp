@@ -21,6 +21,8 @@
  */
 #include "rootitem.h"
 
+#include "dummyparent.h"
+#include "page.h"
 #include "score.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -29,22 +31,28 @@
 
 using namespace mu::engraving;
 
-RootItem::RootItem(Score* score)
-    : EngravingItem(ElementType::ROOT_ITEM, score)
+RootItem::RootItem(Score* score, Kind kind)
+    : EngravingItem(ElementType::ROOT_ITEM, score), m_kind(kind)
 {
-    m_dummy = new compat::DummyElement(this);
 }
 
-RootItem::~RootItem()
+EngravingItemList RootItem::accessibleChildren() const
 {
-    compat::DummyElement* d = m_dummy;
-    m_dummy = nullptr;
-    delete d;
-}
+    switch (m_kind) {
+    case Kind::Score: {
+        EngravingItemList children = EngravingItem::accessibleChildren();
+        // The pages are owned by the score, but this is the top of the accessibility
+        // tree, so this is where they are listed.
+        children.insert(children.end(), score()->pages().begin(), score()->pages().end());
+        return children;
+    }
+    case Kind::Dummy:
+        // The objects parked on the dummy are not part of the score, so they form a
+        // tree of their own, headed by this.
+        return score()->dummy()->childrenItems();
+    }
 
-compat::DummyElement* RootItem::dummy() const
-{
-    return m_dummy;
+    return EngravingItemList();
 }
 
 void RootItem::init()
@@ -52,9 +60,6 @@ void RootItem::init()
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     setupAccessible();
 #endif
-
-    m_dummy->setParent(this);
-    m_dummy->init();
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

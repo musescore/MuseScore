@@ -51,7 +51,7 @@ private:
     void updateMenu();
     void loadInstrumentOrders();
     void buildMenu(bool includeInstrumentsOrdering);
-    void setInstrumentsOrder(const muse::actions::ActionData& args);
+    void setInstrumentsOrder(const QString& itemId);
     void updateOrderingMenu(const QString& newOrderId);
 
     muse::uicomponents::MenuItem* createInstrumentsOrderingItem();

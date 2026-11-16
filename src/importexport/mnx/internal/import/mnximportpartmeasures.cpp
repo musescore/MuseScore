@@ -33,30 +33,31 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
-#include "engraving/dom/hook.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/hook.h"
 #include "engraving/dom/instrtemplate.h"
-#include "engraving/dom/drumset.h"
 #include "engraving/dom/keysig.h"
-#include "engraving/dom/laissezvib.h"
+#include "engraving/dom/laissezvib.h" // IWYU pragma: keep
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteval.h"
-#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/partialtie.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/tie.h"
 #include "engraving/dom/tiejumppointlist.h"
 #include "engraving/dom/tremolotwochord.h"
-#include "engraving/dom/tie.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
@@ -255,7 +256,6 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                     }
                     Lyrics* lyric = Factory::createLyrics(cr);
                     lyric->setTrack(cr->track());
-                    lyric->setParent(cr);
                     lyric->setVerse(verse);
                     lyric->setXmlText(String::fromStdString(it->second.text()));
                     lyric->setSyllabic(toMuseScoreLyricsSyllabic(it->second.type()));
@@ -271,7 +271,6 @@ void MnxImporter::createLyrics(const mnx::sequence::Event& mnxEvent, engraving::
                 }
                 Lyrics* lyric = Factory::createLyrics(cr);
                 lyric->setTrack(cr->track());
-                lyric->setParent(cr);
                 int verse = 0;
                 if (staffIt != m_lyricLineToVerse.end()) {
                     const auto mapped = staffIt->second.find(lineId);
@@ -365,7 +364,6 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
         tie->setStartNote(startNote);
         tie->setTick(startNote->tick());
         tie->setTrack(startNote->track());
-        tie->setParent(startNote);
         startNote->setTieFor(tie);
         DirectionV tieDir = DirectionV::AUTO;
         if (const auto side = mnxTie.side()) {
@@ -431,7 +429,6 @@ void MnxImporter::createTies(const mnx::Array<mnx::sequence::Tie>& ties, engravi
             tie->setStartNote(startNote);
             tie->setTick(startNote->tick());
             tie->setTrack(startNote->track());
-            tie->setParent(startNote);
             startNote->setTieFor(tie);
             startTie = tie;
             setAndStyleProperty(tie, Pid::SLUR_DIRECTION, tieDir);
@@ -549,7 +546,6 @@ Note* MnxImporter::createNote(const mnx::sequence::Note& mnxNote, Chord* chord, 
                               const Fraction& tick, int ottavaDisplacement, track_idx_t curTrackIdx)
 {
     Note* note = Factory::createNote(chord);
-    note->setParent(chord);
     note->setTrack(curTrackIdx);
     auto pitch = mnxNote.pitch();
     NoteVal nval = toMuseScoreNoteVal(pitch, baseStaff->concertKey(tick), ottavaDisplacement);
@@ -581,7 +577,6 @@ Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measur
 
     Tuplet* t = Factory::createTuplet(measure);
     t->setTrack(curTrackIdx);
-    t->setParent(measure);
     t->setTick(measure->tick() + toMuseScoreFraction(startTick));
     t->setRatio(tupletRatio);
     t->setBaseLen(baseLen);
@@ -636,7 +631,6 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
     tremolo->setTremoloType(TremoloType(tremoloBeamsNum));
     tremolo->setTrack(curTrackIdx);
     tremolo->setVisible(c1->notes().front()->visible());
-    tremolo->setParent(c1);
     tremolo->setChords(c1, c2);
     c1->setTremoloTwoChord(tremolo);
 }
@@ -723,7 +717,6 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                         nval.headGroup = drumset->noteHead(midiPitch);
                     }
                     engraving::Note* note = Factory::createNote(chord);
-                    note->setParent(chord);
                     note->setTrack(curTrackIdx);
                     note->setNval(nval);
                     chord->add(note);
@@ -1116,7 +1109,6 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
     }
 
     Dynamic* dyn = Factory::createDynamic(segment);
-    dyn->setParent(segment);
     dyn->setTrack(curTrackIdx);
 
     // An accent spells itself out as accentPrefix + value + accentSuffix + residualValue.
@@ -1229,7 +1221,7 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
         }
     }
 
-    Hairpin* hairpin = Factory::createHairpin(segment);
+    Hairpin* hairpin = Factory::createHairpin(m_score->dummy());
     hairpin->setHairpinType(mnxHairpin.wedgeType() == mnx::DynamicWedgeType::Increasing
                             ? HairpinType::CRESC_HAIRPIN
                             : HairpinType::DIM_HAIRPIN);
@@ -1420,7 +1412,7 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
                 }
             }
             if (beamElements.size() > 1) {
-                Beam* msBeam = Factory::createBeam(m_score->dummy()->system());
+                Beam* msBeam = Factory::createBeam(m_score);
                 msBeam->setTrack(beamElements.front()->track());
                 msBeam->setDirection(beamDirection);
                 for (ChordRest* cr : beamElements) {
@@ -1550,7 +1542,6 @@ void MnxImporter::createArpeggios(const mnx::part::Measure& mnxMeasure)
                 }
             }
         }
-        arpeggio->setParent(chordTop);
         chordTop->setArpeggio(arpeggio);
     };
 

@@ -135,13 +135,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>G_G</eid>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <text>Grouping conflicts</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>subtitle</style>
+          <eid>I_I</eid>
           <text>Currently the grouping algorithm does not consider other notes and rests in the measure.</text>
           </Text>
         </VBox>
@@ -154,8 +154,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>L_L</eid>
             <style>instrument_change</style>
+            <eid>L_L</eid>
             <text>Simple Triple: must expose 2 out of 3 beats</text>
             </StaffText>
           <Chord>
@@ -239,8 +239,8 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <eid>d_d</eid>
             <style>instrument_change</style>
+            <eid>d_d</eid>
             <text>Compound: must expose 2 out of 3 divisions within a beat (similar to Simple Triple)</text>
             </StaffText>
           <Beam>
@@ -344,8 +344,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>z_z</eid>
             <style>instrument_change</style>
+            <eid>z_z</eid>
             <text>Syncopation: allow simple rhythms to cross unstressed beats</text>
             </StaffText>
           <Beam>
@@ -537,8 +537,8 @@
         <eid>dB_dB</eid>
         <voice>
           <StaffText>
-            <eid>eB_eB</eid>
             <style>instrument_change</style>
+            <eid>eB_eB</eid>
             <text>Syncopation continued:  don't allow isolated notes to cross unstressed beats</text>
             </StaffText>
           <Chord>

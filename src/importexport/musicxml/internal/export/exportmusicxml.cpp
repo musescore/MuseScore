@@ -114,7 +114,6 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tapping.h"
-#include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textlinebase.h"
@@ -1484,7 +1483,7 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
 
 static double parentHeight(const EngravingItem* element)
 {
-    const EngravingItem* parent = element->parentItem();
+    const EngravingItem* parent = element->layoutParent();
 
     if (!parent) {
         return 0;
@@ -1711,11 +1710,20 @@ static void unpitch2xml(const Note* note, String& s, int& octave)
     Fraction tick        = note->chord()->tick();
     Staff* st       = note->staff();
     ClefType ct     = st->clef(tick);
+
+    int noteLine = note->line();
+    if (noteLine == INVALID_LINE) {
+        // Invisible staves are skipped by ModifyDom::cmdUpdateNotes(), so a percussion note on
+        // one may never have had its display line computed; resolve it from the drumset instead
+        const Drumset* drumset = st->part()->instrument(tick)->drumset();
+        noteLine = (drumset && drumset->isValid(note->pitch())) ? drumset->line(note->pitch()) : 0;
+    }
+
     // offset in lines between staff with current clef and with G clef
     int clefOffset  = ClefInfo::pitchOffset(ct) - ClefInfo::pitchOffset(ClefType::G);
     // line note would be on on a five line staff with G clef
     // note top line is line 0, bottom line is line 8
-    int line5g      = note->line() - clefOffset;
+    int line5g      = noteLine - clefOffset;
     // in MusicXML with percussion clef, step and octave are determined as if G clef is used
     // when stafflines is not equal to five, in MusicXML the bottom line is still E4.
     // in MuseScore assumes line 0 is F5
@@ -3349,7 +3357,6 @@ static String symIdToTechn(const SymId sid)
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations)
 {
     for (EngravingItem* e : chord->el()) {
-        LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->isChordLine()) {
             const ChordLine* cl = toChordLine(e);
             String subtype;
@@ -4288,25 +4295,11 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     xml.startElement(useDrumset ? "unpitched" : "pitch");
     xml.tag(useDrumset ? "display-step" : "step", step);
     // Check for microtonal accidentals and overwrite "alter" tag
-    const Accidental* acc = note->accidental();
-    double microtonalAlter = 0.0;
-    if (acc) {
-        switch (acc->accidentalType()) {
-        case AccidentalType::MIRRORED_FLAT:  microtonalAlter = -0.5;
-            break;
-        case AccidentalType::SHARP_SLASH:    microtonalAlter = 0.5;
-            break;
-        case AccidentalType::MIRRORED_FLAT2: microtonalAlter = -1.5;
-            break;
-        case AccidentalType::SHARP_SLASH4:   microtonalAlter = 1.5;
-            break;
-        default:                                             break;
-        }
-    }
-    // Override accidental with explicit note tuning
+    double microtonalAlter = note->centOffset() / 100.0;
+    // Explicit note tuning
     double tuning = note->tuning();
     if (!muse::RealIsNull(tuning)) {
-        microtonalAlter = tuning / 100.0;
+        microtonalAlter += tuning / 100.0;
     }
     if (alter || microtonalAlter) {
         xml.tag("alter", alter + microtonalAlter);
@@ -5016,7 +5009,7 @@ void ExportMusicXml::tempoSound(TempoText const* const text)
     // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
     BeatsPerMinute bpm = text->tempo().toBPM();
     if (text->isATempo() || text->isTempoPrimo()) {
-        bpm = m_score->tempomap()->tempo(text->tick().ticks()).toBPM();
+        bpm = m_score->tempo(text->tick()).toBPM();
     }
     double bpmRounded = round(bpm.val * 100) / 100;
     m_xml.tag("sound", { { "tempo", bpmRounded } });
@@ -7175,7 +7168,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (m->tick().isZero()) {
             //KeySigEvent kse;
             //kse.setKey(Key::C);
-            KeySig* ks = Factory::createKeySig(m_score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(m_score->dummy());
             if (p->staff(0)->isTabStaff(Fraction(0, 1))) {
                 ks->setVisible(false);
             }

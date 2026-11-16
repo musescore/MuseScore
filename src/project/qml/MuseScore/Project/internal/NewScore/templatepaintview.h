@@ -27,7 +27,8 @@
 #include "modularity/ioc.h"
 #include "notationscene/qml/MuseScore/NotationScene/abstractnotationpaintview.h"
 #include "project/iprojectcreator.h"
-#include "shortcuts/ishortcutsregister.h"
+
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 namespace mu::project {
 class TemplatePaintView : public notation::AbstractNotationPaintView
@@ -37,7 +38,7 @@ class TemplatePaintView : public notation::AbstractNotationPaintView
     QML_ELEMENT
 
     muse::GlobalInject<IProjectCreator> notationCreator;
-    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
 
 public:
     explicit TemplatePaintView(QQuickItem* parent = nullptr);
@@ -56,7 +57,7 @@ private:
 
     void resetNotation();
 
-    QString shortcutsTitleByActionCode(const muse::actions::ActionCode& code) const;
+    QString shortcutsTitleByCommand(const muse::rcommand::Command& command) const;
 
     void adjustCanvas();
     qreal resolveDefaultScaling() const;

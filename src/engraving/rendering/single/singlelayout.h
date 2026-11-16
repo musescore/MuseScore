@@ -49,6 +49,7 @@ class Chord;
 class ChordLine;
 class Clef;
 
+class DummyParent;
 class Dynamic;
 
 class Expression;
@@ -130,10 +131,6 @@ class Volta;
 class VoltaSegment;
 }
 
-namespace mu::engraving::compat {
-class DummyElement;
-}
-
 namespace mu::engraving::rendering::single {
 class SingleLayout
 {
@@ -148,7 +145,7 @@ public:
 
         const engraving::MStyle& style() const;
         std::shared_ptr<engraving::IEngravingFont> engravingFont() const;
-        engraving::compat::DummyElement* dummyParent() const;
+        engraving::DummyParent* dummyParent() const;
 
         //! NOTE Temporarily, do not use
         engraving::Score* dontUseScore() const { return m_score; }

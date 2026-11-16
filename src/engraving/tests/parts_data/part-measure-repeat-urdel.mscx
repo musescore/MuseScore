@@ -22,6 +22,7 @@
       <lyricsMelismaPad>0.2</lyricsMelismaPad>
       <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
       <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
+      <lyricsStackingOrder>1</lyricsStackingOrder>
       <lyricsOddFontFace>Edwin</lyricsOddFontFace>
       <lyricsOddFontSize>10</lyricsOddFontSize>
       <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
@@ -30,6 +31,7 @@
       <barWidth>0.18</barWidth>
       <doubleBarWidth>0.18</doubleBarWidth>
       <endBarWidth>0.55</endBarWidth>
+      <dashBarWidth>0.18</dashBarWidth>
       <doubleBarDistance>0.37</doubleBarDistance>
       <endBarDistance>0.37</endBarDistance>
       <repeatBarlineDotSeparation>0.37</repeatBarlineDotSeparation>
@@ -260,7 +262,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto">
@@ -300,7 +302,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="tenor">
@@ -342,8 +344,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>testpart1</text>
           </Text>
         </VBox>
@@ -1100,7 +1102,7 @@
           <eid>CC_CC</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="alto">
@@ -1142,14 +1144,14 @@
           <eid>DC_DC</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>EC_EC</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart1</text>
             </Text>
           <Text>
-            <eid>FC_FC</eid>
             <style>instrument_excerpt</style>
+            <eid>FC_FC</eid>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1584,7 +1586,7 @@
           <eid>RD_RD</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="tenor">
@@ -1626,14 +1628,14 @@
           <eid>SD_SD</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>TD_TD</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>testpart1</text>
             </Text>
           <Text>
-            <eid>UD_UD</eid>
             <style>instrument_excerpt</style>
+            <eid>UD_UD</eid>
             <text>Tenor</text>
             </Text>
           </VBox>

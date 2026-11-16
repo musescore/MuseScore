@@ -267,6 +267,13 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>UB_UB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>VB_VB</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>g_g</NoteEID>
                 </Notes>
@@ -453,6 +460,13 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>WB_WB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>XB_XB</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>EB_EB</NoteEID>
                 </Notes>

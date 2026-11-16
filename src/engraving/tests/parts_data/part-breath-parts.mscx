@@ -39,7 +39,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto">
@@ -79,7 +79,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="tenor">
@@ -120,13 +120,13 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>test-part</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>breath</text>
           </Text>
         </VBox>
@@ -851,7 +851,7 @@
           <eid>/B_/B</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="alto">
@@ -893,20 +893,20 @@
           <eid>AC_AC</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>BC_BC</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>test-part</text>
             </Text>
           <Text>
+            <style>subtitle</style>
             <eid>CC_CC</eid>
             <linkedTo>G_G</linkedTo>
-            <style>subtitle</style>
             <text>breath</text>
             </Text>
           <Text>
-            <eid>DC_DC</eid>
             <style>instrument_excerpt</style>
+            <eid>DC_DC</eid>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1338,7 +1338,7 @@
           <eid>QD_QD</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Instrument id="tenor">
@@ -1380,20 +1380,20 @@
           <eid>RD_RD</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>SD_SD</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>test-part</text>
             </Text>
           <Text>
+            <style>subtitle</style>
             <eid>TD_TD</eid>
             <linkedTo>G_G</linkedTo>
-            <style>subtitle</style>
             <text>breath</text>
             </Text>
           <Text>
-            <eid>UD_UD</eid>
             <style>instrument_excerpt</style>
+            <eid>UD_UD</eid>
             <text>Tenor</text>
             </Text>
           </VBox>

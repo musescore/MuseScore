@@ -51,7 +51,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testReadWriteResetPositions)
         String writeFile(String(file) + u"-undoreset-test.mscx");
 
         MasterScore* score = ScoreRW::readScore(readFile);
-        EXPECT_TRUE(score);
+        ASSERT_TRUE(score);
         score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Reset all positions"), [&](Transaction& tx) {
             Reset::resetAllPositions(tx, score);
         });

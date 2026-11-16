@@ -31,7 +31,6 @@
 
 namespace mu::engraving {
 class Score;
-class TempoMap;
 class SynthesizerState;
 }
 

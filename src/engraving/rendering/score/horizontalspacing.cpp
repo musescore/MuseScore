@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "chordbracketlayout.h"
 #include "parenthesislayout.h"
 
 #include "dom/barline.h"
@@ -31,6 +32,7 @@
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
 #include "dom/lyrics.h"
+#include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -840,7 +842,7 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
     CrossBeamSpacing crossBeamSpacing = computeCrossBeamSpacing(thisSeg, nextSeg);
 
     const Score* score = thisSeg->score();
-    const PaddingTable& paddingTable = score->paddingTable();
+    const PaddingTable& paddingTable = score->paddingTables().horizontalPaddingTable();
     const MStyle& style = score->style();
 
     double displacement = score->noteHeadWidth() - style.styleAbsolute(Sid::stemWidth);
@@ -868,7 +870,7 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
                          : style.styleAbsolute(Sid::minNoteDistance);
         width = std::max(width, score->noteHeadWidth() + padding);
     } else if (crossBeamSpacing.ensureMinStemDistance) {
-        width = std::max(width, score->paddingTable().at(ElementType::STEM).at(ElementType::STEM));
+        width = std::max(width, paddingTable.at(ElementType::STEM).at(ElementType::STEM));
     }
 }
 
@@ -876,6 +878,7 @@ double HorizontalSpacing::minStemDistOnNonAdjacentCross(const Segment* thisSeg, 
 {
     // Extreme edge-case of chords that are a) adjacent in a cross-staff beam but b) on non-adjacent segments
     // (which causes them to escape the previous cross-staff spacing checks) c) stemmed up->down (see #27786)
+    const PaddingTable& paddingTable = thisSeg->score()->paddingTables().horizontalPaddingTable();
     double dist = -DBL_MAX;
     for (EngravingItem* item : nextSeg->elist()) {
         if (!item || !item->isChord()) {
@@ -905,7 +908,7 @@ double HorizontalSpacing::minStemDistOnNonAdjacentCross(const Segment* thisSeg, 
         }
 
         double minStemDist = prevChordOnBeam->x() + prevChordOnBeam->stem()->x() - (chord->x() + chord->stem()->x());
-        minStemDist += chord->score()->paddingTable().at(ElementType::STEM).at(ElementType::STEM);
+        minStemDist += paddingTable.at(ElementType::STEM).at(ElementType::STEM);
 
         dist = std::max(dist, minStemDist);
     }
@@ -1337,6 +1340,13 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             d = std::max(d, f->staffShape(staffIdx).right());
         }
 
+        // Multi-staff ChordBrackets are stored on their owner chords
+        // and are therefore not fully represented in every visually spanned staff Shape.
+        // Add the missing bracket collisions before combining the per-staff minimum distances.
+        if (f->isChordRestType() || ns->isChordRestType()) {
+            ChordBracketLayout::updateHorizontalSpacing(f, ns, staffIdx, squeezeFactor, d);
+        }
+
         if (f->isChordRestType() && ns->isChordRestType()) {
             checkCollisionsWithCrossStaffStems(f, ns, staffIdx, d);
         }
@@ -1367,14 +1377,15 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
 
     // Multimeasure rest exceptions that need special handling
     if (f->measure() && f->measure()->isMMRest()) {
+        const PaddingTable& paddingTable = f->score()->paddingTables().horizontalPaddingTable();
         if (ns->isChordRestType()) {
             double minDist = f->minRight();
             if (f->isClefType()) {
-                minDist += f->score()->paddingTable().at(ElementType::CLEF).at(ElementType::REST);
+                minDist += paddingTable.at(ElementType::CLEF).at(ElementType::REST);
             } else if (f->isKeySigType()) {
-                minDist += f->score()->paddingTable().at(ElementType::KEYSIG).at(ElementType::REST);
+                minDist += paddingTable.at(ElementType::KEYSIG).at(ElementType::REST);
             } else if (f->isTimeSigType()) {
-                minDist += f->score()->paddingTable().at(ElementType::TIMESIG).at(ElementType::REST);
+                minDist += paddingTable.at(ElementType::TIMESIG).at(ElementType::REST);
             }
             w = std::max(w, minDist);
         } else if (f->isChordRestType()) {
@@ -1443,7 +1454,7 @@ double HorizontalSpacing::computePadding(const EngravingItem* item1, const Engra
     if (item1->isParenthesis() || item2->isParenthesis()) {
         return ParenthesisLayout::computeParenthesisPadding(item1, item2);
     }
-    const PaddingTable& paddingTable = item1->score()->paddingTable();
+    const PaddingTable& paddingTable = item1->score()->paddingTables().horizontalPaddingTable();
     ElementType type1 = item1->type();
     ElementType type2 = item2->type();
 
@@ -1609,9 +1620,10 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 void HorizontalSpacing::computeChordBracketPadding(const EngravingItem* item1, const ChordBracket* chordBracket, double& padding)
 {
     const Chord* chord = chordBracket->chord();
-    if (chord && chord == item1->findAncestor(ElementType::CHORD)) {
-        // Padding a right-handed chord bracket to its own chord: use the same padding values as the left-handed case
-        padding = item1->score()->paddingTable().at(ElementType::CHORD_BRACKET).at(item1->type());
+    const Chord* itemChord = toChord(item1->findAncestor(ElementType::CHORD));
+    if (chord && itemChord && chord->segment() == itemChord->segment() && chord->part() == itemChord->part()) {
+        // Padding a right-handed chord bracket to chords in the same Segment and part: use the same padding values as the left-handed case
+        padding = item1->score()->paddingTables().horizontalPaddingTable().at(ElementType::CHORD_BRACKET).at(item1->type());
     }
 }
 
@@ -1735,7 +1747,7 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::KERN_UNTIL_RIGHT_EDGE;
     }
 
-    EngravingItem* nextParent = item2->parentItem(true);
+    EngravingObject* nextParent = item2->ownershipParent();
     if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
         return KerningType::NON_KERNING;
     }
@@ -1770,16 +1782,16 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
 
 KerningType HorizontalSpacing::computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2)
 {
-    if (!stemSlash->chord() || !stemSlash->chord()->beam() || !item2->parentItem()) {
+    if (!stemSlash->chord() || !stemSlash->chord()->beam() || !item2->ownershipParent()) {
         return KerningType::KERNING;
     }
 
-    EngravingItem* nextParent = item2->parentItem();
+    EngravingObject* nextParent = item2->ownershipParent();
     Chord* nextChord = nullptr;
     if (nextParent->isChord()) {
         nextChord = toChord(nextParent);
     } else if (nextParent->isNote()) {
-        nextChord = toChord(nextParent->parentItem());
+        nextChord = toChord(nextParent->ownershipParent());
     }
     if (!nextChord) {
         return KerningType::KERNING;

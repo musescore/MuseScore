@@ -114,8 +114,8 @@
             </Chord>
           <PlayCountText>
             <playCountCustomText></playCountCustomText>
-            <eid>M_M</eid>
             <style>repeat_play_count</style>
+            <eid>M_M</eid>
             <text>3x</text>
             </PlayCountText>
           </voice>

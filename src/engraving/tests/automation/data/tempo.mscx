@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>IgMHKL4ZLqO_rbq68IziYT</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-08-17</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestral">
+      <name>Orchestral</name>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
+    <Part id="1">
+      <eid>5xMB+ek5ncO_PbnxG93Xo6D</eid>
+      <Staff>
+        <eid>kFUYWio/LVF_yQHzJ61KE/G</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>2</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Instrument id="piano">
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>xE3wt+wn8wE_Msy6Bw0x8vD</eid>
+        <voice>
+          <KeySig>
+            <eid>pfwbSmxyd0E_pOeBeBLEHlI</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>kVsLVP8U59P_b8teCq82WGG</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tempo>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <eid>IBMcLLTot2I_yxoHudebAEP</eid>
+            <text><sym>metNoteQuarterUp</sym> = 180</text>
+            </Tempo>
+          <Chord>
+            <eid>Ab2Yp5vgwFN_dQ7w9QZqbuD</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>1IpaCr5R0aC_qSZK62wS8IG</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>cMlf/HvODbK_2ywHU2XLBAF</eid>
+        <voice>
+          <Chord>
+            <eid>kcrrocjYZUP_AV1vup0sanE</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>cmDppBC6aaE_gop5jcIMnNJ</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>rt0+2OxmU6L_x7BLMfLexiH</eid>
+        <voice>
+          <Chord>
+            <eid>IUG8SCdWd8_Hdgkuhxz29M</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>7wkoSLZ1b4P_zZjlwG+KniH</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>XQ4mwkuW3LG_ZcwlEsKJuWB</eid>
+        <voice>
+          <Tempo>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <type>aTempo</type>
+            <eid>LiFEu9UsEeC_fsst2EN0f7P</eid>
+            <text>a tempo</text>
+            </Tempo>
+          <Chord>
+            <eid>REoePr0pK8G_Rgi4G3imHNI</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>R7PKdUkE1bN_O0C5g0UU0vD</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>EXi3ULEMAmG_cm31zQF8XQP</eid>
+        <voice>
+          <Tempo>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <type>tempoPrimo</type>
+            <eid>Qa1El2hQPBN_fFIxaIDI1kM</eid>
+            <text>Tempo I</text>
+            </Tempo>
+          <Chord>
+            <eid>Soc7JR+5pJF_46wUH9Ob1RN</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>LfAW9z9T5gJ_uaaAXVJFtdD</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>jZqKyoInOvB_jjpSxkzWbmK</eid>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <eid>fzLI+yJqUlP_uhbqADcTav</eid>
+            </Fermata>
+          <Chord>
+            <eid>qigNKcHkHUM_WCUT4zeQHjO</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>t/Y65++g7dH_xu/37qXqNMJ</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <SpannerMap>
+      <GradualTempoChange>
+        <tempoChangeType>ritardando</tempoChangeType>
+        <tempoChangeFactor>0.5</tempoChangeFactor>
+        <beginHookHeight>1.9</beginHookHeight>
+        <endHookType>0</endHookType>
+        <endHookHeight>1.9</endHookHeight>
+        <beginTextOffset x="0" y="0"/>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>ksl6jFQEQ7D_rxqfwd8rVyL</eid>
+        <track>0</track>
+        <Segment>
+          <subtype>0</subtype>
+          <offset x="0" y="-2"/>
+          <off2 x="1.68293" y="0"/>
+          <eid>k/cK13go4qD_GF8tIHttI+I</eid>
+          <track>0</track>
+          <offset x="0" y="-2"/>
+          </Segment>
+        </GradualTempoChange>
+      </SpannerMap>
+    </Score>
+  </museScore>

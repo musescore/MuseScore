@@ -54,8 +54,8 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Test</text>
           </Text>
         </VBox>
@@ -71,10 +71,12 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <StaffText>
+          <Capo>
+            <transposeMode>2</transposeMode>
+            <style>staff</style>
             <eid>J_J</eid>
-            <text>Capo. fret 1</text>
-            </StaffText>
+            <text>Capo 1</text>
+            </Capo>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
@@ -96,8 +98,8 @@
               <string>59</string>
               <string>62</string>
               </StringData>
-            <eid>M_M</eid>
             <style>string_tunings</style>
+            <eid>M_M</eid>
             <text/>
             </StringTunings>
           <Chord>

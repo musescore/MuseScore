@@ -22,22 +22,18 @@
 
 #include "mmrest.h"
 
-#include "../editing/addremoveelement.h"
+#include "measure.h"
 #include "part.h"
 #include "score.h"
 #include "system.h"
 
-#include "log.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //    MMRest
 //--------------------------------------------------------
 
-MMRest::MMRest(Segment* s)
+MMRest::MMRest(DummyParentOr<Segment> s)
     : Rest(ElementType::MMREST, s)
 {
     m_numberVisible = true;
@@ -144,5 +140,4 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
         return Rest::setProperty(propertyId, v);
     }
     return true;
-}
 }

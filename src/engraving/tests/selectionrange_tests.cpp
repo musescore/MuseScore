@@ -82,7 +82,7 @@ static EngravingItem* chordRestAtBeat(Score* score, int beat, int half = 0)
 TEST_F(Engraving_SelectionRangeTests, selRangeAndSpanners)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + "selrangeandspanners.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 
@@ -165,7 +165,7 @@ TEST_F(Engraving_SelectionRangeTests, deleteSegmentWithSlur)
      *  q  q  q  e e
      */
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + "selectionrangedelete01.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
     size_t spanners = score->spanner().size();
@@ -203,7 +203,7 @@ TEST_F(Engraving_SelectionRangeTests, deleteSegmentWithSpanner)
      *  q  q  q
      */
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + "selectionrangedelete02.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 
@@ -233,10 +233,10 @@ TEST_F(Engraving_SelectionRangeTests, deleteSegmentWithSpanner)
 void Engraving_SelectionRangeTests::deleteVoice(int voice, String idx)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + String("selectionrangedelete%1.mscx").arg(idx));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     VoicesSelectionFilterTypes voiceFilterType = VoicesSelectionFilterTypes((int)VoicesSelectionFilterTypes::FIRST_VOICE + voice);
     score->selectionFilter().setFiltered(voiceFilterType, false);
@@ -266,10 +266,10 @@ TEST_F(Engraving_SelectionRangeTests, deleteVoice2)
 TEST_F(Engraving_SelectionRangeTests, deleteSkipAnnotations)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + String(u"selectionrangedelete05.mscx"));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    EXPECT_TRUE(m1);
+    ASSERT_TRUE(m1);
 
     ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes((int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
     score->selectionFilter().setFiltered(annotationFilterType, false);
@@ -328,10 +328,38 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
                                             SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
 }
 
+TEST_F(Engraving_SelectionRangeTests, rangeDeleteBoxes)
+{
+    MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + u"selectionrangedelete07_boxes.mscx");
+    EXPECT_TRUE(score);
+
+    score->doLayout();
+
+    score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
+    score->cmdSelectAll();
+    score->endCmd();
+
+    const Selection& sel = score->selection();
+    EXPECT_TRUE(sel.isRange());
+    LOGD() << sel.startMeasureBase()->typeName();
+    EXPECT_TRUE(sel.startMeasureBase() && sel.startMeasureBase()->isVBox());
+    EXPECT_TRUE(sel.endMeasureBase() && sel.endMeasureBase()->isHBox());
+
+    score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    score->doLayout();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete07_boxes.mscx"),
+                                            SELRANGE_DATA_DIR + String(u"selectionrangedelete07_boxes-ref.mscx")));
+    delete score;
+}
+
 TEST_F(Engraving_SelectionRangeTests, deleteSelectionListElements)
 {
     MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + u"list-delete-crash.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     std::vector<EngravingItem*> notes;
     std::vector<EngravingItem*> harmonies;

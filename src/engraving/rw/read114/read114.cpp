@@ -38,6 +38,8 @@
 #include "style/defaultstyle.h"
 #include "style/style.h"
 
+#include "types/bps.h"
+#include "types/constants.h"
 #include "types/typesconv.h"
 
 #include "dom/accidental.h"
@@ -77,7 +79,6 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stringdata.h"
-#include "dom/tempo.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
@@ -902,7 +903,7 @@ static void readTremolo(TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
     auto createDefaultTremolo = [](TremoloCompat* t) {
         t->single = Factory::createTremoloSingleChord(t->parent);
-        t->single->setTrack(t->parent->track());
+        t->single->setTrack(t->parent.as<Chord>()->track());
         t->single->setTremoloType(TremoloType::R8);
     };
 
@@ -953,11 +954,11 @@ static void readTremolo(TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 
             if (isTremoloTwoChord(type)) {
                 t->two = Factory::createTremoloTwoChord(t->parent);
-                t->two->setTrack(t->parent->track());
+                t->two->setTrack(t->parent.as<Chord>()->track());
                 t->two->setTremoloType(type);
             } else {
                 t->single = Factory::createTremoloSingleChord(t->parent);
-                t->single->setTrack(t->parent->track());
+                t->single->setTrack(t->parent.as<Chord>()->track());
                 t->single->setTremoloType(type);
             }
         } else if (!TRead::readItemProperties(item(t), e, ctx)) {
@@ -986,29 +987,27 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
-            note->setParent(chord);
             readNote(note, e, ctx);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
             EngravingItem* el = Read206::readArticulation(chord, e, ctx);
             if (el->isFermata()) {
                 if (!chord->segment()) {
-                    chord->setParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+                    chord->setOwnershipParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
                 }
                 chord->segment()->add(el);
             } else {
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            TremoloCompat tcompat;
-            tcompat.parent = chord;
+            TremoloCompat tcompat { chord };
             readTremolo(&tcompat, e, ctx);
             if (tcompat.two) {
-                tcompat.two->setParent(chord);
+                tcompat.two->setOwnershipParent(chord);
                 tcompat.two->setDurationType(chord->durationType());
                 chord->setTremoloTwoChord(tcompat.two, false);
             } else if (tcompat.single) {
-                tcompat.single->setParent(chord);
+                tcompat.single->setOwnershipParent(chord);
                 tcompat.single->setDurationType(chord->durationType());
                 chord->setTremoloSingleChord(tcompat.single);
             } else {
@@ -1033,7 +1032,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e, ReadContext& ctx)
             EngravingItem* el = Read206::readArticulation(rest, e, ctx);
             if (el->isFermata()) {
                 if (!rest->segment()) {
-                    rest->setParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+                    rest->setOwnershipParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
                 }
                 rest->segment()->add(el);
             } else {
@@ -1128,7 +1127,7 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
     } else if (tag == "endHookType") {
         tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
     } else if (tag == "Segment") {
-        LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
+        LineSegment* ls = tl->createLineSegment();
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
         tl->add(ls);
         readLineSegment114(e, ctx, ls);
@@ -1529,7 +1528,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             lastTick = ctx.tick();
         } else if (tag == "BarLine") {
-            BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(ctx.dummy());
             barLine->setTrack(ctx.track());
             // initialize span properties with values from staff
             barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
@@ -1588,11 +1587,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(st, ctx.tick());
             segment->add(barLine);
         } else if (tag == "Chord") {
-            Chord* chord = Factory::createChord(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+            // where the chord belongs is only known once it has been read: a grace note
+            // goes on the chord it decorates rather than on a segment of its own, and
+            // reading moves the tick the segment is looked up by
+            Chord* chord = Factory::createChord(ctx.score()->dummy());
             chord->setTrack(ctx.track());
             readChord(m, chord, e, ctx);
             if (!chord->segment()) {
-                chord->setParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
+                chord->setOwnershipParent(m->getSegment(SegmentType::ChordRest, ctx.tick()));
             }
             segment = chord->segment();
             if (chord->noteType() != NoteType::NORMAL) {
@@ -1610,7 +1612,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 Fraction crticks = chord->actualTicks();
 
                 if (chord->tremoloSingleChord()) {
-                    chord->tremoloSingleChord()->setParent(chord);
+                    chord->tremoloSingleChord()->setOwnershipParent(chord);
                 } else if (chord->tremoloTwoChord()) {
                     TremoloTwoChord* tremolo = chord->tremoloTwoChord();
                     track_idx_t track = chord->track();
@@ -1631,7 +1633,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                         }
                     }
                     if (pch) {
-                        tremolo->setParent(pch);
+                        tremolo->setOwnershipParent(pch);
                         pch->setTremoloTwoChord(tremolo);
                         chord->setTremoloTwoChord(nullptr);
                         // force duration to half
@@ -1650,7 +1652,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
-                mmr->setParent(segment);
                 mmr->setTrack(ctx.track());
                 read400::TRead::read(mmr, e, ctx);
                 mmr->setTicks(m->ticks());
@@ -1658,14 +1659,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Rest* rest = Factory::createRest(ctx.score()->dummy()->segment());
+                Rest* rest = Factory::createRest(ctx.score()->dummy());
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
                 readRest(m, rest, e, ctx);
 
                 Segment* segment2 = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                rest->setParent(segment2);
+                rest->setOwnershipParent(segment2);
                 segment2->add(rest);
 
                 if (!rest->ticks().isValid()) {    // hack
@@ -1724,7 +1725,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             e.readNext();
         } else if (tag == "Slur") {
-            Slur* sl = Factory::createSlur(m);
+            Slur* sl = Factory::createSlur(ctx.score()->dummy());
             sl->setTick(ctx.tick());
             Read206::readSlur206(e, ctx, sl);
             //
@@ -1843,7 +1844,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 m->setTimesig(ts->sig() / timeStretch);
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy());
             ks->setTrack(ctx.track());
             read400::TRead::read(ks, e, ctx);
             Fraction curTick = ctx.tick();
@@ -1853,7 +1854,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(ks);
             staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Lyrics") {
-            Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
+            Lyrics* l = Factory::createLyrics(ctx.dummy());
             l->setTrack(ctx.track());
 
             int iEndTick = 0;                 // used for backward compatibility
@@ -1931,7 +1932,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             read400::TRead::read(dyn, e, ctx); // for 114 scores, dynamics are frontloaded in the measure with <tick> attributes.
             // so we need to reset its parent to the correct one after that element is read.
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-            dyn->setParent(segment);
+            dyn->setOwnershipParent(segment);
             if (dyn->dynamicType() == DynamicType::OTHER && dyn->xmlText().isEmpty()) {
                 // if we add this dynamic, it will be an unselectable invisible object that
                 // messes with collision detection.
@@ -1971,7 +1972,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             if (el->isSymbol()) {
-                el->setParent(m);            // this will get reset when adding to segment
+                el->setOwnershipParent(m);            // this will get reset when adding to segment
             }
             el->setTrack(ctx.track());
             read400::TRead::readItem(el, e, ctx);
@@ -2075,7 +2076,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setParent(m);
             readTuplet(tuplet, e, ctx);
             ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
@@ -2106,10 +2106,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
             int beamId = e.intAttribute("id");
-            Beam* beam = Factory::createBeam(ctx.dummy()->system());
+            Beam* beam = Factory::createBeam(ctx.score());
             beam->setTrack(ctx.track());
             read400::TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             ctx.addBeam(beamId, beam);
         } else if (tag == "Segment") {
             if (segment) {
@@ -2128,7 +2127,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MeasureNumber* noText = new MeasureNumber(m);
             readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
-            noText->setParent(m);
             m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "multiMeasureRest") {
             m->setMMRestCount(e.readInt());
@@ -2232,11 +2230,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
             b->add(image);
         }
     } else if (tag == "HBox") {
-        HBox* hb = Factory::createHBox(b->system());
+        HBox* hb = Factory::createHBox(b->score());
         readBox(e, ctx, hb);
         b->add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = Factory::createVBox(b->system());
+        VBox* vb = Factory::createVBox(b->score());
         readBox(e, ctx, vb);
         b->add(vb);
     }
@@ -2259,17 +2257,16 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
     b->setBoxHeight(0_sp); // override default set in constructor
     b->setBoxWidth(0_sp);
     bool keepMargins = false; // whether original margins have to be kept when reading old file
-    System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(bSystem);
+            HBox* hb = Factory::createHBox(b->score());
             readBox(e, ctx, hb);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(bSystem);
+            VBox* vb = Factory::createVBox(b->score());
             readBox(e, ctx, vb);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
@@ -2305,7 +2302,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
 
         if (tag == "Measure") {
             if (staff == 0) {
-                measure = Factory::createMeasure(score->dummy()->system());
+                measure = Factory::createMeasure(score);
                 measure->setTick(ctx.tick());
                 const SigEvent& ev = score->sigmap()->timesig(measure->tick());
                 measure->setTicks(ev.timesig());
@@ -2331,7 +2328,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             } else {
                 if (measure == 0) {
                     LOGD("Score::readStaff(): missing measure!");
-                    measure = Factory::createMeasure(score->dummy()->system());
+                    measure = Factory::createMeasure(score);
                     measure->setTick(ctx.tick());
                     score->measures()->append(measure);
                 }
@@ -2768,14 +2765,14 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     MasterScore* masterScore = static_cast<MasterScore*>(score);
 
-    TempoMap tm;
+    std::map<int, double> tm;
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             readStaffContent(masterScore, e, ctx);
         } else if (tag == "KeySig") {                 // not supported
-            KeySig* ks = Factory::createKeySig(masterScore->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(masterScore->dummy());
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
@@ -2793,18 +2790,13 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();             // obsolete
         } else if (tag == "tempolist") {
             // store the tempo list to create invisible tempo text later
-            double tempo = e.doubleAttribute("fix", 2.0);
-            tm.setTempoMultiplier(tempo);
+            masterScore->setTempoMultiplier(e.doubleAttribute("fix", 2.0));
             while (e.readNextStartElement()) {
                 if (e.name() == "tempo") {
                     int tick   = e.attribute("tick").toInt();
                     double tmp = e.readText().toDouble();
                     tick       = ctx.fileDivision(tick);
-                    auto pos   = tm.find(tick);
-                    if (pos != tm.end()) {
-                        tm.erase(pos);
-                    }
-                    tm.setTempo(tick, tmp);
+                    tm[tick] = tmp;
                 } else if (e.name() == "relTempo") {
                     e.readText();
                 } else {
@@ -2892,7 +2884,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (tag == "Pedal") {
                 readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
-                Ornament* ornament = Factory::createOrnament(score->dummy()->chord());
+                Ornament* ornament = Factory::createOrnament(score->dummy());
                 toTrill(s)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(s));
             } else {
@@ -2923,9 +2915,8 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             readExcerpt(ex, e, ctx);
             masterScore->m_excerpts.push_back(ex);
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(masterScore->dummy()->system());
+            Beam* beam = Factory::createBeam(masterScore);
             read400::TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             // _beams.append(beam);
             delete beam;
         } else {
@@ -2990,7 +2981,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 KeySigEvent ke = i->second;
                 KeySig* ks = Factory::createKeySig(seg);
                 ks->setKeySigEvent(ke);
-                ks->setParent(seg);
                 ks->setTrack(track);
                 ks->setGenerated(false);
                 seg->add(ks);
@@ -3097,28 +3087,46 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
-    masterScore->setUpTempoMap();
+    masterScore->updateTicksAndTimeSigMap();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
-        BeatsPerSecond tempo   = i.second.tempo;
-        if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
-            TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
-            tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
-            tt->setTempo(tempo);
-            tt->setTrack(0);
-            tt->setVisible(false);
-            Measure* m = masterScore->tick2measure(tick);
-            if (m) {
-                Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
-                seg->add(tt);
-                masterScore->setTempo(tick, tempo);
-            } else {
-                delete tt;
+        BeatsPerSecond tempo   = i.second;
+
+        if (i.first == tm.begin()->first && tempo == Constants::DEFAULT_TEMPO) {
+            continue;
+        }
+
+        Measure* m = masterScore->tick2measure(tick);
+        if (!m) {
+            continue;
+        }
+
+        Segment* seg = m->findSegment(SegmentType::ChordRest, tick);
+        bool hasMatchingTempo = false;
+        if (seg) {
+            for (const EngravingItem* segAnnotation : seg->annotations()) {
+                if (segAnnotation->isTempoText() && toTempoText(segAnnotation)->tempo() == tempo) {
+                    hasMatchingTempo = true;
+                    break;
+                }
             }
         }
+        if (hasMatchingTempo) {
+            continue;
+        }
+
+        TempoText* tt = Factory::createTempoText(masterScore->dummy());
+        tt->setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(std::round(tempo.toBPM().val)));
+        tt->setTempo(tempo);
+        tt->setTrack(0);
+        tt->setVisible(false);
+
+        if (!seg) {
+            seg = m->getSegment(SegmentType::ChordRest, tick);
+        }
+        seg->add(tt);
     }
 
-    masterScore->setUpTempoMap();
     // While reading the score, some elements might use `score->repeatList()` (which is incorrect
     // anyway, because the repeatList will be incomplete because the score is incomplete, but some
     // elements still do it).

@@ -25,18 +25,14 @@
 
 #include "types/ret.h"
 #include "async/asyncable.h"
-#include "actions/actionable.h"
-#include "actions/actiontypes.h"
 #include "rcommand/commandable.h"
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
-#include "context/iuicontextresolver.h"
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -48,17 +44,15 @@
 #include "inotationviewcontroller.h"
 
 namespace mu::notation {
-class NotationActionController : public INotationCommandsController, public muse::actions::Actionable, public muse::rcommand::Commandable,
-    public muse::async::Asyncable, public muse::Contextable
+class NotationActionController : public INotationCommandsController, public muse::rcommand::Commandable, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<INotationSceneConfiguration> sceneConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
@@ -68,8 +62,6 @@ public:
         : muse::Contextable(iocCtx) {}
 
     void init();
-
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     void setViewController(INotationViewController* controller) override;
     INotationViewController* viewController() const override;
@@ -103,6 +95,7 @@ public:
 
     bool isNoteInputActionAllowed() const override;
     bool isNoteOrRestSelected() const override;
+    bool isHairpinSelected() const override;
     bool isMoveSelectionAvailable(MoveSelectionType type) const override;
 
     bool isToggleLayoutBreakAvailable() const override;
@@ -141,22 +134,22 @@ private:
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
 
-    muse::Ret addNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret addNote(const muse::rcommand::Params& params);
     void addNote(NoteName noteName, NoteAddingMode addingMode);
-    muse::Ret addDrumNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret addDrumNote(const muse::rcommand::Params& params);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
     void setDuration(engraving::DurationType duration);
     void toggleRest();
     void toggleDots(int dots);
-    muse::Ret putNote(const muse::rcommand::CommandQuery& query);
-    muse::Ret removeNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret putNote(const muse::rcommand::Params& params);
+    muse::Ret removeNote(const muse::rcommand::Params& params);
     void increaseDecreaseDuration(int steps, bool stepByDots);
     void realtimeAdvance();
 
     void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
-    muse::Ret putTuplet(const muse::rcommand::CommandQuery& query);
+    muse::Ret putTuplet(const muse::rcommand::Params& params);
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
@@ -179,6 +172,7 @@ private:
     void insertClef(mu::engraving::ClefType type);
 
     void addText(TextStyleType type);
+    void addDynamic();
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
@@ -186,10 +180,10 @@ private:
 
     void openSelectionMoreOptions();
 
-    muse::Ret startEditSelectedElement(const muse::rcommand::CommandQuery& query);
-    muse::Ret startEditSelectedText(const muse::rcommand::CommandQuery& query);
+    muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
+    muse::Ret startEditSelectedText(const muse::rcommand::Params& params);
 
-    muse::Ret addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
+    muse::Ret addMeasures(const muse::rcommand::Params& params, AddBoxesTarget target);
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
@@ -204,7 +198,7 @@ private:
     void resetStretch();
     void resetBeamMode();
 
-    muse::Ret openEditStyleDialog(const muse::rcommand::CommandQuery& query);
+    muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
     void openPageSettingsDialog();
     void openStaffProperties();
     void openEditStringsDialog();
@@ -263,20 +257,18 @@ private:
 
     bool elementHasPopup(const EngravingItem* e) const;
 
-    bool isNotationPage() const;
-
     void checkForScoreCorruptions();
 
     void toggleAutomation();
-    muse::Ret selectAutomationType(const muse::rcommand::CommandQuery& query);
+    muse::Ret selectAutomationType(const muse::rcommand::Params& params);
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
-    void registerQueryCommand(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::CommandQuery&)>);
+    void registerCommandWithParams(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::Params&)>);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerQueryCommand(const muse::rcommand::Command&, muse::Ret (NotationActionController::*)(const muse::rcommand::CommandQuery&));
+    void registerCommandWithParams(const muse::rcommand::Command&, muse::Ret (NotationActionController::*)(const muse::rcommand::Params&));
 
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
                          bool (NotationActionController::*)() const = nullptr);
@@ -287,16 +279,16 @@ private:
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
-    muse::Ret select(const muse::rcommand::CommandQuery& query);
+    muse::Ret select(const muse::rcommand::Params& params);
     void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
 
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)());
     template<typename P1>
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)(P1), P1);
 
-    muse::Ret zoomToPercent(const muse::rcommand::CommandQuery& query);
+    muse::Ret zoomToPercent(const muse::rcommand::Params& params);
 
-    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::CommandQuery& query);
+    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::Params& params);
 
     INotationViewController* m_viewController = nullptr;
 
@@ -311,9 +303,5 @@ private:
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
     muse::async::Notification m_currentNotationStyleChanged;
     muse::async::Notification m_automationModeEnabledChanged;
-
-    using IsActionEnabledFunc = std::function<bool ()>;
-    std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
-    std::unordered_set<muse::actions::ActionCode> m_isAllowedDuringPlayback;
 };
 }

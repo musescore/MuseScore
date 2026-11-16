@@ -23,18 +23,9 @@
 
 #include "modularity/ioc.h"
 #include "internal/globalcontext.h"
-#include "internal/uicontextresolver.h"
-#include "shortcutcontext.h"
-
-#include "muse_framework_config.h"
-
-#ifdef MUSE_MODULE_SHORTCUTS_V2
-#include "internal/shortcutresolver.h"
-#endif
 
 using namespace mu::context;
 using namespace muse::modularity;
-using namespace muse::shortcuts;
 
 static const std::string mname("context");
 
@@ -51,15 +42,8 @@ IContextSetup* ContextModule::newContext(const muse::modularity::ContextPtr& ctx
 void ContextModuleContext::registerExports()
 {
     m_globalContext = std::make_shared<GlobalContext>();
-    m_uicontextResolver = std::make_shared<UiContextResolver>(iocContext());
 
     ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
-    ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
-    ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
-
-#ifdef MUSE_MODULE_SHORTCUTS_V2
-    ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext()));
-#endif
 }
 
 void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)
@@ -67,8 +51,6 @@ void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)
     if (mode != muse::IApplication::RunMode::GuiApp) {
         return;
     }
-
-    m_uicontextResolver->init();
 }
 
 void ContextModuleContext::onDeinit()

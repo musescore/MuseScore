@@ -39,7 +39,7 @@ class BSymbol : public EngravingItem
     OBJECT_ALLOCATOR(engraving, BSymbol)
 public:
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
@@ -60,7 +60,7 @@ public:
     std::vector<LineF> dragAnchorLines() const override;
 
 protected:
-    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const ElementType& type, EngravingObject* parent, ElementFlags f = ElementFlag::NOTHING);
     BSymbol(const BSymbol&);
 
 private:

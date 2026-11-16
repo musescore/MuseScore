@@ -138,7 +138,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(SlurTieSegment)
 
 protected:
-    SlurTieSegment(const ElementType& type, System*);
+    SlurTieSegment(const ElementType& type, SlurTie* sp);
     SlurTieSegment(const SlurTieSegment&);
 
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
@@ -159,7 +159,7 @@ class SlurTie : public Spanner
     OBJECT_ALLOCATOR(engraving, SlurTie)
 
 public:
-    SlurTie(const ElementType& type, EngravingItem* parent);
+    SlurTie(const ElementType& type, EngravingObject* parent);
     SlurTie(const SlurTie&);
     ~SlurTie();
 
@@ -183,7 +183,7 @@ public:
     AutoOnOff maskSlurTie() const { return m_maskSlurTie; }
     void setMaskSlurTie(AutoOnOff val) { m_maskSlurTie = val; }
 
-    virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
+    virtual SlurTieSegment* newSlurTieSegment() = 0;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

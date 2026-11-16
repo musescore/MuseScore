@@ -277,19 +277,15 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
         duration.setDots(augmentDotsAtt->GetDots());
     }
 
-    Segment* segment = nullptr;
-    // For grace notes we use a dummy segment, otherwise a ChordRest segment with the appropriate ticks value
-    if (m_readingGraceNotes) {
-        segment = m_score->dummy()->segment();
-    } else {
-        segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
-    }
+    // grace notes are added to the chord they precede, so they get no segment of their own
+    Segment* segment = m_readingGraceNotes ? nullptr : measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
+    const DummyParentOr<Segment> parent = parentOrDummy(segment, m_score->dummy());
 
     ChordRest* chordRest = nullptr;
     if (isRest) {
-        chordRest = Factory::createRest(segment);
+        chordRest = Factory::createRest(parent);
     } else {
-        chordRest = Factory::createChord(segment);
+        chordRest = Factory::createChord(parent);
     }
 
     // Do not use single note xml:id / EID for the ChordRest
@@ -522,27 +518,28 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
         return nullptr;
     }
 
-    Spanner* item = nullptr;
-    Segment* segment = pos.measure->getSegment(SegmentType::ChordRest, pos.tick);
+    // a spanner is not attached to anything: the score manages it
+    DummyParent* dummy = m_score->dummy();
 
+    Spanner* item = nullptr;
     if (meiElement.m_name == "dir") {
         ElementType elementType = Convert::elementTypeForDirWithExt(meiElement);
         switch (elementType) {
-        case (ElementType::HAIRPIN): item = Factory::createHairpin(segment);
+        case (ElementType::HAIRPIN): item = Factory::createHairpin(dummy);
             break;
         default:
-            item = Factory::createTextLine(segment);
+            item = Factory::createTextLine(dummy);
         }
     } else if (meiElement.m_name == "hairpin") {
-        item = Factory::createHairpin(segment);
+        item = Factory::createHairpin(dummy);
     } else if (meiElement.m_name == "octave") {
-        item = Factory::createOttava(segment);
+        item = Factory::createOttava(dummy);
     } else if (meiElement.m_name == "pedal") {
-        item = Factory::createPedal(segment);
+        item = Factory::createPedal(dummy);
     } else if (meiElement.m_name == "slur") {
-        item = Factory::createSlur(segment);
+        item = Factory::createSlur(dummy);
     } else if (meiElement.m_name == "trill") {
-        item = Factory::createTrill(segment);
+        item = Factory::createTrill(dummy);
     } else {
         return nullptr;
     }
@@ -895,13 +892,11 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
     if (ornament->hasIntervalAbove() && (ornamSt.accidTypeAbove != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeAbove);
-        accidental->setParent(ornament);
         ornament->setAccidentalAbove(accidental);
     }
     if (ornament->hasIntervalBelow() && (ornamSt.accidTypeBelow != AccidentalType::NONE)) {
         Accidental* accidental = Factory::createAccidental(ornament);
         accidental->setAccidentalType(ornamSt.accidTypeBelow);
-        accidental->setParent(ornament);
         ornament->setAccidentalBelow(accidental);
     }
 }
@@ -1134,7 +1129,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
         }
 
         if (!vBox) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
 
         Text* text = Factory::createText(vBox, textStyle);
@@ -1442,7 +1437,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     meiMeasure.Read(measureNode);
     Convert::MeasureStruct measureSt = Convert::measureFromMEI(meiMeasure, warning);
 
-    Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(m_score);
     this->readXmlId(measure, meiMeasure.m_xmlId);
     measure->setTick(m_ticks);
     measure->setTimesig(m_currentTimeSig);
@@ -2225,7 +2220,6 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     }
 
     m_tuplet->setTrack(track);
-    m_tuplet->setParent(measure);
 
     success = readElements(tupletNode, measure, track, ticks);
 
@@ -2590,7 +2584,7 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     FiguredBassItem* figuredBassItem = figuredBass->createItem(line);
     this->readXmlId(figuredBassItem, meiF.m_xmlId);
     figuredBassItem->setTrack(figuredBass->track());
-    figuredBassItem->setParent(figuredBass);
+    figuredBassItem->setOwnershipParent(figuredBass);
 
     StringList meiLines;
     size_t meiLine = 0;
@@ -2747,7 +2741,6 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
     gliss->setTick(startNote->chord()->tick());
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
-    gliss->setParent(startNote);
     gliss->setGlissandoStyle(startNote->part()->instrument(startNote->tick())->glissandoStyle());
 
     const String glissText = String(glissNode.text().as_string());
@@ -2881,7 +2874,6 @@ bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
     }
 
     LaissezVib* lv = Factory::createLaissezVib(note);
-    lv->setParent(note);
     note->score()->undoAddElement(lv);
     m_uids->reg(lv, meiLv.m_xmlId);
 
@@ -3127,7 +3119,7 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
         return true;
     }
 
-    Tie* tie = new Tie(m_score->dummy());
+    Tie* tie = new Tie(startNote);
     this->readXmlId(tie, meiTie.m_xmlId);
     startNote->setTieFor(tie);
     tie->setStartNote(startNote);
@@ -3165,7 +3157,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
         Trill* trill = toTrill(this->addSpanner(meiTrill, measure, trillNode));
         if (trill) {
             // move ornament to spanner
-            ornament->parentItem()->remove(ornament);
+            ornament->ownershipParentItem()->remove(ornament);
             trill->setOrnament(ornament);
             // @color
             Convert::colorlineFromMEI(trill, meiTrill);
@@ -3545,7 +3537,7 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 {
     if (!str.isEmpty()) {
         if (vBox == nullptr) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
         Text* text = Factory::createText(vBox, textStyleType);
         text->setPlainText(str);

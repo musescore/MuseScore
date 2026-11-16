@@ -213,8 +213,8 @@
           <eid>S_S</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>T_T</eid>
             <style>instrument_excerpt</style>
+            <eid>T_T</eid>
             <text>Flute</text>
             </Text>
           </VBox>

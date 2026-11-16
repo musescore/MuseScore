@@ -162,7 +162,7 @@ struct BrailleContext {
 class Braille
 {
 public:
-    Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection, mu::braille::BrailleVoiceOrder voiceOrder);
+    Braille(Score* s, const mu::braille::BrailleOptions& options = {});
     bool write(QIODevice& device);
     bool convertMeasure(Measure* m, BrailleEngravingItemList* beis);
     bool convertItem(EngravingItem* el, BrailleEngravingItemList* beis);
@@ -178,8 +178,7 @@ private:
 
     Score* m_score = nullptr;
     BrailleContext m_context;
-    mu::braille::BrailleIntervalDirection m_intervalDirection = mu::braille::BrailleIntervalDirection::Auto;
-    mu::braille::BrailleVoiceOrder m_voiceOrder = mu::braille::BrailleVoiceOrder::Auto;
+    mu::braille::BrailleOptions m_options;
 
     void resetOctave(size_t stave);
     void resetOctaves();

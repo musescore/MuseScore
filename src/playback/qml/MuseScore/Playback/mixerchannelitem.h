@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "iplaybackconfiguration.h"
@@ -78,7 +78,7 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
 
 public:
@@ -205,7 +205,7 @@ protected:
 
     muse::audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
-    void openEditor(AbstractAudioResourceItem* item, const muse::actions::ActionQuery& action);
+    void openEditor(AbstractAudioResourceItem* item, const muse::rcommand::CommandQuery& command);
     void closeEditor(AbstractAudioResourceItem* item);
 
     bool askAboutChangingSound();

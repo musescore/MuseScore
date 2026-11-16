@@ -129,16 +129,23 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>R_R</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>S_S</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>Q_Q</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>U_U</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <fret>3</fret>
@@ -148,14 +155,14 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>Q_Q</startElement>
-                <endElement>S_S</endElement>
-                <eid>T_T</eid>
+                <endElement>U_U</endElement>
+                <eid>V_V</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             </Chord>
           <Rest>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

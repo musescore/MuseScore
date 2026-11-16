@@ -32,7 +32,6 @@
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
-#include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
@@ -75,7 +74,6 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow  = { this };
@@ -100,7 +98,7 @@ public:
                                  const QPointF offset = QPointF(), const QString& tag = "");
     PaletteCellPtr appendElement(mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr appendActionIcon(mu::engraving::ActionIconType type, muse::actions::ActionCode code);
+    PaletteCellPtr appendActionIcon(mu::engraving::ActionIconType type);
 
     void clear();
 

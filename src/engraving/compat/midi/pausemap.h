@@ -24,7 +24,6 @@
 #define MU_ENGRAVING_PAUSEMAP_H
 
 #include <map>
-#include <memory>
 
 /**
  \file
@@ -33,7 +32,6 @@
 
 namespace mu::engraving {
 class Score;
-class TempoMap;
 
 //---------------------------------------------------
 //   PauseMap
@@ -45,12 +43,12 @@ class PauseMap : std::map<int, int>
 public:
     void calculate(const engraving::Score* s);
     inline int tickWithPauses(int utick) const { return utick + offsetAtUTick(utick); }
-    const engraving::TempoMap* tempomapWithPauses() const { return m_tempomapWithPauses.get(); }
+    const std::map<int, double>& tempoEvents() const { return m_tempoEvents; }
 
 private:
     int offsetAtUTick(int utick) const;
 
-    std::shared_ptr<engraving::TempoMap> m_tempomapWithPauses;
+    std::map<int, double> m_tempoEvents;
 };
 } // namespace mu::engraving
 #endif

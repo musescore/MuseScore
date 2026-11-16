@@ -26,22 +26,25 @@
 
 #include <QVariantMap>
 
+#include "engraving/dom/guitarbend.h"
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace BendTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class ShowHoldLine {
-    SHOW_HOLD_AUTO = 0,
-    SHOW_HOLD_SHOW = 1,
-    SHOW_HOLD_HIDE = 2,
+    SHOW_HOLD_AUTO = int(engraving::GuitarBendShowHoldLine::AUTO),
+    SHOW_HOLD_SHOW = int(engraving::GuitarBendShowHoldLine::SHOW),
+    SHOW_HOLD_HIDE = int(engraving::GuitarBendShowHoldLine::HIDE),
 };
 Q_ENUM_NS(ShowHoldLine)
 
 enum class VibratoType {
-    VIBRATO_NONE = -1,
-    VIBRATO_VIBRATO,
-    VIBRATO_VIBRATO_WIDE,
+    VIBRATO_NONE = int(engraving::VibratoType::NONE),
+    VIBRATO_VIBRATO = int(engraving::VibratoType::GUITAR_VIBRATO),
+    VIBRATO_VIBRATO_WIDE = int(engraving::VibratoType::GUITAR_VIBRATO_WIDE),
 };
 Q_ENUM_NS(VibratoType)
 }

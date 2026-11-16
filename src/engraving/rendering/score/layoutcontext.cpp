@@ -395,7 +395,7 @@ const RangeLocks* DomAccessor::pageLocks() const
 
 const PaddingTable& DomAccessor::paddingTable() const
 {
-    return score()->paddingTable();
+    return score()->paddingTables().horizontalPaddingTable();
 }
 
 const std::vector<BracketItem*>& DomAccessor::brackets(staff_idx_t staffIdx) const
@@ -419,15 +419,7 @@ MeasureBase* DomAccessor::first()
     return score()->first();
 }
 
-RootItem* DomAccessor::rootItem() const
-{
-    IF_ASSERT_FAILED(score()) {
-        return nullptr;
-    }
-    return score()->rootItem();
-}
-
-compat::DummyElement* DomAccessor::dummyParent() const
+DummyParent* DomAccessor::dummyParent() const
 {
     IF_ASSERT_FAILED(score()) {
         return nullptr;
@@ -611,10 +603,6 @@ LayoutContext::LayoutContext(Score* score)
 
 LayoutContext::~LayoutContext()
 {
-    for (Spanner* s : m_state.processedSpanners()) {
-        TLayout::layoutSystemsDone(s);
-    }
-
     for (MuseScoreView* v : m_score->getViewer()) {
         v->layoutChanged();
     }

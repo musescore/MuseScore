@@ -28,7 +28,7 @@
       <Staff>
         <eid>/JGCLp7p+7P_/JGCLp7p+7P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">
@@ -81,7 +81,7 @@
       <Staff>
         <eid>BKGCLp7p+7P_BKGCLp7p+7P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="viola">
@@ -135,8 +135,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>0PvvpAVmcFE_1eRoZ24u3KG</eid>
         <Text>
-          <eid>4vXiWwYYdHG_jowMfrEe/vL</eid>
           <style>title</style>
+          <eid>4vXiWwYYdHG_jowMfrEe/vL</eid>
           <text>tst_copy_symbol_list</text>
           </Text>
         </VBox>

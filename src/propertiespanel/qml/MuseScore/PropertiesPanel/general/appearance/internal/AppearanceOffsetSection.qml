@@ -33,6 +33,8 @@ Column {
     property alias offset: offsets.propertyItem
 
     property bool isSnappedToGrid: false
+    property bool isAutoplaceEnabled: true
+    property string freezePlacementShortcut: ""
     property alias isVerticalOffsetAvailable: offsets.isVerticalOffsetAvailable
     property alias measurementUnits: offsets.measurementUnits
 
@@ -42,6 +44,8 @@ Column {
 
     signal snapToGridToggled(var snap)
     signal configureGridRequested()
+    
+    signal freezeCurrentPlacementRequested()
 
     height: implicitHeight
     width: parent.width
@@ -55,13 +59,34 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
+    FlatButton {
+        id: freezePlacementButton
+        width: parent.width
+
+        enabled: root.isAutoplaceEnabled
+
+        navigation.name: "Freeze current placement"
+        navigation.panel: root.navigationPanel
+        navigation.row: offsets.navigationRowEnd + 1
+
+        text: qsTrc("propertiespanel", "Freeze current placement")
+
+        toolTipTitle: qsTrc("propertiespanel", "Freeze current placement")
+        toolTipDescription: qsTrc("propertiespanel", "Turn off auto-place and freeze the selection’s current drawn position relative to the item’s anchor point.")
+        toolTipShortcut: root.freezePlacementShortcut
+
+        onClicked: {
+            root.freezeCurrentPlacementRequested()
+        }
+    }
+
     CheckBox {
         id: snapToGridCheckbox
         width: parent.width
 
         navigation.name: "Snap to grid"
         navigation.panel: root.navigationPanel
-        navigation.row: offsets.navigationRowEnd + 1
+        navigation.row: freezePlacementButton.navigation.row + 1
 
         text: qsTrc("propertiespanel", "Snap to grid")
 

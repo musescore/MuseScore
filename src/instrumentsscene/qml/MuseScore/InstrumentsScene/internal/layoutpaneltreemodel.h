@@ -27,15 +27,16 @@
 #include <QVariant>
 #include <qqmlintegration.h>
 
+#include "async/asyncable.h"
 #include "abstractlayoutpaneltreeitem.h"
+
 #include "modularity/ioc.h"
 #include "notationscene/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
-#include "async/asyncable.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
+#include "rcommand/icommanddispatcher.h"
 #include "interactive/iinteractive.h"
-#include "shortcuts/ishortcutsregister.h"
+#include "shortcuts_v2/icommandshortcutsregister.h"
+
 #include "layoutpanelutils.h"
 
 Q_MOC_INCLUDE(< QItemSelectionModel >)
@@ -48,8 +49,7 @@ class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
-class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable,
-    public muse::actions::Actionable, public muse::Contextable
+class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -66,10 +66,10 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
 
     QML_ELEMENT
 
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

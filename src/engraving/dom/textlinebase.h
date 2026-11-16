@@ -42,7 +42,7 @@ class TextLineBaseSegment : public LineSegment
     OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
 
 public:
-    TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    TextLineBaseSegment(const ElementType& type, TextLineBase*, ElementFlags f = ElementFlag::NOTHING);
     TextLineBaseSegment(const TextLineBaseSegment&);
     ~TextLineBaseSegment();
 
@@ -140,16 +140,17 @@ class TextLineBase : public SLine
     M_PROPERTY(bool,       textSizeSpatiumDependent, setTextSizeSpatiumDependent)
 
 public:
-    TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, EngravingObject* parent, ElementFlags = ElementFlag::NOTHING);
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    PropertyFlags propertyFlags(Pid) const override;
     void setPropertyFlags(Pid, PropertyFlags) override;
 
-    static const std::array<Pid, 44>& textLineBasePropertyIds();
+    static const std::array<Pid, 45>& textLineBasePropertyIds();
 
     void reset() override;
 

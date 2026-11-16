@@ -36,7 +36,7 @@ static const ElementStyle annotationStyle {
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-PlayTechAnnotation::PlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType tid)
+PlayTechAnnotation::PlayTechAnnotation(DummyParentOr<Segment> parent, PlayingTechniqueType techniqueType, TextStyleType tid)
     : StaffTextBase(ElementType::PLAYTECH_ANNOTATION, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF),
     m_techniqueType(techniqueType)
 {

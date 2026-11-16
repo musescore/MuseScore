@@ -22,17 +22,20 @@
 
 #include "transpose.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
+#include "../dom/factory.h"
+#include "../dom/fret.h"
 #include "../dom/harmony.h"
+#include "../dom/keysig.h"
+#include "../dom/linkedobjects.h"
+#include "../dom/measure.h"
+#include "../dom/note.h"
 #include "../dom/part.h"
 #include "../dom/segment.h"
 #include "../dom/staff.h"
 #include "../dom/utils.h"
-#include "../dom/note.h"
-#include "../dom/factory.h"
-#include "../dom/keysig.h"
-#include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
-#include "../dom/fret.h"
 
 #include "editenharmonicspelling.h"
 #include "editfretboarddiagram.h"
@@ -288,7 +291,6 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
                 ks->setTrack(track);
                 Key nKey = transposeKey(Key::C, interval);
                 ks->setKey(nKey);
-                ks->setParent(seg);
                 score->undoAddElement(ks);
             }
         }
@@ -362,7 +364,6 @@ void Transpose::transposeKeys(Transaction& tx, Score* score, staff_idx_t staffSt
                 nKey = cKey;
             }
             ks->setKey(cKey, nKey);
-            ks->setParent(seg);
             score->undoAddElement(ks);
         }
     }
@@ -640,7 +641,7 @@ void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Scor
 
 String Transpose::transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc)
 {
-    Harmony h(score->dummy()->segment());
+    Harmony h(score->dummy());
     h.setHarmony(name);
     for (HarmonyInfo* info : h.chords()) {
         info->setRootTpc(transformTpc(info->rootTpc()));

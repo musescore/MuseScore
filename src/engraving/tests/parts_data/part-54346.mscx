@@ -153,8 +153,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Test</text>
           </Text>
         </VBox>
@@ -177,8 +177,8 @@
             </Rest>
           <SystemText>
             <swing unit="eighth" ratio="60"/>
-            <eid>K_K</eid>
             <style>tempo</style>
+            <eid>K_K</eid>
             <text>Swing</text>
             </SystemText>
           <Chord>

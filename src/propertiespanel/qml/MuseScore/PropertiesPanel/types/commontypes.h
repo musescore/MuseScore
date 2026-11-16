@@ -66,22 +66,22 @@ Q_NAMESPACE;
 QML_ELEMENT;
 
 enum class Placement {
-    PLACEMENT_TYPE_ABOVE,
-    PLACEMENT_TYPE_BELOW
+    PLACEMENT_TYPE_ABOVE = int(mu::engraving::PlacementV::ABOVE),
+    PLACEMENT_TYPE_BELOW = int(mu::engraving::PlacementV::BELOW)
 };
 Q_ENUM_NS(Placement)
 
 enum class AlignmentH {
-    LEFT,
-    RIGHT,
-    HCENTER
+    LEFT = int(mu::engraving::AlignH::LEFT),
+    RIGHT = int(mu::engraving::AlignH::RIGHT),
+    HCENTER = int(mu::engraving::AlignH::HCENTER)
 };
 Q_ENUM_NS(AlignmentH)
 
 enum class AutoOnOff {
-    AUTO_ON_OFF_AUTO,
-    AUTO_ON_OFF_ON,
-    AUTO_ON_OFF_OFF,
+    AUTO_ON_OFF_AUTO = int(mu::engraving::AutoOnOff::AUTO),
+    AUTO_ON_OFF_ON = int(mu::engraving::AutoOnOff::ON),
+    AUTO_ON_OFF_OFF = int(mu::engraving::AutoOnOff::OFF),
 };
 Q_ENUM_NS(AutoOnOff);
 

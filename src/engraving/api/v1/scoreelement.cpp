@@ -99,6 +99,7 @@ qreal ScoreElement::spatium() const
 
 //---------------------------------------------------------
 //   ScoreElement::get
+///   Returns an engraving property converted to a plugin-readable value.
 //---------------------------------------------------------
 
 QVariant ScoreElement::get(mu::engraving::Pid pid) const
@@ -118,6 +119,10 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     }
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
+    case P_TYPE::PAIR_REAL: {
+        const PairF pair = val.value<PairF>();
+        return QVariantList { pair.first, pair.second };
+    }
     case P_TYPE::ABSOLUTE:
         return val.toReal() / spatium();
     case P_TYPE::SPATIUM:

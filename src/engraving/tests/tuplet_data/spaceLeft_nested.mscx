@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <Score>
+    <Division>480</Division>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched"><name>stdNormal</name></StaffType>
+      </Staff>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <trackName>Flute</trackName>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel><program value="73"/></Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Tuplet><normalNotes>2</normalNotes><actualNotes>3</actualNotes><baseNote>half</baseNote><Number><style>tuplet</style><text>3</text></Number></Tuplet>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>5</actualNotes><baseNote>eighth</baseNote><Number><style>tuplet</style><text>5</text></Number></Tuplet>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>7</actualNotes><baseNote>16th</baseNote><Number><style>tuplet</style><text>7</text></Number></Tuplet>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>half</durationType></Rest>
+          <Rest><durationType>half</durationType></Rest>
+          <endTuplet/>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Tuplet><normalNotes>2</normalNotes><actualNotes>3</actualNotes><baseNote>half</baseNote><Number><style>tuplet</style><text>3</text></Number></Tuplet>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>5</actualNotes><baseNote>eighth</baseNote><Number><style>tuplet</style><text>5</text></Number></Tuplet>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>7</actualNotes><baseNote>16th</baseNote><Number><style>tuplet</style><text>7</text></Number></Tuplet>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <Rest><durationType>16th</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>half</durationType></Rest>
+          <Rest><durationType>half</durationType></Rest>
+          <endTuplet/>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>5</actualNotes><baseNote>quarter</baseNote><Number><style>tuplet</style><text>5</text></Number></Tuplet>
+          <Tuplet><normalNotes>2</normalNotes><actualNotes>3</actualNotes><baseNote>eighth</baseNote><Number><style>tuplet</style><text>3</text></Number></Tuplet>
+          <Tuplet><normalNotes>4</normalNotes><actualNotes>6</actualNotes><baseNote>32nd</baseNote><Number><style>tuplet</style><text>6</text></Number></Tuplet>
+          <Rest><durationType>32nd</durationType></Rest>
+          <Rest><durationType>32nd</durationType></Rest>
+          <Rest><durationType>32nd</durationType></Rest>
+          <Rest><durationType>32nd</durationType></Rest>
+          <Rest><durationType>32nd</durationType></Rest>
+          <Rest><durationType>32nd</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>eighth</durationType></Rest>
+          <Rest><durationType>eighth</durationType></Rest>
+          <endTuplet/>
+          <Rest><durationType>quarter</durationType></Rest>
+          <Rest><durationType>quarter</durationType></Rest>
+          <Rest><durationType>quarter</durationType></Rest>
+          <Rest><durationType>quarter</durationType></Rest>
+          <endTuplet/>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

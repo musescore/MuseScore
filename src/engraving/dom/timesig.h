@@ -56,7 +56,7 @@ class TimeSig final : public EngravingItem
 
 public:
 
-    void setParent(Segment* parent);
+    void setOwnershipParent(DummyParentOr<Segment> parent);
 
     String ssig() const;
     void setSSig(const String&);
@@ -86,8 +86,8 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 
     bool showCourtesySig() const { return m_showCourtesySig; }
     void setShowCourtesySig(bool v) { m_showCourtesySig = v; }
@@ -149,7 +149,7 @@ protected:
 private:
 
     friend class Factory;
-    TimeSig(Segment* parent = 0);
+    TimeSig(DummyParentOr<Segment> parent);
 
     String m_numeratorString;       // calculated from actualSig() if !customText
     String m_denominatorString;

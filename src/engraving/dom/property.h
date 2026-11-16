@@ -323,6 +323,7 @@ enum class Pid : short {
     STAFF_GEN_CLEF,
     STAFF_GEN_TIMESIG,
     STAFF_GEN_KEYSIG,
+    STAFF_INSTRUMENT_LABEL_VISIBILITY,
     STAFF_YOFFSET,
     STAFF_USERDIST,
     STAFF_BARLINE_SPAN,
@@ -432,7 +433,6 @@ enum class Pid : short {
     CLEF_TYPE_CONCERT,
     CLEF_TYPE_TRANSPOSING,
     CLEF_TO_BARLINE_POS,
-    IS_HEADER, // for clefs
     KEY_CONCERT,
     KEY,
     ACTION,   // for ActionIcon

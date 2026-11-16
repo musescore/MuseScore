@@ -141,7 +141,7 @@ void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
         return;
     }
 
-    const Instrument* ins = staff->part()->instrument(segment.tick());
+    const Instrument* ins = staff->originPart(segment.tick())->instrument(segment.tick());
     if (!ins->useDrumset()) {
         return;
     }

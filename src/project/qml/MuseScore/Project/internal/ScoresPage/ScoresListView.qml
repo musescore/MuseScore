@@ -34,6 +34,7 @@ Item {
     property list<ColumnItem> columns
     property alias showNewScoreItem: newScoreItem.visible
     property string searchText
+    property bool allowRemoveFromRecentFiles: false
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -44,6 +45,13 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal revealInFileBrowserRequested(var scorePath)
+    signal viewOnlineRequested(var scoreId)
+    signal removeFromRecentFilesRequested(var scorePath)
+    signal deleteScoreRequested(var scoreId, var scoreName)
+    signal retryRequested()
+    signal cancelConversionRequested(int convertType, int convertId)
+    signal cancelUploadRequested(int uploadId)
 
     component ColumnItem : QtObject {
         property string header
@@ -100,7 +108,8 @@ Item {
             navigation.column: 0
 
             score: {
-                "name": qsTrc("project", "New score")
+                "name": qsTrc("project", "New score"),
+                "isCreateNew": true
             }
 
             thumbnailComponent: Rectangle {
@@ -203,6 +212,8 @@ Item {
                     model: searchFilterModel
 
                     delegate: ScoreListItem {
+                        id: item
+
                         required property int index
 
                         columns: root.columns
@@ -210,13 +221,44 @@ Item {
                         itemInset: view.itemInset
                         implicitHeight: view.rowHeight
                         columnSpacing: view.columnSpacing
+                        showRemoveFromRecentFiles: root.allowRemoveFromRecentFiles
+
+                        mouseArea.enabled: !item.isProcessing
 
                         navigation.panel: navPanel
                         navigation.row: index + 1
                         navigation.column: 0
 
                         onClicked: {
-                            root.openScoreRequested(score.path, score.name)
+                            if (!item.isProcessing) {
+                                root.openScoreRequested(score.path, score.name)
+                            }
+                        }
+
+                        onRevealInFileBrowserRequested: function(scorePath) {
+                            root.revealInFileBrowserRequested(scorePath)
+                        }
+
+                        onViewOnlineRequested: function(scoreId) {
+                            root.viewOnlineRequested(scoreId)
+                        }
+
+                        onRemoveFromRecentFilesRequested: function(scorePath) {
+                            root.removeFromRecentFilesRequested(scorePath)
+                        }
+
+                        onDeleteScoreRequested: function(scoreId, scoreName) {
+                            root.deleteScoreRequested(scoreId, scoreName)
+                        }
+
+                        onRetryRequested: root.retryRequested()
+
+                        onCancelUploadRequested: function(uploadId) {
+                            root.cancelUploadRequested(uploadId)
+                        }
+
+                        onCancelConversionRequested: function(convertType, convertId) {
+                            root.cancelConversionRequested(convertType, convertId)
                         }
                     }
                 }

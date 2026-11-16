@@ -519,6 +519,7 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>AH</continueText>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>5/4</ticks>
         <eid>MB_MB</eid>
         <track>0</track>

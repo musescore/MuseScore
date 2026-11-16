@@ -48,28 +48,33 @@ ignored_files = {
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-def tr_error(message_element, description, resolution, hint=''):
-    global num_errors
+def tr_error(description, resolution, hint=''):
+    global ctx, message, num_errors
     locations = [
         (
-            os.path.relpath(os.path.join('share/locale', location.get('filename'))).replace('\\', '/'),
-            location.get('line'),
+            location.get('filename', '<missing_filename>'),
+            location.get('line', '<missing_line>'),
         )
-        for location in message_element.findall('location')
+        for location in message.findall('location')
     ]
     locations = [ (file, line) for file, line in locations if file not in ignored_files ]
     if not locations:
-        return False # error is ignored
+        # Error only occurs in an ignored file, or in no files if it's an obsolete string.
+        return False # Ignore error.
     num_errors += 1
     eprint(f'Error in translatable string: "{message.find("source").text}"')
     for file, line in locations:
         eprint(f'    Location: {file}:{line}')
+    eprint(f'    Context: "{ctx}"')
+    comment = message.find('comment')
+    if comment is not None:
+        eprint(f'    Disambiguation: "{comment.text}"')
     eprint(f'    Problem: {description}')
     eprint(f'    Solution: {resolution}')
     if hint:
         eprint(f'    Hint: {hint}')
     eprint()
-    return True # error
+    return True # Give error.
 
 def write_ts_file(target_file, root):
     # Tweak ElementTree's XML formatting to match that of Qt's lupdate. The aim
@@ -108,67 +113,108 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
     eprint("Reading " + source_file)
     tree = ET.parse(source_file)
     root = tree.getroot()
-
     assert(root.tag == 'TS')
 
-    for message in root.findall('.//message'):
-        source = message.find('source')
-        translation = message.find('translation')
-        plurals = translation.findall('numerusform')
+    for context in root.findall('context'):
+        ctx = context.find('name').text
 
-        bytes = source.findall('byte')
-        if bytes:
-            values = ', '.join([ f"'{b.get('value')}'" for b in bytes ])
-            if tr_error(message, f'Translatable string contains illegal byte(s): {values}.',
-                'Remove the illegal bytes or provide them in a non-translatable string.'):
-                continue
+        for message in context.findall('message'):
+            source = message.find('source')
+            translation = message.find('translation')
+            plurals = translation.findall('numerusform')
 
-        # use the source as basis for the translation
-        tr_txt = source.text
+            # Make all <location> filename's relative to the repository root. This affects meta
+            # info that translators see on Transifex, but it has no impact on the final program.
+            # Do it before any calls to `ts_error()` so this script's error messages also benefit.
+            for location in message.findall('location[@filename]'):
+                filename = location.get('filename')
+                if not filename:
+                    continue
+                filename = os.path.join('share/locale', filename)
+                filename = os.path.relpath(filename).replace('\\', '/')
+                location.set('filename', filename)
 
-        if not tr_txt:
-            # Sadly, this test only works for empty strings in QML files. If a translated
-            # string is empty in a C++ file then lupdate doesn't include it in the TS file.
-            if tr_error(message, 'Translatable string is empty.',
-                'Provide a non-empty string or use "" untranslated if it really needs to be empty.'):
-                continue
+            # Line numbers change frequently, which creates noise in the TS file's diff. Let's
+            # replace them with a count of how many times the string occurs in each source file.
+            # This creates a smaller diff, which makes actual string changes more noticeable.
+            locations = {}
+            for location in message.findall('location'):
+                filename = location.get('filename')
+                line = location.get('line')
 
-        tr_stripped = tr_txt.strip()
+                if not filename:
+                    tr_error(f"Location has invalid filename: '{filename}'.",
+                        'Re-run lupdate with `-locations absolute` (the default) to get valid filenames.')
+                    continue
 
-        if not tr_stripped:
-            if tr_error(message, 'Translatable string only contains whitespace characters.',
-                'Include non-whitespace characters or provide the whitepace as untranslated text.'):
-                continue
+                if not line or not re.fullmatch('[0-9]+', line):
+                    tr_error(f"Location has invalid line number: '{line}'.",
+                        'Re-run lupdate with `-locations absolute` (the default) to get valid line numbers.')
+                    continue
 
-        if tr_txt != tr_stripped:
-            tr_error(message, 'Translatable string contains leading and/or trailing whitespace.',
-                'Remove the whitepace or provide it separately as non-translatable text.',
-                'Use .arg() and %1 tags if you need to insert text or numbers into a translatable string.')
+                if filename not in locations:
+                    locations[filename] = location
+                    count = 1
+                else:
+                    message.remove(location)
+                    location = locations[filename]
+                    count = int(location.get('line')) + 1
 
-        if '  ' in tr_txt:
-            tr_error(message, "Translatable string contains consecutive space characters (  ).",
-                'Use a single space character ( ), or provide the spaces as untranslated text.')
+                location.set('line', str(count))
 
-        if '...' in tr_txt:
-            tr_error(message, "Translatable string contains three consecutive dot characters (...).",
-                'Use the ellipsis character (…) instead.')
+            byte_elements = source.findall('byte')
+            if byte_elements:
+                values = ', '.join([ f"'{b.get('value')}'" for b in byte_elements ])
+                if tr_error(f'Translatable string contains illegal byte(s): {values}.',
+                    'Remove the illegal bytes or provide them in a non-translatable string.'):
+                    continue
 
-        if "'" in tr_txt:
-            tr_error(message, "Translatable string contains the straight single quote mark (').",
-                'Use left (‘) or right (’) curly single quote mark, or prime (′).')
+            # use the source as basis for the translation
+            tr_txt = source.text
 
-        if '"' in re.sub(r'<a href="[^"]*">', '', tr_txt):
-            tr_error(message, 'Translatable string contains the straight double quote mark (").',
-                'Use left (“) or right (”) curly double quote mark, or double prime (″).')
+            if not tr_txt:
+                # Sadly, this test only works for empty strings in QML files. If a translated
+                # string is empty in a C++ file then lupdate doesn't include it in the TS file.
+                if tr_error('Translatable string is empty.',
+                    'Provide a non-empty string or use "" untranslated if it really needs to be empty.'):
+                    continue
 
-        if plurals:
-            for idx, plural in enumerate(plurals):
-                plural.text = tr_txt
-        else:
-            translation.text = tr_txt
-        
-        if translation.get('type') == 'obsolete':
-            translation.set('type', 'unfinished')
+            tr_stripped = tr_txt.strip()
+
+            if not tr_stripped:
+                if tr_error('Translatable string only contains whitespace characters.',
+                    'Include non-whitespace characters or provide the whitepace as untranslated text.'):
+                    continue
+
+            if tr_txt != tr_stripped:
+                tr_error('Translatable string contains leading and/or trailing whitespace.',
+                    'Remove the whitepace or provide it separately as non-translatable text.',
+                    'Use .arg() and %1 tags if you need to insert text or numbers into a translatable string.')
+
+            if '  ' in tr_txt:
+                tr_error("Translatable string contains consecutive space characters (  ).",
+                    'Use a single space character ( ), or provide the spaces as untranslated text.')
+
+            if '...' in tr_txt:
+                tr_error("Translatable string contains three consecutive dot characters (...).",
+                    'Use the ellipsis character (…) instead.')
+
+            if "'" in tr_txt:
+                tr_error("Translatable string contains the straight single quote mark (').",
+                    'Use left (‘) or right (’) curly single quote mark, or prime (′).')
+
+            if '"' in re.sub(r'<a href="[^"]*">', '', tr_txt):
+                tr_error('Translatable string contains the straight double quote mark (").',
+                    'Use left (“) or right (”) curly double quote mark, or double prime (″).')
+
+            if plurals:
+                for plural in plurals:
+                    plural.text = tr_txt
+            else:
+                translation.text = tr_txt
+
+            if translation.get('type') == 'obsolete':
+                translation.set('type', 'unfinished')
 
     eprint("Filling " + source_file + " with translations by copying source texts")
     write_ts_file(source_file, root)

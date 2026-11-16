@@ -194,13 +194,13 @@
         <height>10</height>
         <eid>pizFWS7gUnK_7oCJLZRQ/HP</eid>
         <Text>
-          <eid>pnTMP+qq/1E_bV6TpF8GqYP</eid>
           <style>title</style>
+          <eid>pnTMP+qq/1E_bV6TpF8GqYP</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>aWhciF8rbXP_7uH6EOUNg+F</eid>
           <style>composer</style>
+          <eid>aWhciF8rbXP_7uH6EOUNg+F</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

@@ -22,6 +22,8 @@
 
 #include "engravingobject.h"
 
+#include <algorithm>
+
 #include "global/containers.h"
 
 #include "../editing/addremoveelement.h"
@@ -32,6 +34,7 @@
 #include "types/typesconv.h"
 
 #include "bracketitem.h"
+#include "dummyparent.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"
@@ -56,6 +59,8 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         assert(parent);
     }
 
+    // The parent an object is constructed with is its parent: it is attached to it
+    // right away. Passing the dummy means it is not attached to anything yet.
     doSetParent(parent);
     if (m_parent) {
         doSetScore(m_parent->score());
@@ -78,7 +83,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
     m_type = se.m_type;
     doSetParent(se.m_parent);
     m_score = se.m_score;
-    m_isParentExplicitlySet = se.m_isParentExplicitlySet;
     m_elementStyle = se.m_elementStyle;
     if (m_elementStyle) {
         size_t n = m_elementStyle->size();
@@ -112,7 +116,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->rootItem() && score()->rootItem()->dummy();
+                              && score()->dummy();
 
         // copy because moveToDummy might modify children
         EngravingObjectList children = m_children;
@@ -182,9 +186,29 @@ void EngravingObject::moveToDummy()
     Score* sc = score();
     if (sc) {
         if (sc->dummy() && sc->dummy() != this) {
-            setParent(sc->dummy());
+            setOwnershipParent(sc->dummy());
         }
     }
+}
+
+static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
+{
+    for (EngravingObject* ch : item->children()) {
+        if (ch->isEngravingItem()) {
+            list.push_back(toEngravingItem(ch));
+
+            if (all) {
+                collectChildrenItems(ch, list, all);
+            }
+        }
+    }
+}
+
+EngravingItemList EngravingObject::childrenItems(bool all) const
+{
+    EngravingItemList list;
+    collectChildrenItems(this, list, all);
+    return list;
 }
 
 EngravingItemList EngravingObject::getChildren(bool includeInvisible) const
@@ -216,7 +240,7 @@ void EngravingObject::setScore(Score* s)
     if (m_parent->isType(ElementType::DUMMY)) {
         moveToDummy();
     } else if (m_parent->isType(ElementType::SCORE)) {
-        setParent(s);
+        setOwnershipParent(s);
     }
 }
 
@@ -235,7 +259,15 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    muse::remove(m_children, o);
+
+    // Search from the back: a child is often unparented shortly after it was added, so it
+    // still sits near the end of the list. That matters for the dummy, whose child list is
+    // long-lived and large. Empirical evidence shows that searching from the back walks on
+    // average orders-of-magnitude less list entries than searching from the front.
+    auto it = std::find(m_children.rbegin(), m_children.rend(), o);
+    if (it != m_children.rend()) {
+        m_children.erase(std::next(it).base());
+    }
 }
 
 EngravingObject* EngravingObject::parent() const
@@ -243,20 +275,15 @@ EngravingObject* EngravingObject::parent() const
     return m_parent;
 }
 
-EngravingObject* EngravingObject::explicitParent() const
+EngravingObject* EngravingObject::ownershipParent() const
 {
-    if (!m_isParentExplicitlySet) {
+    if (!m_parent || m_parent->isType(ElementType::DUMMY)) {
         return nullptr;
     }
     return m_parent;
 }
 
-void EngravingObject::setParent(EngravingObject* p)
-{
-    setParentInternal(p);
-}
-
-void EngravingObject::setParentInternal(EngravingObject* p)
+void EngravingObject::setOwnershipParent(EngravingObject* p)
 {
     IF_ASSERT_FAILED(this != p) {
         return;
@@ -271,17 +298,6 @@ void EngravingObject::setParentInternal(EngravingObject* p)
     if (m_parent) {
         doSetScore(m_parent->score());
     }
-
-    if (p && !p->isType(ElementType::DUMMY)) {
-        m_isParentExplicitlySet = true;
-    } else {
-        m_isParentExplicitlySet = false;
-    }
-}
-
-void EngravingObject::resetExplicitParent()
-{
-    m_isParentExplicitlySet = false;
 }
 
 Score* EngravingObject::score() const
@@ -466,14 +482,6 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
                 break;
             }
             changeProperties(this, p.pid, style().styleV(p.sid), PropertyFlags::STYLED);
-        }
-    } else if (id == Pid::OFFSET) {
-        // TODO: do this in caller?
-        if (isEngravingItem()) {
-            EngravingItem* e = toEngravingItem(this);
-            if (e->offset() != v.value<PointF>()) {
-                e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
-            }
         }
     } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
         if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {

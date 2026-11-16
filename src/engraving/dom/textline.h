@@ -38,7 +38,7 @@ class TextLineSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::TEXTLINE_SEGMENT)
 
 public:
-    TextLineSegment(Spanner* sp, System* parent, bool system=false);
+    TextLineSegment(TextLine* sp, bool system=false);
 
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
@@ -59,7 +59,7 @@ class TextLine final : public TextLineBase
     DECLARE_CLASSOF(ElementType::TEXTLINE)
 
 public:
-    TextLine(EngravingItem* parent, bool system=false);
+    TextLine(DummyParentOr<EngravingItem> parent, bool system=false);
     TextLine(const TextLine&);
     ~TextLine() {}
 
@@ -71,7 +71,7 @@ public:
 
     void initStyle();
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     bool allowTimeAnchor() const override;
 

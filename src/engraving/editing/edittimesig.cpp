@@ -207,7 +207,7 @@ bool EditTimeSig::rewriteMeasures(Transaction& tx, Score* score, Measure* startM
         Measure* newLastMeasure = nullptr;
         Fraction tick     = startMeasure->tick();
         for (int i = 0; i < newMeasures; ++i) {
-            Measure* m = Factory::createMeasure(s->dummy()->system());
+            Measure* m = Factory::createMeasure(s);
             m->setPrev(newLastMeasure);
             if (newLastMeasure) {
                 newLastMeasure->setNext(m);
@@ -362,10 +362,10 @@ bool EditTimeSig::rewriteMeasures(Transaction& tx, Score* score, Measure* fm, co
             if (sectionBreak) {
                 // reinstate section break, then stop rewriting
                 if (measure && measure->prevMeasure()) {
-                    sectionBreak->setParent(measure->prevMeasure());
+                    sectionBreak->setOwnershipParent(measure->prevMeasure());
                     score->undoAddElement(sectionBreak);
                 } else if (!measure) {
-                    sectionBreak->setParent(score->lastMeasure());
+                    sectionBreak->setOwnershipParent(score->lastMeasure());
                     score->undoAddElement(sectionBreak);
                 } else {
                     LOGD("unable to restore section break");
@@ -430,7 +430,7 @@ bool EditTimeSig::rewriteMeasures(Transaction& tx, Score* score, Measure* fm, co
                            ? toTimeSig(endOfMeasureTimeSigSeg->element(staff2track(i))) : score->staff(i)->timeSig(nm->tick());
             if (ots) {
                 TimeSig* nts = Factory::copyTimeSig(*ots);
-                nts->setParent(timeSigSeg);
+                nts->setOwnershipParent(timeSigSeg);
                 if (sectionBreak) {
                     nts->setGenerated(false);
                     nts->setShowCourtesySig(false);
@@ -600,7 +600,7 @@ void EditTimeSig::addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_i
                     nsig = Factory::copyTimeSig(*ts);
                     nsig->setScore(lscore);
                     nsig->setTrack(si * VOICES);
-                    nsig->setParent(seg);
+                    nsig->setOwnershipParent(seg);
                     nsig->styleChanged();
                     score->undoAddElement(nsig);
                     if (lscore->excerpt()) {

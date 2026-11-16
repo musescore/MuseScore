@@ -26,6 +26,7 @@
 #include "textlayout.h"
 
 #include "../dom/hairpin.h"
+#include "../dom/measure.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
 #include "../types/typesconv.h"
@@ -152,7 +153,7 @@ void DynamicsLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase:
 
 void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::LayoutData* ldata)
 {
-    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious() || !item->offset().isNull()) {
+    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious()) {
         return;
     }
 

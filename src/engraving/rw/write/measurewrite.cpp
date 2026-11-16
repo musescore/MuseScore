@@ -56,7 +56,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         xml.tag("multiMeasureRest", measure->mmRestCount());
     }
     if (writeSystemElements) {
-        TWrite::writeItemEid(measure, xml, ctx);
+        TWrite::writeItemEid(measure, xml);
 
         if (measure->isMMRest()) {
             Measure* lastMeasure = measure->mmRestLast();

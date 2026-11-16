@@ -7,6 +7,7 @@
       <windsNameByGroup>0</windsNameByGroup>
       <vocalsNameByGroup>0</vocalsNameByGroup>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsStackingOrder>0</lyricsStackingOrder>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -273,8 +274,8 @@
         <height>10</height>
         <eid>K_K</eid>
         <Text>
-          <eid>L_L</eid>
           <style>title</style>
+          <eid>L_L</eid>
           <text>implode1</text>
           </Text>
         </VBox>

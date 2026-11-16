@@ -39,7 +39,7 @@ class SystemDivider final : public Symbol
     DECLARE_CLASSOF(ElementType::SYSTEM_DIVIDER)
 
 public:
-    SystemDivider(System* parent = 0);
+    SystemDivider(DummyParentOr<System> parent);
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
@@ -50,7 +50,7 @@ public:
     RectF drag(EditData&) override;
 
     Segment* segment() const override { return nullptr; }
-    System* system() const { return (System*)explicitParent(); }
+    System* system() const { return (System*)ownershipParent(); }
 
     PropertyValue propertyDefault(Pid id) const override;
 

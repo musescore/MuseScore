@@ -122,6 +122,7 @@
     <SpannerMap>
       <PalmMute>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/4</ticks>
         <eid>R_R</eid>
         <track>0</track>

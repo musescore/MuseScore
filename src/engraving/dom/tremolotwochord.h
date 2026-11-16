@@ -45,7 +45,7 @@ public:
     TremoloTwoChord* clone() const override { return new TremoloTwoChord(*this); }
     ~TremoloTwoChord() override;
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
 
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;
@@ -126,7 +126,7 @@ public:
 private:
     friend class Factory;
 
-    TremoloTwoChord(Chord* parent);
+    TremoloTwoChord(DummyParentOr<Chord> parent);
     TremoloTwoChord(const TremoloTwoChord&);
 
     void setBeamPos(const PairF& bp);

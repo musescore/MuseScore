@@ -24,9 +24,11 @@
 #include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
+#include "rcommand/commandtypes.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
+#include "rcommand/icommandsregister.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuistate.h"
 #include "notationscene/inotationcommandscontroller.h"
@@ -40,6 +42,7 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public Q
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<muse::ui::IUiState> uiState = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
@@ -51,6 +54,17 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     bool isInputAllowed() const;
+
+    static const muse::ui::ToolConfig& defaultNoteInputConfig();
+
+    static const std::string CROSS_STAFF_BEAMING_SUBITEMS;
+    static const std::string TUPLET_SUBITEMS;
+
+    struct ServiceItemInfo {
+        muse::MnemonicString title;
+        muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE;
+    };
+    static ServiceItemInfo serviceItemInfo(const std::string& intent);
 
 signals:
     void isInputAllowedChanged();
@@ -66,8 +80,8 @@ private:
     void init();
     void load() override;
 
-    muse::uicomponents::MenuItem* makeActionItem(const muse::ui::UiAction& action, const QString& section,
-                                                 const muse::uicomponents::MenuItemList& subitems = {});
+    muse::uicomponents::MenuItem* makeServiceItem(const std::string& intent, const QString& section);
+    muse::uicomponents::MenuItem* makeCommandItem(const muse::rcommand::Command& command, const QString& section);
     muse::uicomponents::MenuItem* makeAddItem(const QString& section);
 
     muse::uicomponents::MenuItemList makeCrossStaffBeamingItems();
@@ -77,7 +91,6 @@ private:
     muse::uicomponents::MenuItemList makeIntervalsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
-    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();

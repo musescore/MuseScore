@@ -24,6 +24,7 @@
 
 #include <set>
 
+#include "../dom/repeatlist.h"
 #include "../dom/score.h"
 #include "../dom/spanner.h"
 
@@ -35,12 +36,12 @@ using namespace mu::engraving;
 
 void InsertTime::redo()
 {
-    score->insertTime(tick, len);
+    score->insertTime(tick, len, score->repeatSegmentInfoList(/*expandRepeats*/ true));
 }
 
 void InsertTime::undo()
 {
-    score->insertTime(tick, -len);
+    score->insertTime(tick, -len, score->repeatSegmentInfoList(/*expandRepeats*/ true));
 }
 
 //---------------------------------------------------------

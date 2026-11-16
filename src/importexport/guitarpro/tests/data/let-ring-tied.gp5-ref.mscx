@@ -142,6 +142,7 @@
     <SpannerMap>
       <LetRing>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>4/8</ticks>
         <eid>V_V</eid>
         <track>0</track>

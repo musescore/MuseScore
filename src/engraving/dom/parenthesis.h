@@ -32,11 +32,11 @@ class Parenthesis : public EngravingItem
 public:
     static constexpr double PARENTHESIS_END_WIDTH = 0.1;
 
-    Parenthesis(EngravingItem* parent);
+    Parenthesis(DummyParentOr<EngravingItem> parent);
     Parenthesis(const Parenthesis& p);
 
     Parenthesis* clone() const override { return new Parenthesis(*this); }
-    Segment* segment() const { return explicitParent() && explicitParent()->isSegment() ? toSegment(explicitParent()) : nullptr; }
+    Segment* segment() const { return ownershipParent() && ownershipParent()->isSegment() ? toSegment(ownershipParent()) : nullptr; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;

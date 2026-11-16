@@ -43,13 +43,13 @@ class LedgerLine final : public EngravingItem
     DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
 public:
-    LedgerLine(EngravingItem*);
+    LedgerLine(DummyParentOr<EngravingItem>);
     ~LedgerLine();
     LedgerLine& operator=(const LedgerLine&) = delete;
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
 
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }

@@ -28,13 +28,14 @@
 #include "containers.h"
 #include "translation.h"
 
+#include "iengravingconfiguration.h"
+
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 
-#include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
 #include "deadslapped.h"
@@ -46,7 +47,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "parenthesis.h"
 
 #include "log.h"
 
@@ -58,23 +58,23 @@ namespace mu::engraving {
 //    Rest
 //--------------------------------------------------------
 
-Rest::Rest(Segment* parent)
+Rest::Rest(DummyParentOr<Segment> parent)
     : Rest(ElementType::REST, parent)
 {
 }
 
-Rest::Rest(const ElementType& type, Segment* parent)
+Rest::Rest(const ElementType& type, DummyParentOr<Segment> parent)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;
 }
 
-Rest::Rest(Segment* parent, const TDuration& d)
+Rest::Rest(DummyParentOr<Segment> parent, const TDuration& d)
     : Rest(ElementType::REST, parent, d)
 {
 }
 
-Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
+Rest::Rest(const ElementType& type, DummyParentOr<Segment> parent, const TDuration& d)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;
@@ -310,7 +310,6 @@ void Rest::checkDots()
     int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(this);
-        dot->setParent(this);
         dot->setVisible(visible());
         score()->undoAddElement(dot);
     }
@@ -535,8 +534,8 @@ String Rest::screenReaderInfo() const
 
 void Rest::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
     e->setTrack(track());
 

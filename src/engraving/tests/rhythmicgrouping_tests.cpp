@@ -44,7 +44,7 @@ public:
 void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
 {
     MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Regroup notes and rests"), [&](Transaction& tx) {
         if (!staves) {

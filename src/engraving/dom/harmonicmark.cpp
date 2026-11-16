@@ -64,8 +64,8 @@ static const ElementStyle harmonicMarkStyle {
     { Sid::dummyMusicalSymbolsScale,             Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
-    : TextLineBaseSegment(ElementType::HARMONIC_MARK_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp)
+    : TextLineBaseSegment(ElementType::HARMONIC_MARK_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -75,7 +75,7 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 //   HarmonicMark
 //---------------------------------------------------------
 
-HarmonicMark::HarmonicMark(EngravingItem* parent)
+HarmonicMark::HarmonicMark(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::HARMONIC_MARK, parent)
 {
     initElementStyle(&harmonicMarkStyle);
@@ -106,9 +106,9 @@ static const ElementStyle harmonicMarkSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* HarmonicMark::createLineSegment(System* parent)
+LineSegment* HarmonicMark::createLineSegment()
 {
-    HarmonicMarkSegment* hm = new HarmonicMarkSegment(this, parent);
+    HarmonicMarkSegment* hm = new HarmonicMarkSegment(this);
     hm->setTrack(track());
     hm->initElementStyle(&harmonicMarkSegmentStyle);
     return hm;

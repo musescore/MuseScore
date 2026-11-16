@@ -22,21 +22,18 @@
 
 #pragma once
 
-#include "actions/actionable.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteconfiguration.h"
 #include "internal/ipalettecommandscontroller.h"
 
 namespace mu::palette {
-class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
     QML_ELEMENT
 
-    muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::ContextInject<IPaletteCommandsController> commandsController = { this };
 
 public:
@@ -46,11 +43,5 @@ public:
 
 signals:
     void expandCollapseAllRequested(bool expand);
-
-private:
-    muse::uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
-    muse::uicomponents::MenuItem* createIsSinglePaletteItem();
-    muse::uicomponents::MenuItem* createIsDragEnabledItem();
-    muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }

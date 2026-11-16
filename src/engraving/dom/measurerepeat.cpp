@@ -43,7 +43,7 @@ static const ElementStyle measureRepeatStyle {
 //   MeasureRepeat
 //---------------------------------------------------------
 
-MeasureRepeat::MeasureRepeat(Segment* parent)
+MeasureRepeat::MeasureRepeat(DummyParentOr<Segment> parent)
     : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure

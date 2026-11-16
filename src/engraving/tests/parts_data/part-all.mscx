@@ -29,7 +29,7 @@
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="alto">
@@ -75,7 +75,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="tenor">
@@ -118,8 +118,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>testpart2</text>
           </Text>
         </VBox>
@@ -1060,13 +1060,13 @@
       <HairPin>
         <subtype>0</subtype>
         <veloChange>10</veloChange>
-        <beginText>cresc.</beginText>
-        <continueText>(cresc.)</continueText>
         <track2>0</track2>
         <startTick>1/1</startTick>
         <ticks>1/4</ticks>
         <eid>T_T</eid>
         <track>0</track>
+        <beginText>cresc.</beginText>
+        <continueText>(cresc.)</continueText>
         </HairPin>
       <Slur>
         <startElement>q_q</startElement>

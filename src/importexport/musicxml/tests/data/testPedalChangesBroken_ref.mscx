@@ -120,18 +120,18 @@
         <height>10</height>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text><font size="22"/>Pedal Changes</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -456,6 +456,7 @@
         <continueTextPlace>auto</continueTextPlace>
         <endTextPlace>auto</endTextPlace>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>HB_HB</eid>
         <track>0</track>

@@ -38,7 +38,7 @@ class PickScrapeSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::PICK_SCRAPE_SEGMENT)
 
 public:
-    PickScrapeSegment(PickScrape* sp, System* parent);
+    PickScrapeSegment(PickScrape* sp);
 
     PickScrapeSegment* clone() const override { return new PickScrapeSegment(*this); }
 
@@ -57,13 +57,13 @@ class PickScrape final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::PICK_SCRAPE)
 
 public:
-    PickScrape(EngravingItem* parent);
+    PickScrape(DummyParentOr<EngravingItem> parent);
 
     PickScrape* clone() const override { return new PickScrape(*this); }
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

@@ -34,14 +34,16 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Add/remove instruments…"),
         TranslatableString("action", "Add/remove instruments"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::All
     },
     CommandInfo{
         INSTRUMENTS_CHANGE_COMMAND,
         TranslatableString("action", "Select instrument…"),
         TranslatableString("action", "Select instrument"),
         InputSchema(),
-        Decoration()
+        Decoration(),
+        Availability::All
     },
 };
 

@@ -1122,6 +1122,13 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
         instrument.m_channel.push_back(new InstrChannel(c));
     }
 
+    if (instrument.m_channel.empty()) {
+        InstrChannel* fallbackChannel = new InstrChannel;
+        fallbackChannel->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
+        fallbackChannel->setProgram(instrument.recognizeMidiProgram());
+        instrument.m_channel.push_back(fallbackChannel);
+    }
+
     instrument.setStringData(templ->stringData);
     instrument.setSingleNoteDynamics(templ->singleNoteDynamics);
     instrument.setTrait(templ->trait);

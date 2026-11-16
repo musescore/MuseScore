@@ -1,4 +1,4 @@
-#include "previewprovider.h"
+#include "previewprovider.hpp"
 
 #include <memory>
 #include <string>

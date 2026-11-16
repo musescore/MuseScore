@@ -261,14 +261,17 @@ DynamicAutomationLayers PlaybackContext::dynamicLevelLayers(const track_idx_t tr
             lastCurve = curve;
             auto hint = lastLevelMap.end();
 
+            // AutomationCurve ticks are always in expanded utick space, regardless of the Play Repeats setting
+            const TempoTimeline& expandedTimeline = m_score->tempoTimeline(/*expandRepeats*/ true);
+
             if (curve->cbegin()->first > 0) {
                 AutomationPoint naturalPoint;
                 naturalPoint.value.outValue = real_t(NATURAL_DYNAMIC_LEVEL) / real_t(MAX_DYNAMIC_LEVEL);
-                hint = lastLevelMap.insert(hint, { timestampFromTicks(m_score, 0), naturalPoint.value });
+                hint = lastLevelMap.insert(hint, { expandedTimeline.utick2utime(0) * 1000000, naturalPoint.value });
             }
 
             for (const auto& [tick, point] : *curve) {
-                hint = lastLevelMap.insert(hint, { timestampFromTicks(m_score, tick), point.value });
+                hint = lastLevelMap.insert(hint, { expandedTimeline.utick2utime(tick) * 1000000, point.value });
             }
         }
 

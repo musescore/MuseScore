@@ -43,7 +43,7 @@ public:
     TremoloSingleChord* clone() const override { return new TremoloSingleChord(*this); }
     ~TremoloSingleChord() override;
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
 
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;
@@ -54,7 +54,6 @@ public:
     TremoloType tremoloType() const { return m_tremoloType; }
 
     double minHeight() const;
-    void reset() override;
 
     double chordMag() const;
     RectF drag(EditData&) override;
@@ -81,8 +80,6 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     bool isMovable() const override { return true; }
-    bool isEditable() const override { return true; }
-    void endEdit(EditData&) override;
 
     muse::draw::PainterPath basePath(double stretch = 0) const;
     const muse::draw::PainterPath& path() const { return m_path; }
@@ -93,7 +90,7 @@ public:
 private:
     friend class Factory;
 
-    TremoloSingleChord(Chord* parent);
+    TremoloSingleChord(DummyParentOr<Chord> parent);
     TremoloSingleChord(const TremoloSingleChord&);
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;

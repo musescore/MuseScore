@@ -113,7 +113,7 @@ const char* Segment::subTypeName(SegmentType t)
 void Segment::setElement(track_idx_t track, EngravingItem* el)
 {
     if (el) {
-        el->setParent(this);
+        el->setOwnershipParent(this);
         m_elist[track] = el;
         setEmpty(false);
     } else {
@@ -146,17 +146,15 @@ void Segment::removeElement(track_idx_t track)
 //   Segment
 //---------------------------------------------------------
 
-Segment::Segment(Measure* m)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+Segment::Segment(DummyParentOr<Measure> m)
+    : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
     init();
 }
 
-Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+Segment::Segment(DummyParentOr<Measure> m, SegmentType st, const Fraction& t)
+    : EngravingItem(ElementType::SEGMENT, m, ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
 //      assert(t >= Fraction(0,1));
 //      assert(t <= m->ticks());
     m_segmentType = st;
@@ -184,16 +182,16 @@ Segment::Segment(const Segment& s)
         EngravingItem* ne = 0;
         if (e) {
             ne = e->clone();
-            ne->setParent(this);
+            ne->setOwnershipParent(this);
         }
         m_elist.push_back(ne);
     }
     m_shapes  = s.m_shapes;
 }
 
-void Segment::setParent(Measure* parent)
+void Segment::setOwnershipParent(DummyParentOr<Measure> parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -608,6 +606,12 @@ EngravingItem* Segment::element(track_idx_t track) const
     return m_elist[track];
 }
 
+System* Segment::system() const
+{
+    Measure* m = measure();
+    return m ? m->system() : nullptr;
+}
+
 //---------------------------------------------------------
 //   insertStaff
 //---------------------------------------------------------
@@ -680,8 +684,8 @@ void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
-    if (el->explicitParent() != this) {
-        el->setParent(this);
+    if (el->ownershipParent() != this) {
+        el->setOwnershipParent(this);
     }
 
     track_idx_t track = el->track();
@@ -723,7 +727,10 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::STRING_TUNINGS: {
         m_annotations.push_back(el);
-        el->part()->addStringTunings(toStringTunings(el));
+        // Shared parts display copies of their origin parts' string tunings. Tunings should not be registered in them
+        if (!el->part()->isSharedPart()) {
+            el->part()->addStringTunings(toStringTunings(el));
+        }
         break;
     }
 
@@ -752,8 +759,13 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::HARP_DIAGRAM:
+        // Shared parts display copies of their origin parts' diagrams; the origin parts own them
+        if (el->part()->isSharedPart()) {
+            m_annotations.push_back(el);
+            break;
+        }
         // already a diagram in this segment
-        if (el->part()->harpDiagrams.count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
+        if (el->part()->harpDiagrams().count(toHarpPedalDiagram(el)->segment()->tick().ticks()) > 0) {
             break;
         }
         el->part()->addHarpDiagram(toHarpPedalDiagram(el));
@@ -928,31 +940,29 @@ void Segment::remove(EngravingItem* el)
         break;
 
     case ElementType::STRING_TUNINGS:
-        el->part()->removeStringTunings(toStringTunings(el));
+        if (!el->part()->isSharedPart()) {
+            el->part()->removeStringTunings(toStringTunings(el));
+        }
         removeAnnotation(el);
         break;
 
     case ElementType::STAFF_STATE:
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
-            Part* part = el->part();
-            part->removeInstrument(tick());
+            el->part()->removeInstrument(toStaffState(el)->instrument(), tick());
         }
         removeAnnotation(el);
         break;
 
     case ElementType::INSTRUMENT_CHANGE:
-    {
-        if (!isMMRestSegment()) {
-            InstrumentChange* is = toInstrumentChange(el);
-            Part* part = is->part();
-            part->removeInstrument(tick());
-        }
-    }
+        // Ensure that the entry in the Part's InstrumentList for this segment's tick is the one this InstrumentChange owns:
+        el->part()->removeInstrument(toInstrumentChange(el)->instrument(), tick());
         removeAnnotation(el);
         break;
 
     case ElementType::HARP_DIAGRAM:
-        el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
+        if (!el->part()->isSharedPart()) {
+            el->part()->removeHarpDiagram(toHarpPedalDiagram(el));
+        }
         removeAnnotation(el);
         break;
 
@@ -980,7 +990,6 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::BREATH:
         m_elist[track] = 0;
-        score()->setPause(tick(), 0);
         break;
 
     default:
@@ -1255,13 +1264,12 @@ bool Segment::splitsTuplet() const
         if (!(e && e->isChordRest())) {
             continue;
         }
-        ChordRest* cr = toChordRest(e);
-        Tuplet* t = cr->tuplet();
-        while (t) {
-            if (cr != t->elements().front()) {
+        // an outer tuplet's first element is the inner tuplet, not the chord or rest
+        const DurationElement* el = toChordRest(e);
+        for (const Tuplet* t = el->tuplet(); t; el = t, t = t->tuplet()) {
+            if (el != t->elements().front()) {
                 return true;
             }
-            t = t->tuplet();
         }
     }
     return false;
@@ -1396,6 +1404,16 @@ bool Segment::hasAnnotationOrElement(ElementType type, track_idx_t minTrack, tra
         }
     }
     return hasElements(minTrack, maxTrack);
+}
+
+bool Segment::hasAnnotationOrElement(staff_idx_t staffIdx) const
+{
+    for (const EngravingItem* e : m_annotations) {
+        if (e->staffIdx() == staffIdx) {
+            return true;
+        }
+    }
+    return hasElements(staffIdx);
 }
 
 //---------------------------------------------------------
@@ -1998,7 +2016,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STICKING:
     case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             next = nextAnnotation(e);
 
             if (next && next->isFretDiagram()) {
@@ -2078,13 +2096,13 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             p = sp->startElement();
         } else {
             p = e;
-            EngravingItem* pp = p->parentItem();
+            EngravingItem* pp = p->ownershipParentItem();
             if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote())) {
                 p = pp;
             }
         }
         EngravingItem* el = p;
-        for (; p && !p->isSegment(); p = p->parentItem()) {
+        for (; p && !p->isSegment(); p = p->layoutParent()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
@@ -2232,7 +2250,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
 
         EngravingItem* prevAnnotation = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             prevAnnotation = this->prevAnnotation(e);
         }
         if (prevAnnotation) {
@@ -2309,9 +2327,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             el = sp->startElement();
             seg = sp->startSegment();
         } else {
-            EngravingItem* ep = e->parentItem();
+            EngravingItem* ep = e->ownershipParentItem();
             if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote())) {
-                el = e->parentItem();
+                el = e->ownershipParentItem();
             }
         }
 
@@ -2667,8 +2685,9 @@ void Segment::createShape(staff_idx_t staffIdx)
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
             PointF pos = e->pos();
             // Harmony attached to invisible fret diagram
-            if (e->isHarmony() && e->parent()->isFretDiagram()) {
-                pos += e->parentItem()->pos();
+            const EngravingItem* parent = e->layoutParent();
+            if (e->isHarmony() && parent && parent->isFretDiagram()) {
+                pos += parent->pos();
             }
             RectF bbox = e->ldata()->bbox().translated(pos);
             if (Parenthesis* p = e->leftParen()) {

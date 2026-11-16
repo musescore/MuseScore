@@ -53,7 +53,7 @@ const std::vector<BreathType> Breath::BREATH_LIST {
 //   Breath
 //---------------------------------------------------------
 
-Breath::Breath(Segment* parent)
+Breath::Breath(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_symId = SymId::breathMarkComma;
@@ -111,7 +111,6 @@ bool Breath::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
-        score()->setUpTempoMapLater();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -174,23 +173,5 @@ String Breath::accessibleInfo() const
 muse::TranslatableString Breath::subtypeUserName() const
 {
     return SymNames::userNameForSymId(symId());
-}
-
-void Breath::added()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-void Breath::removed()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
 }
 }

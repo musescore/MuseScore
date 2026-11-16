@@ -62,7 +62,7 @@ class BagpipeEmbellishment final : public EngravingItem
     DECLARE_CLASSOF(ElementType::BAGPIPE_EMBELLISHMENT)
 
 public:
-    BagpipeEmbellishment(EngravingItem* parent)
+    BagpipeEmbellishment(DummyParentOr<EngravingItem> parent)
         : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), m_embelType(EmbellishmentType(0)) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }

@@ -22,6 +22,7 @@
 #include "tie.h"
 
 #include "../editing/mscoreview.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -54,13 +55,13 @@ namespace mu::engraving {
 //   TieSegment
 //---------------------------------------------------------
 
-TieSegment::TieSegment(System* parent)
-    : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+TieSegment::TieSegment(Tie* sp)
+    : SlurTieSegment(ElementType::TIE_SEGMENT, sp)
 {
 }
 
-TieSegment::TieSegment(const ElementType& type, System* parent)
-    : SlurTieSegment(type, parent)
+TieSegment::TieSegment(const ElementType& type, Tie* sp)
+    : SlurTieSegment(type, sp)
 {
 }
 
@@ -220,7 +221,7 @@ double TieSegment::dottedWidth() const
 //   Tie
 //---------------------------------------------------------
 
-Tie::Tie(const ElementType& type, EngravingItem* parent)
+Tie::Tie(const ElementType& type, EngravingObject* parent)
     : SlurTie(type, parent)
 {
 }
@@ -238,7 +239,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    const Note* note = toNote(parentItem());
+    const Note* note = toNote(ownershipParent());
     const Chord* chord = note ? note->chord() : nullptr;
     const Measure* measure = chord ? chord->measure() : nullptr;
     if (!measure) {
@@ -370,7 +371,7 @@ const TieJumpPointList* Tie::tieJumpPoints() const
     return startNote() ? startNote()->tieJumpPoints() : nullptr;
 }
 
-Tie::Tie(EngravingItem* parent)
+Tie::Tie(EngravingObject* parent)
     : SlurTie(ElementType::TIE, parent)
 {
 }
@@ -442,7 +443,7 @@ double Tie::scalingFactor() const
 void Tie::setStartNote(Note* note)
 {
     setStartElement(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 Note* Tie::startNote() const
@@ -515,11 +516,10 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
+    Tie* newTie = addPartialTie ? Factory::createPartialTie(startNote) : Factory::createTie(startNote);
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

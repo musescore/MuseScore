@@ -28,7 +28,7 @@
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
-#include "compat/dummyelement.h"
+#include "dom/dummyparent.h"
 
 #include "dom/factory.h"
 
@@ -312,7 +312,7 @@ std::shared_ptr<IEngravingFont> SingleLayout::Context::engravingFont() const
     return m_score->engravingFont();
 }
 
-compat::DummyElement* SingleLayout::Context::dummyParent() const
+DummyParent* SingleLayout::Context::dummyParent() const
 {
     return m_score->dummy();
 }
@@ -518,7 +518,7 @@ void SingleLayout::layout(Articulation* item, const Context& ctx)
         Text* text = item->text();
         text->setXmlText(TConv::text(item->textType()));
         text->setTrack(item->track());
-        text->setParent(item);
+        text->setOwnershipParent(item);
 
         layoutTextBase(item->text(), ctx, item->text()->mutldata());
         bbox = text->ldata()->bbox();
@@ -643,6 +643,8 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
                 + ctx.style().styleAbsolute(Sid::endBarDistance);
             break;
         case BarLineType::BROKEN:
+            w = ctx.style().styleAbsolute(Sid::dashBarWidth);
+            break;
         case BarLineType::NORMAL:
         case BarLineType::DOTTED:
             w = ctx.style().styleAbsolute(Sid::barWidth);
@@ -836,7 +838,6 @@ void SingleLayout::layoutGroupBracket(Bracket* item, const Context& ctx)
 
     if (!item->text()) {
         const_cast<Bracket*>(item)->setText(new Text(const_cast<Bracket*>(item)));
-        item->text()->setParent(const_cast<Bracket*>(item));
     }
 
     Text* text = item->text();
@@ -1028,7 +1029,7 @@ void SingleLayout::layout(Glissando* item, const Context& ctx)
     double spatium = item->spatium();
 
     if (item->spannerSegments().empty()) {
-        item->add(item->createLineSegment(ctx.dummyParent()->system()));
+        item->add(item->createLineSegment());
     }
     LineSegment* s = item->frontSegment();
     s->setPos(PointF(-spatium * Glissando::GLISS_PALETTE_WIDTH / 2, spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
@@ -1081,7 +1082,7 @@ void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
     double spatium = item->spatium();
     HammerOnPullOffSegment* s = nullptr;
     if (item->spannerSegments().empty()) {
-        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s = new HammerOnPullOffSegment(item);
         s->setTrack(item->track());
         item->add(s);
     } else {
@@ -1110,7 +1111,6 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
     }
 
     HammerOnPullOffText* hopoText = hopoTexts.front();
-    hopoText->setParent(item);
     hopoText->setXmlText("H/P");
 
     Align align;
@@ -1527,12 +1527,12 @@ void SingleLayout::layout(RehearsalMark* item, const Context& ctx)
     layoutTextBase(item, ctx, item->mutldata());
 }
 
-void SingleLayout::layout(Slur* item, const Context& ctx)
+void SingleLayout::layout(Slur* item, const Context&)
 {
     double spatium = item->spatium();
     SlurSegment* s = nullptr;
     if (item->spannerSegments().empty()) {
-        s = new SlurSegment(ctx.dummyParent()->system());
+        s = new SlurSegment(item);
         s->setTrack(item->track());
         item->add(s);
     } else {
@@ -1560,7 +1560,7 @@ void SingleLayout::layout(Spacer* item, const Context&)
     PainterPath path = PainterPath();
     double w = spatium;
     double b = w * .5;
-    double h = item->explicitParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));       // limit length for palette
+    double h = item->ownershipParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));       // limit length for palette
 
     switch (item->spacerType()) {
     case SpacerType::DOWN:
@@ -1673,7 +1673,6 @@ void SingleLayout::layout(Tapping* item, const Context& ctx)
         text = new TappingText(item);
     }
 
-    text->setParent(item);
     item->setText(text);
     text->setTrack(item->track());
     DO_ASSERT(item->hand() != TappingHand::INVALID);
@@ -1916,7 +1915,7 @@ void SingleLayout::layout(TrillSegment* item, const Context& ctx)
                                  : a->shape().minVerticalDistance(Shape(box));
             y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
             a->setPos(x, y);
-            a->setParent(item);
+            a->setOwnershipParent(item);
         }
     } else {
         item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
@@ -1976,7 +1975,6 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
     double hookHeight = item->absoluteFromSpatium(item->volta()->beginHookHeight());
     if (item->text()) {
         Text* text = item->text();
-        text->setParent(item);
         RectF textBBox = text->ldata()->bbox().translated(text->pos());
         text->mutldata()->moveY(hookHeight - textBBox.bottom());
         text->mutldata()->moveX(0.5 * spatium);

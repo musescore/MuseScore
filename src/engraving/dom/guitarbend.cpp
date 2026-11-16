@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "../iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
 #include "../editing/editnote.h"
@@ -46,7 +48,7 @@ namespace mu::engraving {
  *              GuitarBend
  * **************************************/
 
-GuitarBend::GuitarBend(EngravingItem* parent)
+GuitarBend::GuitarBend(EngravingObject* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
 }
@@ -65,9 +67,9 @@ GuitarBend::~GuitarBend()
     }
 }
 
-LineSegment* GuitarBend::createLineSegment(System* parent)
+LineSegment* GuitarBend::createLineSegment()
 {
-    GuitarBendSegment* seg = new GuitarBendSegment(this, parent);
+    GuitarBendSegment* seg = new GuitarBendSegment(this);
     seg->setTrack(track());
     seg->setColor(lineColor());
     return seg;
@@ -242,7 +244,7 @@ bool GuitarBend::isFullReleaseDive() const
 void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
 {
     Staff* curStaff =  startNote->staff();
-    Part* curPart = startNote->part();
+    Part* curPart = startNote->originPart();
     if (!curStaff || !curPart) {
         return;
     }
@@ -308,7 +310,7 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
 {
     // The start grace-note of bend must be on the same string as the main note
     int mainString = main->string();
-    const StringData* stringData = main->part()->stringData(main->tick(), main->staff()->idx());
+    const StringData* stringData = main->originPart()->stringData(main->tick(), main->staff()->idx());
     int staffPitchOffset = main->staff()->pitchOffset(main->tick());
     int graceFret = stringData->fret(grace->pitch() + staffPitchOffset, mainString, main->staff());
     if (graceFret > 0) {
@@ -822,7 +824,7 @@ void GuitarBend::updateHoldLine()
     m_holdLine->setTrack(track());
     m_holdLine->setTrack2(track());
     m_holdLine->setGenerated(true);
-    m_holdLine->setParent(this);
+    m_holdLine->setOwnershipParent(this);
 }
 
 double GuitarBend::lineWidth() const
@@ -842,11 +844,10 @@ double GuitarBend::lineWidth() const
  *              GuitarBendSegment
  * **************************************/
 
-GuitarBendSegment::GuitarBendSegment(GuitarBend* sp, System* parent)
-    : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+GuitarBendSegment::GuitarBendSegment(GuitarBend* sp)
+    : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text = new GuitarBendText(this);
-    m_text->setParent(this);
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
@@ -855,7 +856,6 @@ GuitarBendSegment::GuitarBendSegment(const GuitarBendSegment& s)
 {
     m_vertexPointOff = s.m_vertexPointOff;
     m_text = new GuitarBendText(this);
-    m_text->setParent(this);
 }
 
 GuitarBendSegment::~GuitarBendSegment()
@@ -925,7 +925,6 @@ void GuitarBendSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         UNREACHABLE;
@@ -1113,9 +1112,9 @@ GuitarBendHold::GuitarBendHold(const GuitarBendHold& h)
 {
 }
 
-LineSegment* GuitarBendHold::createLineSegment(System* parent)
+LineSegment* GuitarBendHold::createLineSegment()
 {
-    GuitarBendHoldSegment* seg = new GuitarBendHoldSegment(this, parent);
+    GuitarBendHoldSegment* seg = new GuitarBendHoldSegment(this);
     seg->setTrack(track());
     seg->setColor(lineColor());
     return seg;
@@ -1154,8 +1153,8 @@ double GuitarBendHold::lineWidth() const
  *         GuitarBendHoldSegment
  * **************************************/
 
-GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp, System* parent)
-    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp)
+    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -1174,7 +1173,6 @@ void GuitarBendHoldSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         break;

@@ -47,7 +47,7 @@ public:
 
     double lw() const { return m_lw; }
 
-    Measure* measure() const { return toMeasure(explicitParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -56,7 +56,7 @@ public:
 private:
 
     friend class Factory;
-    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(DummyParentOr<MeasureBase> parent);
     StaffTypeChange(const StaffTypeChange&);
 
     void spatiumChanged(double oldValue, double newValue) override;

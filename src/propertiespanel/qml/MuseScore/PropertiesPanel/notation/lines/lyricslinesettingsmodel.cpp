@@ -28,7 +28,7 @@ using namespace mu::propertiespanel;
 LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                  IElementRepositoryService* repository,
                                                  ElementType elementType)
-    : PropertiesPanelAbstractModel(parent, iocCtx, repository)
+    : ModelWithStaveCenteringOptions(parent, iocCtx, repository)
 {
     if (elementType == ElementType::LyricsLine) {
         setTitle(muse::qtrc("propertiespanel", "Lyrics line"));
@@ -38,7 +38,7 @@ LyricsLineSettingsModel::LyricsLineSettingsModel(QObject* parent, const muse::mo
         setTitle(muse::qtrc("propertiespanel", "Partial lyrics line"));
         setElementType(mu::engraving::ElementType::PARTIAL_LYRICSLINE);
         setModelType(PropertiesPanelModelType::TYPE_PARTIAL_LYRICS_LINE);
-        m_hasVerse = true;
+        m_isPartialLyricsLine = true;
     }
     setIcon(muse::ui::IconCode::Code::LYRICS);
 
@@ -55,19 +55,30 @@ PropertyItem* LyricsLineSettingsModel::verse() const
     return m_verse;
 }
 
-bool LyricsLineSettingsModel::hasVerse() const
+PropertyItem* LyricsLineSettingsModel::placement() const
 {
-    return m_hasVerse;
+    return m_placement;
+}
+
+bool LyricsLineSettingsModel::isPartialLyricsLine() const
+{
+    return m_isPartialLyricsLine;
 }
 
 void LyricsLineSettingsModel::createProperties()
 {
+    ModelWithStaveCenteringOptions::createProperties();
+
     m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
     m_verse = buildPropertyItem(mu::engraving::Pid::VERSE);
+    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 }
 
 void LyricsLineSettingsModel::loadProperties()
 {
+    ModelWithStaveCenteringOptions::loadProperties();
+
     loadPropertyItem(m_thickness);
     loadPropertyItem(m_verse);
+    loadPropertyItem(m_placement);
 }

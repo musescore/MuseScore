@@ -30,7 +30,6 @@ namespace mu::playback {
 class PlaybackConfiguration;
 class PlaybackController;
 class SoundProfilesRepository;
-class PlaybackUiActions;
 class PlaybackCommandsController;
 class PlaybackModule : public muse::modularity::IModuleSetup
 {
@@ -56,11 +55,11 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
 private:
     std::shared_ptr<PlaybackCommandsController> m_commandsController;
     std::shared_ptr<PlaybackController> m_playbackController;
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
-    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
 };
 }

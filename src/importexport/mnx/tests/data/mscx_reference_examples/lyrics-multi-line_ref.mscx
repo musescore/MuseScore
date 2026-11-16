@@ -110,8 +110,8 @@
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>K_K</eid>
               <style>lyrics_odd</style>
+              <eid>K_K</eid>
               <text>Am</text>
               </Lyrics>
             <Note>
@@ -129,8 +129,8 @@
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>O_O</eid>
               <style>lyrics_odd</style>
+              <eid>O_O</eid>
               <text>I</text>
               </Lyrics>
             <Note>
@@ -150,8 +150,8 @@
             <Lyrics>
               <no>1</no>
               <syllabic>begin</syllabic>
-              <eid>S_S</eid>
               <style>lyrics_odd</style>
+              <eid>S_S</eid>
               <text>sleep</text>
               </Lyrics>
             <Note>
@@ -171,8 +171,8 @@
             <Lyrics>
               <no>1</no>
               <syllabic>end</syllabic>
-              <eid>W_W</eid>
               <style>lyrics_odd</style>
+              <eid>W_W</eid>
               <text>ing?</text>
               </Lyrics>
             <Note>

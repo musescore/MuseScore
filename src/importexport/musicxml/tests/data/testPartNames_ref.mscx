@@ -260,18 +260,18 @@
         <height>10</height>
         <eid>J_J</eid>
         <Text>
-          <eid>K_K</eid>
           <style>title</style>
+          <eid>K_K</eid>
           <text><font size="22"/>Test Part Names</text>
           </Text>
         <Text>
-          <eid>L_L</eid>
           <style>subtitle</style>
+          <eid>L_L</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>M_M</eid>
           <style>composer</style>
+          <eid>M_M</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>

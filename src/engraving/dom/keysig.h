@@ -49,8 +49,8 @@ public:
     void setKey(Key concertKey, Key transposedKey);
     void setKey(Key concertKey);
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return ownershipParent() ? (Measure*)ownershipParent()->ownershipParent() : nullptr; }
 
     Key key() const { return m_sig.key(); }
     Key concertKey() const { return m_sig.concertKey(); }
@@ -101,7 +101,7 @@ public:
 private:
     friend class Factory;
 
-    KeySig(Segment* = 0);
+    KeySig(DummyParentOr<Segment>);
     KeySig(const KeySig&);
 
     void addLayout(SymId sym, int line);

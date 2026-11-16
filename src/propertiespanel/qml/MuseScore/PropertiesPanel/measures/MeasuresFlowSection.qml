@@ -70,7 +70,6 @@ Column {
 
     FlatButton {
         id: toggleLockButton
-        visible: root.visible
         width: parent.width
 
         navigation.panel: root.navigationPanel
@@ -98,14 +97,12 @@ Column {
 
         StyledTextLabel {
             width: parent.width
-            visible: root.visible
             horizontalAlignment: Qt.AlignLeft
             text: root.moveSectionTitle
         }
 
         Row {
             id: moveButtons
-            visible: root.visible
             width: parent.width
             spacing: 4
 
@@ -148,7 +145,6 @@ Column {
 
     FlatButton {
         id: makeIntoButton
-        visible: root.visible
         enabled: root.isMakeIntoAvailable
         width: parent.width
 

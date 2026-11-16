@@ -35,6 +35,7 @@
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editstaffbrackets.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/style/style.h"
@@ -423,6 +424,14 @@ void MusicXmlParserPass1::setExporterSoftware(String& exporter)
         m_exporterSoftware = MusicXmlExporterSoftware::FINALE;
     } else if (exporter.contains(u"noteflight")) {
         m_exporterSoftware = MusicXmlExporterSoftware::NOTEFLIGHT;
+    }
+}
+
+void MusicXmlParserPass1::setExporterStyles()
+{
+    // If exporters have different default styles to MuseScore, assume they are being used here
+    if (sibOrDolet()) {
+        m_score->style().set(Sid::fretFrets, 5);
     }
 }
 
@@ -916,7 +925,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 
 VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score, Fraction tick)
 {
-    VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
+    VBox* vbox = Factory::createTitleVBox(score);
     vbox->setTick(tick);
     score->measures()->append(vbox);
     return vbox;
@@ -1187,7 +1196,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         }
 
         // create and add the measure
-        Measure* measure  = Factory::createMeasure(score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(score);
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setMeasureNumber(int(i));
@@ -1529,6 +1538,7 @@ void MusicXmlParserPass1::identification()
                 } else if (m_e.name() == "software") {
                     String exporterString = m_e.readText().toLower();
                     setExporterSoftware(exporterString);
+                    setExporterStyles();
                 } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();

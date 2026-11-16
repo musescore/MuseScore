@@ -203,6 +203,7 @@
       <Pedal>
         <endHookType>1</endHookType>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>M3niFYbb/sO_ApJs0jo/kkC</eid>
         <track>0</track>
@@ -211,6 +212,7 @@
         <endHookType>1</endHookType>
         <placement>above</placement>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>BUmutQ28oON_007vOL+IdFE</eid>
         <track>0</track>

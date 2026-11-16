@@ -73,7 +73,7 @@ void ImageStoreItem::reference(Image* image)
 bool ImageStoreItem::isUsed(Score* score) const
 {
     for (Image* image : m_references) {
-        if (image->score() == score && image->explicitParent()) {
+        if (image->score() == score && image->ownershipParent()) {
             return true;
         }
     }

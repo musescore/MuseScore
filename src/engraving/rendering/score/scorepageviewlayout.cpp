@@ -148,13 +148,14 @@ void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
                     score->setSelectionChanged(true);
                 }
             }
-            s->resetExplicitParent();
+            // no need to clear the page placement: the systems are deleted below,
+            // and ~System unlinks itself from its page
         }
 
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
-                toMeasure(mb)->mmRest()->moveToDummy();
+                toMeasure(mb)->mmRest()->setSystem(nullptr);
             }
         }
         muse::DeleteAll(score->systems());
@@ -226,6 +227,8 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
     } while (state.curSystem() && !(state.rangeDone() && lmb == state.pageOldMeasure()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
+
+    SystemLayout::centerPendingSystems(ctx);
 }
 
 void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)

@@ -57,17 +57,26 @@ Score* EngravingPluginAPIHelper::readScore(const QString& name)
 {
     const muse::io::path_t path(name);
     const ProjectFile file(path);
-    const Ret ret = projectFilesController()->openProject(file);
 
-    if (ret.success() && globalContext()->currentNotation()) {
-        return globalContext()->currentNotation()->elements()->msScore();
-    }
+    openProjectScenario()->openProject(file)
+    .onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "score was not opened: " << ret.toString();
+        }
+    });
+
+    //! TODO: return promise to js
     return nullptr;
 }
 
 void EngravingPluginAPIHelper::closeScore()
 {
-    projectFilesController()->closeOpenedProject();
+    closeProjectController()->closeOpenedProject()
+    .onResolve(this, [](const Ret& ret) {
+        if (!ret) {
+            LOGD() << "score was not closed: " << ret.toString();
+        }
+    });
 }
 
 std::optional<INotationWriter::UnitType> EngravingPluginAPIHelper::determineWriterUnitType(const std::string& ext) const

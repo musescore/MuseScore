@@ -797,7 +797,7 @@
         <source>Fife pitched in B♭ (when all 6 holes are covered), notated in A♭, sounding a minor sixth higher than written.</source>
         <comment>fife description</comment>
         <extracomment>description for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fife B♭-viritys (kun kaikki 6 reikää on peitetty), nuotinnettu A♭, kuulostaa pientä sekstiä korkeammalta kuin on kirjoitettu.</translation>
+        <translation>Fife B-viritys (kun kaikki 6 reikää on peitetty), nuotinnettu A♭, kuulostaa pientä sekstiä korkeammalta kuin on kirjoitettu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="469"/>
@@ -902,7 +902,7 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭-vireinen pilli (konserttikorkeus)</translation>
+        <translation>B-vireinen pilli (konserttikorkeus)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="502"/>
@@ -1364,7 +1364,7 @@
         <source>Soprano ocarina in B♭.</source>
         <comment>bb-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraano-okariina, B♭. </translation>
+        <translation>Sopraano-okariina, B. </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="650"/>
@@ -1504,7 +1504,7 @@
         <source>Alto (sometimes called tenor) ocarina in B♭.</source>
         <comment>bb-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Altto- (joskus kutsutaan tenoriksi) okariina, B♭.</translation>
+        <translation>Altto- (joskus kutsutaan tenoriksi) okariina, B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="694"/>
@@ -3163,7 +3163,7 @@
         <source>Armenian double-reed instrument made of apricot wood, pitched in B.</source>
         <comment>b-duduk description</comment>
         <extracomment>description for Duduk; tuning: B; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Armenialainen aprikoosipuusta valmistettu kaksoisruokosoitin, B-vireinen.</translation>
+        <translation>Armenialainen aprikoosipuusta valmistettu kaksoisruokosoitin, H-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1224"/>
@@ -3177,7 +3177,7 @@
         <source>B Duduk</source>
         <comment>b-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: B; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B-duduk</translation>
+        <translation>H-duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1228"/>
@@ -3198,7 +3198,7 @@
         <source>Armenian double-reed instrument made of apricot wood, pitched in B♭.</source>
         <comment>bb-duduk description</comment>
         <extracomment>description for Duduk; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Armenialainen aprikoosipuusta valmistettu kaksoisruokosoitin, B♭-vireinen.</translation>
+        <translation>Armenialainen aprikoosipuusta valmistettu kaksoisruokosoitin, B-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1235"/>
@@ -3212,7 +3212,7 @@
         <source>B♭ Duduk</source>
         <comment>bb-duduk longName</comment>
         <extracomment>longName for Duduk; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭-duduk</translation>
+        <translation>B-duduk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1239"/>
@@ -3555,7 +3555,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>bb-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanoklarinetti B♭. Yksi normaaleista orkesteriklarineteista.</translation>
+        <translation>Sopraanoklarinetti B. Yksi normaaleista orkesteriklarineteista.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1348"/>
@@ -3590,7 +3590,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>clarinet description</comment>
         <extracomment>description for Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanoklarinetti B♭. Yksi normaaleista orkesteriklarineteista.</translation>
+        <translation>Sopraanoklarinetti B. Yksi normaaleista orkesteriklarineteista.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1359"/>
@@ -3772,7 +3772,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet.</source>
         <comment>bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassoklarinetti B♭. Oktaavia matalampi kuin B♭-sopraanoklarinetti.</translation>
+        <translation>Bassoklarinetti B. Oktaavia matalampi kuin B-sopraanoklarinetti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1417"/>
@@ -3800,7 +3800,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassoklarinetti B♭. Oktaavia matalampi kuin B♭-sopraanoklarinetti. Nuotinnettu diskanttiavaimella (&apos;ranskalaisessa notaatiossa&apos;).</translation>
+        <translation>Bassoklarinetti B. Oktaavia matalampi kuin B-sopraanoklarinetti. Nuotinnettu diskanttiavaimella (&apos;ranskalaisessa notaatiossa&apos;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1426"/>
@@ -3835,7 +3835,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassoklarinetti B♭. Oktaavi matalampi kuin B♭-sopraanoklarinetti. Nuotinnettu bassoavaimella (&apos;saksalaisessa notaatiossa&apos;).</translation>
+        <translation>Bassoklarinetti B. Oktaavi matalampi kuin B-sopraanoklarinetti. Nuotinnettu bassoavaimella (&apos;saksalaisessa notaatiossa&apos;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1437"/>
@@ -3968,7 +3968,7 @@
         <source>Contrabass clarinet in B♭. An octave lower than the B♭ bass clarinet.</source>
         <comment>contrabass-clarinet description</comment>
         <extracomment>description for Contrabass Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabassoklarinetti B♭. Oktaavia matalampi kuin B♭-bassoklarinetti.</translation>
+        <translation>Kontrabassoklarinetti B. Oktaavia matalampi kuin B-bassoklarinetti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1479"/>
@@ -4234,7 +4234,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in B♭.</source>
         <comment>bb-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, B♭-viritys.</translation>
+        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, B-viritys.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1564"/>
@@ -4360,7 +4360,7 @@
         <source>Saxophone in B♭ (an octave above the soprano).</source>
         <comment>sopranissimo-saxophone description</comment>
         <extracomment>description for Sopranissimo Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi sopraanon yläpuolella).</translation>
+        <translation>Saksofoni B (oktaavi sopraanon yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1604"/>
@@ -4444,7 +4444,7 @@
         <source>Saxophone in B♭ (an octave above the tenor).</source>
         <comment>soprano-saxophone description</comment>
         <extracomment>description for Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi tenorin yläpuolella).</translation>
+        <translation>Saksofoni B (oktaavi tenorin yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1631"/>
@@ -4584,7 +4584,7 @@
         <source>Saxophone in B♭ (an octave below the soprano).</source>
         <comment>saxophone description</comment>
         <extracomment>description for Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi sopraanon alapuolella).</translation>
+        <translation>Saksofoni B (oktaavi sopraanon alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1676"/>
@@ -4612,7 +4612,7 @@
         <source>Saxophone in B♭ (an octave below the soprano).</source>
         <comment>tenor-saxophone description</comment>
         <extracomment>description for Tenor Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi sopraanon alapuolella).</translation>
+        <translation>Saksofoni B (oktaavi sopraanon alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1685"/>
@@ -4668,7 +4668,7 @@
         <source>Saxophone in B♭ (an octave below the tenor).</source>
         <comment>bass-saxophone description</comment>
         <extracomment>description for Bass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi tenorin alapuolella).</translation>
+        <translation>Saksofoni B (oktaavi tenorin alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1703"/>
@@ -4724,7 +4724,7 @@
         <source>Saxophone in B♭ (an octave below the bass).</source>
         <comment>subcontrabass-saxophone description</comment>
         <extracomment>description for Subcontrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saksofoni B♭ (oktaavi basson alapuolella).</translation>
+        <translation>Saksofoni B (oktaavi basson alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1721"/>
@@ -4892,7 +4892,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave above the soprano).</source>
         <comment>sopranino-sarrusophone description</comment>
         <extracomment>description for Sopranino Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B♭-vireinen (oktaavi sopraanon yläpuolella).</translation>
+        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B-vireinen (oktaavi sopraanon yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1775"/>
@@ -4920,7 +4920,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭.</source>
         <comment>sarrusophone description</comment>
         <extracomment>description for Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B♭-vireinen.</translation>
+        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1784"/>
@@ -4948,7 +4948,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭.</source>
         <comment>soprano-sarrusophone description</comment>
         <extracomment>description for Soprano Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B♭-vireinen.</translation>
+        <translation>Yksi- tai kaksiruokoinen metallisoitin, jossa on kartiomainen poraus, B-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1793"/>
@@ -5004,7 +5004,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave below the soprano).</source>
         <comment>tenor-sarrusophone description</comment>
         <extracomment>description for Tenor Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yksi- tai kaksiruokoinen metallisoitin kartiomaisella porauksella, B♭-vireinen (oktaavi sopranon alapuolella).</translation>
+        <translation>Yksi- tai kaksiruokoinen metallisoitin kartiomaisella porauksella, B-vireinen (oktaavi sopranon alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1811"/>
@@ -5060,7 +5060,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave below the tenor).</source>
         <comment>bass-sarrusophone description</comment>
         <extracomment>description for Bass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yksi- tai kaksiruokoinen metallisoitin kartiomaisella porauksella, B♭-vireinen (oktaavi tenorin alapuolella).</translation>
+        <translation>Yksi- tai kaksiruokoinen metallisoitin kartiomaisella porauksella, B-vireinen (oktaavi tenorin alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1829"/>
@@ -6061,7 +6061,7 @@
         <source>Horn in high B♭.</source>
         <comment>bb-horn-alto description</comment>
         <extracomment>description for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Torvi, korkea B♭.</translation>
+        <translation>Torvi, korkea B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2153"/>
@@ -6089,7 +6089,7 @@
         <source>B♭ alto</source>
         <comment>bb-horn-alto traitName</comment>
         <extracomment>traitName for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭ altto</translation>
+        <translation>B altto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2161"/>
@@ -6551,7 +6551,7 @@
         <source>Horn in low B♭.</source>
         <comment>bb-horn-basso description</comment>
         <extracomment>description for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Torvi, matala B♭.</translation>
+        <translation>Torvi, matala B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2303"/>
@@ -6579,7 +6579,7 @@
         <source>B♭ basso</source>
         <comment>bb-horn-basso traitName</comment>
         <extracomment>traitName for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭ basso</translation>
+        <translation>B basso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2311"/>
@@ -6642,7 +6642,7 @@
         <source>Wagner tuba in B♭.</source>
         <comment>bb-wagner-tuba description</comment>
         <extracomment>description for Wagner Tuba; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Wagnertuuba, B♭.</translation>
+        <translation>Wagnertuuba, B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2331"/>
@@ -6838,7 +6838,7 @@
         <source>Cornet in B♭. The most common cornet.</source>
         <comment>bb-cornet description</comment>
         <extracomment>description for Cornet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kornetti, B♭-vireinen. Yleisin kornetti.</translation>
+        <translation>Kornetti, B-vireinen. Yleisin kornetti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2392"/>
@@ -7286,7 +7286,7 @@
         <source>Piccolo trumpet in B♭.</source>
         <comment>bb-piccolo-trumpet description</comment>
         <extracomment>description for Piccolo Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Piccolotrumpetti B♭.</translation>
+        <translation>Piccolotrumpetti B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2530"/>
@@ -7335,7 +7335,7 @@
         <source>Piccolo trumpet in B♭.</source>
         <comment>piccolo-trumpet description</comment>
         <extracomment>description for Piccolo Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Piccolotrumpetti B♭.</translation>
+        <translation>Piccolotrumpetti B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2545"/>
@@ -7713,7 +7713,7 @@
         <source>Trumpet in B♭. Still the most common trumpet in non-orchestral contexts.</source>
         <comment>bb-trumpet description</comment>
         <extracomment>description for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumpetti B♭. Edelleen yleisin trumpetti ei-orkesterikonteksteissa.</translation>
+        <translation>Trumpetti B. Edelleen yleisin trumpetti ei-orkesterikonteksteissa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2661"/>
@@ -7811,7 +7811,7 @@
         <source>Trumpet in B♭, with the tubing wound into a smaller coil than the standard trumpet.</source>
         <comment>pocket-trumpet description</comment>
         <extracomment>description for Pocket Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭-trumpetti, letku kierretty pienempään kelaan kuin normaali trumpetti.</translation>
+        <translation>B-trumpetti, letku kierretty pienempään kelaan kuin normaali trumpetti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2691"/>
@@ -7895,7 +7895,7 @@
         <source>Tenor trumpet in B♭.</source>
         <comment>tenor-trumpet description</comment>
         <extracomment>description for Tenor Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenoritrumpetti B♭.</translation>
+        <translation>Tenoritrumpetti B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2717"/>
@@ -8035,7 +8035,7 @@
         <source>Bass trumpet in B♭.</source>
         <comment>bass-trumpet description</comment>
         <extracomment>description for Bass Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassotrumpetti B♭. </translation>
+        <translation>Bassotrumpetti B. </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2760"/>
@@ -8077,7 +8077,7 @@
         <source>Bass trumpet in B♭.</source>
         <comment>bb-bass-trumpet description</comment>
         <extracomment>description for Bass Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassotrumpetti B♭. </translation>
+        <translation>Bassotrumpetti B. </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2773"/>
@@ -8322,7 +8322,7 @@
         <source>Baroque trumpet in B♭.</source>
         <comment>bb-baroque-trumpet description</comment>
         <extracomment>description for Baroque Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Barokkitrumpetti B♭.</translation>
+        <translation>Barokkitrumpetti B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2848"/>
@@ -8371,7 +8371,7 @@
         <source>Baroque trumpet in B♭.</source>
         <comment>baroque-trumpet description</comment>
         <extracomment>description for Baroque Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Barokkitrumpetti B♭.</translation>
+        <translation>Barokkitrumpetti B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2863"/>
@@ -8721,7 +8721,7 @@
         <source>Small flugelhorn in B♭, played using a deep bowled mouthpiece.</source>
         <comment>kuhlohorn description</comment>
         <extracomment>description for Kuhlohorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pieni flyygelitorvi, B♭. Soitetaan syvällä kulmikkaalla suukappaleella.</translation>
+        <translation>Pieni flyygelitorvi, B. Soitetaan syvällä kulmikkaalla suukappaleella.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2974"/>
@@ -8896,7 +8896,7 @@
         <source>Bass ophicleide in B♭.</source>
         <comment>bb-bass-ophicleide description</comment>
         <extracomment>description for Bass Ophicleide; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basso-ofikleidi, B♭.</translation>
+        <translation>Basso-ofikleidi, B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3029"/>
@@ -9134,7 +9134,7 @@
         <source>Soprano trombone (usually pitched in B♭, an octave above the tenor).</source>
         <comment>soprano-trombone description</comment>
         <extracomment>description for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanopasuuna (yleensä B♭-vireinen, oktaavin tenorin yläpuolella).</translation>
+        <translation>Sopraanopasuuna (yleensä B-vireinen, oktaavin tenorin yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3105"/>
@@ -9218,7 +9218,7 @@
         <source>Tenor trombone (pitched in B♭).</source>
         <comment>tenor-trombone description</comment>
         <extracomment>description for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenoripasuuna (E♭-vireinen).</translation>
+        <translation>Tenoripasuuna (B-vireinen).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3131"/>
@@ -9302,7 +9302,7 @@
         <source>Trombone (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>trombone-treble description</comment>
         <extracomment>description for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pasuuna (nuotinnettu diskanttiavaimeen transponoivana instrumenttina, B♭).</translation>
+        <translation>Pasuuna (nuotinnettu diskanttiavaimeen transponoivana instrumenttina, B).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3157"/>
@@ -9344,7 +9344,7 @@
         <source>Bass trombone (pitched in B♭).</source>
         <comment>bass-trombone description</comment>
         <extracomment>description for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bassopasuuna (B♭-vireinen).</translation>
+        <translation>Bassopasuuna (B-vireinen).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3170"/>
@@ -9568,7 +9568,7 @@
         <source>Euphonium (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>euphonium-treble description</comment>
         <extracomment>description for Euphonium (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Eufonium (nuotinnettu diskanttiavaimella transponoivaksi instrumentiksi, B♭-viritys).</translation>
+        <translation>Eufonium (nuotinnettu diskanttiavaimella transponoivaksi instrumentiksi, B-viritys).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3241"/>
@@ -9820,7 +9820,7 @@
         <source>Contrabass tuba in B♭ (notated in bass clef at concert pitch).</source>
         <comment>bb-tuba description</comment>
         <extracomment>description for Contrabass Tuba; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabassotuuba, B♭ (nuotinnettu bassoavaimella konserttikorkeudelle).</translation>
+        <translation>Kontrabassotuuba, B (nuotinnettu bassoavaimella konserttikorkeudelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3321"/>
@@ -9834,7 +9834,7 @@
         <source>B♭ Contrabass Tuba</source>
         <comment>bb-tuba longName</comment>
         <extracomment>longName for Contrabass Tuba; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabassotuuba, B♭</translation>
+        <translation>Kontrabassotuuba, B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3325"/>
@@ -9855,7 +9855,7 @@
         <source>Contrabass tuba in B♭ (notated in treble clef as a transposing instrument).</source>
         <comment>bb-tuba-treble description</comment>
         <extracomment>description for Contrabass Tuba (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasso tuuba, B♭ (nuotinnettu diskanttiavaimella transponoivaksi instrumentiksi).</translation>
+        <translation>Kontrabasso tuuba, B (nuotinnettu diskanttiavaimella transponoivaksi instrumentiksi).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3332"/>
@@ -9918,7 +9918,7 @@
         <source>Sousaphone in B♭ (notated in bass clef).</source>
         <comment>bb-sousaphone description</comment>
         <extracomment>description for Sousaphone; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousafoni, B♭ (nuotinnettu bassoavaimella).</translation>
+        <translation>Sousafoni, B (nuotinnettu bassoavaimella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3352"/>
@@ -9953,7 +9953,7 @@
         <source>Sousaphone in B♭ (notated in treble clef).</source>
         <comment>bb-sousaphone-treble description</comment>
         <extracomment>description for Sousaphone (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousafoni, B♭ (nuotinnettu diskanttiavaimella).</translation>
+        <translation>Sousafoni, B (nuotinnettu diskanttiavaimella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3363"/>
@@ -10586,6 +10586,41 @@
         <translation>B. Panit</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3568"/>
+        <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
+        <comment>glockenspiel description</comment>
+        <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Viritettyjä metallilaattoja, jotka on järjestetty pianon koskettimiston tavoin. Soitetaan kapuloilla. Soi kaksi oktavia kirjoitettua korkeammalta.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3577"/>
+        <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
+        <comment>xylophone description</comment>
+        <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Viritettyjä puulaattoja, jotka on järjestetty pianon koskettimiston tavoin, toisinaan alapuolella olevilla resonanssiputkilla varustettuna. Soitetaan kapuloilla. Soi oktavia kirjoitettua korkeammalta.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3595"/>
+        <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
+        <comment>vibraphone description</comment>
+        <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Viritettyjä alumiinilaattoja, jotka on järjestetty pianon koskettimiston tavoin, varustettuna resonanssiputkilla ja kaikuipedaalilla. Joissain malleissa on nopeudeltaan säädettävä sähkömoottori, joka avaa ja sulkee resonanssiputkia nopeasti luoden tremolo-efektin.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3622"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba description</comment>
+        <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Viritettyjä puulaattoja, jotka on järjestetty pianon koskettimiston tavoin, alapuolella olevilla resonanssiputkilla varustettuna. Soitetaan kapuloilla. Soundiltaan syvempi ja pehmeämpi kuin ksylofoni, ja soi kirjoitetulta korkeudelta.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3631"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba-single description</comment>
+        <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Viritettyjä puulaattoja, jotka on järjestetty pianon koskettimiston tavoin, alapuolella olevilla resonanssiputkilla varustettuna. Soitetaan kapuloilla. Soundiltaan syvempi ja pehmeämpi kuin ksylofoni, ja soi kirjoitetulta korkeudelta.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
         <source>Korean hourglass-shaped drum used in samulnori percussion ensemble.</source>
         <comment>samul-janggu description</comment>
@@ -10696,6 +10731,104 @@
         <comment>sori-buk shortName</comment>
         <extracomment>shortName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>So. buk</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5031"/>
+        <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
+        <comment>celesta description</comment>
+        <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kellopiano. Käytännössä koskettimistolla ja kaikupedaalilla varustettu kellopeli. Soi oktavia kirjoitettua korkeammalta.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5040"/>
+        <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
+        <comment>clavichord description</comment>
+        <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Käyttää tangentteja (pieniä metalliliuskoja) metallikielten lyömiseen sekä niiden pituuden (eli sävelkorkeuden) määrittämiseen. Ilmeikäs, mutta erittäin hiljainen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5049"/>
+        <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
+        <comment>clavinet description</comment>
+        <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Klavikordi, jossa on sähköisesti vahvistetut kielet. Tämä muuttaa sointia ja poistaa äänenvoimakkuuden rajoitukset.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5058"/>
+        <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
+        <comment>harpsichord description</comment>
+        <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Näppäilee kieliä tuottaen terävämmän soinnin ja pienemmän dynaamisen alueen kuin piano.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5067"/>
+        <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
+        <comment>virginal description</comment>
+        <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Pieni cembalo, jossa on vain yksi kieli kosketinta kohden, mikä rajoittaa dynaamista aluetta ja sointiväriä.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5076"/>
+        <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
+        <comment>electric-piano description</comment>
+        <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Piano, jossa on sähköisesti vahvistetut kielet, kielettyt tai ääniraudat (tai digitaalipiano, joka on asetettu kuullostamaan sähköpianolta).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5085"/>
+        <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
+        <comment>grand-piano description</comment>
+        <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Omaa suuremman vaakasuoran rungon, mikä voi tarjota täyteläisemmän soinnin ja tarkemman koskettimiston hallinnan pystypianoon verrattuna.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5094"/>
+        <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
+        <comment>honky-tonk-piano description</comment>
+        <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Honky-tonk-tyylinen (runsaasti epävireinen) pystypiano, joka yhdistetään usein baareihin, country-musiikkiin ja vaudeville-musiikkisaliin.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5103"/>
+        <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
+        <comment>piano description</comment>
+        <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Pystypiano tai flyygeli. Lyö kieliä vasaralla mahdollistaen laajan dynaamisen alueen. Säveliä voidaan pidentää pedaalin avulla.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5112"/>
+        <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
+        <comment>toy-piano description</comment>
+        <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Pieni piano, jossa käytetään kielten sijasta metallitankoja ja jonka koneisto muistuttaa celestaa. Siinä ei yleensä ole pedaaleja, ja se suunniteltiin alun perin lapsille.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5121"/>
+        <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
+        <comment>upright-piano description</comment>
+        <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Omaa pienemmän pystysuoran rungon, mikä tekee siitä flyygeliä tiiviimmän. Käytetään yleensä harjoituksissa tai esiintymisissä vapaamuotoisemmissa puitteissa.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5541"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
+        <comment>electric-guitar description</comment>
+        <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Umpipuinen kitara sähköisesti vahvistetuilla kielillä (nuottikirjoitus: g-avain, oktavia kirjoitettua alempana).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5562"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
+        <comment>electric-guitar-treble-clef description</comment>
+        <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Umpipuinen kitara sähköisesti vahvistetuilla kielillä (nuottikirjoitus: tavallinen g-avain).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5621"/>
+        <source>Solid-body guitar with electrically amplified strings (tablature).</source>
+        <comment>electric-guitar-tablature description</comment>
+        <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Umpipuinen kitara sähköisesti vahvistetuilla kielillä (tabulatuuri).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
@@ -10894,7 +11027,6 @@
         <translation>pizzicato</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3568"/>
         <source>Glockenspiel.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10922,7 +11054,6 @@
         <translation>Glock.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3577"/>
         <source>Xylophone.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -10978,7 +11109,6 @@
         <translation>XMrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Vibraphone.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11062,7 +11192,6 @@
         <translation>Sym.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3622"/>
         <source>Marimba notated on a grand staff.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -11090,7 +11219,6 @@
         <translation>Mrm.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Marimba notated on a single staff.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15290,7 +15418,6 @@
         <translation>Kaz.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5031"/>
         <source>Celesta.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15318,7 +15445,6 @@
         <translation>Cel.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5040"/>
         <source>Clavichord.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15346,7 +15472,6 @@
         <translation>Cch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Electrically amplified clavichord.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15374,7 +15499,6 @@
         <translation>Clav.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5058"/>
         <source>Harpsichord.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15402,7 +15526,6 @@
         <translation>Hch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5067"/>
         <source>Virginal.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15430,7 +15553,6 @@
         <translation>Vir.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15458,7 +15580,6 @@
         <translation>El. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5085"/>
         <source>Specifically a grand piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15486,7 +15607,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5094"/>
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15514,7 +15634,6 @@
         <translation>Hnk. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5103"/>
         <source>Piano.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15542,7 +15661,6 @@
         <translation>Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -15570,7 +15688,6 @@
         <translation>Toy Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5121"/>
         <source>Specifically an upright piano.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16879,7 +16996,6 @@
         <translation>mykistä</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5541"/>
         <source>Electric guitar (notated with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -16949,7 +17065,6 @@
         <translation>yliohjattu</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5562"/>
         <source>Electric guitar (notated with normal treble clef).</source>
         <comment>electric-guitar-treble-clef description</comment>
         <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
@@ -17138,7 +17253,6 @@
         <translation>mykistä</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5621"/>
         <source>Electric guitar (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>

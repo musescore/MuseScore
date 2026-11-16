@@ -55,8 +55,6 @@ static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinke
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
 
-static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
-
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -182,10 +180,6 @@ void EngravingConfiguration::init()
     settings()->valueChanged(UNLINKED_COLOR).onReceive(nullptr, [this](const Val& val) {
         m_unlinkedColorChanged.send(Color::fromQColor(val.toQColor()));
     });
-
-    settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
-    settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
-    settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -479,16 +473,6 @@ void EngravingConfiguration::setDebuggingOptions(const DebuggingOptions& options
 muse::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 {
     return m_debuggingOptions.notification;
-}
-
-bool EngravingConfiguration::doNotSaveEIDsForBackCompat() const
-{
-    return settings()->value(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT).toBool();
-}
-
-void EngravingConfiguration::setDoNotSaveEIDsForBackCompat(bool doNotSave)
-{
-    settings()->setSharedValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(doNotSave));
 }
 
 bool EngravingConfiguration::allowReadingImagesFromOutsideMscz() const

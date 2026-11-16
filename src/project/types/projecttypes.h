@@ -26,10 +26,21 @@
 #include <QUrl>
 
 #include "io/path.h"
+#include "global/progress.h"
 
 #include "cloud/cloudtypes.h"
 
 namespace mu::project {
+enum class BusyStatus {
+    Opening,
+    Saving,
+    Closing,
+    Downloading,
+    Uploading,
+    Publishing,
+    AudioSharing
+};
+
 struct OpenParams {
     OpenParams() {}
 
@@ -79,5 +90,10 @@ enum class GenerateAudioTimePeriodType {
     Never = 0,
     Always,
     AfterCertainNumberOfSaves
+};
+
+struct ProjectBeingDownloaded {
+    int scoreId = 0;
+    muse::ProgressPtr progress;
 };
 }

@@ -44,7 +44,7 @@ class DurationElement : public EngravingItem
 public:
     ~DurationElement();
 
-    virtual Measure* measure() const { return (Measure*)(explicitParent()); }
+    virtual Measure* measure() const { return (Measure*)(ownershipParent()); }
 
     void readAddTuplet(Tuplet* t);
 
@@ -68,7 +68,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
 protected:
-    DurationElement(const ElementType& type, EngravingItem* parent = nullptr, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const ElementType& type, EngravingObject* parent = nullptr,
+                    ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
     DurationElement(const DurationElement& e, bool link = false);
 
 private:

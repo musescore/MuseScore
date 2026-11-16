@@ -71,8 +71,8 @@ static const ElementStyle glissandoElementStyle {
 //   GlissandoSegment
 //=========================================================
 
-GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
-    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+GlissandoSegment::GlissandoSegment(Glissando* sp)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, ElementFlag::MOVABLE)
 {
 }
 
@@ -104,7 +104,7 @@ EngravingObject* GlissandoSegment::propertyDelegate(Pid pid) const
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(EngravingItem* parent)
+Glissando::Glissando(DummyParentOr<EngravingItem> parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&glissandoElementStyle);
@@ -141,9 +141,9 @@ Glissando::Glissando(const Glissando& g)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Glissando::createLineSegment(System* parent)
+LineSegment* Glissando::createLineSegment()
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, parent);
+    GlissandoSegment* seg = new GlissandoSegment(this);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -184,7 +184,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
         // Obey harp pedal diagrams if on a harp staff
         if (glissando->isHarpGliss().value_or(false)) {
-            HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
+            HarpPedalDiagram* hd = spanner->originPart()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
             playablePitches.reserve(playableTpcs.size());
@@ -272,8 +272,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE16:
     case NoteType::GRACE32:
         // move unto parent chord and proceed to standard case
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            chord = toChord(chord->explicitParent());
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            chord = toChord(chord->ownershipParent());
         } else {
             return 0;
         }
@@ -282,8 +282,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            return toChord(chord->explicitParent())->upNote();
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            return toChord(chord->ownershipParent())->upNote();
         } else {                                // no parent or parent is not a chord?
             return nullptr;
         }
@@ -303,7 +303,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
     // standard case (NORMAL or grace before chord)
 
     // if parent not a segment, can't locate a target note
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 

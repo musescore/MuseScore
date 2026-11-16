@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuistate.h"
-#include "ui/iuiactionsregister.h"
+#include "rcommand/icommandsregister.h"
 
 class QItemSelectionModel;
 
@@ -49,8 +49,8 @@ class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemList
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)
 
+    muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<muse::ui::IUiState> uiState = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit NoteInputBarCustomiseModel(QObject* parent = nullptr);
@@ -82,7 +82,8 @@ private:
     void updateAddSeparatorAvailability();
     void setIsAddSeparatorAvailable(bool isAddSeparatorAvailable);
 
-    NoteInputBarCustomiseItem* makeItem(const muse::ui::UiAction& action, bool checked);
+    NoteInputBarCustomiseItem* makeServiceItem(const std::string& intent, bool checked);
+    NoteInputBarCustomiseItem* makeCommandItem(const std::string& intent, bool checked);
     NoteInputBarCustomiseItem* makeSeparatorItem();
 
     void saveActions();

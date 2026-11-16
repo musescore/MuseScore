@@ -190,18 +190,18 @@
         <height>10</height>
         <eid>G_G</eid>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <text><font size="22"/>Placement Defaults</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>subtitle</style>
+          <eid>I_I</eid>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>composer</style>
+          <eid>J_J</eid>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -641,6 +641,7 @@
         <subtype>0</subtype>
         <direction>up</direction>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>3/1</ticks>
         <eid>bB_bB</eid>
         <track>0</track>

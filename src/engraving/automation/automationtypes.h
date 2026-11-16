@@ -73,6 +73,7 @@ inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve
 enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
+    Tempo,
     Volume,
     Pan,
 };
@@ -142,6 +143,11 @@ struct AutomationCurveKey {
         }, scope);
     }
 
+    bool isGlobal() const
+    {
+        return std::holds_alternative<std::monostate>(scope);
+    }
+
     std::optional<InstrumentTrackId> trackId() const
     {
         const Instrument* instrument = std::get_if<Instrument>(&scope);
@@ -182,6 +188,8 @@ struct AutomationCurveKey {
 };
 
 using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
+
+inline const AutomationCurveKey TEMPO_KEY = AutomationCurveKey::global(AutomationType::Tempo);
 
 struct AutomationPointEdit {
     //! NOTE: write point at tick

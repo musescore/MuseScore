@@ -323,7 +323,7 @@ public:
     void setTempo(int n, Measure* measure);
     muse::String title, subtitle, artist, album, composer, poet;
     muse::StringList comments;
-    GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
+    std::array<GpTrack, GP_MAX_TRACK_NUMBER* 2> channelDefaults;
     size_t staves = 0;
     size_t measures = 0;
     std::vector<GpBar> bars;

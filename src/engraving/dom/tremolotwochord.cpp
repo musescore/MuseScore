@@ -54,7 +54,7 @@ static const ElementStyle TREMOLO_STYLE {
 //   Tremolo
 //---------------------------------------------------------
 
-TremoloTwoChord::TremoloTwoChord(Chord* parent)
+TremoloTwoChord::TremoloTwoChord(DummyParentOr<Chord> parent)
     : BeamBase(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);
@@ -90,7 +90,7 @@ TremoloTwoChord::~TremoloTwoChord()
 
 double TremoloTwoChord::chordMag() const
 {
-    return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;
+    return chord() ? chord()->intrinsicMag() : 1.0;
 }
 
 //---------------------------------------------------------
@@ -555,7 +555,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
         ty += td;
     }
 
-    if (!explicitParent()) {
+    if (!chord()) {
         // for the palette or for one-note tremolos
         Transform shearTransform;
         shearTransform.shear(0.0, -(lw / 2.0) / w2);

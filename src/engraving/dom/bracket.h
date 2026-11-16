@@ -30,6 +30,7 @@ class Factory;
 class System;
 class Transaction;
 enum class BracketType : signed char;
+enum class InstrumentNameType : char;
 
 //---------------------------------------------------------
 //   @@ Bracket
@@ -60,13 +61,16 @@ public:
     size_t lastStaff() const { return m_lastStaff; }
     void setStaffSpan(size_t a, size_t b);
 
+    InstrumentNameType labelType() const { return m_labelType; }
+    void setLabelType(InstrumentNameType t) { m_labelType = t; }
+
     SymId braceSymbol() const { return m_braceSymbol; }
     void setBraceSymbol(const SymId& sym) { m_braceSymbol = sym; }
     size_t column() const { return m_bi->column(); }
     size_t span() const { return m_bi->bracketSpan(); }
     double magx() const { return m_magx; }
 
-    System* system() const { return (System*)explicitParent(); }
+    System* system() const { return (System*)ownershipParent(); }
 
     Measure* measure() const { return m_measure; }
     void setMeasure(Measure* measure) { m_measure = measure; }
@@ -123,13 +127,15 @@ public:
 private:
     friend class Factory;
 
-    Bracket(EngravingItem* parent);
+    Bracket(DummyParentOr<EngravingItem> parent);
 
     BracketItem* m_bi = nullptr;
     double m_ay1 = 0.0;
 
     size_t m_firstStaff = 0;
     size_t m_lastStaff = 0;
+
+    InstrumentNameType m_labelType;
 
     SymId m_braceSymbol = SymId::noSym;
 

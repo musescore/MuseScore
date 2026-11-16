@@ -36,12 +36,12 @@ class SystemText : public StaffTextBase
     DECLARE_CLASSOF(ElementType::SYSTEM_TEXT)
 
 public:
-    SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM, ElementType type = ElementType::SYSTEM_TEXT);
+    SystemText(DummyParentOr<Segment> parent, TextStyleType = TextStyleType::SYSTEM, ElementType type = ElementType::SYSTEM_TEXT);
 
     bool isEditAllowed(EditData&) const override;
 
     SystemText* clone() const override { return new SystemText(*this); }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 

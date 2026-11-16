@@ -23,10 +23,10 @@
 
 #include <qqmlintegration.h>
 
-#include "propertiespanelabstractmodel.h"
+#include "modelwithstavecenteringoptions.h"
 
 namespace mu::propertiespanel {
-class LyricsSettingsModel : public PropertiesPanelAbstractModel
+class LyricsSettingsModel : public ModelWithStaveCenteringOptions
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -34,6 +34,8 @@ class LyricsSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(mu::propertiespanel::PropertyItem * verse READ verse CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * avoidBarlines READ avoidBarlines CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * placement READ placement CONSTANT)
+
 public:
     explicit LyricsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
@@ -43,9 +45,11 @@ public:
 
     PropertyItem* verse() const;
     PropertyItem* avoidBarlines() const;
+    PropertyItem* placement() const;
 
 private:
     PropertyItem* m_verse = nullptr;
     PropertyItem* m_avoidBarlines = nullptr;
+    PropertyItem* m_placement = nullptr;
 };
 }

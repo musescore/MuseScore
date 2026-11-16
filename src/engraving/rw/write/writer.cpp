@@ -116,7 +116,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     xml.startElement(score);
 
-    TWrite::writeItemEid(score, xml, ctx);
+    TWrite::writeItemEid(score, xml);
 
     if (Excerpt* e = score->excerpt()) {
         if (!e->name().empty()) {

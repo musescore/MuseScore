@@ -28,7 +28,7 @@
 
 namespace mu::context {
 class GlobalContext;
-class UiContextResolver;
+class ExtensionContextResolver;
 class ContextModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -50,7 +50,7 @@ public:
 
 private:
     std::shared_ptr<GlobalContext> m_globalContext;
-    std::shared_ptr<UiContextResolver> m_uicontextResolver;
+    std::shared_ptr<ExtensionContextResolver> m_extensionContextResolver;
 };
 }
 

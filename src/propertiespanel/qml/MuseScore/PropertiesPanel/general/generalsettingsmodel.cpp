@@ -95,8 +95,11 @@ void GeneralSettingsModel::requestElements()
         }
 
         elementsForIsVisibleProperty.insert(element);
-        elementsForIsAutoPlaceProperty.insert(element);
         elementsForIsPlayableProperty.insert(element);
+
+        if (autoplaceAppliesToType(element->type())) {
+            elementsForIsAutoPlaceProperty.insert(element);
+        }
     }
 
     m_elementsForIsSmallProperty = elementsForIsSmallProperty.values();
@@ -118,9 +121,12 @@ void GeneralSettingsModel::loadProperties()
     updateAreGeneralPropertiesAvailable();
 }
 
-void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
     loadProperties(changedPropertyIdSet);
+
+    m_appearanceSettingsModel->onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
+    m_playbackProxyModel->onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
 }
 
 void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)

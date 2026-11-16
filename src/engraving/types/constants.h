@@ -103,7 +103,11 @@ struct Constants
 //       - New link system which uses EIDs
 
     constexpr static int DIVISION = 480;
-    constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm
+
+    constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; // default tempo is equal 120 bpm
+    constexpr static BeatsPerSecond MIN_TEMPO = 5.0 / 60.0;
+    constexpr static BeatsPerSecond MAX_TEMPO = 999.0 / 60.0;
+    constexpr static int TEMPO_PRECISION = 6;
 };
 }
 

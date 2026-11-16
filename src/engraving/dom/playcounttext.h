@@ -33,7 +33,7 @@ class PlayCountText final : public TextBase
 public:
     PlayCountText* clone() const override { return new PlayCountText(*this); }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
     BarLine* barline() const;
 
     bool isEditable() const override { return true; }
@@ -55,7 +55,7 @@ public:
 
 private:
     friend class Factory;
-    PlayCountText(Segment* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
+    PlayCountText(DummyParentOr<Segment> parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
 
     AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
     String m_playCountCustomText = u"";

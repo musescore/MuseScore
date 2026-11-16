@@ -244,28 +244,28 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Title</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
           <style>subtitle</style>
+          <eid>G_G</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
           <style>composer</style>
+          <eid>H_H</eid>
           <text>Composer</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
           <style>poet</style>
+          <eid>I_I</eid>
           <text>Lyricist</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
           <style>instrument_excerpt</style>
+          <eid>J_J</eid>
           <text>Partname</text>
           </Text>
         </VBox>
@@ -440,9 +440,9 @@
             <Note>
               <eid>t_t</eid>
               <Fingering>
+                <style>guitar_fingering_rh</style>
                 <eid>u_u</eid>
                 <offset x="0.658281" y="-1.50188"/>
-                <style>guitar_fingering_rh</style>
                 <text>p</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -482,14 +482,14 @@
             <Note>
               <eid>2_2</eid>
               <Fingering>
+                <style>string_number</style>
                 <eid>3_3</eid>
                 <offset x="0.658281" y="-6.50188"/>
-                <style>string_number</style>
                 <text>0</text>
                 </Fingering>
               <Fingering>
-                <eid>4_4</eid>
                 <style>guitar_fingering_lh</style>
+                <eid>4_4</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -514,8 +514,8 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>9_9</eid>
             <style>metronome</style>
+            <eid>9_9</eid>
             <text>metronome</text>
             </StaffText>
           <Rest>
@@ -600,8 +600,8 @@
         <voice>
           <SystemText>
             <swing unit="eighth" ratio="60"/>
-            <eid>GB_GB</eid>
             <style>tempo</style>
+            <eid>GB_GB</eid>
             <text>Swing</text>
             </SystemText>
           <Chord>

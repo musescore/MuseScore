@@ -29,6 +29,7 @@
 #include "factory.h"
 #include "measurebase.h"
 #include "mscore.h"
+#include "rootitem.h"
 #include "score.h"
 #include "system.h"
 
@@ -38,10 +39,38 @@ using namespace mu::engraving;
 //   Page
 //---------------------------------------------------------
 
-Page::Page(RootItem* parent)
+Page::Page(Score* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
     m_bspTreeValid = false;
+}
+
+void Page::setOwnershipParent(Score* score)
+{
+    EngravingItem::setOwnershipParent(score);
+}
+
+EngravingItem* Page::layoutParent() const
+{
+    // A page is the top of the visual hierarchy: it is not laid out inside anything.
+    return nullptr;
+}
+
+EngravingItem* Page::accessibleParentItem() const
+{
+    // Above the visual hierarchy sits the root item, which exists only to head the
+    // accessibility tree. A page that is not in the score belongs to the dummy's tree,
+    // which the base implementation finds.
+    return ownershipParent() ? score()->rootItem() : EngravingItem::accessibleParentItem();
+}
+
+Page::~Page()
+{
+    for (System* s : m_systems) {
+        if (s->page() == this) {
+            s->setPage(nullptr);
+        }
+    }
 }
 
 MeasureBase* Page::firstMeasureBase() const
@@ -88,8 +117,18 @@ std::vector<EngravingItem*> Page::items(const PointF& point)
 
 void Page::appendSystem(System* s)
 {
-    s->moveToPage(this);
+    s->setPage(this);
     m_systems.push_back(s);
+}
+
+EngravingItemList Page::accessibleChildren() const
+{
+    // The systems are owned by the score, but it is the page that places them, so the
+    // page is where the accessibility tree finds them.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    children.insert(children.end(), m_systems.begin(), m_systems.end());
+
+    return children;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

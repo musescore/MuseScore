@@ -57,7 +57,7 @@ static bool styleIsSelectable(TextStyleType style)
 //   Text
 //---------------------------------------------------------
 
-Text::Text(EngravingItem* parent, TextStyleType tid)
+Text::Text(DummyParentOr<EngravingItem> parent, TextStyleType tid)
     : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
@@ -95,7 +95,7 @@ PropertyValue Text::getProperty(Pid id) const
     switch (id) {
     case Pid::VOICE_ASSIGNMENT:
         if (hasVoiceAssignmentProperties()) {
-            return parentItem()->getProperty(id);
+            return ownershipParent()->getProperty(id);
         }
     // fallthrough
     default:
@@ -112,7 +112,7 @@ String Text::readXmlText(XmlReader& xml, Score* score)
 
 bool Text::hasVoiceAssignmentProperties() const
 {
-    const EngravingItem* parent = parentItem();
+    const EngravingItem* parent = ownershipParentItem();
     if (parent && parent->isTextLineBaseSegment()) {
         return parent->hasVoiceAssignmentProperties();
     }

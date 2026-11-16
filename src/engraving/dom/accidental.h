@@ -238,7 +238,7 @@ public:
 
     Accidental* clone() const override { return new Accidental(*this); }
 
-    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
+    Note* note() const;
 
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
@@ -315,7 +315,7 @@ private:
 
     friend class Factory;
 
-    Accidental(EngravingItem* parent);
+    Accidental(DummyParentOr<EngravingItem> parent);
 
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;

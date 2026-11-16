@@ -96,11 +96,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Segment* parent)
+Clef::Clef(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF)
 {
     m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
-    m_isHeader = parent->isHeaderClefType();
 }
 
 //---------------------------------------------------------
@@ -149,7 +148,6 @@ EngravingItem* Clef::drop(Transaction& tx, EditData& data)
                 score()->undoRemoveElement(segm->element(track()));
             }
             Ambitus* r = Factory::createAmbitus(segm);
-            r->setParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);
         }
@@ -243,14 +241,14 @@ void Clef::undoSetShowCourtesy(bool v)
 Clef* Clef::otherClef()
 {
     // if not in a clef-segment-measure hierarchy, do nothing
-    if (!explicitParent() || !explicitParent()->isSegment()) {
+    if (!ownershipParent() || !ownershipParent()->isSegment()) {
         return nullptr;
     }
-    Segment* segm = toSegment(explicitParent());
-    if (!segm->explicitParent() || !segm->explicitParent()->isMeasure()) {
+    Segment* segm = toSegment(ownershipParent());
+    if (!segm->ownershipParent() || !segm->ownershipParent()->isMeasure()) {
         return 0;
     }
-    Measure* meas = toMeasure(segm->explicitParent());
+    Measure* meas = toMeasure(segm->ownershipParent());
     Measure* otherMeas = nullptr;
     Segment* otherSegm = nullptr;
     Fraction segmTick  = segm->tick();
@@ -285,7 +283,6 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
-    case Pid::IS_HEADER: return m_isHeader;
     case Pid::IS_COURTESY: return m_isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
@@ -307,7 +304,7 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::SHOW_COURTESY:
         m_showCourtesy = v.toBool();
-        if (m_showCourtesy && m_isHeader && selected()) {
+        if (m_showCourtesy && isHeader() && selected()) {
             Clef* courtesyClef = otherClef();
             if (courtesyClef) {
                 score()->deselect(this);
@@ -321,14 +318,11 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::CLEF_TO_BARLINE_POS: {
         const auto newClefToBlPos = v.value<ClefToBarlinePosition>();
 
-        if (newClefToBlPos != m_clefToBarlinePosition && !m_isHeader) {
+        if (newClefToBlPos != m_clefToBarlinePosition && !isHeader()) {
             changeClefToBarlinePos(newClefToBlPos);
         }
         break;
     }
-    case Pid::IS_HEADER:
-        m_isHeader = v.toBool();
-        break;
     case Pid::IS_COURTESY:
         m_isCourtesy = v.toBool();
         break;
@@ -343,7 +337,7 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 {
     m_clefToBarlinePosition = newPos;
 
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return;
     }
 
@@ -374,6 +368,12 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
     }
+}
+
+bool Clef::isHeader() const
+{
+    const Segment* seg = segment();
+    return seg && seg->isHeaderClefType();
 }
 
 bool Clef::isMidMeasureClef() const
@@ -408,7 +408,6 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::SHOW_COURTESY: return true;
     case Pid::SMALL:         return false;
     case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
-    case Pid::IS_HEADER: return false;
     case Pid::IS_COURTESY: return false;
     default:              return EngravingItem::propertyDefault(id);
     }
@@ -464,7 +463,7 @@ void Clef::clear()
     ldata->clearBbox();
     ldata->symId = SymId::noSym;
     Clef* pairedClef = otherClef();
-    if (selected() && score()->selection().isList() && !m_isHeader && pairedClef) {
+    if (selected() && score()->selection().isList() && !isHeader() && pairedClef) {
         score()->deselect(this);
         score()->select(pairedClef, SelectType::ADD, staffIdx());
     }

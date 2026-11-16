@@ -52,6 +52,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "tabdurationsymbol.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "volta.h"
@@ -64,6 +65,8 @@
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
+#include "rendering/iscorerenderer.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -74,7 +77,7 @@ namespace mu::engraving {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, Segment* parent)
+ChordRest::ChordRest(const ElementType& type, DummyParentOr<Segment> parent)
     : DurationElement(type, parent)
 {
     m_staffMove    = 0;
@@ -105,7 +108,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
         if (link) {
             nl->linkTo(l);
         }
-        nl->setParent(this);
+        nl->setOwnershipParent(this);
         nl->setTrack(track());
         m_lyrics.push_back(nl);
     }
@@ -217,7 +220,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             delete b;
             return existingBreath;
         } else {
-            b->setParent(seg);
+            b->setOwnershipParent(seg);
             score()->undoAddElement(b);
             return e;
         }
@@ -255,7 +258,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
                 l = toBarLine(obl->linkedClone());
             }
             l->setTrack(st->idx() * VOICES);
-            l->setParent(seg);
+            l->setOwnershipParent(seg);
             score->undoAddElement(l);
         }
 
@@ -277,7 +280,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
                 } else {
                     e->setPlacement(el->placement());
                     e->setTrack(track());
-                    e->setParent(segment());
+                    e->setOwnershipParent(segment());
                     score()->undoChangeElement(el, e);
                     return e;
                 }
@@ -291,14 +294,14 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         e->setTrack(track());
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         score()->undoAddElement(e);
         return e;
 
     case ElementType::DYNAMIC:
         e->setTrack(track());
         e->checkVoiceAssignmentCompatibleWithTrack();
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         score()->undoAddElement(e);
         return e;
 
@@ -311,7 +314,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = Factory::createChord(score()->dummy()->segment());
+        Chord* chord = Factory::createChord(score()->dummy());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());
@@ -343,14 +346,14 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     case ElementType::HARP_DIAGRAM:
     case ElementType::REHEARSAL_MARK:
     {
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         e->setTrack(trackZeroVoice(track()));
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
             r->setXmlText(EditRehearsalMark::createRehearsalMarkText(score(), r));
-        } else if (e->isHarpPedalDiagram() && fromPalette && part()) {
+        } else if (e->isHarpPedalDiagram() && fromPalette && originPart()) {
             // Match pedal config with previous diagram's
-            if (HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick())) {
+            if (HarpPedalDiagram* prevDiagram = originPart()->prevHarpDiagram(segment()->tick())) {
                 toHarpPedalDiagram(e)->setPedalState(prevDiagram->getPedalState());
             }
         }
@@ -364,7 +367,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             return nullptr;
         } else {
             InstrumentChange* ic = toInstrumentChange(e);
-            ic->setParent(segment());
+            ic->setOwnershipParent(segment());
             ic->setTrack(trackZeroVoice(track()));
 
             const Instrument* prevInstr = part()->instrument(tick());
@@ -380,7 +383,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             score()->undoAddElement(ic);
 
             if (!fromPalette) {
-                ic->setupInstrument(&instr);
+                ic->setupInstrument(&instr, /*updateText*/ false);
             }
             return e;
         }
@@ -388,7 +391,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     {
         bool bNew;
         FiguredBass* fb = toFiguredBass(e);
-        fb->setParent(segment());
+        fb->setOwnershipParent(segment());
         fb->setTrack(trackZeroVoice(track()));
         fb->setTicks(ticks());
         fb->setOnNote(true);
@@ -562,7 +565,7 @@ String ChordRest::durationUserName() const
 
 void ChordRest::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
@@ -680,7 +683,10 @@ void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, Proper
 {
     if (id == Pid::BEAM_MODE) {
         if (isChord() && m_durationType.hooks() == 0) {
-            return;
+            const StaffType* tab = staffType();
+            if (!tab || !tab->isTabStaff() || !tab->genDurations()) {
+                return;
+            }
         }
         BeamMode newBeamMode = newValue.value<BeamMode>();
         if ((newBeamMode == BeamMode::BEGIN16 && m_durationType.hooks() < 2)
@@ -1285,23 +1291,6 @@ bool ChordRest::isBefore(const EngravingItem* o) const
     }
 
     return false;
-}
-
-//---------------------------------------------------------
-//   undoAddAnnotation
-//---------------------------------------------------------
-
-void ChordRest::undoAddAnnotation(EngravingItem* a)
-{
-    Segment* seg = segment();
-    Measure* m = measure();
-    if (m && m->isMMRest()) {
-        seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    }
-
-    a->setTrack(/*a->systemFlag() ? 0 : */ track());
-    a->setParent(seg);
-    score()->undoAddElement(a);
 }
 
 bool ChordRest::isBelowCrossBeam(const BeamBase* beamBase) const

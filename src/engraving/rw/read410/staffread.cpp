@@ -46,7 +46,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
             const AsciiStringView tag(e.name());
 
             if (tag == "Measure") {
-                Measure* measure = Factory::createMeasure(ctx.dummy()->system());
+                Measure* measure = Factory::createMeasure(ctx.score());
                 measure->setTick(ctx.tick());
                 ctx.setCurrentMeasureIndex(measureIdx++);
                 //
@@ -106,7 +106,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
             if (tag == "Measure") {
                 if (measure == 0) {
                     LOGD("Score::readStaff(): missing measure!");
-                    measure = Factory::createMeasure(ctx.dummy()->system());
+                    measure = Factory::createMeasure(ctx.score());
                     measure->setTick(ctx.tick());
                     score->measures()->append(measure);
                 }

@@ -188,6 +188,13 @@
               <ghost>1</ghost>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>b_b</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>c_c</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>X_X</NoteEID>
                 <NoteEID>Y_Y</NoteEID>
@@ -197,7 +204,7 @@
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>d_d</eid>
             <durationType>whole</durationType>
             <Note>
               <eid>L_L</eid>
@@ -211,7 +218,7 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>X_X</startElement>
                 <endElement>L_L</endElement>
-                <eid>c_c</eid>
+                <eid>e_e</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
@@ -227,7 +234,7 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>Y_Y</startElement>
                 <endElement>O_O</endElement>
-                <eid>d_d</eid>
+                <eid>f_f</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
@@ -243,7 +250,7 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>Z_Z</startElement>
                 <endElement>R_R</endElement>
-                <eid>e_e</eid>
+                <eid>g_g</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
@@ -259,7 +266,7 @@
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>a_a</startElement>
                 <endElement>U_U</endElement>
-                <eid>f_f</eid>
+                <eid>h_h</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>

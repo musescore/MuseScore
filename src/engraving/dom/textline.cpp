@@ -119,14 +119,15 @@ static const ElementStyle systemTextLineStyle {
     { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
     { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
     { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::systemTextLineFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 //---------------------------------------------------------
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
-    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TextLineSegment::TextLineSegment(TextLine* sp, bool system)
+    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
     initStyle();
@@ -151,7 +152,7 @@ EngravingObject* TextLineSegment::propertyDelegate(Pid pid) const
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(EngravingItem* parent, bool system)
+TextLine::TextLine(DummyParentOr<EngravingItem> parent, bool system)
     : TextLineBase(ElementType::TEXTLINE, parent)
 {
     setSystemFlag(system);
@@ -218,9 +219,9 @@ void TextLineSegment::initStyle()
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* TextLine::createLineSegment(System* parent)
+LineSegment* TextLine::createLineSegment()
 {
-    TextLineSegment* seg = new TextLineSegment(this, parent, systemFlag());
+    TextLineSegment* seg = new TextLineSegment(this, systemFlag());
     seg->setTrack(track());
     // note-anchored line segments are relative to system not to staff
     if (anchor() == Spanner::Anchor::NOTE) {

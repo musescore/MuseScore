@@ -42,10 +42,8 @@ public:
     Q_INVOKABLE void load() override;
 
 private:
-    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
+    void onCommandStateChanged(const muse::rcommand::Command& command, const muse::rcommand::CommandState& state) override;
 
     INotationUndoStackPtr undoStack() const;
-    void updateItems();
-    void subsribeOnUndoStackChanges();
 };
 }

@@ -40,11 +40,11 @@ class StemSlash final : public EngravingItem
 
 public:
 
-    double mag() const override { return parentItem()->mag(); }
+    double mag() const override { return layoutParent()->mag(); }
 
     StemSlash* clone() const override { return new StemSlash(*this); }
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
+    Chord* chord() const { return (Chord*)ownershipParent(); }
 
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;
@@ -55,7 +55,7 @@ public:
 private:
 
     friend class Factory;
-    StemSlash(Chord* parent = 0);
+    StemSlash(DummyParentOr<Chord> parent);
 };
 } // namespace mu::engraving
 #endif

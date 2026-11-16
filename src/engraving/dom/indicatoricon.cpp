@@ -22,13 +22,15 @@
 
 #include "indicatoricon.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "mscore.h"
 #include "system.h"
 
 using namespace mu::engraving;
 using namespace muse::draw;
 
-IndicatorIcon::IndicatorIcon(const ElementType& type, System* parent, ElementFlags flags)
+IndicatorIcon::IndicatorIcon(const ElementType& type, DummyParentOr<System> parent, ElementFlags flags)
     : EngravingItem(type, parent, flags)
 {
 }

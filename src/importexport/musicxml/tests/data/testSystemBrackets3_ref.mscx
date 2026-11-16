@@ -567,8 +567,8 @@
         <height>10</height>
         <eid>Q_Q</eid>
         <Text>
-          <eid>R_R</eid>
           <style>title</style>
+          <eid>R_R</eid>
           <text>Sample</text>
           </Text>
         </VBox>

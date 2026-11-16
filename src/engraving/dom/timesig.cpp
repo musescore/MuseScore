@@ -29,6 +29,7 @@
 #include "../editing/edittimesig.h"
 #include "../editing/transaction/transaction.h"
 
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -51,7 +52,7 @@ static const ElementStyle tsStyle {
 //    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
-TimeSig::TimeSig(Segment* parent)
+TimeSig::TimeSig(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
     initElementStyle(&tsStyle);
@@ -64,9 +65,9 @@ TimeSig::TimeSig(Segment* parent)
     setMinDistance(0.5_sp); // TODO: style
 }
 
-void TimeSig::setParent(Segment* parent)
+void TimeSig::setOwnershipParent(DummyParentOr<Segment> parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -475,7 +476,7 @@ void TimeSig::added()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 
 void TimeSig::removed()
@@ -484,6 +485,6 @@ void TimeSig::removed()
         return;
     }
 
-    score()->setUpTempoMapLater();
+    score()->updateTicksAndTimeSigMapLater();
 }
 }

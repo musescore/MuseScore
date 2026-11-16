@@ -30,7 +30,7 @@
 
 using namespace mu::engraving;
 
-StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags flags)
+StaffTextBase::StaffTextBase(const ElementType& type, DummyParentOr<Segment> parent, TextStyleType tid, ElementFlags flags)
     : TextBase(type, parent, tid, flags)
 {
     setSwingParameters(Constants::DIVISION / 2, 60);
@@ -77,11 +77,11 @@ int StaffTextBase::aeolusStop(int group) const
 
 Segment* StaffTextBase::segment() const
 {
-    if (!explicitParent()->isSegment()) {
-        LOGD("parent %s", explicitParent()->typeName());
+    if (!ownershipParent()->isSegment()) {
+        LOGD("parent %s", ownershipParent()->typeName());
         return 0;
     }
-    Segment* s = toSegment(explicitParent());
+    Segment* s = toSegment(ownershipParent());
     return s;
 }
 

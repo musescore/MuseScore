@@ -38,7 +38,7 @@ class WhammyBarSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::WHAMMY_BAR_SEGMENT)
 
 public:
-    WhammyBarSegment(WhammyBar* sp, System* parent);
+    WhammyBarSegment(WhammyBar* sp);
 
     WhammyBarSegment* clone() const override { return new WhammyBarSegment(*this); }
 
@@ -57,13 +57,13 @@ class WhammyBar final : public ChordTextLineBase
     DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
 
 public:
-    WhammyBar(EngravingItem* parent);
+    WhammyBar(DummyParentOr<EngravingItem> parent);
 
     WhammyBar* clone() const override { return new WhammyBar(*this); }
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

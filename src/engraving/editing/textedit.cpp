@@ -24,6 +24,7 @@
 
 #include "mscoreview.h"
 #include "navigation.h"
+#include "transaction/transaction.h"
 #include "transaction/undostack.h"
 
 #include "iengravingfont.h"
@@ -31,9 +32,12 @@
 
 #include "../dom/fret.h"
 #include "../dom/lyrics.h"
+#include "../dom/masterscore.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
+
+#include "../rendering/iscorerenderer.h"
 
 #include "log.h"
 
@@ -172,13 +176,13 @@ void TextBase::endEdit(EditData& ed)
     }
 
     // TBox'es manage their Text themselves and are not removed if text is empty
-    const bool removeTextIfEmpty = !(explicitParent() && explicitParent()->isTBox());
+    const bool removeTextIfEmpty = !(ownershipParent() && ownershipParent()->isTBox());
 
     if (actualPlainText.isEmpty() && removeTextIfEmpty) {
         LOGD("actual text is empty");
 
         if (newlyAdded) {
-            undo->reopen();
+            score()->masterScore()->transactionManager()->reopen();
             // Rollback the "AddElement" command, but don't delete the rolled-back element(s):
             score()->endCmd(true, false, /*keepRolledBackElements*/ true);
             // Defer deletion (to ~TextEditData):
@@ -186,7 +190,7 @@ void TextBase::endEdit(EditData& ed)
         } else {
             if (textWasEdited) {
                 // The text was just edited down to empty: the top transaction is this element's own edit:
-                undo->reopen();
+                score()->masterScore()->transactionManager()->reopen();
             } else {
                 /* The text was already empty before editing began (e.g. an empty text from a
                  * legacy/corrupt file). No undo command relevant to this text resides on undo
@@ -217,8 +221,8 @@ void TextBase::endEdit(EditData& ed)
             }
         }
 
-        if (isHarmony() && explicitParent()->isFretDiagram()) {
-            score()->select(toFretDiagram(explicitParent()), SelectType::SINGLE);
+        if (isHarmony() && ownershipParent()->isFretDiagram()) {
+            score()->select(toFretDiagram(ownershipParent()), SelectType::SINGLE);
         }
 
         return;
@@ -226,7 +230,7 @@ void TextBase::endEdit(EditData& ed)
 
     if (textWasEdited) {
         setXmlText(ted->oldXmlText); // reset text to value before editing
-        undo->reopen();
+        score()->masterScore()->transactionManager()->reopen();
         resetFormatting();
 
         // change property to set text to actual value again - this also changes text of linked elements

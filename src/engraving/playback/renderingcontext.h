@@ -73,7 +73,7 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
 
     auto chordTnD = timestampAndDurationFromStartAndDurationTicks(score, chordPosTick, chordDurationTicks, tickPositionOffset);
 
-    BeatsPerSecond bps = score->tempomap()->multipliedTempo(chordPosTick);
+    BeatsPerSecond bps = score->multipliedTempoAtUtick(chordPosTickWithOffset);
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
 
     RenderingContext ctx{ chordTnD.timestamp,

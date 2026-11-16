@@ -101,6 +101,13 @@ static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH(":/data/harmony_to_diagram.xml");
 
+static int canonicalEnharmonicTpc(int tpc)
+{
+    // Normalize to one canonical TPC per pitch class
+    int mod = (tpc - Tpc::TPC_G_B) % TPC_DELTA_ENHARMONIC;
+    return Tpc::TPC_G_B + (mod < 0 ? mod + TPC_DELTA_ENHARMONIC : mod);
+}
+
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
     String s = harmony;
@@ -158,7 +165,7 @@ static DiagramInfo resolveDiagram(const std::vector<DiagramInfo>& diagrams)
     return result;
 }
 
-FretDiagram::FretDiagram(Segment* parent)
+FretDiagram::FretDiagram(DummyParentOr<Segment> parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initDefaultValues();
@@ -228,12 +235,12 @@ EngravingItem* FretDiagram::linkedClone()
 
 Segment* FretDiagram::segment() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     if (!parent || !parent->isSegment()) {
         return nullptr;
     }
 
-    return toSegment(explicitParent());
+    return toSegment(ownershipParent());
 }
 
 void FretDiagram::updateDiagram(const String& harmonyName)
@@ -251,7 +258,7 @@ void FretDiagram::updateDiagram(const String& harmonyName)
 
     clear();
 
-    read460::ReadContext ctx;
+    read460::ReadContext ctx(score());
     XmlReader reader(diagramXml.toUtf8());
 
     read460::TRead::read(this, reader, ctx);
@@ -826,10 +833,15 @@ std::vector<DiagramInfo> FretDiagram::patternsFromHarmony(const String& harmonyN
         readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
     }
 
-    String _harmonyName = harmonyName;
-
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-    HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
+    HarmonyMapKey key = createHarmonyMapKey(harmonyName, spellingType, score()->chordList());
+
+    if (tpcIsValid(key.rootTpc)) {
+        key.rootTpc = canonicalEnharmonicTpc(key.rootTpc);
+    }
+    if (tpcIsValid(key.bassTpc)) {
+        key.bassTpc = canonicalEnharmonicTpc(key.bassTpc);
+    }
 
     return muse::value(s_harmonyToDiagramMap, key);
 }
@@ -957,7 +969,7 @@ String FretDiagram::harmonyDisplayText() const
 void FretDiagram::setHarmony(String harmonyText)
 {
     if (!m_harmony) {
-        Harmony* h = new Harmony(this->score()->dummy()->segment());
+        Harmony* h = new Harmony(this);
         add(h);
     }
 
@@ -972,7 +984,7 @@ void FretDiagram::setHarmony(String harmonyText)
 
 void FretDiagram::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     if (e->isHarmony()) {
         m_harmony = toHarmony(e);
 
@@ -991,10 +1003,6 @@ void FretDiagram::add(EngravingItem* e)
                 }
             }
         }
-
-        m_harmony->resetProperty(Pid::OFFSET);
-        m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
-        m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
 
         e->added();
     } else {
@@ -1043,7 +1051,7 @@ EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
-        h->setParent(explicitParent());
+        h->setOwnershipParent(ownershipParent());
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
@@ -1335,22 +1343,26 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
     FretDiagram* fretDiagram = nullptr;
 
-    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
         Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
 
-        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
+        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy());
 
         fretDiagram->updateDiagram(harmony->plainText());
 
+        harmony->resetProperty(Pid::OFFSET);
+        harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+
         fretDiagram->add(harmony);
-    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
-        fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
+    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram->ownershipParent())->clone();
     } else if (harmonyOrFretDiagram->isFretDiagram()) {
         fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
         fretDiagram->setOffset(PointF());
         if (!fretDiagram->harmony()) {
             //! generate from diagram and add harmony
-            fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
+            fretDiagram->add(Factory::createHarmony(fretDiagram));
         }
     }
 
@@ -1359,7 +1371,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
 bool FretDiagram::isInFretBox() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     return parent ? parent->isFBox() : false;
 }
 
@@ -1392,6 +1404,13 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
 
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     HarmonyMapKey key = createHarmonyMapKey(harmonyNameForCompare, spellingType, score()->chordList());
+
+    if (tpcIsValid(key.rootTpc)) {
+        key.rootTpc = canonicalEnharmonicTpc(key.rootTpc);
+    }
+    if (tpcIsValid(key.bassTpc)) {
+        key.bassTpc = canonicalEnharmonicTpc(key.bassTpc);
+    }
 
     std::vector<DiagramInfo> availableDiagrams = muse::value(s_harmonyToDiagramMap, key);
     if (availableDiagrams.empty()) {
@@ -1429,6 +1448,13 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
 
     for (auto& [key, value] : harmonyToDiagramMap) {
         HarmonyMapKey mapKey = createHarmonyMapKey(key, spellingType, chordList);
+
+        if (tpcIsValid(mapKey.rootTpc)) {
+            mapKey.rootTpc = canonicalEnharmonicTpc(mapKey.rootTpc);
+        }
+        if (tpcIsValid(mapKey.bassTpc)) {
+            mapKey.bassTpc = canonicalEnharmonicTpc(mapKey.bassTpc);
+        }
 
         s_harmonyToDiagramMap[mapKey].push_back({ key, value.xml, value.pattern });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);

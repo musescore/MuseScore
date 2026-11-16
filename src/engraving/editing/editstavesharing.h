@@ -48,7 +48,7 @@ private:
     static StaveSharingGroups computeGroups(Score* score);
     static void createSharedParts(Transaction& tx, const StaveSharingGroups& groups, Score* score);
     static SharedPart* createSharedPart(Score* score, size_t idx, const Instrument* instr);
-    static void addStaffToSharedPart(SharedPart* sharedPart, const KeyList& keyList, const StaffType* staffType);
+    static void addStaffToSharedPart(SharedPart* sharedPart, const Part* originPart, const KeyList& keyList, const StaffType* staffType);
 
     static void connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
     static void disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);

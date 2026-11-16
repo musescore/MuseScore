@@ -31,12 +31,12 @@
 using namespace mu;
 
 namespace mu::engraving {
-BracketItem::BracketItem(EngravingItem* parent)
+BracketItem::BracketItem(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::BRACKET_ITEM, parent)
 {
 }
 
-BracketItem::BracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
+BracketItem::BracketItem(DummyParentOr<EngravingItem> parent, BracketType bracketType, size_t span)
     : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(bracketType), m_bracketSpan(span)
 {
 }

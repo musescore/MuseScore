@@ -19,12 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "tread.h"
+
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"
-#include "../../infrastructure/htmlparser.h"
+
+#include "../../compat/midi/event.h"
 
 #include "../../dom/accidental.h"
 #include "../../dom/actionicon.h"
@@ -699,7 +703,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "mag") {
             TRead::readProperty(d, e, ctx, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(d->score()->dummy()->segment());
+            Harmony* h = new Harmony(d->score()->dummy());
             read(h, e, ctx);
             if (h->chords().empty()) {
                 // Invalid harmony
@@ -798,7 +802,12 @@ void TRead::read(Instrument* item, XmlReader& e, ReadContext& ctx, Part* part)
 
     item->updateInstrumentId();
 
-    if (item->channel(0) && item->channel(0)->program() == -1) {
+    if (item->channel().empty()) { // for backward compatibility
+        InstrChannel* fallbackChannel = new InstrChannel;
+        fallbackChannel->setName(String::fromUtf8(InstrChannel::DEFAULT_NAME));
+        fallbackChannel->setProgram(item->recognizeMidiProgram());
+        item->appendChannel(fallbackChannel);
+    } else if (item->channel(0)->program() == -1) {
         item->channel(0)->setProgram(item->recognizeMidiProgram());
     }
 
@@ -1307,7 +1316,7 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "FiguredBassItem") {
             FiguredBassItem* pItem = b->createItem(idx++);
             pItem->setTrack(b->track());
-            pItem->setParent(b);
+            pItem->setOwnershipParent(b);
             TRead::read(pItem, e, ctx);
             b->appendItem(pItem);
             // add item normalized text
@@ -1491,7 +1500,6 @@ void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Number") {
             number = Factory::createText(t, TextStyleType::TUPLET);
             number->setComposition(true);
-            number->setParent(t);
             Tuplet::resetNumberProperty(number);
             TRead::read(number, e, ctx);
             number->setVisible(t->visible());         //?? override saved property
@@ -1722,7 +1730,7 @@ void TRead::read(ActionIcon* i, XmlReader& e, ReadContext&)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "action") {
-            i->setAction(e.readText().toStdString(), 0);
+            i->setActionType(TConv::fromXml(e.readAsciiText(), ActionIconType::UNDEFINED));
         } else if (tag == "subtype") {
             i->setActionType(static_cast<ActionIconType>(e.readInt()));
         } else {
@@ -1774,10 +1782,9 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* accidental = Factory::createAccidental(o);
         TRead::read(accidental, xml, ctx);
-        accidental->setParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
-        Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
+        Chord* chord = Factory::createChord(ctx.score()->dummy());
         TRead::read(chord, xml, ctx);
         chord->setTrack(ctx.track());
         o->setCueNoteChord(chord);
@@ -1891,7 +1898,7 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "spanToOffset") {
             b->setSpanTo(e.readInt());
         } else if (tag == "Articulation") {
-            Articulation* a = Factory::createArticulation(b->score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(b->score()->dummy());
             TRead::read(a, e, ctx);
             b->add(a);
         } else if (tag == "Symbol") {
@@ -2061,7 +2068,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             b->add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(b->score()->dummy());
         TRead::read(f, e, ctx);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment
@@ -2074,7 +2081,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         // If we do not set the parent of this new box correctly, it will cause a crash on read()
         // because it needs access to the system it is being added to. (c.r. issue #14643)
         if (b->parent() && b->parent()->isSystem()) {
-            HBox* hb = new HBox(toSystem(b->parent()));
+            HBox* hb = new HBox(b->score());
             TRead::read(hb, e, ctx);
             //! TODO Looks like a bug.
             //! The HBox parent must be System
@@ -2084,7 +2091,7 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
         }
     } else if (tag == "VBox") {
         if (b->parent() && b->parent()->isSystem()) {
-            VBox* vb = new VBox(toSystem(b->parent()));
+            VBox* vb = new VBox(b->score());
             TRead::read(vb, e, ctx);
             //! TODO Looks like a bug.
             //! The VBox parent must be System
@@ -2136,7 +2143,6 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
         stc->setTrack(ctx.track());
-        stc->setParent(b);
         TRead::read(stc, e, ctx);
         b->add(stc);
     } else if (readItemProperties(b, e, ctx)) {
@@ -2322,7 +2328,6 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         Note* note = Factory::createNote(ch);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
-        note->setParent(ch);
         TRead::read(note, e, ctx);
         ch->add(note);
     } else if (TRead::readProperties(toChordRest(ch), e, ctx)) {
@@ -2370,18 +2375,17 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
         TRead::read(arpeggio, e, ctx);
-        arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
         TremoloCompat tcompat;
         tcompat.parent = ch;
         TRead::read(tcompat, e, ctx);
         if (tcompat.two) {
-            tcompat.two->setParent(ch);
+            tcompat.two->setOwnershipParent(ch);
             tcompat.two->setDurationType(ch->durationType());
             ch->setTremoloTwoChord(tcompat.two, false);
         } else if (tcompat.single) {
-            tcompat.single->setParent(ch);
+            tcompat.single->setOwnershipParent(ch);
             tcompat.single->setDurationType(ch->durationType());
             ch->setTremoloSingleChord(tcompat.single);
         } else {
@@ -2567,7 +2571,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
+void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx, bool* isHeader)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2582,7 +2586,10 @@ void TRead::read(Clef* c, XmlReader& e, ReadContext& ctx)
         } else if (tag == "clefToBarlinePos") {
             c->setClefToBarlinePosition(ClefToBarlinePosition(e.readInt()));
         } else if (tag == "isHeader") {
-            c->setIsHeader(e.readBool());
+            const bool header = e.readBool();
+            if (isHeader) {
+                *isHeader = header;
+            }
         } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }
@@ -3281,7 +3288,7 @@ void TRead::read(Page* p, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "System") {
-            System* system = Factory::createSystem(p->score()->dummy()->page());
+            System* system = Factory::createSystem(p->score());
             p->score()->systems().push_back(system);
             read(system, e, ctx);
         } else {
@@ -3411,7 +3418,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideMod
     } else if (tag == "name") {
         p->instrument()->setLongName(e.readText());
     } else if (tag == "color") {
-        p->setColor(e.readInt());
+        e.skipCurrentElement(); // Unused
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
     } else if (tag == "show") {
@@ -3563,7 +3570,7 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "ticks") {
         l->setTicks(Fraction::fromTicks(e.readInt()));
     } else if (tag == "Segment") {
-        LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
+        LineSegment* ls = l->createLineSegment();
         ls->setTrack(l->track());     // needed in read to get the right staff mag
         l->add(ls);
         TRead::read(ls, e, ctx);
@@ -3615,9 +3622,9 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
         const int idx = e.intAttribute("no", 0);
         const int n = int(s->spannerSegments().size());
         for (int i = n; i < idx; ++i) {
-            s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
+            s->add(s->newSlurTieSegment());
         }
-        SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
+        SlurTieSegment* sts = s->newSlurTieSegment();
         s->add(sts);
         TRead::read(sts, e, ctx);
     } else if (!readProperties(toSpanner(s), e, ctx)) {
@@ -3689,7 +3696,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            t->setXmlName(e.readText());
+            t->setType(TConv::fromXml(e.readAsciiText(), StaffTypes::STANDARD));
         } else if (tag == "lines") {
             t->setLines(e.readInt());
         } else if (tag == "lineDistance") {
@@ -4318,7 +4325,7 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Ornament") {
             Ornament* ornament = t->ornament();
             if (!ornament) {
-                ornament = Factory::createOrnament(toChordRest(t->parentItem(true)));
+                ornament = Factory::createOrnament(toChordRest(t->ownershipParent()));
                 t->setOrnament(ornament);
             }
             ornament->setSymId(Ornament::fromTrillType(t->trillType()));
@@ -4327,7 +4334,6 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Accidental") {
             Accidental* accidental = Factory::createAccidental(t);
             TRead::read(accidental, e, ctx);
-            accidental->setParent(t);
             t->setAccidental(accidental);
             if (t->ornament()) {
                 t->ornament()->setTrillOldCompatAccidental(accidental);

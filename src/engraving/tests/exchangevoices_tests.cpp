@@ -47,7 +47,7 @@ class Engraving_ExchangevoicesTests : public ::testing::Test
 TEST_F(Engraving_ExchangevoicesTests, slurs)
 {
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -67,7 +67,7 @@ TEST_F(Engraving_ExchangevoicesTests, slurs)
 TEST_F(Engraving_ExchangevoicesTests, glissandi)
 {
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-gliss.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -88,7 +88,7 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
 {
     // Change voice of range selection including lyrics, lyrics lines, partial ties, slur, glissando, note anchored line, dynamics
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     score->startCmd(TranslatableString::untranslatable("Exchange voices select all"));
@@ -118,7 +118,7 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
     String reference2(EXCHVOICES_DATA_DIR + u"undoChangeVoice02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // do

@@ -1,0 +1,253 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.Ui
+import Muse.UiComponents
+import Muse.Cloud
+import MuseScore.Project
+
+import "internal/ConvertFileToScore"
+
+StyledDialogView {
+    id: root
+
+    title: qsTrc("project/convert", "Convert file to score")
+
+    contentHeight: 560
+    contentWidth: 616
+    margins: 0
+
+    modal: true
+    resizable: false
+
+    background.color: ui.theme.backgroundPrimaryColor
+
+    //! NOTE: paths pre-selected outside the dialog, e.g. via drag-and-drop onto the app window
+    property var initialPaths: []
+    property int initialConvertType: 0
+
+    property int currentPageIndex: 0
+    property bool skipCloseConfirmation: false
+
+    readonly property string pageTitle: {
+        if (root.currentPageIndex === 2) {
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        }
+
+        switch (convertModel.fileListModel.fileCategory) {
+        case FileListModel.Audio:
+            return qsTrc("project/convert", "Convert audio to score (beta)")
+        case FileListModel.Pdf:
+            return qsTrc("project/convert", "Convert PDF to score")
+        case FileListModel.Image:
+            return qsTrc("project/convert", "Convert images to score")
+        case FileListModel.Unknown:
+            break
+        }
+
+        return qsTrc("project/convert", "Convert a file to score")
+    }
+
+    ConvertFileToScoreModel {
+        id: convertModel
+
+        onCancelConfirmed: {
+            root.skipCloseConfirmation = true
+            root.reject()
+        }
+
+        onGoingBackConfirmed: {
+            root.currentPageIndex = 0
+            convertModel.clearSelection()
+        }
+    }
+
+    Component.onCompleted: {
+        convertModel.load(root.initialPaths, root.initialConvertType)
+
+        if (root.initialPaths.length > 0) {
+            root.currentPageIndex = 1
+        }
+    }
+
+    function finish(type, paths, link, convertedScoreName) {
+        root.skipCloseConfirmation = true
+        root.ret = { errcode: 0, value: { type: type, paths: paths, link: link, convertedScoreName: convertedScoreName } }
+        root.hide()
+    }
+
+    function focusOnPageDefault() {
+        if (pageLoader.item && pageLoader.item.focusOnDefault) {
+            pageLoader.item.focusOnDefault()
+        }
+    }
+
+    onNavigationActivateRequested: root.focusOnPageDefault()
+
+    onAboutToClose: function(closeEvent) {
+        if (root.currentPageIndex === 0 || root.skipCloseConfirmation) {
+            return
+        }
+
+        closeEvent.accepted = false
+        convertModel.confirmCancel()
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.topMargin: 18
+        anchors.bottomMargin: 18
+        anchors.leftMargin: 48
+        anchors.rightMargin: 48
+        spacing: 18
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 12
+
+            StyledTextLabel {
+                Layout.fillWidth: true
+
+                text: root.pageTitle
+                font: ui.theme.largeBodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            AccountAvatar {
+                side: 30
+                withBackground: false
+                url: convertModel.accountAvatarUrl
+            }
+        }
+
+        Loader {
+            id: pageLoader
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            sourceComponent: {
+                if (root.currentPageIndex === 0) {
+                    return selectFilePageComponent
+                } else if (root.currentPageIndex === 1) {
+                    return selectedFilesPageComponent
+                }
+
+                return linkEntryPageComponent
+            }
+
+            onLoaded: {
+                if (root.isOpened) {
+                    root.focusOnPageDefault()
+                }
+            }
+        }
+    }
+
+    Component {
+        id: selectFilePageComponent
+
+        SelectFilePage {
+            guidelinesUrl: convertModel.guidelinesUrl
+            linkHintText: convertModel.linkHintText
+            audioComUrl: convertModel.audioComUrl
+            fileRequirements: convertModel.fileRequirements
+            navigationSection: root.navigationSection
+
+            onCancelRequested: root.reject()
+
+            onSelectFilesRequested: {
+                if (convertModel.selectAndValidateFiles()) {
+                    root.currentPageIndex = 1
+                }
+            }
+
+            onFilesDropped: function(urls) {
+                if (convertModel.validateAndAddFiles(urls)) {
+                    root.currentPageIndex = 1
+                }
+            }
+
+            onConvertFromLinkRequested: {
+                root.currentPageIndex = 2
+            }
+        }
+    }
+
+    Component {
+        id: selectedFilesPageComponent
+
+        SelectedFilesPage {
+            id: filesPage
+
+            saveAsName: convertModel.defaultSaveAsName
+            saveAsErrorText: convertModel.validateFileName(filesPage.saveAsTrimmed)
+            navigationSection: root.navigationSection
+            fileListModel: convertModel.fileListModel
+            canSelectMultipleFiles: convertModel.canSelectMultipleFiles
+            fileRequirements: convertModel.fileRequirements
+
+            onCancelRequested: convertModel.confirmCancel()
+            onBackRequested: convertModel.confirmGoingBack()
+
+            onConvertRequested: function(convertedScoreName) {
+                root.finish(convertModel.convertType, convertModel.fileListModel.paths(), "", convertedScoreName)
+            }
+
+            onSelectMoreFilesRequested: convertModel.selectAndValidateFiles()
+
+            onAddFilesRequested: function(urls) {
+                convertModel.validateAndAddFiles(urls)
+            }
+        }
+    }
+
+    Component {
+        id: linkEntryPageComponent
+
+        LinkEntryPage {
+            id: linkPage
+
+            saveAsName: convertModel.defaultSaveAsName
+            saveAsErrorText: convertModel.validateFileName(linkPage.saveAsTrimmed)
+            hintText: convertModel.linkPageHintText
+            hintPlainText: convertModel.linkPageHintPlainText
+            audioComUrl: convertModel.audioComUrl
+            maxLinkLength: convertModel.maxLinkLength
+            navigationSection: root.navigationSection
+
+            onCancelRequested: convertModel.confirmCancel()
+            onBackRequested: convertModel.confirmGoingBack()
+
+            onConvertRequested: function(link, convertedScoreName) {
+                if (!convertModel.validateLink(link)) {
+                    return
+                }
+
+                convertModel.selectedLink = link
+                root.finish(convertModel.convertType, [], link, convertedScoreName)
+            }
+        }
+    }
+}

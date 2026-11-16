@@ -63,8 +63,8 @@ static const ElementStyle rasgueadoStyle {
     { Sid::dummyMusicalSymbolsScale,             Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
-    : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+RasgueadoSegment::RasgueadoSegment(Rasgueado* sp)
+    : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -74,7 +74,7 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 //   Rasgueado
 //---------------------------------------------------------
 
-Rasgueado::Rasgueado(EngravingItem* parent)
+Rasgueado::Rasgueado(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::RASGUEADO, parent)
 {
     initElementStyle(&rasgueadoStyle);
@@ -96,9 +96,9 @@ static const ElementStyle rasgueadoSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Rasgueado::createLineSegment(System* parent)
+LineSegment* Rasgueado::createLineSegment()
 {
-    RasgueadoSegment* wb = new RasgueadoSegment(this, parent);
+    RasgueadoSegment* wb = new RasgueadoSegment(this);
     wb->setTrack(track());
     wb->initElementStyle(&rasgueadoSegmentStyle);
     return wb;

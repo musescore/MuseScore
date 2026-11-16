@@ -32,13 +32,14 @@
 #include "modularity/ioc.h"
 #include "translation.h"
 
-#include "engraving/compat/dummyelement.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/dummyparent.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/types/symnames.h"
@@ -71,7 +72,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     QAction* a = new QAction("delete", this);
     a->setShortcut(Qt::Key_Delete);
     addAction(a);
-    clef = Factory::createClef(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    clef = Factory::createClef(paletteScoreProvider()->paletteScore()->dummy());
     clef->setClefType(ClefType::G);
     connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
@@ -235,7 +236,6 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
-        dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
         engravingRender()->layoutItem(dragElement);
@@ -408,7 +408,7 @@ void KeyEditor::addClicked()
         c.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
         e.customKeyDefs().push_back(c);
     }
-    auto ks = Factory::makeKeySig(paletteScoreProvider()->paletteScore()->dummy()->segment());
+    auto ks = Factory::makeKeySig(paletteScoreProvider()->paletteScore()->dummy());
     ks->setKeySigEvent(e);
     m_keySigPaletteWidget->appendElement(ks, "custom");
     m_dirty = true;

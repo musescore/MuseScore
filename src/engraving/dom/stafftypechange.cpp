@@ -22,22 +22,20 @@
 
 #include "stafftypechange.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
 
-#include "log.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffTypeChange
 //---------------------------------------------------------
 
-StaffTypeChange::StaffTypeChange(MeasureBase* parent)
+StaffTypeChange::StaffTypeChange(DummyParentOr<MeasureBase> parent)
     : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent)
 {
     m_lw = spatium() * 0.3;
@@ -102,6 +100,8 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
         return m_staffType->stemless();
     case Pid::HEAD_SCHEME:
         return m_staffType->noteHeadScheme();
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        return m_staffType->instrumentLabelVisibility();
     case Pid::STAFF_GEN_CLEF:
         return m_staffType->genClef();
     case Pid::STAFF_GEN_TIMESIG:
@@ -155,6 +155,9 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::HEAD_SCHEME:
         m_staffType->setNoteHeadScheme(v.value<NoteHeadScheme>());
         break;
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        m_staffType->setInstrumentLabelVisibility(v.value<InstrumentLabelVisibility>());
+        break;
     case Pid::STAFF_GEN_CLEF:
         m_staffType->setGenClef(v.toBool());
         break;
@@ -204,7 +207,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     }
 
-    if (explicitParent()) {
+    if (ownershipParent()) {
         staff()->staffTypeListChanged(measure()->tick());
     }
     return true;
@@ -231,6 +234,8 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
         return false;
     case Pid::HEAD_SCHEME:
         return NoteHeadScheme::HEAD_NORMAL;
+    case Pid::STAFF_INSTRUMENT_LABEL_VISIBILITY:
+        return InstrumentLabelVisibility::AUTO;
     case Pid::STAFF_GEN_CLEF:
         return true;
     case Pid::STAFF_GEN_TIMESIG:
@@ -254,5 +259,4 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
-}
 }

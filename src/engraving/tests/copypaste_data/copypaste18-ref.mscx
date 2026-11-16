@@ -26,7 +26,7 @@
       <Staff>
         <eid>P_P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">
@@ -81,8 +81,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>Q_Q</eid>
         <Text>
-          <eid>R_R</eid>
           <style>title</style>
+          <eid>R_R</eid>
           <text>voice-paste</text>
           </Text>
         </VBox>

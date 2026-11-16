@@ -50,22 +50,28 @@ class BackendApi
     inline static muse::GlobalInject<project::INotationWritersRegister> writers;
 
 public:
-    static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
+    static muse::Ret exportScoreMedia(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                      const muse::io::path_t& highlightConfigPath, const OpenParams& openParams = {});
+    static muse::Ret exportScoreMeta(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
+                                     const OpenParams& openParams = {});
+    static muse::Ret exportScoreParts(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const muse::io::path_t& out,
                                       const OpenParams& openParams = {});
-    static muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
-    static muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
-    static muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
-    static muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                          const OpenParams& openParams = {});
+    static muse::Ret exportScorePartsPdfs(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in,
+                                          const muse::io::path_t& out, const OpenParams& openParams = {});
+    static muse::Ret exportScoreTranspose(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in,
+                                          const muse::io::path_t& out, const std::string& optionsJson, const OpenParams& openParams = {});
 
-    static muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {});
+    static muse::Ret exportScoreElements(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in,
+                                         const muse::io::path_t& out, const OpenParams& openParams = {});
 
-    static muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false);
+    static muse::Ret updateSource(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& in, const std::string& newSource,
+                                  bool forceMode = false);
 
 private:
     static muse::Ret openOutputFile(QFile& file, const muse::io::path_t& out);
 
-    static muse::RetVal<project::INotationProjectPtr> openProject(const muse::io::path_t& path, const OpenParams& params = {});
+    static muse::RetVal<project::INotationProjectPtr> openProject(const muse::modularity::ContextPtr& iocCtx, const muse::io::path_t& path,
+                                                                  const OpenParams& params = {});
 
     static QVariantMap readBeatsColors(const muse::io::path_t& filePath);
 
@@ -86,15 +92,17 @@ private:
     static muse::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
                                                   const project::INotationWriter::Options& options);
 
-    static muse::Ret doExportScoreParts(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice);
+    static muse::Ret doExportScoreParts(const muse::modularity::ContextPtr& iocCtx, const notation::IMasterNotationPtr notation,
+                                        QIODevice& destinationDevice);
     static muse::Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice,
                                             const std::string& scoreFileName);
-    static muse::Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
-                                            bool addSeparator = false);
+    static muse::Ret doExportScoreTranspose(const muse::modularity::ContextPtr& iocCtx, const notation::INotationPtr notation,
+                                            BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
     static muse::Ret doExportScoreElements(const notation::INotationPtr notation, QIODevice& out);
 
-    static muse::RetVal<QByteArray> scorePartJson(mu::engraving::Score* score, const std::string& fileName);
+    static muse::RetVal<QByteArray> scorePartJson(const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score,
+                                                  const std::string& fileName);
 
     static void switchToPageView(notation::IMasterNotationPtr masterNotation);
     static void renderExcerptsContents(notation::IMasterNotationPtr masterNotation);

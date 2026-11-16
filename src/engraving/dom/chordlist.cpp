@@ -22,6 +22,7 @@
 
 #include "chordlist.h"
 
+#include "global/containers.h"
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
@@ -2283,6 +2284,11 @@ const ChordDescription* ChordList::description(int id) const
         return nullptr;
     }
     return &it->second;
+}
+
+ChordSymbol ChordList::symbol(const String& s) const
+{
+    return muse::value(m_symbols, s);
 }
 
 ChordToken ChordList::token(const String& s, ChordTokenClass type) const

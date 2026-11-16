@@ -138,16 +138,23 @@
               <string>3</string>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>T_T</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>U_U</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>P_P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>W_W</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -158,17 +165,17 @@
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
                 <startElement>P_P</startElement>
-                <endElement>U_U</endElement>
-                <eid>V_V</eid>
+                <endElement>W_W</endElement>
+                <eid>X_X</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <Note>
-              <eid>W_W</eid>
+              <eid>Y_Y</eid>
               <Tie>
                 <startElement>R_R</startElement>
-                <endElement>W_W</endElement>
-                <eid>X_X</eid>
+                <endElement>Y_Y</endElement>
+                <eid>Z_Z</eid>
                 <track>0</track>
                 </Tie>
               <pitch>72</pitch>
@@ -179,20 +186,27 @@
               <string>3</string>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>a_a</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>b_b</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>U_U</NoteEID>
+                <NoteEID>W_W</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>d_d</eid>
               <parentheses>both</parentheses>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>a_a</eid>
+                <eid>e_e</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
@@ -202,18 +216,18 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>1</bendEndTimeFactor>
-                <startElement>U_U</startElement>
-                <endElement>Z_Z</endElement>
-                <eid>b_b</eid>
+                <startElement>W_W</startElement>
+                <endElement>d_d</endElement>
+                <eid>f_f</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <Note>
-              <eid>c_c</eid>
+              <eid>g_g</eid>
               <Tie>
-                <startElement>W_W</startElement>
-                <endElement>c_c</endElement>
-                <eid>d_d</eid>
+                <startElement>Y_Y</startElement>
+                <endElement>g_g</endElement>
+                <eid>h_h</eid>
                 <track>0</track>
                 </Tie>
               <pitch>72</pitch>
@@ -224,16 +238,23 @@
               <string>3</string>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>i_i</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>j_j</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>Z_Z</NoteEID>
+                <NoteEID>d_d</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>k_k</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>l_l</eid>
               <parentheses>both</parentheses>
               <pitch>50</pitch>
               <tpc>16</tpc>
@@ -243,18 +264,18 @@
                 <guitarBendType>dive</guitarBendType>
                 <bendStartTimeFactor>0</bendStartTimeFactor>
                 <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                <startElement>Z_Z</startElement>
-                <endElement>f_f</endElement>
-                <eid>g_g</eid>
+                <startElement>d_d</startElement>
+                <endElement>l_l</endElement>
+                <eid>m_m</eid>
                 <track>0</track>
                 </GuitarBend>
               </Note>
             <Note>
-              <eid>h_h</eid>
+              <eid>n_n</eid>
               <Tie>
-                <startElement>c_c</startElement>
-                <endElement>h_h</endElement>
-                <eid>i_i</eid>
+                <startElement>g_g</startElement>
+                <endElement>n_n</endElement>
+                <eid>o_o</eid>
                 <track>0</track>
                 </Tie>
               <pitch>72</pitch>
@@ -265,13 +286,20 @@
               <string>3</string>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>p_p</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>q_q</eid>
+                </Parenthesis>
               <Notes>
-                <NoteEID>f_f</NoteEID>
+                <NoteEID>l_l</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>j_j</eid>
+            <eid>r_r</eid>
             <durationType>eighth</durationType>
             </Rest>
           </voice>
@@ -283,8 +311,9 @@
         <beginTextOffset x="0" y="0"/>
         <continueText>AH</continueText>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>15/8</ticks>
-        <eid>k_k</eid>
+        <eid>s_s</eid>
         <track>0</track>
         </HarmonicMark>
       </SpannerMap>

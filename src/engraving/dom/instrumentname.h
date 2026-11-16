@@ -46,7 +46,7 @@ class InstrumentName final : public TextBase
     DECLARE_CLASSOF(ElementType::INSTRUMENT_NAME)
 
 public:
-    InstrumentName(System*);
+    InstrumentName(DummyParentOr<System>);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
 
@@ -56,7 +56,7 @@ public:
     InstrumentNameRole instrumentNameRole() const { return m_instrumentNameRole; }
     void setInstrumentNameRole(InstrumentNameRole v) { m_instrumentNameRole = v; }
 
-    System* system() const { return toSystem(explicitParent()); }
+    System* system() const { return toSystem(ownershipParent()); }
 
     SysStaff* sysStaff() const { return m_sysStaff; }
     void setSysStaff(SysStaff* s) { m_sysStaff = s; }

@@ -56,9 +56,9 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
-    Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
-    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
-    ChordRest* chordRest() const { return toChordRest(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()->ownershipParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()->ownershipParent()->ownershipParent()); }
+    ChordRest* chordRest() const { return toChordRest(ownershipParent()); }
 
     int subtype() const override { return m_verse; }
     TranslatableString subtypeUserName() const override;
@@ -99,6 +99,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
+    void reset() override;
     void triggerLayout() const override;
 
     double yRelativeToStaff() const;
@@ -110,7 +111,7 @@ public:
 private:
 
     friend class Factory;
-    Lyrics(ChordRest* parent);
+    Lyrics(DummyParentOr<ChordRest> parent);
     Lyrics(const Lyrics&);
 
     int m_verse = 0;              // row index
@@ -132,27 +133,28 @@ class LyricsLine : public SLine
     DECLARE_CLASSOF(ElementType::LYRICSLINE)
 
 public:
-    LyricsLine(EngravingItem* parent);
+    LyricsLine(DummyParentOr<EngravingItem> parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     void removeUnmanaged() override;
 
-    virtual Lyrics* lyrics() const { return toLyrics(explicitParent()); }
+    virtual Lyrics* lyrics() const { return toLyrics(ownershipParent()); }
     Lyrics* nextLyrics() const { return m_nextLyrics; }
     void setNextLyrics(Lyrics* l) { m_nextLyrics = l; }
     virtual bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
+
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
     Sid getPropertyStyle(Pid) const override;
 
 protected:
-    LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    LyricsLine(const ElementType& type, DummyParentOr<EngravingItem> parent, ElementFlags = ElementFlag::NOTHING);
 
     bool isInSpannerMap() const override { return false; }
 
@@ -172,7 +174,7 @@ class LyricsLineSegment : public LineSegment
     DECLARE_CLASSOF(ElementType::LYRICSLINE_SEGMENT)
 
 public:
-    LyricsLineSegment(LyricsLine*, System* parent);
+    LyricsLineSegment(LyricsLine*);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
 
@@ -207,7 +209,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(LyricsLineSegment)
 
 protected:
-    LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    LyricsLineSegment(const ElementType& type, LyricsLine* sp, ElementFlags f = ElementFlag::NOTHING);
     void rebaseAnchors(EditData&, Grip) override;
 };
 
@@ -217,10 +219,10 @@ class PartialLyricsLine final : public LyricsLine
     DECLARE_CLASSOF(ElementType::PARTIAL_LYRICSLINE)
 
 public:
-    PartialLyricsLine(EngravingItem* parent);
+    PartialLyricsLine(DummyParentOr<EngravingItem> parent);
     PartialLyricsLine(const PartialLyricsLine&);
     PartialLyricsLine* clone() const override { return new PartialLyricsLine(*this); }
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     Lyrics* lyrics() const override { return nullptr; }
 
@@ -230,11 +232,15 @@ public:
     void setVerse(int val) { m_verse = val; }
     int verse() const { return m_verse; }
 
+    void setCenterBetweenStaves(AutoOnOff v) { m_centerBetweenStaves = v; }
+    AutoOnOff centerBetweenStaves() const { return m_centerBetweenStaves; }
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
+    void reset() override;
 
     Lyrics* findLyricsInPreviousRepeatSeg() const;
     Lyrics* findAdjacentLyricsOrDefault() const;
@@ -246,6 +252,7 @@ protected:
 private:
     bool m_isEndMelisma = false;
     int m_verse = 0;
+    AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
 };
 
 class PartialLyricsLineSegment final : public LyricsLineSegment
@@ -254,7 +261,7 @@ class PartialLyricsLineSegment final : public LyricsLineSegment
     DECLARE_CLASSOF(ElementType::PARTIAL_LYRICSLINE_SEGMENT)
 
 public:
-    PartialLyricsLineSegment(PartialLyricsLine*, System* parent);
+    PartialLyricsLineSegment(PartialLyricsLine*);
 
     LyricsLineSegment* clone() const override { return new PartialLyricsLineSegment(*this); }
 

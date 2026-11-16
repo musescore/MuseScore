@@ -25,6 +25,7 @@
 #include "types/typesconv.h"
 
 #include "bracketitem.h"
+#include "instrumentname.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -41,12 +42,13 @@ using namespace muse::draw;
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(EngravingItem* parent)
+Bracket::Bracket(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::BRACKET, parent)
 {
     m_ay1          = 0;
     m_firstStaff  = 0;
     m_lastStaff   = 0;
+    m_labelType   = InstrumentNameType::LONG;
     m_bi          = 0;
     m_braceSymbol = SymId::noSym;
     m_magx        = 1.;
@@ -169,7 +171,7 @@ void Bracket::endDragGrip(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        double ay  = parentItem()->pagePos().y();
+        double ay  = layoutParent()->pagePos().y();
         System* s = system();
         double y   = s->staff(staffIdx1)->y() + ay;
         double h1  = staff()->staffHeight();

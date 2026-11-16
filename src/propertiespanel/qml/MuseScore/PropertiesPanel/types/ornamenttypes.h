@@ -24,18 +24,15 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/types/types.h"
+
 namespace mu::propertiespanel {
 namespace OrnamentTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
-enum class Style {
-    STYLE_STANDARD = 0,
-    STYLE_BAROQUE
-};
-Q_ENUM_NS(Style)
-
 // For ornaments that only accept intervals of second (turns...)
+// a simplified view over engraving::OrnamentInterval, which has no single enum equivalent
 enum class BasicInterval {
     TYPE_INVALID,
     TYPE_AUTO_DIATONIC,
@@ -47,31 +44,31 @@ Q_ENUM_NS(BasicInterval)
 
 // For ornaments that can define a custom interval (trills)
 enum class IntervalStep {
-    STEP_UNISON = 0,
-    STEP_SECOND,
-    STEP_THIRD,
-    STEP_FOURTH,
-    STEP_FIFTH,
-    STEP_SIXTH,
-    STEP_SEVENTH,
-    STEP_OCTAVE,
+    STEP_UNISON = int(engraving::IntervalStep::UNISON),
+    STEP_SECOND = int(engraving::IntervalStep::SECOND),
+    STEP_THIRD = int(engraving::IntervalStep::THIRD),
+    STEP_FOURTH = int(engraving::IntervalStep::FOURTH),
+    STEP_FIFTH = int(engraving::IntervalStep::FIFTH),
+    STEP_SIXTH = int(engraving::IntervalStep::SIXTH),
+    STEP_SEVENTH = int(engraving::IntervalStep::SEVENTH),
+    STEP_OCTAVE = int(engraving::IntervalStep::OCTAVE),
 };
 Q_ENUM_NS(IntervalStep)
 
 enum class IntervalType {
-    TYPE_AUTO = 0,
-    TYPE_AUGMENTED,
-    TYPE_MAJOR,
-    TYPE_PERFECT,
-    TYPE_MINOR,
-    TYPE_DIMINISHED
+    TYPE_AUTO = int(engraving::IntervalType::AUTO),
+    TYPE_AUGMENTED = int(engraving::IntervalType::AUGMENTED),
+    TYPE_MAJOR = int(engraving::IntervalType::MAJOR),
+    TYPE_PERFECT = int(engraving::IntervalType::PERFECT),
+    TYPE_MINOR = int(engraving::IntervalType::MINOR),
+    TYPE_DIMINISHED = int(engraving::IntervalType::DIMINISHED)
 };
 Q_ENUM_NS(IntervalType)
 
 enum class OrnamentShowAccidental {
-    SHOW_ACCIDENTAL_DEFAULT,
-    SHOW_ACCIDENTAL_ANY_ALTERATION,
-    SHOW_ACCIDENTAL_ALWAYS
+    SHOW_ACCIDENTAL_DEFAULT = int(engraving::OrnamentShowAccidental::DEFAULT),
+    SHOW_ACCIDENTAL_ANY_ALTERATION = int(engraving::OrnamentShowAccidental::ANY_ALTERATION),
+    SHOW_ACCIDENTAL_ALWAYS = int(engraving::OrnamentShowAccidental::ALWAYS)
 };
 Q_ENUM_NS(OrnamentShowAccidental)
 }

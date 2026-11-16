@@ -40,7 +40,7 @@ class LayoutBreak final : public EngravingItem
 
 public:
 
-    void setParent(MeasureBase* parent);
+    void setOwnershipParent(DummyParentOr<MeasureBase> parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(m_layoutBreakType); }
@@ -52,7 +52,7 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
-    MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
+    MeasureBase* measure() const { return (MeasureBase*)ownershipParent(); }
     double pause() const { return m_pause; }
     void setPause(double v) { m_pause = v; }
     bool startWithLongNames() const { return m_startWithLongNames; }
@@ -78,14 +78,11 @@ public:
     char16_t iconCode() const;
 
     muse::draw::Font font() const;
-protected:
-    void added() override;
-    void removed() override;
 
 private:
 
     friend class Factory;
-    LayoutBreak(MeasureBase* parent = 0);
+    LayoutBreak(DummyParentOr<MeasureBase> parent);
     LayoutBreak(const LayoutBreak&);
 
     double m_pause = 0.0;

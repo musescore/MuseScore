@@ -27,7 +27,7 @@
 #include "propertiespanelabstractmodel.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 
 namespace mu::propertiespanel {
 class TextSettingsModel : public PropertiesPanelAbstractModel
@@ -78,7 +78,7 @@ class TextSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(QString centerPositionText READ centerPositionText NOTIFY centerPositionTextChanged)
     Q_PROPERTY(QString rightPositionText READ rightPositionText NOTIFY rightPositionTextChanged)
 
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);

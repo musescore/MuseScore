@@ -22,6 +22,8 @@
 
 #include "hammeronpulloff.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "mscore.h"
 #include "note.h"
 #include "score.h"
@@ -30,7 +32,7 @@
 #include "system.h"
 
 namespace mu::engraving {
-HammerOnPullOff::HammerOnPullOff(EngravingItem* parent)
+HammerOnPullOff::HammerOnPullOff(DummyParentOr<EngravingItem> parent)
     : Slur(parent, ElementType::HAMMER_ON_PULL_OFF)
 {
 }
@@ -40,8 +42,8 @@ HammerOnPullOff::HammerOnPullOff(const HammerOnPullOff& other)
 {
 }
 
-HammerOnPullOffSegment::HammerOnPullOffSegment(System* parent)
-    : SlurSegment(parent, ElementType::HAMMER_ON_PULL_OFF_SEGMENT)
+HammerOnPullOffSegment::HammerOnPullOffSegment(HammerOnPullOff* sp)
+    : SlurSegment(sp, ElementType::HAMMER_ON_PULL_OFF_SEGMENT)
 {
 }
 
@@ -132,7 +134,6 @@ void HammerOnPullOffSegment::updateHopoText()
             m_hopoText.push_back(curHopoText);
         }
 
-        curHopoText->setParent(this);
         curHopoText->setTrack(track());
         curHopoText->setIsValid(curRegion.isValid);
         curHopoText->setIsHammerOn(curRegion.isHammerOn);
@@ -286,7 +287,7 @@ std::vector<LineF> HammerOnPullOffText::dragAnchorLines() const
 
     PointF p1 = canvasPos();
 
-    HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(parent());
+    HammerOnPullOffSegment* hopoSeg = hopoSegment();
     const Shape& hopoSegShape = hopoSeg->ldata()->shape();
     double x = ldata()->pos().x();// + hopoSegShape.bbox().x();
     double y = hopoSeg->hammerOnPullOff()->up() ? hopoSegShape.topAtX(x) : hopoSegShape.bottomAtX(x);

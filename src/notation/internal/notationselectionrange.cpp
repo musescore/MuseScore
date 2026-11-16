@@ -65,10 +65,10 @@ Fraction NotationSelectionRange::endTick() const
     return selection.tickEnd();
 }
 
-NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() const
+NotationSelectionRange::MeasureBaseRange NotationSelectionRange::measureBaseRange() const
 {
-    MeasureRange range;
-    score()->selection().measureRange(&range.startMeasure, &range.endMeasure);
+    MeasureBaseRange range;
+    score()->selection().measureBaseRange(&range.startMeasureBase, &range.endMeasureBase);
 
     return range;
 }
@@ -77,7 +77,8 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
 {
     return ScoreRangeUtilities::boundingArea(score(),
                                              rangeStartSegment(), rangeEndSegment(),
-                                             startStaffIndex(), endStaffIndex());
+                                             startStaffIndex(), endStaffIndex(),
+                                             rangeStartBox(), rangeEndBox());
 }
 
 bool NotationSelectionRange::containsPoint(const PointF& point) const
@@ -173,6 +174,11 @@ mu::engraving::Segment* NotationSelectionRange::rangeStartSegment() const
     return startSegment;
 }
 
+mu::engraving::Box* NotationSelectionRange::rangeStartBox() const
+{
+    return score()->selection().startBox();
+}
+
 mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
 {
     mu::engraving::Segment* endSegment = score()->selection().endSegment();
@@ -186,4 +192,9 @@ mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
     }
 
     return endSegment;
+}
+
+mu::engraving::Box* NotationSelectionRange::rangeEndBox() const
+{
+    return score()->selection().endBox();
 }

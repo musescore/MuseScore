@@ -198,8 +198,8 @@ int Location::measure(const EngravingItem* e)
 
 int Location::graceIndex(const EngravingItem* e)
 {
-    if (e->isChord() || (e->explicitParent() && e->explicitParent()->isChord())) {
-        const Chord* ch = e->isChord() ? toChord(e) : toChord(e->explicitParent());
+    if (e->isChord() || (e->ownershipParent() && e->ownershipParent()->isChord())) {
+        const Chord* ch = e->isChord() ? toChord(e) : toChord(e->ownershipParent());
         if (ch->isGrace()) {
             return static_cast<int>(ch->graceIndex());
         }

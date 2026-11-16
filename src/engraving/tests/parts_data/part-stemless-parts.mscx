@@ -175,8 +175,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
-          <eid>F_F</eid>
           <style>title</style>
+          <eid>F_F</eid>
           <text>Stemless</text>
           </Text>
         </VBox>
@@ -589,14 +589,14 @@
           <eid>NB_NB</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>OB_OB</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>Stemless</text>
             </Text>
           <Text>
-            <eid>PB_PB</eid>
             <style>instrument_excerpt</style>
+            <eid>PB_PB</eid>
             <text>Flute</text>
             </Text>
           </VBox>
@@ -885,14 +885,14 @@
           <eid>3B_3B</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
+            <style>title</style>
             <eid>4B_4B</eid>
             <linkedTo>F_F</linkedTo>
-            <style>title</style>
             <text>Stemless</text>
             </Text>
           <Text>
-            <eid>5B_5B</eid>
             <style>instrument_excerpt</style>
+            <eid>5B_5B</eid>
             <text>Oboe</text>
             </Text>
           </VBox>

@@ -65,13 +65,13 @@ const std::vector<MarkerTypeTableItem> markerTypeTable {
 //   Marker
 //---------------------------------------------------------
 
-Marker::Marker(EngravingItem* parent)
+Marker::Marker(DummyParentOr<EngravingItem> parent)
     : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
     resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
-Marker::Marker(EngravingItem* parent, TextStyleType tid)
+Marker::Marker(DummyParentOr<EngravingItem> parent, TextStyleType tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
@@ -227,16 +227,16 @@ String Marker::accessibleInfo() const
 
 std::vector<LineF> Marker::dragAnchorLines() const
 {
-    Measure* measure = parentItem() ? toMeasure(parentItem()) : nullptr;
+    Measure* m = measure();
 
     std::vector<LineF> lines(TextBase::dragAnchorLines());
 
-    if (!measure || !isRightMarker()) {
+    if (!m || !isRightMarker()) {
         return lines;
     }
 
     for (LineF& l : lines) {
-        l.setP1(l.p1() + PointF(measure->width(), 0.0));
+        l.setP1(l.p1() + PointF(m->width(), 0.0));
     }
 
     return lines;

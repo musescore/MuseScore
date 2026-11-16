@@ -28,7 +28,7 @@
       <Staff>
         <eid>4XyViKqA39P_4XyViKqA39P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="violin">
@@ -81,7 +81,7 @@
       <Staff>
         <eid>6XyViKqA39P_6XyViKqA39P</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="viola">
@@ -135,8 +135,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>loH5ICWNZ7I_n5qV6oB/+CN</eid>
         <Text>
-          <eid>L0XPT6lQqQG_gxMhiKD23mI</eid>
           <style>title</style>
+          <eid>L0XPT6lQqQG_gxMhiKD23mI</eid>
           <text>tst_copy_symbol_list</text>
           </Text>
         </VBox>

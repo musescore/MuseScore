@@ -30,7 +30,6 @@ namespace mu::palette {
 class PaletteConfiguration;
 class PaletteProvider;
 class PaletteActionsController;
-class PaletteUiActions;
 class PaletteWorkspaceSetup;
 class PaletteModule : public muse::modularity::IModuleSetup
 {
@@ -62,7 +61,6 @@ public:
 private:
     std::shared_ptr<PaletteProvider> m_paletteProvider;
     std::shared_ptr<PaletteActionsController> m_actionsController;
-    std::shared_ptr<PaletteUiActions> m_paletteUiActions;
     std::shared_ptr<PaletteWorkspaceSetup> m_paletteWorkspaceSetup;
 };
 }

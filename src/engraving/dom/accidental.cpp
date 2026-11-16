@@ -243,9 +243,15 @@ AccidentalVal sym2accidentalVal(SymId id)
 //   Accidental
 //---------------------------------------------------------
 
-Accidental::Accidental(EngravingItem* parent)
+Accidental::Accidental(DummyParentOr<EngravingItem> parent)
     : EngravingItem(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
+}
+
+Note* Accidental::note() const
+{
+    EngravingObject* owner = ownershipParent();
+    return owner && owner->isNote() ? toNote(owner) : nullptr;
 }
 
 //---------------------------------------------------------
@@ -268,7 +274,8 @@ SymId Accidental::symId() const
 
 bool Accidental::parentNoteHasParentheses() const
 {
-    return explicitParent() && parentItem()->isNote() && toNote(parentItem())->parenthesisInfo();
+    const EngravingObject* owner = ownershipParent();
+    return owner && owner->isNote() && toNote(owner)->parenthesisInfo();
 }
 
 //---------------------------------------------------------
@@ -392,7 +399,7 @@ void Accidental::setAccidentalType(AccidentalType t)
 
 void Accidental::computeMag()
 {
-    double m = explicitParent() ? parentItem()->mag() : 1.0;
+    double m = layoutParent() ? layoutParent()->mag() : 1.0;
     if (isSmall()) {
         m *= style().styleD(Sid::smallNoteMag);
     }

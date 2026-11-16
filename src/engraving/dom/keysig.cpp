@@ -25,6 +25,7 @@
 #include "types/typesconv.h"
 
 #include "masterscore.h"
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -44,7 +45,7 @@ namespace mu::engraving {
 //   KeySig
 //---------------------------------------------------------
 
-KeySig::KeySig(Segment* s)
+KeySig::KeySig(DummyParentOr<Segment> s)
     : EngravingItem(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
     m_showCourtesy = true;
@@ -113,10 +114,11 @@ void KeySig::setKey(Key concertKey)
     KeySigEvent e;
     e.setConcertKey(concertKey);
     if (staff() && !style().styleB(Sid::concertPitch)) {
-        Interval v = staff()->part()->instrument(tick())->transpose();
+        const Part* part = staff()->originPart(tick());
+        Interval v = part->instrument(tick())->transpose();
         if (!v.isZero()) {
             v.flip();
-            Key transposedKey = Transpose::transposeKey(concertKey, v, staff()->part()->preferSharpFlat());
+            Key transposedKey = Transpose::transposeKey(concertKey, v, part->preferSharpFlat());
             e.setKey(transposedKey);
         }
     }

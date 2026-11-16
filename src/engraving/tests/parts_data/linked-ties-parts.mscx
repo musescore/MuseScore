@@ -386,8 +386,8 @@
           <eid>0_0</eid>
           <linkedTo>v_v</linkedTo>
           <Text>
-            <eid>1_1</eid>
             <style>instrument_excerpt</style>
+            <eid>1_1</eid>
             <text>Flute</text>
             </Text>
           </VBox>

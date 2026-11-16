@@ -44,7 +44,7 @@ static const ElementStyle mmRestRangeStyle {
     { Sid::mmRestRangeTextStyle, Pid::TEXT_STYLE }
 };
 
-MMRestRange::MMRestRange(Measure* parent)
+MMRestRange::MMRestRange(DummyParentOr<Measure> parent)
     : MeasureNumberBase(ElementType::MMREST_RANGE, parent, TextStyleType::MMREST_RANGE)
 {
     initElementStyle(&mmRestRangeStyle);

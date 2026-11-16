@@ -48,7 +48,7 @@ TEST_F(Engraving_BreathTests, breath)
     String reference2(BREATH_DATA_DIR + u"breath02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     score->doLayout();
 
@@ -57,7 +57,7 @@ TEST_F(Engraving_BreathTests, breath)
         score->cmdSelectAll();
         for (EngravingItem* e : score->selection().elements()) {
             EditData dd(0);
-            Breath* b = Factory::createBreath(score->dummy()->segment());
+            Breath* b = Factory::createBreath(score->dummy());
             b->setSymId(SymId::breathMarkComma);
             dd.dropElement = b;
             if (e->acceptDrop(dd)) {

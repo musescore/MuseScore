@@ -220,6 +220,7 @@ private:
     // functions
     void addError(const muse::String& error);        // Add an error to be shown in the GUI
     void setExporterSoftware(muse::String& exporter);
+    void setExporterStyles();
 
     // generic pass 1 data
     muse::XmlStreamReader m_e;

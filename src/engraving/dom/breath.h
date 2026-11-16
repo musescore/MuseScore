@@ -59,7 +59,7 @@ public:
     double pause() const { return m_pause; }
     void setPause(double v) { m_pause = v; }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -76,14 +76,10 @@ public:
 
     static const std::vector<BreathType> BREATH_LIST;
 
-protected:
-    void added() override;
-    void removed() override;
-
 private:
 
     friend class Factory;
-    Breath(Segment* parent);
+    Breath(DummyParentOr<Segment> parent);
 
     double m_pause = 0.0;
     SymId m_symId = SymId::breathMarkComma;

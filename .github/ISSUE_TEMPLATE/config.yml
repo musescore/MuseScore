@@ -1,10 +1,7 @@
 contact_links:
-  - name: MuseSounds issue
-    url: https://support.musehub.com/hc/en-gb/requests/new
-    about: Report playback issues specific to MuseSounds.
-  - name: MuseHub issue
+  - name: MuseHub or MuseSounds issue
     url: https://support.musehub.com/
-    about: Learn how to install apps and sounds via MuseHub.
+    about: Get information and support for MuseHub apps and sounds
   - name: Support forum
     url: https://musescore.org/en/forum/6
     about: Get help solving a problem or checking if something is a bug in MuseScore Studio.

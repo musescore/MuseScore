@@ -31,6 +31,7 @@
 
 #include "ui/view/iconcodes.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
 
@@ -39,10 +40,12 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
-#include "notationscene/notationcommands.h"
 
 #include "project/inotationproject.h" // IWYU pragma: keep
 #include "project/iprojectaudiosettings.h"
+
+#include "notationscene/notationcommands.h"
+#include "palette/palettecommands.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
@@ -51,9 +54,9 @@ static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
-using namespace muse::actions;
 using namespace muse::ui;
 using namespace mu::notation;
+using namespace mu::palette;
 
 static const std::unordered_map<PercussionPanelPadModel::PadAction, NoteAddingMode> WRITE_ACTION_MAP = {
     { PercussionPanelPadModel::PadAction::TRIGGER_STANDARD, NoteAddingMode::NextChord },
@@ -325,7 +328,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 
 void PercussionPanelModel::customizeKit()
 {
-    dispatcher()->dispatch("customize-kit");
+    commandDispatcher()->dispatch(OPEN_CUSTOMIZE_KIT_COMMAND);
 }
 
 void PercussionPanelModel::onCurrentNotationChanged()
@@ -541,7 +544,7 @@ void PercussionPanelModel::playPitch(int pitch)
     const NoteInputState& inputState = interaction()->noteInput()->state();
     std::shared_ptr<Chord> chord = PercussionUtilities(iocContext()).getDrumNoteForPreview(m_padListModel->drumset(), pitch);
 
-    chord->setParent(inputState.segment());
+    chord->setOwnershipParent(inputState.segment());
     chord->setTrack(inputState.track());
 
     playbackController()->playElements({ chord.get() });

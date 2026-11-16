@@ -26,14 +26,15 @@
 
 #include "defer.h"
 
-#include "style/style.h"
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "chord.h"
 #include "note.h"
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
-#include "capo.h"
+
+#include "types/types.h"
 
 using namespace mu;
 
@@ -194,7 +195,7 @@ void StringData::fretChords(Chord* chord) const
     int count = 0;
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         sortChordNotes(sortedNotes, chord, &count);
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
@@ -354,7 +355,7 @@ int StringData::frettedStrings() const
 
 int StringData::pitchOffsetAt(const Staff* staff)
 {
-    return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
+    return -(staff ? staff->originPart(Part::MAIN_INSTRUMENT_TICK)->instrument()->transpose().chromatic : 0);
 }
 
 int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
@@ -362,7 +363,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
     if (!staff) {
         return 0;
     }
-    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int transp = staff->originPart(tick)->instrument(tick)->transpose().chromatic;
     int offset = -transp + staff->pitchOffset(tick);
     const CapoParams& capo = staff->capo(tick);
     if (capo.active) {
@@ -383,7 +384,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick, int stri
     if (!staff) {
         return 0;
     }
-    int transp = staff->part()->instrument(tick)->transpose().chromatic;
+    int transp = staff->originPart(tick)->instrument(tick)->transpose().chromatic;
     int offset = -transp + staff->pitchOffset(tick);
     const CapoParams& capo = staff->capo(tick);
     if (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)string)) {
@@ -763,7 +764,7 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
 {
     bool useSameString = chord->configuration()->preferSameStringForTranspose();
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
-    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
+    int transp = chord->staff() ? chord->originPart()->instrument(chord->tick())->transpose().chromatic : 0;
     int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
 
     if (useSameString) {

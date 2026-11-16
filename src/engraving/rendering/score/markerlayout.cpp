@@ -22,11 +22,12 @@
 
 #include "markerlayout.h"
 #include "layoutcontext.h"
-#include "tlayout.h"
 #include "textlayout.h"
 #include "autoplace.h"
 
+#include "../dom/barline.h"
 #include "../dom/marker.h"
+#include "../dom/measure.h"
 
 using namespace mu::engraving::rendering::score;
 
@@ -37,7 +38,7 @@ void MarkerLayout::layoutMarker(Marker* item, TextBase::LayoutData* ldata, Layou
     double customTextOffset = computeCustomTextOffset(item, ldata, ctx);
     ldata->moveX(-customTextOffset);
 
-    Measure* measure = item->parentItem() ? toMeasure(item->parentItem()) : nullptr;
+    Measure* measure = item->measure();
     if (measure && item->autoplace()) {
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(ldata->isSetBbox());
@@ -49,7 +50,7 @@ void MarkerLayout::layoutMarker(Marker* item, TextBase::LayoutData* ldata, Layou
 
 void MarkerLayout::doLayoutMarker(Marker* item, TextBase::LayoutData* ldata, LayoutContext& ctx)
 {
-    Measure* measure = toMeasure(item->parentItem());
+    Measure* measure = item->measure();
     IF_ASSERT_FAILED(measure) {
         LOGD() << "Marker has no measure";
     }

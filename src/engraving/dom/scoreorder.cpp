@@ -408,7 +408,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
         staff_idx_t staffIdx { 0 };
         const bool isMultiStaffInstrument = instrTemplate->staffCount > 1;
-        const int partStaffCount = part->nstaves();
+        const size_t partStaffCount = part->nstaves();
 
         const int templateBracketSpan = std::accumulate(instrTemplate->bracketSpan, instrTemplate->bracketSpan + MAX_STAVES, 0);
         const bool bracketSpansAllStaves = templateBracketSpan == (int)instrTemplate->staffCount;
@@ -430,7 +430,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
             // The number of staves could differ from the template
             // Use template spans if span doesn't cover whole set of staves (eg. organ), otherwise cover all staves
             if (partStaffCount > 1) {
-                int bracketSpan = bracketSpansAllStaves ? partStaffCount : instrTemplate->bracketSpan[staffIdx];
+                size_t bracketSpan = bracketSpansAllStaves ? partStaffCount : instrTemplate->bracketSpan[staffIdx];
                 EditStaffBrackets::undoAddBracket(score, staff, 0, instrTemplate->bracket[staffIdx], bracketSpan);
 
                 int barlineSpan = instrTemplate->barlineSpan[barlineSpansAllStaves - 1 ? 0 : staffIdx];

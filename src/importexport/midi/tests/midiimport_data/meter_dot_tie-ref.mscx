@@ -94,31 +94,37 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
+          <Tempo>
+            <tempo>1.666667</tempo>
             <eid>G_G</eid>
+            <visible>0</visible>
+            <text><sym>metNoteQuarterUp</sym> = 100</text>
+            </Tempo>
+          <Chord>
+            <eid>H_H</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>100</velocity>
               </Note>
             </Chord>
           <Beam>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <l1>-12</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <Tie>
-                <startElement>H_H</startElement>
-                <endElement>K_K</endElement>
-                <eid>L_L</eid>
+                <startElement>I_I</startElement>
+                <endElement>L_L</endElement>
+                <eid>M_M</eid>
                 <track>0</track>
                 </Tie>
               <pitch>67</pitch>
@@ -127,30 +133,30 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>100</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>100</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>100</velocity>

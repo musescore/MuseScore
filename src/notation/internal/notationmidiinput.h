@@ -31,7 +31,6 @@
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
 #include "inotationconfiguration.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
 
 #include "../inotationmidiinput.h"
@@ -49,7 +48,6 @@ class NotationMidiInput : public INotationMidiInput, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
 public:
     NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack,

@@ -25,14 +25,14 @@
 
 #include "translation.h"
 
-#include "internal/notationuiactions.h"
+#include "noteinputbarmodel.h"
 
 #include "log.h"
 
 using namespace mu::notation;
 using namespace muse::ui;
 using namespace muse::uicomponents;
-using namespace muse::actions;
+using namespace muse::rcommand;
 
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
@@ -45,13 +45,18 @@ void NoteInputBarCustomiseModel::load()
 {
     TRACEFUNC;
 
-    QList<Item*> items;
+    ItemList items;
 
-    ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
+    ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
-        const UiAction& action = actionsRegister()->action(item.action);
-        items << makeItem(action, item.show);
+        if (item.isSeparator()) {
+            items << makeSeparatorItem();
+        } else if (item.intent == NoteInputBarModel::CROSS_STAFF_BEAMING_SUBITEMS || item.intent == NoteInputBarModel::TUPLET_SUBITEMS) {
+            items << makeServiceItem(item.intent, item.show);
+        } else {
+            items << makeCommandItem(item.intent, item.show);
+        }
     }
 
     setItems(items);
@@ -208,16 +213,29 @@ void NoteInputBarCustomiseModel::updateAddSeparatorAvailability()
     setIsAddSeparatorAvailable(addingAvailable);
 }
 
-NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& action, bool checked)
+NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeServiceItem(const std::string& intent, bool checked)
 {
-    if (action.code.empty()) {
-        return makeSeparatorItem();
-    }
-
+    const NoteInputBarModel::ServiceItemInfo info = NoteInputBarModel::serviceItemInfo(intent);
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::ACTION, this);
-    item->setId(QString::fromStdString(action.code));
-    item->setTitle(action.title.qTranslatedWithoutMnemonic());
-    item->setIcon(action.iconCode);
+    item->setId(QString::fromStdString(intent));
+    item->setTitle(info.title.qTranslatedWithoutMnemonic());
+    item->setIcon(info.icon);
+    item->setChecked(checked);
+
+    connect(item, &NoteInputBarCustomiseItem::checkedChanged, this, [this](bool) {
+        saveActions();
+    });
+
+    return item;
+}
+
+NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeCommandItem(const std::string& intent, bool checked)
+{
+    const CommandInfo& info = commandsRegister()->commandInfo(Command(intent));
+    NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::ACTION, this);
+    item->setId(QString::fromStdString(info.command.toString()));
+    item->setTitle(info.title.qTranslatedWithoutMnemonic());
+    item->setIcon(info.decoration.iconCode);
     item->setChecked(checked);
 
     connect(item, &NoteInputBarCustomiseItem::checkedChanged, this, [this](bool) {
@@ -240,14 +258,14 @@ void NoteInputBarCustomiseModel::saveActions()
     TRACEFUNC;
 
     ToolConfig config;
-    for (const Item* item : items()) {
+    for (const QObject* item : items()) {
         auto customiseItem = dynamic_cast<const NoteInputBarCustomiseItem*>(item);
         if (!customiseItem) {
             continue;
         }
 
         ToolConfig::Item citem;
-        citem.action = customiseItem->id().toStdString();
+        citem.intent = customiseItem->id().toStdString();
         citem.show = customiseItem->checked();
         config.items.append(citem);
     }

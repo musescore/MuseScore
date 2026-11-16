@@ -1,5 +1,5 @@
 {
-    "uri": "musescore://extensions/colornotes",
+    "uri": "extension://notation/colornotes",
     "type": "macros",
     "title": "Color Notes",
     "description": "This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention",

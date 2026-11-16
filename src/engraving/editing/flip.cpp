@@ -162,8 +162,8 @@ void Flip::flip(Transaction&, Score* score)
                 DirectionV dir = tuplet->isUp() ? DirectionV::DOWN : DirectionV::UP;
                 tuplet->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(dir), PropertyFlags::UNSTYLED);
             });
-        } else if (e->isNoteDot() && e->explicitParent()->isNote()) {
-            Note* note = toNote(e->explicitParent());
+        } else if (e->isNoteDot() && e->ownershipParent()->isNote()) {
+            Note* note = toNote(e->ownershipParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
         } else if (e->isChordBracket()) {
@@ -272,7 +272,6 @@ void Flip::flip(Transaction&, Score* score)
                             double oldY = off.y() - oldDefaultY;
                             off.ry() = newDefaultY - oldY;
                             ss->undoChangeProperty(Pid::OFFSET, off);
-                            ss->setOffsetChanged(false);
                         }
                     }
                 } else if (!ee->offset().isNull()) {
@@ -280,7 +279,6 @@ void Flip::flip(Transaction&, Score* score)
                     double oldY = off.y() - oldDefaultY;
                     off.ry() = newDefaultY - oldY;
                     ee->undoChangeProperty(Pid::OFFSET, off);
-                    ee->setOffsetChanged(false);
                 }
             });
         }

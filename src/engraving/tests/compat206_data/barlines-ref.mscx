@@ -453,8 +453,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>S_S</eid>
         <Text>
-          <eid>T_T</eid>
           <style>title</style>
+          <eid>T_T</eid>
           <text>barlines</text>
           </Text>
         </VBox>

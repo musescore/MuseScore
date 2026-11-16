@@ -27,7 +27,6 @@
 #include "dom/spanner.h"
 #include "dom/trill.h"
 #include "dom/pedal.h"
-#include "dom/tempo.h"
 
 #include "playback/utils/pitchutils.h"
 #include "playback/filters/spannerfilter.h"

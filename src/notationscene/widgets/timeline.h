@@ -27,12 +27,13 @@
 #include <QGraphicsView>
 #include <QSplitter>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotation.h"
-#include "async/asyncable.h"
-#include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
+#include "rcommand/icommanddispatcher.h"
 
 namespace mu::engraving {
 class Measure;
@@ -114,7 +115,7 @@ class Timeline : public QGraphicsView, public muse::Contextable, public muse::as
     Q_OBJECT
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:

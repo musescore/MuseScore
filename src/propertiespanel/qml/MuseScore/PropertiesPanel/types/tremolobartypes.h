@@ -24,20 +24,21 @@
 
 #include <qqmlintegration.h>
 
+#include "engraving/dom/tremolobar.h"
+
 namespace mu::propertiespanel {
 namespace TremoloBarTypes {
 Q_NAMESPACE;
 QML_ELEMENT;
 
-//! NOTE: must be in synch with mu::engraving::TremoloBarType
 enum class TremoloBarType {
-    TYPE_DIP = 0,
-    TYPE_DIVE,
-    TYPE_RELEASE_UP,
-    TYPE_INVERTED_DIP,
-    TYPE_RETURN,
-    TYPE_RELEASE_DOWN,
-    TYPE_CUSTOM
+    TYPE_DIP = int(engraving::TremoloBarType::DIP),
+    TYPE_DIVE = int(engraving::TremoloBarType::DIVE),
+    TYPE_RELEASE_UP = int(engraving::TremoloBarType::RELEASE_UP),
+    TYPE_INVERTED_DIP = int(engraving::TremoloBarType::INVERTED_DIP),
+    TYPE_RETURN = int(engraving::TremoloBarType::RETURN),
+    TYPE_RELEASE_DOWN = int(engraving::TremoloBarType::RELEASE_DOWN),
+    TYPE_CUSTOM = int(engraving::TremoloBarType::CUSTOM)
 };
 
 Q_ENUM_NS(TremoloBarType)

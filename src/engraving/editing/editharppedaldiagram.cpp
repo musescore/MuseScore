@@ -51,7 +51,7 @@ void ChangeHarpPedalState::flip()
 
 std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
 {
-    Part* part = diagram->part();
+    Part* part = diagram->originPart();
     std::vector<EngravingObject*> objs{ diagram };
     if (!part) {
         return objs;
@@ -87,7 +87,7 @@ void ChangeSingleHarpPedal::flip()
 
 std::vector<EngravingObject*> ChangeSingleHarpPedal::objectItems() const
 {
-    Part* part = diagram->part();
+    Part* part = diagram->originPart();
     std::vector<EngravingObject*> objs{ diagram };
     if (!part) {
         return objs;

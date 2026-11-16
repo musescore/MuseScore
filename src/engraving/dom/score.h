@@ -35,31 +35,26 @@
 #include "global/types/ret.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingfontsprovider.h"
-#include "../ipalettescoreprovider.h"
-#include "../iengravingcontextconfiguration.h"
 
 #include "../automation/automationtypes_fwd.h"
 #include "../types/constants.h"
 
-#include "../rendering/iscorerenderer.h"
 #include "../rendering/layoutoptions.h"
 #include "../rendering/paddingtable.h"
 
 #include "../style/style.h"
 #include "../style/pagestyle.h"
 
-#include "../compat/midi/compatmidirenderinternal.h"
-
 #include "../editing/cmd.h"
 
 #include "chordlist.h"
+#include "dummyparent.h"
 #include "guitarbend.h"
 #include "input.h"
 #include "mscore.h"
 #include "property.h"
-#include "rootitem.h"
 #include "scoreorder.h"
+#include "segment.h"
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"
@@ -128,7 +123,9 @@ class Page;
 class Part;
 class RehearsalMark;
 class RepeatList;
+struct RepeatSegmentInfo;
 class Rest;
+class RootItem;
 class Score;
 class IEngravingFont;
 class Segment;
@@ -137,7 +134,7 @@ class Spanner;
 class Staff;
 class System;
 class TDuration;
-class TempoMap;
+class TempoTimeline;
 class Text;
 class TimeSig;
 class TimeSigMap;
@@ -281,11 +278,11 @@ class Score : public EngravingObject, public muse::Contextable
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    muse::GlobalInject<IEngravingConfiguration> configuration;
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<IEngravingContextConfiguration> contextConfiguration = { this };
-    muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
-    muse::ContextInject<IPaletteScoreProvider> paletteScoreProvider = { this };
+    muse::GlobalInject<class IEngravingConfiguration> configuration;
+    muse::GlobalInject<class IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<class IEngravingContextConfiguration> contextConfiguration;
+    muse::ContextInject<class IEngravingElementsProvider> elementsProvider;
+    muse::ContextInject<class IPaletteScoreProvider> paletteScoreProvider;
     // internal
     muse::GlobalInject<rendering::IScoreRenderer> renderer;
 
@@ -306,7 +303,7 @@ public:
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
     RootItem* rootItem() const { return m_rootItem; }
-    compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
+    DummyParent* dummy() const { return m_dummy; }
 
     ShadowNote* shadowNote() const;
 
@@ -327,15 +324,9 @@ public:
     void cmdRemoveStaff(staff_idx_t staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
-    void setResetAutoplace() { m_resetAutoplace = true; }
-    void setResetCrossBeams() { m_resetCrossBeams = true; }
 
     Excerpt* excerpt() { return m_excerpt; }
     void setExcerpt(Excerpt* e) { m_excerpt = e; }
-
-    // methods for resetting elements for pre-4.0 score migration
-    void resetAutoplace();
-    void resetCrossBeams();
 
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
@@ -371,7 +362,8 @@ public:
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
     const std::vector<Staff*> systemObjectStavesWithTopStaff() const;
 
-    Measure* pos2measure(const PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, PointF* offset) const;
+    MeasureBase* pos2measureBase(const PointF&, bool scanMeasuresOnly, staff_idx_t* staffIdx, int* pitch, Segment**, PointF* offset) const;
+    Measure* pos2measure(const PointF& p, staff_idx_t* staffIdx, int* pitch, Segment** seg, PointF* offset) const;
     void dragPosition(const PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5, bool allowTimeAnchor = false) const;
 
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false,
@@ -550,9 +542,9 @@ public:
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false, SegmentType segType = SegmentType::ChordRest) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
-    void setUpTempoMapLater();
-    void setUpTempoMap();
-    bool needSetUpTempoMap() const { return m_needSetUpTempoMap; }
+    void updateTicksAndTimeSigMap();
+    void updateTicksAndTimeSigMapLater() { m_needUpdateTicksAndTimeSigMap = true; }
+    bool needUpdateTicksAndTimeSigMap() const { return m_needUpdateTicksAndTimeSigMap; }
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -627,15 +619,11 @@ public:
 
     void cmdConcertPitchChanged(bool);
 
-    virtual TempoMap* tempomap() const;
     virtual TimeSigMap* sigmap() const;
 
-    void setTempo(Segment*, BeatsPerSecond bps);
-    void setTempo(const Fraction& tick, BeatsPerSecond bps);
-    void removeTempo(const Fraction& tick);
-    void setPause(const Fraction& tick, double seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
     BeatsPerSecond multipliedTempo(const Fraction& tick) const;
+    BeatsPerSecond multipliedTempoAtUtick(int utick) const;
 
     Text* getText(TextStyleType subtype) const;
 
@@ -649,10 +637,10 @@ public:
     void lassoSelectEnd();
 
     Page* searchPage(const PointF&) const;
-    std::vector<System*> searchSystem(const PointF& p, const System* preferredSystem = nullptr, double spacingFactor = 0.5,
-                                      double preferredSpacingFactor = 1.0) const;
-    Measure* searchMeasure(const PointF& p, const System* preferredSystem = nullptr, double spacingFactor = 0.5,
-                           double preferredSpacingFactor = 1.0) const;
+    std::vector<System*> searchSystem(const PointF& p, bool includeMeasurelessSystems = true, const System* preferredSystem = nullptr,
+                                      double spacingFactor = 0.5, double preferredSpacingFactor = 1.0) const;
+    MeasureBase* searchMeasureBase(const PointF& p, bool scanMeasuresOnly = false, const System* preferredSystem = nullptr,
+                                   double spacingFactor = 0.5, double preferredSpacingFactor = 1.0) const;
 
     bool getPosition(Position* pos, const PointF&, voice_idx_t voice) const;
 
@@ -667,11 +655,19 @@ public:
     const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+    /// Read-only snapshot, safe to call mid-edit (e.g. before a structural change invalidates the current repeatList)
+    std::vector<RepeatSegmentInfo> repeatSegmentInfoList(bool expandRepeats) const;
+    /// Always the repeat-expanded list, regardless of the current playback setting
+    const RepeatList& expandedRepeatList() const;
 
     void invalidateRepeatList();
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
+
+    const TempoTimeline& tempoTimeline() const;
+    const TempoTimeline& tempoTimeline(bool expandRepeats) const;
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }
@@ -800,7 +796,7 @@ public:
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     ChordRest* findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const;
     ChordRest* findChordRestEndingBeforeTickInTrack(const Fraction& tick, track_idx_t trackIdx) const;
-    void insertTime(const Fraction& tickPos, const Fraction& tickLen);
+    void insertTime(const Fraction& tickPos, const Fraction& tickLen, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
@@ -846,10 +842,8 @@ public:
 
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
-    void createPaddingTable();
-    const PaddingTable& paddingTable() const { return m_paddingTable; }
-
-    void autoUpdateSpatium();
+    void updatePaddingTables();
+    const PaddingTables& paddingTables() const { return m_paddingTables; }
 
     const RangeLocks* systemLocks() const { return &m_systemLocks; }
     void addSystemLock(const RangeLock* lock);
@@ -867,7 +861,7 @@ public:
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
     virtual AutomationDataConstPtr automationData() const;
-    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true);
 
     friend class Chord;
 
@@ -878,7 +872,7 @@ public:
     size_t bracketLevels(staff_idx_t staffIdx) const;
 
 protected:
-    virtual void onTimeInserted(const Fraction& tick, const Fraction& len);
+    virtual void onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);
@@ -914,11 +908,9 @@ private:
 
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
+    bool tryExtendRangeSelectionToElem(EngravingItem* e);
 
-    void resetTempo();
-    void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
-    void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
+    void rebuildTimeSigMap(Measure* m);
 
     void doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo = true);
     void doUndoResetPartialSlur(Slur* slur, bool undo);
@@ -991,16 +983,14 @@ private:
     bool m_printing = false;                // True if we are drawing to a printer
     bool m_savedCapture = false;            // True if we saved an image capture
     bool m_corrupted = false;
+    bool m_needUpdateTicksAndTimeSigMap = false;
 
     ShowAnchors m_showAnchors;
 
     ScoreOrder m_scoreOrder;                 // used for score ordering
-    bool m_resetAutoplace = false;
-    bool m_resetCrossBeams = false;
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
-    bool m_needSetUpTempoMap = true;
 
     std::map<String, String> m_metaTags;
 
@@ -1008,6 +998,7 @@ private:
     SelectionFilter m_selectionFilter;
 
     RootItem* m_rootItem = nullptr;
+    DummyParent* m_dummy = nullptr;
     LayoutOptions m_layoutOptions;
 
     muse::async::Channel<EngravingItem*> m_elementDestroyed;
@@ -1018,7 +1009,7 @@ private:
 
     muse::async::Channel<float> m_layoutProgressChannel;
 
-    PaddingTable m_paddingTable;
+    PaddingTables m_paddingTables;
     double m_minimumPaddingUnit = 0.0;
 };
 

@@ -25,6 +25,7 @@
 #include <QTransform>
 #include <QVariant>
 
+#include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/system.h"
@@ -153,7 +154,7 @@ void NotationRegionsBeingProcessedModel::load()
         setRegions(calculateRegions(m_tracksBeingProcessed));
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         onIsPlayingChanged();
     });
 
@@ -197,7 +198,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
 {
-    return globalContext()->playbackState()->isPlaying();
+    return playbackController()->isPlaying();
 }
 
 void NotationRegionsBeingProcessedModel::clear()
@@ -348,8 +349,8 @@ void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackI
 
     for (const InputProcessingProgress::ChunkInfo& chunk : chunks) {
         TickRange range;
-        range.tickFrom = master->playback()->secToPlayedTick(chunk.start);
-        range.tickTo = master->playback()->secToPlayedTick(chunk.end);
+        range.tickFrom = master->playback()->secToTick(chunk.start);
+        range.tickTo = master->playback()->secToTick(chunk.end);
 
         if (!muse::contains(info.ranges, range)) {
             info.ranges.push_back(range);

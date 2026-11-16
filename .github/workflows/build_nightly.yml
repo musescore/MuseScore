@@ -47,7 +47,6 @@ jobs:
               inputs: {
                 platforms: 'linux_arm64 linux_x64 macos windows_x64 windows_portable',
                 build_mode: 'nightly',
-                publish: 'on',
-                sentry_project: 'sandbox'
+                publish: 'on'
               }
             })

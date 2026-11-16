@@ -65,11 +65,11 @@ private:
 
 class TimeTickAnchor : public EngravingItem
 {
-    TimeTickAnchor(Segment* parent);
+    TimeTickAnchor(DummyParentOr<Segment> parent);
     friend class Factory;
 
 public:
-    Segment* segment() const { return toSegment(parentItem()); }
+    Segment* segment() const { return toSegment(ownershipParentItem()); }
 
     TimeTickAnchor* clone() const override { return new TimeTickAnchor(*this); }
 

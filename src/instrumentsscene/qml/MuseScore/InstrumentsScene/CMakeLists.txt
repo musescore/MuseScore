@@ -76,5 +76,7 @@ qt_add_qml_module(instrumentsscene_qml
 
 fixup_qml_module_dependencies(instrumentsscene_qml)
 
+target_link_libraries(instrumentsscene_qml PRIVATE muse::uicomponents_qml)
+
 # Necessary for the auto-generated sources
 target_include_directories(instrumentsscene_qml PRIVATE internal)

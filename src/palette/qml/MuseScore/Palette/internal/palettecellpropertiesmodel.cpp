@@ -66,7 +66,9 @@ double PaletteCellPropertiesModel::xOffset() const
 
 double PaletteCellPropertiesModel::yOffset() const
 {
-    return m_currentConfig.yOffset;
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    return -m_currentConfig.yOffset;
 }
 
 double PaletteCellPropertiesModel::scaleFactor() const
@@ -105,7 +107,9 @@ void PaletteCellPropertiesModel::setYOffset(double yOffset)
         return;
     }
 
-    m_currentConfig.yOffset = yOffset;
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    m_currentConfig.yOffset = -yOffset;
     setConfig(m_currentConfig);
 }
 

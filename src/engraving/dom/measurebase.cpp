@@ -22,9 +22,15 @@
 
 #include "measurebase.h"
 
+#include "../editing/editpagelocks.h"
+#include "../editing/editsystemlocks.h"
+
+#include "actionicon.h"
+#include "box.h"
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
+#include "page.h"
 #include "score.h"
 #include "staff.h"
 #include "stafftypechange.h"
@@ -39,9 +45,28 @@ using namespace mu::engraving;
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(const ElementType& type, System* system)
-    : EngravingItem(type, system)
+MeasureBase::MeasureBase(const ElementType& type, Score* parent)
+    : EngravingItem(type, parent)
 {
+}
+
+void MeasureBase::setOwnershipParent(Score* score)
+{
+    EngravingItem::setOwnershipParent(score);
+}
+
+void MeasureBase::setOwnershipParent(Box* box)
+{
+    EngravingItem::setOwnershipParent(box);
+}
+
+EngravingItem* MeasureBase::layoutParent() const
+{
+    if (m_system) {
+        return m_system;
+    }
+    // e.g. a horizontal frame nested inside a vertical frame is placed within its parent frame
+    return EngravingItem::layoutParent();
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -171,6 +196,114 @@ Page* MeasureBase::nextPage() const
     return nextPage != curPage ? nextPage : nullptr;
 }
 
+bool MeasureBase::acceptDrop(EditData& data) const
+{
+    const EngravingItem* e = data.dropElement;
+    if (!e || !system() || !page()) {
+        return false;
+    }
+
+    if (e->isLayoutBreak()) {
+        return true;
+    }
+
+    if (e->isActionIcon()) {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::PAGE_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            return layoutMode == LayoutMode::PAGE;
+        }
+        case ActionIconType::SYSTEM_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            return layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM;
+        }
+        default: break;
+        }
+    }
+    return false;
+}
+
+EngravingItem* MeasureBase::drop(Transaction& tx, EditData& data)
+{
+    EngravingItem* e = data.dropElement;
+    if (!e || !system() || !page()) {
+        delete e;
+        return nullptr;
+    }
+    if (e->isLayoutBreak()) {
+        LayoutBreak* b = toLayoutBreak(e);
+        MeasureBase* mb = this;
+        if (isMeasure()) {
+            Measure* m = toMeasure(this);
+            if (m->isMMRest()) {
+                mb = m->mmRestLast();
+            }
+        }
+        switch (b->layoutBreakType()) {
+        case  LayoutBreakType::PAGE:
+            if (mb->pageBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+            }
+            break;
+        case  LayoutBreakType::LINE:
+            if (mb->lineBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setPageBreak(false);
+            }
+            break;
+        case  LayoutBreakType::SECTION:
+            if (mb->sectionBreak()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+            }
+            break;
+        case LayoutBreakType::NOBREAK:
+            if (mb->noBreak() || mb->isEndOfSystemLock() || mb->isEndOfPageLock()) {
+                delete b;
+                b = nullptr;
+            } else {
+                mb->setLineBreak(false);
+                mb->setPageBreak(false);
+            }
+            break;
+        }
+        if (b) {
+            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
+            }
+            b->setTrack(0);
+            b->setOwnershipParent(mb);
+            score()->undoAddElement(b);
+        }
+        mb->cleanupLayoutBreaks(true);
+        return b;
+    }
+    if (e->isActionIcon()) {
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::SYSTEM_LOCK:
+            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
+            break;
+        case ActionIconType::PAGE_LOCK:
+            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
+            break;
+        default:
+            LOGD("MeasureBase: cannot drop %s here", e->typeName());
+            break;
+        }
+    }
+    delete e;
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   add
 ///   Add new EngravingItem \a el to MeasureBase
@@ -178,8 +311,8 @@ Page* MeasureBase::nextPage() const
 
 void MeasureBase::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
-        e->setParent(this);
+    if (e->ownershipParent() != this) {
+        e->setOwnershipParent(this);
     }
 
     if (e->isLayoutBreak()) {
@@ -238,7 +371,6 @@ void MeasureBase::remove(EngravingItem* el)
             break;
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
-            score()->setPause(endTick(), 0);
             if (lb->startWithMeasureOne()) {
                 triggerLayoutToEnd();
             }
@@ -350,9 +482,9 @@ double MeasureBase::pause() const
 MeasureBase* MeasureBase::top() const
 {
     const MeasureBase* mb = this;
-    while (mb->explicitParent()) {
-        if (mb->explicitParent()->isMeasureBase()) {
-            mb = toMeasureBase(mb->explicitParent());
+    while (mb->ownershipParent()) {
+        if (mb->ownershipParent()->isMeasureBase()) {
+            mb = toMeasureBase(mb->ownershipParent());
         } else {
             break;
         }
@@ -506,7 +638,6 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(0);
-        lb->setParent(mb);
         score()->undoAddElement(lb);
     }
     cleanupLayoutBreaks(true);
@@ -889,10 +1020,10 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         m_first = nb;
     }
     if (nb->isBox()) {
-        nb->setParent(ob->system());
+        nb->setSystem(ob->system());
     }
     for (EngravingItem* e : nb->el()) {
-        e->setParent(nb);
+        e->setOwnershipParent(nb);
     }
 }
 
@@ -960,29 +1091,10 @@ MeasureBase* MeasureBaseList::firstMeasureBaseAtTick(int tick) const
 
     auto it = m_tickIndex.upper_bound(tick);
 
-    if (it == m_tickIndex.begin()) {
-        MeasureBase* mb = it->second;
-
-        return mb;
+    if (it != m_tickIndex.begin()) {
+        --it;
     }
-
-    --it;
-    for (;; --it) {
-        if (it == m_tickIndex.begin()) {
-            MeasureBase* mb = it->second;
-
-            return mb;
-        }
-
-        MeasureBase* mb = it->second;
-        if (!mb) {
-            break;
-        }
-
-        return mb;
-    }
-
-    return nullptr;
+    return it->second;
 }
 
 std::vector<MeasureBase*> MeasureBaseList::measureBasesAtTick(int tick) const

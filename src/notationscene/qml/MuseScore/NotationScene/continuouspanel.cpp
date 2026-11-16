@@ -269,7 +269,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
                 nameText->setSizeIsSpatiumDependent(true);
             }
 
-            nameText->setParent(seg);
+            nameText->setOwnershipParent(seg);
             nameText->setXmlText(staffName);
             nameText->setTrack(e->track());
             nameText->mutldata()->reset();
@@ -289,7 +289,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
                 clef->setTrack(e->track());
             }
 
-            clef->setParent(seg);
+            clef->setOwnershipParent(seg);
             engraving::ClefType currentClef = currentStaff->clef(tick);
             clef->setClefType(currentClef);
             clef->mutldata()->reset();
@@ -306,7 +306,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
                 keySig->setTrack(e->track());
             }
 
-            keySig->setParent(seg);
+            keySig->setOwnershipParent(seg);
             engraving::KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(tick);
             keySig->setKeySigEvent(currentKeySigEvent);
             keySig->mutldata()->reset();
@@ -321,7 +321,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
                 timeSig = engraving::Factory::createTimeSig(seg, ACCESSIBILITY_DISABLED);
                 timeSig->setTrack(e->track());
             }
-            timeSig->setParent(seg);
+            timeSig->setOwnershipParent(seg);
 
             // Try to get local time signature, if not, get the current measure one
             engraving::TimeSig* currentTimeSig = currentStaff->timeSig(tick);
@@ -345,7 +345,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
                 barLine->setTrack(e->track());
             }
 
-            barLine->setParent(seg);
+            barLine->setOwnershipParent(seg);
             barLine->setSpanStaff(currentStaff->barLineSpan());
             barLine->setSpanFrom(currentStaff->barLineFrom());
             barLine->setSpanTo(currentStaff->barLineTo());
@@ -446,7 +446,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
             // Staff lines
             engraving::StaffLines newStaffLines(*toStaffLines(e));
-            newStaffLines.setParent(seg->measure());
+            newStaffLines.setOwnershipParent(seg->measure());
             newStaffLines.setTrack(e->track());
             {
                 LayoutContext cntx(newStaffLines.score());

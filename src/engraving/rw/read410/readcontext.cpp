@@ -23,6 +23,7 @@
 #include "readcontext.h"
 
 #include "dom/linkedobjects.h"
+#include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/trill.h"
@@ -105,7 +106,7 @@ void ReadContext::setSpatium(double v)
     m_score->style().set(Sid::spatium, v);
 }
 
-compat::DummyElement* ReadContext::dummy() const
+DummyParent* ReadContext::dummy() const
 {
     return m_score->dummy();
 }

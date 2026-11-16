@@ -47,16 +47,16 @@ class Engraving_EarlymusicTests : public ::testing::Test
 TEST_F(Engraving_EarlymusicTests, earlymusic01)
 {
     MasterScore* score = ScoreRW::readScore(EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     score->doLayout();
 
     // go to first chord and verify crossMeasure values
     Measure* msr   = score->firstMeasure();
-    EXPECT_TRUE(msr);
+    ASSERT_TRUE(msr);
     Segment* seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0, 1));
-    EXPECT_TRUE(seg);
+    ASSERT_TRUE(seg);
     Chord* chord = toChord(seg->element(0));
-    EXPECT_TRUE(chord);
+    ASSERT_TRUE(chord);
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     EXPECT_EQ(chord->crossMeasure(), CrossMeasure::UNKNOWN);
     TDuration cmDur   = chord->crossMeasureDurationType();

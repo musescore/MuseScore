@@ -239,26 +239,40 @@
                 </GuitarBend>
               </Note>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>j_j</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>k_k</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>f_f</NoteEID>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
+              <Parenthesis>
+                <eid>l_l</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>m_m</eid>
+                </Parenthesis>
               <Notes>
                 <NoteEID>c_c</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <BarLine>
-            <eid>j_j</eid>
+            <eid>n_n</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>o_o</eid>
         <voice>
           <Rest>
-            <eid>l_l</eid>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

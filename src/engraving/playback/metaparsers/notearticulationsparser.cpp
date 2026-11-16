@@ -22,6 +22,7 @@
 
 #include "notearticulationsparser.h"
 
+#include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/spanner.h"
 #include "dom/laissezvib.h"

@@ -127,18 +127,18 @@
         <height>10</height>
         <eid>YRewe+1wtBJ_B/s5bHeD0yG</eid>
         <Text>
-          <eid>mtumnv/Rk/J_MQ5AaeMX/QE</eid>
           <style>title</style>
+          <eid>mtumnv/Rk/J_MQ5AaeMX/QE</eid>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>0Ki/39rH30G_a3j9vhraDbM</eid>
           <style>subtitle</style>
+          <eid>0Ki/39rH30G_a3j9vhraDbM</eid>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>DCv1Hr68jl_lU3VTe3ZRdM</eid>
           <style>composer</style>
+          <eid>DCv1Hr68jl_lU3VTe3ZRdM</eid>
           <text>Composer / arranger</text>
           </Text>
         </VBox>

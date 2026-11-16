@@ -38,7 +38,7 @@ namespace mu::engraving {
 //   LayoutBreak
 //---------------------------------------------------------
 
-Spacer::Spacer(Measure* parent)
+Spacer::Spacer(DummyParentOr<Measure> parent)
     : EngravingItem(ElementType::SPACER, parent)
 {
     m_spacerType = SpacerType::UP;
@@ -168,7 +168,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 
 void Spacer::triggerLayout() const
 {
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return;
     }
 

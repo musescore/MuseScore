@@ -22,12 +22,12 @@
 
 #pragma once
 
+#include "rcommand/commandtypes.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
 #include "notation/inotationconfiguration.h"
-#include "context/iglobalcontext.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
@@ -53,7 +53,6 @@ class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<IPlaybackController> playbackController = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -95,14 +94,14 @@ private:
     muse::uicomponents::MenuItem* makeInputPitchMenu();
 
     void updateActions();
-    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
 
-    bool isAdditionalAction(const muse::actions::ActionCode& actionCode) const;
+    bool isAdditionalCommand(const muse::rcommand::Command& command) const;
 
     muse::secs_t totalPlayTime() const;
     engraving::MeasureBeat measureBeat() const;
 
-    muse::ui::UiAction playAction() const;
+    muse::uicomponents::MenuItem* makePlayItem();
+    void updatePlayItem();
 
     void updatePlayPosition(muse::audio::secs_t secs);
 

@@ -25,6 +25,7 @@
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
 #include "../editing/transaction/transaction.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "arpeggio.h"
 #include "beam.h"
@@ -47,8 +48,8 @@ using namespace mu::engraving;
 using namespace muse::draw;
 
 namespace mu::engraving {
-SlurSegment::SlurSegment(System* parent, ElementType type)
-    : SlurTieSegment(type, parent)
+SlurSegment::SlurSegment(Slur* sp, ElementType type)
+    : SlurTieSegment(type, sp)
 {
 }
 
@@ -379,7 +380,7 @@ Slur::Slur(const Slur& s)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(EngravingItem* parent, ElementType type)
+Slur::Slur(DummyParentOr<EngravingItem> parent, ElementType type)
     : SlurTie(type, parent)
 {
 }

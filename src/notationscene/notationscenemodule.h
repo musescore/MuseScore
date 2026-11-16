@@ -28,7 +28,6 @@
 namespace mu::notation {
 class NotationSceneConfiguration;
 class NotationActionController;
-class NotationUiActions;
 class MidiInputOutputController;
 class NotationSceneModule : public muse::modularity::IModuleSetup
 {
@@ -53,11 +52,9 @@ public:
     void registerExports() override;
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
-    void onAllInited(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<NotationActionController> m_actionController;
-    std::shared_ptr<NotationUiActions> m_notationUiActions;
     std::shared_ptr<MidiInputOutputController> m_midiInputOutputController;
 };
 }

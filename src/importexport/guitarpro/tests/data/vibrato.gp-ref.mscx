@@ -197,6 +197,7 @@
       <Vibrato>
         <subtype>guitarVibrato</subtype>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/4</ticks>
         <eid>j_j</eid>
         <track>0</track>

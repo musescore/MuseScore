@@ -39,8 +39,7 @@ class TrillSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::TRILL_SEGMENT)
 
 public:
-    TrillSegment(Trill* sp, System* parent);
-    TrillSegment(System* parent);
+    TrillSegment(Trill* sp);
 
     Trill* trill() const { return (Trill*)spanner(); }
 
@@ -76,7 +75,7 @@ class Trill final : public SLine
     DECLARE_CLASSOF(ElementType::TRILL)
 
 public:
-    Trill(EngravingItem* parent);
+    Trill(DummyParentOr<EngravingItem> parent);
     Trill(const Trill& t);
 
     Trill* clone() const override { return new Trill(*this); }
@@ -84,7 +83,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     void remove(EngravingItem*) override;
 
     void setTrack(track_idx_t n) override;
@@ -105,7 +104,7 @@ public:
     Chord* cueNoteChord() const { return m_cueNoteChord; }
     void setCueNoteChord(Chord* c) { m_cueNoteChord = c; }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

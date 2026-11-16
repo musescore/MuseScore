@@ -41,7 +41,7 @@ public:
         Additional
     };
 
-    RehearsalMark(Segment* parent);
+    RehearsalMark(DummyParentOr<Segment> parent);
 
     bool isEditAllowed(EditData&) const override;
     bool allowTimeAnchor() const override { return false; }
@@ -49,7 +49,7 @@ public:
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     PropertyValue propertyDefault(Pid id) const override;
 

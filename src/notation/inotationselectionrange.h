@@ -28,9 +28,10 @@
 
 namespace mu::engraving {
 class EngravingItem;
-class Measure;
+class MeasureBase;
 class Part;
 class Segment;
+class Box;
 }
 
 namespace mu::notation {
@@ -42,17 +43,19 @@ public:
     virtual engraving::staff_idx_t startStaffIndex() const = 0;
     virtual engraving::Segment* rangeStartSegment() const = 0;
     virtual engraving::Fraction startTick() const = 0;
+    virtual engraving::Box* rangeStartBox() const = 0;
 
     virtual engraving::staff_idx_t endStaffIndex() const = 0;
     virtual engraving::Segment* rangeEndSegment() const = 0;
     virtual engraving::Fraction endTick() const = 0;
+    virtual engraving::Box* rangeEndBox() const = 0;
 
-    struct MeasureRange {
-        engraving::Measure* startMeasure = nullptr;
-        engraving::Measure* endMeasure = nullptr;
+    struct MeasureBaseRange {
+        engraving::MeasureBase* startMeasureBase = nullptr;
+        engraving::MeasureBase* endMeasureBase = nullptr;
     };
 
-    virtual MeasureRange measureRange() const = 0;
+    virtual MeasureBaseRange measureBaseRange() const = 0;
 
     virtual std::vector<const engraving::Part*> selectedParts() const = 0;
 

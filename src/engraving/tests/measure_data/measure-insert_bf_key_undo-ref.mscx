@@ -6,6 +6,7 @@
     <Style>
       <windsNameByGroup>0</windsNameByGroup>
       <vocalsNameByGroup>0</vocalsNameByGroup>
+      <lyricsStackingOrder>0</lyricsStackingOrder>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -44,7 +45,7 @@
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Instrument id="c-trumpet">

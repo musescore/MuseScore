@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTCONTEXT_DEV_H
-#define MU_ENGRAVING_LAYOUTCONTEXT_DEV_H
+
+#pragma once
 
 #include <vector>
 #include <set>
+#include <unordered_set>
 
 #include "../../types/fraction.h"
 #include "../../types/types.h"
@@ -54,8 +55,8 @@
 #endif
 
 namespace mu::engraving {
+class DummyParent;
 class EngravingItem;
-class RootItem;
 class MeasureBase;
 class Part;
 class Page;
@@ -75,10 +76,6 @@ class UndoableCommand;
 class EditData;
 
 class Selection;
-}
-
-namespace mu::engraving::compat {
-class DummyElement;
 }
 
 namespace mu::engraving::rendering::score {
@@ -200,8 +197,9 @@ public:
     ChordRest* findCR(Fraction tick, track_idx_t track);
 
     // Create/Remove
-    RootItem* rootItem() const;
-    compat::DummyElement* dummyParent() const;
+    const Score* score() const;
+    Score* score();
+    DummyParent* dummyParent() const;
     void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
@@ -216,9 +214,6 @@ public:
     const std::set<Spanner*>& unmanagedSpanners() const;
 
 private:
-    const Score* score() const;
-    Score* score();
-
     IGetScoreInternal* m_getScore = nullptr;
 };
 
@@ -251,6 +246,8 @@ public:
     int measureNumber() const { return m_measureNumber; }
 
     bool rangeDone() const { return m_rangeDone; }
+
+    const std::unordered_set<System*>& systemsNeedingCentering() const { return m_systemsNeedingCentering; }
 
     bool mustRecomputeHeadersFooters() const { return m_mustRecomputeHeadersFooters; }
 
@@ -287,9 +284,11 @@ public:
     void setPageOldMeasure(MeasureBase* m) { m_pageOldMeasure = m; }
     void setMeasureNumber(int n) { m_measureNumber = n; }
 
-    std::set<Spanner*>& processedSpanners() { return m_processedSpanners; }
-
     void setRangeDone(bool val) { m_rangeDone = val; }
+
+    void addSystemNeedingCentering(System* s) { m_systemsNeedingCentering.insert(s); }
+    void removeSystemNeedingCentering(System* s) { m_systemsNeedingCentering.erase(s); }
+    void clearSystemsNeedingCentering() { m_systemsNeedingCentering.clear(); }
 
     void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
 
@@ -320,9 +319,9 @@ private:
     MeasureBase* m_pageOldMeasure = nullptr;
     int m_measureNumber = 0;
 
-    std::set<Spanner*> m_processedSpanners;
-
     bool m_rangeDone = false;
+
+    std::unordered_set<System*> m_systemsNeedingCentering; // systems which have been laid out and still need SystemLayout::centerElementsBetweenStaves
 
     bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
 
@@ -427,5 +426,3 @@ private:
     LayoutState m_state;
 };
 }
-
-#endif // MU_ENGRAVING_LAYOUTCONTEXT_DEV_H

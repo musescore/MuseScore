@@ -108,8 +108,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>G_G</eid>
         <Text>
-          <eid>H_H</eid>
           <style>title</style>
+          <eid>H_H</eid>
           <text>Instrument Change</text>
           </Text>
         </VBox>

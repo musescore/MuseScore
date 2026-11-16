@@ -26,7 +26,6 @@
 #include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
-#include "actions/actionable.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -77,8 +76,7 @@ struct FilterPaletteTreeModelForeign {
     QML_UNCREATABLE("Must be created in C++ only")
 };
 
-class PaletteRootModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::Contextable
+class PaletteRootModel : public QObject, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)

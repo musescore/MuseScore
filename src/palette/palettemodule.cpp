@@ -25,13 +25,11 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
 #include "accessibility/iqaccessibleinterfaceregister.h"
 #include "rcommand/icommandsregister.h"
 #include "rcommand/icommandsstate.h"
 
 #include "internal/paletteconfiguration.h"
-#include "internal/paletteuiactions.h"
 #include "internal/paletteactionscontroller.h"
 #include "internal/paletteworkspacesetup.h"
 #include "internal/paletteprovider.h"
@@ -105,7 +103,6 @@ void PaletteContext::registerExports()
 {
     m_paletteProvider = std::make_shared<PaletteProvider>(iocContext());
     m_actionsController = std::make_shared<PaletteActionsController>(iocContext());
-    m_paletteUiActions = std::make_shared<PaletteUiActions>(m_actionsController, iocContext());
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
     ioc()->registerExport<IPaletteProvider>(mname, m_paletteProvider);
@@ -118,17 +115,11 @@ void PaletteContext::resolveImports()
     if (cs) {
         cs->reg(std::make_shared<PaletteCommandsState>(iocContext()));
     }
-
-    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
-    if (ar) {
-        ar->reg(m_paletteUiActions);
-    }
 }
 
 void PaletteContext::onInit(const IApplication::RunMode&)
 {
     m_actionsController->init();
-    m_paletteUiActions->init();
     m_paletteProvider->init();
 }
 
@@ -142,7 +133,6 @@ void PaletteContext::onAllInited(const IApplication::RunMode&)
 void PaletteContext::onDeinit()
 {
     m_paletteWorkspaceSetup.reset();
-    m_paletteUiActions.reset();
 
     ioc()->unregisterIfRegistered<IPaletteProvider>(mname, m_paletteProvider);
     m_paletteProvider.reset();

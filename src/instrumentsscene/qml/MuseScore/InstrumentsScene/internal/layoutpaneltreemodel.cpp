@@ -27,6 +27,7 @@
 #include "async/notifylist.h"
 
 #include "translation.h"
+#include "defer.h"
 
 #include "engraving/dom/score.h"
 
@@ -41,18 +42,16 @@
 #include "stafftreeitem.h"
 #include "staffcontroltreeitem.h"
 #include "systemobjectslayertreeitem.h"
+#include "instrumentscommands.h"
 
 #include "uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 
-#include "defer.h"
 #include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
-
-static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -96,7 +95,7 @@ void LayoutPanelTreeModel::init()
         onNotationChanged();
     });
 
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+    commandShortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
         emit addInstrumentsKeyboardShortcutChanged();
     });
 }
@@ -514,7 +513,7 @@ void LayoutPanelTreeModel::clearSelection()
 
 void LayoutPanelTreeModel::addInstruments()
 {
-    dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
+    commandDispatcher()->dispatch(INSTRUMENTS_SELECT_COMMAND);
 }
 
 void LayoutPanelTreeModel::addSystemMarkings()
@@ -855,8 +854,7 @@ bool LayoutPanelTreeModel::isStaveSharingEnabled() const
 
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
-    const muse::shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
-
+    muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
     if (shortcut.sequences.empty()) {
         return {};
     }

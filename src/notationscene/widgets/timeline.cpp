@@ -54,10 +54,13 @@
 #include "notation/inotationselection.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 
+#include "instrumentsscene/instrumentscommands.h"
+
 #include "log.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
+using namespace mu::instrumentsscene;
 
 using namespace Qt::StringLiterals;
 
@@ -3244,7 +3247,7 @@ void Timeline::updateTimelineTheme()
 
 void Timeline::requestInstrumentDialog()
 {
-    dispatcher()->dispatch("instruments");
+    commandDispatcher()->dispatch(INSTRUMENTS_SELECT_COMMAND);
 }
 
 INotationInteractionPtr Timeline::interaction() const

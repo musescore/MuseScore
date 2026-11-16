@@ -23,7 +23,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Alto Saxophone</trackName>

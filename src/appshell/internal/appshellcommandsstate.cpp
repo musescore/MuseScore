@@ -22,6 +22,9 @@
 
 #include "appshellcommandsstate.h"
 
+#include "appshelltypes.h"
+#include "global/containers.h"
+
 #include "dockwindow/idockwindow.h"
 
 #include "../appshellcommands.h"
@@ -31,6 +34,25 @@ using namespace muse;
 using namespace muse::rcommand;
 using namespace muse::dock;
 using namespace mu::appshell;
+
+static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
+
+static const std::vector<Command> PROJECT_PAGE_COMMANDS = {
+    DOCK_TOGGLE_PLAYBACK_COMMAND,
+    DOCK_TOGGLE_NOTEINPUT_COMMAND,
+    DOCK_TOGGLE_PALETTES_COMMAND,
+    DOCK_TOGGLE_INSTRUMENTS_COMMAND,
+    DOCK_TOGGLE_PROPERTIES_COMMAND,
+    DOCK_TOGGLE_SELECTION_FILTER_COMMAND,
+    DOCK_TOGGLE_UNDO_HISTORY_COMMAND,
+    DOCK_TOGGLE_NAVIGATOR_COMMAND,
+    DOCK_TOGGLE_BRAILLE_COMMAND,
+    DOCK_TOGGLE_TIMELINE_COMMAND,
+    DOCK_TOGGLE_MIXER_COMMAND,
+    DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND,
+    DOCK_TOGGLE_PERCUSSION_COMMAND,
+    DOCK_TOGGLE_STATUSBAR_COMMAND,
+};
 
 std::string AppshellCommandsState::moduleName() const
 {
@@ -66,11 +88,18 @@ void AppshellCommandsState::init()
             std::vector<Command> commands;
             commands.reserve(dockNames.size());
             for (const QString& dockName : dockNames) {
-                commands.push_back(commandsController()->dockToggleCommand(dockName));
+                Command cmd = commandsController()->dockToggleCommand(dockName);
+                if (cmd.isValid()) {
+                    commands.push_back(std::move(cmd));
+                }
             }
 
             updateCommandStates({ commands });
         });
+    });
+
+    interactive()->currentUri().ch.onReceive(this, [this](const muse::Uri&) {
+        updateCommandStates(PROJECT_PAGE_COMMANDS);
     });
 
     updateCommandStates();
@@ -104,6 +133,12 @@ CommandState AppshellCommandsState::commandState(const Command& command) const
         return CommandState(true, mainWindow()->isFullScreen());
     }
 
+    if (muse::contains(PROJECT_PAGE_COMMANDS, command)) {
+        if (!isProjectPage()) {
+            return CommandState(false, false);
+        }
+    }
+
     if (command == DOCK_TOGGLE_NAVIGATOR_COMMAND) {
         return CommandState(true, appShellState()->isNotationNavigatorVisible());
     }
@@ -125,4 +160,13 @@ CommandState AppshellCommandsState::commandState(const Command& command) const
 async::Channel<Command, CommandState> AppshellCommandsState::commandStateChanged() const
 {
     return m_commandStateChanged;
+}
+
+bool AppshellCommandsState::isProjectPage() const
+{
+    if (!interactive()) {
+        return false;
+    }
+
+    return interactive()->isOpened(PROJECT_PAGE_URI).val;
 }

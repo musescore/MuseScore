@@ -55,6 +55,7 @@ static const ElementStyle whammyBarStyle {
     { Sid::whammyBarEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::whammyBarLineWidth,                     Pid::LINE_WIDTH },
     { Sid::whammyBarText,                          Pid::BEGIN_TEXT },
+    { Sid::whammyBarPlacement,                     Pid::PLACEMENT },
 
     { Sid::whammyBarMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::whammyBarMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
@@ -64,8 +65,8 @@ static const ElementStyle whammyBarStyle {
     { Sid::dummyMusicalSymbolsScale,               Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+WhammyBarSegment::WhammyBarSegment(WhammyBar* sp)
+    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -75,7 +76,7 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 //   WhammyBar
 //---------------------------------------------------------
 
-WhammyBar::WhammyBar(EngravingItem* parent)
+WhammyBar::WhammyBar(DummyParentOr<EngravingItem> parent)
     : ChordTextLineBase(ElementType::WHAMMY_BAR, parent)
 {
     initElementStyle(&whammyBarStyle);
@@ -97,9 +98,9 @@ static const ElementStyle whammyBarSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* WhammyBar::createLineSegment(System* parent)
+LineSegment* WhammyBar::createLineSegment()
 {
-    WhammyBarSegment* wb = new WhammyBarSegment(this, parent);
+    WhammyBarSegment* wb = new WhammyBarSegment(this);
     wb->setTrack(track());
     wb->initElementStyle(&whammyBarSegmentStyle);
     return wb;
@@ -169,7 +170,7 @@ Sid WhammyBar::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::ottava8VAPlacement; // TODO: fix the style
+        return Sid::whammyBarPlacement;
     case Pid::BEGIN_FONT_FACE:
         return Sid::whammyBarFontFace;
     case Pid::BEGIN_FONT_SIZE:

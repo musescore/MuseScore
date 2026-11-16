@@ -81,6 +81,7 @@ void PlaybackCursor::setNotation(INotationPtr notation)
 
     if (m_notation) {
         m_notation->elements()->msScore()->changesChannel().disconnect(this);
+        m_notation->viewModeChanged().disconnect(this);
     }
 
     if (notation) {

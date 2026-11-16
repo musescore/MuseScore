@@ -31,7 +31,7 @@ class LaissezVibSegment : public TieSegment
     DECLARE_CLASSOF(ElementType::LAISSEZ_VIB_SEGMENT)
 
 public:
-    LaissezVibSegment(System* parent);
+    LaissezVibSegment(LaissezVib* sp);
     LaissezVibSegment(const LaissezVibSegment& s);
 
     LaissezVibSegment* clone() const override { return new LaissezVibSegment(*this); }
@@ -55,7 +55,7 @@ class LaissezVib : public Tie
     DECLARE_CLASSOF(ElementType::LAISSEZ_VIB);
 
 public:
-    LaissezVib(Note* parent);
+    LaissezVib(DummyParentOr<Note> parent);
 
     LaissezVib* clone() const override { return new LaissezVib(*this); }
 
@@ -68,7 +68,7 @@ public:
 
     SymId symId() const;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override;
+    SlurTieSegment* newSlurTieSegment() override;
 
     void setEndNote(Note* note) override;
     void setEndElement(EngravingItem*) override;
