@@ -247,8 +247,7 @@ public:
     virtual void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual void addTextToTopFrame(TextStyleType type) = 0;
-    virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;
+    virtual void addText(TextStyleType type) = 0;
 
     virtual muse::Ret canAddImageToItem(const EngravingItem* item) const = 0;
     virtual void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) = 0;

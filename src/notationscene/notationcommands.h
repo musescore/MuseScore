@@ -1602,6 +1602,169 @@ struct AddIntervalMinus10Command {
     cprop_decl redirect = AddIntervalCommand(-10);
 };
 
+struct AddTextCommand {
+    cprop_decl id = Command("command://notation/add-text");
+    cprop_decl title = MnemonicString("action", "Add text");
+    cprop_decl description = TranslatableString("action", "Add text");
+    cprop_decl availabilities = Availability::API;
+
+    TextStyleType type = TextStyleType::DEFAULT;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddTextCommand::type, "Text style type" },
+    };
+
+    AddTextCommand() = default;
+    AddTextCommand(TextStyleType type)
+        : type(type) {}
+};
+
+// aliases for add text command
+
+struct AddTitleTextCommand {
+    cprop_decl id = Command("command://notation/add-text/title");
+    cprop_decl title = MnemonicString("action", "&Title");
+    cprop_decl description = TranslatableString("action", "Add text: title");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::TITLE);
+};
+
+struct AddSubtitleTextCommand {
+    cprop_decl id = Command("command://notation/add-text/subtitle");
+    cprop_decl title = MnemonicString("action", "&Subtitle");
+    cprop_decl description = TranslatableString("action", "Add text: subtitle");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::SUBTITLE);
+};
+
+struct AddComposerTextCommand {
+    cprop_decl id = Command("command://notation/add-text/composer");
+    cprop_decl title = MnemonicString("action", "&Composer");
+    cprop_decl description = TranslatableString("action", "Add text: composer");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::COMPOSER);
+};
+
+struct AddLyricistTextCommand {
+    cprop_decl id = Command("command://notation/add-text/lyricist");
+    cprop_decl title = MnemonicString("action", "&Lyricist");
+    cprop_decl description = TranslatableString("action", "Add text: lyricist");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::LYRICIST);
+};
+
+struct AddPartTextCommand {
+    cprop_decl id = Command("command://notation/add-text/part-name");
+    cprop_decl title = MnemonicString("action", "&Part name");
+    cprop_decl description = TranslatableString("action", "Add text: part name");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::INSTRUMENT_EXCERPT);
+};
+
+struct AddFrameTextCommand {
+    cprop_decl id = Command("command://notation/add-text/frame");
+    cprop_decl title = MnemonicString("action", "Text");
+    cprop_decl description = TranslatableString("action", "Add frame text");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::FRAME);
+};
+
+struct AddSystemTextCommand {
+    cprop_decl id = Command("command://notation/add-text/system");
+    cprop_decl title = MnemonicString("action", "Syst&em text");
+    cprop_decl description = TranslatableString("action", "Add text: system text");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::SYSTEM);
+};
+
+struct AddStaffTextCommand {
+    cprop_decl id = Command("command://notation/add-text/staff");
+    cprop_decl title = MnemonicString("action", "St&aff text");
+    cprop_decl description = TranslatableString("action", "Add text: staff text");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::STAFF);
+};
+
+struct AddExpressionTextCommand {
+    cprop_decl id = Command("command://notation/add-text/expression");
+    cprop_decl title = MnemonicString("action", "E&xpression text");
+    cprop_decl description = TranslatableString("action", "Add text: expression text");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::EXPRESSION);
+};
+
+struct AddRehearsalMarkTextCommand {
+    cprop_decl id = Command("command://notation/add-rehearsalmark");
+    cprop_decl title = MnemonicString("action", "&Rehearsal mark");
+    cprop_decl description = TranslatableString("action", "Add text: rehearsal mark");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::REHEARSAL_MARK);
+};
+
+struct AddInstrumentChangeTextCommand {
+    cprop_decl id = Command("command://notation/add-instrument-change");
+    cprop_decl title = MnemonicString("action", "&Instrument change");
+    cprop_decl description = TranslatableString("action", "Add text: instrument change");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::INSTRUMENT_CHANGE);
+};
+
+struct AddFingeringTextCommand {
+    cprop_decl id = Command("command://notation/add-fingering");
+    cprop_decl title = MnemonicString("action", "&Fingering");
+    cprop_decl description = TranslatableString("action", "Add text: fingering");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::FINGERING);
+};
+
+struct AddStickingTextCommand {
+    cprop_decl id = Command("command://notation/add-sticking");
+    cprop_decl title = MnemonicString("action", "Stic&king");
+    cprop_decl description = TranslatableString("action", "Add text: sticking");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::STICKING);
+};
+
+struct AddChordTextCommand {
+    cprop_decl id = Command("command://notation/add-chord-symbol");
+    cprop_decl title = MnemonicString("action", "C&hord symbol");
+    cprop_decl description = TranslatableString("action", "Add text: chord symbol");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::HARMONY_A);
+};
+
+struct AddRomanNumeralTextCommand {
+    cprop_decl id = Command("command://notation/add-text/roman-numeral");
+    cprop_decl title = MnemonicString("action", "R&oman numeral analysis");
+    cprop_decl description = TranslatableString("action", "Add text: Roman numeral analysis");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::HARMONY_ROMAN);
+};
+
+struct AddNashvilleNumberTextCommand {
+    cprop_decl id = Command("command://notation/add-text/nashville-number");
+    cprop_decl title = MnemonicString("action", "&Nashville number");
+    cprop_decl description = TranslatableString("action", "Add text: Nashville number");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::HARMONY_NASHVILLE);
+};
+
+struct AddLyricsCommand {
+    cprop_decl id = Command("command://notation/add-lyrics");
+    cprop_decl title = MnemonicString("action", "L&yrics");
+    cprop_decl description = TranslatableString("action", "Add text: lyrics");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::LYRICS_ODD);
+};
+
+struct AddTempoCommand {
+    cprop_decl id = Command("command://notation/add-tempo");
+    cprop_decl title = MnemonicString("action", "Tempo &marking");
+    cprop_decl description = TranslatableString("action", "Add text: tempo marking");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddTextCommand(TextStyleType::TEMPO);
+};
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1697,24 +1860,7 @@ inline static const muse::rcommand::Command ADD_UP_BOW_COMMAND("command://notati
 inline static const muse::rcommand::Command ADD_DOWN_BOW_COMMAND("command://notation/add-down-bow");
 
 // add text commands
-inline static const muse::rcommand::Command ADD_TITLE_TEXT_COMMAND("command://notation/add-title-text");
-inline static const muse::rcommand::Command ADD_SUBTITLE_TEXT_COMMAND("command://notation/add-subtitle-text");
-inline static const muse::rcommand::Command ADD_COMPOSER_TEXT_COMMAND("command://notation/add-composer-text");
-inline static const muse::rcommand::Command ADD_LYRICIST_TEXT_COMMAND("command://notation/add-lyricist-text");
-inline static const muse::rcommand::Command ADD_PART_TEXT_COMMAND("command://notation/add-part-text");
-inline static const muse::rcommand::Command ADD_FRAME_TEXT_COMMAND("command://notation/add-frame-text");
-inline static const muse::rcommand::Command ADD_SYSTEM_TEXT_COMMAND("command://notation/add-system-text");
-inline static const muse::rcommand::Command ADD_STAFF_TEXT_COMMAND("command://notation/add-staff-text");
-inline static const muse::rcommand::Command ADD_EXPRESSION_TEXT_COMMAND("command://notation/add-expression-text");
-inline static const muse::rcommand::Command ADD_REHEARSALMARK_TEXT_COMMAND("command://notation/add-rehearsalmark-text");
-inline static const muse::rcommand::Command ADD_INSTRUMENT_CHANGE_TEXT_COMMAND("command://notation/add-instrument-change-text");
-inline static const muse::rcommand::Command ADD_FINGERING_TEXT_COMMAND("command://notation/add-fingering-text");
-inline static const muse::rcommand::Command ADD_STICKING_TEXT_COMMAND("command://notation/add-sticking-text");
-inline static const muse::rcommand::Command ADD_CHORD_TEXT_COMMAND("command://notation/add-chord-text");
-inline static const muse::rcommand::Command ADD_ROMAN_NUMERAL_TEXT_COMMAND("command://notation/add-roman-numeral-text");
-inline static const muse::rcommand::Command ADD_NASHVILLE_NUMBER_TEXT_COMMAND("command://notation/add-nashville-number-text");
-inline static const muse::rcommand::Command ADD_LYRICS_COMMAND("command://notation/add-lyrics");
-inline static const muse::rcommand::Command ADD_TEMPO_COMMAND("command://notation/add-tempo");
+
 inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
 
 // add beam commands

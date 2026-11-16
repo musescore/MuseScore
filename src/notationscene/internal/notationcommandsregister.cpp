@@ -308,6 +308,26 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddIntervalMinus9Command>(),
     makeCommandInfo<AddIntervalMinus10Command>(),
 
+    makeCommandInfo<AddTextCommand>(),
+    makeCommandInfo<AddTitleTextCommand>(),
+    makeCommandInfo<AddSubtitleTextCommand>(),
+    makeCommandInfo<AddComposerTextCommand>(),
+    makeCommandInfo<AddLyricistTextCommand>(),
+    makeCommandInfo<AddPartTextCommand>(),
+    makeCommandInfo<AddFrameTextCommand>(),
+    makeCommandInfo<AddSystemTextCommand>(),
+    makeCommandInfo<AddStaffTextCommand>(),
+    makeCommandInfo<AddExpressionTextCommand>(),
+    makeCommandInfo<AddRehearsalMarkTextCommand>(),
+    makeCommandInfo<AddInstrumentChangeTextCommand>(),
+    makeCommandInfo<AddFingeringTextCommand>(),
+    makeCommandInfo<AddStickingTextCommand>(),
+    makeCommandInfo<AddChordTextCommand>(),
+    makeCommandInfo<AddRomanNumeralTextCommand>(),
+    makeCommandInfo<AddNashvilleNumberTextCommand>(),
+    makeCommandInfo<AddLyricsCommand>(),
+    makeCommandInfo<AddTempoCommand>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -974,137 +994,10 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // add text commands
-    CommandInfo{
-        ADD_TITLE_TEXT_COMMAND,
-        TranslatableString("action", "&Title"),
-        TranslatableString("action", "Add text: title"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SUBTITLE_TEXT_COMMAND,
-        TranslatableString("action", "&Subtitle"),
-        TranslatableString("action", "Add text: subtitle"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_COMPOSER_TEXT_COMMAND,
-        TranslatableString("action", "&Composer"),
-        TranslatableString("action", "Add text: composer"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_LYRICIST_TEXT_COMMAND,
-        TranslatableString("action", "&Lyricist"),
-        TranslatableString("action", "Add text: lyricist"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_PART_TEXT_COMMAND,
-        TranslatableString("action", "&Part name"),
-        TranslatableString("action", "Add text: part name"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_FRAME_TEXT_COMMAND,
-        TranslatableString("action", "Text"),
-        TranslatableString("action", "Add frame text"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_SYSTEM_TEXT_COMMAND,
-        TranslatableString("action", "Syst&em text"),
-        TranslatableString("action", "Add text: system text"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_STAFF_TEXT_COMMAND,
-        TranslatableString("action", "St&aff text"),
-        TranslatableString("action", "Add text: staff text"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_EXPRESSION_TEXT_COMMAND,
-        TranslatableString("action", "E&xpression text"),
-        TranslatableString("action", "Add text: expression text"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_REHEARSALMARK_TEXT_COMMAND,
-        TranslatableString("action", "&Rehearsal mark"),
-        TranslatableString("action", "Add text: rehearsal mark"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_INSTRUMENT_CHANGE_TEXT_COMMAND,
-        TranslatableString("action", "&Instrument change"),
-        TranslatableString("action", "Add text: instrument change"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_FINGERING_TEXT_COMMAND,
-        TranslatableString("action", "&Fingering"),
-        TranslatableString("action", "Add text: fingering"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_STICKING_TEXT_COMMAND,
-        TranslatableString("action", "Stic&king"),
-        TranslatableString("action", "Add text: sticking"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_CHORD_TEXT_COMMAND,
-        TranslatableString("action", "C&hord symbol"),
-        TranslatableString("action", "Add text: chord symbol"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_ROMAN_NUMERAL_TEXT_COMMAND,
-        TranslatableString("action", "R&oman numeral analysis"),
-        TranslatableString("action", "Add text: Roman numeral analysis"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_NASHVILLE_NUMBER_TEXT_COMMAND,
-        TranslatableString("action", "&Nashville number"),
-        TranslatableString("action", "Add text: Nashville number"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_LYRICS_COMMAND,
-        TranslatableString("action", "L&yrics"),
-        TranslatableString("action", "Add text: lyrics"),
-        InputSchema(),
-        Decoration()
-    },
     CommandInfo{
         ADD_FIGURED_BASS_COMMAND,
         TranslatableString("action", "Figured &bass"),
         TranslatableString("action", "Add text: figured bass"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_TEMPO_COMMAND,
-        TranslatableString("action", "Tempo &marking"),
-        TranslatableString("action", "Add text: tempo marking"),
         InputSchema(),
         Decoration()
     },

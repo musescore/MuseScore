@@ -364,27 +364,27 @@ MenuItemList NoteInputBarModel::makeFramesItems()
 MenuItemList NoteInputBarModel::makeTextItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_TITLE_TEXT_COMMAND),
-        makeMenuItem(ADD_SUBTITLE_TEXT_COMMAND),
-        makeMenuItem(ADD_COMPOSER_TEXT_COMMAND),
-        makeMenuItem(ADD_LYRICIST_TEXT_COMMAND),
-        makeMenuItem(ADD_PART_TEXT_COMMAND),
+        makeMenuItem(AddTitleTextCommand::id),
+        makeMenuItem(AddSubtitleTextCommand::id),
+        makeMenuItem(AddComposerTextCommand::id),
+        makeMenuItem(AddLyricistTextCommand::id),
+        makeMenuItem(AddPartTextCommand::id),
         makeSeparator(),
-        makeMenuItem(ADD_SYSTEM_TEXT_COMMAND),
-        makeMenuItem(ADD_STAFF_TEXT_COMMAND),
+        makeMenuItem(AddSystemTextCommand::id),
+        makeMenuItem(AddStaffTextCommand::id),
         makeMenuItem(ADD_DYNAMIC_COMMAND),
-        makeMenuItem(ADD_EXPRESSION_TEXT_COMMAND),
-        makeMenuItem(ADD_REHEARSALMARK_TEXT_COMMAND),
-        makeMenuItem(ADD_INSTRUMENT_CHANGE_TEXT_COMMAND),
-        makeMenuItem(ADD_FINGERING_TEXT_COMMAND),
+        makeMenuItem(AddExpressionTextCommand::id),
+        makeMenuItem(AddRehearsalMarkTextCommand::id),
+        makeMenuItem(AddInstrumentChangeTextCommand::id),
+        makeMenuItem(AddFingeringTextCommand::id),
         makeSeparator(),
-        makeMenuItem(ADD_STICKING_TEXT_COMMAND),
-        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
-        makeMenuItem(ADD_ROMAN_NUMERAL_TEXT_COMMAND),
-        makeMenuItem(ADD_NASHVILLE_NUMBER_TEXT_COMMAND),
-        makeMenuItem(ADD_LYRICS_COMMAND),
+        makeMenuItem(AddStickingTextCommand::id),
+        makeMenuItem(AddChordTextCommand::id),
+        makeMenuItem(AddRomanNumeralTextCommand::id),
+        makeMenuItem(AddNashvilleNumberTextCommand::id),
+        makeMenuItem(AddLyricsCommand::id),
         makeMenuItem(ADD_FIGURED_BASS_COMMAND),
-        makeMenuItem(ADD_TEMPO_COMMAND)
+        makeMenuItem(AddTempoCommand::id)
     };
 
     return items;
@@ -407,7 +407,7 @@ MenuItemList NoteInputBarModel::makeLinesItems()
 MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
+        makeMenuItem(AddChordTextCommand::id),
         makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
         makeSeparator(),
         makeMenuItem(InsertFretFrameCommand::id, TranslatableString("notation", "Fretboard diagram legend"))
