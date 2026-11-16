@@ -171,7 +171,7 @@ private:
     muse::Ret openTupletOtherDialog();
 
     muse::Ret addBoxes(const AddBoxesCommand& command);
-
+    muse::Ret addGraceNotes(const AddGraceNoteCommand& command);
     muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);

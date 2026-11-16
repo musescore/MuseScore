@@ -268,7 +268,7 @@
         {"command": "command://notation/add-expression-text",  "sequences": ["Ctrl+E"]},
         {"command": "command://notation/add-chord-text",  "sequences": ["Ctrl+K"]},
         {"command": "command://notation/add-rehearsalmark-text",  "sequences": ["Ctrl+M"]},
-        {"command": "command://notation/add-acciaccatura",  "sequences": ["/","Num+/"]},
+        {"command": "command://notation/add-grace-note/acciaccatura",  "sequences": ["/","Num+/"]},
         {"command": "command://notation/add-figured-bass",  "sequences": ["Ctrl+G"]},
         {"command": "command://notation/add-tuplet/duplet",  "sequences": ["Ctrl+2"]},
         {"command": "command://notation/add-tuplet/triplet",  "sequences": ["Ctrl+3"]},

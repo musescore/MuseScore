@@ -1347,6 +1347,103 @@ struct AppendMeasuresCommand {
     cprop_decl redirect = AddBoxesCommand(BoxType::Measure, AddBoxesTarget::AtEndOfScore, -1, true);
 };
 
+// add grace notes commands
+struct AddGraceNoteCommand {
+    cprop_decl id = Command("command://notation/add-grace-note");
+    cprop_decl title = MnemonicString("action", "Add grace note");
+    cprop_decl description = TranslatableString("action", "Add grace note");
+    cprop_decl availabilities = Availability::API;
+
+    GraceNoteType type = GraceNoteType::NORMAL;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddGraceNoteCommand::type, "Grace note type" },
+    };
+};
+
+// aliases for add grace notes command
+
+struct AddAcciaccaturaCommand {
+    cprop_decl id = Command("command://notation/add-grace-note/acciaccatura");
+    cprop_decl title = MnemonicString("action", "Acciaccatura");
+    cprop_decl description = TranslatableString("action", "Add grace note: acciaccatura");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::ACCIACCATURA);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::ACCIACCATURA);
+};
+
+struct AddAppoggiaturaCommand {
+    cprop_decl id = Command("command://notation/add-grace-note/appoggiatura");
+    cprop_decl title = MnemonicString("action", "Appoggiatura");
+    cprop_decl description = TranslatableString("action", "Add grace note: appoggiatura");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::APPOGGIATURA);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::APPOGGIATURA);
+};
+
+struct AddGrace4Command {
+    cprop_decl id = Command("command://notation/add-grace-note/grace4");
+    cprop_decl title = MnemonicString("action", "Grace: quarter");
+    cprop_decl description = TranslatableString("action", "Add grace note: quarter");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE4);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE4);
+};
+
+struct AddGrace16Command {
+    cprop_decl id = Command("command://notation/add-grace-note/grace16");
+    cprop_decl title = MnemonicString("action", "Grace: 16th");
+    cprop_decl description = TranslatableString("action", "Add grace note: 16th");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE16);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE16);
+};
+
+struct AddGrace32Command {
+    cprop_decl id = Command("command://notation/add-grace-note/grace32");
+    cprop_decl title = MnemonicString("action", "Grace: 32nd");
+    cprop_decl description = TranslatableString("action", "Add grace note: 32nd");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE32);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE32);
+};
+
+struct AddGrace8AfterCommand {
+    cprop_decl id = Command("command://notation/add-grace-note/grace8-after");
+    cprop_decl title = MnemonicString("action", "Grace: 8th after");
+    cprop_decl description = TranslatableString("action", "Add grace note: eighth after");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE8_AFTER);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE8_AFTER);
+};
+
+struct AddGrace16AfterCommand {
+    cprop_decl id = Command("command://notation/add-grace-note/grace16-after");
+    cprop_decl title = MnemonicString("action", "Grace: 16th after");
+    cprop_decl description = TranslatableString("action", "Add grace note: 16th after");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE16_AFTER);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE16_AFTER);
+};
+
+struct AddGrace32AfterCommand {
+    cprop_decl id = Command("command://notation/add-grace-note/grace32-after");
+    cprop_decl title = MnemonicString("action", "Grace: 32nd after");
+    cprop_decl description = TranslatableString("action", "Add grace note: 32nd after");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GRACE32_AFTER);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE32_AFTER);
+};
+
+inline static const muse::rcommand::Command ADD_ACCIACCATURA_COMMAND = AddAcciaccaturaCommand::id;
+inline static const muse::rcommand::Command ADD_APPOGGIATURA_COMMAND = AddAppoggiaturaCommand::id;
+inline static const muse::rcommand::Command ADD_GRACE4_COMMAND = AddGrace4Command::id;
+inline static const muse::rcommand::Command ADD_GRACE16_COMMAND = AddGrace16Command::id;
+inline static const muse::rcommand::Command ADD_GRACE32_COMMAND = AddGrace32Command::id;
+inline static const muse::rcommand::Command ADD_GRACE8_AFTER_COMMAND = AddGrace8AfterCommand::id;
+inline static const muse::rcommand::Command ADD_GRACE16_AFTER_COMMAND = AddGrace16AfterCommand::id;
+inline static const muse::rcommand::Command ADD_GRACE32_AFTER_COMMAND = AddGrace32AfterCommand::id;
+
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
     cprop_decl title = MnemonicString("action", "Flip direction");
@@ -1461,16 +1558,6 @@ inline static const muse::rcommand::Command ADD_NASHVILLE_NUMBER_TEXT_COMMAND("c
 inline static const muse::rcommand::Command ADD_LYRICS_COMMAND("command://notation/add-lyrics");
 inline static const muse::rcommand::Command ADD_TEMPO_COMMAND("command://notation/add-tempo");
 inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
-
-// add grace notes commands
-inline static const muse::rcommand::Command ADD_ACCIACCATURA_COMMAND("command://notation/add-acciaccatura");
-inline static const muse::rcommand::Command ADD_APPOGGIATURA_COMMAND("command://notation/add-appoggiatura");
-inline static const muse::rcommand::Command ADD_GRACE4_COMMAND("command://notation/add-grace4");
-inline static const muse::rcommand::Command ADD_GRACE16_COMMAND("command://notation/add-grace16");
-inline static const muse::rcommand::Command ADD_GRACE32_COMMAND("command://notation/add-grace32");
-inline static const muse::rcommand::Command ADD_GRACE8_AFTER_COMMAND("command://notation/add-grace8-after");
-inline static const muse::rcommand::Command ADD_GRACE16_AFTER_COMMAND("command://notation/add-grace16-after");
-inline static const muse::rcommand::Command ADD_GRACE32_AFTER_COMMAND("command://notation/add-grace32-after");
 
 // add beam commands
 inline static const muse::rcommand::Command ADD_BEAM_AUTO_COMMAND("command://notation/add-beam-auto");
