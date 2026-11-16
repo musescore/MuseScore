@@ -172,6 +172,7 @@ private:
 
     muse::Ret addBoxes(const AddBoxesCommand& command);
     muse::Ret addGraceNotes(const AddGraceNoteCommand& command);
+    muse::Ret addInterval(const AddIntervalCommand& command);
     muse::Ret flipSelection();
 
     muse::Ret putNote(const muse::rcommand::Params& params);

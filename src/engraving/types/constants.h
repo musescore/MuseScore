@@ -112,6 +112,9 @@ struct Constants
 
 static constexpr size_t MAX_DOTS = 4;
 static constexpr size_t MAX_VOICES = 4;
+static constexpr size_t VOICES = MAX_VOICES; // deprecated, use MAX_VOICES instead
+static constexpr int MIN_NOTES_INTERVAL = -10;
+static constexpr int MAX_NOTES_INTERVAL = 10;
 }
 
 #endif // MU_ENGRAVING_CONSTANTS_H

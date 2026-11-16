@@ -1435,14 +1435,172 @@ struct AddGrace32AfterCommand {
     cprop_decl redirect = AddGraceNoteCommand(GraceNoteType::GRACE32_AFTER);
 };
 
-inline static const muse::rcommand::Command ADD_ACCIACCATURA_COMMAND = AddAcciaccaturaCommand::id;
-inline static const muse::rcommand::Command ADD_APPOGGIATURA_COMMAND = AddAppoggiaturaCommand::id;
-inline static const muse::rcommand::Command ADD_GRACE4_COMMAND = AddGrace4Command::id;
-inline static const muse::rcommand::Command ADD_GRACE16_COMMAND = AddGrace16Command::id;
-inline static const muse::rcommand::Command ADD_GRACE32_COMMAND = AddGrace32Command::id;
-inline static const muse::rcommand::Command ADD_GRACE8_AFTER_COMMAND = AddGrace8AfterCommand::id;
-inline static const muse::rcommand::Command ADD_GRACE16_AFTER_COMMAND = AddGrace16AfterCommand::id;
-inline static const muse::rcommand::Command ADD_GRACE32_AFTER_COMMAND = AddGrace32AfterCommand::id;
+struct AddIntervalCommand {
+    cprop_decl id = Command("command://notation/add-interval");
+    cprop_decl title = MnemonicString("action", "Add interval");
+    cprop_decl description = TranslatableString("action", "Add interval");
+    cprop_decl availabilities = Availability::API;
+
+    int interval = 0;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "interval", &AddIntervalCommand::interval, "Interval from -10 to 10, excluding 0 and -1", -10, 10 },
+    };
+};
+
+// interval commands
+
+struct AddInterval1Command {
+    cprop_decl id = Command("command://notation/add-interval/1");
+    cprop_decl title = MnemonicString("action", "&Unison");
+    cprop_decl description = TranslatableString("action", "Enter interval: unison");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(1);
+};
+
+struct AddInterval2Command {
+    cprop_decl id = Command("command://notation/add-interval/2");
+    cprop_decl title = MnemonicString("action", "Se&cond above");
+    cprop_decl description = TranslatableString("action", "Enter interval: second above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(2);
+};
+
+struct AddInterval3Command {
+    cprop_decl id = Command("command://notation/add-interval/3");
+    cprop_decl title = MnemonicString("action", "Thir&d above");
+    cprop_decl description = TranslatableString("action", "Enter interval: third above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(3);
+};
+
+struct AddInterval4Command {
+    cprop_decl id = Command("command://notation/add-interval/4");
+    cprop_decl title = MnemonicString("action", "Fou&rth above");
+    cprop_decl description = TranslatableString("action", "Enter interval: fourth above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(4);
+};
+
+struct AddInterval5Command {
+    cprop_decl id = Command("command://notation/add-interval/5");
+    cprop_decl title = MnemonicString("action", "Fift&h above");
+    cprop_decl description = TranslatableString("action", "Enter interval: fifth above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(5);
+};
+
+struct AddInterval6Command {
+    cprop_decl id = Command("command://notation/add-interval/6");
+    cprop_decl title = MnemonicString("action", "Si&xth above");
+    cprop_decl description = TranslatableString("action", "Enter interval: sixth above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(6);
+};
+
+struct AddInterval7Command {
+    cprop_decl id = Command("command://notation/add-interval/7");
+    cprop_decl title = MnemonicString("action", "Seve&nth above");
+    cprop_decl description = TranslatableString("action", "Enter interval: seventh above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(7);
+};
+
+struct AddInterval8Command {
+    cprop_decl id = Command("command://notation/add-interval/8");
+    cprop_decl title = MnemonicString("action", "Octave &above");
+    cprop_decl description = TranslatableString("action", "Enter interval: octave above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(8);
+};
+
+struct AddInterval9Command {
+    cprop_decl id = Command("command://notation/add-interval/9");
+    cprop_decl title = MnemonicString("action", "Ninth abov&e");
+    cprop_decl description = TranslatableString("action", "Enter interval: ninth above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(9);
+};
+
+struct AddInterval10Command {
+    cprop_decl id = Command("command://notation/add-interval/10");
+    cprop_decl title = MnemonicString("action", "Tenth above");
+    cprop_decl description = TranslatableString("action", "Enter interval: tenth above");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(10);
+};
+
+struct AddIntervalMinus2Command {
+    cprop_decl id = Command("command://notation/add-interval/-2");
+    cprop_decl title = MnemonicString("action", "&Second below");
+    cprop_decl description = TranslatableString("action", "Enter interval: second below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-2);
+};
+
+struct AddIntervalMinus3Command {
+    cprop_decl id = Command("command://notation/add-interval/-3");
+    cprop_decl title = MnemonicString("action", "&Third below");
+    cprop_decl description = TranslatableString("action", "Enter interval: third below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-3);
+};
+
+struct AddIntervalMinus4Command {
+    cprop_decl id = Command("command://notation/add-interval/-4");
+    cprop_decl title = MnemonicString("action", "F&ourth below");
+    cprop_decl description = TranslatableString("action", "Enter interval: fourth below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-4);
+};
+
+struct AddIntervalMinus5Command {
+    cprop_decl id = Command("command://notation/add-interval/-5");
+    cprop_decl title = MnemonicString("action", "&Fifth below");
+    cprop_decl description = TranslatableString("action", "Enter interval: fifth below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-5);
+};
+
+struct AddIntervalMinus6Command {
+    cprop_decl id = Command("command://notation/add-interval/-6");
+    cprop_decl title = MnemonicString("action", "S&ixth below");
+    cprop_decl description = TranslatableString("action", "Enter interval: sixth below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-6);
+};
+
+struct AddIntervalMinus7Command {
+    cprop_decl id = Command("command://notation/add-interval/-7");
+    cprop_decl title = MnemonicString("action", "Se&venth below");
+    cprop_decl description = TranslatableString("action", "Enter interval: seventh below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-7);
+};
+
+struct AddIntervalMinus8Command {
+    cprop_decl id = Command("command://notation/add-interval/-8");
+    cprop_decl title = MnemonicString("action", "Octave &below");
+    cprop_decl description = TranslatableString("action", "Enter interval: octave below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-8);
+};
+
+struct AddIntervalMinus9Command {
+    cprop_decl id = Command("command://notation/add-interval/-9");
+    cprop_decl title = MnemonicString("action", "Ninth belo&w");
+    cprop_decl description = TranslatableString("action", "Enter interval: ninth below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-9);
+};
+
+struct AddIntervalMinus10Command {
+    cprop_decl id = Command("command://notation/add-interval/-10");
+    cprop_decl title = MnemonicString("action", "Tenth below");
+    cprop_decl description = TranslatableString("action", "Enter interval: tenth below");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddIntervalCommand(-10);
+};
 
 struct FlipCommand {
     cprop_decl id = Command("command://notation/flip");
@@ -1594,27 +1752,6 @@ inline static const muse::rcommand::Command ADD_CLEF_VIOLIN_COMMAND("command://n
 inline static const muse::rcommand::Command ADD_CLEF_BASS_COMMAND("command://notation/add-clef-bass");
 
 inline static const muse::rcommand::Command ADD_FULL_MEASURE_REST_COMMAND("command://notation/add-full-measure-rest");
-
-// interval commands
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_1_COMMAND("command://notation/add-interval-plus1");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_2_COMMAND("command://notation/add-interval-plus2");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_3_COMMAND("command://notation/add-interval-plus3");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_4_COMMAND("command://notation/add-interval-plus4");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_5_COMMAND("command://notation/add-interval-plus5");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_6_COMMAND("command://notation/add-interval-plus6");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_7_COMMAND("command://notation/add-interval-plus7");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_8_COMMAND("command://notation/add-interval-plus8");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_9_COMMAND("command://notation/add-interval-plus9");
-inline static const muse::rcommand::Command ADD_INTERVAL_PLUS_10_COMMAND("command://notation/add-interval-plus10");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_2_COMMAND("command://notation/add-interval-minus2");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_3_COMMAND("command://notation/add-interval-minus3");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_4_COMMAND("command://notation/add-interval-minus4");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_5_COMMAND("command://notation/add-interval-minus5");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_6_COMMAND("command://notation/add-interval-minus6");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_7_COMMAND("command://notation/add-interval-minus7");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_8_COMMAND("command://notation/add-interval-minus8");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_9_COMMAND("command://notation/add-interval-minus9");
-inline static const muse::rcommand::Command ADD_INTERVAL_MINUS_10_COMMAND("command://notation/add-interval-minus10");
 
 // editing commands
 inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");

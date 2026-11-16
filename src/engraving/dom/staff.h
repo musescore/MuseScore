@@ -217,7 +217,7 @@ public:
     bool playbackVoice(int voice) const;
     void setPlaybackVoice(int voice, bool val);
 
-    const std::array<bool, VOICES>& visibilityVoices() const;
+    const std::array<bool, MAX_VOICES>& visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
     bool canDisableVoice() const;
 
@@ -288,12 +288,12 @@ private:
 
     StaffTypeList m_staffTypeList;
 
-    std::map<int, int> m_channelList[VOICES];
+    std::map<int, int> m_channelList[MAX_VOICES];
     std::map<int, SwingParameters> m_swingMap;
     std::map<int, CapoParams> m_capoMap;
     std::map<int, int> m_pitchOffsetMap;
-    bool m_playbackVoice[VOICES] { true, true, true, true };
-    std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
+    bool m_playbackVoice[MAX_VOICES] { true, true, true, true };
+    std::array<bool, MAX_VOICES> m_visibilityVoices { true, true, true, true };
 
     bool m_reflectTranspositionInLinkedTab = true;
 

@@ -132,6 +132,8 @@ void NotationActionController::init()
     registerCommand<OpenTupletConfigureCommand>([this]() { return openTupletOtherDialog(); });
 
     registerCommand<AddBoxesCommand>(&Controller::addBoxes);
+    registerCommand<AddGraceNoteCommand>(&Controller::addGraceNotes);
+    registerCommand<AddIntervalCommand>(&Controller::addInterval);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -222,9 +224,6 @@ void NotationActionController::init()
     registerCommand(ADD_TEMPO_COMMAND, [this]() { addText(TextStyleType::TEMPO); });
     registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
 
-    // add grace notes commands
-    registerCommand<AddGraceNoteCommand>(&Controller::addGraceNotes);
-
     // add beam commands
     registerCommand(ADD_BEAM_AUTO_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
     registerCommand(ADD_BEAM_NONE_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
@@ -260,27 +259,6 @@ void NotationActionController::init()
     registerCommand(ADD_CLEF_BASS_COMMAND, [this]() { insertClef(mu::engraving::ClefType::F); });
 
     registerCommand(ADD_FULL_MEASURE_REST_COMMAND, &Controller::addFullMeasureRest);
-
-    // interval commands
-    registerCommand(ADD_INTERVAL_PLUS_1_COMMAND, &Interaction::addIntervalToSelectedNotes, 1);
-    registerCommand(ADD_INTERVAL_PLUS_2_COMMAND, &Interaction::addIntervalToSelectedNotes, 2);
-    registerCommand(ADD_INTERVAL_PLUS_3_COMMAND, &Interaction::addIntervalToSelectedNotes, 3);
-    registerCommand(ADD_INTERVAL_PLUS_4_COMMAND, &Interaction::addIntervalToSelectedNotes, 4);
-    registerCommand(ADD_INTERVAL_PLUS_5_COMMAND, &Interaction::addIntervalToSelectedNotes, 5);
-    registerCommand(ADD_INTERVAL_PLUS_6_COMMAND, &Interaction::addIntervalToSelectedNotes, 6);
-    registerCommand(ADD_INTERVAL_PLUS_7_COMMAND, &Interaction::addIntervalToSelectedNotes, 7);
-    registerCommand(ADD_INTERVAL_PLUS_8_COMMAND, &Interaction::addIntervalToSelectedNotes, 8);
-    registerCommand(ADD_INTERVAL_PLUS_9_COMMAND, &Interaction::addIntervalToSelectedNotes, 9);
-    registerCommand(ADD_INTERVAL_PLUS_10_COMMAND, &Interaction::addIntervalToSelectedNotes, 10);
-    registerCommand(ADD_INTERVAL_MINUS_2_COMMAND, &Interaction::addIntervalToSelectedNotes, -2);
-    registerCommand(ADD_INTERVAL_MINUS_3_COMMAND, &Interaction::addIntervalToSelectedNotes, -3);
-    registerCommand(ADD_INTERVAL_MINUS_4_COMMAND, &Interaction::addIntervalToSelectedNotes, -4);
-    registerCommand(ADD_INTERVAL_MINUS_5_COMMAND, &Interaction::addIntervalToSelectedNotes, -5);
-    registerCommand(ADD_INTERVAL_MINUS_6_COMMAND, &Interaction::addIntervalToSelectedNotes, -6);
-    registerCommand(ADD_INTERVAL_MINUS_7_COMMAND, &Interaction::addIntervalToSelectedNotes, -7);
-    registerCommand(ADD_INTERVAL_MINUS_8_COMMAND, &Interaction::addIntervalToSelectedNotes, -8);
-    registerCommand(ADD_INTERVAL_MINUS_9_COMMAND, &Interaction::addIntervalToSelectedNotes, -9);
-    registerCommand(ADD_INTERVAL_MINUS_10_COMMAND, &Interaction::addIntervalToSelectedNotes, -10);
 
     // editing commands
     registerCommand(COPY_COMMAND, &Interaction::copySelection);
@@ -2171,6 +2149,25 @@ muse::Ret NotationActionController::addGraceNotes(const AddGraceNoteCommand& com
     }
 
     interaction->addGraceNotesToSelectedNotes(command.type);
+
+    seekSelectedElement();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addInterval(const AddIntervalCommand& command)
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (!isNotesIntervalValid(command.interval)) {
+        return muse::make_ret(muse::Ret::Code::BadArgs);
+    }
+
+    interaction->addIntervalToSelectedNotes(command.interval);
 
     seekSelectedElement();
 
