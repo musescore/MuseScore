@@ -135,7 +135,6 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
 
     // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
     bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
-    bool isExportingOnlyOneScore = notations.size() == 1;
 
     // The user might have selected not-yet-inited excerpts
     ExcerptNotationList excerptsToInit;
@@ -165,8 +164,10 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
     std::vector<ViewMode> viewModes = this->viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
+    const std::vector<ExportFile> files = exportFiles(notations, destinationPath, writer, unitType, isCreatingOnlyOneFile);
+
     Progress* writerProgress = writer->progress();
-    size_t fileCount = exportFileCount(notations, unitType);
+    size_t fileCount = files.size();
     size_t currentFileNum = 0;
 
     if (writerProgress) {
@@ -199,66 +200,13 @@ Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList nota
     // not reach this point. But if we do, existing files should be overridden.
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-    };
-
-    switch (unitType) {
-    case INotationWriter::UnitType::PER_PAGE: {
-        for (const INotationPtr& notation : notations) {
-            size_t pageCount = notation->elements()->msScore()->pages().size();
-            bool isMain = isMainNotation(notation);
-
-            for (size_t page = 0; page < pageCount; ++page) {
-                options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
-
-                muse::io::path_t definitivePath = isCreatingOnlyOneFile
-                                                  ? destinationPath
-                                                  : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
-                                                                       static_cast<int>(page));
-
-                auto exportFunction = [writer, notation, options](io::IODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
-                    };
-
-                Ret ret = doExportLoop(definitivePath, exportFunction);
-                if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                    return resolvedExportPromise(make_ret(Ret::Code::Cancel));
-                }
-
-                ++currentFileNum;
-            }
-        }
-    } break;
-    case INotationWriter::UnitType::PER_PART: {
-        for (const INotationPtr& notation : notations) {
-            muse::io::path_t definitivePath = isCreatingOnlyOneFile
-                                              ? destinationPath
-                                              : completeExportPath(destinationPath, notation, isMainNotation(
-                                                                       notation), isExportingOnlyOneScore);
-
-            auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
-                    return writer->write(notation, destinationDevice, options);
-                };
-
-            Ret ret = doExportLoop(definitivePath, exportFunction);
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                return resolvedExportPromise(make_ret(Ret::Code::Cancel));
-            }
-
-            ++currentFileNum;
-        }
-    } break;
-    case INotationWriter::UnitType::MULTI_PART: {
-        auto exportFunction = [writer, notations, options](IODevice& destinationDevice) {
-                return writer->writeList(notations, destinationDevice, options);
-            };
-
-        Ret ret = doExportLoop(destinationPath, exportFunction);
+    for (const ExportFile& file : files) {
+        Ret ret = doExportLoop(file.path, file.exportFunction);
         if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             return resolvedExportPromise(make_ret(Ret::Code::Cancel));
         }
-    } break;
+
+        ++currentFileNum;
     }
 
     if (openDestinationFolderOnExport) {
@@ -316,25 +264,60 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     return false;
 }
 
-size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
+std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFiles(const INotationPtrList& notations,
+                                                                                const muse::io::path_t& destinationPath,
+                                                                                INotationWriterPtr writer,
+                                                                                INotationWriter::UnitType unitType,
+                                                                                bool isCreatingOnlyOneFile) const
 {
+    std::vector<ExportFile> files;
+
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
+    };
+
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
-        size_t count = 0;
-
         for (const INotationPtr& notation : notations) {
-            count += notation->elements()->pages().size();
-        }
+            size_t pageCount = notation->elements()->msScore()->pages().size();
+            bool isMain = isMainNotation(notation);
 
-        return count;
-    };
-    case INotationWriter::UnitType::PER_PART:
-        return notations.size();
-    case INotationWriter::UnitType::MULTI_PART:
-        return 1;
+            for (size_t page = 0; page < pageCount; ++page) {
+                options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
+
+                muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                                  ? destinationPath
+                                                  : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
+                                                                       static_cast<int>(page));
+
+                files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
+                        return writer->write(notation, destinationDevice, options);
+                    } });
+            }
+        }
+    } break;
+    case INotationWriter::UnitType::PER_PART: {
+        for (const INotationPtr& notation : notations) {
+            muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                              ? destinationPath
+                                              : completeExportPath(destinationPath, notation, isMainNotation(
+                                                                       notation), isExportingOnlyOneScore);
+
+            files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
+                    return writer->write(notation, destinationDevice, options);
+                } });
+        }
+    } break;
+    case INotationWriter::UnitType::MULTI_PART: {
+        files.push_back({ destinationPath, [writer, notations, options](IODevice& destinationDevice) {
+                return writer->writeList(notations, destinationDevice, options);
+            } });
+    } break;
     }
 
-    return 0;
+    return files;
 }
 
 bool ExportProjectScenario::isMainNotation(INotationPtr notation) const

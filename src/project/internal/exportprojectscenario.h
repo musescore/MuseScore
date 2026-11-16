@@ -75,18 +75,25 @@ private:
         ReplaceAll
     };
 
+    struct ExportFile {
+        muse::io::path_t path;
+        std::function<muse::Ret(muse::io::IODevice&)> exportFunction;
+    };
+
     /// When the user is trying to export a part that is a "potential excerpt", the corresponding score
     /// is not initialized yet, so we can't be certain about the page count. We should not initialize
     /// these scores either, until the user really starts the export, because initializing these scores
     /// means making changes to the file, which can't be done without the user's consent.
     bool guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
-    size_t exportFileCount(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 
     muse::io::path_t completeExportPath(const muse::io::path_t& basePath, notation::INotationPtr notation, bool isMain,
                                         bool isExportingOnlyOneScore, int pageIndex = -1) const;
+
+    std::vector<ExportFile> exportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                                        INotationWriterPtr writer, INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
 
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
