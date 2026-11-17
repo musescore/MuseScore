@@ -1630,6 +1630,25 @@ static bool durationTooShortForDots(const TDuration& duration, int dots)
 }
 
 //---------------------------------------------------------
+//   useSelectedNoteForRhythm
+//    Rhythm input enters the selected note: make it the
+//    input note
+//---------------------------------------------------------
+
+void NoteInput::useSelectedNoteForRhythm(Score* score)
+{
+    InputState& is = score->inputState();
+    if (is.rest() || !score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+        return;
+    }
+
+    const EngravingItem* selectedItem = score->selection().element();
+    if (selectedItem && selectedItem->isNote()) {
+        is.setNotes({ toNote(selectedItem)->noteVal() });
+    }
+}
+
+//---------------------------------------------------------
 //   setDuration
 //    Set the note input duration (and apply it to the selection).
 //---------------------------------------------------------
@@ -1659,6 +1678,9 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
                 toggleDots(tx, score, oldDuration.dots());
             }
 
+            // in Rhythm input, the selected note's drum sets the voice below
+            useSelectedNoteForRhythm(score);
+
             // a drum in another voice takes a tuplet waiting here to that voice
             const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice();
             if (drumVoice && is.pendingTupletHere()) {
@@ -1677,13 +1699,6 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
                 score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction());
                 is.moveToNextInputPos();
             } else {
-                if (score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-                    const EngravingItem* selectedItem = score->selection().element();
-                    if (selectedItem && selectedItem->isNote()) {
-                        is.setNotes({ toNote(selectedItem)->noteVal() });
-                    }
-                }
-
                 if (is.beyondScore()) {
                     score->appendMeasures(1);
                     is.moveToNextInputPos();

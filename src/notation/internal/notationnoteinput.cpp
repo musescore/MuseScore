@@ -858,6 +858,7 @@ void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
     NoteInputState& is = score()->inputState();
 
     // the tuplet waits in the voice the next drum goes into
+    NoteInput::useSelectedNoteForRhythm(score());
     if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
         is.setVoice(*drumVoice);
     }

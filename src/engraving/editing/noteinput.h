@@ -106,6 +106,7 @@ public:
 
     static void setDuration(Transaction& tx, Score* score, DurationType duration);
     static std::optional<TupletPreview> tupletPreview(const Score* score);
+    static void useSelectedNoteForRhythm(Score* score);
     static void toggleRest(Transaction& tx, Score* score);
     static void toggleDots(Transaction& tx, Score* score, int dots, bool toggleForSelectionOnly = false);
     static void increaseDuration(Transaction& tx, Score* score);

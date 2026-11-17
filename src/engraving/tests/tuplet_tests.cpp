@@ -2390,6 +2390,71 @@ TEST_F(Engraving_TupletTests, pendingTupletDrumPad)
     delete score;
 }
 
+TEST_F(Engraving_TupletTests, pendingTupletRhythmSelectedDrum)
+{
+    // in Rhythm input, the selected note's drum is entered, in its own voice; the tuplet goes with it there
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"tupletDrums.mscx");
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::RHYTHM);
+
+    auto crAt = [score](const Fraction& tick, track_idx_t track) -> const ChordRest* {
+        const Segment* s = score->tick2segment(tick, false, SegmentType::ChordRest);
+        return s ? toChordRest(s->element(track)) : nullptr;
+    };
+
+    // a bass drum (voice 2) entered at `tick`, then changed to a snare (voice 1) and selected; the bass drum is still the input note
+    auto selectSnareInVoice2 = [&](const Fraction& tick) {
+        is.setTrack(1);
+        is.setSegment(score->tick2segment(tick, false, SegmentType::ChordRest));
+        is.setDuration(DurationType::V_QUARTER);
+        is.setNotes({ NoteVal(36) });
+        score->deselectAll();
+        pressDuration(score, DurationType::V_QUARTER);
+        const ChordRest* cr = crAt(tick, 1);
+        ASSERT_TRUE(cr && cr->isChord());
+        Note* note = toChord(cr)->upNote();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Pending tuplet tests"), [&](Transaction&) {
+            note->undoChangeProperty(Pid::PITCH, 38);
+        });
+        score->select(note, SelectType::SINGLE, 0);
+        is.setTrack(1);
+        is.setSegment(score->tick2segment(tick, false, SegmentType::ChordRest));
+        ASSERT_EQ(is.notes().front().pitch, 36);
+    };
+
+    // with no tuplet waiting, the snare goes into voice 1
+    ASSERT_NO_FATAL_FAILURE(selectSnareInVoice2(Fraction(0, 1)));
+    pressDuration(score, DurationType::V_EIGHTH);
+    EXPECT_TRUE(score->sanityCheck());
+    const ChordRest* control = crAt(Fraction(0, 1), 0);
+    ASSERT_TRUE(control && control->isChord());
+    EXPECT_EQ(toChord(control)->upNote()->pitch(), 38);
+
+    // a tuplet command waits in the snare's voice, as it takes the selected note as the next one
+    ASSERT_NO_FATAL_FAILURE(selectSnareInVoice2(Fraction(1, 1)));
+    NoteInput::useSelectedNoteForRhythm(score);
+    EXPECT_EQ(is.otherDrumVoice(), std::optional<voice_idx_t>(0));
+
+    // with a tuplet waiting, the snare takes it to voice 1 too, also from another voice with the bass drum as the input note
+    is.setNotes({ NoteVal(36) });
+    setPendingTriplet(score, true);
+    pressDuration(score, DurationType::V_EIGHTH);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_FALSE(is.pendingTuplet());
+    const ChordRest* snare = crAt(Fraction(1, 1), 0);
+    ASSERT_TRUE(snare && snare->isChord());
+    EXPECT_EQ(toChord(snare)->upNote()->pitch(), 38);
+    ASSERT_TRUE(snare->tuplet());
+    EXPECT_EQ(snare->tuplet()->ratio(), Fraction(3, 2));
+    const ChordRest* voice2 = crAt(Fraction(1, 1), 1);
+    EXPECT_TRUE(voice2 && !voice2->tuplet());
+
+    delete score;
+}
+
 TEST_F(Engraving_TupletTests, pendingTupletDrumVoiceInsideTuplet)
 {
     // the drum's voice has a tuplet around the input position: the waiting tuplet goes to that tuplet's start,
