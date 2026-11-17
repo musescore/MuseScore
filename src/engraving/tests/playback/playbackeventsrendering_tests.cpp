@@ -49,6 +49,31 @@ static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATI
 static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
 static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
 
+//! Checks that consecutive events [firstEventIdx, firstEventIdx + eventsCount) form exactly one articulation range:
+//! only the first event starts it (occupiedFrom == 0) and only the last one ends it (occupiedTo == 100%).
+//! Range-based consumers (e.g. MuseSampler) support only one open range per voice, so ranges must not interleave
+static void checkSingleArticulationRange(const PlaybackEventList& events, const size_t firstEventIdx, const size_t eventsCount,
+                                         const ArticulationType type)
+{
+    ASSERT_GE(eventsCount, 2);
+    ASSERT_LE(firstEventIdx + eventsCount, events.size());
+
+    for (size_t i = 0; i < eventsCount; ++i) {
+        const PlaybackEvent& event = events.at(firstEventIdx + i);
+        ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+        const ArticulationMap& articulations = std::get<mpe::NoteEvent>(event).expressionCtx().articulations;
+        ASSERT_TRUE(articulations.contains(type));
+
+        const ArticulationAppliedData& articulationData = articulations.at(type);
+        const bool isFirst = i == 0;
+        const bool isLast = i == eventsCount - 1;
+
+        EXPECT_EQ(articulationData.occupiedFrom == 0, isFirst) << "event " << firstEventIdx + i;
+        EXPECT_EQ(articulationData.occupiedTo == HUNDRED_PERCENT, isLast) << "event " << firstEventIdx + i;
+    }
+}
+
 class Engraving_PlaybackEventsRendererTests : public ::testing::Test
 {
 protected:
@@ -2579,25 +2604,91 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
     m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * expectedSubNotesCount);
+    const PlaybackEventList& events = result.begin()->second;
+    ASSERT_EQ(events.size(), expectedChordsCount * expectedSubNotesCount);
 
-    for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
-        for (int noteIdx = 0; noteIdx < expectedSubNotesCount; ++noteIdx) {
-            int eventIdx = (chordIdx * expectedSubNotesCount) + noteIdx;
+    // [THEN] We expect all sub-notes of one chord note before the next chord note
+    for (int noteIdx = 0; noteIdx < expectedSubNotesCount; ++noteIdx) {
+        for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
+            int eventIdx = (noteIdx * expectedChordsCount) + chordIdx;
 
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(eventIdx));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo16th));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, chordIdx * SEMI_QUAVER_NOTE_DURATION);
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(chordIdx));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(noteIdx));
         }
+
+        // [THEN] We expect that the sub-notes of each chord note form exactly one tremolo range
+        checkSingleArticulationRange(events, noteIdx * expectedChordsCount, expectedChordsCount, ArticulationType::Tremolo16th);
     }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Dotted_Chord_Tremolo
+ * @details In this case we're gonna render a simple piece of score with a single measure,
+ *          which starts with the F4+A4+C5 dotted quarter notes chord marked by the 8-th Tremolo articulation.
+ *          Each chord note must form one complete tremolo range, see: https://github.com/musescore/MuseScore/issues/35553
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Dotted_Chord_Tremolo)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "dotted_chord_tremolo.mscx");
+
+    const Chord* chord = findChord(score, 0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure: 3 eighth sub-notes per chord note
+    constexpr int expectedStepsCount = 3;
+
+    const std::vector<pitch_level_t> expectedPitches = {
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4),
+        pitchLevel(PitchClass::C, 5)
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Tremolo8th, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
+
+    // [WHEN] Request to render a chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] We expect that rendered note events number will match expectations
+    ASSERT_EQ(result.size(), 1);
+    const PlaybackEventList& events = result.begin()->second;
+    ASSERT_EQ(events.size(), expectedStepsCount * expectedPitches.size());
+
+    for (size_t noteIdx = 0; noteIdx < expectedPitches.size(); ++noteIdx) {
+        for (int stepIdx = 0; stepIdx < expectedStepsCount; ++stepIdx) {
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(noteIdx * expectedStepsCount + stepIdx));
+
+            // [THEN] We expect evenly spaced eighth sub-notes of the same pitch
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(noteIdx));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, stepIdx * QUAVER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, QUAVER_NOTE_DURATION);
+
+            // [THEN] We expect that the tremolo spans the whole dotted quarter note
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo8th);
+            EXPECT_EQ(articulationData.meta.timestamp, 0);
+            EXPECT_EQ(articulationData.meta.overallDuration, expectedStepsCount * QUAVER_NOTE_DURATION);
+        }
+
+        // [THEN] We expect that the sub-notes of each chord note form exactly one tremolo range
+        checkSingleArticulationRange(events, noteIdx * expectedStepsCount, expectedStepsCount, ArticulationType::Tremolo8th);
+    }
+
+    delete score;
 }
 
 /**

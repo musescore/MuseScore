@@ -189,7 +189,9 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
 
     stepDurationTicks = overallDurationTicks / stepsCount;
 
-    TremoloTimeCache tremoloTimeCache;
+    auto stepStartTick = [&ctx, stepDurationTicks](int step) {
+        return ctx.nominalPositionStartTick + step * stepDurationTicks;
+    };
 
     if (tremolo.two) {
         const Chord* firstTremoloChord = tremolo.two->chord1();
@@ -200,22 +202,38 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
         }
 
         for (int i = 0; i < stepsCount; ++i) {
-            const Chord* currentChord = firstTremoloChord;
+            const Chord* currentChord = (i % 2 == 0) ? firstTremoloChord : secondTremoloChord;
 
-            if (i % 2 != 0) {
-                currentChord = secondTremoloChord;
+            for (const Note* note : currentChord->notes()) {
+                if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
+                    continue;
+                }
+
+                TimestampAndDuration noteSpan;
+                noteSpan.timestamp = tremoloTimestampFrom(note, ctx);
+                noteSpan.duration = tremoloDuration(note, noteSpan.timestamp, ctx);
+
+                buildAndAppendEvent(note, preferredType, stepDurationTicks, stepStartTick(i), noteSpan, ctx, result);
             }
-
-            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
-                                 ctx, tremoloTimeCache, result);
         }
 
         return;
     }
 
-    for (int i = 0; i < stepsCount; ++i) {
-        buildAndAppendEvents(chord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
-                             ctx, tremoloTimeCache, result);
+    // Emit all steps of one note before the next, because range-based consumers (e.g. MuseSampler)
+    // support only one open tremolo range per voice
+    for (const Note* note : chord->notes()) {
+        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
+            continue;
+        }
+
+        TimestampAndDuration noteSpan;
+        noteSpan.timestamp = tremoloTimestampFrom(note, ctx);
+        noteSpan.duration = tremoloDuration(note, noteSpan.timestamp, ctx);
+
+        for (int i = 0; i < stepsCount; ++i) {
+            buildAndAppendEvent(note, preferredType, stepDurationTicks, stepStartTick(i), noteSpan, ctx, result);
+        }
     }
 }
 
@@ -228,51 +246,28 @@ int TremoloRenderer::stepDurationTicks(const Chord* chord, int tremoloLines)
     return ticks * chord->timeStretchFactor();
 }
 
-void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const ArticulationType type,
-                                           const int stepDurationTicks,
-                                           const int startTick, const RenderingContext& ctx,
-                                           TremoloTimeCache& tremoloCache,
-                                           mpe::PlaybackEventList& result)
+void TremoloRenderer::buildAndAppendEvent(const Note* note, const ArticulationType type,
+                                          const int stepDurationTicks, const int startTick,
+                                          const TimestampAndDuration& tremoloSpan,
+                                          const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
-    for (const Note* note : chord->notes()) {
-        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
-            continue;
-        }
+    auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
+        ctx.score, startTick, stepDurationTicks, ctx.positionTickOffset);
 
-        auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            ctx.score, startTick, stepDurationTicks, ctx.positionTickOffset);
+    NominalNoteCtx noteCtx(note, ctx);
+    noteCtx.duration = noteTnD.duration;
+    noteCtx.timestamp = noteTnD.timestamp;
 
-        NominalNoteCtx noteCtx(note, ctx);
-        noteCtx.duration = noteTnD.duration;
-        noteCtx.timestamp = noteTnD.timestamp;
+    int utick = timestampToTick(ctx.score, noteCtx.timestamp);
+    noteCtx.dynamicLevel = ctx.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
-        int utick = timestampToTick(ctx.score, noteCtx.timestamp);
-        noteCtx.dynamicLevel = ctx.playbackCtx->appliableDynamicLevel(note->track(), utick);
+    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
 
-        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
+    muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);
+    articulationData.meta.timestamp = tremoloSpan.timestamp;
+    articulationData.meta.overallDuration = tremoloSpan.duration;
 
-        const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, ctx, tremoloCache);
-        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);
-        articulationData.meta.timestamp = tremoloTnD.timestamp;
-        articulationData.meta.overallDuration = tremoloTnD.duration;
+    updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
 
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
-
-        result.emplace_back(buildNoteEvent(noteCtx));
-    }
-}
-
-const TimestampAndDuration& TremoloRenderer::tremoloTimeAndDuration(const Note* note, const RenderingContext& ctx,
-                                                                    TremoloTimeCache& cache)
-{
-    auto cacheIt = cache.find(note);
-    if (cacheIt != cache.end()) {
-        return cacheIt->second;
-    }
-
-    TimestampAndDuration& tnd = cache[note];
-    tnd.timestamp = tremoloTimestampFrom(note, ctx);
-    tnd.duration = tremoloDuration(note, tnd.timestamp, ctx);
-
-    return tnd;
+    result.emplace_back(buildNoteEvent(noteCtx));
 }
