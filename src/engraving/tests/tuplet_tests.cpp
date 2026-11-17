@@ -36,6 +36,7 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/edittimesig.h"
 #include "engraving/editing/edittuplet.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -2102,6 +2103,39 @@ TEST_F(Engraving_TupletTests, pendingTupletBeyondShortLastMeasure)
     EXPECT_TRUE(score->sanityCheck());
     ASSERT_EQ(score->nmeasures(), measures + 1);
     EXPECT_EQ(rhythm(score->lastMeasure()), "3:2[4 r4 r4] r2");
+
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, pendingTupletBeyondLocalTimeSig)
+{
+    MasterScore* score = pendingTupletScore();
+    ASSERT_TRUE(score);
+    InputState& is = score->inputState();
+
+    // a local 3/4 in the last measure: the new measure is 3/4 on this staff too
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {
+        TimeSig* ts = Factory::createTimeSig(score->dummy());
+        ts->setSig(Fraction(3, 4));
+        EditTimeSig::addTimeSig(tx, score, score->lastMeasure(), 0, ts, true);
+    });
+
+    // a half-note triplet doesn't fit in 3/4: refused, no measure added, and the tuplet still waits
+    const int measures = score->nmeasures();
+    is.setSegment(score->lastMeasure()->first(SegmentType::ChordRest));
+    is.setBeyondScore(true);
+    setPendingTriplet(score, true);
+    pressDuration(score, DurationType::V_HALF);
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_TRUE(score->sanityCheck());
+    EXPECT_EQ(score->nmeasures(), measures);
+    EXPECT_TRUE(is.pendingTupletHere());
+
+    // a quarter-note triplet fits
+    pressDuration(score, DurationType::V_QUARTER);
+    EXPECT_TRUE(score->sanityCheck());
+    ASSERT_EQ(score->nmeasures(), measures + 1);
+    EXPECT_EQ(rhythm(score->lastMeasure()), "3:2[4 r4 r4] r4");
 
     delete score;
 }

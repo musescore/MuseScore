@@ -837,9 +837,11 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
     }
 
     if (is.beyondScore()) {
-        // a new measure of the nominal time signature there, as appendMeasures() adds
+        // the measure appendMeasures() adds: the nominal time signature there, stretched by the staff's local one
         const Fraction measureLen = score->sigmap()->timesig(score->endTick()).nominal();
-        return shape->baseLen.fraction() * shape->ratio.denominator() <= measureLen;
+        const Staff* staff = score->staff(track2staff(is.track()));
+        const Fraction timeStretch = staff ? staff->timeStretch(score->endTick()) : Fraction(1, 1);
+        return actualTicks(shape->baseLen.fraction() * shape->ratio.denominator(), nullptr, timeStretch) <= measureLen;
     }
 
     // at a chord or rest, in an empty voice, or in a longer chord or rest that addPendingTuplet shortens
