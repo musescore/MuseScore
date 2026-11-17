@@ -157,11 +157,9 @@ public:
     void undoRedoToIndex(size_t idx) override;
 
     // Move
+    bool moveSelectedItems(MoveDirection d, bool quickly) override;
     void movePitch(MoveDirection d, PitchMode mode) override;
-    void nudge(MoveDirection d, bool quickly) override;
-    void nudgeAnchors(MoveDirection) override;
     void moveChordRestToStaff(MoveDirection d) override;
-    void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
     void toggleSnapToPrevious() override;
     void toggleSnapToNext() override;
@@ -443,8 +441,7 @@ private:
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
 
-    double getHRaster() const;
-    double getVRaster() const;
+    double gridRaster(const EngravingItem* item, muse::Orientation orientation) const;
 
     double currentScaling(muse::draw::Painter* painter) const;
 
@@ -496,6 +493,10 @@ private:
 
     void resetGripEdit();
     void resetHitElementContext() override;
+
+    void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements);
+    void nudgeAnchors(MoveDirection d);
+    void shiftLyricsVerses(engraving::Transaction& tx, MoveDirection d, const std::vector<EngravingItem*>& elements);
 
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);
