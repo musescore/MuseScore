@@ -89,6 +89,12 @@ public:
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
+    QString lastInstrumentNamesLanguage() const override;
+    void setLastInstrumentNamesLanguage(const QString& languageCode) override;
+
+    QStringList recentInstrumentNamesLanguages() const override;
+    void setRecentInstrumentNamesLanguages(const QStringList& languageCodes) override;
+
     MigrationOptions migrationOptions(MigrationType type) const override;
     void setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent = true) override;
 
