@@ -24,6 +24,7 @@
 
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
+#include "engraving/editing/staffconfig.h"
 
 namespace mu::notation {
 using Part = mu::engraving::Part;
@@ -32,37 +33,7 @@ using Staff = mu::engraving::Staff;
 using StaffGroup = mu::engraving::StaffGroup;
 using StaffType = mu::engraving::StaffType;
 using StaffTypeId = mu::engraving::StaffTypes;
-
-struct StaffConfig
-{
-    bool visible = false;
-    engraving::Spatium userDistance = engraving::Spatium(0.0);
-    bool cutaway = false;
-    bool hideSystemBarline = false;
-    engraving::AutoOnOff mergeMatchingRests = engraving::AutoOnOff::AUTO;
-    bool reflectTranspositionInLinkedTab = false;
-    engraving::ClefTypeList clefTypeList;
-    engraving::StaffType staffType;
-
-    bool operator==(const StaffConfig& conf) const
-    {
-        bool equal = visible == conf.visible;
-        equal &= userDistance == conf.userDistance;
-        equal &= cutaway == conf.cutaway;
-        equal &= hideSystemBarline == conf.hideSystemBarline;
-        equal &= mergeMatchingRests == conf.mergeMatchingRests;
-        equal &= clefTypeList == conf.clefTypeList;
-        equal &= staffType == conf.staffType;
-        equal &= reflectTranspositionInLinkedTab == conf.reflectTranspositionInLinkedTab;
-
-        return equal;
-    }
-
-    bool operator!=(const StaffConfig& conf) const
-    {
-        return !(*this == conf);
-    }
-};
+using StaffConfig = mu::engraving::StaffConfig;
 
 inline QString staffTypeToString(StaffTypeId type)
 {

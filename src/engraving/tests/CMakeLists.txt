@@ -51,6 +51,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamic_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/earlymusic_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editpart_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/eid_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/element_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/exchangevoices_tests.cpp

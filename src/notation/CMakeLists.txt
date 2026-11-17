@@ -69,8 +69,6 @@ target_sources(notation PRIVATE
     internal/instrumentsrepository.h
     internal/masternotation.cpp
     internal/masternotation.h
-    internal/masternotationparts.cpp
-    internal/masternotationparts.h
     internal/mscnotationwriter.cpp
     internal/mscnotationwriter.h
     internal/mscoreerrorscontroller.cpp

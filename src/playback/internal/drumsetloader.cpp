@@ -90,19 +90,9 @@ void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackI
         return;
     }
 
-    QString instrumentId = trackId.instrumentId.toQString();
-    const mu::engraving::InstrumentList& instruments = part->instruments();
+    InstrumentKey instrumentKey;
+    instrumentKey.instrumentId = trackId.instrumentId;
+    instrumentKey.partId = trackId.partId;
 
-    for (auto it = instruments.cbegin(); it != instruments.cend(); ++it) {
-        if (it->second->id() != trackId.instrumentId) {
-            continue;
-        }
-
-        InstrumentKey instrumentKey;
-        instrumentKey.instrumentId = instrumentId;
-        instrumentKey.partId = trackId.partId;
-        instrumentKey.tick = Fraction::fromTicks(it->first);
-
-        parts->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
-    }
+    parts->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
 }
