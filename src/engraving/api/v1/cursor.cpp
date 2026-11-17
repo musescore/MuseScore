@@ -573,7 +573,7 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
         return;
     }
 
-    inputState().setSegment(tupletMeasure->tick2segment(tupletTick));
+    setSegment(tupletMeasure->tick2segment(tupletTick));
     inputState().setDuration(baseLen);
 }
 
@@ -792,6 +792,8 @@ mu::engraving::Segment* Cursor::segment() const
 void Cursor::setSegment(mu::engraving::Segment* seg)
 {
     inputState().setSegment(seg);
+    // a position the plugin moves to is never past the end of the score
+    inputState().setBeyondScore(false);
 }
 
 //---------------------------------------------------------
