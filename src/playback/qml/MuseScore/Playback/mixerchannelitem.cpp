@@ -22,6 +22,8 @@
 
 #include "mixerchannelitem.h"
 
+#include <QPointer>
+
 #include "defer.h"
 #include "translation.h"
 #include "log.h"
@@ -637,9 +639,11 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
     InputResourceItem* newItem = new InputResourceItem(this);
 
     connect(newItem, &InputResourceItem::inputParamsChangeRequested, this, [this, newItem](const AudioResourceMeta& newMeta) {
-        if (askAboutChangingSound()) {
-            newItem->setParamsRecourceMeta(newMeta);
-        }
+        askAboutChangingSound().onResolve(this, [item = QPointer<InputResourceItem>(newItem), newMeta](bool change) {
+            if (change && item) {
+                item->setParamsRecourceMeta(newMeta);
+            }
+        });
     });
 
     connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
@@ -791,37 +795,42 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
     item->setEditorCommand({});
 }
 
-bool MixerChannelItem::askAboutChangingSound()
+async::Promise<bool> MixerChannelItem::askAboutChangingSound()
 {
-    if (!configuration()->needToShowResetSoundFlagsWhenChangeSoundWarning()) {
-        return true;
+    if (!configuration()->needToShowResetSoundFlagsWhenChangeSoundWarning()
+        || !notationPlayback()->hasSoundFlags({ m_instrumentTrackId })) {
+        return async::make_promise<bool>([](auto resolve) {
+            return resolve(true);
+        });
     }
 
-    if (!notationPlayback()->hasSoundFlags({ m_instrumentTrackId })) {
-        return true;
-    }
+    return async::make_promise<bool>([this](auto resolve) {
+        int changeBtn = int(IInteractive::Button::Apply);
+        IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
+        IInteractive::ButtonDatas buttons = {
+            interactive()->buttonData(IInteractive::Button::Cancel),
+            IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sound"), true /*accent*/)
+        };
 
-    int changeBtn = int(IInteractive::Button::Apply);
-    IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
-    IInteractive::ButtonDatas buttons = {
-        interactive()->buttonData(IInteractive::Button::Cancel),
-        IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sound"), true /*accent*/)
-    };
+        interactive()->warning(muse::trc("playback", "Are you sure you want to change this sound?"),
+                               IInteractive::Text(muse::trc("playback",
+                                                            "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.")),
+                               buttons, changeBtn, options)
+        .onResolve(this, [this, changeBtn, resolve](const IInteractive::Result& result) {
+            if (result.button() != changeBtn) {
+                (void)resolve(false);
+                return;
+            }
 
-    IInteractive::Result result = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change this sound?"),
-                                                             muse::trc("playback",
-                                                                       "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
-                                                             buttons, changeBtn, options);
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowResetSoundFlagsWhenChangeSoundWarning(false);
+            }
 
-    if (result.button() == changeBtn) {
-        if (!result.showAgain()) {
-            configuration()->setNeedToShowResetSoundFlagsWhenChangeSoundWarning(false);
-        }
+            (void)resolve(true);
+        });
 
-        return true;
-    } else {
-        return false;
-    }
+        return async::Promise<bool>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
 }
 
 AudioFxChainOrder MixerChannelItem::resolveNewBlankOutputResourceItemOrder() const

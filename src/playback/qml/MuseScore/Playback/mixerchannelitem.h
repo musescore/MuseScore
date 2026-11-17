@@ -209,7 +209,7 @@ protected:
     void openEditor(AbstractAudioResourceItem* item, const muse::rcommand::CommandQuery& command);
     void closeEditor(AbstractAudioResourceItem* item);
 
-    bool askAboutChangingSound();
+    muse::async::Promise<bool> askAboutChangingSound();
 
     std::optional<notation::AutomationCurveKey> automationCurveKey(notation::AutomationType type) const;
     bool hasAutomationCurve(notation::AutomationType type) const;
