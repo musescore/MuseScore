@@ -5725,6 +5725,8 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
                                options.selectedDurationAs);
     });
     notifyAboutNotationChanged();
+
+    checkAndShowError();
 }
 
 void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)

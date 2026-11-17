@@ -158,6 +158,7 @@ enum class MsError : unsigned char {
     CANNOT_EXPLODE_IMPLODE_LOCAL_TIMESIG,
     NO_SPACE_FOR_TUPLET,
     TUPLET_NOTE_VALUE_TOO_SHORT,
+    TUPLET_RATIO_NOT_POSSIBLE,
 };
 
 /// \cond PLUGIN_API \private \endcond

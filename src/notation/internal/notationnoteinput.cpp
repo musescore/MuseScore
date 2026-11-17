@@ -805,6 +805,8 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     apply();
 
     notifyAboutStateChanged();
+
+    m_interaction->checkAndShowError();
 }
 
 static muse::RectF segmentContentRect(const Segment* segment, track_idx_t track)
