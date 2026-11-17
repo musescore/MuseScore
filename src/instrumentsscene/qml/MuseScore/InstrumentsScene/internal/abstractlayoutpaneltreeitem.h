@@ -54,6 +54,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(bool settingsAvailable READ settingsAvailable NOTIFY settingsAvailableChanged)
     Q_PROPERTY(bool settingsEnabled READ settingsEnabled NOTIFY settingsEnabledChanged)
+    Q_PROPERTY(bool isLastChild READ isLastChild NOTIFY isLastChildChanged)
 
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
@@ -107,6 +108,7 @@ public:
     bool isEmpty() const;
     int childCount() const;
     int row() const;
+    bool isLastChild() const;
 
 public slots:
     void setTitle(QString title);
@@ -130,6 +132,7 @@ signals:
     void isSelectedChanged(bool isSelected);
     void settingsAvailableChanged(bool available);
     void settingsEnabledChanged(bool enabled);
+    void isLastChildChanged(bool isLast);
 
 protected:
     notation::IMasterNotationPtr masterNotation() const;
@@ -137,6 +140,7 @@ protected:
 
 private:
     int indexOf(const AbstractLayoutPanelTreeItem* item) const;
+    void setIsLastChild(bool isLast);
 
     QList<AbstractLayoutPanelTreeItem*> m_children;
     AbstractLayoutPanelTreeItem* m_parent = nullptr;
@@ -152,6 +156,7 @@ private:
     bool m_isSelected = false;
     bool m_settingsAvailable = false;
     bool m_settingsEnabled = false;
+    bool m_isLastChild = false;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     notation::INotationPtr m_notation = nullptr;

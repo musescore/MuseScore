@@ -992,7 +992,7 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     }
 
     // exclude the control item
-    bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
+    const bool hasControlItem = parentItem->childType(parentItem->childCount() - 1) == LayoutPanelItemType::CONTROL_ADD_STAFF;
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
     bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
 
@@ -1223,8 +1223,10 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Par
         partItem->appendChild(staffItem);
     }
 
-    auto addStaffControlItem = buildAddStaffControlItem(partItem->id(), partItem);
-    partItem->appendChild(addStaffControlItem);
+    // Instruments in a shared-staves group can't add staves
+    if (!masterPart->sharedPart()) {
+        partItem->appendChild(buildAddStaffControlItem(partItem->id(), partItem));
+    }
 
     setupStavesConnections(partItem->id());
 

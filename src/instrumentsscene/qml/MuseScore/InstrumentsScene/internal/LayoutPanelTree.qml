@@ -344,9 +344,8 @@ Item {
             readonly property bool isDragged: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem
             readonly property bool isGroupHeader: dropArea.item?.type === LayoutPanelItemType.SHARED_PART
 
-            readonly property bool isCardBottom: dropArea.depth === 0
-                                                 ? !dropArea.expanded
-                                                 : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
+            readonly property bool isCardBottom: dropArea.depth === 0 ? !dropArea.expanded
+                                                                      : Boolean(dropArea.item?.isLastChild)
 
             // Staves and "Add staff" rows are in their part's group
             readonly property PartTreeItem groupPart: {
