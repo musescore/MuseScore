@@ -45,18 +45,23 @@ RowLayout {
     required property NavigationPanel navigationPanel
     required property int navigationRow
 
-    readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
     readonly property string title: root.item ? root.item.title : ""
-    readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
-    readonly property bool isSharedPart: root.type === LayoutPanelItemType.SHARED_PART
-
-    // A group that isn't combined and the instruments of one that is
-    readonly property bool isEyeHidden: root.isSharedPart ? !root.isEnabled : root.isInCombinedGroup
     readonly property alias isPopupOpened: settingsPopup.isOpened
 
     signal visibilityToggled(bool visible)
     signal expandToggled(bool expand)
     signal enabledToggled(bool enabled)
+
+    QtObject {
+        id: prv
+
+        readonly property int type: root.item ? root.item.type : LayoutPanelItemType.UNDEFINED
+        readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
+        readonly property bool isSharedPart: prv.type === LayoutPanelItemType.SHARED_PART
+
+        // A group that isn't combined and the instruments of one that is
+        readonly property bool isEyeHidden: prv.isSharedPart ? !root.isEnabled : root.isInCombinedGroup
+    }
 
     spacing: 2
 
@@ -65,7 +70,7 @@ RowLayout {
         Layout.fillHeight: true
         Layout.leftMargin: {
             // Keeps the title in line while the eye is hidden
-            let margin = root.isEyeHidden ? ui.theme.defaultButtonSize + root.spacing : 0
+            let margin = prv.isEyeHidden ? ui.theme.defaultButtonSize + root.spacing : 0
 
             if (root.isInCombinedGroup) {
                 margin += ui.theme.defaultButtonSize / 2
@@ -74,7 +79,7 @@ RowLayout {
             return margin
         }
 
-        sourceComponent: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? systemObjectsLayerTitleComp
+        sourceComponent: prv.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? systemObjectsLayerTitleComp
                                                                                 : visibilityControlsComp
     }
 
@@ -117,7 +122,7 @@ RowLayout {
     ToggleButton {
         id: sharedPartToggle
 
-        visible: root.isSharedPart && root.isStaveSharingEnabled
+        visible: prv.isSharedPart && root.isStaveSharingEnabled
         checked: Boolean(root.item) && root.item.isEnabled
 
         navigation.panel: root.navigationPanel
@@ -139,13 +144,13 @@ RowLayout {
             navigationRow: root.navigationRow
 
             title: root.title
-            isRootControl: root.type === LayoutPanelItemType.PART || root.isSharedPart
+            isRootControl: prv.type === LayoutPanelItemType.PART || prv.isSharedPart
 
             // A group that isn't combined is dimmed
-            useVisibilityButton: !root.isEyeHidden
-            opacity: root.isSharedPart && !root.isEnabled ? 0.7 : 1
+            useVisibilityButton: !prv.isEyeHidden
+            opacity: prv.isSharedPart && !root.isEnabled ? 0.7 : 1
 
-            isVisible: root.isItemVisible
+            isVisible: prv.isItemVisible
             onVisibilityButtonClicked: function(isVisible) {
                 root.visibilityToggled(!isVisible)
             }

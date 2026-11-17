@@ -59,7 +59,7 @@ FlatButton {
         Rectangle {
             id: chipBackground
 
-            // 70 = 32+2+32+4 for the buttons and spacing in LayoutPanelItemDelegate
+            // 70 = 32+2+32+4 for the buttons and spacing in LayoutPanelCardContent
             // to make sure that the Add button aligns vertically with the text of the item above it
             x: root.sideMargin + 70 + 12 * root.depth
             anchors.verticalCenter: parent.verticalCenter

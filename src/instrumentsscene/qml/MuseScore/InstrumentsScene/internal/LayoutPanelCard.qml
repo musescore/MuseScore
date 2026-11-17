@@ -40,22 +40,16 @@ FocusableControl {
     required property bool isExpanded
     property bool isDragged: false
 
-    property bool isEnabled: item && item.isEnabled
     property bool isInCombinedGroup: false
 
     readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
-    readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
-
-    // A group header's state is drawn on the whole group's background
-    readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
 
     property int sideMargin: 0
     property int cardRadius: 0
 
-    readonly property alias isPopupOpened: row.isPopupOpened
+    readonly property alias isPopupOpened: cardContent.isPopupOpened
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
@@ -74,6 +68,13 @@ FocusableControl {
     QtObject {
         id: prv
 
+        readonly property bool isEnabled: Boolean(root.item?.isEnabled)
+        readonly property bool isSelected: Boolean(root.item?.isSelected)
+        readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
+
+        // A group header's state is drawn on the whole group's background
+        readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
+
         readonly property bool isExpandedPart: root.isExpanded && root.type === LayoutPanelItemType.PART
 
         readonly property bool isCardTop: root.depth === 0 || root.isDragged
@@ -84,11 +85,11 @@ FocusableControl {
     implicitHeight: 30
     implicitWidth: 248
 
-    navigation.name: "LayoutPanelItemDelegate"
+    navigation.name: "LayoutPanelCard"
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: row.title
+    navigation.accessible.name: cardContent.title
 
     onNavigationTriggered: { root.clicked(null) }
 
@@ -128,8 +129,8 @@ FocusableControl {
         z: -1
     }
 
-    LayoutPanelItemRow {
-        id: row
+    LayoutPanelCardContent {
+        id: cardContent
 
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
@@ -138,18 +139,18 @@ FocusableControl {
         item: root.item
         isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
         isHovered: root.mouseArea.containsMouse
-        isHighlighted: root.isSelected || root.isPressed || root.navigation.highlight
+        isHighlighted: prv.isSelected || prv.isPressed || root.navigation.highlight
 
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
         depth: root.depth
         isExpanded: root.isExpanded
-        isEnabled: root.isEnabled
+        isEnabled: prv.isEnabled
         isInCombinedGroup: root.isInCombinedGroup
 
         onVisibilityToggled: function(visible) {
-            if (root.isSelected) {
+            if (prv.isSelected) {
                 root.changeVisibilityOfSelectedRowsRequested(visible)
             } else {
                 root.changeVisibilityRequested(root.modelIndex, visible)
@@ -161,7 +162,7 @@ FocusableControl {
         }
 
         onEnabledToggled: function(enabled) {
-            if (root.isSelected) {
+            if (prv.isSelected) {
                 root.changeEnabledOfSelectedRowsRequested(enabled)
             } else {
                 root.changeEnabledRequested(root.modelIndex, enabled)
@@ -187,7 +188,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.usesRowHighlight && root.mouseArea.containsMouse && !root.isPressed && !root.isSelected
+            when: prv.usesRowHighlight && root.mouseArea.containsMouse && !prv.isPressed && !prv.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -198,7 +199,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.usesRowHighlight && root.mouseArea.pressed && !root.isSelected && !root.isDragged
+            when: prv.usesRowHighlight && root.mouseArea.pressed && !prv.isSelected && !root.isDragged
 
             PropertyChanges {
                 target: root.background
@@ -209,7 +210,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: root.usesRowHighlight && root.isSelected && !root.mouseArea.containsMouse && !root.isPressed
+            when: prv.usesRowHighlight && prv.isSelected && !root.mouseArea.containsMouse && !prv.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -220,7 +221,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.usesRowHighlight && root.isSelected && root.mouseArea.containsMouse && !root.isPressed
+            when: prv.usesRowHighlight && prv.isSelected && root.mouseArea.containsMouse && !prv.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -231,7 +232,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: root.usesRowHighlight && root.isSelected && root.isPressed
+            when: prv.usesRowHighlight && prv.isSelected && prv.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -242,7 +243,7 @@ FocusableControl {
 
         State {
             name: "IN_EXPANDED_CARD"
-            when: prv.isInExpandedCard && !root.isSelected
+            when: prv.isInExpandedCard && !prv.isSelected
 
             PropertyChanges {
                 target: root.background

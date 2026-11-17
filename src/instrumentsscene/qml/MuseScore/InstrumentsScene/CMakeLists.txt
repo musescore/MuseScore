@@ -64,10 +64,11 @@ qt_add_qml_module(instrumentsscene_qml
         internal/LayoutControlPanel.qml
         internal/LayoutPanelAddButton.qml
         internal/LayoutPanelAddStaffButton.qml
-        internal/LayoutPanelItemDelegate.qml
-        internal/LayoutPanelItemRow.qml
+        internal/LayoutPanelCard.qml
+        internal/LayoutPanelCardContent.qml
         internal/LayoutPanelItemSettingsPopup.qml
         internal/LayoutPanelTree.qml
+        internal/LayoutPanelTreeDelegate.qml
         internal/StaffSettingsPopup.qml
         internal/SystemObjectsLayerHelpPopup.qml
         internal/SystemObjectsLayerSettingsPopup.qml
