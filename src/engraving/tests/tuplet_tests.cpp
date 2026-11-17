@@ -28,8 +28,11 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftype.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/editing/edittuplet.h"
@@ -741,6 +744,35 @@ TEST_F(Engraving_TupletTests, addTupletKeepsSelection)
     EXPECT_EQ(rhythm(m1), "3:2[16 r16 r16] 8 8 8 8 8 8 8");
     EXPECT_EQ(score->selection().element(), note);
     EXPECT_EQ(score->inputState().duration(), TDuration(DurationType::V_QUARTER));
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTupletKeepsTabString)
+{
+    // staff 0 as a guitar TAB staff
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    Staff* staff = score->staff(0);
+    staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::TAB_6COMMON));
+    int strings[] = { 40, 45, 50, 55, 59, 64 };
+    staff->part()->instrument()->setStringData(StringData(24, 6, strings));
+
+    // G4 at fret 8 on string 1, not its default string 0 (fret 3): the tuplet's first note keeps it
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setDuration(DurationType::V_QUARTER);
+    is.setNoteEntryMode(true);
+    is.setString(1);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {
+        NoteInput::addFret(tx, score, 8);
+    });
+    ASSERT_TRUE(addTuplet(chordRestAt(measureAt(score, 0), 0), Fraction(3, 2), DurationType::V_QUARTER));
+    const Chord* chord = toChord(chordRestAt(measureAt(score, 0), 0));
+    ASSERT_TRUE(chord->tuplet());
+    EXPECT_EQ(chord->upNote()->string(), 1);
+    EXPECT_EQ(chord->upNote()->fret(), 8);
+
     delete score;
 }
 
