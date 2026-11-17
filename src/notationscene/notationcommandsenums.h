@@ -270,6 +270,22 @@ struct PastingTypeContract {
         { "special", PastingType::Special, "special" },
     } };
 };
+
+struct FontStyleContract {
+    static constexpr EnumTable<FontStyle, 4> table { {
+        { "bold", FontStyle::Bold, "bold" },
+        { "italic", FontStyle::Italic, "italic" },
+        { "underline", FontStyle::Underline, "underline" },
+        { "strike", FontStyle::Strike, "strike" },
+    } };
+};
+
+struct VerticalAlignmentContract {
+    static constexpr EnumTable<VerticalAlignment, 2> table { {
+        { "subscript", VerticalAlignment::AlignSubScript, "subscript" },
+        { "superscript", VerticalAlignment::AlignSuperScript, "superscript" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -291,4 +307,6 @@ DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
+DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);
 }
