@@ -35,6 +35,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/roottreeitem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parttreeitem_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/sharedparttreeitem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutpaneltreemodel_tests.cpp
 )
 
