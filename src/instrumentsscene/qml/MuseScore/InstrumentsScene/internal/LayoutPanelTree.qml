@@ -345,13 +345,16 @@ Item {
                                                  : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
 
             // Staves and "Add staff" rows are in their part's group
-            readonly property int groupRole: {
+            readonly property PartTreeItem groupPart: {
                 const item = dropArea.depth > 0 ? root.model.modelIndexToItem(dropArea.modelIndex.parent) : dropArea.item
-                const part = item as PartTreeItem
-                return part ? part.sharedGroupRole : LayoutPanelItemType.NOT_IN_GROUP
+                return item as PartTreeItem
             }
 
+            readonly property int groupRole: dropArea.groupPart?.sharedGroupRole ?? LayoutPanelItemType.NOT_IN_GROUP
+            readonly property PartTreeItem groupHeader: dropArea.groupPart?.sharedGroupHeader ?? null
+
             readonly property bool isInGroup: dropArea.groupRole !== LayoutPanelItemType.NOT_IN_GROUP
+            readonly property bool isInCombinedGroup: !dropArea.isGroupHeader && Boolean(dropArea.groupHeader?.isEnabled)
             readonly property bool isGroupTop: dropArea.depth === 0 && dropArea.groupRole === LayoutPanelItemType.GROUP_HEADER
             readonly property bool isGroupCollapsed: dropArea.isGroupHeader && prv.isGroupCollapsed(dropArea.item as PartTreeItem)
             readonly property bool isGroupBottom: {
@@ -442,6 +445,7 @@ Item {
                             row: dropArea.row
                             depth: dropArea.depth
                             isExpanded: dropArea.isGroupHeader ? !dropArea.isGroupCollapsed : dropArea.expanded
+                            isInCombinedGroup: dropArea.isInCombinedGroup
 
                             sideMargin: root.sideMargin
                             cardRadius: prv.cardRadius

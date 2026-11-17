@@ -41,6 +41,7 @@ FocusableControl {
     property bool isDragged: false
 
     property bool isEnabled: item && item.isEnabled
+    property bool isInCombinedGroup: false
 
     readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isSelected: item && item.isSelected
@@ -142,6 +143,7 @@ FocusableControl {
         depth: root.depth
         isExpanded: root.isExpanded
         isEnabled: root.isEnabled
+        isInCombinedGroup: root.isInCombinedGroup
 
         onVisibilityToggled: function(visible) {
             if (root.isSelected) {

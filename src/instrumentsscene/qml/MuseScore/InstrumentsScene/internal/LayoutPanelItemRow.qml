@@ -37,6 +37,7 @@ RowLayout {
     required property int depth
     required property bool isExpanded
     required property bool isEnabled
+    required property bool isInCombinedGroup
     required property bool isStaveSharingEnabled
     required property bool isHovered
     required property bool isHighlighted
@@ -48,6 +49,9 @@ RowLayout {
     readonly property string title: root.item ? root.item.title : ""
     readonly property bool isItemVisible: Boolean(root.item) && root.item.isVisible
     readonly property bool isSharedPart: root.type === LayoutPanelItemType.SHARED_PART
+
+    // A group that isn't combined and the instruments of one that is
+    readonly property bool isEyeHidden: root.isSharedPart ? !root.isEnabled : root.isInCombinedGroup
     readonly property alias isPopupOpened: settingsPopup.isOpened
 
     signal visibilityToggled(bool visible)
@@ -59,8 +63,16 @@ RowLayout {
     Loader {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        // Keeps the title in line while a group's eye is hidden
-        Layout.leftMargin: root.isSharedPart && !root.isEnabled ? ui.theme.defaultButtonSize + root.spacing : 0
+        Layout.leftMargin: {
+            // Keeps the title in line while the eye is hidden
+            let margin = root.isEyeHidden ? ui.theme.defaultButtonSize + root.spacing : 0
+
+            if (root.isInCombinedGroup) {
+                margin += ui.theme.defaultButtonSize / 2
+            }
+
+            return margin
+        }
 
         sourceComponent: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER ? systemObjectsLayerTitleComp
                                                                                 : visibilityControlsComp
@@ -129,8 +141,8 @@ RowLayout {
             title: root.title
             isRootControl: root.type === LayoutPanelItemType.PART || root.isSharedPart
 
-            // A group that isn't combined has no eye and is dimmed
-            useVisibilityButton: !root.isSharedPart || root.isEnabled
+            // A group that isn't combined is dimmed
+            useVisibilityButton: !root.isEyeHidden
             opacity: root.isSharedPart && !root.isEnabled ? 0.7 : 1
 
             isVisible: root.isItemVisible
