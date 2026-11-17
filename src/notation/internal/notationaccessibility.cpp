@@ -41,7 +41,7 @@ using namespace mu::engraving;
 using namespace muse::accessibility;
 
 NotationAccessibility::NotationAccessibility(const Notation* notation)
-    : m_getScore(notation)
+    : m_getScore(notation), m_notation(notation)
 {
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateAccessibilityInfo();
@@ -51,8 +51,7 @@ NotationAccessibility::NotationAccessibility(const Notation* notation)
         updateAccessibilityInfo();
     });
 
-    m_noteInput = notation->interaction()->noteInput();
-    m_noteInput->stateChanged().onNotify(this, [this]() {
+    notation->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
         updateAccessibilityInfo();
     });
 }
@@ -131,7 +130,9 @@ void NotationAccessibility::updateAccessibilityInfo()
     }
 
     // first, so that it stays visible in a narrow status bar
-    const QString pendingTuplet = m_noteInput ? m_noteInput->pendingTupletInfo().toQString() : QString();
+    const INotationInteractionPtr interaction = m_notation->interaction();
+    const INotationNoteInputPtr noteInput = interaction ? interaction->noteInput() : nullptr;
+    const QString pendingTuplet = noteInput ? noteInput->pendingTupletInfo().toQString() : QString();
     if (!pendingTuplet.isEmpty()) {
         newAccessibilityInfo = newAccessibilityInfo.isEmpty() ? pendingTuplet : pendingTuplet + "; " + newAccessibilityInfo;
     }

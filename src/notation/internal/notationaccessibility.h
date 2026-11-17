@@ -23,7 +23,6 @@
 #pragma once
 
 #include "inotationaccessibility.h"
-#include "inotationnoteinput.h"
 
 #include "async/asyncable.h"
 
@@ -58,7 +57,7 @@ private:
     QString singleElementAccessibilityInfo() const;
 
     const IGetScore* m_getScore = nullptr;
-    INotationNoteInputPtr m_noteInput;
+    const Notation* m_notation = nullptr;
     muse::ValCh<std::string> m_accessibilityInfo;
 };
 }
