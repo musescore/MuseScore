@@ -1084,48 +1084,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // text editing commands
-    CommandInfo{
-        EDITTEXT_TOGGLE_BOLD_COMMAND,
-        TranslatableString("action", "Toggle bold"),
-        TranslatableString("action", "Toggle bold"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_TOGGLE_ITALIC_COMMAND,
-        TranslatableString("action", "Toggle italic"),
-        TranslatableString("action", "Toggle italic"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_TOGGLE_UNDERLINE_COMMAND,
-        TranslatableString("action", "Toggle underline"),
-        TranslatableString("action", "Toggle underline"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_TOGGLE_STRIKE_COMMAND,
-        TranslatableString("action", "Toggle strike"),
-        TranslatableString("action", "Toggle strike"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND,
-        TranslatableString("action", "Toggle subscript"),
-        TranslatableString("action", "Toggle subscript"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND,
-        TranslatableString("action", "Toggle superscript"),
-        TranslatableString("action", "Toggle superscript"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<EditTextFontStyleCommand>(),
+    makeCommandInfo<EditTextBoldCommand>(),
+    makeCommandInfo<EditTextItalicCommand>(),
+    makeCommandInfo<EditTextUnderlineCommand>(),
+    makeCommandInfo<EditTextStrikeCommand>(),
+    makeCommandInfo<EditTextValignCommand>(),
+    makeCommandInfo<EditTextSubScriptCommand>(),
+    makeCommandInfo<EditTextSuperScriptCommand>(),
 
     CommandInfo{
         EXTEND_TO_NEXT_NOTE_COMMAND,

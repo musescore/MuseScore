@@ -263,12 +263,8 @@ public:
 
     MOCK_METHOD(void, navigateToNearText, (MoveDirection), (override));
 
-    MOCK_METHOD(void, toggleBold, (), (override));
-    MOCK_METHOD(void, toggleItalic, (), (override));
-    MOCK_METHOD(void, toggleUnderline, (), (override));
-    MOCK_METHOD(void, toggleStrike, (), (override));
-    MOCK_METHOD(void, toggleSubScript, (), (override));
-    MOCK_METHOD(void, toggleSuperScript, (), (override));
+    MOCK_METHOD(void, toggleTextFontStyle, (FontStyle), (override));
+    MOCK_METHOD(void, toggleTextVAlign, (VerticalAlignment), (override));
 
     MOCK_METHOD(bool, canInsertClef, (mu::engraving::ClefType), (const, override));
     MOCK_METHOD(void, insertClef, (mu::engraving::ClefType), (override));

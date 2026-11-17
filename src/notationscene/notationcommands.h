@@ -2319,12 +2319,93 @@ inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("comma
 inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
 
 // text editing commands
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_BOLD_COMMAND("command://notation/edittext-toggle-bold");
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_ITALIC_COMMAND("command://notation/edittext-toggle-italic");
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_UNDERLINE_COMMAND("command://notation/edittext-toggle-underline");
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_STRIKE_COMMAND("command://notation/edittext-toggle-strike");
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND("command://notation/edittext-toggle-subscript");
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND("command://notation/edittext-toggle-superscript");
+
+struct EditTextFontStyleCommand {
+    cprop_decl id = Command("command://notation/edittext/fontstyle");
+    cprop_decl title = MnemonicString("action", "Toggle font style");
+    cprop_decl description = TranslatableString("action", "Toggle font style of the edited text");
+    cprop_decl availabilities = Availability::API;
+
+    FontStyle style = FontStyle::Bold;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "style", &EditTextFontStyleCommand::style, "Font style" },
+    };
+};
+
+// aliases for edittext toggle font style command
+
+struct EditTextBoldCommand {
+    cprop_decl id = Command("command://notation/edittext/fontstyle/bold");
+    cprop_decl title = MnemonicString("action", "Toggle bold");
+    cprop_decl description = TranslatableString("action", "Toggle bold");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextFontStyleCommand(FontStyle::Bold);
+};
+
+struct EditTextItalicCommand {
+    cprop_decl id = Command("command://notation/edittext/fontstyle/italic");
+    cprop_decl title = MnemonicString("action", "Toggle italic");
+    cprop_decl description = TranslatableString("action", "Toggle italic");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextFontStyleCommand(FontStyle::Italic);
+};
+
+struct EditTextUnderlineCommand {
+    cprop_decl id = Command("command://notation/edittext/fontstyle/underline");
+    cprop_decl title = MnemonicString("action", "Toggle underline");
+    cprop_decl description = TranslatableString("action", "Toggle underline");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextFontStyleCommand(FontStyle::Underline);
+};
+
+struct EditTextStrikeCommand {
+    cprop_decl id = Command("command://notation/edittext/fontstyle/strike");
+    cprop_decl title = MnemonicString("action", "Toggle strike");
+    cprop_decl description = TranslatableString("action", "Toggle strike");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextFontStyleCommand(FontStyle::Strike);
+};
+
+inline static const muse::rcommand::Command EDITTEXT_TOGGLE_BOLD_COMMAND = EditTextBoldCommand::id;
+inline static const muse::rcommand::Command EDITTEXT_TOGGLE_ITALIC_COMMAND = EditTextItalicCommand::id;
+inline static const muse::rcommand::Command EDITTEXT_TOGGLE_UNDERLINE_COMMAND = EditTextUnderlineCommand::id;
+inline static const muse::rcommand::Command EDITTEXT_TOGGLE_STRIKE_COMMAND = EditTextStrikeCommand::id;
+
+struct EditTextValignCommand {
+    cprop_decl id = Command("command://notation/edittext/valign");
+    cprop_decl title = MnemonicString("action", "Toggle vertical alignment");
+    cprop_decl description = TranslatableString("action", "Toggle subscript / superscript of the edited text");
+    cprop_decl availabilities = Availability::API;
+
+    VerticalAlignment align = VerticalAlignment::AlignSubScript;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "align", &EditTextValignCommand::align, "Vertical alignment" },
+    };
+
+    EditTextValignCommand() = default;
+    EditTextValignCommand(VerticalAlignment align)
+        : align(align) {}
+};
+
+// aliases for edittext valign command
+
+struct EditTextSubScriptCommand {
+    cprop_decl id = Command("command://notation/edittext/valign/subscript");
+    cprop_decl title = MnemonicString("action", "Toggle subscript");
+    cprop_decl description = TranslatableString("action", "Toggle subscript");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextValignCommand(VerticalAlignment::AlignSubScript);
+};
+
+struct EditTextSuperScriptCommand {
+    cprop_decl id = Command("command://notation/edittext/valign/superscript");
+    cprop_decl title = MnemonicString("action", "Toggle superscript");
+    cprop_decl description = TranslatableString("action", "Toggle superscript");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextValignCommand(VerticalAlignment::AlignSuperScript);
+};
 
 // note input commands
 

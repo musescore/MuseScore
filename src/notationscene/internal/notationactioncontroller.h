@@ -276,6 +276,8 @@ private:
     void nextBeatTextElement();
     void prevBeatTextElement();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
+    muse::Ret toggleFontStyle(const EditTextFontStyleCommand& command);
+    muse::Ret toggleValign(const EditTextValignCommand& command);
     muse::Ret editTextAdvance(const EditTextAdvanceCommand& command);
     void navigateToTextItemByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);

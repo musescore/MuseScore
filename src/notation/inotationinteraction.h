@@ -317,12 +317,8 @@ public:
     virtual void navigateToNearText(MoveDirection direction) = 0;
 
     // Text style
-    virtual void toggleBold() = 0;
-    virtual void toggleItalic() = 0;
-    virtual void toggleUnderline() = 0;
-    virtual void toggleStrike() = 0;
-    virtual void toggleSubScript() = 0;
-    virtual void toggleSuperScript() = 0;
+    virtual void toggleTextFontStyle(FontStyle style) = 0;
+    virtual void toggleTextVAlign(VerticalAlignment align) = 0;
 
     virtual bool canInsertClef(mu::engraving::ClefType) const = 0;
     virtual void insertClef(mu::engraving::ClefType) = 0;

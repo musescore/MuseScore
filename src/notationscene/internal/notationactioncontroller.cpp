@@ -166,12 +166,8 @@ void NotationActionController::init()
     registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
 
     // text editing commands
-    registerCommand(EDITTEXT_TOGGLE_BOLD_COMMAND, &Interaction::toggleBold);
-    registerCommand(EDITTEXT_TOGGLE_ITALIC_COMMAND, &Interaction::toggleItalic);
-    registerCommand(EDITTEXT_TOGGLE_UNDERLINE_COMMAND, &Interaction::toggleUnderline);
-    registerCommand(EDITTEXT_TOGGLE_STRIKE_COMMAND, &Interaction::toggleStrike);
-    registerCommand(EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND, &Interaction::toggleSubScript);
-    registerCommand(EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND, &Interaction::toggleSuperScript);
+    registerCommand<EditTextFontStyleCommand>(&Controller::toggleFontStyle);
+    registerCommand<EditTextValignCommand>(&Controller::toggleValign);
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
@@ -2581,6 +2577,34 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     } else {
         currentNotationInteraction()->navigateToNearText(direction);
     }
+}
+
+muse::Ret NotationActionController::toggleFontStyle(const EditTextFontStyleCommand& command)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->toggleTextFontStyle(command.style);
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleValign(const EditTextValignCommand& command)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->toggleTextVAlign(command.align);
+
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::editTextAdvance(const EditTextAdvanceCommand& command)

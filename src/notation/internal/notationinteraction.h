@@ -333,12 +333,10 @@ public:
     void addGuitarBend(GuitarBendType bendType) override;
     void addFretboardDiagram() override;
 
-    void toggleBold() override;
-    void toggleItalic() override;
-    void toggleUnderline() override;
-    void toggleStrike() override;
-    void toggleSubScript() override;
-    void toggleSuperScript() override;
+    void toggleTextFontStyle(FontStyle style) override;
+
+    void toggleTextVAlign(VerticalAlignment align) override;
+
     void toggleArticulation(mu::engraving::SymId) override;
     void toggleOrnament(OrnamentType type) override;
     void toggleAutoplace(bool) override;
@@ -411,8 +409,7 @@ private:
     void notifyAboutNoteInputStateChanged();
     void doDragLasso(const muse::PointF& p);
     void endLasso();
-    void toggleFontStyle(mu::engraving::FontStyle);
-    void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
+
     void navigateToLyrics(bool, bool, bool);
 
     mu::engraving::Harmony* editedHarmony() const;
