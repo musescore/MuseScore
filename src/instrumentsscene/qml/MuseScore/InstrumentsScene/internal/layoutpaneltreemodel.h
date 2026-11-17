@@ -185,7 +185,7 @@ private:
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
     bool needWarnOnRemoveRows(int row, int count);
-    bool warnAboutRemovingInstrumentsIfNecessary(int count);
+    muse::async::Promise<bool> askAboutRemovingInstruments(int count);
 
     AbstractLayoutPanelTreeItem* buildSharedPartItem(const notation::Part* part);
     AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
