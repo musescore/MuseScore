@@ -51,6 +51,8 @@ public:
     MOCK_METHOD(void, resetExcerpt, (IExcerptNotationPtr & excerpt), (override));
     MOCK_METHOD(void, sortExcerpts, (ExcerptNotationList & excerpts), (override));
     MOCK_METHOD(void, setExcerptIsOpen, (const INotationPtr excerptNotation, bool opened), (override));
+    MOCK_METHOD(INotationPtrList, createTemporaryStaffNotations, (), (override));
+    MOCK_METHOD(void, removeTemporaryStaffNotations, (), (override));
 
     MOCK_METHOD(INotationPartsPtr, parts, (), (const, override));
     MOCK_METHOD(bool, hasParts, (), (const, override));

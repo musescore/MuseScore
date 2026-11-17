@@ -64,6 +64,12 @@ public:
 
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 
+    //! NOTE Temporary notations containing a single staff each, used for exporting
+    //! each staff to a separate file. They are not part of the project and must be
+    //! freed via removeTemporaryStaffNotations() when no longer needed.
+    virtual INotationPtrList createTemporaryStaffNotations() = 0;
+    virtual void removeTemporaryStaffNotations() = 0;
+
     virtual INotationPartsPtr parts() const = 0;
     virtual bool hasParts() const = 0;
     virtual muse::async::Notification hasPartsChanged() const = 0;

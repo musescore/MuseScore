@@ -85,7 +85,7 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
             filenameAddition = "-" + muse::trc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
-        if (!isMainNotation(notations.front())) {
+        if (!isMainNotation(notations.front()) && unitType != INotationWriter::UnitType::PER_STAFF) {
             filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toStdString();
         }
 
@@ -241,6 +241,38 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
             ++currentFileNum;
         }
     } break;
+    case INotationWriter::UnitType::PER_STAFF: {
+        // NOTE: temporary per-staff notations are always generated from the master notation
+        INotationPtrList staffNotations = masterNotation()->createTemporaryStaffNotations();
+        bool isCanceled = false;
+
+        for (const INotationPtr& notation : staffNotations) {
+            muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                              ? destinationPath
+                                              : completeExportPath(destinationPath, notation, /*isMain*/ false,
+                                                                   /*isExportingOnlyOneScore*/ false);
+
+            auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
+                    return writer->write(notation, destinationDevice, options);
+                };
+
+            Ret ret = doExportLoop(definitivePath, exportFunction);
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                isCanceled = true;
+                break;
+            }
+
+            ++currentFileNum;
+        }
+
+        // NOTE: the temporary notations must be freed before the temporary excerpts are deleted
+        staffNotations.clear();
+        masterNotation()->removeTemporaryStaffNotations();
+
+        if (isCanceled) {
+            return false;
+        }
+    } break;
     case INotationWriter::UnitType::MULTI_PART: {
         auto exportFunction = [writer, notations, options](IODevice& destinationDevice) {
                 return writer->writeList(notations, destinationDevice, options);
@@ -301,6 +333,8 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     };
     case INotationWriter::UnitType::PER_PART:
         return notations.size() == 1;
+    case INotationWriter::UnitType::PER_STAFF:
+        return masterNotation()->notation()->elements()->msScore()->nstaves() == 1;
     case INotationWriter::UnitType::MULTI_PART:
         return true;
     }
@@ -322,6 +356,8 @@ size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations,
     };
     case INotationWriter::UnitType::PER_PART:
         return notations.size();
+    case INotationWriter::UnitType::PER_STAFF:
+        return masterNotation()->notation()->elements()->msScore()->nstaves();
     case INotationWriter::UnitType::MULTI_PART:
         return 1;
     }

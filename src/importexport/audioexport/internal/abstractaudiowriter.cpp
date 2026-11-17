@@ -40,7 +40,7 @@ using namespace mu::notation;
 
 std::vector<INotationWriter::UnitType> AbstractAudioWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { UnitType::PER_PART, UnitType::PER_STAFF };
 }
 
 bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const

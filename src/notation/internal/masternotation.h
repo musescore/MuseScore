@@ -73,6 +73,9 @@ public:
     INotationPlaybackPtr playback() const override;
     void initNotationSoloMuteState(const INotationPtr notation) override;
 
+    INotationPtrList createTemporaryStaffNotations() override;
+    void removeTemporaryStaffNotations() override;
+
     INotationAutomationPtr automation() const override;
 
 private:
@@ -87,6 +90,8 @@ private:
     void updateExcerpts();
     void updatePotentialExcerpts() const;
     void unloadExcerpts(ExcerptNotationList& excerpts);
+
+    void createTemporaryStaffNotations(const std::vector<engraving::Staff*>& staves, StringList& usedNames);
 
     bool containsExcerpt(const engraving::Excerpt* excerpt) const;
 
@@ -105,6 +110,10 @@ private:
     muse::async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;
+
+    //! NOTE Temporary per-staff notations used for exporting each staff to a separate file
+    ExcerptNotationList m_temporaryStaffNotations;
+    std::vector<engraving::Excerpt*> m_temporaryExcerpts;
 
     // When the user first removes instruments (`Parts`) and then adds new ones,
     // the new ones might have the same ID as the removed ones. In this case,

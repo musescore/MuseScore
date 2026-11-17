@@ -40,7 +40,8 @@ public:
     enum class UnitType {
         PER_PAGE,
         PER_PART,
-        MULTI_PART
+        MULTI_PART,
+        PER_STAFF
     };
 
     enum class OptionKey {

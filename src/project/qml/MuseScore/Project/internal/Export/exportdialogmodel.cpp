@@ -370,6 +370,7 @@ QVariantList ExportDialogModel::availableUnitTypes() const
         { UnitType::PER_PAGE, muse::qtrc("project/export", "Each page to a separate file") },
         { UnitType::PER_PART, muse::qtrc("project/export", "Each part to a separate file") },
         { UnitType::MULTI_PART, muse::qtrc("project/export", "All parts combined in one file") },
+        { UnitType::PER_STAFF, muse::qtrc("project/export", "Each staff to a separate file") },
     };
 
     QVariantList result;

@@ -28,6 +28,8 @@
 #include "realfn.h"
 #include "translation.h"
 
+#include "global/containers.h"
+
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/pagestyle.h"
 
@@ -36,6 +38,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/utils.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/keysig.h"
@@ -116,6 +119,8 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
 MasterNotation::~MasterNotation()
 {
     m_parts = nullptr;
+
+    removeTemporaryStaffNotations();
 
     unloadExcerpts(m_potentialExcerpts);
 }
@@ -797,6 +802,94 @@ const ExcerptNotationList& MasterNotation::potentialExcerpts() const
     updatePotentialExcerpts();
 
     return m_potentialExcerpts;
+}
+
+INotationPtrList MasterNotation::createTemporaryStaffNotations()
+{
+    removeTemporaryStaffNotations();
+
+    MasterScore* score = masterScore();
+    IF_ASSERT_FAILED(score) {
+        return {};
+    }
+
+    if (score->staves().empty()) {
+        return {};
+    }
+
+    StringList usedNames;
+    for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
+        usedNames.push_back(excerpt->name().toLower());
+    }
+
+    INotationPtrList result;
+
+    for (Staff* staff : score->staves()) {
+        mu::engraving::Excerpt* excerpt = new mu::engraving::Excerpt(score);
+        excerpt->parts().push_back(staff->part());
+        masterScore()->initExcerpt(excerpt);
+
+        Score* excerptScore = excerpt->excerptScore();
+        IF_ASSERT_FAILED(excerptScore) {
+            delete excerpt;
+            continue;
+        }
+
+        // Remove all the other staves (with their content), so that only `staff` remains
+        std::vector<Staff*> stavesToRemove;
+        for (Staff* excerptStaff : excerptScore->staves()) {
+            if (excerptStaff->id() != staff->id()) {
+                stavesToRemove.push_back(excerptStaff);
+            }
+        }
+
+        for (Staff* excerptStaff : stavesToRemove) {
+            excerptScore->undoRemoveStaff(excerptStaff);
+        }
+
+        // Remove parts that have lost all their staves
+        std::vector<Part*> partsToRemove;
+        for (Part* part : excerptScore->parts()) {
+            if (part->staves().empty()) {
+                partsToRemove.push_back(part);
+            }
+        }
+
+        for (Part* part : partsToRemove) {
+            excerptScore->undoRemovePart(part);
+        }
+
+        excerptScore->doLayout();
+
+        String name = staff->part()->partName();
+        if (staff->part()->nstaves() > 1) {
+            size_t staffIdxInPart = muse::indexOf(staff->part()->staves(), staff);
+            name += String(u" %1").arg(static_cast<int>(staffIdxInPart + 1));
+        }
+
+        String uniqueName = mu::engraving::formatUniqueExcerptName(name, usedNames);
+        excerpt->setName(uniqueName);
+        usedNames.push_back(uniqueName.toLower());
+
+        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
+        m_temporaryStaffNotations.push_back(excerptNotation);
+        m_temporaryExcerpts.push_back(excerpt);
+
+        result.push_back(excerptNotation->notation());
+    }
+
+    return result;
+}
+
+void MasterNotation::removeTemporaryStaffNotations()
+{
+    m_temporaryStaffNotations.clear();
+
+    for (mu::engraving::Excerpt* excerpt : m_temporaryExcerpts) {
+        delete excerpt;
+    }
+
+    m_temporaryExcerpts.clear();
 }
 
 void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts)
