@@ -32,6 +32,7 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "dom/measure.h"
+#include "dom/tuplet.h"
 
 #include "log.h"
 
@@ -196,6 +197,15 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         const LyricsLineSegment* a = toLyricsLineSegment(itemToAutoplace);
         const LyricsLineSegment* b = toLyricsLineSegment(itemInSkyline);
         return a->verse() == b->verse() && a->lyricsPlaceAbove() == b->lyricsPlaceAbove();
+    }
+
+    if (itemToAutoplace->isTuplet() && itemInSkyline->isTuplet()) {
+        // A tuplet avoids the tuplets nested inside it
+        for (const Tuplet* t = toTuplet(itemInSkyline)->tuplet(); t; t = t->tuplet()) {
+            if (t == itemToAutoplace) {
+                return false;
+            }
+        }
     }
 
     if (type1 == type2) {
