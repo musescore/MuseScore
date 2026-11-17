@@ -61,6 +61,14 @@ StyledDialogView {
 
     EditPercussionShortcutModel {
         id: model
+
+        onCloseRequested: function(accepted) {
+            if (accepted) {
+                root.done({ newShortcut: model.newShortcutText, conflictDrumPitch: model.conflictDrumPitch() })
+                return
+            }
+            root.reject()
+        }
     }
 
     EditShortcutDialogContent {
@@ -76,11 +84,7 @@ StyledDialogView {
         informationText: model.informationText
 
         onSaveRequested: {
-            if (model.trySave()) {
-                root.done({ newShortcut: model.newShortcutText, conflictDrumPitch: model.conflictDrumPitch() })
-                return
-            }
-            root.reject()
+            model.trySave()
         }
 
         onCancelRequested: {
