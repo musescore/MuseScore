@@ -271,20 +271,19 @@ static double curveValueBetween(const AutomationCurve& curve, int tickBefore, in
 
     if (tickAfter == -1) {
         // No point after - the curve stays flat at the last point's out value...
-        const mu::engraving::AutomationPoint& pointBefore = curve.find(tickBefore)->second;
+        const mu::engraving::AutomationPoint pointBefore = muse::value(curve, tickBefore, mu::engraving::AutomationPoint());
         return static_cast<double>(pointBefore.value.outValue);
     }
 
-    const auto pointAfterIt = curve.find(tickAfter);
-    const double inValue = static_cast<double>(mu::engraving::resolveInValue(curve, pointAfterIt));
+    const mu::engraving::AutomationPoint pointAfter = muse::value(curve, tickAfter, mu::engraving::AutomationPoint());
     if (tickBefore == -1) {
         // No point before - the curve is flat at the first point's in value...
-        return inValue;
+        return static_cast<double>(muse::mpe::resolveInValue(pointAfter.value, std::nullopt));
     }
 
-    const double outValue = static_cast<double>(curve.find(tickBefore)->second.value.outValue);
-    const double ratio = static_cast<double>(tick - tickBefore) / static_cast<double>(tickAfter - tickBefore);
-    return outValue + (inValue - outValue) * ratio;
+    const mu::engraving::AutomationPoint pointBefore = muse::value(curve, tickBefore, mu::engraving::AutomationPoint());
+    const muse::real_t ratio = static_cast<muse::real_t>(tick - tickBefore) / static_cast<muse::real_t>(tickAfter - tickBefore);
+    return static_cast<double>(muse::mpe::evaluateAt(pointAfter.value, pointBefore.value.outValue, ratio));
 }
 
 static staff_idx_t firstVisibleStaffIdx(const Score* score)
@@ -447,26 +446,26 @@ void NotationAutomationController::buildAndAddPolylinesForStaff(const System* sy
             endMeasure = toMeasure(mb);
         } else if (mb->isHBox() && startMeasure) {
             // Horizontal boxes end the current region - anything after them belongs to the next one...
-            buildAndAddPolylineForStaffRegion(system, staffIdx, startMeasure, endMeasure);
+            buildAndAddPolylineForStaffRegion(system, staff, startMeasure, endMeasure);
             startMeasure = nullptr;
             endMeasure = nullptr;
         }
     }
 
     if (startMeasure) {
-        buildAndAddPolylineForStaffRegion(system, staffIdx, startMeasure, endMeasure);
+        buildAndAddPolylineForStaffRegion(system, staff, startMeasure, endMeasure);
     }
 }
 
-void NotationAutomationController::buildAndAddPolylineForStaffRegion(const System* system, staff_idx_t staffIdx,
+void NotationAutomationController::buildAndAddPolylineForStaffRegion(const System* system, const Staff* staff,
                                                                      const Measure* startMeasure, const Measure* endMeasure)
 {
-    IF_ASSERT_FAILED(score() && system && staffIdx != muse::nidx && startMeasure && endMeasure && m_linesParent) {
+    IF_ASSERT_FAILED(score() && system && staff && startMeasure && endMeasure && m_linesParent) {
         return;
     }
 
-    const Staff* staff = score()->staff(staffIdx);
-    const muse::RectF regionRect = staff ? regionCanvasRect(system, staffIdx, startMeasure, endMeasure) : muse::RectF();
+    const staff_idx_t staffIdx = staff->idx();
+    const muse::RectF regionRect = regionCanvasRect(system, staffIdx, startMeasure, endMeasure);
     IF_ASSERT_FAILED(regionRect.isValid()) {
         return;
     }
@@ -479,7 +478,11 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
     const QVector<PointData> pointsData = pointsDataInStaffRegion(staff, regionRect, startTick, endTick);
 
     const PolylineKey key(system, staffIdx, startTick);
-    m_polylinesDataMap.emplace(key, PolylineData(polyline, pointsData, startMeasure, endMeasure));
+    const bool inserted = m_polylinesDataMap.emplace(key, PolylineData(polyline, pointsData, startMeasure, endMeasure)).second;
+    IF_ASSERT_FAILED(inserted) {
+        delete polyline;
+        return;
+    }
 
     //! NOTE: There can't be a 1-to-1 match between the number of points in the automation model and
     //! points on the polyline. A point with equal in/out values (i.e. a "BOTH" point) is represented
@@ -502,14 +505,13 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
 
-        const auto mapIt = m_polylinesDataMap.find(key);
-        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+        const PolylineData data = polylineData(key);
+        IF_ASSERT_FAILED(data.polyline) {
             return;
         }
 
-        const PolylineData& data = mapIt->second;
         const QVector<PointData>& pointsData = data.pointsData;
-        IF_ASSERT_FAILED(pointIdx < pointsData.size()) {
+        IF_ASSERT_FAILED(pointIdx >= 0 && pointIdx < pointsData.size()) {
             return;
         }
 
@@ -544,7 +546,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
 
             if (oldPointData.isPending) {
                 // Not in the model yet - add it where it was dropped
-                requestAddPoint(key, clampedX, y);
+                requestAddPoint(key, clampedX, y, /*useCurveValue*/ false);
                 rebuildPolylinePoints(key);
                 return;
             }
@@ -567,17 +569,16 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
                      [this, key, polyline](qreal x, qreal y, bool completed) {
         if (completed) {
             m_currentlyEditedPolyline = nullptr;
-            requestAddPoint(key, x, y);
+            requestAddPoint(key, x, y, /*useCurveValue*/ true);
             rebuildPolylinePoints(key);
             return;
         }
 
-        const auto mapIt = m_polylinesDataMap.find(key);
-        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+        const PolylineData data = polylineData(key);
+        IF_ASSERT_FAILED(data.polyline) {
             return;
         }
 
-        PolylineData& data = mapIt->second;
         const int tick = tickFromXInPolyline(key, data, x);
         if (tick == -1) {
             return;
@@ -585,13 +586,14 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
 
         m_currentlyEditedPolyline = polyline;
 
-        QVector<PointData>& pointsData = data.pointsData;
+        QVector<PointData> pointsData = data.pointsData;
 
         int insertIdx = 0;
         while (insertIdx < pointsData.size() && pointsData.at(insertIdx).tick < tick) {
             ++insertIdx;
         }
         pointsData.insert(insertIdx, PointData(-1, tick, { x, y }, PointData::PointType::BOTH, /*isPending*/ true));
+        setPolylinePointsData(key, pointsData);
 
         QVector<QPointF> points = polyline->points();
         points.insert(insertIdx, { x, y });
@@ -604,12 +606,12 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
         if (!completed) {
             return;
         }
-        const auto mapIt = m_polylinesDataMap.find(key);
-        IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+        const PolylineData data = polylineData(key);
+        IF_ASSERT_FAILED(data.polyline) {
             return;
         }
 
-        const QVector<PointData>& pointsData = mapIt->second.pointsData;
+        const QVector<PointData>& pointsData = data.pointsData;
         IF_ASSERT_FAILED(pointIdx >= 0 && pointIdx < pointsData.size()) {
             return;
         }
@@ -797,9 +799,9 @@ void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline, c
 
 void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* polyline, const PolylineKey& key) const
 {
-    const auto mapIt = m_polylinesDataMap.find(key);
+    const PolylineData data = polylineData(key);
     const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
-    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end() && staff && automationData()) {
+    IF_ASSERT_FAILED(polyline && data.polyline && staff && automationData()) {
         return;
     }
 
@@ -812,7 +814,6 @@ void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* po
     QColor editedColor = allVoicesColor;
     editedColor.setAlpha(POLYLINE_EDITED_AREA_ALPHA);
 
-    const PolylineData& data = mapIt->second;
     const QVector<PointData>& pointsData = data.pointsData;
 
     //! NOTE: The first and last segments run to/from the points just outside the region (if any), which can be in other polylines...
@@ -845,13 +846,12 @@ void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* po
 
 void NotationAutomationController::applyPolylineEdgeValues(PolylinePlot* polyline, const PolylineKey& key) const
 {
-    const auto mapIt = m_polylinesDataMap.find(key);
+    const PolylineData data = polylineData(key);
     const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
-    IF_ASSERT_FAILED(polyline && mapIt != m_polylinesDataMap.end() && staff && automationData()) {
+    IF_ASSERT_FAILED(polyline && data.polyline && staff && automationData()) {
         return;
     }
 
-    const PolylineData& data = mapIt->second;
     const AutomationType type = currentAutomationType();
     const AutomationCurve& curve = automationData()->curve(currentCurveKey(staff));
 
@@ -867,8 +867,15 @@ void NotationAutomationController::applyPolylineEdgeValues(PolylinePlot* polylin
         return;
     }
 
-    const double left = curveValueBetween(curve, tickOfPointBefore(curve, startTick), tickOfPointAfter(curve, startTick - 1), startTick);
-    const double right = curveValueBetween(curve, tickOfPointBefore(curve, lastTick + 1), tickOfPointAfter(curve, lastTick), endTick);
+    // Left edge - between the last point before the region and the first point in or after it...
+    const int tickBeforeStart = tickOfPointBefore(curve, startTick);
+    const int tickAtOrAfterStart = tickOfPointAfter(curve, startTick - 1);
+    const double left = curveValueBetween(curve, tickBeforeStart, tickAtOrAfterStart, startTick);
+
+    // Right edge - between the last point in or before the region and the first point after it...
+    const int tickAtOrBeforeLast = tickOfPointBefore(curve, lastTick + 1);
+    const int tickAfterLast = tickOfPointAfter(curve, lastTick);
+    const double right = curveValueBetween(curve, tickAtOrBeforeLast, tickAfterLast, endTick);
 
     // Higher value == lower Y...
     polyline->setLeftEdgeValue(1.0 - automationValueToDisplay(type, staff, startTick, left));
@@ -912,18 +919,15 @@ void NotationAutomationController::updatePolylinesGeometry()
             continue;
         }
 
-        if (!visible) {
-            polyline->setVisible(false);
-            continue;
-        }
-
         const muse::RectF regionRect = regionCanvasRect(key.system, key.staffIdx, data.startMeasure, data.endMeasure);
-        IF_ASSERT_FAILED(regionRect.isValid()) {
-            polyline->setVisible(false);
+        const bool shown = visible && regionRect.isValid();
+        polyline->setVisible(shown);
+        if (!shown) {
+            if (visible) {
+                ASSERT_X("Invalid region rect");
+            }
             continue;
         }
-
-        polyline->setVisible(true);
 
         //! NOTE: Here we should only update properties of the polyline that change relative to the view matrix. Polyline points are
         //! placed relative to the polylines themselves, and thus do not need to be modified in here...
@@ -1122,14 +1126,9 @@ void NotationAutomationController::rebuildAllPolylines()
 
 void NotationAutomationController::rebuildPolylinePoints(const PolylineKey& key)
 {
-    const auto mapIt = m_polylinesDataMap.find(key);
-    IF_ASSERT_FAILED(key.isValid() && mapIt != m_polylinesDataMap.end()) {
-        return;
-    }
-
-    PolylineData& data = mapIt->second;
+    const PolylineData data = polylineData(key);
     PolylinePlot* polyline = data.polyline;
-    IF_ASSERT_FAILED(polyline) {
+    IF_ASSERT_FAILED(key.isValid() && polyline) {
         return;
     }
 
@@ -1141,11 +1140,13 @@ void NotationAutomationController::rebuildPolylinePoints(const PolylineKey& key)
 
     //! NOTE: A polyline only holds the points inside its own region. Whatever lies outside it (which can still affect
     //! the polyline) is covered by the edge values...
-    data.pointsData = pointsDataInStaffRegion(staff, regionRect, data.startMeasure->tick().ticks(), regionLastTick(data.endMeasure));
+    const QVector<PointData> pointsData = pointsDataInStaffRegion(staff, regionRect, data.startMeasure->tick().ticks(),
+                                                                  regionLastTick(data.endMeasure));
+    setPolylinePointsData(key, pointsData);
 
     QVector<QPointF> points;
-    points.reserve(data.pointsData.size());
-    for (const PointData& pointData : data.pointsData) {
+    points.reserve(pointsData.size());
+    for (const PointData& pointData : pointsData) {
         points.push_back(pointData.qPointF);
     }
     polyline->setPoints(points);
@@ -1224,13 +1225,13 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return false;
     }
 
-    const auto mapIt = m_polylinesDataMap.find(key);
-    IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+    const PolylineData data = polylineData(key);
+    IF_ASSERT_FAILED(data.polyline) {
         return false;
     }
 
     // STEP 2 - Determine the new tick value based on the x parameter...
-    const int resolvedTick = tickFromXInPolyline(key, mapIt->second, x);
+    const int resolvedTick = tickFromXInPolyline(key, data, x);
     const int newTick = resolvedTick != -1 ? resolvedTick : oldPointData.tick;
     const bool tickChanged = newTick != oldPointData.tick;
 
@@ -1307,7 +1308,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     return true;
 }
 
-bool NotationAutomationController::requestAddPoint(const PolylineKey& key, qreal x, qreal y)
+bool NotationAutomationController::requestAddPoint(const PolylineKey& key, qreal x, qreal y, bool useCurveValue)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return false;
@@ -1318,13 +1319,13 @@ bool NotationAutomationController::requestAddPoint(const PolylineKey& key, qreal
         return false;
     }
 
-    const auto mapIt = m_polylinesDataMap.find(key);
-    IF_ASSERT_FAILED(mapIt != m_polylinesDataMap.end()) {
+    const PolylineData data = polylineData(key);
+    IF_ASSERT_FAILED(data.polyline) {
         return false;
     }
 
     //! NOTE: No need to clamp x here - tickFromXInPolyline can't resolve to a tick outside the region...
-    const int newTick = tickFromXInPolyline(key, mapIt->second, x);
+    const int newTick = tickFromXInPolyline(key, data, x);
     if (newTick == -1) {
         return false;
     }
@@ -1332,8 +1333,9 @@ bool NotationAutomationController::requestAddPoint(const PolylineKey& key, qreal
     const mu::engraving::AutomationCurveKey curveKey = currentCurveKey(staff);
     const mu::engraving::AutomationCurve& curve = automationData()->curve(curveKey);
 
-    // The click lands on the drawn line, which may be clamped, so keep the curve's own value
-    const std::optional<muse::real_t> curveValue = mu::engraving::evaluateCurveAt(curve, newTick);
+    //! A click lands on the drawn line, which may be clamped, so keep the curve's own value. A dragged point
+    //! is placed wherever the user dropped it, so its y is used instead...
+    const std::optional<muse::real_t> curveValue = useCurveValue ? mu::engraving::evaluateCurveAt(curve, newTick) : std::nullopt;
 
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = curveValue ? *curveValue
@@ -1387,6 +1389,26 @@ void NotationAutomationController::editAutomationPoints(const mu::engraving::Aut
     }
 
     notationAutomation->editPoints(key, edits);
+}
+
+NotationAutomationController::PolylineData NotationAutomationController::polylineData(const PolylineKey& key) const
+{
+    const auto it = m_polylinesDataMap.find(key);
+    IF_ASSERT_FAILED(it != m_polylinesDataMap.end()) {
+        return PolylineData();
+    }
+
+    return it->second;
+}
+
+void NotationAutomationController::setPolylinePointsData(const PolylineKey& key, const QVector<PointData>& pointsData)
+{
+    const auto it = m_polylinesDataMap.find(key);
+    IF_ASSERT_FAILED(it != m_polylinesDataMap.end()) {
+        return;
+    }
+
+    it->second.pointsData = pointsData;
 }
 
 const mu::engraving::AutomationPoint* NotationAutomationController::automationPointAt(const PolylineKey& key, int tick) const
