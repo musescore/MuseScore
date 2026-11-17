@@ -872,6 +872,7 @@ INotationPtrList MasterNotation::createTemporaryStaffNotations()
         usedNames.push_back(uniqueName.toLower());
 
         IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
+        initNotationSoloMuteState(excerptNotation->notation());
         m_temporaryStaffNotations.push_back(excerptNotation);
         m_temporaryExcerpts.push_back(excerpt);
 
