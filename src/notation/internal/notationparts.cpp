@@ -154,8 +154,8 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 
     EditPart::SetPartsResult result;
 
-    transaction(TranslatableString("undoableAction", "Add/remove instruments"), [&](engraving::Transaction&) {
-        result = EditPart::setParts(score(), partEntries(parts), order);
+    transaction(TranslatableString("undoableAction", "Add/remove instruments"), [&](engraving::Transaction& tx) {
+        result = EditPart::setParts(tx, score(), partEntries(parts), order);
     });
 
     const std::vector<Part*>& currentParts = score()->parts();
@@ -175,8 +175,8 @@ void NotationParts::setScoreOrder(const ScoreOrder& order)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Set score order"), [&](engraving::Transaction&) {
-        EditPart::setScoreOrder(score(), order);
+    transaction(TranslatableString("undoableAction", "Set score order"), [&](engraving::Transaction& tx) {
+        EditPart::setScoreOrder(tx, score(), order);
     });
 
     m_scoreOrderChanged.notify();
@@ -199,8 +199,8 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
                                           ? TranslatableString("undoableAction", "Show instrument")
                                           : TranslatableString("undoableAction", "Hide instrument");
 
-    transaction(actionName, [&](engraving::Transaction&) {
-        EditPart::setPartVisible(score(), part, visible);
+    transaction(actionName, [&](engraving::Transaction& tx) {
+        EditPart::setPartVisible(tx, score(), part, visible);
     });
 
     notifyAboutPartChanged(part);
@@ -226,8 +226,8 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     //! which will result in the wrong UI state in the Layout panel.
     //! We should not recreate the staff here, only update it
     m_ignoreUndoStackChanges = true;
-    transaction(actionName, [&](engraving::Transaction&) {
-        result = EditPart::setVoiceVisible(score(), staff, voiceIndex, visible);
+    transaction(actionName, [&](engraving::Transaction& tx) {
+        result = EditPart::setVoiceVisible(tx, score(), staff, voiceIndex, visible);
     });
     m_ignoreUndoStackChanges = false;
 
@@ -259,8 +259,8 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     config.visible = visible;
 
-    transaction(actionName, [&](engraving::Transaction&) {
-        EditPart::setStaffConfig(score(), staff, config);
+    transaction(actionName, [&](engraving::Transaction& tx) {
+        EditPart::setStaffConfig(tx, score(), staff, config);
     });
 
     notifyAboutStaffChanged(staff);
@@ -290,8 +290,8 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
         return TranslatableString("undoableAction", "Set sharps/flats preference");
     };
 
-    transaction(calcActionName(sharpFlat), [&](engraving::Transaction&) {
-        EditPart::setPartSharpFlat(score(), part, sharpFlat);
+    transaction(calcActionName(sharpFlat), [&](engraving::Transaction& tx) {
+        EditPart::setPartSharpFlat(tx, score(), part, sharpFlat);
     });
 
     notifyAboutPartChanged(part);
@@ -316,8 +316,8 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Set instrument name"), [&](engraving::Transaction&) {
-        EditPart::setInstrumentName(score(), part, instrumentKey.tick, name);
+    transaction(TranslatableString("undoableAction", "Set instrument name"), [&](engraving::Transaction& tx) {
+        EditPart::setInstrumentName(tx, score(), part, instrumentKey.tick, name);
     });
 
     notifyAboutPartChanged(part);
@@ -341,8 +341,8 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Set abbreviated instrument name"), [&](engraving::Transaction&) {
-        EditPart::setInstrumentAbbreviature(score(), part, instrumentKey.tick, abbreviature);
+    transaction(TranslatableString("undoableAction", "Set abbreviated instrument name"), [&](engraving::Transaction& tx) {
+        EditPart::setInstrumentAbbreviature(tx, score(), part, instrumentKey.tick, abbreviature);
     });
 
     notifyAboutPartChanged(part);
@@ -355,10 +355,10 @@ void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKe
 
     std::vector<Part*> changedParts;
 
-    transaction(TranslatableString("undoableAction", "Set instrument custom group name"), [&](engraving::Transaction&) {
+    transaction(TranslatableString("undoableAction", "Set instrument custom group name"), [&](engraving::Transaction& tx) {
         for (const InstrumentKey& key : instruments) {
             Part* part = score()->partById(key.partId);
-            if (EditPart::setInstrumentGroupNameOptions(score(), part, key.tick, useCustom, name, shortName)) {
+            if (EditPart::setInstrumentGroupNameOptions(tx, score(), part, key.tick, useCustom, name, shortName)) {
                 changedParts.push_back(part);
             }
         }
@@ -387,8 +387,8 @@ void NotationParts::setInstrumentNumber(const InstrumentKey& instrumentKey, int 
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Set instrument number"), [&](engraving::Transaction&) {
-        EditPart::setInstrumentNumber(score(), part, instrumentKey.tick, v);
+    transaction(TranslatableString("undoableAction", "Set instrument number"), [&](engraving::Transaction& tx) {
+        EditPart::setInstrumentNumber(tx, score(), part, instrumentKey.tick, v);
     });
 
     notifyAboutPartChanged(part);
@@ -409,8 +409,8 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Set staff type"), [&](engraving::Transaction&) {
-        EditPart::setStaffType(score(), staff, type);
+    transaction(TranslatableString("undoableAction", "Set staff type"), [&](engraving::Transaction& tx) {
+        EditPart::setStaffType(tx, score(), staff, type);
     });
 
     notifyAboutStaffChanged(staff);
@@ -429,8 +429,8 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config,
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Edit staff properties"), [&](engraving::Transaction&) {
-        EditPart::setStaffConfig(score(), staff, config, tick);
+    transaction(TranslatableString("undoableAction", "Edit staff properties"), [&](engraving::Transaction& tx) {
+        EditPart::setStaffConfig(tx, score(), staff, config, tick);
     });
 
     notifyAboutStaffChanged(staff);
@@ -453,8 +453,8 @@ void NotationParts::setSharedPartEnabled(const muse::ID& partId, bool enable)
                                           ? TranslatableString("undoableAction", "Enable shared staff")
                                           : TranslatableString("undoableAction", "Disable shared staff");
 
-    transaction(actionName, [&](engraving::Transaction&) {
-        EditPart::setSharedPartEnabled(score(), part, enable);
+    transaction(actionName, [&](engraving::Transaction& tx) {
+        EditPart::setSharedPartEnabled(tx, score(), part, enable);
     });
 
     notifyAboutPartChanged(part);
@@ -470,8 +470,8 @@ void NotationParts::removeParts(const IDList& partsIds)
     }
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Remove instruments"), [&](engraving::Transaction&) {
-        EditPart::removeParts(score(), partsToRemove);
+    transaction(TranslatableString("undoableAction", "Remove instruments"), [&](engraving::Transaction& tx) {
+        EditPart::removeParts(tx, score(), partsToRemove);
     });
 
     for (const Part* part : partsToRemove) {
@@ -489,8 +489,8 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     }
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Remove staves"), [&](engraving::Transaction&) {
-        EditPart::removeStaves(score(), stavesToRemove);
+    transaction(TranslatableString("undoableAction", "Remove staves"), [&](engraving::Transaction& tx) {
+        EditPart::removeStaves(tx, score(), stavesToRemove);
     });
 }
 
@@ -505,8 +505,8 @@ void NotationParts::reorderParts(const IDList& partIds, const std::vector<System
     }
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction&) {
-        EditPart::reorderParts(score(), orderedParts, moves);
+    transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction& tx) {
+        EditPart::reorderParts(tx, score(), orderedParts, moves);
     });
 }
 
@@ -520,8 +520,8 @@ void NotationParts::reorderStaves(const IDList& staffIds)
     }
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Move staves"), [&](engraving::Transaction&) {
-        EditPart::reorderStaves(score(), orderedStaves);
+    transaction(TranslatableString("undoableAction", "Move staves"), [&](engraving::Transaction& tx) {
+        EditPart::reorderStaves(tx, score(), orderedStaves);
     });
 }
 
@@ -538,8 +538,8 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    transaction(TranslatableString("undoableAction", "Add staff"), [&](engraving::Transaction&) {
-        EditPart::appendStaff(score(), staff, destinationPart);
+    transaction(TranslatableString("undoableAction", "Add staff"), [&](engraving::Transaction& tx) {
+        EditPart::appendStaff(tx, score(), staff, destinationPart);
     });
 
     return true;
@@ -559,8 +559,8 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
         return false;
     }
 
-    transaction(TranslatableString("undoableAction", "Add linked staff"), [&](engraving::Transaction&) {
-        EditPart::appendLinkedStaff(score(), staff, sourceStaff, destinationPart);
+    transaction(TranslatableString("undoableAction", "Add linked staff"), [&](engraving::Transaction& tx) {
+        EditPart::appendLinkedStaff(tx, score(), staff, sourceStaff, destinationPart);
     });
 
     return true;
@@ -574,8 +574,8 @@ void NotationParts::insertPart(Part* part, size_t index)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Add instrument"), [&](engraving::Transaction&) {
-        EditPart::insertPart(score(), part, index);
+    transaction(TranslatableString("undoableAction", "Add instrument"), [&](engraving::Transaction& tx) {
+        EditPart::insertPart(tx, score(), part, index);
     });
 
     notifyAboutPartAdded(part);
@@ -590,8 +590,8 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Reset instrument formatting"), [&](engraving::Transaction&) {
-        EditPart::replacePart(score(), part, newPart);
+    transaction(TranslatableString("undoableAction", "Reset instrument formatting"), [&](engraving::Transaction& tx) {
+        EditPart::replacePart(tx, score(), part, newPart);
     });
 
     notifyAboutPartReplaced(part, newPart);
@@ -608,8 +608,8 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     bool replaced = false;
 
-    transaction(TranslatableString("undoableAction", "Replace instrument"), [&](engraving::Transaction&) {
-        replaced = EditPart::replaceInstrument(score(), part, instrumentKey.tick, newInstrument, newStaffType);
+    transaction(TranslatableString("undoableAction", "Replace instrument"), [&](engraving::Transaction& tx) {
+        replaced = EditPart::replaceInstrument(tx, score(), part, instrumentKey.tick, newInstrument, newStaffType);
     });
 
     if (replaced) {
@@ -624,21 +624,19 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    auto replace = [this, part, &instrumentKey, &newDrumset, undoable]() {
+    auto replace = [this, part, &instrumentKey, &newDrumset, undoable](engraving::Transaction& tx) {
         for (const auto& pair : part->instruments()) {
             const Instrument* instrument = pair.second;
             if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
-                EditPart::replaceDrumset(score(), part, Fraction::fromTicks(pair.first), newDrumset, undoable);
+                EditPart::replaceDrumset(tx, score(), part, Fraction::fromTicks(pair.first), newDrumset, undoable);
             }
         }
     };
 
     if (undoable) {
-        transaction(TranslatableString("undoableAction", "Edit drumset"), [&replace](engraving::Transaction&) {
-            replace();
-        });
+        transaction(TranslatableString("undoableAction", "Edit drumset"), replace);
     } else {
-        replace();
+        replace(score()->transactionManager()->currentOrDummyTransaction());
     }
 
     notifyAboutPartChanged(part);
@@ -662,8 +660,8 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Add system markings"), [&](engraving::Transaction&) {
-        EditPart::addSystemObjects(score(), staves);
+    transaction(TranslatableString("undoableAction", "Add system markings"), [&](engraving::Transaction& tx) {
+        EditPart::addSystemObjects(tx, score(), staves);
     });
 }
 
@@ -674,8 +672,8 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Remove system markings"), [&](engraving::Transaction&) {
-        EditPart::removeSystemObjects(score(), staves);
+    transaction(TranslatableString("undoableAction", "Remove system markings"), [&](engraving::Transaction& tx) {
+        EditPart::removeSystemObjects(tx, score(), staves);
     });
 }
 
