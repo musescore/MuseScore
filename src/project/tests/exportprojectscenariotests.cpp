@@ -22,11 +22,8 @@
 
 #include <gmock/gmock.h>
 
+#include <map>
 #include <set>
-
-#include <QDir>
-#include <QFile>
-#include <QTemporaryDir>
 
 #include "project/internal/exportprojectscenario.h"
 
@@ -90,17 +87,19 @@ protected:
 
     void SetUp() override
     {
-        ASSERT_TRUE(m_dir.isValid());
+        //! NOTE The file system is the global one: the scenario takes it from there, and so does the file stream it writes with
+        m_fileSystem = std::make_shared<NiceMock<io::FileSystemMock> >();
+        m_realFileSystem = modularity::globalIoc()->resolve<io::IFileSystem>("utests");
+        modularity::globalIoc()->unregister<io::IFileSystem>("utests");
+        modularity::globalIoc()->registerExport<io::IFileSystem>("utests", m_fileSystem);
 
         m_scenario = std::make_shared<ExportProjectScenario>(modularity::globalCtx());
 
-        m_fileSystem = std::make_shared<NiceMock<io::FileSystemMock> >();
         m_writers = std::make_shared<NiceMock<NotationWritersRegisterMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_platformInteractive = std::make_shared<NiceMock<PlatformInteractiveMock> >();
         m_projectSession = std::make_shared<NiceMock<ProjectSessionMock> >();
 
-        m_scenario->fileSystem.set(m_fileSystem);
         m_scenario->writers.set(m_writers);
         m_scenario->interactive.set(m_interactive);
         m_scenario->platformInteractive.set(m_platformInteractive);
@@ -129,11 +128,28 @@ protected:
         });
 
         // Only the files a test puts there exist, and they can be removed.
-        //! NOTE The files are really written to a temporary directory, by the file stream
         ON_CALL(*m_fileSystem, exists(_)).WillByDefault([this](const io::path_t& path) {
             return m_existingPaths.count(path) ? make_ok() : make_ret(Ret::Code::UnknownError);
         });
         ON_CALL(*m_fileSystem, remove(_, _)).WillByDefault(Return(make_ok()));
+
+        // The files are written to memory, unless their directory is missing.
+        ON_CALL(*m_fileSystem, openStream(_, _)).WillByDefault([this](const io::path_t& path, io::OpenMode) {
+            if (m_missingDirs.count(io::dirpath(path))) {
+                return RetVal<io::StreamId>(make_ret(Ret::Code::UnknownError));
+            }
+
+            io::StreamId id = io::StreamId(m_openedStreams.size());
+            m_openedStreams.push_back(path);
+            m_writtenData[path] = ByteArray();
+            return RetVal<io::StreamId>::make_ok(id);
+        });
+        ON_CALL(*m_fileSystem, writeToStream(_, _, _)).WillByDefault([this](io::StreamId id, const ByteArray& data, uint64_t offset) {
+            EXPECT_EQ(offset, io::STREAM_POS_CURRENT) << "the writers here only append";
+            m_writtenData[m_openedStreams.at(id)].push_back(data);
+            return make_ok();
+        });
+        ON_CALL(*m_fileSystem, closeStream(_)).WillByDefault(Return(make_ok()));
 
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button btn) {
             return IInteractive::ButtonData(btn, "");
@@ -153,6 +169,11 @@ protected:
             release(score->notation);
             release(score->elements);
             release(score->painting);
+        }
+
+        modularity::globalIoc()->unregister<io::IFileSystem>("utests");
+        if (m_realFileSystem) {
+            modularity::globalIoc()->registerExport<io::IFileSystem>("utests", m_realFileSystem);
         }
 
         release(m_projectSession);
@@ -239,7 +260,7 @@ protected:
 
     io::path_t path(const QString& fileName) const
     {
-        return io::path_t(m_dir.filePath(fileName));
+        return io::path_t("/Exports/" + fileName);
     }
 
     std::vector<io::path_t> writtenPaths() const
@@ -279,6 +300,11 @@ protected:
     void givenFileExists(const io::path_t& path)
     {
         m_existingPaths.insert(path);
+    }
+
+    void givenDirectoryDoesNotExist(const io::path_t& dirPath)
+    {
+        m_missingDirs.insert(dirPath);
     }
 
     //! The user answers the question about replacing an existing file with `btn`.
@@ -347,11 +373,10 @@ protected:
         });
     }
 
-    QTemporaryDir m_dir;
-
     std::shared_ptr<ExportProjectScenario> m_scenario;
 
     std::shared_ptr<io::FileSystemMock> m_fileSystem;
+    std::shared_ptr<io::IFileSystem> m_realFileSystem;
     std::shared_ptr<NotationWritersRegisterMock> m_writers;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<PlatformInteractiveMock> m_platformInteractive;
@@ -366,6 +391,10 @@ protected:
 
     std::set<io::path_t> m_existingPaths;
     std::vector<WrittenFile> m_writtenFiles;
+
+    std::set<io::path_t> m_missingDirs;
+    std::vector<io::path_t> m_openedStreams;
+    std::map<io::path_t, ByteArray> m_writtenData;
 };
 
 // ─── Which writer ────────────────────────────────────────────────────────────
@@ -410,10 +439,8 @@ TEST_F(ExportProjectScenarioTests, PerPart_OneScore_WritesExactlyWhereTheUserSai
     EXPECT_EQ(m_writtenFiles[0].options.at(INotationWriter::OptionKey::UNIT_TYPE).toInt(), int(INotationWriter::UnitType::PER_PART));
     EXPECT_EQ(m_writtenFiles[0].options.count(INotationWriter::OptionKey::PAGE_NUMBER), 0);
 
-    //! [THEN] The file really is on disk
-    QFile file(path("Export.pdf").toQString());
-    ASSERT_TRUE(file.open(QIODevice::ReadOnly));
-    EXPECT_EQ(file.readAll(), QByteArray("data"));
+    //! [THEN] What the writer wrote really ends up in the file
+    EXPECT_EQ(m_writtenData[path("Export.pdf")], ByteArray("data"));
 }
 
 TEST_F(ExportProjectScenarioTests, PerPart_OnePart_WritesExactlyWhereTheUserSaid)
@@ -821,14 +848,14 @@ TEST_F(ExportProjectScenarioTests, RemoveFails_Abort_WritesNothing)
 TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Retry_OpensAgain)
 {
     //! [GIVEN] The chosen directory does not exist
-    const QString dirPath = m_dir.filePath("NotYet");
-    const io::path_t filePath(dirPath + "/Export.pdf");
+    givenDirectoryDoesNotExist(path("NotYet"));
+    const io::path_t filePath = path("NotYet/Export.pdf");
 
     //! [GIVEN] The user creates it, and retries
     ON_CALL(*m_interactive, question(_, IsRetryQuestion(), _, _, _, _))
-    .WillByDefault([dirPath](const std::string&, const IInteractive::Text&, const IInteractive::ButtonDatas&, int,
-                             const IInteractive::Options&, const std::string&) {
-        QDir().mkpath(dirPath);
+    .WillByDefault([this](const std::string&, const IInteractive::Text&, const IInteractive::ButtonDatas&, int,
+                          const IInteractive::Options&, const std::string&) {
+        m_missingDirs.erase(path("NotYet"));
         return dialogResult(IInteractive::Button::Retry);
     });
 
@@ -846,6 +873,7 @@ TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Retry_OpensAgain)
 TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Abort_WritesNothing)
 {
     //! [GIVEN] The chosen directory does not exist, and the user does not want to retry
+    givenDirectoryDoesNotExist(path("NotExisting"));
     givenRetryQuestionAnsweredWith(IInteractive::Button::Abort);
 
     //! [THEN] The writer is not called
