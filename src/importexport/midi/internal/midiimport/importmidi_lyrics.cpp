@@ -33,6 +33,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/text.h"
+#include "engraving/editing/editlyrics.h"
 
 #include <set>
 
@@ -237,7 +238,7 @@ void addLyricsToScore(
 
         QString text = MidiCharset::convertToCharset(it->second);
         if (originalTime != ReducedFraction(0, 1) || !isTitlePrefix(text)) {     // not title
-            score->addLyrics(quantizedTime.fraction(), staffAddTo->idx(), removeSlashes(text).toHtmlEscaped());
+            EditLyrics::addLyrics(score, quantizedTime.fraction(), staffAddTo->idx(), removeSlashes(text).toHtmlEscaped());
         }
     }
 }
