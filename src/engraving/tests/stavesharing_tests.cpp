@@ -1883,3 +1883,97 @@ TEST_F(Engraving_StaveSharingTests, testNoStaleHeaderKeySigAfterDisablingStaveSh
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, testHeaderKeySigUpdatedWhenStavesSplitMidSystem)
+{
+    // [GIVEN] Two clarinets in D major, resting until crossing voices in m.3, with a line break after m.4
+    // The first system must not be the last on the page, as page layout rebuilds the last system's header
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staleHeaderKeySigAfterMappingChange.mscx");
+    ASSERT_TRUE(score);
+
+    // [WHEN] Stave sharing is enabled
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m3);
+    ASSERT_TRUE(m1->system());
+    ASSERT_EQ(m1->system(), m3->system());
+    ASSERT_NE(m1->system(), score->lastMeasure()->system());
+
+    // [THEN] The second shared staff should show the second clarinet from the start of the system
+    const staff_idx_t secondSharedStaff = sharedPart->staff(1)->idx();
+    ASSERT_EQ(sharedPart->originStaffForStaff(secondSharedStaff, m1->tick()), originParts.at(1)->staff(0));
+    EXPECT_TRUE(m1->system()->staff(secondSharedStaff)->show());
+
+    // [THEN] Its header key signature should be D major, not the C major from before the staves split
+    Segment* headerKeySigSeg = m1->findSegment(SegmentType::KeySig, m1->tick());
+    ASSERT_TRUE(headerKeySigSeg);
+    EngravingItem* headerKeySig = headerKeySigSeg->element(staff2track(secondSharedStaff));
+    ASSERT_TRUE(headerKeySig && headerKeySig->isKeySig());
+    EXPECT_EQ(toKeySig(headerKeySig)->key(), Key::D);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testNoStaleSystemHeaderAfterTogglingStaveSharingAndAddingSystemBreaks)
+{
+    // [GIVEN] A new score with two clarinets
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staleHeaderAfterSystemBreaks.mscx");
+    ASSERT_TRUE(score);
+
+    auto toggleStaveSharing = [score](bool enable) {
+        score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Toggle stave sharing"), [&](Transaction& tx) {
+            EditStaveSharing::toggleStaveSharing(tx, score, enable);
+        });
+    };
+
+    auto addSystemBreak = [score](int measureIdx) {
+        Measure* m = score->crMeasure(measureIdx);
+        ASSERT_TRUE(m);
+        score->startCmd(muse::TranslatableString::untranslatable("Add system break"));
+        m->undoSetLineBreak(true);
+        score->endCmd();
+    };
+
+    // [WHEN] Stave sharing is toggled on and off, then a system break is added at the end of m.2,
+    // then stave sharing is toggled on and off, then a system break is added at the end of m.4,
+    // then stave sharing is toggled on
+    toggleStaveSharing(true);
+    toggleStaveSharing(false);
+    addSystemBreak(1);
+    toggleStaveSharing(true);
+    toggleStaveSharing(false);
+    addSystemBreak(3);
+    toggleStaveSharing(true);
+
+    // [THEN] Only measures starting a system should have a header clef, header key signature or start barline
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        ASSERT_TRUE(m->system());
+        if (m->isFirstInSystem()) {
+            continue;
+        }
+
+        for (const Segment& seg : m->segments()) {
+            const bool isHeaderSeg = seg.isHeaderClefType() || (seg.isKeySigType() && seg.header()) || seg.isBeginBarLineType();
+            if (!isHeaderSeg || !seg.enabled()) {
+                continue;
+            }
+            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                EXPECT_FALSE(seg.element(staff2track(staffIdx)))
+                    << seg.subTypeName() << " in measure " << m->measureNumber() + 1 << " on staff " << staffIdx;
+            }
+        }
+    }
+
+    delete score;
+}

@@ -25,6 +25,7 @@
 #include "measurelayout.h"
 #include "systemheaderlayout.h"
 
+#include "dom/box.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
@@ -92,6 +93,16 @@ void StaveSharingLayout::relayoutMeasuresOnTrackMapChanged(System* system, Layou
             toMeasure(mb)->mutldata()->setNeedLayout(true);
             // TODO: only relayout shared staves
             MeasureLayout::layoutMeasure(mb, ctx);
+
+            // Recreate system header clefs & keysigs as the new mapping could have changed these
+            Measure* m = toMeasure(mb);
+            const MeasureBase* prev = m->prev();
+            const bool needsHeader = m->isFirstInSystem() || (prev && prev->isHBox() && toHBox(prev)->createSystemHeader());
+            if (needsHeader) {
+                MeasureLayout::addSystemHeader(m, ctx.state().firstSystem() && m->isFirstInSystem(), ctx);
+            } else {
+                MeasureLayout::removeSystemHeader(m);
+            }
         }
         if (mb == system->last()) {
             break;
