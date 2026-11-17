@@ -181,7 +181,8 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
     }
 
     mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
-    mu::engraving::EditPart::replacePartInstrument(score(), part->part(), newInstrument);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::replacePartInstrument(tx, score(), part->part(), newInstrument);
 }
 
 void Score::setPartVisible(apiv1::Part* part, bool visible)
@@ -191,7 +192,8 @@ void Score::setPartVisible(apiv1::Part* part, bool visible)
         return;
     }
 
-    mu::engraving::EditPart::setPartVisible(score(), part->part(), visible);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::setPartVisible(tx, score(), part->part(), visible);
 }
 
 void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
@@ -201,7 +203,8 @@ void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
         return;
     }
 
-    mu::engraving::EditPart::setPartSharpFlat(score(), part->part(), mu::engraving::PreferSharpFlat(sharpFlat));
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::setPartSharpFlat(tx, score(), part->part(), mu::engraving::PreferSharpFlat(sharpFlat));
 }
 
 void Score::setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name)
@@ -215,7 +218,8 @@ void Score::setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QS
         return;
     }
 
-    mu::engraving::EditPart::setInstrumentName(score(), part->part(), tick->fraction(), name);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::setInstrumentName(tx, score(), part->part(), tick->fraction(), name);
 }
 
 void Score::setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature)
@@ -229,7 +233,8 @@ void Score::setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, 
         return;
     }
 
-    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part->part(), tick->fraction(), abbreviature);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::setInstrumentAbbreviature(tx, score(), part->part(), tick->fraction(), abbreviature);
 }
 
 void Score::setStaffType(apiv1::Staff* staff, int staffTypeId)
@@ -239,7 +244,8 @@ void Score::setStaffType(apiv1::Staff* staff, int staffTypeId)
         return;
     }
 
-    mu::engraving::EditPart::setStaffType(score(), staff->staff(), mu::engraving::StaffTypes(staffTypeId));
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::setStaffType(tx, score(), staff->staff(), mu::engraving::StaffTypes(staffTypeId));
 }
 
 void Score::removeParts(QList<apiv1::Part*> parts)
@@ -253,7 +259,8 @@ void Score::removeParts(QList<apiv1::Part*> parts)
         domParts.push_back(p->part());
     }
 
-    mu::engraving::EditPart::removeParts(score(), domParts);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::removeParts(tx, score(), domParts);
 }
 
 void Score::removeStaves(QList<apiv1::Staff*> staves)
@@ -267,7 +274,8 @@ void Score::removeStaves(QList<apiv1::Staff*> staves)
         domStaves.push_back(s->staff());
     }
 
-    mu::engraving::EditPart::removeStaves(score(), domStaves);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::removeStaves(tx, score(), domStaves);
 }
 
 void Score::moveParts(QList<apiv1::Part*> sourceParts, apiv1::Part* destinationPart, int insertMode)
@@ -286,7 +294,8 @@ void Score::moveParts(QList<apiv1::Part*> sourceParts, apiv1::Part* destinationP
         domParts.push_back(p->part());
     }
 
-    mu::engraving::EditPart::moveParts(score(), domParts, destinationPart->part(), insertMode == 1);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::moveParts(tx, score(), domParts, destinationPart->part(), insertMode == 1);
 }
 
 void Score::moveStaves(QList<apiv1::Staff*> sourceStaves, apiv1::Staff* destinationStaff, int insertMode)
@@ -305,7 +314,8 @@ void Score::moveStaves(QList<apiv1::Staff*> sourceStaves, apiv1::Staff* destinat
         domStaves.push_back(s->staff());
     }
 
-    mu::engraving::EditPart::moveStaves(score(), domStaves, destinationStaff->staff(), insertMode == 1);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::moveStaves(tx, score(), domStaves, destinationStaff->staff(), insertMode == 1);
 }
 
 void Score::addSystemObjects(QList<apiv1::Staff*> staves)
@@ -319,7 +329,8 @@ void Score::addSystemObjects(QList<apiv1::Staff*> staves)
         domStaves.push_back(s->staff());
     }
 
-    mu::engraving::EditPart::addSystemObjects(score(), domStaves);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::addSystemObjects(tx, score(), domStaves);
 }
 
 void Score::removeSystemObjects(QList<apiv1::Staff*> staves)
@@ -333,7 +344,8 @@ void Score::removeSystemObjects(QList<apiv1::Staff*> staves)
         domStaves.push_back(s->staff());
     }
 
-    mu::engraving::EditPart::removeSystemObjects(score(), domStaves);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::removeSystemObjects(tx, score(), domStaves);
 }
 
 void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff)
@@ -347,7 +359,8 @@ void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinati
         return;
     }
 
-    mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::moveSystemObjects(tx, score(), sourceStaff->staff(), destinationStaff->staff());
 }
 
 Staff* Score::appendStaff(Part* destinationPart)
@@ -357,7 +370,8 @@ Staff* Score::appendStaff(Part* destinationPart)
         return nullptr;
     }
 
-    mu::engraving::Staff* staff = mu::engraving::EditPart::appendStaff(score(), destinationPart->part());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendStaff(tx, score(), destinationPart->part());
     return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
 }
 
@@ -372,7 +386,8 @@ Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
         return nullptr;
     }
 
-    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(), destinationPart->part());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(tx, score(), sourceStaff->staff(), destinationPart->part());
     return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
 }
 
@@ -383,7 +398,8 @@ bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return false;
     }
 
-    return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    return mu::engraving::EditPart::setVoiceVisible(tx, score(), staff->staff(), voiceIndex, visible);
 }
 
 void Score::replaceDrumset(Part* part, apiv1::Fraction* tick, Drumset* drumset)
@@ -401,7 +417,8 @@ void Score::replaceDrumset(Part* part, apiv1::Fraction* tick, Drumset* drumset)
         return;
     }
 
-    mu::engraving::EditPart::replaceDrumset(score(), part->part(), tick->fraction(), *drumset->drumset());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::replaceDrumset(tx, score(), part->part(), tick->fraction(), *drumset->drumset());
 }
 
 void Score::insertPart(const QString& instrumentId, int index)
@@ -412,7 +429,8 @@ void Score::insertPart(const QString& instrumentId, int index)
         return;
     }
 
-    mu::engraving::EditPart::insertPart(score(), t, static_cast<size_t>(index));
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::insertPart(tx, score(), t, static_cast<size_t>(index));
 }
 
 void Score::replacePart(Part* part, const QString& instrumentId)
@@ -428,7 +446,8 @@ void Score::replacePart(Part* part, const QString& instrumentId)
         return;
     }
 
-    mu::engraving::EditPart::replacePart(score(), part->part(), t);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditPart::replacePart(tx, score(), part->part(), t);
 }
 
 void Score::setScoreOrder(const QString& orderId)
@@ -437,7 +456,8 @@ void Score::setScoreOrder(const QString& orderId)
 
     for (const mu::engraving::ScoreOrder& order : mu::engraving::instrumentOrders) {
         if (order.id == id) {
-            mu::engraving::EditPart::setScoreOrder(score(), order);
+            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+            mu::engraving::EditPart::setScoreOrder(tx, score(), order);
             return;
         }
     }

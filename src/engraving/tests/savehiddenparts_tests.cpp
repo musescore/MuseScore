@@ -35,6 +35,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/infrastructure/mscreader.h"
@@ -78,7 +79,8 @@ public:
         addNote(NUM_MEASURES, 0);
         addNote(hiddenNoteMeasure, 1);
         score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
-        EditPart::setPartVisible(score, score->parts().back(), false);
+        Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+        EditPart::setPartVisible(tx, score, score->parts().back(), false);
         score->endCmd();
 
         return std::unique_ptr<MasterScore>(score);
@@ -140,8 +142,9 @@ public:
     void showAllParts(MasterScore* score)
     {
         score->startCmd(TranslatableString::untranslatable("Save hidden parts tests"));
+        Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
         for (Part* part : score->parts()) {
-            EditPart::setPartVisible(score, part, true);
+            EditPart::setPartVisible(tx, score, part, true);
         }
         score->endCmd();
     }
