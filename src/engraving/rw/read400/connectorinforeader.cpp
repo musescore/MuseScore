@@ -393,10 +393,6 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->ownershipParent() && item->ownershipParent()->isChord()) {
-                    toChord(item->ownershipParent())->setEndsNoteAnchoredLine(true);
-                }
                 item->addSpannerBack(sp);
             }
 

@@ -408,11 +408,6 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                     tie->updatePossibleJumpPoints();
                 }
             } else {
-                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->ownershipParent()
-                    && item->ownershipParent()->isChord()) {
-                    toChord(item->ownershipParent())->setEndsNoteAnchoredLine(true);
-                }
                 item->addSpannerBack(sp);
             }
 
