@@ -26,9 +26,15 @@
 #include "engraving/api/v1/cursor.h"
 
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "engraving/tests/utils/scorerw.h"
 
@@ -78,15 +84,15 @@ static void addTuplet(Score* score, apiv1::Cursor& cursor, const Fraction& ratio
     score->endCmd();
 }
 
-static ChordRest* chordRestAt(Score* score, const Fraction& tick)
+static ChordRest* chordRestAt(Score* score, const Fraction& tick, track_idx_t track = 0)
 {
     Segment* segment = score->tick2segment(tick, true, SegmentType::ChordRest);
-    return segment ? toChordRest(segment->element(0)) : nullptr;
+    return segment ? toChordRest(segment->element(track)) : nullptr;
 }
 
-static void expectTuplet(Score* score, const Fraction& tick, const Fraction& ratio, const Fraction& ticks)
+static void expectTuplet(Score* score, const Fraction& tick, const Fraction& ratio, const Fraction& ticks, track_idx_t track = 0)
 {
-    ChordRest* cr = chordRestAt(score, tick);
+    ChordRest* cr = chordRestAt(score, tick, track);
     ASSERT_TRUE(cr);
     Tuplet* tuplet = cr->tuplet();
     ASSERT_TRUE(tuplet);
@@ -222,6 +228,188 @@ TEST(Engraving_ApiCursorTests, addTupletCrossingParentTuplet)
     ASSERT_TRUE(second);
     EXPECT_EQ(second->tuplet(), quintuplet);
     EXPECT_EQ(second->ticks(), Fraction(1, 32));
+
+    delete score;
+}
+
+// a triplet on the last half note of a half-note triplet: it ends with the outer triplet, at the barline
+TEST(Engraving_ApiCursorTests, addTupletOnLastNoteOfTuplet)
+{
+    MasterScore* score = ScoreRW::readScore(CURSOR_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+
+    // a half-note triplet filling m1
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 0);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 1));
+    ChordRest* first = chordRestAt(score, Fraction(0, 1));
+    ASSERT_TRUE(first);
+    Tuplet* outer = first->tuplet();
+    ASSERT_TRUE(outer);
+
+    // a triplet on its third half note, at 2/3 of m1
+    rewindTo(cursor, 2);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 2));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    ASSERT_NO_FATAL_FAILURE(expectTuplet(score, Fraction(2, 3), Fraction(3, 2), Fraction(1, 2)));
+    EXPECT_EQ(chordRestAt(score, Fraction(2, 3))->tuplet()->tuplet(), outer);
+
+    delete score;
+}
+
+// empty.mscx with a second staff, m1 in the global time signature and the second staff's m1 in a local one
+static MasterScore* readScoreWithLocalTimeSig(const Fraction& global, const Fraction& local)
+{
+    MasterScore* score = ScoreRW::readScore(CURSOR_DATA_DIR + u"empty.mscx");
+    if (!score) {
+        return nullptr;
+    }
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving API cursor tests"), [&](Transaction& tx) {
+        Staff* staff = score->staff(0);
+        Staff* newStaff = Factory::createStaff(staff->part());
+        newStaff->setPart(staff->part());
+        score->undoInsertStaff(newStaff, 1, /*createRests*/ true);
+
+        TimeSig* globalSig = Factory::createTimeSig(score->dummy());
+        globalSig->setSig(global, TimeSigType::NORMAL);
+        EditTimeSig::addTimeSig(tx, score, score->firstMeasure(), 0, globalSig, false);
+    });
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving API cursor tests"), [&](Transaction& tx) {
+        TimeSig* localSig = Factory::createTimeSig(score->dummy());
+        localSig->setSig(local, TimeSigType::NORMAL);
+        EditTimeSig::addTimeSig(tx, score, score->firstMeasure(), 1, localSig, true);
+    });
+
+    return score;
+}
+
+// m1 in 2/4, the second staff in 4/4: a whole-note triplet fits the second staff's bar, not the first staff's
+TEST(Engraving_ApiCursorTests, addTupletInLongerLocalTimeSig)
+{
+    MasterScore* score = readScoreWithLocalTimeSig(Fraction(2, 4), Fraction(4, 4));
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    cursor.setStaffIdx(1);
+    rewindTo(cursor, 0);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 1));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    ASSERT_NO_FATAL_FAILURE(expectTuplet(score, Fraction(0, 1), Fraction(3, 2), Fraction(1, 1), staff2track(1)));
+
+    // on the first staff it would end after the barline: refused, the bar is unchanged
+    cursor.setStaffIdx(0);
+    rewindTo(cursor, 0);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 1));
+
+    ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    ChordRest* rest = chordRestAt(score, Fraction(0, 1));
+    ASSERT_TRUE(rest);
+    EXPECT_TRUE(rest->isRest());
+    EXPECT_FALSE(rest->tuplet());
+
+    delete score;
+}
+
+// m1 in 4/4, the second staff in 2/4: a whole-note triplet doesn't fit the second staff's bar
+TEST(Engraving_ApiCursorTests, addTupletInShorterLocalTimeSig)
+{
+    MasterScore* score = readScoreWithLocalTimeSig(Fraction(4, 4), Fraction(2, 4));
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    cursor.setStaffIdx(1);
+    rewindTo(cursor, 0);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 1));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    ChordRest* rest = chordRestAt(score, Fraction(0, 1), staff2track(1));
+    ASSERT_TRUE(rest);
+    EXPECT_TRUE(rest->isRest());
+    EXPECT_FALSE(rest->tuplet());
+
+    delete score;
+}
+
+// a quarter triplet on the last eighth of m1 would end after the barline: refused, the bar is unchanged
+TEST(Engraving_ApiCursorTests, addTupletAcrossBarline)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 7);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 2));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    ChordRest* last = chordRestAt(score, Fraction(7, 8));
+    ASSERT_TRUE(last);
+    EXPECT_TRUE(last->isChord());
+    EXPECT_FALSE(last->tuplet());
+    EXPECT_EQ(last->ticks(), Fraction(1, 8));
+
+    delete score;
+}
+
+// the same in an empty voice: refused, and the voice stays empty
+TEST(Engraving_ApiCursorTests, addTupletAcrossBarlineInEmptyVoice)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 7);
+    cursor.setVoice(1);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 2));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EXPECT_FALSE(s->element(1)) << "voice 2 at tick " << s->tick().toString().toStdString();
+    }
+
+    delete score;
+}
+
+// in voice 2, on m1's second eighth, inside a half note that starts on the first: refused, voice 2 is unchanged
+TEST(Engraving_ApiCursorTests, addTupletInsideLongerChord)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 0);
+    cursor.setVoice(1);
+    cursor.setDuration(1, 2);
+    score->startCmd(TranslatableString::untranslatable("Engraving API cursor tests"));
+    cursor.addNote(67);
+    score->endCmd();
+
+    cursor.setVoice(0);
+    rewindTo(cursor, 1);
+    ASSERT_EQ(cursor.tick(), Fraction(1, 8).ticks());
+    cursor.setVoice(1);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 4));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        const ChordRest* cr = toChordRest(s->element(1));
+        EXPECT_FALSE(cr && cr->tuplet()) << "tuplet in voice 2 at tick " << s->tick().toString().toStdString();
+    }
+    ChordRest* half = chordRestAt(score, Fraction(0, 1), 1);
+    ASSERT_TRUE(half);
+    EXPECT_TRUE(half->isChord());
+    EXPECT_FALSE(half->tuplet());
+    EXPECT_EQ(half->ticks(), Fraction(1, 2));
+    EXPECT_FALSE(chordRestAt(score, Fraction(1, 8), 1));
 
     delete score;
 }

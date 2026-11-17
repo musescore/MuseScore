@@ -514,6 +514,10 @@ void Cursor::addRest()
 ///   existing chord or rest, use its
 ///   \ref DurationElement.duration "duration" value as
 ///   a parameter.
+///   \note If the tuplet doesn't fit where the cursor is (it would end after
+///   the barline, or after the end of the tuplet it starts in), or the cursor
+///   is inside a longer chord or rest of its voice, nothing changes and a
+///   warning is logged.
 ///   \since MuseScore 3.5
 ///   \see \ref DurationElement.tuplet
 //---------------------------------------------------------
@@ -536,13 +540,6 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
 
     mu::engraving::Measure* tupletMeasure = segment()->measure();
     const mu::engraving::Fraction tupletTick = segment()->tick();
-    if (tupletTick + fDuration > tupletMeasure->endTick()) {
-        LOGW(
-            "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
-            tupletMeasure->measureNumber() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
-
-        return;
-    }
 
     const mu::engraving::Fraction baseLen = fDuration * mu::engraving::Fraction(1, fRatio.denominator());
     if (!TDuration::isValid(baseLen)) {
@@ -553,17 +550,19 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
         return;
     }
 
-    m_score->expandVoice(inputState().segment(), inputState().track());
-    mu::engraving::ChordRest* cr = inputState().cr();
-    if (!cr) { // shouldn't happen?
-        return;
-    }
-
-    // check first: Score::addTuplet() shows a dialog when it can't, but the Cursor only logs
-    if (!m_score->canAddTuplet(cr, fRatio, TDuration(baseLen))) {
+    // check first: Score::addTuplet() shows a dialog when it can't, but the Cursor only logs;
+    // and before expandVoice(), so that a refused tuplet leaves no rests in an empty voice
+    if (!m_score->canAddTuplet(inputState().segment(), inputState().track(), fRatio, TDuration(baseLen))) {
         LOGW("Cursor::addTuplet: cannot add tuplet for ratio %s and duration %s",
              qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
 
+        return;
+    }
+
+    m_score->expandVoice(inputState().segment(), inputState().track());
+    mu::engraving::ChordRest* cr = inputState().cr();
+    if (!cr) { // inside a longer chord/rest of this voice: expandVoice() can't start one here
+        LOGW("Cursor::addTuplet: cannot add a tuplet inside a longer chord or rest");
         return;
     }
 
