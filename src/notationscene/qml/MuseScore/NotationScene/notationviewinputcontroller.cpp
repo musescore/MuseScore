@@ -1554,7 +1554,8 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (m_readonly) {
+    //! NOTE Another drop would replace the one that waits for the user's answer
+    if (m_readonly || m_isDropConfirmationPending) {
         event->ignore();
         return;
     }
@@ -1661,7 +1662,10 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
         dropEvent(m_lastDragMoveEvent);
     }
 
-    viewInteraction()->endDrop();
+    //! NOTE The drop that waits for the user's answer is ended after the answer
+    if (!m_isDropConfirmationPending) {
+        viewInteraction()->endDrop();
+    }
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 }
 
@@ -1706,6 +1710,28 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
         bool isMove = isInternal && event.dropAction == Qt::MoveAction;
         isAccepted = viewInteraction()->dropRange(mimeData->data(mimeStaffListFormat), pos, isMove);
     } else {
+        Ret ret = viewInteraction()->canDropSingle(pos);
+        if (!ret) {
+            //! NOTE The element is dropped once the user agrees, and the drop is kept until the answer
+            m_isDropConfirmationPending = true;
+            std::weak_ptr<INotationInteraction> weakInteraction = viewInteraction();
+            interactive()->askToContinue(ret).onResolve(this, [this, weakInteraction, pos, modifiers](bool proceed) {
+                m_isDropConfirmationPending = false;
+
+                //! NOTE The notation may be closed while the user is asked
+                INotationInteractionPtr interaction = weakInteraction.lock();
+                if (!interaction) {
+                    return;
+                }
+
+                if (proceed) {
+                    interaction->dropSingle(pos, modifiers);
+                }
+                interaction->endDrop();
+            });
+            return true;
+        }
+
         isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
 

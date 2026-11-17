@@ -476,7 +476,23 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
-    notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
+    mu::notation::INotationInteractionPtr interaction = notation->interaction();
+    mu::engraving::ElementPtr element = cell->element;
+
+    Ret ret = interaction->canApplyPaletteElement(element.get());
+    if (!ret) {
+        //! NOTE The element is applied once the user agrees, unless the notation is closed or changed meanwhile
+        std::weak_ptr<mu::notation::INotation> weakNotation = notation;
+        interactive()->askToContinue(ret).onResolve(this, [this, weakNotation, element, modifiers](bool proceed) {
+            mu::notation::INotationPtr notation = weakNotation.lock();
+            if (proceed && notation && notation == projectSession()->currentNotation()) {
+                notation->interaction()->applyPaletteElement(element.get(), modifiers);
+            }
+        });
+        return;
+    }
+
+    interaction->applyPaletteElement(element.get(), modifiers);
     mainWindow()->qWindow()->requestActivate();
 }
 
@@ -588,7 +604,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     }
 
     qreal cellMag = cell->mag * mag;
-    ElementPtr element = cell->element;
+    mu::engraving::ElementPtr element = cell->element;
 
     engravingRender()->layoutItem(element.get());
 

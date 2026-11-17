@@ -593,7 +593,23 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
         return false;
     }
 
-    return notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
+    mu::notation::INotationInteractionPtr interaction = notation->interaction();
+    mu::engraving::ElementPtr element = cell->element;
+
+    Ret ret = interaction->canApplyPaletteElement(element.get());
+    if (!ret) {
+        //! NOTE The element is applied once the user agrees, unless the notation is closed or changed meanwhile
+        std::weak_ptr<mu::notation::INotation> weakNotation = notation;
+        interactive()->askToContinue(ret).onResolve(this, [this, weakNotation, element, modifiers](bool proceed) {
+            mu::notation::INotationPtr notation = weakNotation.lock();
+            if (proceed && notation && notation == projectSession()->currentNotation()) {
+                notation->interaction()->applyPaletteElement(element.get(), modifiers);
+            }
+        });
+        return true;
+    }
+
+    return interaction->applyPaletteElement(element.get(), modifiers);
 }
 
 // ========================================================

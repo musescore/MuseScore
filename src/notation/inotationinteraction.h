@@ -127,14 +127,19 @@ public:
     virtual bool startDropImage(const QUrl& url) = 0;
     virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) = 0;
+
+    virtual muse::Ret canDropSingle(const muse::PointF& pos) = 0;
     virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+
     virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRects(const std::vector<muse::RectF>& rects) = 0;
     virtual void endDrop() = 0;
     virtual muse::async::Notification dropChanged() const = 0;
 
+    virtual muse::Ret canApplyPaletteElement(mu::engraving::EngravingItem* element) const = 0;
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+
     virtual void undo() = 0;
     virtual void redo() = 0;
     virtual void undoRedoToIndex(size_t idx) = 0;

@@ -79,6 +79,7 @@
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
@@ -114,6 +115,7 @@
 #include "engraving/editing/regroup.h"
 #include "engraving/editing/reset.h"
 #include "engraving/editing/navigation.h"
+#include "engraving/editing/editmeasurerepeat.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editlyrics.h"
@@ -1818,6 +1820,32 @@ bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool>
 }
 
 //! NOTE Copied from ScoreView::dropEvent
+Ret NotationInteraction::canDropSingle(const PointF& pos)
+{
+    if (!m_dropData.elementDropData.has_value()) {
+        return make_ok();
+    }
+
+    ElementDropData& edd = m_dropData.elementDropData.value();
+
+    const EngravingItem* dropElement = edd.ed.dropElement;
+    if (!dropElement || !dropElement->isMeasureRepeat()) {
+        return make_ok();
+    }
+
+    // the same target as in dropSingle()
+    if (edd.ed.pos.isNull()) {
+        edd.ed.pos = pos;
+    }
+
+    EngravingItem* target = edd.dropTarget ? edd.dropTarget : dropTarget(edd.ed);
+    if (EditMeasureRepeat::droppingReplacesContents(target, edd.ed.track, toMeasureRepeat(dropElement)->numMeasures())) {
+        return make_ret(notation::Err::MeasureRepeatReplacesContents);
+    }
+
+    return make_ok();
+}
+
 bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
@@ -2208,6 +2236,29 @@ void NotationInteraction::cleanupDrumsetChanges(mu::engraving::InstrumentChange*
 }
 
 //! NOTE Copied from Palette::applyPaletteElement
+Ret NotationInteraction::canApplyPaletteElement(EngravingItem* element) const
+{
+    if (!element || !element->isMeasureRepeat()) {
+        return make_ok();
+    }
+
+    const mu::engraving::Score* score = this->score();
+    if (!score) {
+        return make_ok();
+    }
+
+    // the same targets as in applyPaletteElementToList() and applyPaletteElementToRange()
+    bool unique = false;
+    const int numMeasures = toMeasureRepeat(element)->numMeasures();
+    for (EngravingItem* target : mu::engraving::filterTargetElements(score->selection(), element, unique)) {
+        if (EditMeasureRepeat::droppingReplacesContents(target, target->track(), numMeasures)) {
+            return make_ret(notation::Err::MeasureRepeatReplacesContents);
+        }
+    }
+
+    return make_ok();
+}
+
 bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers)
 {
     IF_ASSERT_FAILED(element) {

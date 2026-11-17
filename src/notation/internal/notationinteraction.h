@@ -144,14 +144,19 @@ public:
     bool startDropImage(const QUrl& url) override;
     bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) override;
+
+    muse::Ret canDropSingle(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRects(const std::vector<muse::RectF>& rects) override;
     void endDrop() override;
     muse::async::Notification dropChanged() const override;
 
+    muse::Ret canApplyPaletteElement(mu::engraving::EngravingItem* element) const override;
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
+
     void undo() override;
     void redo() override;
     void undoRedoToIndex(size_t idx) override;

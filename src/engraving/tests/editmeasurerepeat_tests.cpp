@@ -29,6 +29,7 @@
 #include "engraving/dom/segment.h"
 
 #include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 
@@ -122,4 +123,20 @@ TEST_F(Engraving_EditMeasureRepeatTests, Dropping_OntoWhatDoesNotTakeIt_Replaces
     EXPECT_FALSE(EditMeasureRepeat::droppingReplacesContents(chord, chord->track(), 1));
     EXPECT_FALSE(EditMeasureRepeat::droppingReplacesContents(quarterRest, quarterRest->track(), 1));
     EXPECT_FALSE(EditMeasureRepeat::droppingReplacesContents(nullptr, staff2track(0), 1));
+}
+
+TEST_F(Engraving_EditMeasureRepeatTests, Adding_MeasureWithNotes_ReplacesThemWithoutAsking)
+{
+    //! [WHEN] A measure repeat is added to the measure with notes
+    m_score->startCmd(TranslatableString::untranslatable("Edit measure repeat tests"));
+    EditMeasureRepeat::addMeasureRepeat(m_score->transactionManager()->currentOrDummyTransaction(), m_score, m_withNotes, 1, 0);
+    m_score->endCmd();
+
+    //! [THEN] The notes are replaced with it
+    EXPECT_TRUE(m_withNotes->isMeasureRepeatGroup(0));
+
+    for (Segment* segment = m_withNotes->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        const EngravingItem* item = segment->element(staff2track(0));
+        EXPECT_FALSE(item && item->isChord());
+    }
 }

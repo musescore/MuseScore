@@ -37,6 +37,9 @@ enum class Err {
 
     // note input
     NoteInputRemovesMeasureRepeat = 1060,
+
+    // measure repeats
+    MeasureRepeatReplacesContents = 1070,
 };
 
 inline muse::Ret make_ret(Err err)
@@ -59,6 +62,11 @@ inline muse::Ret make_ret(Err err)
         text += muse::trc("engraving", "This measure contains a measure repeat."
                                        " If you enter notes here, it will be deleted."
                                        " Do you want to continue?");
+        break;
+    case Err::MeasureRepeatReplacesContents:
+        text = muse::trc("engraving", "Current contents of measures will be replaced");
+        text += "\n\n";
+        text += muse::trc("engraving", "Continue with inserting measure repeat?");
         break;
     case Err::Undefined:
     case Err::NoError:

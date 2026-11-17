@@ -78,6 +78,7 @@ public:
     MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
     MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, updateDropRange, (const muse::PointF&, std::optional<bool>), (override));
+    MOCK_METHOD(muse::Ret, canDropSingle, (const muse::PointF&), (override));
     MOCK_METHOD(bool, dropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&, bool), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
@@ -85,7 +86,9 @@ public:
     MOCK_METHOD(void, endDrop, (), (override));
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
 
+    MOCK_METHOD(muse::Ret, canApplyPaletteElement, (mu::engraving::EngravingItem*), (const, override));
     MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
+
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
     MOCK_METHOD(void, undoRedoToIndex, (size_t idx), (override));

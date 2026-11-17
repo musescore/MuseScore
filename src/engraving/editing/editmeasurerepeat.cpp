@@ -24,8 +24,6 @@
 
 #include <vector>
 
-#include "translation.h"
-
 #include "../dom/barline.h"
 #include "../dom/factory.h"
 #include "../dom/measure.h"
@@ -36,8 +34,6 @@
 #include "../dom/select.h"
 #include "../dom/staff.h"
 #include "../dom/utils.h"
-
-#include "../infrastructure/messagebox.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -158,7 +154,7 @@ bool EditMeasureRepeat::droppingReplacesContents(EngravingItem* target, track_id
 //---------------------------------------------------------
 //   makeMeasureRepeatGroup
 ///   clear measures, apply noBreak, set measureRepeatCount
-///   returns false if these measures won't work or user aborted
+///   returns false if these measures won't work
 //---------------------------------------------------------
 
 bool EditMeasureRepeat::makeMeasureRepeatGroup(Transaction&, Score* score, Measure* firstMeasure, int numMeasures,
@@ -173,16 +169,7 @@ bool EditMeasureRepeat::makeMeasureRepeatGroup(Transaction&, Score* score, Measu
         return false;
     }
 
-    //
-    // warn user if things will have to be deleted to make room for measure repeat
-    //
-    if (hasContentsToReplace(measures, staffIdx)) {
-        auto b = MessageBox(score->iocContext()).warning(muse::trc("engraving", "Current contents of measures will be replaced"),
-                                                         muse::trc("engraving", "Continue with inserting measure repeat?"));
-        if (b == MessageBox::Button::Cancel) {
-            return false;
-        }
-    }
+    // the contents of the measures are replaced, the user is asked beforehand
 
     //
     // group measures and clear current contents
