@@ -25,12 +25,8 @@
 #include <QFile>
 #include <QFileInfo>
 
-#include "translation.h"
-
 #include "engraving/engravingerrors.h"
 #include "engraving/rw/xmlwriter.h"
-
-#include "engraving/infrastructure/messagebox.h"
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
@@ -1236,10 +1232,10 @@ void loadMidiData(MidiFile& mf)
     }
 }
 
-Err importMidi(MasterScore* score, const QString& name)
+muse::Ret importMidi(MasterScore* score, const QString& name)
 {
     if (name.isEmpty()) {
-        return Err::FileNotFound;
+        return make_ret(Err::FileNotFound, muse::io::path_t(name));
     }
 
     auto& opers = midiImportOperations;
@@ -1259,21 +1255,17 @@ Err importMidi(MasterScore* score, const QString& name)
         QFile fp(name);
         if (!fp.open(QIODevice::ReadOnly)) {
             LOGD("importMidi: file open error <%s>", qPrintable(name));
-            return Err::FileOpenError;
+            return make_ret(Err::FileOpenError, muse::io::path_t(name));
         }
         MidiFile mf;
         try {
             mf.read(&fp);
         }
         catch (QString errorText) {
-            if (!MScore::noGui) {
-                MessageBox(score->iocContext()).warning(muse::trc("iex_midi", "Import MIDI"),
-                                                        muse::qtrc("iex_midi", "Import failed: %1").arg(errorText).toStdString(),
-                                                        { MessageBox::Ok });
-            }
             fp.close();
             LOGD("importMidi: bad file format");
-            return Err::FileBadFormat;
+            //! NOTE The caller tells the user about it, the error is the details
+            return make_ret(Err::FileBadFormat, muse::String::fromQString(errorText));
         }
         fp.close();
 
@@ -1285,6 +1277,6 @@ Err importMidi(MasterScore* score, const QString& name)
     opers.data()->tracks = convertMidi(score, opers.midiFile(name));
     ++opers.data()->processingsOfOpenedFile;
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 }
