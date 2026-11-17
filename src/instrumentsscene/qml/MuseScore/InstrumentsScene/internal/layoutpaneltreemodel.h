@@ -100,6 +100,7 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void toggleStaveSharing(bool on);
+    Q_INVOKABLE void ungroupSharedGroup(const QString& sharedPartId);
     Q_INVOKABLE void toggleHideEmptyStaves(bool on);
     Q_INVOKABLE void setLayoutPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);

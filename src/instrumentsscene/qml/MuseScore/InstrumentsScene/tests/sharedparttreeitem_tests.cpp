@@ -144,10 +144,11 @@ TEST_F(InstrumentsScene_SharedPartTreeItemTests, Init_Combined)
     EXPECT_EQ(item->id(), sharedPart->id());
     EXPECT_EQ(item->title(), QString("Trumpet 1–3"));
 
-    // [THEN] It's enabled and expandable, with no settings
+    // [THEN] It's enabled and expandable, with settings
     EXPECT_TRUE(item->isEnabled());
     EXPECT_TRUE(item->isExpandable());
-    EXPECT_FALSE(item->settingsAvailable());
+    EXPECT_TRUE(item->settingsAvailable());
+    EXPECT_TRUE(item->settingsEnabled());
 }
 
 TEST_F(InstrumentsScene_SharedPartTreeItemTests, Init_NotCombined)

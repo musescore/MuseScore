@@ -61,6 +61,7 @@ FocusableControl {
     signal changeEnabledRequested(var modelIndex, bool enable)
 
     signal expandRequested(bool expand)
+    signal ungroupRequested()
 
     signal mousePressed()
     signal mouseReleased()
@@ -167,6 +168,10 @@ FocusableControl {
             } else {
                 root.changeEnabledRequested(root.modelIndex, enabled)
             }
+        }
+
+        onUngroupRequested: {
+            root.ungroupRequested()
         }
     }
 
