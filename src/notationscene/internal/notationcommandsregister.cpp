@@ -42,84 +42,19 @@ static const TranslatableString fret_X_TAB = TranslatableString("action", "Fret 
 static const TranslatableString enter_TAB_fret_X = TranslatableString("action", "Enter TAB: fret %1");
 
 static const std::vector<CommandInfo> s_commandInfos = {
-    // copy, cut, paste, delete, cancel
-    CommandInfo{
-        COPY_COMMAND,
-        TranslatableString("action", "&Copy"),
-        TranslatableString("action", "Copy the current notation element"),
-        InputSchema(),
-        Decoration(IconCode::Code::COPY)
-    },
-    CommandInfo{
-        COPY_PASTE_SWAP_COMMAND,
-        TranslatableString("action", "&Swap with clipboard"),
-        TranslatableString("action", "Copy/paste: swap with clipboard"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        CUT_COMMAND,
-        TranslatableString("action", "Cu&t"),
-        TranslatableString("action", "Cut the current notation element"),
-        InputSchema(),
-        Decoration(IconCode::Code::CUT)
-    },
-    CommandInfo{
-        PASTE_COMMAND,
-        TranslatableString("action", "Past&e"),
-        TranslatableString("action", "Paste the current notation element"),
-        InputSchema(),
-        Decoration(IconCode::Code::PASTE)
-    },
-    CommandInfo{
-        PASTE_HALF_COMMAND,
-        TranslatableString("action", "Paste &half duration"),
-        TranslatableString("action", "Paste half duration"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        PASTE_DOUBLE_COMMAND,
-        TranslatableString("action", "Paste &double duration"),
-        TranslatableString("action", "Paste double duration"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        PASTE_SPECIAL_COMMAND,
-        TranslatableString("action", "Paste special"),
-        TranslatableString("action", "Paste special"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        DELETE_COMMAND,
-        TranslatableString("action", "De&lete"),
-        TranslatableString("action", "Delete the current notation element"),
-        InputSchema(),
-        Decoration(IconCode::Code::DELETE_TANK)
-    },
-    CommandInfo{
-        CANCEL_COMMAND,
-        TranslatableString("action", "Cancel"),
-        TranslatableString("action", "Cancel the current notation operation"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        UNDO_COMMAND,
-        TranslatableString("action", "Undo"),
-        TranslatableString("action", "Undo the last notation operation"),
-        InputSchema(),
-        Decoration(IconCode::Code::UNDO)
-    },
-    CommandInfo{
-        REDO_COMMAND,
-        TranslatableString("action", "Redo"),
-        TranslatableString("action", "Redo the last notation operation"),
-        InputSchema(),
-        Decoration(IconCode::Code::REDO)
-    },
+    makeCommandInfo<CancelCommand>(),
+    makeCommandInfo<UndoCommand>(),
+    makeCommandInfo<RedoCommand>(),
+    makeCommandInfo<CopyCommand>(),
+    makeCommandInfo<CopyPasteSwapCommand>(),
+    makeCommandInfo<CopyLyricsCommand>(),
+    makeCommandInfo<CutCommand>(),
+    makeCommandInfo<PasteCommand>(),
+    makeCommandInfo<PasteDefaultCommand>(),
+    makeCommandInfo<PasteHalfCommand>(),
+    makeCommandInfo<PasteDoubleCommand>(),
+    makeCommandInfo<PasteSpecialCommand>(),
+    makeCommandInfo<DeleteCommand>(),
 
     // navigation and selection commands
 
@@ -1333,13 +1268,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         UNROLL_REPEATS_COMMAND,
         TranslatableString("action", "U&nroll repeats"),
         TranslatableString("action", "Unroll repeats"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        COPY_LYRICS_COMMAND,
-        TranslatableString("action", "Copy &lyrics to clipboard"),
-        TranslatableString("action", "Copy lyrics"),
         InputSchema(),
         Decoration()
     },

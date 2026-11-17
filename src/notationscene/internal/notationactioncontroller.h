@@ -136,6 +136,15 @@ private:
 
     mu::engraving::Score* currentNotationScore() const;
 
+    muse::Ret resetState();
+    muse::Ret undo();
+    muse::Ret redo();
+    muse::Ret copySelection();
+    muse::Ret cutSelection();
+    muse::Ret copyPasteSwap();
+    muse::Ret copyLyrics();
+    muse::Ret deleteSelection();
+
     muse::Ret select(const SelectCommand& command);
     muse::Ret select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
     muse::Ret addToSelection(const AddToSelectionCommand& command);
@@ -193,7 +202,6 @@ private:
     void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
 
-    void cutSelection();
     void repeatSelection();
     void addTie();
     void addLaissezVib();
@@ -219,7 +227,6 @@ private:
     void toggleHideEmpty();
     void addFullMeasureRest();
 
-    void resetState();
     void resetStretch();
     void resetBeamMode();
 
@@ -249,7 +256,7 @@ private:
     bool isEditingElement() const;
     bool isNotEditingElement() const;
 
-    void pasteSelection(PastingType type = PastingType::Default);
+    muse::Ret pasteSelection(const PasteCommand& command);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
     enum class TextNavigationType {

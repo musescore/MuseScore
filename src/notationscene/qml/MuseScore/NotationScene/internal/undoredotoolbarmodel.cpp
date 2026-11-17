@@ -43,8 +43,8 @@ void UndoRedoToolbarModel::load()
     AbstractToolBarModel::load();
 
     ToolBarItemList items = {
-        makeItem(UNDO_COMMAND),
-        makeItem(REDO_COMMAND),
+        makeItem(UndoCommand::id),
+        makeItem(RedoCommand::id),
     };
 
     setItems(items);
@@ -56,16 +56,16 @@ void UndoRedoToolbarModel::onCommandStateChanged(const muse::rcommand::Command& 
 
     INotationUndoStackPtr stack = undoStack();
 
-    if (command == UNDO_COMMAND) {
-        ToolBarItem* undoItem = findItemPtr(UNDO_COMMAND);
+    if (command == UndoCommand::id) {
+        ToolBarItem* undoItem = findItemPtr(UndoCommand::id);
         if (undoItem) {
             const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
             undoItem->setTitle(undoActionName.isEmpty()
                                ? TranslatableString("action", "Undo")
                                : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
         }
-    } else if (command == REDO_COMMAND) {
-        ToolBarItem* redoItem = findItemPtr(REDO_COMMAND);
+    } else if (command == RedoCommand::id) {
+        ToolBarItem* redoItem = findItemPtr(RedoCommand::id);
         if (redoItem) {
             const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
             redoItem->setTitle(redoActionName.isEmpty()

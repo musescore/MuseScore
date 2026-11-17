@@ -214,9 +214,9 @@
       "shortcuts": [
         {"command": "command://notation/copy",  "sequences": ["Ctrl+C"]},
         {"command": "command://notation/copy-paste-swap",  "sequences": ["Ctrl+Shift+X"]},
-        {"command": "command://notation/paste",  "sequences": ["Ctrl+V"]},
-        {"command": "command://notation/paste-half",  "sequences": ["Ctrl+Shift+Q"]},
-        {"command": "command://notation/paste-double",  "sequences": ["Ctrl+Shift+W"]},
+        {"command": "command://notation/paste/default",  "sequences": ["Ctrl+V"]},
+        {"command": "command://notation/paste/half",  "sequences": ["Ctrl+Shift+Q"]},
+        {"command": "command://notation/paste/double",  "sequences": ["Ctrl+Shift+W"]},
         {"command": "command://notation/cut",  "sequences": ["Ctrl+X"]},
         {"command": "command://notation/delete",  "sequences": ["Del","Backspace"]},
         {"command": "command://notation/edit-element",  "sequences": ["F2", "Alt+Shift+E"], "autorepeat": false},
