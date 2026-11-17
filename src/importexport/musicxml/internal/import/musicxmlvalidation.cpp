@@ -175,10 +175,9 @@ muse::Ret MusicXmlValidation::validate(const String& name, const muse::ByteArray
             return muse::make_ok();         // might as well try anyhow in converter mode
         }
 
-        //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode, without the validation
-        QString text = muse::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
-        text += "\n\n" + messageHandler.getErrors();
-        return make_ret(Err::FileCorrupted, muse::String::fromQString(text));
+        //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode, without the validation.
+        //! The caller tells the user about it, the errors are the details
+        return make_ret(Err::FileCorrupted, muse::String::fromQString(messageHandler.getErrors()));
     }
 
     return muse::make_ok();
