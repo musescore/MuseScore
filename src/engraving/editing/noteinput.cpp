@@ -860,13 +860,10 @@ std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
     }
 
     const PendingTuplet& pending = *is.pendingTuplet();
-    TupletPreview::Level level;
-    // its ratio as if the input duration sized it, also when that duration can't
-    level.ratio = pendingTupletRatio(pending, is.duration());
-    level.numberType = pending.numberType;
-
     TupletPreview preview;
-    preview.levels.push_back(level);
+    // its ratio as if the input duration sized it, also when that duration can't
+    preview.ratio = pendingTupletRatio(pending, is.duration());
+    preview.numberType = pending.numberType;
     return preview;
 }
 

@@ -73,12 +73,10 @@ void PendingTupletMarker::paint(Painter* painter, const NoteInputState& state)
     }
 
     const Score* score = staff->score();
-    const std::optional<TupletPreview> preview = NoteInput::tupletPreview(score);
-    if (!preview || preview->levels.empty()) {
+    const std::optional<TupletPreview> tuplet = NoteInput::tupletPreview(score);
+    if (!tuplet) {
         return;
     }
-    // the tuplet waiting at the input position
-    const TupletPreview::Level* tuplet = &preview->levels.back();
 
     const MStyle& style = score->style();
     const double spatium = style.spatium();

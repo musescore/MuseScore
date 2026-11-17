@@ -57,13 +57,8 @@ struct NoteInputParams {
 
 // the tuplet waiting at the input position
 struct TupletPreview {
-    struct Level {
-        Fraction ratio;
-        TupletNumberType numberType {};
-    };
-
-    // from the outermost to the innermost
-    std::vector<Level> levels;
+    Fraction ratio;
+    TupletNumberType numberType {};
 };
 
 class NoteInput

@@ -2755,9 +2755,8 @@ TEST_F(Engraving_TupletTests, tupletPreviewPending)
         setPendingTriplet(score, true);
         std::optional<TupletPreview> preview = NoteInput::tupletPreview(score);
         ASSERT_TRUE(preview);
-        ASSERT_EQ(preview->levels.size(), 1u);
-        EXPECT_EQ(preview->levels[0].ratio, Fraction(3, 2));
-        EXPECT_EQ(preview->levels[0].numberType, TupletNumberType::SHOW_NUMBER);
+        EXPECT_EQ(preview->ratio, Fraction(3, 2));
+        EXPECT_EQ(preview->numberType, TupletNumberType::SHOW_NUMBER);
 
         // the next duration adds it
         pressDuration(score, DurationType::V_EIGHTH);
@@ -2773,7 +2772,7 @@ TEST_F(Engraving_TupletTests, tupletPreviewPending)
             is.setPendingTuplet(pending);
             preview = NoteInput::tupletPreview(score);
             ASSERT_TRUE(preview);
-            EXPECT_EQ(preview->levels[0].numberType, numberType);
+            EXPECT_EQ(preview->numberType, numberType);
         }
 
         // moving away cancels it
@@ -2787,7 +2786,7 @@ TEST_F(Engraving_TupletTests, tupletPreviewPending)
         setPendingTriplet(score, false);
         preview = NoteInput::tupletPreview(score);
         ASSERT_TRUE(preview);
-        EXPECT_EQ(preview->levels[0].ratio, Fraction(3, 3));
+        EXPECT_EQ(preview->ratio, Fraction(3, 3));
 
         // a duration it can't divide still shows its number: 7:6 dividing a quarter
         is.setDuration(DurationType::V_QUARTER);
@@ -2797,7 +2796,7 @@ TEST_F(Engraving_TupletTests, tupletPreviewPending)
         is.setPendingTuplet(pending);
         preview = NoteInput::tupletPreview(score);
         ASSERT_TRUE(preview);
-        EXPECT_EQ(preview->levels[0].ratio, Fraction(7, 6));
+        EXPECT_EQ(preview->ratio, Fraction(7, 6));
 
         delete score;
     }
@@ -2815,8 +2814,7 @@ TEST_F(Engraving_TupletTests, tupletPreviewPendingBeyondScore)
     setPendingTriplet(score, true);
     std::optional<TupletPreview> preview = NoteInput::tupletPreview(score);
     ASSERT_TRUE(preview);
-    ASSERT_EQ(preview->levels.size(), 1u);
-    EXPECT_EQ(preview->levels[0].ratio, Fraction(3, 2));
+    EXPECT_EQ(preview->ratio, Fraction(3, 2));
 
     delete score;
 }
