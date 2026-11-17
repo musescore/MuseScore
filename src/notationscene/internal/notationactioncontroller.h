@@ -276,6 +276,7 @@ private:
     void nextBeatTextElement();
     void prevBeatTextElement();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
+    muse::Ret editTextAdvance(const EditTextAdvanceCommand& command);
     void navigateToTextItemByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
@@ -317,7 +318,6 @@ private:
     template<typename P1>
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
                          bool (NotationActionController::*)() const = nullptr);
-    void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
     void registerGetCommand(const muse::rcommand::Command&, std::function<muse::RetVal<muse::rcommand::Params>()>);
     void registerGetCommand(const muse::rcommand::Command&, muse::RetVal<muse::rcommand::Params>(NotationActionController::*)() const);

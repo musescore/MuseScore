@@ -147,6 +147,8 @@ void NotationActionController::init()
     registerCommand<AddOrnamentCommand>(&Controller::addOrnament);
     registerCommand<AddFretCommand>(&Controller::addFret);
 
+    registerCommand<EditTextAdvanceCommand>(&Controller::editTextAdvance);
+
     registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
 
     // text navigation commands
@@ -155,16 +157,6 @@ void NotationActionController::init()
     registerCommand(EDITTEXT_PREV_ELEMENT_COMMAND, [this]() { prevTextElement(); });
     registerCommand(EDITTEXT_NEXT_BEAT_COMMAND, &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerCommand(EDITTEXT_PREV_BEAT_COMMAND, &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
-
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_LONGA_COMMAND, Fraction(4, 1));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_BREVE_COMMAND, Fraction(2, 1));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_1_COMMAND, Fraction(1, 1));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_2_COMMAND, Fraction(1, 2));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_4_COMMAND, Fraction(1, 4));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_8_COMMAND, Fraction(1, 8));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_16_COMMAND, Fraction(1, 16));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_32_COMMAND, Fraction(1, 32));
-    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_64_COMMAND, Fraction(1, 64));
 
     // lyrics editing commands
     registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
@@ -2535,6 +2527,20 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     }
 }
 
+muse::Ret NotationActionController::editTextAdvance(const EditTextAdvanceCommand& command)
+{
+    TRACEFUNC;
+
+    if (!textNavigationByFractionAvailable()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    const Fraction fraction = TDuration(command.duration).fraction();
+    navigateToTextItemByFraction(fraction);
+
+    return muse::make_ok();
+}
+
 void NotationActionController::navigateToTextItemByFraction(const Fraction& fraction)
 {
     const mu::engraving::EngravingItem* element = selectedElement();
@@ -3076,14 +3082,6 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
             }
         }
     }, enabler);
-}
-
-void NotationActionController::registerNavigationByFractionCommand(const muse::rcommand::Command& command, const Fraction& fraction)
-{
-    registerCommand(command, [this, fraction]() {
-        navigateToTextItemByFraction(
-            fraction);
-    }, &NotationActionController::textNavigationByFractionAvailable);
 }
 
 void NotationActionController::registerGetCommand(const muse::rcommand::Command& command,

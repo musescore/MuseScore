@@ -2212,6 +2212,95 @@ struct AddFret14Command {
     cprop_decl availabilities = Availability::UI;
     cprop_decl redirect = AddFretCommand(14);
 };
+
+// text navigation commands
+
+struct EditTextAdvanceCommand {
+    cprop_decl id = Command("command://notation/edittext-advance");
+    cprop_decl title = MnemonicString("action", "Advance cursor");
+    cprop_decl description = TranslatableString("action", "Advance cursor in chord symbols / figured bass");
+    cprop_decl availabilities = Availability::API;
+
+    DurationType duration = DurationType::V_QUARTER;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "duration", &EditTextAdvanceCommand::duration, "Duration to advance by" },
+    };
+};
+
+// aliases for edittext advance command
+
+struct EditTextAdvanceLongaCommand {
+    cprop_decl id = Command("command://notation/edittext-advance/longa");
+    cprop_decl title = MnemonicString("action", "Advance cursor: longa (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_LONG);
+};
+
+struct EditTextAdvanceBreveCommand {
+    cprop_decl id = Command("command://notation/edittext-advance/breve");
+    cprop_decl title = MnemonicString("action", "Advance cursor: breve (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_BREVE);
+};
+
+struct EditTextAdvance1Command {
+    cprop_decl id = Command("command://notation/edittext-advance/1");
+    cprop_decl title = MnemonicString("action", "Advance cursor: whole note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_WHOLE);
+};
+
+struct EditTextAdvance2Command {
+    cprop_decl id = Command("command://notation/edittext-advance/2");
+    cprop_decl title = MnemonicString("action", "Advance cursor: half note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_HALF);
+};
+
+struct EditTextAdvance4Command {
+    cprop_decl id = Command("command://notation/edittext-advance/4");
+    cprop_decl title = MnemonicString("action", "Advance cursor: quarter note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_QUARTER);
+};
+
+struct EditTextAdvance8Command {
+    cprop_decl id = Command("command://notation/edittext-advance/8");
+    cprop_decl title = MnemonicString("action", "Advance cursor: eighth note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_EIGHTH);
+};
+
+struct EditTextAdvance16Command {
+    cprop_decl id = Command("command://notation/edittext-advance/16");
+    cprop_decl title = MnemonicString("action", "Advance cursor: 16th note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_16TH);
+};
+
+struct EditTextAdvance32Command {
+    cprop_decl id = Command("command://notation/edittext-advance/32");
+    cprop_decl title = MnemonicString("action", "Advance cursor: 32nd note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_32ND);
+};
+
+struct EditTextAdvance64Command {
+    cprop_decl id = Command("command://notation/edittext-advance/64");
+    cprop_decl title = MnemonicString("action", "Advance cursor: 64th note (chord symbols/figured bass)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_64TH);
+};
 }
 
 namespace mu::notation {
@@ -2221,16 +2310,6 @@ inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("comma
 inline static const muse::rcommand::Command EDITTEXT_PREV_ELEMENT_COMMAND("command://notation/edittext-prev-element");
 inline static const muse::rcommand::Command EDITTEXT_NEXT_BEAT_COMMAND("command://notation/edittext-next-beat");
 inline static const muse::rcommand::Command EDITTEXT_PREV_BEAT_COMMAND("command://notation/edittext-prev-beat");
-
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_LONGA_COMMAND("command://notation/edittext-advance-longa");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_BREVE_COMMAND("command://notation/edittext-advance-breve");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_1_COMMAND("command://notation/edittext-advance-1");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_2_COMMAND("command://notation/edittext-advance-2");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_4_COMMAND("command://notation/edittext-advance-4");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_8_COMMAND("command://notation/edittext-advance-8");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_16_COMMAND("command://notation/edittext-advance-16");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_32_COMMAND("command://notation/edittext-advance-32");
-inline static const muse::rcommand::Command EDITTEXT_ADVANCE_64_COMMAND("command://notation/edittext-advance-64");
 
 // lyrics editing commands
 inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
