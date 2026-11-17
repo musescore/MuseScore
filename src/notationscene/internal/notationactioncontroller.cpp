@@ -137,6 +137,7 @@ void NotationActionController::init()
     registerCommand<AddTextCommand>(&Controller::addText);
     registerCommand<AddBeamCommand>(&Controller::addBeam);
     registerCommand<AddOrnamentCommand>(&Controller::addOrnament);
+    registerCommand<AddFretCommand>(&Controller::addFret);
 
     registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
 
@@ -387,22 +388,6 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_256TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_256TH); });
     registerCommand(SET_DURATION_512TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
-
-    registerCommand(ENTER_FRET_0_COMMAND, [this]() { addFret(0); });
-    registerCommand(ENTER_FRET_1_COMMAND, [this]() { addFret(1); });
-    registerCommand(ENTER_FRET_2_COMMAND, [this]() { addFret(2); });
-    registerCommand(ENTER_FRET_3_COMMAND, [this]() { addFret(3); });
-    registerCommand(ENTER_FRET_4_COMMAND, [this]() { addFret(4); });
-    registerCommand(ENTER_FRET_5_COMMAND, [this]() { addFret(5); });
-    registerCommand(ENTER_FRET_6_COMMAND, [this]() { addFret(6); });
-    registerCommand(ENTER_FRET_7_COMMAND, [this]() { addFret(7); });
-    registerCommand(ENTER_FRET_8_COMMAND, [this]() { addFret(8); });
-    registerCommand(ENTER_FRET_9_COMMAND, [this]() { addFret(9); });
-    registerCommand(ENTER_FRET_10_COMMAND, [this]() { addFret(10); });
-    registerCommand(ENTER_FRET_11_COMMAND, [this]() { addFret(11); });
-    registerCommand(ENTER_FRET_12_COMMAND, [this]() { addFret(12); });
-    registerCommand(ENTER_FRET_13_COMMAND, [this]() { addFret(13); });
-    registerCommand(ENTER_FRET_14_COMMAND, [this]() { addFret(14); });
 
     registerCommand(ENTER_REST_TAB_COMMAND, &Interaction::putRestToSelection);
 
@@ -1860,15 +1845,16 @@ void NotationActionController::addHammerOnPullOff()
     interaction->addHammerOnPullOffToSelection();
 }
 
-void NotationActionController::addFret(int num)
+muse::Ret NotationActionController::addFret(const AddFretCommand& command)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    interaction->addFret(num);
+    interaction->addFret(command.num);
     seekAndPlaySelectedElement(currentNotationScore()->playChord());
+    return muse::make_ok();
 }
 
 void NotationActionController::insertClef(mu::engraving::ClefType type)

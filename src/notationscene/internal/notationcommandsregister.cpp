@@ -352,6 +352,24 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddOrnamentShakeMuffatCommand>(),
     makeCommandInfo<AddOrnamentTremblementCouperinCommand>(),
 
+    // Tab
+    makeCommandInfo<AddFretCommand>(),
+    makeCommandInfo<AddFret0Command>(),
+    makeCommandInfo<AddFret1Command>(),
+    makeCommandInfo<AddFret2Command>(),
+    makeCommandInfo<AddFret3Command>(),
+    makeCommandInfo<AddFret4Command>(),
+    makeCommandInfo<AddFret5Command>(),
+    makeCommandInfo<AddFret6Command>(),
+    makeCommandInfo<AddFret7Command>(),
+    makeCommandInfo<AddFret8Command>(),
+    makeCommandInfo<AddFret9Command>(),
+    makeCommandInfo<AddFret10Command>(),
+    makeCommandInfo<AddFret11Command>(),
+    makeCommandInfo<AddFret12Command>(),
+    makeCommandInfo<AddFret13Command>(),
+    makeCommandInfo<AddFret14Command>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -1517,112 +1535,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         ENTER_REST_TAB_COMMAND,
         X_TAB.arg(TranslatableString("action", "Rest")),
         X_TAB.arg(TranslatableString("action", "Enter rest")),
-        InputSchema(),
-        Decoration()
-    },
-
-    CommandInfo {
-        ENTER_FRET_0_COMMAND,
-        fret_X_TAB.arg(0),
-        enter_TAB_fret_X.arg(0),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_1_COMMAND,
-        fret_X_TAB.arg(1),
-        enter_TAB_fret_X.arg(1),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_2_COMMAND,
-        fret_X_TAB.arg(2),
-        enter_TAB_fret_X.arg(2),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_3_COMMAND,
-        fret_X_TAB.arg(3),
-        enter_TAB_fret_X.arg(3),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_4_COMMAND,
-        fret_X_TAB.arg(4),
-        enter_TAB_fret_X.arg(4),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_5_COMMAND,
-        fret_X_TAB.arg(5),
-        enter_TAB_fret_X.arg(5),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_6_COMMAND,
-        fret_X_TAB.arg(6),
-        enter_TAB_fret_X.arg(6),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_7_COMMAND,
-        fret_X_TAB.arg(7),
-        enter_TAB_fret_X.arg(7),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_8_COMMAND,
-        fret_X_TAB.arg(8),
-        enter_TAB_fret_X.arg(8),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_9_COMMAND,
-        fret_X_TAB.arg(9),
-        enter_TAB_fret_X.arg(9),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_10_COMMAND,
-        fret_X_TAB.arg(10),
-        enter_TAB_fret_X.arg(10),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_11_COMMAND,
-        fret_X_TAB.arg(11),
-        enter_TAB_fret_X.arg(11),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_12_COMMAND,
-        fret_X_TAB.arg(12),
-        enter_TAB_fret_X.arg(12),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_13_COMMAND,
-        fret_X_TAB.arg(13),
-        enter_TAB_fret_X.arg(13),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo {
-        ENTER_FRET_14_COMMAND,
-        fret_X_TAB.arg(14),
-        enter_TAB_fret_X.arg(14),
         InputSchema(),
         Decoration()
     },
