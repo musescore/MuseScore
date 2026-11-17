@@ -24,7 +24,6 @@
 #include "project/inotationreader.h"
 
 #include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
 #include "io/ifilesystem.h"
 
 #include "engraving/engravingerrors.h"
@@ -32,7 +31,6 @@
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader, public muse::Contextable
 {
-    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
@@ -42,8 +40,5 @@ public:
 
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
     mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
-
-private:
-    bool askToLoadDespiteWarnings(const muse::String& text, const muse::String& detailedText);
 };
 }

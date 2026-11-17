@@ -27,8 +27,10 @@
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"
 
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/mscore.h"
 
 #include "modularity/ioc.h"
 #include "importexport/mei/imeiconfiguration.h"
@@ -88,6 +90,38 @@ void Mei_Tests::meiReadTest(const char* file)
 
     // Compare the mei files
     EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"));
+}
+
+//! Reads a file whose import reports problems (it is not MEI Basic)
+static muse::Ret readMeiWithWarnings(bool forceMode)
+{
+    // The problems are reported to the user only when there is one
+    MScore::noGui = false;
+
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(muse::modularity::globalCtx());
+    MeiReader meiReader(nullptr);
+    MeiReader::Options options { { project::INotationReader::OptionKey::ForceMode, muse::Val(forceMode) } };
+    muse::Ret ret = meiReader.read(score, ScoreRW::rootPath() + u"/" + MEI_DIR + u"warnings-01.mei", options);
+    delete score;
+
+    MScore::noGui = true;
+
+    return ret;
+}
+
+TEST_F(Mei_Tests, readWithWarnings_NotForced_ReportsTheProblems) {
+    muse::Ret ret = readMeiWithWarnings(/*forceMode*/ false);
+
+    EXPECT_EQ(ret.code(), int(Err::FileCorrupted));
+
+    //! The problems are the details, the message for the user is up to the caller
+    EXPECT_NE(ret.text().find("does not seem to be a MEI Basic version"), std::string::npos);
+}
+
+TEST_F(Mei_Tests, readWithWarnings_Forced_Reads) {
+    muse::Ret ret = readMeiWithWarnings(/*forceMode*/ true);
+
+    EXPECT_TRUE(ret);
 }
 
 TEST_F(Mei_Tests, mei_accid_01) {

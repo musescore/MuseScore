@@ -22,8 +22,6 @@
 
 #include "meireader.h"
 
-#include "translation.h"
-
 #include "engraving/engravingerrors.h"
 #include "engraving/dom/masterscore.h"
 
@@ -37,7 +35,15 @@ using namespace mu::engraving;
 Ret MeiReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
     Err result = this->import(score, path, options);
-    return (result == Err::NoError) ? muse::make_ok() : make_ret(result, path);
+    if (result == Err::NoError) {
+        return muse::make_ok();
+    }
+
+    if (result == Err::FileCorrupted) {
+        return make_ret(result, Convert::logs.join(u"\n"));
+    }
+
+    return make_ret(result, path);
 }
 
 Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Options& options)
@@ -59,32 +65,10 @@ Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Op
 
     bool hasWarnings = (Convert::logs.size() > 0);
 
+    //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode
     if (!forceMode && !MScore::noGui && hasWarnings) {
-        int numLogs = static_cast<int>(Convert::logs.size());
-        const String text = muse::qtrc("iex_mei", "%Ln problem(s) occurred and the import may be incomplete.",
-                                       nullptr, numLogs);
-        if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
-            return Err::FileBadFormat;
-        }
+        return Err::FileCorrupted;
     }
 
     return Err::NoError;
-}
-
-/**
- * Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
- */
-bool MeiReader::askToLoadDespiteWarnings(const String& title, const String& detailedText)
-{
-    IInteractive::Text t;
-    t.text = muse::trc("iex_mei", "Do you want to try to load this MEI file anyway?");
-    t.detailedText = detailedText.toStdString();
-
-    IInteractive::Button btn = interactive()->warningSync(
-        title.toStdString(), t, {
-        interactive()->buttonData(IInteractive::Button::Cancel),
-        interactive()->buttonData(IInteractive::Button::Yes)
-    }, (int)IInteractive::Button::Yes).standardButton();
-
-    return btn == IInteractive::Button::Yes;
 }
