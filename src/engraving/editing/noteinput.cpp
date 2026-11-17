@@ -36,8 +36,6 @@
 #include "transaction/transaction.h"
 #include "transpose.h"
 
-#include "../infrastructure/messagebox.h"
-
 #include "../dom/accidental.h"
 #include "../dom/chord.h"
 #include "../dom/chordline.h"
@@ -838,18 +836,10 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
         return make_ret(Ret::Code::UnknownError);
     }
 
-    // warn and delete MeasureRepeat if necessary
+    // delete MeasureRepeat if necessary, the user is asked beforehand
     Measure* m = is.segment()->measure();
     staff_idx_t staffIdx = track2staff(is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
-        auto b = MessageBox(score->iocContext()).warning(muse::trc("engraving", "Note input will remove measure repeat"),
-                                                         muse::trc("engraving", "This measure contains a measure repeat."
-                                                                                " If you enter notes here, it will be deleted."
-                                                                                " Do you want to continue?"));
-        if (b == MessageBox::Cancel) {
-            return make_ret(Ret::Code::Cancel);
-        }
-
         score->deleteItem(m->measureRepeatElement(staffIdx));
     }
 

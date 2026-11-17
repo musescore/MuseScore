@@ -258,7 +258,10 @@ public:
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
+
+    muse::Ret canAddFret() const override;
     void addFret(int fretIndex) override;
+
     void changeSelectedElementsVoice(voice_idx_t voiceIndex) override;
     void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) override;
     void addAnchoredLineToSelectedNotes() override;

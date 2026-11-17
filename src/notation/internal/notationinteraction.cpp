@@ -6061,6 +6061,15 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     apply();
 }
 
+Ret NotationInteraction::canAddFret() const
+{
+    if (NoteInput::addFretRemovesMeasureRepeat(score())) {
+        return make_ret(notation::Err::NoteInputRemovesMeasureRepeat);
+    }
+
+    return make_ok();
+}
+
 void NotationInteraction::addFret(int fretIndex)
 {
     transaction(TranslatableString("undoableAction", "Enter note at fret %1").arg(fretIndex), [&](auto& tx) {

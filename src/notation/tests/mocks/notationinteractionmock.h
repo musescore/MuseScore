@@ -192,6 +192,7 @@ public:
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
     MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));
+    MOCK_METHOD(muse::Ret, canAddFret, (), (const, override));
     MOCK_METHOD(void, addFret, (int), (override));
     MOCK_METHOD(void, changeSelectedElementsVoice, (voice_idx_t), (override));
     MOCK_METHOD(void, changeSelectedElementsVoiceAssignment, (VoiceAssignment), (override));

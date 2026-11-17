@@ -34,6 +34,9 @@ enum class Err {
     // selection
     SelectCompleteTupletOrTremolo = 1050,
     EmptySelection,
+
+    // note input
+    NoteInputRemovesMeasureRepeat = 1060,
 };
 
 inline muse::Ret make_ret(Err err)
@@ -49,6 +52,13 @@ inline muse::Ret make_ret(Err err)
         break;
     case Err::EmptySelection:
         text = muse::trc("notation", "The selection is empty");
+        break;
+    case Err::NoteInputRemovesMeasureRepeat:
+        text = muse::trc("engraving", "Note input will remove measure repeat");
+        text += "\n\n";
+        text += muse::trc("engraving", "This measure contains a measure repeat."
+                                       " If you enter notes here, it will be deleted."
+                                       " Do you want to continue?");
         break;
     case Err::Undefined:
     case Err::NoError:

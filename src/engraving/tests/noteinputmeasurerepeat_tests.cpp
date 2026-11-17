@@ -118,6 +118,27 @@ TEST_F(Engraving_NoteInputMeasureRepeatTests, AddPitch_Repitch_DoesNotRemoveIt)
     EXPECT_FALSE(NoteInput::addPitchRemovesMeasureRepeat(m_score, false));
 }
 
+TEST_F(Engraving_NoteInputMeasureRepeatTests, AddPitch_InMeasureRepeat_RemovesItWithoutAsking)
+{
+    //! [GIVEN] The input position is in the measure repeat
+    inputAt(m_repeatMeasure, 0);
+
+    //! [WHEN] A note is entered there
+    m_score->startCmd(TranslatableString::untranslatable("Note input measure repeat tests"));
+    NoteInput::addPitch(tx(), m_score, 0, false, false);
+    m_score->endCmd();
+
+    //! [THEN] The measure repeat is gone, and the note is there
+    EXPECT_FALSE(m_repeatMeasure->isMeasureRepeatGroup(0));
+    EXPECT_FALSE(m_repeatMeasure->nextMeasure()->isMeasureRepeatGroup(0));
+
+    const Segment* segment = m_repeatMeasure->first(SegmentType::ChordRest);
+    ASSERT_TRUE(segment);
+    const EngravingItem* item = segment->element(0);
+    ASSERT_TRUE(item);
+    EXPECT_TRUE(item->isChord());
+}
+
 TEST_F(Engraving_NoteInputMeasureRepeatTests, PutNote_ClickInMeasureRepeat_RemovesIt)
 {
     //! [GIVEN] A click on the measure repeat

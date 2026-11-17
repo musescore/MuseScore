@@ -46,11 +46,16 @@ public:
     virtual bool usingNoteInputMethod(NoteInputMethod method) const = 0;
     virtual void setNoteInputMethod(NoteInputMethod method) = 0;
 
+    virtual muse::Ret canAddNote(NoteAddingMode addingMode) const = 0;
     virtual void addNote(const NoteInputParams& params, NoteAddingMode addingMode) = 0;
+
     virtual void setDuration(engraving::DurationType duration) = 0;
     virtual void toggleRest() = 0;
     virtual void toggleDots(int dots) = 0;
+
+    virtual muse::Ret canPutNote(const muse::PointF& pos) const = 0;
     virtual muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) = 0;
+
     virtual void removeNote(const muse::PointF& pos) = 0;
 
     virtual void addTuplet(const TupletOptions& options) = 0;
