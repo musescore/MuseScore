@@ -2116,7 +2116,7 @@ void Score::cmdRemovePart(Part* part)
     }
 
     Transaction& tx = transactionManager()->currentOrDummyTransaction();
-    EditStaveSharing::handleRemovePart(tx, part);
+    EditStaveSharing::disconnectBeforeRemovingPart(tx, part);
 
     staff_idx_t sidx = staffIdx(part);
     size_t n = part->nstaves();

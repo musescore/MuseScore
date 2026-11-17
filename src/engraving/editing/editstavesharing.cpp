@@ -250,7 +250,7 @@ void EditStaveSharing::toggleStaveSharing(Transaction& tx, Score* score, bool on
     score->undoChangeStyleVal(Sid::enableStaveSharing, on);
 
     if (on && score->sharedParts().empty()) {
-        cmdCreateSharedStaves(tx, score);
+        createSharedStaves(tx, score);
     }
 
     score->setBracketsAndBarlines();
@@ -258,18 +258,7 @@ void EditStaveSharing::toggleStaveSharing(Transaction& tx, Score* score, bool on
     score->update();
 }
 
-void EditStaveSharing::cmdRemoveSharedStaves(Score* score)
-{
-    std::vector<Part*> parts = score->parts(); // COPY because we're about to remove elements
-
-    for (Part* part : parts) {
-        if (part->isSharedPart()) {
-            score->cmdRemovePart(part);
-        }
-    }
-}
-
-void EditStaveSharing::cmdCreateSharedStaves(Transaction& tx, Score* score)
+void EditStaveSharing::createSharedStaves(Transaction& tx, Score* score)
 {
     StaveSharingGroups staveSharingGroups = computeGroups(score);
 
@@ -418,17 +407,79 @@ void EditStaveSharing::disconnectSharedPart(Transaction& tx, SharedPart* sharedP
     score->undoRemoveStaff(sharedPart->staves().back());
 }
 
-void EditStaveSharing::handleRemovePart(Transaction& tx, Part* part)
+void EditStaveSharing::disconnectFromCurrentSharedPart(Transaction& tx, Part* part)
 {
-    Score* score = part->score();
+    SharedPart* currentSharedPart = part->sharedPart();
+    if (!currentSharedPart) {
+        return;
+    }
 
-    if (SharedPart* sharedPart = part->sharedPart()) {
-        disconnectSharedPart(tx, sharedPart, part);
-        if (sharedPart->originParts().empty()) {
-            score->cmdRemovePart(sharedPart);
+    disconnectSharedPart(tx, currentSharedPart, part);
+    if (currentSharedPart->originParts().empty()) {
+        part->score()->cmdRemovePart(currentSharedPart);
+    }
+}
+
+SharedPart* EditStaveSharing::createSharedPart(Transaction& tx, const std::vector<Part*>& parts)
+{
+    IF_ASSERT_FAILED(!parts.empty()) {
+        return nullptr;
+    }
+
+    for (Part* part : parts) {
+        disconnectFromCurrentSharedPart(tx, part);
+    }
+
+    Part* firstPart = parts.front();
+    Score* score = firstPart->score();
+    const size_t idx = muse::indexOf(score->parts(), firstPart);
+    SharedPart* sharedPart = createSharedPart(score, idx, firstPart->instrument());
+
+    for (Part* part : parts) {
+        connectSharedPart(tx, sharedPart, part);
+    }
+
+    score->setBracketsAndBarlines();
+    score->update();
+
+    return sharedPart;
+}
+
+void EditStaveSharing::addPartsToSharedPart(Transaction& tx, const std::vector<Part*>& parts, SharedPart* sharedPart)
+{
+    for (Part* part : parts) {
+        if (part->sharedPart() != sharedPart) {
+            disconnectFromCurrentSharedPart(tx, part);
+            connectSharedPart(tx, sharedPart, part);
         }
+    }
+
+    Score* score = sharedPart->score();
+    score->setBracketsAndBarlines();
+    score->update();
+}
+
+void EditStaveSharing::removePartsFromSharedPart(Transaction& tx, const std::vector<Part*>& parts)
+{
+    if (parts.empty()) {
+        return;
+    }
+
+    for (Part* part : parts) {
+        disconnectFromCurrentSharedPart(tx, part);
+    }
+
+    Score* score = parts.front()->score();
+    score->setBracketsAndBarlines();
+    score->update();
+}
+
+void EditStaveSharing::disconnectBeforeRemovingPart(Transaction& tx, Part* part)
+{
+    if (part->sharedPart()) {
+        disconnectFromCurrentSharedPart(tx, part);
     } else if (part->isSharedPart()) {
-        sharedPart = toSharedPart(part);
+        SharedPart* sharedPart = toSharedPart(part);
         std::vector<Part*> originParts = sharedPart->originParts();
         for (Part* originPart : originParts) {
             tx.push(new DisconnectSharedPart(sharedPart, originPart));

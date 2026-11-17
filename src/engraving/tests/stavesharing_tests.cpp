@@ -1209,3 +1209,188 @@ TEST_F(Engraving_StaveSharingTests, testTimeDeleteAtStaveSharingChangeUndo)
 
     delete score;
 }
+
+TEST_F(Engraving_StaveSharingTests, CreateSharedPart)
+{
+    // [GIVEN] Two flutes, not in a shared part
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    ASSERT_TRUE(score);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    // [WHEN] A shared part is created for both flutes
+    SharedPart* sharedPart = nullptr;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared part"), [&](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+
+    // [THEN] It's right before the first flute, with one staff per flute, and both flutes are in it
+    ASSERT_TRUE(sharedPart);
+    EXPECT_EQ(score->parts().at(0), sharedPart);
+    EXPECT_EQ(score->parts().at(1), flute1);
+    EXPECT_EQ(score->parts().at(2), flute2);
+    EXPECT_EQ(sharedPart->nstaves(), 2);
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
+
+    // [WHEN] It's undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The shared part is gone
+    SharedPart* foundSharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &foundSharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(foundSharedPart, originParts));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, AddPartsToSharedPart)
+{
+    // [GIVEN] A shared part with the first flute
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    ASSERT_TRUE(score);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared part"), [&](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The second flute is added to it
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
+        EditStaveSharing::addPartsToSharedPart(tx, { flute2 }, sharedPart);
+    });
+
+    // [THEN] Both flutes are in it, one staff each
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 2);
+
+    // [WHEN] It's undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Only the first flute is in it
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_EQ(sharedPart->nstaves(), 1);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, AddPartsToSharedPart_LeavesEmptiedSharedPart)
+{
+    // [GIVEN] Each flute in its own shared part
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    ASSERT_TRUE(score);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart1 = nullptr;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared parts"), [&](Transaction& tx) {
+        sharedPart1 = EditStaveSharing::createSharedPart(tx, { flute1 });
+        EditStaveSharing::createSharedPart(tx, { flute2 });
+    });
+    ASSERT_TRUE(sharedPart1);
+    ASSERT_EQ(score->sharedParts().size(), 2);
+
+    // [WHEN] The second flute moves to the first flute's shared part
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
+        EditStaveSharing::addPartsToSharedPart(tx, { flute2 }, sharedPart1);
+    });
+
+    // [THEN] Both flutes are in the first shared part, and the second one is removed
+    EXPECT_TRUE(checkSharedPartExist(sharedPart1, { flute1, flute2 }));
+    ASSERT_EQ(score->sharedParts().size(), 1);
+    EXPECT_EQ(score->sharedParts().front(), sharedPart1);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, RemovePartsFromSharedPart)
+{
+    // [GIVEN] Both flutes in a shared part
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    Part* flute1 = originParts.at(0);
+    Part* flute2 = originParts.at(1);
+
+    // [WHEN] The first flute leaves it
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Remove from shared part"), [&](Transaction& tx) {
+        EditStaveSharing::removePartsFromSharedPart(tx, { flute1 });
+    });
+
+    // [THEN] Only the second flute is in it, with one staff
+    EXPECT_FALSE(flute1->sharedPart());
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 1);
+
+    // [WHEN] The second flute leaves it too
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Remove from shared part"), [&](Transaction& tx) {
+        EditStaveSharing::removePartsFromSharedPart(tx, { flute2 });
+    });
+
+    // [THEN] The shared part is removed
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] Both are undone
+    score->undoRedo(true, nullptr);
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Both flutes are back in the shared part
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, RemovePartsFromSharedPart_All)
+{
+    // [GIVEN] Both flutes in a shared part
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    Part* flute1 = originParts.at(0);
+    Part* flute2 = originParts.at(1);
+
+    // [WHEN] Both flutes leave it at once
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Remove from shared part"), [&](Transaction& tx) {
+        EditStaveSharing::removePartsFromSharedPart(tx, { flute1, flute2 });
+    });
+
+    // [THEN] The shared part is removed
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartNotExist(sharedPart, originParts));
+
+    // [WHEN] It's undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Both flutes are back in the shared part
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
+
+    delete score;
+}
