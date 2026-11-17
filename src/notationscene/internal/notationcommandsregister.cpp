@@ -305,6 +305,17 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddFret13Command>(),
     makeCommandInfo<AddFret14Command>(),
 
+    makeCommandInfo<EditTextAdvanceCommand>(),
+    makeCommandInfo<EditTextAdvanceLongaCommand>(),
+    makeCommandInfo<EditTextAdvanceBreveCommand>(),
+    makeCommandInfo<EditTextAdvance1Command>(),
+    makeCommandInfo<EditTextAdvance2Command>(),
+    makeCommandInfo<EditTextAdvance4Command>(),
+    makeCommandInfo<EditTextAdvance8Command>(),
+    makeCommandInfo<EditTextAdvance16Command>(),
+    makeCommandInfo<EditTextAdvance32Command>(),
+    makeCommandInfo<EditTextAdvance64Command>(),
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,
@@ -556,70 +567,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        EDITTEXT_ADVANCE_LONGA_COMMAND,
-        TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_BREVE_COMMAND,
-        TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_1_COMMAND,
-        TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_2_COMMAND,
-        TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_4_COMMAND,
-        TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_8_COMMAND,
-        TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_16_COMMAND,
-        TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_ADVANCE_32_COMMAND,
-        TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
 
-    CommandInfo{
-        EDITTEXT_ADVANCE_64_COMMAND,
-        TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)"),
-        TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)"),
-        InputSchema(),
-        Decoration()
-    },
     CommandInfo{
         EDITLYRIC_NEXT_VERSE_COMMAND,
         TranslatableString("action", "Next lyric verse"),

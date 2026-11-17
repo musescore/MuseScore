@@ -245,7 +245,7 @@ struct BeamModeContract {
 };
 
 struct OrnamentTypeContract {
-    static constexpr EnumTable<OrnamentType, 14> table { {        { "turn", OrnamentType::TURN, "turn" },
+    static constexpr EnumTable<OrnamentType, 14> table { { { "turn", OrnamentType::TURN, "turn" },
         { "turn-inverted", OrnamentType::TURN_INVERTED, "turn inverted" },
         { "turn-slash", OrnamentType::TURN_SLASH, "turn slash" },
         { "turn-up", OrnamentType::TURN_UP, "turn up" },
