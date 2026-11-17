@@ -684,6 +684,19 @@ void NotationParts::toggleStaveSharing(bool on)
     });
 }
 
+void NotationParts::ungroupSharedPart(const ID& sharedPartId)
+{
+    Part* sharedPart = score()->partById(sharedPartId);
+    if (!sharedPart || !sharedPart->isSharedPart()) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Ungroup shared staves"), [&](engraving::Transaction& tx) {
+        EditPart::removeParts(tx, score(), { sharedPart });
+    });
+}
+
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;

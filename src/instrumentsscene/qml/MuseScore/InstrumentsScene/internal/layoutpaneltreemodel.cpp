@@ -478,6 +478,16 @@ void LayoutPanelTreeModel::toggleStaveSharing(bool on)
     updateIsStaveSharingEnabled();
 }
 
+void LayoutPanelTreeModel::ungroupSharedGroup(const QString& sharedPartId)
+{
+    INotationPartsPtr parts = m_masterNotation ? m_masterNotation->parts() : nullptr;
+    if (!parts) {
+        return;
+    }
+
+    parts->ungroupSharedPart(ID(sharedPartId));
+}
+
 void LayoutPanelTreeModel::toggleHideEmptyStaves(bool on)
 {
     if (!m_notation || isHideEmptyStavesEnabled() == on) {

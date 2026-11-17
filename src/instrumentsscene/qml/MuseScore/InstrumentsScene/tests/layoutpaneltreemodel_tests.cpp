@@ -1790,3 +1790,17 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, AddInstrumentsKeyboardShortcu
     EXPECT_EQ(*shortcutChanges, 1);
     EXPECT_TRUE(m_model->addInstrumentsKeyboardShortcut().isEmpty());
 }
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, UngroupSharedGroup)
+{
+    // [GIVEN] An instrument and a shared-staves group
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    createModel();
+
+    // [THEN] The group is removed from the main score
+    EXPECT_CALL(*m_masterParts, ungroupSharedPart(s->id())).Times(1);
+
+    // [WHEN] The group is ungrouped
+    m_model->ungroupSharedGroup(s->id().toQString());
+}
