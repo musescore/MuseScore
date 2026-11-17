@@ -98,8 +98,22 @@ void FirstLaunchSetupModel::setCurrentPageIndex(int index)
     });
 }
 
-bool FirstLaunchSetupModel::askAboutClosingEarly()
+void FirstLaunchSetupModel::onAboutToClose()
 {
+    if (canFinish()) {
+        closeFinished();
+        return;
+    }
+
+    askAboutClosingEarly();
+}
+
+void FirstLaunchSetupModel::askAboutClosingEarly()
+{
+    if (m_isAskingAboutClosingEarly) {
+        return;
+    }
+
     const std::string title = muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?");
     const std::string body = muse::qtrc("appshell/gettingstarted",
                                         "If you choose to cancel, then be sure to check out our free "
@@ -137,14 +151,28 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
         interactive()->buttonData(IInteractive::Button::Cancel), visitMuseHubBtn, keepGoingBtn
     };
 
-    IInteractive::Result result = interactive()->warningSync(title, text, buttons, int(IInteractive::Button::Cancel));
+    m_isAskingAboutClosingEarly = true;
 
-    if (result.isButton(visitMuseHubBtnId)) {
-        platformInteractive()->openUrl(configuration()->museHubFreeMuseSoundsUrl());
-        return true;
-    }
+    interactive()->warning(title, text, buttons, int(IInteractive::Button::Cancel))
+    .onResolve(this, [this](const IInteractive::Result& result) {
+        m_isAskingAboutClosingEarly = false;
 
-    return result.standardButton() == IInteractive::Button::Cancel;
+        if (result.isButton(visitMuseHubBtnId)) {
+            platformInteractive()->openUrl(configuration()->museHubFreeMuseSoundsUrl());
+            closeFinished();
+            return;
+        }
+
+        if (result.standardButton() == IInteractive::Button::Cancel) {
+            closeFinished();
+        }
+    });
+}
+
+void FirstLaunchSetupModel::closeFinished()
+{
+    finish();
+    emit closeRequested();
 }
 
 void FirstLaunchSetupModel::finish()

@@ -64,7 +64,8 @@ public:
     bool canGoForward() const;
     bool canFinish() const;
 
-    Q_INVOKABLE bool askAboutClosingEarly();
+    //! NOTE The dialog asks before it closes, and closes on closeRequested
+    Q_INVOKABLE void onAboutToClose();
 
     Q_INVOKABLE void finish();
 
@@ -73,8 +74,12 @@ public slots:
 
 signals:
     void currentPageChanged();
+    void closeRequested();
 
 private:
+    void askAboutClosingEarly();
+    void closeFinished();
+
     struct Page {
         QString url;
         std::string backgroundUri;
@@ -84,5 +89,6 @@ private:
 
     QList<Page> m_pages;
     int m_currentPageIndex = -1;
+    bool m_isAskingAboutClosingEarly = false;
 };
 }
