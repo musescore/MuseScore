@@ -49,6 +49,9 @@ FocusableControl {
     readonly property bool isExpandable: item && item.isExpandable
     readonly property bool isPressed: root.mouseArea.pressed || root.isDragged
 
+    // A group header's state is drawn on the whole group's background
+    readonly property bool usesRowHighlight: root.type !== LayoutPanelItemType.SHARED_PART
+
     property int sideMargin: 0
     property int cardRadius: 0
 
@@ -184,7 +187,7 @@ FocusableControl {
     background.states: [
         State {
             name: "HOVERED"
-            when: root.mouseArea.containsMouse && !root.isPressed && !root.isSelected
+            when: root.usesRowHighlight && root.mouseArea.containsMouse && !root.isPressed && !root.isSelected
 
             PropertyChanges {
                 target: root.background
@@ -195,7 +198,7 @@ FocusableControl {
 
         State {
             name: "PRESSED"
-            when: root.mouseArea.pressed && !root.isSelected && !root.isDragged
+            when: root.usesRowHighlight && root.mouseArea.pressed && !root.isSelected && !root.isDragged
 
             PropertyChanges {
                 target: root.background
@@ -206,7 +209,7 @@ FocusableControl {
 
         State {
             name: "SELECTED"
-            when: root.isSelected && !root.mouseArea.containsMouse && !root.isPressed
+            when: root.usesRowHighlight && root.isSelected && !root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -217,7 +220,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_HOVERED"
-            when: root.isSelected && root.mouseArea.containsMouse && !root.isPressed
+            when: root.usesRowHighlight && root.isSelected && root.mouseArea.containsMouse && !root.isPressed
 
             PropertyChanges {
                 target: root.background
@@ -228,7 +231,7 @@ FocusableControl {
 
         State {
             name: "SELECTED_PRESSED"
-            when: root.isSelected && root.isPressed
+            when: root.usesRowHighlight && root.isSelected && root.isPressed
 
             PropertyChanges {
                 target: root.background

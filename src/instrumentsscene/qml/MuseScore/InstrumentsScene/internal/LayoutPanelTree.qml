@@ -92,6 +92,10 @@ Item {
 
         property var expandedGroups: ({})
 
+        // Rows clear it only if it's still theirs, as enter/leave can come in either order
+        property Item hoveredGroupRow: null
+        property PartTreeItem pressedGroupHeader: null
+
         //! NOTE Only combined groups can be collapsed
         function isGroupCollapsed(part) {
             const header = part?.sharedGroupHeader ?? null
@@ -385,8 +389,31 @@ Item {
                 onClicked: root.model.clearSelection()
             }
 
+            HoverHandler {
+                id: groupHover
+
+                // Not over the gap below the group
+                readonly property bool isOverGroup: groupHover.hovered && groupHover.point.position.y < groupBackground.height
+
+                enabled: dropArea.isInGroup
+
+                onIsOverGroupChanged: {
+                    if (groupHover.isOverGroup) {
+                        prv.hoveredGroupRow = dropArea
+                    } else if (prv.hoveredGroupRow === dropArea) {
+                        prv.hoveredGroupRow = null
+                    }
+                }
+            }
+
             // The group's background behind this row
             Rectangle {
+                id: groupBackground
+
+                readonly property bool isHovered: Boolean(dropArea.groupHeader) && prv.hoveredGroupRow?.groupHeader === dropArea.groupHeader
+                readonly property bool isPressed: Boolean(dropArea.groupHeader) && prv.pressedGroupHeader === dropArea.groupHeader
+                readonly property bool isSelected: Boolean(dropArea.groupHeader?.isSelected)
+
                 anchors.fill: parent
                 anchors.bottomMargin: dropArea.isGroupBottom ? prv.itemSpacing : 0
 
@@ -397,8 +424,18 @@ Item {
                 bottomLeftRadius: dropArea.isGroupBottom ? prv.groupRadius : 0
                 bottomRightRadius: dropArea.isGroupBottom ? prv.groupRadius : 0
 
-                color: ui.theme.buttonColor
-                opacity: 0.5
+                color: groupBackground.isSelected ? ui.theme.accentColor : ui.theme.buttonColor
+                opacity: {
+                    if (groupBackground.isPressed) {
+                        return 0.7
+                    }
+
+                    if (groupBackground.isHovered) {
+                        return groupBackground.isSelected ? 0.4 : 0.3
+                    }
+
+                    return 0.5
+                }
             }
 
             Item {
@@ -438,6 +475,12 @@ Item {
 
                         LayoutPanelItemDelegate {
                             id: itemDelegate
+
+                            readonly property bool isGroupPressed: dropArea.isGroupHeader && itemDelegate.mouseArea.pressed
+
+                            onIsGroupPressedChanged: {
+                                prv.pressedGroupHeader = itemDelegate.isGroupPressed ? dropArea.groupHeader : null
+                            }
 
                             treeView: layoutPanelTreeView
                             item: dropArea.item
