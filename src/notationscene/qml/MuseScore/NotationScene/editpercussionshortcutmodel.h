@@ -68,6 +68,8 @@ signals:
     void clearedChanged();
 
 private:
+    friend class EditPercussionShortcutModelTests;
+
     bool checkDrumShortcutsForConflict();
     bool checkApplicationShortcutsForConflict();
 
