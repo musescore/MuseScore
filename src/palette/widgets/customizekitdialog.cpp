@@ -616,6 +616,44 @@ void CustomizeKitDialog::load()
         return;
     }
 
+    if (!isDrumsetFileTooOld(fname)) {
+        loadDrumset(fname);
+        return;
+    }
+
+    interactive()->warning(
+        muse::trc("palette", "Drumset file too old"),
+        muse::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
+        muse::IInteractive::Button::Cancel,
+        muse::IInteractive::Button::Ignore
+    }, muse::IInteractive::Button::Cancel)
+    .onResolve(this, [this, fname](const muse::IInteractive::Result& result) {
+        if (result.standardButton() == muse::IInteractive::Button::Ignore) { // Cancel and Esc do not load
+            loadDrumset(fname);
+        }
+    });
+}
+
+bool CustomizeKitDialog::isDrumsetFileTooOld(const muse::io::path_t& fname) const
+{
+    File fp(fname.toQString());
+    if (!fp.open(IODevice::ReadOnly)) {
+        return false;
+    }
+
+    XmlReader e(&fp);
+    while (e.readNextStartElement()) {
+        if (e.name() == "museScore") {
+            return e.attribute("version") != Constants::MSC_VERSION_STR;
+        }
+        e.skipCurrentElement();
+    }
+
+    return false;
+}
+
+void CustomizeKitDialog::loadDrumset(const muse::io::path_t& fname)
+{
     File fp(fname.toQString());
     if (!fp.open(IODevice::ReadOnly)) {
         return;
@@ -625,18 +663,6 @@ void CustomizeKitDialog::load()
     m_editedDrumset.clear();
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            if (e.attribute("version") != Constants::MSC_VERSION_STR) {
-                auto result = interactive()->warningSync(
-                    muse::trc("palette", "Drumset file too old"),
-                    muse::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
-                    muse::IInteractive::Button::Cancel,
-                    muse::IInteractive::Button::Ignore
-                }, muse::IInteractive::Button::Cancel);
-
-                if (result.standardButton() != muse::IInteractive::Button::Ignore) { // covers Cancel and Esc
-                    return;
-                }
-            }
             while (e.readNextStartElement()) {
                 if (e.name() == "Drum") {
                     m_editedDrumset.loadDrum(e);
