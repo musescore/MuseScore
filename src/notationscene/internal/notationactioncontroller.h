@@ -178,6 +178,9 @@ private:
     muse::Ret addOrnament(const AddOrnamentCommand& command);
     muse::Ret flipSelection();
 
+    // Tab
+    muse::Ret addFret(const AddFretCommand& command);
+
     muse::Ret putNote(const muse::rcommand::Params& params);
     muse::Ret removeNote(const muse::rcommand::Params& params);
 
@@ -196,7 +199,6 @@ private:
     void addLaissezVib();
     void addSlur();
     void addHammerOnPullOff();
-    void addFret(int num);
 
     void insertClef(mu::engraving::ClefType type);
 

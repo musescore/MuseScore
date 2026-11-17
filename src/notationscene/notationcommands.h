@@ -750,6 +750,10 @@ inline const TS& Add_X_to_chord() { static const TS s = TranslatableString("acti
 inline const TS& Add_note_X_to_chord() { static const TS s = TranslatableString("action", "Add note %1 to chord"); return s; }
 //: Insert %1
 inline const TS& Insert_X() { static const TS s = TranslatableString("action", "Insert %1"); return s; }
+//: Fret %1 (TAB)
+inline const TS& fret_X_TAB() { static const TS s = TranslatableString("action", "Fret %1 (TAB)"); return s; }
+//: Enter TAB: fret %1
+inline const TS& enter_TAB_fret_X() { static const TS s = TranslatableString("action", "Enter TAB: fret %1"); return s; }
 } // namespace prv
 
 // aliases for add note command
@@ -1963,6 +1967,141 @@ struct FlipCommand {
     cprop_decl description = TranslatableString("action", "Flip direction");
     cprop_decl decoration = muse::rcommand::Decoration(muse::ui::IconCode::Code::NOTE_FLIP);
 };
+
+struct AddFretCommand {
+    cprop_decl id = Command("command://notation/add-fret");
+    cprop_decl title = MnemonicString("action", "Add fret");
+    cprop_decl description = TranslatableString("action", "Add fret");
+    cprop_decl availabilities = Availability::API;
+
+    int num = 0;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "num", &AddFretCommand::num, "Number", 0, 14 },
+    };
+};
+
+// aliases for add fret command
+
+struct AddFret0Command {
+    cprop_decl id = Command("command://notation/add-fret/0");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(0));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(0);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(0);
+};
+
+struct AddFret1Command {
+    cprop_decl id = Command("command://notation/add-fret/1");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(1));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(1);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(1);
+};
+
+struct AddFret2Command {
+    cprop_decl id = Command("command://notation/add-fret/2");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(2));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(2);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(2);
+};
+
+struct AddFret3Command {
+    cprop_decl id = Command("command://notation/add-fret/3");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(3));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(3);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(3);
+};
+
+struct AddFret4Command {
+    cprop_decl id = Command("command://notation/add-fret/4");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(4));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(4);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(4);
+};
+
+struct AddFret5Command {
+    cprop_decl id = Command("command://notation/add-fret/5");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(5));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(5);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(5);
+};
+
+struct AddFret6Command {
+    cprop_decl id = Command("command://notation/add-fret/6");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(6));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(6);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(6);
+};
+
+struct AddFret7Command {
+    cprop_decl id = Command("command://notation/add-fret/7");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(7));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(7);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(7);
+};
+
+struct AddFret8Command {
+    cprop_decl id = Command("command://notation/add-fret/8");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(8));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(8);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(8);
+};
+
+struct AddFret9Command {
+    cprop_decl id = Command("command://notation/add-fret/9");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(9));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(9);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(9);
+};
+
+struct AddFret10Command {
+    cprop_decl id = Command("command://notation/add-fret/10");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(10));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(10);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(10);
+};
+
+struct AddFret11Command {
+    cprop_decl id = Command("command://notation/add-fret/11");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(11));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(11);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(11);
+};
+
+struct AddFret12Command {
+    cprop_decl id = Command("command://notation/add-fret/12");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(12));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(12);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(12);
+};
+
+struct AddFret13Command {
+    cprop_decl id = Command("command://notation/add-fret/13");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(13));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(13);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(13);
+};
+
+struct AddFret14Command {
+    cprop_decl id = Command("command://notation/add-fret/14");
+    cprop_decl title = MnemonicString(prv::fret_X_TAB().arg(14));
+    cprop_decl description = prv::enter_TAB_fret_X().arg(14);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddFretCommand(14);
+};
 }
 
 namespace mu::notation {
@@ -2232,22 +2371,6 @@ inline static const muse::rcommand::Command SET_DURATION_128TH_TAB_COMMAND("comm
 inline static const muse::rcommand::Command SET_DURATION_256TH_TAB_COMMAND("command://notation/set-duration-256th-tab");
 inline static const muse::rcommand::Command SET_DURATION_512TH_TAB_COMMAND("command://notation/set-duration-512th-tab");
 inline static const muse::rcommand::Command SET_DURATION_1024TH_TAB_COMMAND("command://notation/set-duration-1024th-tab");
-
-inline static const muse::rcommand::Command ENTER_FRET_0_COMMAND("command://notation/enter-fret-0");
-inline static const muse::rcommand::Command ENTER_FRET_1_COMMAND("command://notation/enter-fret-1");
-inline static const muse::rcommand::Command ENTER_FRET_2_COMMAND("command://notation/enter-fret-2");
-inline static const muse::rcommand::Command ENTER_FRET_3_COMMAND("command://notation/enter-fret-3");
-inline static const muse::rcommand::Command ENTER_FRET_4_COMMAND("command://notation/enter-fret-4");
-inline static const muse::rcommand::Command ENTER_FRET_5_COMMAND("command://notation/enter-fret-5");
-inline static const muse::rcommand::Command ENTER_FRET_6_COMMAND("command://notation/enter-fret-6");
-inline static const muse::rcommand::Command ENTER_FRET_7_COMMAND("command://notation/enter-fret-7");
-inline static const muse::rcommand::Command ENTER_FRET_8_COMMAND("command://notation/enter-fret-8");
-inline static const muse::rcommand::Command ENTER_FRET_9_COMMAND("command://notation/enter-fret-9");
-inline static const muse::rcommand::Command ENTER_FRET_10_COMMAND("command://notation/enter-fret-10");
-inline static const muse::rcommand::Command ENTER_FRET_11_COMMAND("command://notation/enter-fret-11");
-inline static const muse::rcommand::Command ENTER_FRET_12_COMMAND("command://notation/enter-fret-12");
-inline static const muse::rcommand::Command ENTER_FRET_13_COMMAND("command://notation/enter-fret-13");
-inline static const muse::rcommand::Command ENTER_FRET_14_COMMAND("command://notation/enter-fret-14");
 
 inline static const muse::rcommand::Command ENTER_REST_TAB_COMMAND("command://notation/enter-rest-tab");
 
