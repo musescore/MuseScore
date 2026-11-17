@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 #include <memory>
+#include <optional>
 
 #include "mpe/tests/utils/articulationutils.h"
 
@@ -2950,19 +2951,22 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
     m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * chordNotesCount);
+    const PlaybackEventList& events = result.begin()->second;
+    ASSERT_EQ(events.size(), expectedChordsCount * chordNotesCount);
 
-    for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
-        for (int noteIdx = 0; noteIdx < chordNotesCount; ++noteIdx) {
-            int eventIdx = (chordIdx * chordNotesCount) + noteIdx;
+    // [THEN] We expect the events line by line: line N alternates note N of the first chord with note N of the second chord
+    for (int noteIdx = 0; noteIdx < chordNotesCount; ++noteIdx) {
+        for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
+            int eventIdx = (noteIdx * expectedChordsCount) + chordIdx;
 
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(eventIdx));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo16th));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, chordIdx * SEMI_QUAVER_NOTE_DURATION);
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(chordIdx));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -2972,7 +2976,86 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
                 EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, secondChordPitches.at(noteIdx));
             }
         }
+
+        // [THEN] We expect that each line forms exactly one tremolo range
+        checkSingleArticulationRange(events, noteIdx * expectedChordsCount, expectedChordsCount, ArticulationType::Tremolo16th);
     }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Two_Chords_Tremolo_Unequal
+ * @details In this case we're gonna render a simple piece of score with a single measure,
+ *          which starts with the F4+A4+C5 chord and ends with C5+E5 chord connected by the 16-th Tremolo articulation.
+ *          F4 and A4 alternate with C5 and E5; the unpaired C5 of the first chord plays only on the first chord's steps
+ *          and still forms one complete tremolo range
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo_Unequal)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo_unequal.mscx");
+
+    const Chord* chord = findChord(score, 0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure
+    constexpr int stepsCount = 16;
+
+    struct ExpectedLine {
+        pitch_level_t firstChordPitch = 0;
+        std::optional<pitch_level_t> secondChordPitch;
+    };
+
+    const std::vector<ExpectedLine> expectedLines = {
+        { pitchLevel(PitchClass::F, 4), pitchLevel(PitchClass::C, 5) },
+        { pitchLevel(PitchClass::A, 4), pitchLevel(PitchClass::E, 5) },
+        { pitchLevel(PitchClass::C, 5), std::nullopt },
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
+
+    // [WHEN] Request to render a chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] We expect 2 full lines and 1 line playing only on the first chord's steps
+    ASSERT_EQ(result.size(), 1);
+    const PlaybackEventList& events = result.begin()->second;
+    ASSERT_EQ(events.size(), stepsCount + stepsCount + stepsCount / 2);
+
+    size_t eventIdx = 0;
+
+    for (const ExpectedLine& line : expectedLines) {
+        const size_t lineFirstEventIdx = eventIdx;
+        const int lastStep = line.secondChordPitch ? stepsCount - 1 : stepsCount - 2;
+
+        for (int stepIdx = 0; stepIdx <= lastStep; ++stepIdx) {
+            const bool isFirstChordStep = stepIdx % 2 == 0;
+            if (!isFirstChordStep && !line.secondChordPitch) {
+                continue;
+            }
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(eventIdx++));
+
+            // [THEN] We expect the line's pitches alternating on the expected steps
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, isFirstChordStep ? line.firstChordPitch : *line.secondChordPitch);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, stepIdx * SEMI_QUAVER_NOTE_DURATION);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, SEMI_QUAVER_NOTE_DURATION);
+
+            // [THEN] We expect that the tremolo spans the steps that the line plays
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo16th);
+            EXPECT_EQ(articulationData.meta.timestamp, 0);
+            EXPECT_EQ(articulationData.meta.overallDuration, (lastStep + 1) * SEMI_QUAVER_NOTE_DURATION);
+        }
+
+        // [THEN] We expect that each line forms exactly one tremolo range
+        checkSingleArticulationRange(events, lineFirstEventIdx, eventIdx - lineFirstEventIdx, ArticulationType::Tremolo16th);
+    }
+
+    delete score;
 }
 
 /**

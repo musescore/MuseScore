@@ -124,6 +124,15 @@ static duration_t tremoloDuration(const Note* note, const timestamp_t tremoloTim
     return ctx.nominalDuration;
 }
 
+static const Note* renderableNoteAt(const std::vector<Note*>& notes, const size_t idx, const RenderingContext& ctx)
+{
+    if (idx >= notes.size() || !NoteRenderer::shouldRender(notes.at(idx), ctx, ctx.commonArticulations)) {
+        return nullptr;
+    }
+
+    return notes.at(idx);
+}
+
 const ArticulationTypeSet& TremoloRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
@@ -193,6 +202,9 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
         return ctx.nominalPositionStartTick + step * stepDurationTicks;
     };
 
+    // Events are emitted range by range (all steps of one note, or of one two-chord line, before the next),
+    // because range-based consumers (e.g. MuseSampler) support only one open tremolo range per voice
+
     if (tremolo.two) {
         const Chord* firstTremoloChord = tremolo.two->chord1();
         const Chord* secondTremoloChord = tremolo.two->chord2();
@@ -201,27 +213,55 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
             return;
         }
 
-        for (int i = 0; i < stepsCount; ++i) {
-            const Chord* currentChord = (i % 2 == 0) ? firstTremoloChord : secondTremoloChord;
+        // Line k alternates note k of the first chord (even steps) with note k of the second chord (odd steps).
+        // A note without a counterpart in the other chord forms a line of its own and plays only on its chord's steps
+        const std::vector<Note*>& firstNotes = firstTremoloChord->notes();
+        const std::vector<Note*>& secondNotes = secondTremoloChord->notes();
+        const size_t lineCount = std::max(firstNotes.size(), secondNotes.size());
 
-            for (const Note* note : currentChord->notes()) {
-                if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
-                    continue;
+        for (size_t line = 0; line < lineCount; ++line) {
+            const Note* firstNote = renderableNoteAt(firstNotes, line, ctx);
+            const Note* secondNote = renderableNoteAt(secondNotes, line, ctx);
+
+            auto noteAtStep = [firstNote, secondNote](int step) {
+                return step % 2 == 0 ? firstNote : secondNote;
+            };
+
+            const int firstStep = firstNote ? 0 : 1;
+            int lastStep = stepsCount - 1;
+            if (!noteAtStep(lastStep)) {
+                --lastStep;
+            }
+
+            if (!noteAtStep(firstStep) || firstStep > lastStep) {
+                continue;
+            }
+
+            // The line's tremolo range covers the steps it actually plays; at the outer edges it is extended over ties
+            TimestampAndDuration lineSpan;
+            if (firstStep == 0) {
+                lineSpan.timestamp = tremoloTimestampFrom(firstNote, ctx);
+            } else {
+                lineSpan.timestamp = timestampAndDurationFromStartAndDurationTicks(
+                    ctx.score, stepStartTick(firstStep), stepDurationTicks, ctx.positionTickOffset).timestamp;
+            }
+
+            const TimestampAndDuration lastStepTnD = timestampAndDurationFromStartAndDurationTicks(
+                ctx.score, stepStartTick(lastStep), stepDurationTicks, ctx.positionTickOffset);
+            const timestamp_t lastStepEnd = lastStepTnD.timestamp + lastStepTnD.duration;
+            const timestamp_t tiedEnd = lineSpan.timestamp + tremoloDuration(noteAtStep(lastStep), lineSpan.timestamp, ctx);
+            lineSpan.duration = std::max(lastStepEnd, tiedEnd) - lineSpan.timestamp;
+
+            for (int i = firstStep; i <= lastStep; ++i) {
+                if (const Note* note = noteAtStep(i)) {
+                    buildAndAppendEvent(note, preferredType, stepDurationTicks, stepStartTick(i), lineSpan, ctx, result);
                 }
-
-                TimestampAndDuration noteSpan;
-                noteSpan.timestamp = tremoloTimestampFrom(note, ctx);
-                noteSpan.duration = tremoloDuration(note, noteSpan.timestamp, ctx);
-
-                buildAndAppendEvent(note, preferredType, stepDurationTicks, stepStartTick(i), noteSpan, ctx, result);
             }
         }
 
         return;
     }
 
-    // Emit all steps of one note before the next, because range-based consumers (e.g. MuseSampler)
-    // support only one open tremolo range per voice
     for (const Note* note : chord->notes()) {
         if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
             continue;
