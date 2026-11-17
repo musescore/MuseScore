@@ -36,7 +36,7 @@ public:
                 (const notation::INotationPtrList& notations, const ExportType& exportType, INotationWriter::UnitType unitType,
                  muse::io::path_t defaultPath), (const, override));
 
-    MOCK_METHOD(bool, exportScores,
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, exportScores,
                 (notation::INotationPtrList notations, const muse::io::path_t destinationPath, INotationWriter::UnitType unitType,
                  bool openDestinationFolderOnExport), (const, override));
 

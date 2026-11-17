@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include <deque>
+
+#include <QObject>
+
 #include "modularity/ioc.h"
 
 #include "iexportprojectscenario.h"
@@ -38,6 +42,7 @@
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable, public muse::Contextable
 {
+public:
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
@@ -45,8 +50,6 @@ class ExportProjectScenario : public IExportProjectScenario, public muse::async:
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectSession> context = { this };
-
-public:
 
     ExportProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx)
@@ -59,9 +62,9 @@ public:
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                                                  muse::io::path_t defaultDirPath = "") const override;
 
-    bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                      INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                      bool openDestinationFolderOnExport = false) const override;
+    muse::async::Promise<muse::Ret> exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
+                                                 INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                                 bool openDestinationFolderOnExport = false) const override;
 
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
@@ -73,12 +76,19 @@ private:
         ReplaceAll
     };
 
+    struct ExportFile {
+        muse::io::path_t path;
+        std::function<muse::Ret(muse::io::IODevice&)> exportFunction;
+    };
+
+    struct ExportState;
+    using ExportStatePtr = std::shared_ptr<ExportState>;
+
     /// When the user is trying to export a part that is a "potential excerpt", the corresponding score
     /// is not initialized yet, so we can't be certain about the page count. We should not initialize
     /// these scores either, until the user really starts the export, because initializing these scores
     /// means making changes to the file, which can't be done without the user's consent.
     bool guessIsCreatingOnlyOneFile(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
-    size_t exportFileCount(const notation::INotationPtrList& notations, INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
@@ -86,10 +96,22 @@ private:
     muse::io::path_t completeExportPath(const muse::io::path_t& basePath, notation::INotationPtr notation, bool isMain,
                                         bool isExportingOnlyOneScore, int pageIndex = -1) const;
 
-    bool shouldReplaceFile(const QString& filename) const;
-    bool askForRetry(const QString& filename) const;
+    std::vector<ExportFile> exportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                                        INotationWriterPtr writer, INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
 
-    muse::Ret doExportLoop(const muse::io::path_t& path, std::function<muse::Ret(muse::io::IODevice&)> exportFunction) const;
+    void startNextExportLater() const;
+    void startExport(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                     INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                     const muse::async::Promise<muse::Ret>::Resolve& resolve) const;
+
+    void exportNextFiles(const ExportStatePtr& state) const;
+    void finishExport(const ExportStatePtr& state, const muse::Ret& ret) const;
+
+    void askForReplaceFile(const ExportStatePtr& state) const;
+    void askForRetry(const ExportStatePtr& state) const;
+    void continueExportLater(const ExportStatePtr& state) const;
+
+    muse::Ret writeFile(const ExportFile& file) const;
 
     void showExportProgress(bool isAudioExport) const;
 
@@ -99,8 +121,13 @@ private:
     void setViewModes(const notation::INotationPtrList& notations, const std::vector<notation::ViewMode>& viewModes) const;
     void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
 
-    mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
     mutable muse::Progress m_exportProgress;
     ExportInfo m_exportInfo;
+
+    mutable std::deque<std::function<void()> > m_pendingExports;
+    mutable bool m_isExporting = false;
+
+    //! NOTE The context of the timers, so that they do not outlive the scenario
+    mutable QObject m_timersContext;
 };
 }

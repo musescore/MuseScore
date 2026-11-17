@@ -24,6 +24,7 @@
 
 #include "iopenprojectscenario.h"
 
+#include <QObject>
 #include <QString>
 #include <QUrl>
 
@@ -144,5 +145,8 @@ private:
 
     ProjectBeingDownloaded m_projectBeingDownloaded;
     muse::async::Notification m_projectBeingDownloadedChanged;
+
+    //! NOTE The context of the timers, so that they do not outlive the scenario
+    QObject m_timersContext;
 };
 }

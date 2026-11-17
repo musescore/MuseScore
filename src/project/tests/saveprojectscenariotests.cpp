@@ -288,7 +288,8 @@ protected:
         .WillByDefault([this](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
             m_exportedMp3Paths.push_back(destinationPath.toQString());
             QFile file(destinationPath.toQString());
-            return file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
+            bool ok = file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
+            return resolvedPromise(ok ? make_ok() : make_ret(Ret::Code::UnknownError));
         });
     }
 
@@ -1149,7 +1150,8 @@ TEST_F(SaveProjectScenarioTests, SaveProjectToCloud_AudioCannotBeRendered_DoesNo
     //! [GIVEN] A public score, which always needs an mp3, whose export fails...
     givenReachableCloud();
     givenUserConfirmsCloudDialog();
-    ON_CALL(*m_exportScenario, exportScores(_, _, _, _)).WillByDefault(Return(false));
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
+    .WillByDefault([] { return resolvedPromise(make_ret(Ret::Code::UnknownError)); });
 
     //! [THEN] Nothing is uploaded, because a public score without audio has no web playback
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
@@ -1413,7 +1415,8 @@ TEST_F(SaveProjectScenarioTests, Publish_AudioCannotBeRendered_ReportsFailure)
 
     //! [THEN] The export of the current score is attempted and fails, and nothing is uploaded
     EXPECT_CALL(*m_exportScenario, exportScores(notation::INotationPtrList { m_notation }, _,
-                                                INotationWriter::UnitType::PER_PART, false)).WillOnce(Return(false));
+                                                INotationWriter::UnitType::PER_PART, false))
+    .WillOnce([] { return resolvedPromise(make_ret(Ret::Code::UnknownError)); });
     EXPECT_CALL(*m_museScoreComService, uploadScore(_, _, _, _, _)).Times(0);
 
     //! [WHEN] Publishing...
@@ -1456,6 +1459,37 @@ TEST_F(SaveProjectScenarioTests, Publish_EverythingSucceeds_ReportsSuccess)
     Ret ret = await(m_scenario->publish());
 
     EXPECT_TRUE(ret);
+}
+
+TEST_F(SaveProjectScenarioTests, Publish_AnotherScoreBecomesCurrentDuringTheAudioExport_UploadsThePublishedOne)
+{
+    //! [GIVEN] A publish, during whose audio export another score becomes the current one...
+    givenReachableCloud();
+    givenUserConfirmsCloudDialog();
+    givenUploadFinishesWith(make_ok(), ValMap());
+    ON_CALL(*m_project, writeToDevice(_)).WillByDefault(Return(make_ok()));
+
+    auto otherProject = std::make_shared<NiceMock<NotationProjectMock> >();
+    ON_CALL(*m_exportScenario, exportScores(_, _, _, _))
+    .WillByDefault([this, otherProject](notation::INotationPtrList, const io::path_t& destinationPath, INotationWriter::UnitType, bool) {
+        ON_CALL(*m_projectSession, project()).WillByDefault(Return(otherProject));
+
+        m_exportedMp3Paths.push_back(destinationPath.toQString());
+        QFile file(destinationPath.toQString());
+        bool ok = file.open(QIODevice::WriteOnly) && file.write("fake mp3 data") > 0;
+        return resolvedPromise(ok ? make_ok() : make_ret(Ret::Code::UnknownError));
+    });
+
+    //! [THEN] The published score is uploaded, not the one that became current
+    EXPECT_CALL(*m_project, writeToDevice(_)).Times(1);
+    EXPECT_CALL(*otherProject, writeToDevice(_)).Times(0);
+
+    //! [WHEN] Publishing...
+    Ret ret = await(m_scenario->publish());
+
+    EXPECT_TRUE(ret);
+
+    release(otherProject);
 }
 
 TEST_F(SaveProjectScenarioTests, Publish_UserChoosesToSaveLocallyInstead_WritesThereAndStops)

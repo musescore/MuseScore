@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/engravingerrors.h"
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
@@ -98,11 +99,11 @@ MasterScore* MusicXml_Tests::readScore(const String& fileName, bool isAbsolutePa
     String suffix = io::FileInfo::suffix(fileName);
 
     auto importXml = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return importMusicXml(score, path.toQString(), false);
+        return static_cast<engraving::Err>(importMusicXml(score, path.toQString(), false).code());
     };
 
     auto importMxl = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return importCompressedMusicXml(score, path.toQString(), false);
+        return static_cast<engraving::Err>(importCompressedMusicXml(score, path.toQString(), false).code());
     };
 
     ScoreRW::ImportFunc importFunc = nullptr;
@@ -1507,4 +1508,51 @@ TEST_F(MusicXml_Tests, hiddenStaves)
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName);
 
     EXPECT_EQ(score->style().value(Sid::hideEmptyStaves).toBool(), true);
+}
+
+//---------------------------------------------------------
+//   importWithErrors
+//   a file, which is imported with errors, is not loaded until the user agrees to load it anyway
+//---------------------------------------------------------
+
+//! NOTE The duration of the note has an element inside, which the import cannot read
+static const ByteArray XML_WITH_ERRORS(
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    "<score-partwise version=\"4.0\">\n"
+    "  <part-list><score-part id=\"P1\"><part-name>Music</part-name></score-part></part-list>\n"
+    "  <part id=\"P1\">\n"
+    "    <measure number=\"1\">\n"
+    "      <attributes><divisions>1</divisions></attributes>\n"
+    "      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4<foo/></duration><type>whole</type></note>\n"
+    "    </measure>\n"
+    "  </part>\n"
+    "</score-partwise>\n");
+
+static Ret importXmlWithErrors(bool forceMode)
+{
+    // The errors are reported to the user only when there is one
+    MScore::noGui = false;
+
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(muse::modularity::globalCtx());
+    Ret ret = importMusicXmlfromBuffer(score, u"errors.xml", XML_WITH_ERRORS, forceMode);
+    delete score;
+
+    MScore::noGui = true;
+
+    return ret;
+}
+
+TEST_F(MusicXml_Tests, importWithErrors_NotForced_ReportsTheErrors) {
+    Ret ret = importXmlWithErrors(/*forceMode*/ false);
+
+    EXPECT_EQ(ret.code(), int(Err::FileCorrupted));
+
+    //! The errors are the details, the message for the user is up to the caller
+    EXPECT_NE(ret.text().find("expected token type and name ‘EndElement note’"), std::string::npos);
+}
+
+TEST_F(MusicXml_Tests, importWithErrors_Forced_Imports) {
+    Ret ret = importXmlWithErrors(/*forceMode*/ true);
+
+    EXPECT_TRUE(ret);
 }

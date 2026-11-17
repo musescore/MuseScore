@@ -23,6 +23,7 @@
 #pragma once
 
 #include "types/string.h"
+#include "types/ret.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::musicxml {
@@ -30,6 +31,6 @@ class MusicXmlValidation
 {
 public:
 
-    static engraving::Err validate(const muse::String& name, const muse::ByteArray& data);
+    static muse::Ret validate(const muse::String& name, const muse::ByteArray& data);
 };
 }

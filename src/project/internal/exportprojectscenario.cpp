@@ -22,11 +22,14 @@
 
 #include "exportprojectscenario.h"
 
+#include <thread>
+
+#include <QTimer>
+
 #include "global/io/fileinfo.h"
 #include "global/io/filestream.h"
 
 #include "translation.h"
-#include "defer.h"
 #include "log.h"
 
 #include "engraving/dom/score.h"
@@ -43,6 +46,29 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::project;
 using namespace mu::notation;
+using muse::async::Promise;
+
+struct ExportProjectScenario::ExportState {
+    INotationPtrList notations;
+    std::vector<ViewMode> viewModes;
+
+    std::vector<ExportFile> files;
+    size_t currentFileIndex = 0;
+    bool isCurrentFileConfirmed = false; // the user agreed to replace or retry the current file
+    FileConflictPolicy fileConflictPolicy = FileConflictPolicy::Undefined;
+
+    muse::io::path_t destinationPath;
+    bool openDestinationFolderOnExport = false;
+
+    Progress* writerProgress = nullptr;
+    Promise<Ret>::Resolve resolve;
+
+    void moveToNextFile()
+    {
+        ++currentFileIndex;
+        isCurrentFileConfirmed = false;
+    }
+};
 
 std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes(const ExportType& exportType) const
 {
@@ -111,23 +137,61 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     return exportPath;
 }
 
-bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
+                                                 INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
+{
+    return async::make_promise<Ret>([this, notations, destinationPath, unitType, openDestinationFolderOnExport](auto resolve) {
+        m_pendingExports.push_back([this, notations, destinationPath, unitType, openDestinationFolderOnExport, resolve]() {
+            startExport(notations, destinationPath, unitType, openDestinationFolderOnExport, resolve);
+        });
+
+        //! NOTE The exports go one after another, so that they do not change the view modes of each other.
+        //! The resolve is lost if it is called before the caller subscribes to the promise,
+        //! so an export always starts on the next event loop
+        if (!m_isExporting) {
+            m_isExporting = true;
+            startNextExportLater();
+        }
+
+        return Promise<Ret>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
+}
+
+void ExportProjectScenario::startNextExportLater() const
+{
+    QTimer::singleShot(0, &m_timersContext, [this]() {
+        if (m_pendingExports.empty()) {
+            m_isExporting = false;
+            return;
+        }
+
+        std::function<void()> start = std::move(m_pendingExports.front());
+        m_pendingExports.pop_front();
+        start();
+    });
+}
+
+void ExportProjectScenario::startExport(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                                        INotationWriter::UnitType unitType, bool openDestinationFolderOnExport,
+                                        const Promise<Ret>::Resolve& resolve) const
 {
     std::string suffix = io::suffix(destinationPath);
     INotationWriterPtr writer = writers()->writer(suffix);
 
     if (!writer) {
-        return false;
+        (void)resolve(make_ret(Ret::Code::NotSupported));
+        startNextExportLater();
+        return;
     }
 
     IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
-        return false;
+        (void)resolve(make_ret(Ret::Code::NotSupported));
+        startNextExportLater();
+        return;
     }
 
     // Make sure we do this in the same as we did it in `askExportPath`, so before initializing notations
     bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
-    bool isExportingOnlyOneScore = notations.size() == 1;
 
     // The user might have selected not-yet-inited excerpts
     ExcerptNotationList excerptsToInit;
@@ -153,21 +217,29 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }
     }
 
+    auto state = std::make_shared<ExportState>();
+    state->notations = notations;
+    state->destinationPath = destinationPath;
+    state->openDestinationFolderOnExport = openDestinationFolderOnExport;
+
     // Backup view modes
-    std::vector<ViewMode> viewModes = this->viewModes(notations);
+    state->viewModes = viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
-    Progress* writerProgress = writer->progress();
-    size_t fileCount = exportFileCount(notations, unitType);
-    size_t currentFileNum = 0;
+    state->files = exportFiles(notations, destinationPath, writer, unitType, isCreatingOnlyOneFile);
 
-    if (writerProgress) {
+    // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
+    // any existing files. If the user cancels, the filepath will be empty, so we would
+    // not reach this point. But if we do, existing files should be overridden.
+    state->fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
+
+    state->writerProgress = writer->progress();
+    if (state->writerProgress) {
         showExportProgress(isAudioExport(suffix));
         m_exportProgress.start();
 
-        writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
-                                                                                             const std::string& status) {
-            m_exportProgress.progress(currentFileNum * total + current, fileCount * total, status);
+        state->writerProgress->progressChanged().onReceive(this, [this, state](int64_t current, int64_t total, const std::string& status) {
+            m_exportProgress.progress(state->currentFileIndex * total + current, state->files.size() * total, status);
         }, async::Asyncable::Mode::SetReplace);
 
         m_exportProgress.canceled().onNotify(this, [writer]() {
@@ -175,89 +247,8 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
         }, muse::async::Asyncable::Mode::SetReplace);
     }
 
-    DEFER {
-        // Restore view modes
-        setViewModes(notations, viewModes);
-
-        if (writerProgress) {
-            m_exportProgress.finish(muse::make_ok());
-            writerProgress->progressChanged().disconnect(this);
-            m_exportProgress.finished().disconnect(this);
-        }
-    };
-
-    // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
-    // any existing files. If the user cancels, the filepath will be empty, so we would
-    // not reach this point. But if we do, existing files should be overridden.
-    m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
-
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-    };
-
-    switch (unitType) {
-    case INotationWriter::UnitType::PER_PAGE: {
-        for (const INotationPtr& notation : notations) {
-            size_t pageCount = notation->elements()->msScore()->pages().size();
-            bool isMain = isMainNotation(notation);
-
-            for (size_t page = 0; page < pageCount; ++page) {
-                options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
-
-                muse::io::path_t definitivePath = isCreatingOnlyOneFile
-                                                  ? destinationPath
-                                                  : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
-                                                                       static_cast<int>(page));
-
-                auto exportFunction = [writer, notation, options](io::IODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
-                    };
-
-                Ret ret = doExportLoop(definitivePath, exportFunction);
-                if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                    return false;
-                }
-
-                ++currentFileNum;
-            }
-        }
-    } break;
-    case INotationWriter::UnitType::PER_PART: {
-        for (const INotationPtr& notation : notations) {
-            muse::io::path_t definitivePath = isCreatingOnlyOneFile
-                                              ? destinationPath
-                                              : completeExportPath(destinationPath, notation, isMainNotation(
-                                                                       notation), isExportingOnlyOneScore);
-
-            auto exportFunction = [writer, notation, options](IODevice& destinationDevice) {
-                    return writer->write(notation, destinationDevice, options);
-                };
-
-            Ret ret = doExportLoop(definitivePath, exportFunction);
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                return false;
-            }
-
-            ++currentFileNum;
-        }
-    } break;
-    case INotationWriter::UnitType::MULTI_PART: {
-        auto exportFunction = [writer, notations, options](IODevice& destinationDevice) {
-                return writer->writeList(notations, destinationDevice, options);
-            };
-
-        Ret ret = doExportLoop(destinationPath, exportFunction);
-        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return false;
-        }
-    } break;
-    }
-
-    if (openDestinationFolderOnExport) {
-        openFolder(destinationPath);
-    }
-
-    return true;
+    state->resolve = resolve;
+    exportNextFiles(state);
 }
 
 const ExportInfo& ExportProjectScenario::exportInfo() const
@@ -308,25 +299,60 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     return false;
 }
 
-size_t ExportProjectScenario::exportFileCount(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
+std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFiles(const INotationPtrList& notations,
+                                                                                  const muse::io::path_t& destinationPath,
+                                                                                  INotationWriterPtr writer,
+                                                                                  INotationWriter::UnitType unitType,
+                                                                                  bool isCreatingOnlyOneFile) const
 {
+    std::vector<ExportFile> files;
+
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
+    };
+
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
-        size_t count = 0;
-
         for (const INotationPtr& notation : notations) {
-            count += notation->elements()->pages().size();
-        }
+            size_t pageCount = notation->elements()->msScore()->pages().size();
+            bool isMain = isMainNotation(notation);
 
-        return count;
-    };
-    case INotationWriter::UnitType::PER_PART:
-        return notations.size();
-    case INotationWriter::UnitType::MULTI_PART:
-        return 1;
+            for (size_t page = 0; page < pageCount; ++page) {
+                options[INotationWriter::OptionKey::PAGE_NUMBER] = Val(static_cast<int>(page));
+
+                muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                                  ? destinationPath
+                                                  : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
+                                                                       static_cast<int>(page));
+
+                files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
+                            return writer->write(notation, destinationDevice, options);
+                        } });
+            }
+        }
+    } break;
+    case INotationWriter::UnitType::PER_PART: {
+        for (const INotationPtr& notation : notations) {
+            muse::io::path_t definitivePath = isCreatingOnlyOneFile
+                                              ? destinationPath
+                                              : completeExportPath(destinationPath, notation, isMainNotation(
+                                                                       notation), isExportingOnlyOneScore);
+
+            files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
+                        return writer->write(notation, destinationDevice, options);
+                    } });
+        }
+    } break;
+    case INotationWriter::UnitType::MULTI_PART: {
+        files.push_back({ destinationPath, [writer, notations, options](IODevice& destinationDevice) {
+                    return writer->writeList(notations, destinationDevice, options);
+                } });
+    } break;
     }
 
-    return 0;
+    return files;
 }
 
 bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
@@ -357,127 +383,167 @@ muse::io::path_t ExportProjectScenario::completeExportPath(const muse::io::path_
     return result;
 }
 
-bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
+void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
 {
-    switch (m_fileConflictPolicy) {
-    case FileConflictPolicy::ReplaceAll:
-        return true;
-    case FileConflictPolicy::SkipAll:
-        return false;
-    case FileConflictPolicy::Undefined: {
-        constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
-        constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
-        constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
-        constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+    while (state->currentFileIndex < state->files.size()) {
+        const ExportFile& file = state->files.at(state->currentFileIndex);
 
-        IInteractive::Result result = interactive()->questionSync(
-            muse::trc("project/export", "File already exists"),
-            muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
-            .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
-                IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
-                IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
-            });
+        if (!state->isCurrentFileConfirmed && fileSystem()->exists(file.path)) {
+            if (state->fileConflictPolicy == FileConflictPolicy::Undefined) {
+                askForReplaceFile(state);
+                return;
+            }
 
-        switch (result.button()) {
-        case ReplaceAll:
-            m_fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
-        case Replace:
-            return true;
-        case SkipAll:
-            m_fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
-        case Skip:
-        default:
-            return false;
+            if (state->fileConflictPolicy == FileConflictPolicy::SkipAll) {
+                state->moveToNextFile();
+                continue;
+            }
         }
-    } break;
+
+        Ret ret = writeFile(file);
+        if (ret) {
+            state->moveToNextFile();
+            continue;
+        }
+
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            finishExport(state, ret);
+            return;
+        }
+
+        askForRetry(state);
+        return;
     }
 
-    return false;
+    finishExport(state, muse::make_ok());
 }
 
-bool ExportProjectScenario::askForRetry(const QString& filename) const
+void ExportProjectScenario::finishExport(const ExportStatePtr& state, const Ret& ret) const
 {
-    IInteractive::Result result = interactive()->questionSync(
+    // Restore view modes
+    setViewModes(state->notations, state->viewModes);
+
+    if (state->writerProgress) {
+        m_exportProgress.finish(muse::make_ok());
+        state->writerProgress->progressChanged().disconnect(this);
+        m_exportProgress.canceled().disconnect(this);
+    }
+
+    if (ret && state->openDestinationFolderOnExport) {
+        openFolder(state->destinationPath);
+    }
+
+    (void)state->resolve(ret);
+
+    startNextExportLater();
+}
+
+void ExportProjectScenario::askForReplaceFile(const ExportStatePtr& state) const
+{
+    constexpr int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+    constexpr int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
+    constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
+    constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+
+    const String filename = FileInfo(state->files.at(state->currentFileIndex).path).fileName();
+
+    interactive()->question(
+        muse::trc("project/export", "File already exists"),
+        muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
+        .arg(filename).toStdString(), {
+        IInteractive::ButtonData(Replace, muse::trc("project/export", "Replace")),
+        IInteractive::ButtonData(ReplaceAll, muse::trc("project/export", "Replace all")),
+        IInteractive::ButtonData(Skip, muse::trc("project/export", "Skip")),
+        IInteractive::ButtonData(SkipAll, muse::trc("project/export", "Skip all"))
+    })
+    .onResolve(this, [this, state](const IInteractive::Result& result) {
+        switch (result.button()) {
+            case ReplaceAll:
+                state->fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
+            case Replace:
+                state->isCurrentFileConfirmed = true;
+                break;
+            case SkipAll:
+                state->fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
+            case Skip:
+            default:
+                state->moveToNextFile();
+                break;
+        }
+
+        continueExportLater(state);
+    });
+}
+
+void ExportProjectScenario::askForRetry(const ExportStatePtr& state) const
+{
+    const String filename = FileInfo(state->files.at(state->currentFileIndex).path).fileName();
+
+    interactive()->question(
         muse::trc("project/export", "Error"),
         muse::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
-        .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
+        .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort })
+    .onResolve(this, [this, state](const IInteractive::Result& result) {
+        if (result.standardButton() != IInteractive::Button::Retry) {
+            finishExport(state, make_ret(Ret::Code::Cancel));
+            return;
+        }
 
-    return result.standardButton() == IInteractive::Button::Retry;
+        state->isCurrentFileConfirmed = true;
+        continueExportLater(state);
+    });
 }
 
-Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::function<Ret(io::IODevice&)> exportFunction) const
+void ExportProjectScenario::continueExportLater(const ExportStatePtr& state) const
 {
-    IF_ASSERT_FAILED(exportFunction) {
-        return make_ret(Ret::Code::InternalError);
+    //! NOTE The writers may process events deep inside (e.g. the audio export),
+    //! which can't be done neither in Async's callback nor while the question dialog is being closed,
+    //! so continue the export on the next event loop
+    QTimer::singleShot(0, &m_timersContext, [this, state]() {
+        exportNextFiles(state);
+    });
+}
+
+Ret ExportProjectScenario::writeFile(const ExportFile& file) const
+{
+    //! NOTE Most writers stream to the destination device (file on disk).
+    //! But there is one atypical case:
+    //! Export score to unpacked directory - creates a directory and writes files to it
+
+    // Remove previous file because we need to know whether
+    // exportFunction writes at path
+    Ret ret = fileSystem()->remove(file.path);
+    if (!ret) {
+        return ret;
     }
 
-    String filename = FileInfo(scorePath).fileName();
-    if (fileSystem()->exists(scorePath) && !shouldReplaceFile(filename)) {
-        return make_ret(Ret::Code::InternalError);
+    FileStream outputFile(file.path);
+    outputFile.setMeta("file_path", file.path.toStdString());
+    if (!outputFile.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
-    while (true) {
-        //! NOTE Most writers stream to the destination device (file on disk).
-        //! But there is one atypical case:
-        //! Export score to unpacked directory - creates a directory and writes files to it
+    ret = file.exportFunction(outputFile);
+    outputFile.close();
 
-        // Remove previous file because we need to know whether
-        // exportFunction writes at scorePath
-        Ret ret = fileSystem()->remove(scorePath);
-        if (!ret) {
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
+    if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+        const bool isFileMode = fileSystem()->exists(file.path);
+        if (!isFileMode) {
+            return ret;
         }
 
-        FileStream outputFile(scorePath);
-        outputFile.setMeta("file_path", scorePath.toStdString());
-        if (!outputFile.open(IODevice::WriteOnly)) {
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
-        }
-
-        ret = exportFunction(outputFile);
-        outputFile.close();
-
-        if (!ret) {
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                const bool isFileMode = fileSystem()->exists(scorePath);
-                if (!isFileMode) {
-                    return ret;
-                }
-
-                // On Windows, remove() may fail immediately after close()
-                // because the file lock has not been released yet
-                for (int i = 0; i < 10; ++i) {
-                    if (fileSystem()->remove(scorePath)) {
-                        return ret;
-                    }
-
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                }
-
+        // On Windows, remove() may fail immediately after close()
+        // because the file lock has not been released yet
+        for (int i = 0; i < 10; ++i) {
+            if (fileSystem()->remove(file.path)) {
                 return ret;
             }
 
-            if (askForRetry(filename)) {
-                continue;
-            } else {
-                return make_ret(Ret::Code::Cancel);
-            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-
-        break;
     }
 
-    return muse::make_ok();
+    return ret;
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const

@@ -59,12 +59,13 @@ ExtensionBlank {
                 text: "Interactive.question"
                 icon: IconCode.STAR
                 onClicked: {
-                    let btn = Interactive.question("Api tests", "Yes or No?", [ButtonCode.Yes, ButtonCode.No])
-                    if (btn === ButtonCode.Yes) {
-                        Interactive.info("Api tests", "Your answer is Yes.")
-                    } else {
-                        Interactive.warning("Api tests", "Your answer is " + btn)
-                    }
+                    Interactive.question("Api tests", "Yes or No?", [ButtonCode.Yes, ButtonCode.No]).then(function(btn) {
+                        if (btn === ButtonCode.Yes) {
+                            Interactive.info("Api tests", "Your answer is Yes.")
+                        } else {
+                            Interactive.warning("Api tests", "Your answer is " + btn)
+                        }
+                    })
                 }
             }
         }

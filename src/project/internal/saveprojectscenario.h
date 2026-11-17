@@ -158,19 +158,20 @@ private:
     muse::async::Promise<muse::Ret> askAudioGenerationSettings() const;
     muse::async::Promise<muse::RetVal<bool> > needGenerateAudio(bool isPublic) const;
     bool needGenerateAudioAccordingToSettings() const;
-    AudioFile exportMp3(const notation::INotationPtr notation) const;
+    muse::async::Promise<AudioFile> exportMp3(const notation::INotationPtr notation) const;
 
     void showUploadProgressDialog();
     void closeUploadProgressDialog();
 
-    muse::async::Promise<muse::Ret> uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
+    muse::async::Promise<muse::Ret> uploadProject(INotationProjectPtr project, const CloudProjectInfo& info, const AudioFile& audio,
+                                                  bool openEditUrl, bool publishMode);
     muse::async::Promise<muse::Ret> uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
                                                               bool isFirstSave, bool publishMode);
 
     muse::async::Promise<muse::Ret> onUploadFinished(const QUrl& urlToOpen, bool isFirstSave, const AudioFile& audio, bool publishMode);
     muse::async::Promise<muse::Ret> onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    muse::async::Promise<muse::Ret> onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
-                                                          bool openEditUrl, bool publishMode);
+    muse::async::Promise<muse::Ret> onProjectUploadFailed(INotationProjectPtr project, const muse::Ret& ret, const CloudProjectInfo& info,
+                                                          const AudioFile& audio, bool openEditUrl, bool publishMode);
 
     void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
     muse::async::Promise<muse::Ret> onAudioUploadFailed(const muse::Ret& ret);

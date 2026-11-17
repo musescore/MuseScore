@@ -22,11 +22,6 @@
 
 #include "global/translation.h"
 
-#ifndef MUSICXML_NO_INTERACTIVE
-#include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
-#endif
-
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
 #include "global/serialization/xmlstreamreader.h"
@@ -43,50 +38,15 @@
 #include "importmusicxmlpass2.h"
 #include "musicxmlvalidation.h"
 
-#ifndef MUSICXML_NO_INTERACTIVE
-using namespace mu;
-#endif
-
 using namespace muse;
 using namespace mu::engraving;
 
 namespace mu::iex::musicxml {
 //---------------------------------------------------------
-//   musicXmlImportErrorDialog
-//---------------------------------------------------------
-
-/**
- Show a dialog displaying the MusicXML import error(s).
- */
-#ifndef MUSICXML_NO_INTERACTIVE
-static IInteractive::Button musicXmlImportErrorDialog(const muse::modularity::ContextPtr& ctx, const String& text,
-                                                      const String& detailedText)
-{
-    auto interactive = modularity::ioc(ctx)->resolve<IInteractive>("musicxml");
-
-    std::string msg = text.toStdString();
-    msg += '\n';
-    msg += muse::trc("iex_musicxml", "Do you want to try to load this file anyway?");
-    msg += '\n';
-    msg += '\n';
-    msg += detailedText.toStdString();
-
-    IInteractive::Result ret = interactive->questionSync(text.toStdString(),
-                                                         msg,
-                                                         { IInteractive::Button::Yes, IInteractive::Button::No },
-                                                         IInteractive::Button::No
-                                                         );
-
-    return ret.standardButton();
-}
-
-#endif
-
-//---------------------------------------------------------
 //   importMusicXmlfromBuffer
 //---------------------------------------------------------
 
-Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
+Ret importMusicXmlfromBuffer(Score* score, const String& name, const ByteArray& data, bool forceMode)
 {
     MusicXmlLogger logger;
     logger.setLoggingLevel(MusicXmlLogger::Level::MXML_ERROR);   // errors only
@@ -114,17 +74,15 @@ Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArr
     const String pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
 #ifndef MUSICXML_NO_INTERACTIVE
-        if (!MScore::noGui) {
-            const String text = muse::mtrc("iex_musicxml", "%Ln error(s) found, import may be incomplete.",
-                                           nullptr, int(pass1_errors.size() + pass2_errors.size()));
-            if (musicXmlImportErrorDialog(score->iocContext(), text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
-                res = Err::UserAbort;
-            }
+        //! NOTE The user decides whether to load the file anyway, then it is loaded again in the force mode
+        //! The caller tells the user about it, the errors are the details
+        if (res == Err::NoError && !MScore::noGui && !forceMode) {
+            return make_ret(Err::FileCorrupted, pass1_errors + pass2_errors);
         }
 #endif
     }
 
-    return res;
+    return make_ret(res, io::path_t(name));
 }
 
 //---------------------------------------------------------
@@ -195,22 +153,18 @@ static bool extractRootfile(const String& name, ByteArray& data)
  Validate and import MusicXML data from file \a name contained in ByteArray \a data into score \a score.
  */
 
-static Err doValidateAndImport(Score* score, const String& name, const ByteArray& data, bool forceMode)
+static Ret doValidateAndImport(Score* score, const String& name, const ByteArray& data, bool forceMode)
 {
-    Err res;
-
     if (!forceMode) {
         // Validate the file
-        res = MusicXmlValidation::validate(name, data);
-        if (res != Err::NoError) {
-            return res;
+        Ret ret = MusicXmlValidation::validate(name, data);
+        if (!ret) {
+            return ret;
         }
     }
 
     // actually do the import
-    res = importMusicXmlfromBuffer(score, name, data);
-    //LOGD("res %d", static_cast<int>(res));
-    return res;
+    return importMusicXmlfromBuffer(score, name, data, forceMode);
 }
 
 //---------------------------------------------------------
@@ -218,7 +172,7 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 //    return Err::File* errors
 //---------------------------------------------------------
 
-Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
+Ret importMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
@@ -227,12 +181,12 @@ Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
     // open the MusicXML file
     io::File xmlFile(name);
     if (!xmlFile.exists()) {
-        return Err::FileNotFound;
+        return make_ret(Err::FileNotFound, io::path_t(name));
     }
 
     if (!xmlFile.open(io::IODevice::ReadOnly)) {
         LOGE() << "could not open MusicXML file: " << name;
-        return Err::FileOpenError;
+        return make_ret(Err::FileOpenError, io::path_t(name));
     }
 
     const ByteArray data = xmlFile.readAll();
@@ -251,18 +205,18 @@ Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Err importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)
+Ret importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, muPrintable(name));
 
     if (!io::File::exists(name)) {
-        return Err::FileNotFound;
+        return make_ret(Err::FileNotFound, io::path_t(name));
     }
 
     // extract the root file
     ByteArray data;
     if (!extractRootfile(name, data)) {
-        return Err::FileBadFormat;      // appropriate error message has been printed by extractRootfile
+        return make_ret(Err::FileBadFormat, io::path_t(name));      // appropriate error message has been printed by extractRootfile
     }
 
     // and import it

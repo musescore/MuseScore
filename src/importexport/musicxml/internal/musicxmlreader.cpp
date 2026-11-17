@@ -30,7 +30,6 @@ using namespace mu::engraving;
 
 muse::Ret MusicXmlReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
-    Err err = Err::FileUnknownType;
     std::string suffix = muse::io::suffix(path);
     bool forceMode = false;
     if (options.find(INotationReader::OptionKey::ForceMode) != options.end()) {
@@ -38,9 +37,10 @@ muse::Ret MusicXmlReader::read(MasterScore* score, const muse::io::path_t& path,
     }
 
     if (suffix == "xml" || suffix == "musicxml") {
-        err = importMusicXml(score, path.toString(), forceMode);
+        return importMusicXml(score, path.toString(), forceMode);
     } else if (suffix == "mxl") {
-        err = importCompressedMusicXml(score, path.toString(), forceMode);
+        return importCompressedMusicXml(score, path.toString(), forceMode);
     }
-    return make_ret(err, path);
+
+    return make_ret(Err::FileUnknownType, path);
 }

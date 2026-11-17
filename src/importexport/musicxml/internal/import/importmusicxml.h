@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "types/string.h"
+#include "types/ret.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
@@ -32,7 +33,7 @@ class Score;
 }
 
 namespace mu::iex::musicxml {
-engraving::Err importMusicXmlfromBuffer(engraving::Score* score, const muse::String&, const muse::ByteArray& data);
-engraving::Err importCompressedMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
-engraving::Err importMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
+muse::Ret importMusicXmlfromBuffer(engraving::Score* score, const muse::String& name, const muse::ByteArray& data, bool forceMode);
+muse::Ret importCompressedMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
+muse::Ret importMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
 }

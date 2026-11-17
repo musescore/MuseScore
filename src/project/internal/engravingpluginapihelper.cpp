@@ -50,7 +50,15 @@ bool EngravingPluginAPIHelper::writeScore(const QString& name, const QString& ex
     }
 
     const QString outPath = name.endsWith(ext) ? name : (name + '.' + ext);
-    return exportProjectScenario()->exportScores({ notation }, outPath, *unitType, /* openDestinationFolderOnExport */ false);
+    exportProjectScenario()->exportScores({ notation }, outPath, *unitType, /* openDestinationFolderOnExport */ false)
+    .onResolve(this, [outPath](const Ret& ret) {
+        if (!ret) {
+            LOGE() << "score was not written to " << outPath << ": " << ret.toString();
+        }
+    });
+
+    //! TODO: return promise to js
+    return true;
 }
 
 Score* EngravingPluginAPIHelper::readScore(const QString& name)
