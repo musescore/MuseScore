@@ -4016,6 +4016,14 @@ void Score::undoRemoveStaff(Staff* staff)
     const staff_idx_t staffIndex = staff->idx();
     assert(staffIndex != muse::nidx);
 
+    const track_idx_t removedTrack = staff2track(staffIndex);
+    EditStaveSharing::remapUserTrackMaps(transactionManager()->currentOrDummyTransaction(), this, [removedTrack](track_idx_t track) {
+        if (track >= removedTrack && track < removedTrack + VOICES) {
+            return muse::nidx;
+        }
+        return track > removedTrack ? track - VOICES : track;
+    });
+
     std::vector<Spanner*> spannersToRemove;
 
     for (auto it = m_spanner.cbegin(); it != m_spanner.cend(); ++it) {
@@ -4059,6 +4067,11 @@ void Score::undoRemoveStaff(Staff* staff)
 
 void Score::undoInsertStaff(Staff* staff, staff_idx_t ridx, bool createRests)
 {
+    const track_idx_t insertedTrack = staff2track(staffIdx(staff->part()) + ridx);
+    EditStaveSharing::remapUserTrackMaps(transactionManager()->currentOrDummyTransaction(), this, [insertedTrack](track_idx_t track) {
+        return track >= insertedTrack ? track + VOICES : track;
+    });
+
     undo(new InsertStaff(staff, ridx));
     staff_idx_t idx = staffIdx(staff->part()) + ridx;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
