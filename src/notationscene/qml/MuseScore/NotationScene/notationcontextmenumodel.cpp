@@ -116,11 +116,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem(CUT_COMMAND),
-        makeMenuItem(COPY_COMMAND),
-        makeMenuItem(PASTE_COMMAND),
-        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
-        makeMenuItem(DELETE_COMMAND),
+        makeMenuItem(CutCommand::id),
+        makeMenuItem(CopyCommand::id),
+        makeMenuItem(PasteDefaultCommand::id),
+        makeMenuItem(CopyPasteSwapCommand::id),
+        makeMenuItem(DeleteCommand::id),
     };
 
     return items;
@@ -129,15 +129,15 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem(CUT_COMMAND),
-        makeMenuItem(COPY_COMMAND),
-        makeMenuItem(PASTE_COMMAND),
-        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
+        makeMenuItem(CutCommand::id),
+        makeMenuItem(CopyCommand::id),
+        makeMenuItem(PasteDefaultCommand::id),
+        makeMenuItem(CopyPasteSwapCommand::id),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem(DELETE_COMMAND);
+    MenuItem* clearItem = makeMenuItem(DeleteCommand::id);
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND);
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
@@ -243,10 +243,10 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem(COPY_COMMAND)
+        makeMenuItem(CopyCommand::id)
     };
 
-    MenuItem* hideItem = makeMenuItem(DELETE_COMMAND);
+    MenuItem* hideItem = makeMenuItem(DeleteCommand::id);
     hideItem->setTitle(TranslatableString("notation", "Hide"));
     hideItem->setIcon(ui::IconCode::Code::NONE);
 

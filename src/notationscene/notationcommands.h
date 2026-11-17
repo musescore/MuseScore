@@ -38,6 +38,116 @@ using muse::rcommand::Annotation;
 using muse::rcommand::Decoration;
 using muse::rcommand::Checkable;
 
+struct CancelCommand {
+    cprop_decl id = Command("command://notation/cancel");
+    cprop_decl title = MnemonicString("action", "Cancel");
+    cprop_decl description = TranslatableString("action", "Cancel the current notation operation");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct UndoCommand {
+    cprop_decl id = Command("command://notation/undo");
+    cprop_decl title = MnemonicString("action", "Undo");
+    cprop_decl description = TranslatableString("action", "Undo the last notation operation");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::UNDO);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct RedoCommand {
+    cprop_decl id = Command("command://notation/redo");
+    cprop_decl title = MnemonicString("action", "Redo");
+    cprop_decl description = TranslatableString("action", "Redo the last notation operation");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::REDO);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct CopyCommand {
+    cprop_decl id = Command("command://notation/copy");
+    cprop_decl title = MnemonicString("action", "&Copy");
+    cprop_decl description = TranslatableString("action", "Copy the current notation element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::COPY);
+    cprop_decl availabilities = Availability::All;
+    cprop_decl annotations = Annotation::Idempotent;
+};
+
+struct CopyPasteSwapCommand {
+    cprop_decl id = Command("command://notation/copy-paste-swap");
+    cprop_decl title = MnemonicString("action", "&Swap with clipboard");
+    cprop_decl description = TranslatableString("action", "Copy/paste: swap with clipboard");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct CopyLyricsCommand {
+    cprop_decl id = Command("command://notation/copy-lyrics");
+    cprop_decl title = MnemonicString("action", "Copy &lyrics to clipboard");
+    cprop_decl description = TranslatableString("action", "Copy lyrics");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct CutCommand {
+    cprop_decl id = Command("command://notation/cut");
+    cprop_decl title = MnemonicString("action", "Cu&t");
+    cprop_decl description = TranslatableString("action", "Cut the current notation element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::CUT);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct PasteCommand {
+    cprop_decl id = Command("command://notation/paste");
+    cprop_decl title = MnemonicString("action", "Paste");
+    cprop_decl description = TranslatableString("action", "Paste the current notation element");
+    cprop_decl availabilities = Availability::API;
+
+    PastingType type = PastingType::Default;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &PasteCommand::type, "Pasting type", Presence::Optional },
+    };
+};
+
+// aliases for paste command
+
+struct PasteDefaultCommand {
+    cprop_decl id = Command("command://notation/paste/default");
+    cprop_decl title = MnemonicString("action", "Past&e");
+    cprop_decl description = TranslatableString("action", "Paste the current notation element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::PASTE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = PasteCommand(PastingType::Default);
+};
+
+struct PasteHalfCommand {
+    cprop_decl id = Command("command://notation/paste/half");
+    cprop_decl title = MnemonicString("action", "Paste &half duration");
+    cprop_decl description = TranslatableString("action", "Paste half duration");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = PasteCommand(PastingType::Half);
+};
+
+struct PasteDoubleCommand {
+    cprop_decl id = Command("command://notation/paste/double");
+    cprop_decl title = MnemonicString("action", "Paste &double duration");
+    cprop_decl description = TranslatableString("action", "Paste double duration");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = PasteCommand(PastingType::Double);
+};
+
+struct PasteSpecialCommand {
+    cprop_decl id = Command("command://notation/paste/special");
+    cprop_decl title = MnemonicString("action", "Paste special");
+    cprop_decl description = TranslatableString("action", "Paste special");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = PasteCommand(PastingType::Special);
+};
+
+struct DeleteCommand {
+    cprop_decl id = Command("command://notation/delete");
+    cprop_decl title = MnemonicString("action", "De&lete");
+    cprop_decl description = TranslatableString("action", "Delete the current notation element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::DELETE_TANK);
+    cprop_decl availabilities = Availability::All;
+};
+
 // select commands
 struct SelectCommand {
     cprop_decl id = Command("command://notation/select");
@@ -2105,13 +2215,6 @@ struct AddFret14Command {
 }
 
 namespace mu::notation {
-// global commands
-inline static const muse::rcommand::Command CANCEL_COMMAND("command://notation/cancel");
-inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/undo");
-inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
-
-// ------------------------------------------------------------
-
 // text navigation commands
 inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
 inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("command://notation/edittext-next-element");
@@ -2208,17 +2311,6 @@ inline static const muse::rcommand::Command ADD_CLEF_VIOLIN_COMMAND("command://n
 inline static const muse::rcommand::Command ADD_CLEF_BASS_COMMAND("command://notation/add-clef-bass");
 
 inline static const muse::rcommand::Command ADD_FULL_MEASURE_REST_COMMAND("command://notation/add-full-measure-rest");
-
-// editing commands
-inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
-inline static const muse::rcommand::Command COPY_PASTE_SWAP_COMMAND("command://notation/copy-paste-swap");
-inline static const muse::rcommand::Command COPY_LYRICS_COMMAND("command://notation/copy-lyrics");
-inline static const muse::rcommand::Command CUT_COMMAND("command://notation/cut");
-inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/paste");
-inline static const muse::rcommand::Command PASTE_HALF_COMMAND("command://notation/paste-half");
-inline static const muse::rcommand::Command PASTE_DOUBLE_COMMAND("command://notation/paste-double");
-inline static const muse::rcommand::Command PASTE_SPECIAL_COMMAND("command://notation/paste-special");
-inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
 
 inline static const muse::rcommand::Command EDIT_ELEMENT_COMMAND("command://notation/edit-element");
 

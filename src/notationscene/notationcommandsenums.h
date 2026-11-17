@@ -245,8 +245,7 @@ struct BeamModeContract {
 };
 
 struct OrnamentTypeContract {
-    static constexpr EnumTable<OrnamentType, 14> table { {
-        { "turn", OrnamentType::TURN, "turn" },
+    static constexpr EnumTable<OrnamentType, 14> table { {        { "turn", OrnamentType::TURN, "turn" },
         { "turn-inverted", OrnamentType::TURN_INVERTED, "turn inverted" },
         { "turn-slash", OrnamentType::TURN_SLASH, "turn slash" },
         { "turn-up", OrnamentType::TURN_UP, "turn up" },
@@ -260,6 +259,15 @@ struct OrnamentTypeContract {
         { "shake", OrnamentType::SHAKE, "shake" },
         { "shake-muffat", OrnamentType::SHAKE_MUFFAT, "shake muffat" },
         { "tremblement-couperin", OrnamentType::TREMBLEMENT_COUPERIN, "tremblement couperin" },
+    } };
+};
+
+struct PastingTypeContract {
+    static constexpr EnumTable<PastingType, 4> table { {
+        { "default", PastingType::Default, "default" },
+        { "half", PastingType::Half, "half duration" },
+        { "double", PastingType::Double, "double duration" },
+        { "special", PastingType::Special, "special" },
     } };
 };
 }
@@ -282,4 +290,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 }

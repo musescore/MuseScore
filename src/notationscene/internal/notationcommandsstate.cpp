@@ -45,10 +45,10 @@ static inline auto commands(const Map& m) -> std::vector<typename Map::key_type>
 }
 
 static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
-    CUT_COMMAND,
-    COPY_COMMAND,
-    COPY_PASTE_SWAP_COMMAND,
-    DELETE_COMMAND,
+    CutCommand::id,
+    CopyCommand::id,
+    CopyPasteSwapCommand::id,
+    DeleteCommand::id,
     FlipCommand::id,
     FLIP_HORIZONTALLY_COMMAND,
     SelectNextSegmentCommand::id,
@@ -77,8 +77,8 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
-    UNDO_COMMAND,
-    REDO_COMMAND
+    UndoCommand::id,
+    RedoCommand::id
 };
 
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
@@ -447,10 +447,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(controller()->isMoveSelectionAvailable(MOVE_SELECTION_COMMANDS.at(command)), false);
     }
 
-    if (command == UNDO_COMMAND) {
+    if (command == UndoCommand::id) {
         return CommandState(controller()->canUndo(), false);
     }
-    if (command == REDO_COMMAND) {
+    if (command == RedoCommand::id) {
         return CommandState(controller()->canRedo(), false);
     }
 

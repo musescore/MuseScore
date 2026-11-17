@@ -226,17 +226,17 @@ MenuItem* AppMenuModel::makeFileMenu()
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem(UNDO_COMMAND),
-        makeMenuItem(REDO_COMMAND),
+        makeMenuItem(UndoCommand::id),
+        makeMenuItem(RedoCommand::id),
         makeMenuItem(DOCK_TOGGLE_UNDO_HISTORY_COMMAND),
         makeSeparator(),
-        makeMenuItem(CUT_COMMAND),
-        makeMenuItem(COPY_COMMAND),
-        makeMenuItem(PASTE_COMMAND),
-        makeMenuItem(PASTE_HALF_COMMAND),
-        makeMenuItem(PASTE_DOUBLE_COMMAND),
-        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
-        makeMenuItem(DELETE_COMMAND),
+        makeMenuItem(CutCommand::id),
+        makeMenuItem(CopyCommand::id),
+        makeMenuItem(PasteDefaultCommand::id),
+        makeMenuItem(PasteHalfCommand::id),
+        makeMenuItem(PasteDoubleCommand::id),
+        makeMenuItem(CopyPasteSwapCommand::id),
+        makeMenuItem(DeleteCommand::id),
         makeSeparator(),
         makeMenuItem(SelectAllCommand::id),
         makeMenuItem(SelectSectionCommand::id),
@@ -258,13 +258,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(UNDO_COMMAND);
+    MenuItem& undoItem = findItem(UndoCommand::id);
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(REDO_COMMAND);
+    MenuItem& redoItem = findItem(RedoCommand::id);
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")
@@ -394,7 +394,7 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem(REGROUP_RHYTHMS_COMMAND),
         makeMenuItem(RESEQUENCE_REHEARSAL_MARKS_COMMAND),
         makeSeparator(),
-        makeMenuItem(COPY_LYRICS_COMMAND),
+        makeMenuItem(CopyLyricsCommand::id),
         makeMenuItem(REMOVE_EMPTY_TRAILING_MEASURES_COMMAND),
     };
 

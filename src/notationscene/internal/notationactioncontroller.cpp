@@ -98,9 +98,17 @@ void NotationActionController::init()
     TRACEFUNC;
 
     // global commands
-    registerCommand(CANCEL_COMMAND, &Controller::resetState);
-    registerCommand(UNDO_COMMAND, &Interaction::undo);
-    registerCommand(REDO_COMMAND, &Interaction::redo);
+    registerCommand<CancelCommand>(&Controller::resetState);
+    registerCommand<UndoCommand>(&Controller::undo);
+    registerCommand<RedoCommand>(&Controller::redo);
+
+    // editing commands
+    registerCommand<CopyCommand>(&Controller::copySelection);
+    registerCommand<CopyPasteSwapCommand>(&Controller::copyPasteSwap);
+    registerCommand<CopyLyricsCommand>(&Controller::copyLyrics);
+    registerCommand<CutCommand>(&Controller::cutSelection);
+    registerCommand<PasteCommand>(&Controller::pasteSelection);
+    registerCommand<DeleteCommand>(&Controller::deleteSelection);
 
     // navigation and selection commands
 
@@ -221,17 +229,6 @@ void NotationActionController::init()
     registerCommand(ADD_CLEF_BASS_COMMAND, [this]() { insertClef(mu::engraving::ClefType::F); });
 
     registerCommand(ADD_FULL_MEASURE_REST_COMMAND, &Controller::addFullMeasureRest);
-
-    // editing commands
-    registerCommand(COPY_COMMAND, &Interaction::copySelection);
-    registerCommand(COPY_PASTE_SWAP_COMMAND, &Interaction::swapSelection);
-    registerCommand(COPY_LYRICS_COMMAND, &Interaction::copyLyrics);
-    registerCommand(CUT_COMMAND, &Controller::cutSelection);
-    registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
-    registerCommand(PASTE_HALF_COMMAND, [this]() { pasteSelection(PastingType::Half); });
-    registerCommand(PASTE_DOUBLE_COMMAND, [this]() { pasteSelection(PastingType::Double); });
-    registerCommand(PASTE_SPECIAL_COMMAND, [this]() { pasteSelection(PastingType::Special); });
-    registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
 
     // move commands
     registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
@@ -593,7 +590,7 @@ muse::async::Notification NotationActionController::notationStyleChanged() const
     return m_currentNotationStyleChanged;
 }
 
-void NotationActionController::resetState()
+muse::Ret NotationActionController::resetState()
 {
     TRACEFUNC;
 
@@ -603,28 +600,28 @@ void NotationActionController::resetState()
 
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (noteInput->isNoteInputMode()) {
         noteInput->endNoteInput();
-        return;
+        return muse::make_ok();
     }
 
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (interaction->isGripEditStarted()) {
         // Exit grip edit but leave element selected
         interaction->endEditElement();
-        return;
+        return muse::make_ok();
     }
 
     if (interaction->isTextEditingStarted()) {
         interaction->endEditElement();
-        return;
+        return muse::make_ok();
     } else if (interaction->isEditingElement()) {
         interaction->endEditElement();
     }
@@ -636,6 +633,47 @@ void NotationActionController::resetState()
     if (automation()) {
         automation()->resetEditStateRequested().notify();
     }
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::undo()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->undo();
+
+    seekSelectedElement();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::redo()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->redo();
+
+    seekSelectedElement();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::copySelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->copySelection();
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::select(const SelectCommand& command)
@@ -1714,15 +1752,19 @@ muse::Ret NotationActionController::swapVoices(const SwapVoicesCommand& command)
     return muse::make_ok();
 }
 
-void NotationActionController::cutSelection()
+muse::Ret NotationActionController::cutSelection()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
     interaction->copySelection();
     interaction->deleteSelection();
+
+    seekSelectedElement();
+
+    return muse::make_ok();
 }
 
 void NotationActionController::repeatSelection()
@@ -1735,18 +1777,63 @@ void NotationActionController::repeatSelection()
     seekAndPlaySelectedElement(true);
 }
 
-void NotationActionController::pasteSelection(PastingType type)
+muse::Ret NotationActionController::pasteSelection(const PasteCommand& command)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    Fraction scale = resolvePastingScale(interaction, type);
+    Fraction scale = resolvePastingScale(interaction, command.type);
     interaction->pasteSelection(scale);
 
     seekAndPlaySelectedElement(DONT_PLAY_CHORD);
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::copyPasteSwap()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->swapSelection();
+
+    seekSelectedElement();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::copyLyrics()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->copyLyrics();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::deleteSelection()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->deleteSelection();
+
+    seekSelectedElement();
+
+    return muse::make_ok();
 }
 
 Fraction NotationActionController::resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const
