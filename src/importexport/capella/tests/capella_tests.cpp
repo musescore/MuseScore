@@ -37,7 +37,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::iex::capella {
-extern engraving::Err importCapella(MasterScore*, const QString& name);
+extern muse::Ret importCapella(MasterScore*, const QString& name, bool forceMode);
 extern engraving::Err importCapXml(MasterScore*, const QString& name);
 extern void convertCapella(Score* score, Capella* cap, bool capxMode);
 }
@@ -54,6 +54,7 @@ public:
 
     Capella::Error capReadError(const char* file);
     engraving::Err capImport(const char* file);
+    muse::Ret capImportWithGui(const char* file, bool forceMode);
 };
 
 //---------------------------------------------------------
@@ -64,7 +65,7 @@ public:
 void Capella_Tests::capReadTest(const char* file)
 {
     auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return mu::iex::capella::importCapella(score, path.toQString());
+        return engraving::Err(mu::iex::capella::importCapella(score, path.toQString(), /*forceMode*/ false).code());
     };
 
     String fileName = String::fromUtf8(file);
@@ -135,9 +136,29 @@ engraving::Err Capella_Tests::capImport(const char* file)
 {
     String path = ScoreRW::rootPath() + u"/" + CAPELLA_DIR + String::fromUtf8(file) + u".cap";
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
-    engraving::Err err = mu::iex::capella::importCapella(score, path.toQString());
+    engraving::Err err = engraving::Err(mu::iex::capella::importCapella(score, path.toQString(), /*forceMode*/ false).code());
     delete score;
     return err;
+}
+
+//---------------------------------------------------------
+//   capImportWithGui
+//   run the public entry point over a Capella file, as when the user opens it
+//---------------------------------------------------------
+
+muse::Ret Capella_Tests::capImportWithGui(const char* file, bool forceMode)
+{
+    // The errors are reported to the user only when there is one
+    MScore::noGui = false;
+
+    String path = ScoreRW::rootPath() + u"/" + CAPELLA_DIR + String::fromUtf8(file) + u".cap";
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
+    muse::Ret ret = mu::iex::capella::importCapella(score, path.toQString(), forceMode);
+    delete score;
+
+    MScore::noGui = true;
+
+    return ret;
 }
 
 TEST_F(Capella_Tests, capTest1) {
@@ -235,27 +256,28 @@ TEST_F(Capella_Tests, capxTestBarline) {
 //
 //   Every file below is a documented byte patch of one of the valid files above,
 //   crafted to drive the importer into a bounds check. The importer must reject the
-//   file rather than read out of bounds, and importCapella() must swallow the error
-//   (it reports it to the user itself) instead of letting it escape.
+//   file rather than read out of bounds, and the error must not escape importCapella():
+//   a file that cannot be read is a bad format, and from a file that cannot be converted
+//   what is converted is kept, without a user to ask.
 //---------------------------------------------------------
 
 // Capella::readString(): a string length of 0xFFFFFFFF used to overflow `len + 1` on
 // 32 bit and ask for a 4GB buffer everywhere else. Patches the author string length.
 TEST_F(Capella_Tests, capCorruptStringLength) {
     EXPECT_EQ(capReadError("test1-corrupt-string-length"), Capella::Error::BAD_FORMAT);
-    EXPECT_EQ(capImport("test1-corrupt-string-length"), engraving::Err::NoError);
+    EXPECT_EQ(capImport("test1-corrupt-string-length"), engraving::Err::FileBadFormat);
 }
 
 // TextObj::read(): same, for the text length of a TEXT draw object added to the gallery.
 TEST_F(Capella_Tests, capCorruptTextSize) {
     EXPECT_EQ(capReadError("test1-corrupt-text-size"), Capella::Error::BAD_FORMAT);
-    EXPECT_EQ(capImport("test1-corrupt-text-size"), engraving::Err::NoError);
+    EXPECT_EQ(capImport("test1-corrupt-text-size"), engraving::Err::FileBadFormat);
 }
 
 // MetafileObj::read(): same, for the bitmap length of a METAFILE draw object.
 TEST_F(Capella_Tests, capCorruptMetafileSize) {
     EXPECT_EQ(capReadError("test1-corrupt-metafile-size"), Capella::Error::BAD_FORMAT);
-    EXPECT_EQ(capImport("test1-corrupt-metafile-size"), engraving::Err::NoError);
+    EXPECT_EQ(capImport("test1-corrupt-metafile-size"), engraving::Err::FileBadFormat);
 }
 
 // readCapVoice(): a key signature outside -7..+7, which keyOffsets[] has no entry for.
@@ -284,4 +306,29 @@ TEST_F(Capella_Tests, capCorruptStaveIndex) {
 TEST_F(Capella_Tests, capExtraStaff) {
     EXPECT_EQ(capReadError("test1-extra-staff"), Capella::Error::BAD_FORMAT);
     EXPECT_EQ(capImport("test1-extra-staff"), engraving::Err::NoError);
+}
+
+// With a user to ask, a conversion error is reported for the user to decide whether to open what is converted anyway
+TEST_F(Capella_Tests, capCorruptWithGui_NotForced_ReportsTheError) {
+    muse::Ret ret = capImportWithGui("test1-corrupt-stave-index", /*forceMode*/ false);
+
+    //! The error is the details, the message for the user is up to the caller
+    EXPECT_EQ(ret.code(), int(engraving::Err::FileCorrupted));
+    EXPECT_FALSE(ret.text().empty());
+}
+
+TEST_F(Capella_Tests, capCorruptWithGui_Forced_KeepsWhatIsImported) {
+    muse::Ret ret = capImportWithGui("test1-corrupt-stave-index", /*forceMode*/ true);
+
+    EXPECT_TRUE(ret);
+}
+
+// Nothing can be opened from a file that cannot be read, even in the force mode
+TEST_F(Capella_Tests, capUnreadableWithGui_IsBadFormat) {
+    for (bool forceMode : { false, true }) {
+        muse::Ret ret = capImportWithGui("test1-corrupt-string-length", forceMode);
+
+        EXPECT_EQ(ret.code(), int(engraving::Err::FileBadFormat));
+        EXPECT_FALSE(ret.text().empty());
+    }
 }

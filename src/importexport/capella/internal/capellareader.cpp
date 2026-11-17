@@ -30,17 +30,20 @@ using namespace mu::iex::capella;
 using namespace mu::engraving;
 
 namespace mu::iex::capella {
-extern Err importCapella(MasterScore*, const QString& name);
+extern muse::Ret importCapella(MasterScore*, const QString& name, bool forceMode);
 extern Err importCapXml(MasterScore*, const QString& name);
 }
 
-muse::Ret CapellaReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
+muse::Ret CapellaReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
-    Err err = Err::FileUnknownType;
     std::string suffix = muse::io::suffix(path);
     if (suffix == "cap") {
-        err = importCapella(score, path.toQString());
-    } else if (suffix == "capx") {
+        bool forceMode = muse::value(options, OptionKey::ForceMode, muse::Val(false)).toBool();
+        return importCapella(score, path.toQString(), forceMode);
+    }
+
+    Err err = Err::FileUnknownType;
+    if (suffix == "capx") {
         err = importCapXml(score, path.toQString());
     }
     return make_ret(err, path);
