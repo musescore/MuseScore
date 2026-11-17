@@ -320,7 +320,7 @@ jobs:
     # First, so nothing is set up if the x86_64 build failed (the matrix build has one result for all its jobs).
     # Not to the workspace, the checkout cleans it
     - name: Download the AppImage
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         pattern: MU4_*_Lin_x86_64_*
         merge-multiple: true
