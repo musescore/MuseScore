@@ -1453,6 +1453,39 @@ TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_MovesAndCreates)
+{
+    // [GIVEN] Flute, oboe and clarinet
+    MasterScore* score = createMasterScore({ u"flute", u"oboe", u"clarinet" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute = score->parts().at(0);
+    Part* oboe = score->parts().at(1);
+    Part* clarinet = score->parts().at(2);
+
+    // [WHEN] The clarinet and the flute are moved to a new shared part
+    SharedPart* sharedPart = nullptr;
+    edit(score, [score, flute, clarinet, &sharedPart](Transaction& tx) {
+        sharedPart = EditPart::movePartsToNewSharedPart(tx, score, { clarinet, flute });
+    });
+
+    // [THEN] The clarinet is after the flute, and both are in the new shared part, before them
+    ASSERT_TRUE(sharedPart);
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute, clarinet, oboe }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute, clarinet }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] The order is restored and the shared part is gone
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ flute, oboe, clarinet }));
+    EXPECT_FALSE(flute->sharedPart());
+    EXPECT_FALSE(clarinet->sharedPart());
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, ReorderStavesChangesScore_DetectsOrderChange)
 {
     // [GIVEN] Flute and piano

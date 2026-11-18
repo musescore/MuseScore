@@ -97,6 +97,7 @@ public:
     void removeSystemObjects(const muse::IDList& stavesIds) override;
 
     void toggleStaveSharing(bool on) override;
+    const SharedPart* movePartsToNewSharedPart(const muse::IDList& partIds) override;
     void movePartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) override;
     void ungroupSharedPart(const muse::ID& sharedPartId) override;
 

@@ -684,6 +684,23 @@ void NotationParts::toggleStaveSharing(bool on)
     });
 }
 
+const SharedPart* NotationParts::movePartsToNewSharedPart(const IDList& partIds)
+{
+    std::vector<Part*> parts = this->parts(partIds);
+    if (parts.empty()) {
+        return nullptr;
+    }
+
+    SharedPart* sharedPart = nullptr;
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Create shared staves"), [&](engraving::Transaction& tx) {
+        sharedPart = EditPart::movePartsToNewSharedPart(tx, score(), parts);
+    });
+
+    return sharedPart;
+}
+
 void NotationParts::movePartsToSharedPart(const IDList& partIds, const ID& sharedPartId)
 {
     Part* sharedPart = score()->partById(sharedPartId);

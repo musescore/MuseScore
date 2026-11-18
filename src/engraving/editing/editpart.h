@@ -310,6 +310,7 @@ public:
     static void moveParts(Transaction& tx, Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
 
     static void movePartsToSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts, SharedPart* sharedPart);
+    static SharedPart* movePartsToNewSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts);
     static void moveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff,
                            bool insertAfter);
 

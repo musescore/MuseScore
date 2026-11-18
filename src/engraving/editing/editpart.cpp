@@ -863,6 +863,30 @@ void EditPart::movePartsToSharedPart(Transaction& tx, Score* score, const std::v
     EditStaveSharing::addPartsToSharedPart(tx, movingParts, sharedPart);
 }
 
+SharedPart* EditPart::movePartsToNewSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts)
+{
+    if (!score || parts.empty()) {
+        return nullptr;
+    }
+
+    std::vector<Part*> movingParts;
+    for (Part* part : score->parts()) {
+        if (!part->isSharedPart() && muse::contains(parts, part)) {
+            movingParts.push_back(part);
+        }
+    }
+
+    if (movingParts.empty()) {
+        return nullptr;
+    }
+
+    if (movingParts.size() > 1) {
+        moveParts(tx, score, { movingParts.begin() + 1, movingParts.end() }, movingParts.front(), true);
+    }
+
+    return EditStaveSharing::createSharedPart(tx, movingParts);
+}
+
 void EditPart::moveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff,
                           bool insertAfter)
 {
