@@ -270,11 +270,7 @@ private:
     bool textNavigationByFractionAvailable() const;
     bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
 
-    muse::Ret nextTextElement();
-    muse::Ret prevTextElement();
-    muse::Ret nextWord();
-    void nextBeatTextElement();
-    void prevBeatTextElement();
+    muse::Ret navigateToText(const TextNavigateCommand& command);
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     muse::Ret toggleFontStyle(const EditTextFontStyleCommand& command);
     muse::Ret toggleValign(const EditTextValignCommand& command);

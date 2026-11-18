@@ -514,41 +514,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::REST)
     },
 
-    CommandInfo{
-        EDITTEXT_NEXT_WORD_COMMAND,
-        TranslatableString("action", "Edit next word"),
-        TranslatableString("action", "Go to edit next notation word"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_NEXT_ELEMENT_COMMAND,
-        TranslatableString("action", "Edit next text element"),
-        TranslatableString("action", "Go to edit next notation text element"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_PREV_ELEMENT_COMMAND,
-        TranslatableString("action", "Edit previous text element"),
-        TranslatableString("action", "Go to edit previous notation text element"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_NEXT_BEAT_COMMAND,
-        TranslatableString("action", "Advance cursor: next beat (chord symbols)"),
-        TranslatableString("action", "Advance cursor: next beat (chord symbols)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITTEXT_PREV_BEAT_COMMAND,
-        TranslatableString("action", "Advance cursor: previous beat (chord symbols)"),
-        TranslatableString("action", "Advance cursor: previous beat (chord symbols)"),
-        InputSchema(),
-        Decoration()
-    },
+    // text navigation commands
+    makeCommandInfo<TextNavigateCommand>(),
+    makeCommandInfo<TextNavigateNextWordCommand>(),
+    makeCommandInfo<TextNavigateNextElementCommand>(),
+    makeCommandInfo<TextNavigatePrevElementCommand>(),
+    makeCommandInfo<TextNavigateNextBeatCommand>(),
+    makeCommandInfo<TextNavigatePrevBeatCommand>(),
 
     CommandInfo{
         EDITLYRIC_NEXT_VERSE_COMMAND,
