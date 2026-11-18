@@ -2536,8 +2536,37 @@ inline static const muse::rcommand::Command ADD_PARENTHESES_COMMAND("command://n
 inline static const muse::rcommand::Command ADD_BRACES_COMMAND("command://notation/add-braces");
 
 // clef commands
-inline static const muse::rcommand::Command ADD_CLEF_VIOLIN_COMMAND("command://notation/add-clef-violin");
-inline static const muse::rcommand::Command ADD_CLEF_BASS_COMMAND("command://notation/add-clef-bass");
+
+struct AddClefCommand {
+    cprop_decl id = Command("command://notation/add-clef");
+    cprop_decl title = MnemonicString("action", "Add clef");
+    cprop_decl description = TranslatableString("action", "Insert a clef at the current position");
+    cprop_decl availabilities = Availability::API;
+
+    ClefType type = ClefType::G;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddClefCommand::type, "Clef type" },
+    };
+};
+
+// aliases for add clef command
+
+struct AddClefViolinCommand {
+    cprop_decl id = Command("command://notation/add-clef/violin");
+    cprop_decl title = MnemonicString("action", "Add treble clef");
+    cprop_decl description = TranslatableString("action", "Add clef: treble");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddClefCommand(ClefType::G);
+};
+
+struct AddClefBassCommand {
+    cprop_decl id = Command("command://notation/add-clef/bass");
+    cprop_decl title = MnemonicString("action", "Add bass clef");
+    cprop_decl description = TranslatableString("action", "Add clef: bass");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddClefCommand(ClefType::F);
+};
 
 inline static const muse::rcommand::Command ADD_FULL_MEASURE_REST_COMMAND("command://notation/add-full-measure-rest");
 

@@ -301,6 +301,48 @@ struct VerticalAlignmentContract {
         { "superscript", VerticalAlignment::AlignSuperScript, "superscript" },
     } };
 };
+
+struct ClefTypeContract {
+    static constexpr EnumTable<ClefType, 37> table { {
+        { "G", ClefType::G, "treble clef" },
+        { "G15mb", ClefType::G15_MB, "treble clef 15ma bassa" },
+        { "G8vb", ClefType::G8_VB, "treble clef 8va bassa" },
+        { "G8va", ClefType::G8_VA, "treble clef 8va alta" },
+        { "G15ma", ClefType::G15_MA, "treble clef 15ma alta" },
+        { "G8vbo", ClefType::G8_VB_O, "double treble clef 8va bassa on 2nd line" },
+        { "G8vbp", ClefType::G8_VB_P, "treble clef optional 8va bassa" },
+        { "G1", ClefType::G_1, "french violin clef" },
+        { "C1", ClefType::C1, "soprano clef" },
+        { "C2", ClefType::C2, "mezzo-soprano clef" },
+        { "C3", ClefType::C3, "alto clef" },
+        { "C4", ClefType::C4, "tenor clef" },
+        { "C5", ClefType::C5, "baritone clef (C clef)" },
+        { "C_19C", ClefType::C_19C, "C clef, H shape (19th century)" },
+        { "C1_F18C", ClefType::C1_F18C, "soprano clef (French, 18th century)" },
+        { "C3_F18C", ClefType::C3_F18C, "alto clef (French, 18th century)" },
+        { "C4_F18C", ClefType::C4_F18C, "tenor clef (French, 18th century)" },
+        { "C1_F20C", ClefType::C1_F20C, "soprano clef (French, 20th century)" },
+        { "C3_F20C", ClefType::C3_F20C, "alto clef (French, 20th century)" },
+        { "C4_F20C", ClefType::C4_F20C, "tenor clef (French, 20th century)" },
+        { "F", ClefType::F, "bass clef" },
+        { "F15mb", ClefType::F15_MB, "bass clef 15ma bassa" },
+        { "F8vb", ClefType::F8_VB, "bass clef 8va bassa" },
+        { "F8va", ClefType::F_8VA, "bass clef 8va alta" },
+        { "F15ma", ClefType::F_15MA, "bass clef 15ma alta" },
+        { "F3", ClefType::F_B, "baritone clef (F clef)" },
+        { "F5", ClefType::F_C, "subbass clef" },
+        { "F_F18C", ClefType::F_F18C, "F clef (French, 18th century)" },
+        { "F_19C", ClefType::F_19C, "F clef (19th century)" },
+        { "PERC", ClefType::PERC, "percussion" },
+        { "PERC2", ClefType::PERC2, "percussion 2" },
+        { "TAB", ClefType::TAB, "tablature" },
+        { "TAB4", ClefType::TAB4, "tablature 4 lines" },
+        { "TAB2", ClefType::TAB_SERIF, "tablature serif" },
+        { "TAB4_SERIF", ClefType::TAB4_SERIF, "tablature serif 4 lines" },
+        { "C4_8VB", ClefType::C4_8VB, "tenor clef 8va bassa" },
+        { "G8vbc", ClefType::G8_VB_C, "G clef ottava bassa with C clef" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -324,6 +366,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ClefTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextMoveDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextNavigationModeContract);
 }
