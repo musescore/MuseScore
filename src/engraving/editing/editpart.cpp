@@ -831,6 +831,38 @@ void EditPart::moveParts(Transaction& tx, Score* score, const std::vector<Part*>
     score->setBracketsAndBarlines();
 }
 
+void EditPart::movePartsToSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts, SharedPart* sharedPart)
+{
+    if (!score || !sharedPart || parts.empty()) {
+        return;
+    }
+
+    std::vector<Part*> movingParts;
+    Part* lastMember = nullptr;
+
+    for (Part* part : score->parts()) {
+        if (part->isSharedPart()) {
+            continue;
+        }
+
+        if (part->sharedPart() == sharedPart) {
+            lastMember = part;
+        } else if (muse::contains(parts, part)) {
+            movingParts.push_back(part);
+        }
+    }
+
+    if (movingParts.empty()) {
+        return;
+    }
+
+    if (lastMember) {
+        moveParts(tx, score, movingParts, lastMember, true);
+    }
+
+    EditStaveSharing::addPartsToSharedPart(tx, movingParts, sharedPart);
+}
+
 void EditPart::moveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff,
                           bool insertAfter)
 {

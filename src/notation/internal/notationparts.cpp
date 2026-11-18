@@ -24,6 +24,7 @@
 #include "types/translatablestring.h"
 
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/transaction/transaction.h"
 
@@ -680,6 +681,24 @@ void NotationParts::toggleStaveSharing(bool on)
 {
     transaction(TranslatableString("undoableAction", "Toggle stave sharing"), [&](engraving::Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score(), on);
+    });
+}
+
+void NotationParts::movePartsToSharedPart(const IDList& partIds, const ID& sharedPartId)
+{
+    Part* sharedPart = score()->partById(sharedPartId);
+    if (!sharedPart || !sharedPart->isSharedPart()) {
+        return;
+    }
+
+    std::vector<Part*> parts = this->parts(partIds);
+    if (parts.empty()) {
+        return;
+    }
+
+    endInteractionWithScore();
+    transaction(TranslatableString("undoableAction", "Add to shared staves"), [&](engraving::Transaction& tx) {
+        EditPart::movePartsToSharedPart(tx, score(), parts, toSharedPart(sharedPart));
     });
 }
 
