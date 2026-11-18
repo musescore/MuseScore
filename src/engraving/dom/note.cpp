@@ -2768,6 +2768,7 @@ void Note::startDrag(EditData& ed)
     ned->pushProperty(Pid::TPC2);
     ned->pushProperty(Pid::FRET);
     ned->pushProperty(Pid::STRING);
+    ned->pushProperty(Pid::OFFSET);
 
     ed.addData(ned);
 }
@@ -2815,9 +2816,13 @@ void Note::endDrag(EditData& ed)
     IF_ASSERT_FAILED(ned) {
         return;
     }
-    for (Note* nn : tiedNotes()) {
-        for (const auto& [id, data, flags] : ned->propertyData) {
-            setPropertyFlags(id, flags); // reset initial property flags state
+    for (const auto& [id, data, flags] : ned->propertyData) {
+        setPropertyFlags(id, flags); // reset initial property flags state
+        if (id == Pid::OFFSET) {
+            score()->undoPropertyChanged(this, id, data);
+            continue;
+        }
+        for (Note* nn : tiedNotes()) {
             score()->undoPropertyChanged(nn, id, data);
         }
     }
