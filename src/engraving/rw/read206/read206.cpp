@@ -837,7 +837,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "hideSystemBarLine") {
             staff->setHideSystemBarLine(e.readInt());
         } else if (tag == "keylist") {
-            read400::TRead::read(staff->keyList(), e, ctx);
+            read400::TRead::read(&staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
             int col = e.intAttribute("col", -1);
             if (col == -1) {

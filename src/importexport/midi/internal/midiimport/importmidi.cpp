@@ -615,7 +615,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
 
 void MTrack::createKeys(Key defaultKey, const KeyList& allKeyList)
 {
-    KeyList& staffKeyList = *staff->keyList();
+    KeyList& staffKeyList = staff->keyList();
 
     if (!hasKey && !mtrack->drumTrack()) {
         if (allKeyList.empty()) {
@@ -994,7 +994,7 @@ KeyList findAllKeyList(const QList<MTrack>& tracks)
     KeyList kl;
     for (int i = 0; i < tracks.size(); ++i) {
         if (tracks[i].hasKey) {
-            for (const auto& key: *tracks[i].staff->keyList()) {
+            for (const auto& key: tracks[i].staff->keyList()) {
                 kl.setKey(key.first, key.second);
             }
         }

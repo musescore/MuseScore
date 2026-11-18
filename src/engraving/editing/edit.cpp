@@ -3885,11 +3885,11 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 {
     DO_ASSERT(staff->score() == this);
     if (!key.forInstrumentChange()) {
-        KeyList* kl = staff->keyList();
-        int nextTick = kl->nextKeyTick(tick.ticks());
+        const KeyList& kl = staff->keyList();
+        int nextTick = kl.nextKeyTick(tick.ticks());
 
         while (nextTick != -1) {
-            KeySigEvent e = kl->key(nextTick);
+            KeySigEvent e = kl.key(nextTick);
             if (e.forInstrumentChange()) {
                 if (key.isAtonal() && !e.isAtonal()) {
                     e.setMode(KeyMode::NONE);
@@ -3914,7 +3914,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
                 if (keySig) {
                     undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
                 }
-                nextTick = kl->nextKeyTick(nextTick);
+                nextTick = kl.nextKeyTick(nextTick);
             } else {
                 nextTick = -1;
             }

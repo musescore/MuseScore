@@ -185,7 +185,7 @@ void recognizeMainKeySig(QList<MTrack>& tracks)
                 ke.setKey(Transpose::transposeKey(key, v));
             }
 
-            KeyList& staffKeyList = *track.staff->keyList();
+            KeyList& staffKeyList = track.staff->keyList();
             staffKeyList[0] = ke;
             assignKeyListToStaff(staffKeyList, track.staff);
         }

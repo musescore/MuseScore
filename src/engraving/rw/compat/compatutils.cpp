@@ -751,8 +751,8 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
         Interval v = instrument->transpose();
         if (v.chromatic % 12) {
             for (Staff* staff : part->staves()) {
-                KeyList* keys = staff->keyList();
-                if (keys->find(0) == keys->end()) {
+                const KeyList& keys = staff->keyList();
+                if (keys.find(0) == keys.end()) {
                     KeySigEvent kse;
                     Key key = Key::C;
                     Key cKey = key;

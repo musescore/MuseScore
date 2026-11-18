@@ -134,7 +134,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
     staffIdx = 0;
     for (auto& track1: m_midiFile.tracks()) {
         Staff* staff  = m_score->staff(staffIdx);
-        KeyList* keys = staff->keyList();
+        const KeyList& keys = staff->keyList();
 
         bool initialKeySigFound = false;
         for (const RepeatSegment* rs : m_score->repeatList()) {
@@ -142,8 +142,8 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
-            auto sk = keys->lower_bound(startTick);
-            auto ek = keys->lower_bound(endTick);
+            auto sk = keys.lower_bound(startTick);
+            auto ek = keys.lower_bound(endTick);
 
             for (auto ik = sk; ik != ek; ++ik) {
                 MidiEvent ev;

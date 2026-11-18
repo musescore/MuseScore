@@ -3715,7 +3715,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     layoutNaturals();
                 }
             } else if (prevKsEvent.custom()) {
-                Fraction prevKeyTick = Fraction::fromTicks(item->staff()->keyList()->currentKeyTick(
+                Fraction prevKeyTick = Fraction::fromTicks(item->staff()->keyList().currentKeyTick(
                                                                (item->tick() - Fraction::eps()).ticks()));
                 Segment* prevKsSeg = item->score()->tick2segment(prevKeyTick, true, SegmentType::KeySig);
                 if (prevKsSeg) {
