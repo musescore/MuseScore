@@ -2578,6 +2578,10 @@ void Score::sortStaves(std::vector<staff_idx_t>& dst)
     }
     m_staves = dl;
 
+    for (SharedPart* sharedPart : sharedParts()) {
+        sharedPart->sortOriginParts();
+    }
+
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         m->sortStaves(dst);
         if (m->hasMMRest()) {

@@ -81,6 +81,19 @@ void SharedPart::removeOriginPart(Part* p)
     computeIsSameInstruments();
 }
 
+void SharedPart::sortOriginParts()
+{
+    const std::vector<Part*>& parts = score()->parts();
+    std::unordered_map<Part*, size_t> order;
+    for (size_t i = 0; i < parts.size(); ++i) {
+        order[parts[i]] = i;
+    }
+
+    std::sort(m_originParts.begin(), m_originParts.end(), [&order](Part* part1, Part* part2) {
+        return order.at(part1) < order.at(part2);
+    });
+}
+
 Part* SharedPart::mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const
 {
     const SharedTrackMap& trackMap = staveSharingStateAtTick(tick.negative() ? Fraction(0, 1) : tick).sharedTrackMap();
