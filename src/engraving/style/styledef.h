@@ -1140,6 +1140,7 @@ enum class Sid : short {
     jianpuNumberFrameRound,
     jianpuNumberFrameFgColor,
     jianpuNumberFrameBgColor,
+    jianpuNumberPosition,
 
     longInstrumentFontFace,
     longInstrumentFontSize,
@@ -2152,6 +2153,7 @@ enum class Sid : short {
     harpPedalTextDiagramMusicalSymbolSize,
     headerMusicalSymbolSize,
     instrumentChangeMusicalSymbolSize,
+    jianpuNumberMusicalSymbolSize,
     letRingMusicalSymbolSize,
     lhGuitarFingeringMusicalSymbolSize,
     longInstrumentMusicalSymbolSize,

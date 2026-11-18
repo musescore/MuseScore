@@ -1130,6 +1130,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(jianpuNumberFrameRound,                    0.0_sp),
     styleDef(jianpuNumberFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
     styleDef(jianpuNumberFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
+    styleDef(jianpuNumberPosition,                      AlignH::LEFT),
 
     styleDef(longInstrumentFontFace,                     "Edwin"),
     styleDef(longInstrumentFontSize,                     10.0),
@@ -2144,6 +2145,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(harpPedalTextDiagramMusicalSymbolSize,               8.0),
     styleDef(headerMusicalSymbolSize,                             9.0),
     styleDef(instrumentChangeMusicalSymbolSize,                   10.0),
+    styleDef(jianpuNumberMusicalSymbolSize,                       9.0),
     styleDef(letRingMusicalSymbolSize,                            10.0),
     styleDef(lhGuitarFingeringMusicalSymbolSize,                  8.0),
     styleDef(longInstrumentMusicalSymbolSize,                     10.0),
