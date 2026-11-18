@@ -466,6 +466,9 @@ const TextStyle jianpuNumberTextStyle {
         { TextStylePropertyType::FrameRound,           Sid::jianpuNumberFrameRound,                 Pid::FRAME_ROUND },
         { TextStylePropertyType::FrameBorderColor,     Sid::jianpuNumberFrameFgColor,               Pid::FRAME_FG_COLOR },
         { TextStylePropertyType::FrameFillColor,       Sid::jianpuNumberFrameBgColor,               Pid::FRAME_BG_COLOR },
+        { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+        { TextStylePropertyType::MusicalSymbolsSize,   Sid::jianpuNumberMusicalSymbolSize,          Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::jianpuNumberPosition,                   Pid::POSITION },
     } },
     { Sid::jianpuNumberOffset, Sid::jianpuNumberOffset }
 };
