@@ -21,6 +21,11 @@
  */
 #include "sharedparttreeitem.h"
 
+#include <algorithm>
+#include <limits>
+
+#include <QRegularExpression>
+
 #include "engraving/dom/sharedpart.h"
 
 #include "notation/inotation.h"
@@ -41,31 +46,31 @@ void SharedPartTreeItem::init(const notation::Part* part)
 {
     PartTreeItem::init(part);
 
+    setTitle(groupTitle());
     setSettingsAvailable(false);
-    setIsExpandable(true);
-    setIsEnabled(engraving::toSharedPart(part)->enabled());
+    updateEnabled();
 
     m_ignoreEnabledChanged = false;
 }
 
-void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& sc)
+void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
 {
-    PartTreeItem::onScoreChanged(sc);
+    updateVisibility();
+
+    if (isTitleAffected(changes)) {
+        setTitle(groupTitle());
+    }
 
     m_ignoreEnabledChanged = true;
-    setIsEnabled(engraving::toSharedPart(part())->enabled());
+    updateEnabled();
     m_ignoreEnabledChanged = false;
 }
 
-void SharedPartTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                                      int destinationRow, bool updateNotation)
+void SharedPartTreeItem::updateEnabled()
 {
-    PartTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
-}
-
-void SharedPartTreeItem::removeChildren(int row, int count, bool deleteChild)
-{
-    PartTreeItem::removeChildren(row, count, deleteChild);
+    const bool enabled = engraving::toSharedPart(part())->enabled();
+    setIsExpandable(enabled);
+    setIsEnabled(enabled);
 }
 
 void SharedPartTreeItem::listenEnabledChanged()
@@ -86,7 +91,57 @@ void SharedPartTreeItem::listenEnabledChanged()
     });
 }
 
-bool SharedPartTreeItem::canAcceptDrop(const QVariant& obj) const
+bool SharedPartTreeItem::isTitleAffected(const mu::engraving::ScoreChanges& changes) const
 {
-    return PartTreeItem::canAcceptDrop(obj);
+    const engraving::SharedPart* sharedPart = engraving::toSharedPart(part());
+    const std::vector<engraving::Part*>& originParts = sharedPart->originParts();
+
+    for (const auto& changed : changes.changedObjects) {
+        const engraving::EngravingObject* object = changed.first;
+        if (object == sharedPart || std::find(originParts.cbegin(), originParts.cend(), object) != originParts.cend()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QString SharedPartTreeItem::groupTitle() const
+{
+    static const QRegularExpression trailingNumber(QStringLiteral("^(.*?)\\s*(\\d+)$"));
+
+    const engraving::SharedPart* sharedPart = engraving::toSharedPart(part());
+
+    QString baseName;
+    bool hasMixedBaseNames = false;
+    int firstNumber = std::numeric_limits<int>::max();
+    int lastNumber = std::numeric_limits<int>::min();
+
+    for (const engraving::Part* originPart : sharedPart->originParts()) {
+        const QString name = originPart->partName().toQString().simplified();
+        const QRegularExpressionMatch match = trailingNumber.match(name);
+
+        int number = originPart->instrument()->number();
+        if (number <= 0 && match.hasMatch()) {
+            number = match.captured(2).toInt();
+        }
+
+        const QString originBaseName = match.hasMatch() ? match.captured(1) : name;
+        if (baseName.isEmpty()) {
+            baseName = originBaseName;
+        } else if (originBaseName != baseName) {
+            hasMixedBaseNames = true;
+        }
+
+        if (number > 0) {
+            firstNumber = std::min(firstNumber, number);
+            lastNumber = std::max(lastNumber, number);
+        }
+    }
+
+    if (hasMixedBaseNames || baseName.isEmpty() || firstNumber >= lastNumber) {
+        return sharedPart->partName().toQString().simplified();
+    }
+
+    return baseName + QChar(u' ') + QString::number(firstNumber) + QChar(u'–') + QString::number(lastNumber);
 }

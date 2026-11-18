@@ -38,6 +38,7 @@
 
 #include "instrumentsscene/instrumentscommands.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/layoutpaneltreemodel.h"
+#include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayertreeitem.h"
 
 #include "interactive/tests/mocks/interactivemock.h"
@@ -160,6 +161,11 @@ protected:
         m_score->appendStaff(Factory::createStaff(part));
 
         return part;
+    }
+
+    void addToSharedPart(const Part* sharedPart, const Part* part)
+    {
+        toSharedPart(m_score->partById(sharedPart->id()))->addOriginPart(m_score->partById(part->id()));
     }
 
     void addSystemObjects(Staff* staff, bool belowBottomStaff = false)
@@ -416,6 +422,55 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_SharedPart)
     EXPECT_EQ(item(2)->type(), ItemType::SHARED_PART);
     EXPECT_EQ(item(2)->id(), s->id());
     EXPECT_TRUE(item(2)->isEmpty());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_GroupedInstrumentWithoutAddStaffRow)
+{
+    // [GIVEN] A, and B in a shared-staves group
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+
+    // [WHEN] The panel is loaded
+    createModel();
+
+    // [THEN] A has the "add staff" row, B only its staff
+    ASSERT_EQ(rowCount(), 4);
+    EXPECT_EQ(item(2)->type(), ItemType::SHARED_PART);
+    EXPECT_EQ(item(3)->id(), b->id());
+    EXPECT_EQ(childTypes(1), (ItemTypes { ItemType::STAFF, ItemType::CONTROL_ADD_STAFF }));
+    EXPECT_EQ(childTypes(3), (ItemTypes { ItemType::STAFF }));
+
+    // [THEN] B's staff is the last child
+    EXPECT_TRUE(childItem(3, 0)->isLastChild());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_MarkingsInsideSharedGroup)
+{
+    // [GIVEN] A, and B and C in a shared-staves group, system markings above C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    addSystemObjects(c->staff(0));
+
+    // [WHEN] The panel is loaded
+    createModel();
+
+    // [THEN] The markings row sits inside the group
+    EXPECT_EQ(rowNames(), "[A:0] A S B [C:0] C");
+
+    // [THEN] B and C both belong to the group, C as its last instrument
+    const PartTreeItem* bItem = qobject_cast<const PartTreeItem*>(item(3));
+    const PartTreeItem* cItem = qobject_cast<const PartTreeItem*>(item(5));
+    ASSERT_TRUE(bItem && cItem);
+
+    EXPECT_EQ(bItem->sharedGroupRole(), LayoutPanelItemType::GROUP_MEMBER);
+    EXPECT_EQ(cItem->sharedGroupRole(), LayoutPanelItemType::GROUP_LAST_MEMBER);
+    EXPECT_EQ(cItem->sharedGroupHeader(), item(2));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_PartScore)
@@ -1372,6 +1427,24 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_UpdatesSetting
     EXPECT_TRUE(m_model->isStaveSharingEnabled());
     EXPECT_TRUE(m_model->isHideEmptyStavesEnabled());
     EXPECT_EQ(*hideChanges, 1);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_SharedGroupEnabledChanged)
+{
+    // [GIVEN] An instrument and a shared-staves group, stave sharing off
+    addPart(u"A");
+    addSharedPart(u"S");
+    createModel(); // [A:0] A S
+
+    std::shared_ptr<int> groupChanges = countEmits(&LayoutPanelTreeModel::sharedGroupEnabledChanged);
+
+    // [WHEN] The score turns on stave sharing
+    m_score->style().set(Sid::enableStaveSharing, true);
+    m_scoreChanges.send(ScoreChanges());
+
+    // [THEN] The panel reports that the group is now combined
+    EXPECT_TRUE(item(2)->isEnabled());
+    EXPECT_EQ(*groupChanges, 1);
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetupNotationConnections_TextEditingIgnored)

@@ -742,3 +742,80 @@ TEST_F(InstrumentsScene_RootTreeItemTests, RemoveChildren_WithoutDeleting)
     EXPECT_EQ(m_root->childCount(), 3);
     EXPECT_EQ(childNames(), "[A:0] A B");
 }
+
+TEST_F(InstrumentsScene_RootTreeItemTests, IsLastChild_AfterAppend)
+{
+    // [GIVEN] Three instruments, system markings only on the top staff
+    addPart(u"A");
+    addPart(u"B");
+    addPart(u"C");
+
+    // [WHEN] The rows are appended one by one
+    buildTree(); // [A:0] A B C
+
+    // [THEN] Only C is the last child
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_root->childItems();
+    for (int i = 0; i < items.size(); ++i) {
+        EXPECT_EQ(items.at(i)->isLastChild(), i == items.size() - 1);
+    }
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, IsLastChild_LastInstrumentMovedUp)
+{
+    // [GIVEN] Three instruments, system markings only on the top staff
+    addPart(u"A");
+    addPart(u"B");
+    addPart(u"C");
+    buildTree(); // [A:0] A B C
+
+    // [WHEN] C is moved up by one row
+    moveRow(3, 2);
+
+    // [THEN] B is the last child instead of C
+    EXPECT_EQ(childNames(), "[A:0] A C B");
+
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_root->childItems();
+    for (int i = 0; i < items.size(); ++i) {
+        EXPECT_EQ(items.at(i)->isLastChild(), i == items.size() - 1);
+    }
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, IsLastChild_InstrumentMovedToEnd)
+{
+    // [GIVEN] Three instruments, system markings only on the top staff
+    addPart(u"A");
+    addPart(u"B");
+    addPart(u"C");
+    buildTree(); // [A:0] A B C
+
+    // [WHEN] B is moved down to the end
+    moveRow(2, 3);
+
+    // [THEN] B is the last child instead of C
+    EXPECT_EQ(childNames(), "[A:0] A C B");
+
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_root->childItems();
+    for (int i = 0; i < items.size(); ++i) {
+        EXPECT_EQ(items.at(i)->isLastChild(), i == items.size() - 1);
+    }
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, IsLastChild_LastInstrumentRemoved)
+{
+    // [GIVEN] Three instruments, system markings only on the top staff
+    addPart(u"A");
+    addPart(u"B");
+    addPart(u"C");
+    buildTree(); // [A:0] A B C
+
+    // [WHEN] C is removed from the panel only
+    m_root->removeChildren(3, 1, false);
+
+    // [THEN] B is the last child
+    EXPECT_EQ(childNames(), "[A:0] A B");
+
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_root->childItems();
+    for (int i = 0; i < items.size(); ++i) {
+        EXPECT_EQ(items.at(i)->isLastChild(), i == items.size() - 1);
+    }
+}

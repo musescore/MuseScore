@@ -31,6 +31,7 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/score.h"
+#include "engraving/dom/sharedpart.h"
 
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
@@ -239,6 +240,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
         updateIsStaveSharingEnabled();
+        updateSharedGroupRoles();
     }, Mode::SetReplace);
 }
 
@@ -381,6 +383,8 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
         item->onScoreChanged(changes);
     }
 
+    updateSharedGroupRoles();
+
     m_scoreChanged = false;
 }
 
@@ -468,6 +472,7 @@ void LayoutPanelTreeModel::load()
 
     updateIsStaveSharingEnabled();
     updateIsHideEmptyStavesEnabled();
+    updateSharedGroupRoles();
 
     emit scoreChanged();
     emit isEmptyChanged();
@@ -688,6 +693,7 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         updateSystemObjectLayers();
     }
 
+    updateSharedGroupRoles();
     updateRearrangementAvailability();
 
     return true;
@@ -986,7 +992,7 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     }
 
     // exclude the control item
-    bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
+    const bool hasControlItem = parentItem->childType(parentItem->childCount() - 1) == LayoutPanelItemType::CONTROL_ADD_STAFF;
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
     bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
 
@@ -1109,6 +1115,53 @@ void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
     emit isHideEmptyStavesEnabledChanged(enabled);
 }
 
+static const PartTreeItem* nextPartItemAfter(const QList<AbstractLayoutPanelTreeItem*>& items, int row)
+{
+    for (int i = row + 1; i < items.size(); ++i) {
+        if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            return dynamic_cast<const PartTreeItem*>(items.at(i));
+        }
+    }
+
+    return nullptr;
+}
+
+void LayoutPanelTreeModel::updateSharedGroupRoles()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    const QList<AbstractLayoutPanelTreeItem*>& items = m_rootItem->childItems();
+    PartTreeItem* currentHeader = nullptr;
+
+    for (int i = 0; i < items.size(); ++i) {
+        PartTreeItem* partItem = dynamic_cast<PartTreeItem*>(items.at(i));
+        if (!partItem) {
+            // Markings rows sit next to their instrument, even inside a group
+            if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+                currentHeader = nullptr;
+            }
+            continue;
+        }
+
+        LayoutPanelItemType::SharedGroupRole role = LayoutPanelItemType::NOT_IN_GROUP;
+
+        if (partItem->type() == LayoutPanelItemType::SHARED_PART) {
+            currentHeader = partItem;
+            role = LayoutPanelItemType::GROUP_HEADER;
+        } else if (currentHeader && partItem->part()->sharedPart() == currentHeader->part()) {
+            const PartTreeItem* nextPartItem = nextPartItemAfter(items, i);
+            const bool isLast = !nextPartItem || nextPartItem->part()->sharedPart() != currentHeader->part();
+            role = isLast ? LayoutPanelItemType::GROUP_LAST_MEMBER : LayoutPanelItemType::GROUP_MEMBER;
+        } else {
+            currentHeader = nullptr;
+        }
+
+        partItem->setSharedGroup(role, currentHeader);
+    }
+}
+
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)
 {
     for (const QModelIndex& index : indexes) {
@@ -1152,6 +1205,9 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSharedPartItem(const Par
     auto sharedPartItem = new SharedPartTreeItem(m_masterNotation, m_notation, m_rootItem);
     sharedPartItem->init(part);
 
+    connect(sharedPartItem, &AbstractLayoutPanelTreeItem::isEnabledChanged,
+            this, &LayoutPanelTreeModel::sharedGroupEnabledChanged);
+
     return sharedPartItem;
 }
 
@@ -1167,8 +1223,10 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Par
         partItem->appendChild(staffItem);
     }
 
-    auto addStaffControlItem = buildAddStaffControlItem(partItem->id(), partItem);
-    partItem->appendChild(addStaffControlItem);
+    // Instruments in a shared-staves group can't add staves
+    if (!masterPart->sharedPart()) {
+        partItem->appendChild(buildAddStaffControlItem(partItem->id(), partItem));
+    }
 
     setupStavesConnections(partItem->id());
 

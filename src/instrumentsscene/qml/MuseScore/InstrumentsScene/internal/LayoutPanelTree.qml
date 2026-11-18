@@ -40,9 +40,17 @@ Item {
     property int sideMargin: 0
 
     function expandCollapseAll(expand) {
+        let groups = Object.assign({}, prv.expandedGroups)
+
         for (let i = 0; i < root.model.rowCount(); ++i) {
             const modelIndex = root.model.index(i, 0)
-            if (!root.model.modelIndexToItem(modelIndex).isExpandable) {
+            const item = root.model.modelIndexToItem(modelIndex)
+            if (!item.isExpandable) {
+                continue
+            }
+
+            if (item.type === LayoutPanelItemType.SHARED_PART) {
+                groups[item.id] = expand
                 continue
             }
 
@@ -53,6 +61,9 @@ Item {
                 layoutPanelTreeView.collapse(row)
             }
         }
+
+        prv.expandedGroups = groups
+        layoutPanelTreeView.forceLayout()
     }
 
     QtObject {
@@ -63,9 +74,8 @@ Item {
 
         readonly property int cardRadius: 3
         readonly property int rowContentHeight: 30
-        readonly property int itemSpacing: 8
 
-        property LayoutPanelItemDelegate pressedDelegate: null
+        property LayoutPanelCard pressedDelegate: null
 
         property AbstractLayoutPanelTreeItem draggedItem: null
         property var draggedIndex: null
@@ -76,6 +86,18 @@ Item {
         property int focusedColumn: -1
         property bool focusedHighlight: false
 
+        property var expandedGroups: ({})
+
+        // Rows clear it only if it's still theirs, as enter/leave can come in either order
+        property LayoutPanelTreeDelegate hoveredGroupRow: null
+        property PartTreeItem pressedGroupHeader: null
+
+        //! NOTE Only combined groups can be collapsed
+        function isGroupCollapsed(part) {
+            const header = part?.sharedGroupHeader ?? null
+            return Boolean(header) && header.isEnabled && !prv.expandedGroups[header.id]
+        }
+
         function setExpanded(delegate, expand) {
             if (treeNavigationPanel.active) {
                 const navigation = prv.findNavigation(delegate, function(nav) { return nav.active })
@@ -84,6 +106,15 @@ Item {
                     prv.focusedColumn = navigation.column
                     prv.focusedHighlight = navigation.highlight
                 }
+            }
+
+            if (delegate.type === LayoutPanelItemType.SHARED_PART) {
+                let groups = Object.assign({}, prv.expandedGroups)
+                groups[delegate.item.id] = expand
+                prv.expandedGroups = groups
+
+                layoutPanelTreeView.forceLayout()
+                return
             }
 
             if (expand) {
@@ -222,6 +253,11 @@ Item {
         function onModelAboutToBeReset() {
             prv.cancelDrag()
         }
+
+        //! NOTE Combining a group on or off changes no rows, so the view isn't relaid out by itself
+        function onSharedGroupEnabledChanged() {
+            Qt.callLater(layoutPanelTreeView.forceLayout)
+        }
     }
 
     StyledTreeView {
@@ -239,6 +275,15 @@ Item {
 
         columnWidthProvider: function(column) {
             return layoutPanelTreeView.width
+        }
+
+        // 0 hides a collapsed group's instruments and their staves; -1 keeps the delegate's implicitHeight
+        rowHeightProvider: function(row) {
+            const index = layoutPanelTreeView.index(row, 0)
+            const part = root.model.modelIndexToItem(index.parent.valid ? index.parent : index) as PartTreeItem
+            const isMember = Boolean(part) && part.type === LayoutPanelItemType.PART
+
+            return isMember && prv.isGroupCollapsed(part) ? 0 : -1
         }
 
         // Blank space below the last row; sits behind the rows
@@ -265,7 +310,7 @@ Item {
             Drag.hotSpot.x: draggedItemLoader.width / 2
             Drag.hotSpot.y: draggedItemLoader.height / 2
 
-            sourceComponent: LayoutPanelItemDelegate {
+            sourceComponent: LayoutPanelCard {
                 treeView: layoutPanelTreeView
                 item: prv.draggedItem
                 modelIndex: prv.draggedIndex
@@ -281,159 +326,55 @@ Item {
             }
         }
 
-        delegate: DropArea {
-            id: dropArea
+        delegate: LayoutPanelTreeDelegate {
+            id: treeDelegate
 
-            required property TreeView treeView
-            required property int row
-            required property int column
-            required property int depth
-            required property bool expanded
-            required property AbstractLayoutPanelTreeItem item
+            treeModel: root.model
+            navigationPanel: treeNavigationPanel
 
-            readonly property var modelIndex: dropArea.treeView.index(dropArea.row, dropArea.column)
-            readonly property bool isDragged: Boolean(prv.draggedItem) && dropArea.item === prv.draggedItem
+            draggedItem: prv.draggedItem
+            isGroupCollapsed: prv.isGroupCollapsed(treeDelegate.item as PartTreeItem)
+            hoveredGroupHeader: prv.hoveredGroupRow?.groupHeader ?? null
+            pressedGroupHeader: prv.pressedGroupHeader
 
-            readonly property bool isCardBottom: dropArea.depth === 0
-                                                 ? !dropArea.expanded
-                                                 : dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
+            sideMargin: root.sideMargin
+            cardRadius: prv.cardRadius
+            cardHeight: prv.rowContentHeight
 
-            implicitHeight: prv.rowContentHeight + (dropArea.isCardBottom ? prv.itemSpacing : 0)
-
-            // The gaps between cards; clicks on the cards are handled by the rows
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.model.clearSelection()
-            }
-
-            // Where the dragged row will land; its slot follows the drag, as rows are moved live
-            Rectangle {
-                width: parent.width
-                height: prv.rowContentHeight
-
-                visible: dropArea.isDragged
-
-                radius: prv.cardRadius
-                color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
-                border.width: 1.5
-                border.color: ui.theme.accentColor
-            }
-
-            Loader {
-                width: parent.width
-                height: prv.rowContentHeight
-
-                opacity: dropArea.isDragged ? 0 : 1
-
-                sourceComponent: dropArea.item?.type === LayoutPanelItemType.CONTROL_ADD_STAFF
-                                 ? addStaffButtonComponent : treeItemDelegateComponent
-
-                Component {
-                    id: treeItemDelegateComponent
-
-                    LayoutPanelItemDelegate {
-                        id: itemDelegate
-
-                        treeView: layoutPanelTreeView
-                        item: dropArea.item
-                        modelIndex: dropArea.modelIndex
-                        row: dropArea.row
-                        depth: dropArea.depth
-                        isExpanded: dropArea.expanded
-
-                        sideMargin: root.sideMargin
-                        cardRadius: prv.cardRadius
-
-                        navigation.name: itemDelegate.item?.title || "LayoutPanelItemDelegate"
-                        navigation.panel: treeNavigationPanel
-                        navigation.row: dropArea.row
-                        navigation.onActiveChanged: {
-                            if (itemDelegate.navigation.active) {
-                                prv.currentItemNavigationName = itemDelegate.navigation.name
-                                layoutPanelTreeView.positionViewAtRow(dropArea.row, TableView.Contain)
-                            }
-                        }
-
-                        onClicked: {
-                            if (itemDelegate.isSelectable) {
-                                root.model.selectRow(dropArea.modelIndex)
-                            }
-                        }
-
-                        onDoubleClicked: {
-                            if (itemDelegate.isExpandable) {
-                                prv.setExpanded(itemDelegate, !itemDelegate.isExpanded)
-                            }
-                        }
-
-                        onExpandRequested: function(expand) {
-                            prv.setExpanded(itemDelegate, expand)
-                        }
-
-                        onRemoveSelectionRequested: {
-                            root.model.removeSelectedRows()
-                        }
-
-                        onChangeVisibilityOfSelectedRowsRequested: function(visible) {
-                            root.model.changeVisibilityOfSelectedRows(visible)
-                        }
-
-                        onChangeVisibilityRequested: function(modelIndex, visible) {
-                            root.model.changeVisibility(modelIndex, visible)
-                        }
-
-                        onChangeEnabledOfSelectedRowsRequested: function(enabled) {
-                            root.model.changeEnabledOfSelectedRows(enabled)
-                        }
-
-                        onChangeEnabledRequested: function(modelIndex, enabled) {
-                            root.model.changeEnabled(modelIndex, enabled)
-                        }
-
-                        onMousePressed: {
-                            prv.pressedDelegate = itemDelegate
-                        }
-
-                        onMouseReleased: {
-                            Qt.callLater(prv.releasePressedDelegate)
-                        }
-
-                        onIsPopupOpenedChanged: {
-                            prv.isPopupOpened = itemDelegate.isPopupOpened
-                        }
-                    }
-                }
-
-                Component {
-                    id: addStaffButtonComponent
-
-                    LayoutPanelAddStaffButton {
-                        title: dropArea.item?.title || ""
-
-                        navigation.panel: treeNavigationPanel
-                        navigation.row: dropArea.row
-
-                        depth: dropArea.depth
-                        sideMargin: root.sideMargin
-                        cardRadius: prv.cardRadius
-
-                        onClicked: {
-                            dropArea.item.appendNewItem()
-                        }
-                    }
+            onGroupHoverChanged: function(hovered) {
+                if (hovered) {
+                    prv.hoveredGroupRow = treeDelegate
+                } else if (prv.hoveredGroupRow === treeDelegate) {
+                    prv.hoveredGroupRow = null
                 }
             }
 
-            onEntered: function(drag) {
-                if (!prv.draggedItem || !dropArea.item) {
-                    return
-                }
+            onGroupPressChanged: function(pressed) {
+                prv.pressedGroupHeader = pressed ? treeDelegate.groupHeader : null
+            }
 
-                if (dropArea.item === prv.draggedItem || !dropArea.item.canAcceptDrop(prv.draggedItem)) {
-                    return
-                }
+            onCardPressed: function(card) {
+                prv.pressedDelegate = card
+            }
 
-                Qt.callLater(prv.moveDraggedItem, dropArea.modelIndex)
+            onCardReleased: {
+                Qt.callLater(prv.releasePressedDelegate)
+            }
+
+            onExpandRequested: function(card, expand) {
+                prv.setExpanded(card, expand)
+            }
+
+            onPopupOpenedChanged: function(opened) {
+                prv.isPopupOpened = opened
+            }
+
+            onNavigationActivated: function(name) {
+                prv.currentItemNavigationName = name
+            }
+
+            onDropRequested: {
+                Qt.callLater(prv.moveDraggedItem, treeDelegate.modelIndex)
             }
         }
     }

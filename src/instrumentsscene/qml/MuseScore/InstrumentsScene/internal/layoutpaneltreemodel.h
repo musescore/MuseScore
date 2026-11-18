@@ -131,6 +131,7 @@ signals:
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
     void isHideEmptyStavesEnabledChanged(bool enabled);
+    void sharedGroupEnabledChanged();
     void scoreChanged();
 
 private slots:
@@ -142,6 +143,7 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
     void updateIsStaveSharingEnabled();
     void updateIsHideEmptyStavesEnabled();
+    void updateSharedGroupRoles();
 
 private:
     void classBegin() override;

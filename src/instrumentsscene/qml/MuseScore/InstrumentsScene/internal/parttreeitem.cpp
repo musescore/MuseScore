@@ -80,20 +80,42 @@ const Part* PartTreeItem::part() const
     return m_part;
 }
 
+LayoutPanelItemType::SharedGroupRole PartTreeItem::sharedGroupRole() const
+{
+    return m_sharedGroupRole;
+}
+
+PartTreeItem* PartTreeItem::sharedGroupHeader() const
+{
+    return m_sharedGroupHeader.data();
+}
+
+void PartTreeItem::setSharedGroup(LayoutPanelItemType::SharedGroupRole role, PartTreeItem* header)
+{
+    if (m_sharedGroupRole == role && m_sharedGroupHeader == header) {
+        return;
+    }
+
+    m_sharedGroupRole = role;
+    m_sharedGroupHeader = header;
+    emit sharedGroupChanged();
+}
+
 void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 {
     if (!m_part) {
         return;
     }
 
-    const String instName = m_part->partName();
-    setTitle(instName.simplified()); // Collapse whitespace...
+    setTitle(m_part->partName().simplified());
+    updateVisibility();
+    setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
+}
 
+void PartTreeItem::updateVisibility()
+{
     m_ignoreVisibilityChange = true;
     setIsVisible(m_partExists && m_part->getProperty(Pid::VISIBLE).toBool());
-    if (!m_part->isSharedPart()) {
-        setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
-    }
     m_ignoreVisibilityChange = false;
 }
 

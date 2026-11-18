@@ -35,10 +35,10 @@ class LayoutPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<project::IProjectSession> projectSession = { this };
 
-public:
     explicit LayoutPanelContextMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
