@@ -491,6 +491,13 @@ Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotation
     extensions::ExtensionUri uri = extensionUri.uri();
     extensions::ExtensionActionCode actionCode = extensionUri.param("action", Val("main")).toString();
 
+    //! NOTE A form is only opened, the file would be written before the user is done with it
+    const extensions::Action action = extensionsProvider()->manifest(uri).action(actionCode);
+    if (action.type == extensions::ExtensionType::Form) {
+        LOGE() << "Only a macro can be used to convert, not a form: " << uri.toString();
+        return make_ret(Ret::Code::NotSupported);
+    }
+
     //! NOTE First we do the extension, it can modify the notation (score)
     Ret ret = extensionsProvider()->perform(uri, actionCode);
     if (!ret) {
