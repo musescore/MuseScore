@@ -40,7 +40,7 @@ void NotationToolBarModel::load()
     AbstractToolBarModel::load();
 
     std::vector<rcommand::Command> commands = {
-        OPEN_PARTS_COMMAND,
+        OpenPartsCommand::id,
         appshell::DOCK_TOGGLE_MIXER_COMMAND,
         TOGGLE_AUTOMATION_COMMAND
     };

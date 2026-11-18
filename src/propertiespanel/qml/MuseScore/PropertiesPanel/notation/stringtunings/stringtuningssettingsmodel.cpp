@@ -46,5 +46,5 @@ bool StringTuningsSettingsModel::isEmpty() const
 
 void StringTuningsSettingsModel::editStrings()
 {
-    commandDispatcher()->dispatch(OPEN_EDIT_STRINGS_COMMAND);
+    commandDispatcher()->dispatch(OpenEditStringsCommand::id);
 }

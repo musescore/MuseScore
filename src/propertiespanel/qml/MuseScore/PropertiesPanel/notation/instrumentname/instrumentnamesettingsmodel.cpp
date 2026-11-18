@@ -59,7 +59,7 @@ void InstrumentNameSettingsModel::openStyleSettings()
 
 void InstrumentNameSettingsModel::openStaffAndPartProperties()
 {
-    commandDispatcher()->dispatch(OPEN_STAFF_PROPERTIES_COMMAND);
+    commandDispatcher()->dispatch(OpenStaffPropertiesCommand::id);
 }
 
 const mu::engraving::InstrumentName* InstrumentNameSettingsModel::selectedInstrumentName() const
