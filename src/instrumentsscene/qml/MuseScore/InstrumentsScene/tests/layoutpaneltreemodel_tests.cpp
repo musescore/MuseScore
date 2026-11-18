@@ -913,7 +913,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_InvalidArguments)
     createModel(); // [A:0] A B C
 
     // [THEN] Nothing is sent to the score
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] Rows are moved with bad arguments
     // [THEN] Nothing moves
@@ -936,7 +936,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_StaffOutOfPart)
 
     // [THEN] Nothing is sent to the score
     EXPECT_CALL(*m_parts, reorderStaves(_)).Times(0);
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A staff of A is moved onto the markings row above B
     // [THEN] Nothing moves
@@ -956,7 +956,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsDown)
     createModel(); // [A:0] A B C
 
     // [THEN] The new order is sent to the score once
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(1);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(1);
 
     // [WHEN] B is moved down
     m_model->selectRow(row(2));
@@ -977,7 +977,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsUp)
     createModel(); // [A:0] A B C
 
     // [THEN] Each move is sent to the score
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(2);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(2);
 
     // [WHEN] C is moved up
     m_model->selectRow(row(3));
@@ -1003,7 +1003,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsUpAndDown_Not
     createModel(); // [A:0] A B
 
     // [THEN] Nothing is sent to the score
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A is moved up and B is moved down
     m_model->selectRow(row(1));
@@ -1023,7 +1023,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsDown_Staff)
 
     // [THEN] Only the staff order is sent to the score
     EXPECT_CALL(*m_parts, reorderStaves(_)).Times(1);
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] The first staff is moved down
     m_model->selectRow(childRow(1, 0));
@@ -1043,7 +1043,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_AppliesOrder)
     createModel(); // [A:0] A B C
 
     // [THEN] Nothing is sent to the score while dragging
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A is dragged down past B and C
     m_model->startActiveDrag();
@@ -1053,7 +1053,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_AppliesOrder)
     Mock::VerifyAndClearExpectations(m_parts.get());
 
     // [THEN] The order is sent once, on drop
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(1);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(1);
 
     // [WHEN] A is dropped
     m_model->endActiveDrag();
@@ -1070,7 +1070,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_WithoutMoves)
     createModel(); // [A:0] A B
 
     // [THEN] Nothing is sent to the score
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A drag ends without moving anything
     m_model->startActiveDrag();
@@ -1090,9 +1090,10 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_MarkingsOntoMarkings
     std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
 
     // [THEN] The score replaces C's markings with B's
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).WillOnce(InvokeWithoutArgs([this, b]() {
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).WillOnce(InvokeWithoutArgs([this, b]() {
         removeSystemObjects(b->staff(0));
         m_systemObjectStavesChanged.notify();
+        return true;
     }));
 
     // [WHEN] The markings row above B is moved down past B, onto C's markings
@@ -1135,9 +1136,10 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_ScoreAddsMarkings)
     std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
 
     // [THEN] While the order is applied, the score adds markings to C
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).WillOnce(InvokeWithoutArgs([this, c]() {
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).WillOnce(InvokeWithoutArgs([this, c]() {
         addSystemObjects(c->staff(0));
         m_systemObjectStavesChanged.notify();
+        return true;
     }));
 
     // [WHEN] C is moved up past B
@@ -1159,8 +1161,9 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_PartsChangeDuringMov
     std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
 
     // [THEN] The score reports changed instruments while the order is applied
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).WillOnce(InvokeWithoutArgs([this]() {
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).WillOnce(InvokeWithoutArgs([this]() {
         m_partsNotifier.changed();
+        return true;
     }));
 
     // [WHEN] C is moved up
@@ -1182,9 +1185,10 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_NotationChangeDuring
     std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
 
     // [THEN] Another score becomes current while the order is applied, and the panel waits
-    EXPECT_CALL(*m_parts, reorderParts(_, _)).WillOnce(InvokeWithoutArgs([this, resets]() {
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).WillOnce(InvokeWithoutArgs([this, resets]() {
         m_currentNotationChanged.notify();
         EXPECT_EQ(*resets, 0);
+        return true;
     }));
 
     // [WHEN] C is moved up

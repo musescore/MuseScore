@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include "engraving/dom/score.h"
+#include "engraving/dom/sharedpart.h"
 
 #include "parttreeitem.h"
 #include "systemobjectslayertreeitem.h"
@@ -54,18 +55,22 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
 
 void RootTreeItem::applyToScore()
 {
-    IDList partIds;
+    INotationParts::PartsLayout layout;
     std::vector<std::pair<SystemObjectsLayerTreeItem*, const Staff*> > layerDestinations;
-    std::vector<INotationParts::SystemObjectsMove> moves;
     const Part* partBelow = nullptr;
 
     for (int row = childCount() - 1; row >= 0; --row) {
         AbstractLayoutPanelTreeItem* child = childAtRow(row);
         if (isPartItem(child)) {
-            if (notation()->parts()->partExists(child->id())) {
-                partIds.push_back(child->id());
-            }
             partBelow = static_cast<const PartTreeItem*>(child)->part();
+
+            if (notation()->parts()->partExists(child->id())) {
+                INotationParts::PartPlacement placement { child->id() };
+                if (const SharedPart* sharedPart = partBelow->sharedPart()) {
+                    placement.sharedPartId = sharedPart->id();
+                }
+                layout.parts.push_back(placement);
+            }
             continue;
         }
 
@@ -87,13 +92,13 @@ void RootTreeItem::applyToScore()
         }
 
         layerDestinations.emplace_back(layer, destination);
-        moves.push_back({ staff->id(), destination->id(), !partBelow });
+        layout.systemObjects.push_back({ staff->id(), destination->id(), !partBelow });
     }
 
-    std::reverse(partIds.begin(), partIds.end());
-    std::reverse(moves.begin(), moves.end());
+    std::reverse(layout.parts.begin(), layout.parts.end());
+    std::reverse(layout.systemObjects.begin(), layout.systemObjects.end());
 
-    notation()->parts()->reorderParts(partIds, moves);
+    notation()->parts()->setPartsLayout(layout);
 
     // Markings that couldn't move are put back when the panel updates its markings rows
     for (const auto& [layer, destination] : layerDestinations) {

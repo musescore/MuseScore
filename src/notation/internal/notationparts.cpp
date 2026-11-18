@@ -494,20 +494,25 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     });
 }
 
-void NotationParts::reorderParts(const IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves)
+bool NotationParts::setPartsLayout(const PartsLayout& layout)
 {
     TRACEFUNC;
 
-    const std::vector<Part*> orderedParts = parts(partIds);
-    const std::vector<EditPart::SystemObjectsMove> moves = editPartSystemObjectsMoves(systemObjectsMoves);
-    if (!EditPart::reorderPartsChangesScore(score(), orderedParts, moves)) {
-        return;
+    const EditPart::PartsLayout editPartLayout { editPartPlacements(layout.parts), editPartSystemObjectsMoves(layout.systemObjects) };
+    if (!EditPart::isValidPartsLayout(editPartLayout)) {
+        return false;
+    }
+
+    if (!EditPart::partsLayoutChangesScore(score(), editPartLayout)) {
+        return true;
     }
 
     endInteractionWithScore();
     transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction& tx) {
-        EditPart::reorderParts(tx, score(), orderedParts, moves);
+        EditPart::setPartsLayout(tx, score(), editPartLayout);
     });
+
+    return true;
 }
 
 void NotationParts::reorderStaves(const IDList& staffIds)
@@ -867,6 +872,36 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
     }
 
     return parts;
+}
+
+std::vector<EditPart::PartPlacement> NotationParts::editPartPlacements(const std::vector<PartPlacement>& placements) const
+{
+    std::vector<EditPart::PartPlacement> result;
+    result.reserve(placements.size());
+
+    const bool canChangeSharedParts = score()->isMaster();
+
+    for (const PartPlacement& placement : placements) {
+        Part* part = score()->partById(placement.partId);
+        if (!part) {
+            continue;
+        }
+
+        EditPart::PartPlacement editPartPlacement { part, part->sharedPart() };
+
+        if (canChangeSharedParts) {
+            if (!placement.sharedPartId) {
+                editPartPlacement.sharedPart = nullptr;
+            } else if (Part* sharedPart = score()->partById(*placement.sharedPartId); sharedPart && sharedPart->isSharedPart()) {
+                editPartPlacement.sharedPart = toSharedPart(sharedPart);
+            }
+            // else: unknown shared part, membership stays as it is
+        }
+
+        result.push_back(editPartPlacement);
+    }
+
+    return result;
 }
 
 std::vector<EditPart::SystemObjectsMove> NotationParts::editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const

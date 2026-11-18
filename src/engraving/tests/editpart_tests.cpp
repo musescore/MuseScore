@@ -87,6 +87,21 @@ protected:
         return result;
     }
 
+    //! The parts in the given order, each staying in its shared part
+    static EditPart::PartsLayout layout(const std::vector<Part*>& parts, const std::vector<EditPart::SystemObjectsMove>& moves = {})
+    {
+        EditPart::PartsLayout result;
+        result.parts.reserve(parts.size());
+
+        for (Part* part : parts) {
+            result.parts.push_back({ part, part->sharedPart() });
+        }
+
+        result.systemObjects = moves;
+
+        return result;
+    }
+
     Excerpt* addExcerpt(MasterScore* score, Excerpt* excerpt)
     {
         edit(score, [score, excerpt](Transaction&) {
@@ -1114,7 +1129,7 @@ TEST_F(Engraving_EditPartTests, MoveStaves_MovesStaffBeforeDestination)
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderPartsChangesScore_DetectsOrderAndMarkingChanges)
+TEST_F(Engraving_EditPartTests, PartsLayoutChangesScore_DetectsOrderAndMarkingChanges)
 {
     // [GIVEN] Flute and piano
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1127,24 +1142,24 @@ TEST_F(Engraving_EditPartTests, ReorderPartsChangesScore_DetectsOrderAndMarkingC
 
     // [WHEN] The order is unchanged
     // [THEN] The score doesn't change
-    EXPECT_FALSE(EditPart::reorderPartsChangesScore(score, { flute, piano }, {}));
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano })));
 
     // [WHEN] The parts are swapped
     // [THEN] The score changes
-    EXPECT_TRUE(EditPart::reorderPartsChangesScore(score, { piano, flute }, {}));
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, layout({ piano, flute })));
 
     // [WHEN] Markings move below the bottom staff
     // [THEN] The score changes
-    EXPECT_TRUE(EditPart::reorderPartsChangesScore(score, { flute, piano }, { { pianoUpper, nullptr, true } }));
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano }, { { pianoUpper, nullptr, true } })));
 
     // [WHEN] Markings stay on their staff
     // [THEN] The score doesn't change
-    EXPECT_FALSE(EditPart::reorderPartsChangesScore(score, { flute, piano }, { { pianoUpper, pianoUpper, false } }));
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano }, { { pianoUpper, pianoUpper, false } })));
 
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_MasterScore_KeepsExcerptOrder)
 {
     // [GIVEN] Flute and piano, with a part score of both
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1159,7 +1174,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
 
     // [WHEN] The parts are swapped in the main score
     edit(score, [score, flute, piano](Transaction& tx) {
-        EditPart::reorderParts(tx, score, { piano, flute }, {});
+        EditPart::setPartsLayout(tx, score, layout({ piano, flute }));
     });
 
     // [THEN] The main score has the new order, with the staves
@@ -1186,7 +1201,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsStyle)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_SystemObjectsBelowBottomStaff_SetsStyle)
 {
     // [GIVEN] Flute and piano, with system markings on the piano's upper staff
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1202,7 +1217,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsS
 
     // [WHEN] The markings are moved below the bottom staff
     edit(score, [score, pianoUpper](Transaction& tx) {
-        EditPart::reorderParts(tx, score, score->parts(), { { pianoUpper, nullptr, true } });
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, nullptr, true } }));
     });
 
     // [THEN] The bottom staff has the markings, below it
@@ -1213,7 +1228,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsS
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndMeasureNumbers)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_SystemObjectsMove_MovesMarkingsAndMeasureNumbers)
 {
     // [GIVEN] Flute and piano, with a system text copied to the piano's upper staff, which shows measure numbers
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1231,7 +1246,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndM
 
     // [WHEN] The markings are moved to the lower staff
     edit(score, [score, pianoUpper, pianoLower](Transaction& tx) {
-        EditPart::reorderParts(tx, score, score->parts(), { { pianoUpper, pianoLower, false } });
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, pianoLower, false } }));
     });
 
     // [THEN] The lower staff has the markings, the text copy and the measure numbers, above it
@@ -1241,6 +1256,158 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndM
     EXPECT_EQ(systemTextStaves(score), std::vector<staff_idx_t>({ 0, 2 }));
     EXPECT_EQ(pianoLower->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>(), AutoOnOff::ON);
     EXPECT_EQ(pianoUpper->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>(), AutoOnOff::AUTO);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, PartsLayoutChangesScore_DetectsSharedPartChanges)
+{
+    // [GIVEN] Two flutes, the first in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 2u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] Every part keeps its shared part
+    // [THEN] The score doesn't change
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout(score->parts())));
+
+    // [WHEN] The second flute joins the shared part
+    // [THEN] The score changes
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, { { { sharedPart, nullptr }, { flute1, sharedPart },
+                                                      { flute2, sharedPart } }, {} }));
+
+    // [WHEN] The first flute leaves the shared part
+    // [THEN] The score changes
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, { { { sharedPart, nullptr }, { flute1, nullptr },
+                                                      { flute2, nullptr } }, {} }));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetPartsLayout_JoinSharedPart_MovesAndJoinsInOneUndoStep)
+{
+    // [GIVEN] Flute, piano and flute, the first flute in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"piano", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    Part* flute2 = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+
+    // [WHEN] The second flute moves after the first one and joins the shared part
+    edit(score, [score, sharedPart, flute1, piano, flute2](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
+                                     { piano, nullptr } }, {} });
+    });
+
+    // [THEN] Both flutes are next to each other, in the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+    EXPECT_EQ(flute2->sharedPart(), sharedPart);
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetPartsLayout_LeaveSharedPart_MovesAndLeavesInOneUndoStep)
+{
+    // [GIVEN] Two flutes in a shared part, and piano
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"piano" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+    Part* piano = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+
+    // [WHEN] The second flute moves after the piano and leaves the shared part
+    edit(score, [score, sharedPart, flute1, flute2, piano](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { piano, nullptr },
+                                     { flute2, nullptr } }, {} });
+    });
+
+    // [THEN] The second flute is after the piano, out of the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+    EXPECT_EQ(flute2->sharedPart(), sharedPart);
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DetectsSplitSharedPart)
+{
+    // [GIVEN] Two flutes in a shared part, and oboe
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"oboe" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+    Part* oboe = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The order is unchanged
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout(layout(score->parts())));
+
+    // [WHEN] The oboe goes between the flutes
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { oboe, nullptr },
+                                                  { flute2, sharedPart } }, {} }));
+
+    // [WHEN] A flute goes before the shared part
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { flute1, sharedPart }, { sharedPart, nullptr }, { flute2, sharedPart },
+                                                  { oboe, nullptr } }, {} }));
+
+    // [WHEN] The oboe joins the shared part after the flutes
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
+                                                 { oboe, sharedPart } }, {} }));
 
     delete score;
 }
@@ -1366,7 +1533,7 @@ TEST_F(Engraving_EditPartTests, RemoveSystemObjects_BelowBottomStaff_ResetsStyle
         EditPart::addSystemObjects(tx, score, { pianoUpper });
     });
     edit(score, [score, pianoUpper](Transaction& tx) {
-        EditPart::reorderParts(tx, score, score->parts(), { { pianoUpper, nullptr, true } });
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, nullptr, true } }));
     });
     ASSERT_TRUE(pianoLower->isSystemObjectStaff());
     ASSERT_TRUE(score->style().styleB(Sid::systemObjectsBelowBottomStaff));
