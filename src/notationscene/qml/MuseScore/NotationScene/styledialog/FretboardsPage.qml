@@ -74,15 +74,25 @@ StyledFlickable {
                 controlAreaWidth: root.controlAreaWidth
             }
 
-            IconAndTextButtonSelector {
-                styleItem: fretboardsPage.fretOrientation
-                label: qsTrc("notation", "Orientation:")
-                controlAreaWidth: root.controlAreaWidth
+            RowLayout {
+                IconAndTextButtonSelector {
+                    styleItem: fretboardsPage.fretOrientation
+                    label: qsTrc("notation", "Orientation:")
+                    controlAreaWidth: root.controlAreaWidth
+                    hasReset: true
+                    resetEnabled: !fretboardsPage.fretOrientation.isDefault
 
-                model: [
-                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
-                    { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
-                ]
+                    model: [
+                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
+                        { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
+                    ]
+                }
+                FlatButton {
+                    Layout.alignment: Qt.AlignTop
+                    icon: IconCode.UNDO
+                    enabled: !fretboardsPage.fretOrientation.isDefault
+                    onClicked: fretboardsPage.fretOrientation.value = fretboardsPage.fretOrientation.defaultValue
+                }
             }
 
             StyleSpinboxWithReset {
@@ -159,6 +169,16 @@ StyledFlickable {
                                     horizontalAlignment: Text.AlignLeft
                                     text: qsTrc("notation", "Preview:") + " 3" + fretboardsPage.fretCustomSuffix.value
                                 }
+
+                                FlatButton {
+                                    Layout.alignment: Qt.AlignTop
+                                    icon: IconCode.UNDO
+                                    enabled: !fretboardsPage.fretUseCustomSuffix.isDefault || !fretboardsPage.fretCustomSuffix.isDefault
+                                    onClicked: {
+                                        fretboardsPage.fretUseCustomSuffix.value = fretboardsPage.fretUseCustomSuffix.defaultValue
+                                        fretboardsPage.fretCustomSuffix.value = fretboardsPage.fretCustomSuffix.defaultValue
+                                    }
+                                }
                             }
                         }
                     }
@@ -209,10 +229,21 @@ StyledFlickable {
                 }
             }
 
-            CheckBox {
-                text: qsTrc("notation", "Show fingerings")
-                checked: fretboardsPage.fretShowFingerings.value === true
-                onClicked: fretboardsPage.fretShowFingerings.value = !fretboardsPage.fretShowFingerings.value
+            RowLayout {
+                spacing: 6
+                Layout.fillWidth: true
+                CheckBox {
+                    Layout.fillWidth: true
+                    text: qsTrc("notation", "Show fingerings")
+                    checked: fretboardsPage.fretShowFingerings.value === true
+                    onClicked: fretboardsPage.fretShowFingerings.value = !fretboardsPage.fretShowFingerings.value
+                }
+                FlatButton {
+                    Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                    icon: IconCode.UNDO
+                    enabled: !fretboardsPage.fretShowFingerings.isDefault
+                    onClicked: fretboardsPage.fretShowFingerings.value = fretboardsPage.fretShowFingerings.defaultValue
+                }
             }
 
             FlatButton {
@@ -223,15 +254,25 @@ StyledFlickable {
                 }
             }
 
-            IconAndTextButtonSelector {
-                styleItem: fretboardsPage.fretStyleExtended
-                label: qsTrc("notation", "Fretboard style:")
-                controlAreaWidth: root.controlAreaWidth
+            RowLayout {
+                IconAndTextButtonSelector {
+                    styleItem: fretboardsPage.fretStyleExtended
+                    label: qsTrc("notation", "Fretboard style:")
+                    controlAreaWidth: root.controlAreaWidth
+                    hasReset: true
+                    resetEnabled: !fretboardsPage.fretStyleExtended.isDefault
 
-                model: [
-                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
-                    { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
-                ]
+                    model: [
+                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
+                        { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
+                    ]
+                }
+                FlatButton {
+                    Layout.alignment: Qt.AlignTop
+                    icon: IconCode.UNDO
+                    enabled: !fretboardsPage.fretStyleExtended.isDefault
+                    onClicked: fretboardsPage.fretStyleExtended.value = fretboardsPage.fretStyleExtended.defaultValue
+                }
             }
 
             StyleSpinboxWithReset {

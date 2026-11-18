@@ -599,12 +599,22 @@ StyledFlickable {
                     }
                 }
 
-                CheckBox {
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    CheckBox {
                         Layout.fillWidth: true
                         text: qsTrc("notation/editstyle/chordsymbols", "Use SMuFL symbols")
                         checked: chordSymbolsModel.useSmuflSymbols.value === true
                         onClicked: chordSymbolsModel.useSmuflSymbols.value = !chordSymbolsModel.useSmuflSymbols.value
                     }
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: !chordSymbolsModel.useSmuflSymbols.isDefault
+                        onClicked: chordSymbolsModel.useSmuflSymbols.value = chordSymbolsModel.useSmuflSymbols.defaultValue
+                    }
+                }
             }
         }
 
@@ -640,7 +650,8 @@ StyledFlickable {
                     label: qsTrc("notation", "Alignment to notehead:")
                     controlAreaWidth: 98
                     buttonHeight: 30
-                    hasReset: false
+                    hasReset: true
+                    resetEnabled: !chordSymbolsModel.chordAlignmentToNotehead.isDefault
 
                     model: [
                         { iconCode: IconCode.NOTE_ALIGN_LEFT, iconSize: 16, value: 0},
@@ -654,7 +665,8 @@ StyledFlickable {
                     label: qsTrc("notation", "Alignment to fretboard diagram:")
                     controlAreaWidth: 98
                     buttonHeight: 30
-                    hasReset: false
+                    hasReset: true
+                    resetEnabled: !chordSymbolsModel.chordAlignmentToFretboard.isDefault
 
                     model: [
                         { iconCode: IconCode.ALIGN_LEFT, iconSize: 16, value: 0},
@@ -663,10 +675,21 @@ StyledFlickable {
                     ]
                 }
 
-                CheckBox {
-                    text: qsTrc("notation/editstyle/chordsymbols", "Exclude modifiers from horizontal alignment")
-                    checked: chordSymbolsModel.chordAlignmentExcludeModifiers.value === true
-                    onClicked: chordSymbolsModel.chordAlignmentExcludeModifiers.value = !chordSymbolsModel.chordAlignmentExcludeModifiers.value
+                RowLayout {
+                    spacing: 6
+                    Layout.fillWidth: true
+                    CheckBox {
+                        Layout.fillWidth: true
+                        text: qsTrc("notation/editstyle/chordsymbols", "Exclude modifiers from horizontal alignment")
+                        checked: chordSymbolsModel.chordAlignmentExcludeModifiers.value === true
+                        onClicked: chordSymbolsModel.chordAlignmentExcludeModifiers.value = !chordSymbolsModel.chordAlignmentExcludeModifiers.value
+                    }
+                    FlatButton {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                        icon: IconCode.UNDO
+                        enabled: !chordSymbolsModel.chordAlignmentExcludeModifiers.isDefault
+                        onClicked: chordSymbolsModel.chordAlignmentExcludeModifiers.value = chordSymbolsModel.chordAlignmentExcludeModifiers.defaultValue
+                    }
                 }
             }
         }

@@ -44,101 +44,132 @@ StyledFlickable {
         width: parent.width
         spacing: 12
 
-        ItemWithTitle {
-            Layout.fillWidth: true
-            title: qsTrc("notation", "Beam distance")
+        RowLayout {
+            ItemWithTitle {
+                Layout.fillWidth: true
+                title: qsTrc("notation", "Beam distance")
 
-            RadioButtonGroup {
-                Layout.preferredHeight: 70
-                spacing: 12
+                RadioButtonGroup {
+                    Layout.preferredHeight: 70
+                    spacing: 12
 
-                model: [
-                    { iconCode: IconCode.USE_WIDE_BEAMS_REGULAR, text: qsTrc("notation", "Regular"), value: false },
-                    { iconCode: IconCode.USE_WIDE_BEAMS_WIDE, text: qsTrc("notation", "Wide"), value: true }
-                ]
+                    model: [
+                        { iconCode: IconCode.USE_WIDE_BEAMS_REGULAR, text: qsTrc("notation", "Regular"), value: false },
+                        { iconCode: IconCode.USE_WIDE_BEAMS_WIDE, text: qsTrc("notation", "Wide"), value: true }
+                    ]
 
-                delegate: FlatRadioButton {
-                    id: delegateItem
+                    delegate: FlatRadioButton {
+                        id: delegateItem
 
-                    required property var modelData
-                    required property bool value
+                        required property var modelData
+                        required property bool value
 
-                    width: 106
-                    height: 70
+                        width: 106
+                        height: 70
 
-                    checked: modelData.value === beamsPageModel.useWideBeams.value
+                        checked: modelData.value === beamsPageModel.useWideBeams.value
 
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 8
+                        Column {
+                            anchors.centerIn: parent
+                            spacing: 8
 
-                        StyledIconLabel {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            iconCode: delegateItem.modelData.iconCode
-                            font.pixelSize: 28
+                            StyledIconLabel {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                iconCode: delegateItem.modelData.iconCode
+                                font.pixelSize: 28
+                            }
+
+                            StyledTextLabel {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: delegateItem.modelData.text
+                            }
                         }
 
-                        StyledTextLabel {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: delegateItem.modelData.text
+                        onToggled: {
+                            beamsPageModel.useWideBeams.value = modelData.value
                         }
                     }
+                }
+            }
+            FlatButton {
+                icon: IconCode.UNDO
+                enabled: !beamsPageModel.useWideBeams.isDefault
+                onClicked: beamsPageModel.useWideBeams.value = beamsPageModel.useWideBeams.defaultValue
+            }
+        }
 
-                    onToggled: {
-                        beamsPageModel.useWideBeams.value = modelData.value
+        RowLayout {
+            ItemWithTitle {
+                Layout.fillWidth: true
+                title: qsTrc("notation", "Beam thickness")
+
+                IncrementalPropertyControl {
+                    Layout.preferredWidth: 106
+
+                    currentValue: beamsPageModel.beamWidth.value
+
+                    minValue: 0
+                    maxValue: 99
+                    step: 0.01
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
+
+                    onValueEdited: function(newValue) {
+                        beamsPageModel.beamWidth.value = newValue
                     }
                 }
             }
-        }
-
-        ItemWithTitle {
-            Layout.fillWidth: true
-            title: qsTrc("notation", "Beam thickness")
-
-            IncrementalPropertyControl {
-                Layout.preferredWidth: 106
-
-                currentValue: beamsPageModel.beamWidth.value
-
-                minValue: 0
-                maxValue: 99
-                step: 0.01
-                decimals: 2
-                measureUnitsSymbol: qsTrc("global", "sp")
-
-                onValueEdited: function(newValue) {
-                    beamsPageModel.beamWidth.value = newValue
-                }
+            FlatButton {
+                icon: IconCode.UNDO
+                enabled: !beamsPageModel.beamWidth.isDefault
+                onClicked: beamsPageModel.beamWidth.value = beamsPageModel.beamWidth.defaultValue
             }
         }
 
-        ItemWithTitle {
-            Layout.fillWidth: true
-            title: qsTrc("notation", "Broken beam minimum length")
+        RowLayout {
+            ItemWithTitle {
+                Layout.fillWidth: true
+                title: qsTrc("notation", "Broken beam minimum length")
 
-            IncrementalPropertyControl {
-                Layout.preferredWidth: 106
+                IncrementalPropertyControl {
+                    Layout.preferredWidth: 106
 
-                currentValue: beamsPageModel.beamMinLen.value
+                    currentValue: beamsPageModel.beamMinLen.value
 
-                minValue: 0
-                maxValue: 99
-                step: 0.05
-                decimals: 2
-                measureUnitsSymbol: qsTrc("global", "sp")
+                    minValue: 0
+                    maxValue: 99
+                    step: 0.05
+                    decimals: 2
+                    measureUnitsSymbol: qsTrc("global", "sp")
 
-                onValueEdited: function(newValue) {
-                    beamsPageModel.beamMinLen.value = newValue
+                    onValueEdited: function(newValue) {
+                        beamsPageModel.beamMinLen.value = newValue
+                    }
                 }
+            }
+            FlatButton {
+                icon: IconCode.UNDO
+                enabled: !beamsPageModel.beamMinLen.isDefault
+                onClicked: beamsPageModel.beamMinLen.value = beamsPageModel.beamMinLen.defaultValue
             }
         }
 
-        CheckBox {
+        RowLayout {
+            spacing: 6
             Layout.fillWidth: true
-            text: qsTrc("notation", "Flatten all beams")
-            checked: beamsPageModel.beamNoSlope.value
-            onClicked: {
-                beamsPageModel.beamNoSlope.value = !checked
+            CheckBox {
+                Layout.fillWidth: true
+                text: qsTrc("notation", "Flatten all beams")
+                checked: beamsPageModel.beamNoSlope.value
+                onClicked: {
+                    beamsPageModel.beamNoSlope.value = !checked
+                }
+            }
+            FlatButton {
+                Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                icon: IconCode.UNDO
+                enabled: !beamsPageModel.beamNoSlope.isDefault
+                onClicked: beamsPageModel.beamNoSlope.value = beamsPageModel.beamNoSlope.defaultValue
             }
         }
 
@@ -181,6 +212,12 @@ StyledFlickable {
                     forceHeight: 52
                     verticalPadding: 12
                     source: beamsPageModel.frenchStyleBeams.value ? "beamImages/beam_style_french.svg" : "beamImages/beam_style_regular.svg"
+                }
+
+                FlatButton {
+                    icon: IconCode.UNDO
+                    enabled: !beamsPageModel.frenchStyleBeams.isDefault
+                    onClicked: beamsPageModel.frenchStyleBeams.value = beamsPageModel.frenchStyleBeams.defaultValue
                 }
             }
         }

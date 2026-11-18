@@ -364,11 +364,12 @@ void EditStyle::classBegin()
 
     styleWidgets = {
         //   idx                --- showPercent      --- widget          --- resetButton
-        { StyleId::figuredBassAlignment,    false, fbAlign,                 0 },
-        { StyleId::figuredBassStyle,        false, fbStyle,                 0 },
-        { StyleId::figuredBassFontSize,     false, doubleSpinFBSize,        0 },
-        { StyleId::figuredBassYOffset,      false, doubleSpinFBVertPos,     0 },
-        { StyleId::figuredBassLineHeight,   true,  spinFBLineHeight,        0 },
+        { StyleId::figuredBassAlignment,    false, fbAlign,                 resetFbAlign },
+        { StyleId::figuredBassStyle,        false, fbStyle,                 resetFbStyle },
+        { StyleId::figuredBassFontSize,     false, doubleSpinFBSize,        resetDoubleSpinFBSize },
+        { StyleId::figuredBassYOffset,      false, doubleSpinFBVertPos,     resetDoubleSpinFBVertPos },
+        { StyleId::figuredBassLineHeight,   true,  spinFBLineHeight,        resetSpinFBLineHeight },
+        { StyleId::figuredBassFontFamily,   false, comboFBFont,             resetComboFBFont },
         { StyleId::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
         { StyleId::ottavaDashLineLen,       false, ottavaLineStyleDashSize, resetOttavaLineStyleDashSize },
         { StyleId::ottavaDashGapLen,        false, ottavaLineStyleGapSize,  resetOttavaLineStyleGapSize },
