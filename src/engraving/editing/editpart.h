@@ -307,6 +307,8 @@ public:
     static void reorderStaves(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
 
     static void moveParts(Transaction& tx, Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
+
+    static void movePartsToSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts, SharedPart* sharedPart);
     static void moveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff,
                            bool insertAfter);
 

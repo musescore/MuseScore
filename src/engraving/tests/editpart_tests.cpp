@@ -1412,6 +1412,47 @@ TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DetectsSplitSharedPart)
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
+{
+    // [GIVEN] Flute, piano, flute and oboe, the first flute in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"piano", u"flute", u"oboe" });
+    ASSERT_EQ(score->parts().size(), 4u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    Part* flute2 = score->parts().at(2);
+    Part* oboe = score->parts().at(3);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2, oboe }));
+
+    // [WHEN] The oboe and the second flute are moved to the shared part, along with the shared part and its member
+    edit(score, [score, sharedPart, flute1, flute2, oboe](Transaction& tx) {
+        EditPart::movePartsToSharedPart(tx, score, { oboe, sharedPart, flute2, flute1 }, sharedPart);
+    });
+
+    // [THEN] The second flute and the oboe are after the first flute, in score order, and in the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, oboe, piano }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2, oboe }));
+    EXPECT_EQ(sharedPart->nstaves(), 3u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2, oboe }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_FALSE(oboe->sharedPart());
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, ReorderStavesChangesScore_DetectsOrderChange)
 {
     // [GIVEN] Flute and piano
