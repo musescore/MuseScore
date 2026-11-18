@@ -27,6 +27,8 @@
 #include "propertiespanelabstractmodel.h"
 #include "notation/notationtypes.h"
 
+#include "rcommand/icommanddispatcher.h"
+
 namespace mu::propertiespanel {
 class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
 {
@@ -45,14 +47,17 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
 
     Q_PROPERTY(bool allSystemsAreLocked READ allSystemsAreLocked NOTIFY allSystemsAreLockedChanged)
     Q_PROPERTY(bool allPagesAreLocked READ allPagesAreLocked NOTIFY allPagesAreLockedChanged)
-    Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
     Q_PROPERTY(bool isBoxOnlySelection READ isBoxOnlySelection NOTIFY isBoxOnlySelectionChanged)
+    Q_PROPERTY(bool isSystemLayoutAvailable READ isSystemLayoutAvailable NOTIFY isSystemLayoutAvailableChanged)
+    Q_PROPERTY(bool isPageLayoutAvailable READ isPageLayoutAvailable NOTIFY isPageLayoutAvailableChanged)
     Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
     Q_PROPERTY(bool isMakeIntoPageAvailable READ isMakeIntoPageAvailable NOTIFY isMakeIntoPageAvailableChanged)
     Q_PROPERTY(bool isSystemTabAvailable READ isSystemTabAvailable NOTIFY isSystemTabAvailableChanged)
 
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
+
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
 
 public:
     explicit SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
@@ -87,8 +92,11 @@ public:
     Q_INVOKABLE void makeIntoPage();
     QString shortcutMakeIntoPage() const;
 
-    bool scoreIsInPageView() const;
     bool isBoxOnlySelection() const;
+    Q_INVOKABLE void switchToPageView();
+
+    bool isSystemLayoutAvailable() const;
+    bool isPageLayoutAvailable() const;
     bool isMakeIntoSystemAvailable() const;
     bool isMakeIntoPageAvailable() const;
     bool isSystemTabAvailable() const;
@@ -102,7 +110,6 @@ protected:
 private:
     void updateAllSystemsAreLocked();
     void updateAllPagesAreLocked();
-    void updateScoreIsInPageView();
     void updateIsBoxOnlySelection(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsMakeIntoSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsMakeIntoPageAvailable(const QSet<mu::notation::BoxType>& boxTypes);
@@ -110,14 +117,16 @@ private:
 
     QSet<mu::notation::BoxType> boxTypesInSelection() const;
 
+    void updateLayoutAvailability();
     void updateSystemCount();
     void updatePageCount();
 
 signals:
     void allSystemsAreLockedChanged(bool allLocked);
     void allPagesAreLockedChanged(bool allLocked);
-    void scoreIsInPageViewChanged(bool isInPageView);
     void isBoxOnlySelectionChanged(bool isBoxOnlySelection);
+    void isSystemLayoutAvailableChanged(bool available);
+    void isPageLayoutAvailableChanged(bool available);
     void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
     void isMakeIntoPageAvailableChanged(bool isMakeIntoPageAvailable);
     void isSystemTabAvailableChanged(bool isSystemTabAvailable);
@@ -127,8 +136,9 @@ signals:
 private:
     bool m_allSystemsAreLocked = false;
     bool m_allPagesAreLocked = false;
-    bool m_scoreIsInPageView = false;
     bool m_isBoxOnlySelection = false;
+    bool m_isSystemLayoutAvailable = false;
+    bool m_isPageLayoutAvailable = false;
     bool m_isMakeIntoSystemAvailable = false;
     bool m_isMakeIntoPageAvailable = false;
     bool m_isSystemTabAvailable = false;

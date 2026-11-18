@@ -34,6 +34,7 @@
 #include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
+#include "notationscene/notationmenus.h"
 
 #include "appshell/appshellcommands.h"
 #include "project/projectcommands.h"
@@ -655,18 +656,7 @@ MenuItemList AppMenuModel::makeTupletsItems()
 
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
-    MenuItemList items {
-        makeMenuItem(InsertMeasureCommand::id),
-        makeMenuItem(AppendMeasureCommand::id),
-        makeSeparator(),
-        makeMenuItem(InsertMeasuresCommand::id),
-        makeMenuItem(InsertMeasuresAfterSelectionCommand::id),
-        makeSeparator(),
-        makeMenuItem(InsertMeasuresAtStartOfScoreCommand::id),
-        makeMenuItem(AppendMeasuresCommand::id)
-    };
-
-    return items;
+    return makeItems(MEASURES_MENU_COMMANDS);
 }
 
 MenuItemList AppMenuModel::makeFramesItems()

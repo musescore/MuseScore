@@ -39,7 +39,38 @@ PropertiesPanelSection {
 
     readonly property bool isSystemTabAvailable: root.model ? root.model.isSystemTabAvailable : false
 
-    implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : 0
+    implicitHeight: contentColumn.visible ? contentColumn.implicitHeight : switchToPageViewColumn.implicitHeight
+
+    Column {
+        id: switchToPageViewColumn
+
+        width: parent.width
+        spacing: 12
+
+        visible: !contentColumn.visible
+
+        StyledTextLabel {
+            width: parent.width
+
+            text: qsTrc("propertiespanel", "System and page layout options are available in page view.")
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "SwitchToPageView"
+            navigation.row: root.navigationRowStart + 1
+
+            text: qsTrc("propertiespanel", "Switch to page view")
+
+            onClicked: {
+                root.model.switchToPageView()
+            }
+        }
+    }
 
     Column {
         id: contentColumn
@@ -47,7 +78,7 @@ PropertiesPanelSection {
         width: parent.width
         spacing: 12
 
-        visible: root.model ? root.model.scoreIsInPageView : false
+        visible: root.model ? root.model.isSystemLayoutAvailable : false
 
         PropertiesPanelTabBar {
             id: tabBar
@@ -119,6 +150,7 @@ PropertiesPanelSection {
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
                 makeIntoNavigationName: "MakeSystem"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoSystemAvailable : false
+                isLockAndMoveAvailable: root.model ? root.model.isSystemLayoutAvailable : false
 
                 controller: ({
                     movePrevious: () => root.model.moveMeasureUpSystem(),
@@ -163,6 +195,7 @@ PropertiesPanelSection {
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoPage : ""
                 makeIntoNavigationName: "MakePage"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoPageAvailable : false
+                isLockAndMoveAvailable: root.model ? root.model.isPageLayoutAvailable : false
 
                 controller: ({
                     movePrevious: () => root.model.moveSystemUpPage(),

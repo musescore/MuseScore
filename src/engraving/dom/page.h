@@ -99,6 +99,7 @@ public:
     void setFooterText(int index, Text* t) { m_footerTexts.at(index) = t; }
 
     bool isLocked() const;
+    static bool allLocked(const std::vector<Page*>& pages);
     const RangeLock* pageLock() const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

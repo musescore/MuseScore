@@ -22,6 +22,8 @@
 
 #include "breaksdialog.h"
 
+#include "notationcommands.h"
+
 #include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
@@ -38,6 +40,7 @@ BreaksDialog::BreaksDialog(QWidget* parent)
     : muse::ui::WidgetDialog(parent)
 {
     setupUi(this);
+    setWindowTitle(commandsRegister()->commandInfo(OPEN_BREAKS_COMMAND).description.qTranslated());
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     intervalButton->setChecked(true);
     intervalBox->setValue(DEFAULT_INTERVAL);
