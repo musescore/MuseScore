@@ -1578,7 +1578,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         String newText = xmlText();
         if (newText != curText) {
             FretDiagram* fretDiagram = ownershipParent()->isFretDiagram() ? toFretDiagram(ownershipParent()) : nullptr;
-            if (fretDiagram && !fretDiagram->isCustom(curText) && configuration()->autoUpdateFretboardDiagrams()) {
+            if (fretDiagram && !fretDiagram->isCustom(plainText()) && configuration()->autoUpdateFretboardDiagrams()) {
                 fretDiagram->updateDiagram(plainText());
             }
             score()->rebuildFretBox();
