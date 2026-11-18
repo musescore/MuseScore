@@ -1810,6 +1810,40 @@ TEST_F(Engraving_TupletTests, pendingTupletUndoAfterEscape)
     }
 }
 
+TEST_F(Engraving_TupletTests, pendingTupletUndoAfterCancelAndRedo)
+{
+    for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {
+        MasterScore* score = pendingTupletScore(method);
+        ASSERT_TRUE(score);
+        InputState& is = score->inputState();
+
+        setPendingTriplet(score, true);
+        pressDuration(score, DurationType::V_EIGHTH);
+        score->undoRedo(true, nullptr);
+        ASSERT_TRUE(is.pendingTupletHere());
+
+        // the next undo only cancels the wait
+        is.setPendingTuplet(std::nullopt);
+
+        // after a redo, undo brings the wait back
+        score->undoRedo(false, nullptr);
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "3:2[8 r8 r8] r4 r2");
+        score->undoRedo(true, nullptr);
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "R");
+        EXPECT_TRUE(is.pendingTupletHere());
+
+        // but not after Escape
+        is.forgetPendingTuplets();
+        is.setPendingTuplet(std::nullopt);
+        score->undoRedo(false, nullptr);
+        score->undoRedo(true, nullptr);
+        EXPECT_EQ(rhythm(measureAt(score, 0)), "R");
+        EXPECT_FALSE(is.pendingTuplet());
+
+        delete score;
+    }
+}
+
 // like a tuplet command in By duration or Rhythm input, for any ratio
 static void setPendingTuplet(Score* score, const Fraction& ratio, bool durationAsSubdivision)
 {

@@ -161,6 +161,7 @@ public:
     std::optional<voice_idx_t> otherDrumVoice() const;
     void forgetPendingTuplets();
     void restoreFromUndoStack(const InputState& state);
+    void keepPendingTupletFrom(const InputState& state);
 
     void update(Selection& selection);
     void moveInputPos(EngravingItem* e);

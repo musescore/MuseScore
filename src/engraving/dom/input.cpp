@@ -245,6 +245,23 @@ void InputState::restoreFromUndoStack(const InputState& state)
     }
 }
 
+//---------------------------------------------------------
+//   keepPendingTupletFrom
+//    The tuplet that waited at the input position in a
+//    state saved with an undo step, if none waits now
+//---------------------------------------------------------
+
+void InputState::keepPendingTupletFrom(const InputState& state)
+{
+    if (m_pendingTuplet || !state.m_pendingTuplet) {
+        return;
+    }
+    m_pendingTuplet = state.m_pendingTuplet;
+    if (!pendingTupletHere()) {
+        m_pendingTuplet = std::nullopt;
+    }
+}
+
 void InputState::setVoice(voice_idx_t v)
 {
     const Score* score = m_segment ? m_segment->score() : nullptr;
