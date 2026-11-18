@@ -631,6 +631,10 @@ bool EditPart::isValidPartsLayout(const PartsLayout& layout)
         if (placement.sharedPart != openSharedPart) {
             return false;
         }
+
+        if (changesSharedPart(placement) && !EditStaveSharing::canShareStaves(placement.part)) {
+            return false;
+        }
     }
 
     return true;
@@ -844,7 +848,7 @@ void EditPart::movePartsToSharedPart(Transaction& tx, Score* score, const std::v
 
         if (part->sharedPart() == sharedPart) {
             lastMember = part;
-        } else if (muse::contains(parts, part)) {
+        } else if (muse::contains(parts, part) && EditStaveSharing::canShareStaves(part)) {
             movingParts.push_back(part);
         }
     }
@@ -868,7 +872,7 @@ SharedPart* EditPart::movePartsToNewSharedPart(Transaction& tx, Score* score, co
 
     std::vector<Part*> movingParts;
     for (Part* part : score->parts()) {
-        if (!part->isSharedPart() && muse::contains(parts, part)) {
+        if (muse::contains(parts, part) && EditStaveSharing::canShareStaves(part)) {
             movingParts.push_back(part);
         }
     }

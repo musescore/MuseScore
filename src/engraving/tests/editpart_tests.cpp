@@ -1481,6 +1481,29 @@ TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DetectsSplitSharedPart)
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, IsValidPartsLayout_MultiStaffJoin_ReturnsFalse)
+{
+    // [GIVEN] Flute in a shared part, and piano
+    MasterScore* score = createMasterScore({ u"flute", u"piano" });
+    ASSERT_EQ(score->parts().size(), 2u);
+
+    Part* flute = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    ASSERT_EQ(piano->nstaves(), 2u);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The piano joins the shared part after the flute
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute, sharedPart }, { piano, sharedPart } }, {} }));
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
 {
     // [GIVEN] Flute, piano, flute and oboe, the first flute in a shared part
@@ -1518,6 +1541,37 @@ TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
     EXPECT_FALSE(flute2->sharedPart());
     EXPECT_FALSE(oboe->sharedPart());
     EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MultiStaff_SkipsPart)
+{
+    // [GIVEN] Flute, piano and flute, the first flute in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"piano", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    Part* flute2 = score->parts().at(2);
+    ASSERT_EQ(piano->nstaves(), 2u);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The piano and the second flute are moved to the shared part
+    edit(score, [score, sharedPart, piano, flute2](Transaction& tx) {
+        EditPart::movePartsToSharedPart(tx, score, { piano, flute2 }, sharedPart);
+    });
+
+    // [THEN] Only the second flute joins the shared part, the piano stays out of it
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2 }));
+    EXPECT_FALSE(piano->sharedPart());
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
 
     delete score;
 }

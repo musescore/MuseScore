@@ -79,6 +79,7 @@ public:
     static SharedPart* createSharedPart(Transaction& tx, const std::vector<Part*>& parts);
     //! Applies the change, then removes the shared parts left empty
     static void changeSharedParts(Transaction& tx, Score* score, const SharedPartsChange& change);
+    static bool canShareStaves(const Part* part);
     //! Applies remap to every custom voice map; nidx for an origin track drops that entry, for a shared track resets the map to the default
     static void remapUserTrackMaps(Transaction& tx, Score* score, const std::function<track_idx_t(track_idx_t)>& remap);
 
