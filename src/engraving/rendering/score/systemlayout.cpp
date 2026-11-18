@@ -1269,10 +1269,17 @@ void SystemLayout::refineBeamedRestSpacing(System* system, LayoutContext& ctx, d
         if (shouldBeJustified(system, width, targetSystemWidth, ctx)) {
             HorizontalSpacing::justifySystem(system, width, targetSystemWidth);
         }
+        bool createBrackets = false;
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 MeasureLayout::layoutMeasureElements(toMeasure(mb), ctx);
                 MeasureLayout::layoutStaffLines(toMeasure(mb), ctx);
+                if (createBrackets) {
+                    SystemHeaderLayout::addBrackets(system, toMeasure(mb), ctx);
+                    createBrackets = false;
+                }
+            } else if (mb->isHBox()) {
+                createBrackets = toHBox(mb)->createSystemHeader();
             }
         }
         // All beams need the new horizontal coordinates, including beams without rests.
