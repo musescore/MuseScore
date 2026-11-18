@@ -734,7 +734,7 @@ bool StaveSharingLayout::checkClefKeyTimeSigForSameVoice(track_idx_t prevTrack, 
         }
     }
 
-    for (const Measure* m = ctx.crSegments.front()->measure(); m && m->tick() < ctx.eTick; m = m->nextMeasure()) {
+    for (const Measure* m = ctx.score->tick2measure(ctx.sTick); m && m->tick() < ctx.eTick; m = m->nextMeasure()) {
         const TimeSig* prevStaffTimeSig = prevStaff->timeSig(m->tick());
         const TimeSig* nextStaffTimeSig = nextStaff->timeSig(m->tick());
         if (prevStaffTimeSig && nextStaffTimeSig && *prevStaffTimeSig != *nextStaffTimeSig) {
