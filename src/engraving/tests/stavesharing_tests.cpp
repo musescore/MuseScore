@@ -42,6 +42,8 @@
 #include "engraving/editing/splitjoinmeasure.h"
 #include "engraving/editing/transaction/transaction.h"
 
+#include "global/async/asyncable.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -49,7 +51,7 @@ using namespace mu::engraving;
 
 static const String STAVE_SHARING_DIR(u"stavesharing_data/");
 
-class Engraving_StaveSharingTests : public ::testing::Test
+class Engraving_StaveSharingTests : public ::testing::Test, public muse::async::Asyncable
 {
 };
 
@@ -1260,22 +1262,32 @@ TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_Join)
     });
     ASSERT_TRUE(sharedPart);
 
+    ElementTypeSet changedTypes;
+    score->changesChannel().onReceive(this, [&changedTypes](const ScoreChanges& changes) {
+        changedTypes = changes.changedTypes;
+    });
+
     // [WHEN] The second flute is added to it
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
         EditStaveSharing::changeSharedParts(tx, score, SharedPartsChange().join({ flute2 }, sharedPart));
     });
 
-    // [THEN] Both flutes are in it, one staff each
+    // [THEN] Both flutes are in it, one staff each, and the changes include the shared part and the flute
     EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
     EXPECT_EQ(sharedPart->nstaves(), 2);
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::SHARED_PART));
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::PART));
 
     // [WHEN] It's undone
+    changedTypes.clear();
     score->undoRedo(true, nullptr);
 
-    // [THEN] Only the first flute is in it
+    // [THEN] Only the first flute is in it, and the changes include the shared part and the flute
     EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1 }));
     EXPECT_FALSE(flute2->sharedPart());
     EXPECT_EQ(sharedPart->nstaves(), 1);
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::SHARED_PART));
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::PART));
 
     delete score;
 }
@@ -1328,22 +1340,32 @@ TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_Leave)
     Part* flute1 = originParts.at(0);
     Part* flute2 = originParts.at(1);
 
+    ElementTypeSet changedTypes;
+    score->changesChannel().onReceive(this, [&changedTypes](const ScoreChanges& changes) {
+        changedTypes = changes.changedTypes;
+    });
+
     // [WHEN] The first flute leaves it
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Remove from shared part"), [&](Transaction& tx) {
         EditStaveSharing::changeSharedParts(tx, score, SharedPartsChange().leave({ flute1 }));
     });
 
-    // [THEN] Only the second flute is in it, with one staff
+    // [THEN] Only the second flute is in it, with one staff, and the changes include the shared part and the flute
     EXPECT_FALSE(flute1->sharedPart());
     EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute2 }));
     EXPECT_EQ(sharedPart->nstaves(), 1);
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::SHARED_PART));
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::PART));
 
     // [WHEN] It's undone
+    changedTypes.clear();
     score->undoRedo(true, nullptr);
 
-    // [THEN] Both flutes are back in the shared part, with two staves
+    // [THEN] Both flutes are back in the shared part, with two staves, and the changes include the shared part and the flute
     EXPECT_TRUE(checkSharedPartExist(sharedPart, { flute1, flute2 }));
     EXPECT_EQ(sharedPart->nstaves(), 2);
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::SHARED_PART));
+    EXPECT_TRUE(muse::contains(changedTypes, ElementType::PART));
 
     delete score;
 }

@@ -68,6 +68,7 @@ public:
 
     UNDO_TYPE(CommandType::ConnectSharedPart)
     UNDO_NAME("Connect shared part")
+    UNDO_CHANGED_OBJECTS({ sharedPart, originPart })
 };
 
 class DisconnectSharedPart : public UndoableCommand
@@ -93,6 +94,7 @@ public:
 
     UNDO_TYPE(CommandType::DisconnectSharedPart)
     UNDO_NAME("Disconnect shared part")
+    UNDO_CHANGED_OBJECTS({ sharedPart, originPart })
 };
 
 class EditStaveSharingState : public UndoableCommand
