@@ -136,7 +136,7 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
         }
     }
     if (needsUpdate) {
-        Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
+        Fraction tickEnd = Fraction::fromTicks(ostaff->keyList().nextKeyTick(tick.ticks()));
         Transpose::transpositionChanged(tx, score, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }

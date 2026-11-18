@@ -2398,10 +2398,10 @@ KeyList Score::keyList() const
     bool isFirstStaff = true;
     for (Staff* s : masterScore()->staves()) {
         if (!s->isDrumStaff(Fraction(0, 1))) {
-            KeyList* km = s->keyList();
+            const KeyList& km = s->keyList();
             if (isFirstStaff) {
                 isFirstStaff = false;
-                tmpKeymap.insert(km->begin(), km->end());
+                tmpKeymap.insert(km.begin(), km.end());
                 firstStaff = s;
                 continue;
             }
@@ -2409,23 +2409,23 @@ KeyList Score::keyList() const
             // in terms of ticks, tmpKeymap = intersection(tmpKeymap, km)
             // note that if every single staff has a custom local keysig on this tick,
             // we will just copy the one from the top staff.
-            auto currKey = km->begin();
+            auto currKey = km.begin();
             KeyList kl;
             for (auto key : tmpKeymap) {
                 if (key.first < (*currKey).first) {
                     continue;
                 }
-                while ((*currKey).first < key.first && currKey != km->end()) {
+                while ((*currKey).first < key.first && currKey != km.end()) {
                     currKey++;
                 }
-                if (currKey == km->end()) {
+                if (currKey == km.end()) {
                     break;
                 }
                 if (key.first == (*currKey).first) {
                     // there is a matching key sig on this staff
                     ++currKey;
                     kl.insert(key);
-                    if (currKey == km->end()) {
+                    if (currKey == km.end()) {
                         break;
                     }
                 }

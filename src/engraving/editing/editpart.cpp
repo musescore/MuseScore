@@ -1208,7 +1208,7 @@ void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, 
 
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
     Staff* lastStaff = staffLocalIndex > 0 ? destinationPart->staff(staffLocalIndex - 1) : nullptr;
-    KeyList keyList = lastStaff ? *lastStaff->keyList() : score->keyList();
+    KeyList keyList = lastStaff ? lastStaff->keyList() : score->keyList();
 
     staff->setScore(score);
     staff->setPart(destinationPart);

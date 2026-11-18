@@ -219,8 +219,8 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
 
     // Ensure all key sigs that may have been in the template file are cleared
     for (Staff* staff : masterScore->staves()) {
-        KeyList* keys = staff->keyList();
-        keys->clear();
+        KeyList& keys = staff->keyList();
+        keys.clear();
     }
 
     const int totalMeasures = scoreOptions.withPickupMeasure ? scoreOptions.totalMeasures + 1 : scoreOptions.totalMeasures;

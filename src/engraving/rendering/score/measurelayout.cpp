@@ -1959,7 +1959,7 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         if (seg->isKeySigType()) {
             bool keySigChangeHappensHere = false;
             for (Staff* staff : m->score()->staves()) {
-                if (staff->keyList()->count(m->tick().ticks()) > 0) {
+                if (staff->keyList().count(m->tick().ticks()) > 0) {
                     keySigChangeHappensHere = true;
                     break;
                 }

@@ -4111,7 +4111,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
-        TRead::read(s->keyList(), e, ctx);
+        TRead::read(&s->keyList(), e, ctx);
     } else if (tag == "bracket") { // LEGACY
         Color color = Color::fromString(e.attribute("color"));
         int col = e.intAttribute("col", -1);

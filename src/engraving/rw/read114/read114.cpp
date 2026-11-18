@@ -2398,7 +2398,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
                 staff->clefList().insert(std::pair<int, ClefType>(0, ClefType::G));
             }
         } else if (tag == "keylist") {
-            read400::TRead::read(staff->keyList(), e, ctx);
+            read400::TRead::read(&staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
             size_t col = ctx.score()->brackets(staff->idx()).size();
             EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
@@ -2963,8 +2963,8 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
 
         // create missing KeySig
-        KeyList* km = s->keyList();
-        for (auto i = km->begin(); i != km->end(); ++i) {
+        const KeyList& km = s->keyList();
+        for (auto i = km.begin(); i != km.end(); ++i) {
             Fraction tick = Fraction::fromTicks(i->first);
             if (tick < Fraction(0, 1)) {
                 LOGD("read114: Key tick %d", tick.ticks());

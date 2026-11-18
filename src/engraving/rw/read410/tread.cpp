@@ -3841,7 +3841,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
-        TRead::read(s->keyList(), e, ctx);
+        TRead::read(&s->keyList(), e, ctx);
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {

@@ -81,6 +81,7 @@ public:
     Part* originPart(const Fraction& tick) const;
 
     ClefList& clefList() { return m_clefs; }
+    const ClefList& clefList() const { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
     ClefTypeList defaultClefType() const { return m_defaultClefType; }
     void setDefaultClefType(const ClefTypeList& l) { m_defaultClefType = l; }
@@ -105,7 +106,8 @@ public:
 
     Interval transpose(const Fraction& tick) const;
 
-    KeyList* keyList() { return &m_keys; }
+    KeyList& keyList() { return m_keys; }
+    const KeyList& keyList() const { return m_keys; }
     Key key(const Fraction& tick) const { return keySigEvent(tick).key(); }
     Key concertKey(const Fraction& tick) const { return keySigEvent(tick).concertKey(); }
     KeySigEvent keySigEvent(const Fraction&) const;
