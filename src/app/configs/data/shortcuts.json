@@ -298,7 +298,7 @@
       "shortcuts": [
         {"command": "command://notation/move-measure-to-prev-system",  "sequences": ["Alt+Up"]},
         {"command": "command://notation/move-measure-to-next-system",  "sequences": ["Alt+Down"]},
-        {"command": "command://notation/add-beam-selected-range",  "sequences": ["Alt+="]}
+        {"command": "command://notation/set-beam/selected-range",  "sequences": ["Alt+="]}
       ]
     },
     {

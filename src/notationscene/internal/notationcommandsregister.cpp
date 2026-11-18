@@ -263,13 +263,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddLyricsCommand>(),
     makeCommandInfo<AddTempoCommand>(),
 
-    makeCommandInfo<AddBeamCommand>(),
-    makeCommandInfo<AddBeamAutoCommand>(),
-    makeCommandInfo<AddBeamNoneCommand>(),
-    makeCommandInfo<AddBeamBeginCommand>(),
-    makeCommandInfo<AddBeamBegin16Command>(),
-    makeCommandInfo<AddBeamBegin32Command>(),
-    makeCommandInfo<AddBeamMidCommand>(),
+    makeCommandInfo<SetBeamCommand>(),
+    makeCommandInfo<SetBeamAutoCommand>(),
+    makeCommandInfo<SetBeamNoneCommand>(),
+    makeCommandInfo<SetBeamBeginCommand>(),
+    makeCommandInfo<SetBeamBegin16Command>(),
+    makeCommandInfo<SetBeamBegin32Command>(),
+    makeCommandInfo<SetBeamMidCommand>(),
 
     makeCommandInfo<AddOrnamentCommand>(),
     makeCommandInfo<AddOrnamentTurnCommand>(),
@@ -1052,13 +1052,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ADD_BEAM_SELECTED_RANGE_COMMAND,
-        TranslatableString("action", "Beam selected range"),
-        TranslatableString("action", "Beam selected range"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<SetBeamSelectedRangeCommand>(),
 
     // add brackets commands
     CommandInfo{

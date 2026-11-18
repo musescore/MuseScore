@@ -1875,73 +1875,80 @@ struct AddTempoCommand {
     cprop_decl redirect = AddTextCommand(TextStyleType::TEMPO);
 };
 
-struct AddBeamCommand {
-    cprop_decl id = Command("command://notation/add-beam");
-    cprop_decl title = MnemonicString("action", "Add beam");
-    cprop_decl description = TranslatableString("action", "Add beam");
+struct SetBeamCommand {
+    cprop_decl id = Command("command://notation/set-beam");
+    cprop_decl title = MnemonicString("action", "Set beam");
+    cprop_decl description = TranslatableString("action", "Set beam by mode");
     cprop_decl availabilities = Availability::API;
 
     BeamMode mode = BeamMode::AUTO;
 
     cprop_decl input = FieldsScheme {
-        Field{ "mode", &AddBeamCommand::mode, "Beam mode" },
+        Field{ "mode", &SetBeamCommand::mode, "Beam mode" },
     };
 };
 
 // aliases for add beam command
 
-struct AddBeamAutoCommand {
-    cprop_decl id = Command("command://notation/add-beam/auto");
+struct SetBeamAutoCommand {
+    cprop_decl id = Command("command://notation/set-beam/auto");
     cprop_decl title = MnemonicString("action", "Auto beam");
     cprop_decl description = TranslatableString("action", "Add beam: auto");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::AUTO_TEXT);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::AUTO);
+    cprop_decl redirect = SetBeamCommand(BeamMode::AUTO);
 };
 
-struct AddBeamNoneCommand {
-    cprop_decl id = Command("command://notation/add-beam/none");
+struct SetBeamNoneCommand {
+    cprop_decl id = Command("command://notation/set-beam/none");
     cprop_decl title = MnemonicString("action", "No beam");
     cprop_decl description = TranslatableString("action", "Add beam: none");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_NONE);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::NONE);
+    cprop_decl redirect = SetBeamCommand(BeamMode::NONE);
 };
 
-struct AddBeamBeginCommand {
-    cprop_decl id = Command("command://notation/add-beam/begin");
+struct SetBeamBeginCommand {
+    cprop_decl id = Command("command://notation/set-beam/begin");
     cprop_decl title = MnemonicString("action", "Break beam left");
     cprop_decl description = TranslatableString("action", "Break beam left");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_LEFT);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN);
+    cprop_decl redirect = SetBeamCommand(BeamMode::BEGIN);
 };
 
-struct AddBeamBegin16Command {
-    cprop_decl id = Command("command://notation/add-beam/begin16");
+struct SetBeamBegin16Command {
+    cprop_decl id = Command("command://notation/set-beam/begin16");
     cprop_decl title = MnemonicString("action", "Break inner beams (8th)");
     cprop_decl description = TranslatableString("action", "Break inner beams (eighth)");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_INNER_8TH);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN16);
+    cprop_decl redirect = SetBeamCommand(BeamMode::BEGIN16);
 };
 
-struct AddBeamBegin32Command {
-    cprop_decl id = Command("command://notation/add-beam/begin32");
+struct SetBeamBegin32Command {
+    cprop_decl id = Command("command://notation/set-beam/begin32");
     cprop_decl title = MnemonicString("action", "Break inner beams (16th)");
     cprop_decl description = TranslatableString("action", "Break inner beams (16th)");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_BREAK_INNER_16TH);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::BEGIN32);
+    cprop_decl redirect = SetBeamCommand(BeamMode::BEGIN32);
 };
 
-struct AddBeamMidCommand {
-    cprop_decl id = Command("command://notation/add-beam/mid");
+struct SetBeamMidCommand {
+    cprop_decl id = Command("command://notation/set-beam/mid");
     cprop_decl title = MnemonicString("action", "Join beams");
     cprop_decl description = TranslatableString("action", "Join beams");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BEAM_JOIN);
     cprop_decl availabilities = Availability::UI;
-    cprop_decl redirect = AddBeamCommand(BeamMode::MID);
+    cprop_decl redirect = SetBeamCommand(BeamMode::MID);
+};
+
+struct SetBeamSelectedRangeCommand {
+    cprop_decl id = Command("command://notation/set-beam/selected-range");
+    cprop_decl title = MnemonicString("action", "Beam selected range");
+    cprop_decl description = TranslatableString("action", "Beam selected range");
+    cprop_decl availabilities = Availability::All;
 };
 
 struct AddOrnamentCommand {
@@ -2301,24 +2308,6 @@ struct EditTextAdvance64Command {
     cprop_decl availabilities = Availability::UI;
     cprop_decl redirect = EditTextAdvanceCommand(DurationType::V_64TH);
 };
-}
-
-namespace mu::notation {
-// text navigation commands
-inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
-inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("command://notation/edittext-next-element");
-inline static const muse::rcommand::Command EDITTEXT_PREV_ELEMENT_COMMAND("command://notation/edittext-prev-element");
-inline static const muse::rcommand::Command EDITTEXT_NEXT_BEAT_COMMAND("command://notation/edittext-next-beat");
-inline static const muse::rcommand::Command EDITTEXT_PREV_BEAT_COMMAND("command://notation/edittext-prev-beat");
-
-// lyrics editing commands
-inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
-inline static const muse::rcommand::Command EDITLYRIC_PREV_VERSE_COMMAND("command://notation/editlyrics-prev-verse");
-inline static const muse::rcommand::Command EDITLYRIC_NEXT_SYLLABLE_COMMAND("command://notation/editlyrics-next-syllable");
-inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
-inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
-
-// text editing commands
 
 struct EditTextFontStyleCommand {
     cprop_decl id = Command("command://notation/edittext/fontstyle");
@@ -2367,11 +2356,6 @@ struct EditTextStrikeCommand {
     cprop_decl redirect = EditTextFontStyleCommand(FontStyle::Strike);
 };
 
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_BOLD_COMMAND = EditTextBoldCommand::id;
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_ITALIC_COMMAND = EditTextItalicCommand::id;
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_UNDERLINE_COMMAND = EditTextUnderlineCommand::id;
-inline static const muse::rcommand::Command EDITTEXT_TOGGLE_STRIKE_COMMAND = EditTextStrikeCommand::id;
-
 struct EditTextValignCommand {
     cprop_decl id = Command("command://notation/edittext/valign");
     cprop_decl title = MnemonicString("action", "Toggle vertical alignment");
@@ -2383,10 +2367,6 @@ struct EditTextValignCommand {
     cprop_decl input = FieldsScheme {
         Field{ "align", &EditTextValignCommand::align, "Vertical alignment" },
     };
-
-    EditTextValignCommand() = default;
-    EditTextValignCommand(VerticalAlignment align)
-        : align(align) {}
 };
 
 // aliases for edittext valign command
@@ -2406,6 +2386,22 @@ struct EditTextSuperScriptCommand {
     cprop_decl availabilities = Availability::UI;
     cprop_decl redirect = EditTextValignCommand(VerticalAlignment::AlignSuperScript);
 };
+}
+
+namespace mu::notation {
+// text navigation commands
+inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
+inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("command://notation/edittext-next-element");
+inline static const muse::rcommand::Command EDITTEXT_PREV_ELEMENT_COMMAND("command://notation/edittext-prev-element");
+inline static const muse::rcommand::Command EDITTEXT_NEXT_BEAT_COMMAND("command://notation/edittext-next-beat");
+inline static const muse::rcommand::Command EDITTEXT_PREV_BEAT_COMMAND("command://notation/edittext-prev-beat");
+
+// lyrics editing commands
+inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
+inline static const muse::rcommand::Command EDITLYRIC_PREV_VERSE_COMMAND("command://notation/editlyrics-prev-verse");
+inline static const muse::rcommand::Command EDITLYRIC_NEXT_SYLLABLE_COMMAND("command://notation/editlyrics-next-syllable");
+inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
+inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
 
 // note input commands
 
@@ -2456,10 +2452,6 @@ inline static const muse::rcommand::Command ADD_DOWN_BOW_COMMAND("command://nota
 // add text commands
 
 inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
-
-// add beam commands
-
-inline static const muse::rcommand::Command ADD_BEAM_SELECTED_RANGE_COMMAND("command://notation/add-beam-selected-range");
 
 // add brackets commands
 inline static const muse::rcommand::Command ADD_BRACKETS_COMMAND("command://notation/add-brackets");

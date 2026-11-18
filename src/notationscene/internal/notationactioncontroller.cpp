@@ -143,13 +143,14 @@ void NotationActionController::init()
     registerCommand<AddGraceNoteCommand>(&Controller::addGraceNotes);
     registerCommand<AddIntervalCommand>(&Controller::addInterval);
     registerCommand<AddTextCommand>(&Controller::addText);
-    registerCommand<AddBeamCommand>(&Controller::addBeam);
+    registerCommand<SetBeamCommand>(&Controller::setBeamMode);
+    registerCommand<SetBeamSelectedRangeCommand>(&Controller::setBeamSelectedRange);
     registerCommand<AddOrnamentCommand>(&Controller::addOrnament);
     registerCommand<AddFretCommand>(&Controller::addFret);
 
     registerCommand<EditTextAdvanceCommand>(&Controller::editTextAdvance);
-
-    registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
+    registerCommand<EditTextFontStyleCommand>(&Controller::toggleFontStyle);
+    registerCommand<EditTextValignCommand>(&Controller::toggleValign);
 
     // text navigation commands
     registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
@@ -164,10 +165,6 @@ void NotationActionController::init()
     registerCommand(EDITLYRIC_NEXT_SYLLABLE_COMMAND, &Interaction::navigateToNextSyllable);
     registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
     registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
-
-    // text editing commands
-    registerCommand<EditTextFontStyleCommand>(&Controller::toggleFontStyle);
-    registerCommand<EditTextValignCommand>(&Controller::toggleValign);
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
@@ -2225,7 +2222,7 @@ muse::Ret NotationActionController::addText(const AddTextCommand& command)
     return muse::make_ok();
 }
 
-muse::Ret NotationActionController::addBeam(const AddBeamCommand& command)
+muse::Ret NotationActionController::setBeamMode(const SetBeamCommand& command)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -2589,6 +2586,24 @@ muse::Ret NotationActionController::toggleFontStyle(const EditTextFontStyleComma
     }
 
     interaction->toggleTextFontStyle(command.style);
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::setBeamSelectedRange()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (interaction->selection()->isNone()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->beamSelectedRange();
 
     return muse::make_ok();
 }
