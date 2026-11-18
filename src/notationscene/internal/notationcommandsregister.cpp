@@ -431,13 +431,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        REALTIME_ADVANCE_COMMAND,
-        TranslatableString("action", "Real-time advance"),
-        TranslatableString("action", "Real-time advance"),
-        InputSchema(),
-        Decoration(IconCode::Code::METRONOME)
-    },
+    makeCommandInfo<RealtimeAdvanceCommand>(),
 
     makeCommandInfo<ToggleTieCommand>(),
     makeCommandInfo<AddSlurCommand>(),

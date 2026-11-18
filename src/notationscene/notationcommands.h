@@ -561,6 +561,14 @@ struct ToggleInsertModeCommand {
     cprop_decl availabilities = Availability::UI;
 };
 
+struct RealtimeAdvanceCommand {
+    cprop_decl id = Command("command://notation/realtime-advance");
+    cprop_decl title = MnemonicString("action", "Real-time advance");
+    cprop_decl description = TranslatableString("action", "Real-time advance");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::METRONOME);
+    cprop_decl availabilities = Availability::All;
+};
+
 // note input set duration commands
 struct SetDurationCommand {
     cprop_decl id = Command("command://notation/set-duration");
@@ -2428,10 +2436,6 @@ struct TextNavigateCommand {
         Field{ "direction", &TextNavigateCommand::direction, "Navigation direction" },
         Field{ "mode", &TextNavigateCommand::mode, "Navigation mode", Presence::Optional },
     };
-
-    TextNavigateCommand() = default;
-    TextNavigateCommand(TextMoveDirection direction, TextNavigationMode mode)
-        : direction(direction), mode(mode) {}
 };
 
 // aliases for navigate to text command
@@ -2482,10 +2486,6 @@ inline static const muse::rcommand::Command EDITLYRIC_PREV_VERSE_COMMAND("comman
 inline static const muse::rcommand::Command EDITLYRIC_NEXT_SYLLABLE_COMMAND("command://notation/editlyrics-next-syllable");
 inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
 inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
-
-// note input commands
-
-inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
 
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
 

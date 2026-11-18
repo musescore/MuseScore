@@ -370,7 +370,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(DOT_COUNT_COMMANDS));
         updateCommandStates({ ToggleRestCommand::id });
         updateCommandStates(commands(ACCIDENTAL_COMMANDS));
-        updateCommandStates({ REALTIME_ADVANCE_COMMAND });
+        updateCommandStates({ RealtimeAdvanceCommand::id });
         updateCommandStates(ADD_COMMANDS);
         updateCommandStates(commands(ADD_ARTICULATION_COMMANDS));
         updateCommandStates(commands(VOICE_COMMANDS));
