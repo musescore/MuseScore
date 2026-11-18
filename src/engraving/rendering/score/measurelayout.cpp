@@ -1994,25 +1994,35 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         return;
     }
 
-    // Shared stave's keyLists can become stale when stave sharing is off, so ignore them
-    // They contain all their origin stave's keys plus entries for every mapping change, so it is safe
-    const int tick = m->tick().ticks();
-    const bool keySigChangeHappensHere = muse::contains_if(m->score()->staves(), [tick](Staff* staff) {
-        return !staff->part()->isSharedPart() && staff->keyList().count(tick) > 0;
-    });
-
-    for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        if (seg->isKeySigType() && seg->header() && !keySigChangeHappensHere) {
-            seg->setEnabled(false);
-        }
-        if (!seg->header()) {
-            break;
-        }
-        if (!seg->isKeySigType()) {
+    for (Segment* seg = m->first(); seg && seg->header(); seg = seg->next()) {
+        if (seg->isKeySigType()) {
+            removeHeaderKeySigs(seg);
+        } else {
             seg->setEnabled(false);
         }
     }
     m->setHeader(false);
+}
+
+void MeasureLayout::removeHeaderKeySigs(Segment* keySigSegment)
+{
+    // Remove the generated key sigs rather than disabling the segment, so none can reappear mid-system
+    // Key sigs the user added remain
+    Score* score = keySigSegment->score();
+    std::set<staff_idx_t> affectedStaves;
+    for (EngravingItem* item : keySigSegment->elist()) {
+        if (item && item->generated()) {
+            affectedStaves.insert(item->staffIdx());
+            score->undoRemoveElement(item);
+        }
+    }
+    keySigSegment->setHeader(false);
+    keySigSegment->setEnabled(!keySigSegment->empty());
+
+    // Regenerate shape when a key sig has been removed
+    for (staff_idx_t staffIdx : affectedStaves) {
+        keySigSegment->createShape(staffIdx);
+    }
 }
 
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)

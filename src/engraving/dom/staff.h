@@ -100,6 +100,7 @@ public:
     Fraction timeStretch(const Fraction&) const;
     TimeSig* timeSig(const Fraction&) const;
     TimeSig* nextTimeSig(const Fraction&) const;
+    const std::map<int, TimeSig*>& timeSigList() const { return m_timesigs; }
     Fraction currentTimeSigTick(const Fraction&) const;
 
     const Groups& group(const Fraction&) const;
@@ -261,7 +262,6 @@ private:
     Staff(const Staff& staff);
 
     double staffMag(const StaffType*) const;
-    const Staff* timeSigReferenceStaff(const Fraction& tick) const;
 
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);

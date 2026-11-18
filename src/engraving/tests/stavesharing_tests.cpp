@@ -476,6 +476,53 @@ TEST_F(Engraving_StaveSharingTests, testLocalClefKeyTimeSigsCopiedToSharedStaves
     delete score;
 }
 
+static std::vector<EngravingItem*> sharedUserClefKeyTimeSigs(MasterScore* score, const SharedPart* sharedPart)
+{
+    std::vector<EngravingItem*> items;
+    for (Segment* seg = score->firstSegment(SegmentType::Clef | SegmentType::KeySig | SegmentType::TimeSig); seg;
+         seg = seg->next1(SegmentType::Clef | SegmentType::KeySig | SegmentType::TimeSig)) {
+        if (seg->header()) {
+            continue;
+        }
+        for (const Staff* staff : sharedPart->staves()) {
+            EngravingItem* item = seg->element(staff2track(staff->idx()));
+            if (item && !item->generated()) {
+                items.push_back(item);
+            }
+        }
+    }
+    return items;
+}
+
+TEST_F(Engraving_StaveSharingTests, testSharedClefKeyTimeSigsKeptOnRelayout)
+{
+    // Relayout must reuse the shared copies of the origins' clefs, key and time signatures rather than recreating them
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_04.mscx");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+
+    const std::vector<EngravingItem*> before = sharedUserClefKeyTimeSigs(score, sharedPart);
+    ASSERT_FALSE(before.empty());
+
+    score->doLayout();
+
+    EXPECT_EQ(sharedUserClefKeyTimeSigs(score, sharedPart), before);
+    for (const EngravingItem* item : before) {
+        EXPECT_FALSE(item->originItems().empty()) << item->typeName() << " at tick " << item->tick().ticks();
+    }
+
+    delete score;
+}
+
 TEST_F(Engraving_StaveSharingTests, testTimeShiftMovesSharedTupletsOnce)
 {
     // [GIVEN] Two flutes, the second with an eighth triplet on beat 2, and stave sharing enabled

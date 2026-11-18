@@ -48,6 +48,7 @@ private:
         bool trackMapChanged = false;
         Fraction sTick = Fraction(0, 1);
         Fraction eTick = Fraction(0, 1);
+        Fraction systemStartTick = Fraction(0, 1);
         std::vector<Segment*> allSegments;
         std::span<Segment* const> allSegmentsInRange() const;   // Subset of segments in update range for computing track mappings
         std::vector<Segment*> crSegments;
@@ -106,8 +107,11 @@ private:
                                                                                                  const EngravingItem*)>& isEqual);
 
     static void makeSharedNotation(StaveSharingContext& ctx);
+    static void syncSharedClefKeyTimeSigs(StaveSharingContext& ctx);
+    static std::vector<std::pair<Fraction, Fraction> > mappingRanges(const StaveSharingContext& ctx);
+    static void removeStaleClefKeyTimeSigs(StaveSharingContext& ctx);
     static void updateStaffClefKeyMaps(StaveSharingContext& ctx);
-    static void makeSharedClefKeyTimeSigs(StaveSharingContext& ctx);
+    static void makeAllClefKeyTimeSigs(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedBreaths(StaveSharingContext& ctx);
     static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
