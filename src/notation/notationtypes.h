@@ -88,6 +88,7 @@ using BracketType = mu::engraving::BracketType;
 using Segment = mu::engraving::Segment;
 using TextStyleType = mu::engraving::TextStyleType;
 using FontStyle = mu::engraving::FontStyle;
+using ClefType = mu::engraving::ClefType;
 using VerticalAlignment = mu::engraving::VerticalAlignment;
 using PageList = std::vector<Page*>;
 using voice_idx_t = mu::engraving::voice_idx_t;

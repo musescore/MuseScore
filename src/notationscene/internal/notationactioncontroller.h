@@ -208,7 +208,7 @@ private:
     muse::Ret addSlur();
     void addHammerOnPullOff();
 
-    void insertClef(mu::engraving::ClefType type);
+    muse::Ret insertClef(const AddClefCommand& command);
 
     void addDynamic();
     void addImage();

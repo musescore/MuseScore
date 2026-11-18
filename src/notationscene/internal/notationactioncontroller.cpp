@@ -203,8 +203,7 @@ void NotationActionController::init()
     registerCommand(ADD_PARENTHESES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Parentheses);
 
     // clef commands
-    registerCommand(ADD_CLEF_VIOLIN_COMMAND, [this]() { insertClef(mu::engraving::ClefType::G); });
-    registerCommand(ADD_CLEF_BASS_COMMAND, [this]() { insertClef(mu::engraving::ClefType::F); });
+    registerCommand<AddClefCommand>(&Controller::insertClef);
 
     registerCommand(ADD_FULL_MEASURE_REST_COMMAND, &Controller::addFullMeasureRest);
 
@@ -1975,14 +1974,22 @@ muse::Ret NotationActionController::addFret(const AddFretCommand& command)
     return muse::make_ok();
 }
 
-void NotationActionController::insertClef(mu::engraving::ClefType type)
+muse::Ret NotationActionController::insertClef(const AddClefCommand& command)
 {
+    TRACEFUNC;
+
     INotationInteractionPtr interaction = currentNotationInteraction();
-    if (!interaction || !interaction->canInsertClef(type)) {
-        return;
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    interaction->insertClef(type);
+    if (!interaction->canInsertClef(command.type)) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->insertClef(command.type);
+
+    return muse::make_ok();
 }
 
 void NotationActionController::addImage()

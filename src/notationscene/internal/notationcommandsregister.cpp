@@ -1186,20 +1186,10 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // clef commands
-    CommandInfo{
-        ADD_CLEF_VIOLIN_COMMAND,
-        TranslatableString("action", "Add treble clef"),
-        TranslatableString("action", "Add clef: treble"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_CLEF_BASS_COMMAND,
-        TranslatableString("action", "Add bass clef"),
-        TranslatableString("action", "Add clef: bass"),
-        InputSchema(),
-        Decoration()
-    },
+    // clef commands
+    makeCommandInfo<AddClefCommand>(),
+    makeCommandInfo<AddClefViolinCommand>(),
+    makeCommandInfo<AddClefBassCommand>(),
 
     CommandInfo{
         SET_VISIBLE_COMMAND,
