@@ -35,6 +35,6 @@ public:
     MOCK_METHOD(bool, checkInProgress, (), (const, override));
     MOCK_METHOD(muse::async::Notification, checkInProgressChanged, (), (const, override));
     MOCK_METHOD(bool, hasUpdate, (), (const, override));
-    MOCK_METHOD(muse::Ret, showUpdate, (), (override));
+    MOCK_METHOD(void, showUpdate, (), (override));
 };
 }

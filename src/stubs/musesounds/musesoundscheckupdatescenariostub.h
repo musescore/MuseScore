@@ -34,6 +34,6 @@ public:
     muse::async::Notification checkInProgressChanged() const override;
 
     bool hasUpdate() const override;
-    muse::Ret showUpdate() override;
+    void showUpdate() override;
 };
 }

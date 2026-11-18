@@ -51,16 +51,17 @@ public:
     muse::async::Notification checkInProgressChanged() const override;
 
     bool hasUpdate() const override;
-    muse::Ret showUpdate() override;
+    void showUpdate() override;
 
 private:
     bool shouldIgnoreUpdate(const muse::update::ReleaseInfo& info) const;
     void setIgnoredUpdate(const std::string& version);
 
-    muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);
+    void showReleaseInfo(const muse::update::ReleaseInfo& info);
     void tryOpenMuseHub(muse::ValList actions) const;
 
     bool m_checkInProgress = false;
+    bool m_releaseInfoOpened = false;
     muse::async::Notification m_checkInProgressChanged;
 };
 }

@@ -41,6 +41,6 @@ public:
     virtual muse::async::Notification checkInProgressChanged() const = 0;
 
     virtual bool hasUpdate() const = 0;
-    virtual muse::Ret showUpdate() = 0;
+    virtual void showUpdate() = 0;
 };
 }

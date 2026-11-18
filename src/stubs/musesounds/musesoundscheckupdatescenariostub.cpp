@@ -47,7 +47,6 @@ bool MuseSoundsCheckUpdateScenarioStub::hasUpdate() const
     return false;
 }
 
-muse::Ret MuseSoundsCheckUpdateScenarioStub::showUpdate()
+void MuseSoundsCheckUpdateScenarioStub::showUpdate()
 {
-    return muse::make_ok();
 }
