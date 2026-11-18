@@ -109,7 +109,7 @@ public:
 private:
     mu::engraving::Score* score() const;
 
-    void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
+    muse::Ret transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
 
     void listenUndoStackChanges();
     void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});

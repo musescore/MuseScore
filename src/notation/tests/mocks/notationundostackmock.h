@@ -40,7 +40,7 @@ public:
 
     MOCK_METHOD(void, undoRedoToIndex, (size_t, mu::engraving::EditData*), (override));
 
-    MOCK_METHOD(void, transaction, (const muse::TranslatableString&, std::function<void(mu::engraving::Transaction&)>), (override));
+    MOCK_METHOD(muse::Ret, transaction, (const muse::TranslatableString&, std::function<void(mu::engraving::Transaction&)>), (override));
 
     MOCK_METHOD(void, prepareChanges, (const muse::TranslatableString&), (override));
     MOCK_METHOD(void, rollbackChanges, (), (override));

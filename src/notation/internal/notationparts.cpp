@@ -509,11 +509,11 @@ bool NotationParts::setPartsLayout(const PartsLayout& layout)
     }
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction& tx) {
+    const muse::Ret ret = transaction(TranslatableString("undoableAction", "Move instruments"), [&](engraving::Transaction& tx) {
         EditPart::setPartsLayout(tx, score(), editPartLayout);
     });
 
-    return true;
+    return ret.success();
 }
 
 void NotationParts::reorderStaves(const IDList& staffIds)
@@ -700,11 +700,11 @@ const SharedPart* NotationParts::movePartsToNewSharedPart(const IDList& partIds)
     SharedPart* sharedPart = nullptr;
 
     endInteractionWithScore();
-    transaction(TranslatableString("undoableAction", "Create shared staves"), [&](engraving::Transaction& tx) {
+    const muse::Ret ret = transaction(TranslatableString("undoableAction", "Create shared staves"), [&](engraving::Transaction& tx) {
         sharedPart = EditPart::movePartsToNewSharedPart(tx, score(), parts);
     });
 
-    return sharedPart;
+    return ret ? sharedPart : nullptr;
 }
 
 void NotationParts::movePartsToSharedPart(const IDList& partIds, const ID& sharedPartId)
@@ -758,15 +758,19 @@ mu::engraving::Score* NotationParts::score() const
     return m_getScore->score();
 }
 
-void NotationParts::transaction(const TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func)
+muse::Ret NotationParts::transaction(const TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func)
 {
+    muse::Ret ret = muse::make_ok();
+
     if (m_undoStack->isLocked()) {
         func(score()->transactionManager()->currentOrDummyTransaction());
     } else {
-        m_undoStack->transaction(actionName, func);
+        ret = m_undoStack->transaction(actionName, func);
     }
 
     m_partsChanged.notify();
+
+    return ret;
 }
 
 void NotationParts::listenUndoStackChanges()
