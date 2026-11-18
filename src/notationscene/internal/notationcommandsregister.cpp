@@ -439,27 +439,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME)
     },
 
-    CommandInfo{
-        TOGGLE_TIE_COMMAND,
-        TranslatableString("action", "Tie"),
-        TranslatableString("action", "Add tied note"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_TIE)
-    },
-    CommandInfo{
-        ADD_SLUR_COMMAND,
-        TranslatableString("action", "Slur"),
-        TranslatableString("action", "Add slur"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_SLUR)
-    },
-    CommandInfo{
-        TOGGLE_LV_COMMAND,
-        TranslatableString("action", "Laissez vibrer"),
-        TranslatableString("action", "Add laissez vibrer"),
-        InputSchema(),
-        Decoration(IconCode::Code::NOTE_LV)
-    },
+    makeCommandInfo<ToggleTieCommand>(),
+    makeCommandInfo<AddSlurCommand>(),
+    makeCommandInfo<ToggleLaissezVibrerCommand>(),
     CommandInfo{
         TOGGLE_MARCATO_COMMAND,
         TranslatableString("action", "Marcato"),

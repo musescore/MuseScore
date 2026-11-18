@@ -172,9 +172,9 @@ static const std::map<Command, AccidentalType> ACCIDENTAL_COMMANDS = {
 };
 
 static const std::vector<Command> ADD_COMMANDS = {
-    TOGGLE_TIE_COMMAND,
-    ADD_SLUR_COMMAND,
-    TOGGLE_LV_COMMAND
+    ToggleTieCommand::id,
+    AddSlurCommand::id,
+    ToggleLaissezVibrerCommand::id
 };
 
 static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
@@ -496,13 +496,13 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentAccidentalType() == ACCIDENTAL_COMMANDS.at(command));
     }
 
-    if (command == TOGGLE_TIE_COMMAND) {
+    if (command == ToggleTieCommand::id) {
         return CommandState(true, controller()->selectionHasTie());
     }
-    if (command == ADD_SLUR_COMMAND) {
+    if (command == AddSlurCommand::id) {
         return CommandState(true, controller()->selectionHasSlur());
     }
-    if (command == TOGGLE_LV_COMMAND) {
+    if (command == ToggleLaissezVibrerCommand::id) {
         return CommandState(true, controller()->selectionHasLaissezVib());
     }
 

@@ -132,9 +132,9 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
             { ToggleSharpCommand::id, true },
             { ToggleSharp2Command::id, true },
             { ToolConfig::____________, true },
-            { TOGGLE_TIE_COMMAND, true },
-            { ADD_SLUR_COMMAND, true },
-            { TOGGLE_LV_COMMAND, false },
+            { ToggleTieCommand::id, true },
+            { AddSlurCommand::id, true },
+            { ToggleLaissezVibrerCommand::id, false },
             { ToolConfig::____________, true },
             { TOGGLE_MARCATO_COMMAND, true },
             { TOGGLE_SFORZATO_COMMAND, true },
@@ -393,7 +393,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
 MenuItemList NoteInputBarModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_SLUR_COMMAND),
+        makeMenuItem(AddSlurCommand::id),
         makeMenuItem(ADD_HAIRPIN_COMMAND),
         makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
         makeMenuItem(ADD_OTTAVA_8VA_COMMAND),

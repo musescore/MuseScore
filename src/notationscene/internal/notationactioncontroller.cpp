@@ -170,9 +170,9 @@ void NotationActionController::init()
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
-    registerCommand(TOGGLE_TIE_COMMAND, &Controller::addTie);
-    registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
-    registerCommand(TOGGLE_LV_COMMAND, &Controller::addLaissezVib);
+    registerCommand<ToggleTieCommand>(&Controller::addTie);
+    registerCommand<AddSlurCommand>(&Controller::addSlur);
+    registerCommand<ToggleLaissezVibrerCommand>(&Controller::addLaissezVib);
     registerCommand(TOGGLE_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
     registerCommand(TOGGLE_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
     registerCommand(TOGGLE_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
@@ -1875,17 +1875,17 @@ Fraction NotationActionController::resolvePastingScale(const INotationInteractio
     return DEFAULT_SCALE;
 }
 
-void NotationActionController::addTie()
+muse::Ret NotationActionController::addTie()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (noteInput->isNoteInputMode()) {
@@ -1894,19 +1894,21 @@ void NotationActionController::addTie()
     } else {
         interaction->toggleTieForSelection();
     }
+
+    return muse::make_ok();
 }
 
-void NotationActionController::addLaissezVib()
+muse::Ret NotationActionController::addLaissezVib()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (noteInput->isNoteInputMode()) {
@@ -1915,19 +1917,21 @@ void NotationActionController::addLaissezVib()
     } else {
         interaction->addLaissezVibToSelection();
     }
+
+    return muse::make_ok();
 }
 
-void NotationActionController::addSlur()
+muse::Ret NotationActionController::addSlur()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     if (noteInput->isNoteInputMode() && noteInput->state().slur()) {
@@ -1935,6 +1939,8 @@ void NotationActionController::addSlur()
     } else {
         interaction->addSlurToSelection();
     }
+
+    return muse::make_ok();
 }
 
 void NotationActionController::addHammerOnPullOff()

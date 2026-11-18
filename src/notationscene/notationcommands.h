@@ -2386,6 +2386,30 @@ struct EditTextSuperScriptCommand {
     cprop_decl availabilities = Availability::UI;
     cprop_decl redirect = EditTextValignCommand(VerticalAlignment::AlignSuperScript);
 };
+
+struct ToggleTieCommand {
+    cprop_decl id = Command("command://notation/toggle-tie");
+    cprop_decl title = MnemonicString("action", "Tie");
+    cprop_decl description = TranslatableString("action", "Add tied note");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::NOTE_TIE);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct AddSlurCommand {
+    cprop_decl id = Command("command://notation/add-slur");
+    cprop_decl title = MnemonicString("action", "Slur");
+    cprop_decl description = TranslatableString("action", "Add slur");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::NOTE_SLUR);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ToggleLaissezVibrerCommand {
+    cprop_decl id = Command("command://notation/toggle-laissez-vibrer");
+    cprop_decl title = MnemonicString("action", "Laissez vibrer");
+    cprop_decl description = TranslatableString("action", "Add laissez vibrer");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::NOTE_LV);
+    cprop_decl availabilities = Availability::All;
+};
 }
 
 namespace mu::notation {
@@ -2409,9 +2433,6 @@ inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://
 
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
 
-inline static const muse::rcommand::Command TOGGLE_TIE_COMMAND("command://notation/toggle-tie");
-inline static const muse::rcommand::Command ADD_SLUR_COMMAND("command://notation/add-slur");
-inline static const muse::rcommand::Command TOGGLE_LV_COMMAND("command://notation/toggle-laissez-vibrer");
 inline static const muse::rcommand::Command TOGGLE_MARCATO_COMMAND("command://notation/toggle-marcato");
 inline static const muse::rcommand::Command TOGGLE_SFORZATO_COMMAND("command://notation/toggle-sforzato");
 inline static const muse::rcommand::Command TOGGLE_TENUTO_COMMAND("command://notation/toggle-tenuto");
