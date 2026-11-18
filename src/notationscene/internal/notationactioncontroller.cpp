@@ -153,11 +153,7 @@ void NotationActionController::init()
     registerCommand<EditTextValignCommand>(&Controller::toggleValign);
 
     // text navigation commands
-    registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
-    registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
-    registerCommand(EDITTEXT_PREV_ELEMENT_COMMAND, [this]() { prevTextElement(); });
-    registerCommand(EDITTEXT_NEXT_BEAT_COMMAND, &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
-    registerCommand(EDITTEXT_PREV_BEAT_COMMAND, &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
+    registerCommand<TextNavigateCommand>(&Controller::navigateToText);
 
     // lyrics editing commands
     registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
@@ -2523,37 +2519,39 @@ bool NotationActionController::resolveTextNavigationAvailable(TextNavigationType
     return false;
 }
 
-muse::Ret NotationActionController::nextTextElement()
+muse::Ret NotationActionController::navigateToText(const TextNavigateCommand& command)
 {
-    navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST);
-    return muse::make_ok();
-}
+    TRACEFUNC;
 
-muse::Ret NotationActionController::prevTextElement()
-{
-    navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
-    return muse::make_ok();
-}
+    const TextNavigationType navType = [command]() {
+        switch (command.mode) {
+        case TextNavigationMode::Word:
+        case TextNavigationMode::Element:
+            return TextNavigationType::NearNoteOrRest;
+        case TextNavigationMode::Beat:
+            return TextNavigationType::NearBeat;
+        }
+        return TextNavigationType::NearNoteOrRest;
+    }();
 
-muse::Ret NotationActionController::nextWord()
-{
-    if (!textNavigationAvailable()) {
-        return muse::make_ret(Ret::Code::NotSupported);
+    if (!resolveTextNavigationAvailable(navType)) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
     }
 
-    navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST, false);
+    //! NOTE `moveOnly` is false only for the "word" mode: it lets the lyrics
+    //! navigation continue a multi-syllable word instead of just moving on.
+    const bool moveOnly = command.mode != TextNavigationMode::Word;
+    const bool nearNoteOrRest = command.mode != TextNavigationMode::Beat;
+
+    //! NOTE `TextMoveDirection` mirrors the horizontal values of `MoveDirection`
+    //! on purpose, so the conversion is a plain cast.
+    const MoveDirection direction = static_cast<MoveDirection>(command.direction);
+
+    navigateToTextElement(direction, nearNoteOrRest, moveOnly);
+
     return muse::make_ok();
 }
 
-void NotationActionController::nextBeatTextElement()
-{
-    navigateToTextElement(MoveDirection::Right);
-}
-
-void NotationActionController::prevBeatTextElement()
-{
-    navigateToTextElement(MoveDirection::Left);
-}
 
 void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest, bool moveOnly)
 {

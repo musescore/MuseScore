@@ -117,6 +117,27 @@ enum class MoveDirection : unsigned char
     Down
 };
 
+//! NOTE How far a text navigation command moves the cursor.
+//! `Element` jumps to the next/previous text element, `Word` additionally
+//! continues a multi-syllable lyrics word, `Beat` moves by beat inside
+//! chord symbols (ignoring the notes/rests in between).
+enum class TextNavigationMode : unsigned char
+{
+    Element = 0,
+    Word,
+    Beat
+};
+
+//! NOTE Direction of a text navigation. Values mirror the horizontal values of
+//! `MoveDirection` so the two convert with a plain cast, but the enum is
+//! closed: `Up`/`Down` make no sense for text navigation, and having them
+//! absent lets the contract expose exactly the valid choices.
+enum class TextMoveDirection : unsigned char
+{
+    Prev = static_cast<unsigned char>(MoveDirection::Left),
+    Next = static_cast<unsigned char>(MoveDirection::Right),
+};
+
 enum class SelectionTarget : unsigned char
 {
     Undefined = 0,

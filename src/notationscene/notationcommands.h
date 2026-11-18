@@ -2414,11 +2414,67 @@ struct ToggleLaissezVibrerCommand {
 
 namespace mu::notation {
 // text navigation commands
-inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
-inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("command://notation/edittext-next-element");
-inline static const muse::rcommand::Command EDITTEXT_PREV_ELEMENT_COMMAND("command://notation/edittext-prev-element");
-inline static const muse::rcommand::Command EDITTEXT_NEXT_BEAT_COMMAND("command://notation/edittext-next-beat");
-inline static const muse::rcommand::Command EDITTEXT_PREV_BEAT_COMMAND("command://notation/edittext-prev-beat");
+
+struct TextNavigateCommand {
+    cprop_decl id = Command("command://notation/text-navigate");
+    cprop_decl title = MnemonicString("action", "Navigate to text");
+    cprop_decl description = TranslatableString("action", "Navigate to the next or previous text element");
+    cprop_decl availabilities = Availability::API;
+
+    TextMoveDirection direction = TextMoveDirection::Next;
+    TextNavigationMode mode = TextNavigationMode::Element;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "direction", &TextNavigateCommand::direction, "Navigation direction" },
+        Field{ "mode", &TextNavigateCommand::mode, "Navigation mode", Presence::Optional },
+    };
+
+    TextNavigateCommand() = default;
+    TextNavigateCommand(TextMoveDirection direction, TextNavigationMode mode)
+        : direction(direction), mode(mode) {}
+};
+
+// aliases for navigate to text command
+
+struct TextNavigateNextWordCommand {
+    cprop_decl id = Command("command://notation/text-navigate/next-word");
+    cprop_decl title = MnemonicString("action", "Edit next word");
+    cprop_decl description = TranslatableString("action", "Go to edit next notation word");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Next, TextNavigationMode::Word);
+};
+
+struct TextNavigateNextElementCommand {
+    cprop_decl id = Command("command://notation/text-navigate/next-element");
+    cprop_decl title = MnemonicString("action", "Edit next text element");
+    cprop_decl description = TranslatableString("action", "Go to edit next notation text element");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Next, TextNavigationMode::Element);
+};
+
+struct TextNavigatePrevElementCommand {
+    cprop_decl id = Command("command://notation/text-navigate/prev-element");
+    cprop_decl title = MnemonicString("action", "Edit previous text element");
+    cprop_decl description = TranslatableString("action", "Go to edit previous notation text element");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Prev, TextNavigationMode::Element);
+};
+
+struct TextNavigateNextBeatCommand {
+    cprop_decl id = Command("command://notation/text-navigate/next-beat");
+    cprop_decl title = MnemonicString("action", "Advance cursor: next beat (chord symbols)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: next beat (chord symbols)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Next, TextNavigationMode::Beat);
+};
+
+struct TextNavigatePrevBeatCommand {
+    cprop_decl id = Command("command://notation/text-navigate/prev-beat");
+    cprop_decl title = MnemonicString("action", "Advance cursor: previous beat (chord symbols)");
+    cprop_decl description = TranslatableString("action", "Advance cursor: previous beat (chord symbols)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Prev, TextNavigationMode::Beat);
+};
 
 // lyrics editing commands
 inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
