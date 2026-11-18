@@ -77,7 +77,7 @@ public:
     void removeParts(const muse::IDList& partsIds) override;
     void removeStaves(const muse::IDList& stavesIds) override;
 
-    void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) override;
+    void setPartsLayout(const PartsLayout& layout) override;
     void reorderStaves(const muse::IDList& staffIds) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
@@ -117,6 +117,8 @@ private:
 
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
+
+    std::vector<engraving::EditPart::PartPlacement> editPartPlacements(const std::vector<PartPlacement>& placements) const;
     std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
 
     void endInteractionWithScore();

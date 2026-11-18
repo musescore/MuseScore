@@ -34,6 +34,7 @@
 #include "editpagelocks.h"
 #include "editscoreproperties.h"
 #include "editstaff.h"
+#include "editstavesharing.h"
 #include "editsystemlocks.h"
 #include "transaction/transaction.h"
 #include "transpose.h"
@@ -606,18 +607,52 @@ void EditPart::removeStaves(Transaction& tx, Score* score, const std::vector<Sta
     }
 }
 
-bool EditPart::reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts,
-                                        const std::vector<SystemObjectsMove>& moves)
+static bool changesSharedPart(const EditPart::PartPlacement& placement)
+{
+    return !placement.part->isSharedPart() && placement.part->sharedPart() != placement.sharedPart;
+}
+
+bool EditPart::isValidPartsLayout(const PartsLayout& layout)
+{
+    const SharedPart* openSharedPart = nullptr;
+
+    for (const PartPlacement& placement : layout.parts) {
+        if (placement.part->isSharedPart()) {
+            openSharedPart = toSharedPart(placement.part);
+            continue;
+        }
+
+        if (!placement.sharedPart) {
+            openSharedPart = nullptr;
+            continue;
+        }
+
+        // a member must follow its shared part or the other members
+        if (placement.sharedPart != openSharedPart) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool EditPart::partsLayoutChangesScore(const Score* score, const PartsLayout& layout)
 {
     if (!score || score->staves().empty()) {
         return false;
     }
 
+    const std::vector<PartPlacement>& placements = layout.parts;
     const std::vector<Part*>& scoreParts = score->parts();
-    if (parts.size() == scoreParts.size() && !std::equal(parts.begin(), parts.end(), scoreParts.begin())) {
-        return true;
+    const bool comparesOrder = placements.size() == scoreParts.size();
+
+    for (size_t i = 0; i < placements.size(); ++i) {
+        if (changesSharedPart(placements[i]) || (comparesOrder && placements[i].part != scoreParts[i])) {
+            return true;
+        }
     }
 
+    const std::vector<SystemObjectsMove>& moves = layout.systemObjects;
     if (moves.empty()) {
         return false;
     }
@@ -639,10 +674,33 @@ bool EditPart::reorderPartsChangesScore(const Score* score, const std::vector<Pa
     return (belowBottomStaff && bottomStaff->isSystemObjectStaff()) != currentBelowBottomStaff;
 }
 
-void EditPart::reorderParts(Transaction& tx, Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves)
+void EditPart::setPartsLayout(Transaction& tx, Score* score, const PartsLayout& layout)
 {
     if (!score || score->staves().empty()) {
         return;
+    }
+
+    const std::vector<PartPlacement>& placements = layout.parts;
+    const std::vector<SystemObjectsMove>& moves = layout.systemObjects;
+
+    std::vector<Part*> parts;
+    parts.reserve(placements.size());
+
+    std::vector<Part*> leavingParts;
+    std::map<SharedPart*, std::vector<Part*> > joiningParts;
+
+    for (const PartPlacement& placement : placements) {
+        parts.push_back(placement.part);
+
+        if (!changesSharedPart(placement)) {
+            continue;
+        }
+
+        if (placement.sharedPart) {
+            joiningParts[placement.sharedPart].push_back(placement.part);
+        } else {
+            leavingParts.push_back(placement.part);
+        }
     }
 
     doReorderParts(tx, score, parts, moves);
@@ -678,6 +736,12 @@ void EditPart::reorderParts(Transaction& tx, Score* score, const std::vector<Par
         }
 
         doReorderParts(tx, excerptScore, excerptScore->parts(), excerptMoves);
+    }
+
+    EditStaveSharing::removePartsFromSharedPart(tx, leavingParts);
+
+    for (const auto& [sharedPart, sharedPartParts] : joiningParts) {
+        EditStaveSharing::addPartsToSharedPart(tx, sharedPartParts, sharedPart);
     }
 }
 

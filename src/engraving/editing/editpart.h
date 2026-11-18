@@ -288,8 +288,21 @@ public:
         bool belowBottomStaff = false;
     };
 
-    static bool reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
-    static void reorderParts(Transaction& tx, Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+    //! A part and its shared part afterwards
+    struct PartPlacement {
+        Part* part = nullptr;
+        SharedPart* sharedPart = nullptr; // nullptr: not in a shared part
+    };
+
+    //! The parts' new order and shared parts, and where their system markings go
+    struct PartsLayout {
+        std::vector<PartPlacement> parts;
+        std::vector<SystemObjectsMove> systemObjects;
+    };
+
+    static bool isValidPartsLayout(const PartsLayout& layout);
+    static bool partsLayoutChangesScore(const Score* score, const PartsLayout& layout);
+    static void setPartsLayout(Transaction& tx, Score* score, const PartsLayout& layout);
 
     static bool reorderStavesChangesScore(const std::vector<Staff*>& staves);
     static void reorderStaves(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
