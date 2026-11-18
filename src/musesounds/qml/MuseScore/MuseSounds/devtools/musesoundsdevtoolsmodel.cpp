@@ -390,16 +390,11 @@ void MuseSoundsDevToolsModel::openUpdateDialog()
     }
     query.addParam("imageUrl", Val(imageUrl.toStdString()));
 
-    RetVal<Val> rv = interactive()->openSync(query);
-    if (!rv.ret) {
-        LOGD() << rv.ret.toString();
-        return;
-    }
-
-    std::string actionCode = rv.val.toString();
-    if (actionCode == "openMuseHub" && !m_ctaLink.isEmpty()) {
-        platformInteractive()->openUrl(m_ctaLink.toStdString());
-    }
+    interactive()->open(query).onResolve(this, [this, ctaLink = m_ctaLink](const Val& val) {
+        if (val.toString() == "openMuseHub" && !ctaLink.isEmpty()) {
+            platformInteractive()->openUrl(ctaLink.toStdString());
+        }
+    });
 }
 
 QString MuseSoundsDevToolsModel::currentUpdateData_property() const

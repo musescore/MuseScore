@@ -30,12 +30,13 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
 #include "imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
-class MuseSoundsDevToolsModel : public QObject, public muse::Contextable
+class MuseSoundsDevToolsModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT
