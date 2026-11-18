@@ -385,11 +385,11 @@ MenuItemList NotationContextMenuModel::makeHairpinItems()
 
     const engraving::Hairpin* h = toHairpinSegment(element)->hairpin();
 
-    MenuItem* snapPrev = makeMenuItem(TOGGLE_SNAP_TO_PREV_COMMAND);
+    MenuItem* snapPrev = makeMenuItem(ToggleSnapToPrevCommand::id);
     snapPrev->setChecked(h->snapToItemBefore());
     items << snapPrev;
 
-    MenuItem* snapNext = makeMenuItem(TOGGLE_SNAP_TO_NEXT_COMMAND);
+    MenuItem* snapNext = makeMenuItem(ToggleSnapToNextCommand::id);
     snapNext->setChecked(h->snapToItemAfter());
     items << snapNext;
 
@@ -409,7 +409,7 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 
     const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(element)->tempoChange();
 
-    MenuItem* snapNext = makeMenuItem(TOGGLE_SNAP_TO_NEXT_COMMAND);
+    MenuItem* snapNext = makeMenuItem(ToggleSnapToNextCommand::id);
     snapNext->setChecked(gtc->snapToItemAfter());
     items << snapNext;
 

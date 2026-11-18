@@ -336,6 +336,15 @@ enum class BracketsType : unsigned char
     Parentheses
 };
 
+//! NOTE Which end of an element (hairpin, gradual tempo change) is snapped to
+//! the adjacent item. Only `Prev` applies to hairpins, `Next` applies to both
+//! hairpins and gradual tempo changes.
+enum class SnapDirection : unsigned char
+{
+    Prev = 0,
+    Next
+};
+
 static constexpr int MAX_FRET = 14;
 
 constexpr bool isNotesIntervalValid(int interval)

@@ -2595,8 +2595,39 @@ inline static const muse::rcommand::Command PITCH_DOWN_DIATONIC_ALTERATIONS_COMM
 inline static const muse::rcommand::Command TOGGLE_VISIBLE_COMMAND("command://notation/toggle-visible");
 
 // snap commands
-inline static const muse::rcommand::Command TOGGLE_SNAP_TO_PREV_COMMAND("command://notation/toggle-snap-to-prev");
-inline static const muse::rcommand::Command TOGGLE_SNAP_TO_NEXT_COMMAND("command://notation/toggle-snap-to-next");
+
+struct ToggleSnapToCommand {
+    cprop_decl id = Command("command://notation/toggle-snap-to");
+    cprop_decl title = MnemonicString("action", "Toggle snap to item");
+    cprop_decl description = TranslatableString("action", "Toggle snapping of the selected hairpin or tempo change to the adjacent item");
+    cprop_decl availabilities = Availability::API;
+
+    SnapDirection direction = SnapDirection::Next;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "direction", &ToggleSnapToCommand::direction, "Direction of the adjacent item" },
+    };
+};
+
+// aliases for toggle snap to command
+
+struct ToggleSnapToPrevCommand {
+    cprop_decl id = Command("command://notation/toggle-snap-to/prev");
+    cprop_decl title = MnemonicString("action", "Snap to &previous");
+    cprop_decl description = TranslatableString("action", "Snap to previous");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleSnapToCommand(SnapDirection::Prev);
+};
+
+struct ToggleSnapToNextCommand {
+    cprop_decl id = Command("command://notation/toggle-snap-to/next");
+    cprop_decl title = MnemonicString("action", "Snap to &next");
+    cprop_decl description = TranslatableString("action", "Snap to next");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleSnapToCommand(SnapDirection::Next);
+};
 
 // layout commands
 

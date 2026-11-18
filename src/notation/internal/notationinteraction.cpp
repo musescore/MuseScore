@@ -3799,82 +3799,69 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
     apply();
 }
 
-void NotationInteraction::toggleSnapToPrevious()
+void NotationInteraction::toggleSnapTo(SnapDirection direction)
 {
-    bool newSnapValue = false;
+    const bool snapBefore = direction == SnapDirection::Prev;
+    const Pid pid = snapBefore ? Pid::SNAP_BEFORE : Pid::SNAP_AFTER;
 
-    // Collect items to toggle...
-    std::unordered_set<Hairpin*> hairpins;
-    for (EngravingItem* e : score()->selection().elements()) {
-        if (e->isHairpinSegment()) {
-            Hairpin* h = toHairpinSegment(e)->hairpin();
-            // If any item in the selection has a false snapping value, then we should
-            // toggle all to true (handles mixed/indeterminate state)
-            if (!h->snapToItemBefore() && !newSnapValue) {
-                newSnapValue = true;
-            }
-            hairpins.emplace(h);
-        }
-    }
-    if (hairpins.empty()) {
-        return;
-    }
-
-    // Do toggle...
-    startEdit(TranslatableString("undoableAction", "Toggle snap to previous"));
-    for (Hairpin* h : hairpins) {
-        if (h->snapToItemBefore() == newSnapValue) {
-            continue;
-        }
-        h->undoChangeProperty(Pid::SNAP_BEFORE, PropertyValue(newSnapValue));
-    }
-    apply();
-}
-
-void NotationInteraction::toggleSnapToNext()
-{
-    bool newSnapValue = false;
-
-    // Collect items to toggle...
+    // Collect items to toggle.
+    // `GradualTempoChange` only has the "after" end, so it takes part in the
+    // "next" direction only.
     std::unordered_set<Hairpin*> hairpins;
     std::unordered_set<GradualTempoChange*> gradualTempoChanges;
-    for (EngravingItem* e : score()->selection().elements()) {
+
+    auto collect = [&](EngravingItem* e) {
         if (e->isHairpinSegment()) {
             Hairpin* h = toHairpinSegment(e)->hairpin();
-            // If any item in the selection has a false snapping value, then we should
-            // toggle all to true (handles mixed/indeterminate state)
-            if (!h->snapToItemAfter() && !newSnapValue) {
-                newSnapValue = true;
-            }
             hairpins.emplace(h);
+        } else if (!snapBefore && e->isGradualTempoChangeSegment()) {
+            gradualTempoChanges.emplace(toGradualTempoChangeSegment(e)->tempoChange());
         }
-        if (e->isGradualTempoChangeSegment()) {
-            GradualTempoChange* gtc = toGradualTempoChangeSegment(e)->tempoChange();
-            // Same here (see above)
-            if (!gtc->snapToItemAfter() && !newSnapValue) {
-                newSnapValue = true;
-            }
-            gradualTempoChanges.emplace(gtc);
-        }
+    };
+    for (EngravingItem* e : score()->selection().elements()) {
+        collect(e);
     }
+
     if (hairpins.empty() && gradualTempoChanges.empty()) {
         return;
     }
 
-    // Do toggle...
-    startEdit(TranslatableString("undoableAction", "Toggle snap to next"));
-    for (Hairpin* h : hairpins) {
-        if (h->snapToItemAfter() == newSnapValue) {
-            continue;
+    // If any item in the selection has a false snapping value, then we toggle
+    // all to true (handles the mixed/indeterminate state).
+    bool newSnapValue = false;
+    for (const Hairpin* h : hairpins) {
+        if (snapBefore ? !h->snapToItemBefore() : !h->snapToItemAfter()) {
+            newSnapValue = true;
+            break;
         }
-        h->undoChangeProperty(Pid::SNAP_AFTER, PropertyValue(newSnapValue));
+    }
+    if (!newSnapValue) {
+        for (const GradualTempoChange* gtc : gradualTempoChanges) {
+            if (!gtc->snapToItemAfter()) {
+                newSnapValue = true;
+                break;
+            }
+        }
+    }
+
+    // Do toggle...
+    const TranslatableString actionName = snapBefore
+                                          ? TranslatableString("undoableAction", "Toggle snap to previous")
+                                          : TranslatableString("undoableAction", "Toggle snap to next");
+    startEdit(actionName);
+
+    for (Hairpin* h : hairpins) {
+        const bool current = snapBefore ? h->snapToItemBefore() : h->snapToItemAfter();
+        if (current != newSnapValue) {
+            h->undoChangeProperty(pid, PropertyValue(newSnapValue));
+        }
     }
     for (GradualTempoChange* gtc : gradualTempoChanges) {
-        if (gtc->snapToItemAfter() == newSnapValue) {
-            continue;
+        if (gtc->snapToItemAfter() != newSnapValue) {
+            gtc->undoChangeProperty(pid, PropertyValue(newSnapValue));
         }
-        gtc->undoChangeProperty(Pid::SNAP_AFTER, PropertyValue(newSnapValue));
     }
+
     apply();
 }
 

@@ -166,8 +166,7 @@ public:
     void movePitch(MoveDirection d, PitchMode mode) override;
     void moveChordRestToStaff(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
-    void toggleSnapToPrevious() override;
-    void toggleSnapToNext() override;
+    void toggleSnapTo(SnapDirection direction) override;
 
     // Text edit
     bool isTextSelected() const override;
