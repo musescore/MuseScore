@@ -40,7 +40,7 @@
 #include "notationscene/notationcommands.h"
 #include "playback/playbackcommands.h"
 #include "palette/palettecommands.h"
-#include "dockwindow_v2/dockcommands.h"
+#include "dockwindow/dockcommands.h"
 #include "update/updatecommands.h"
 #include "diagnostics/diagnosticscommands.h"
 #include "musesampler/musesamplercommands.h"

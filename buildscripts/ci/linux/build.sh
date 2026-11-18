@@ -33,7 +33,6 @@ BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 BUILD_CRASHPAD_CLIENT="OFF"
 BUILD_PIPEWIRE=OFF
-DOCKWIDGETS_V2=OFF
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -42,7 +41,6 @@ while [[ "$#" -gt 0 ]]; do
         --build_mode) BUILD_MODE="$2"; shift ;;
         --arch) PACKARCH="$2"; shift ;;
         --build-pipewire) BUILD_PIPEWIRE=ON ;;
-        --dockwidgets_v2) DOCKWIDGETS_V2="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -90,7 +88,6 @@ MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
 MUSESCORE_BUILD_VST_MODULE="ON" \
 MUSESCORE_BUILD_WEBSOCKET="ON" \
 MUSESCORE_BUILD_PIPEWIRE_AUDIO_DRIVER=$BUILD_PIPEWIRE \
-MUSESCORE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2=$DOCKWIDGETS_V2 \
 bash ./ninja_build.sh -t appimage
 
 

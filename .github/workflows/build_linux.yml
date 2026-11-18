@@ -20,10 +20,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      dockwidgets_v2:
-        description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'ON'
-        required: false
   workflow_call:
     inputs:
       platforms:
@@ -49,11 +45,6 @@ on:
       build_number:
         description: "Build number (if not provided, will be generated)"
         default: ""
-        type: string
-        required: false
-      dockwidgets_v2:
-        description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'ON'
         type: string
         required: false
       app_repo:
@@ -256,10 +247,8 @@ jobs:
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
 
     - name: Build
-      env:
-        DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
-        bash ./buildscripts/ci/linux/build.sh -n "${BUILD_NUMBER}" --crash_log_url "${SENTRY_URL}" --arch ${{ matrix.arch }} --build-pipewire --dockwidgets_v2 "${DOCKWIDGETS_V2}"
+        bash ./buildscripts/ci/linux/build.sh -n "${BUILD_NUMBER}" --crash_log_url "${SENTRY_URL}" --arch ${{ matrix.arch }} --build-pipewire
     - name: Show ccache stats
       run: |
         ccache -sv

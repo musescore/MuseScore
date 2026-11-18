@@ -83,8 +83,6 @@ set(MUSE_APP_BUILD_MODE "dev" CACHE STRING "Build mode")
 
 set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
-option(MUSE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2 "Use KDDockWidgets v2" ON)
-
 include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseDeclareOptions.cmake)
 
 # Modules (alphabetical order please)

@@ -36,7 +36,7 @@
 #include "notation/inotationselection.h"
 
 #include "dockwindow/idockwindow.h"
-#include "dockwindow_v2/dockcommands.h"
+#include "dockwindow/dockcommands.h"
 
 using namespace muse;
 using namespace mu::appshell;

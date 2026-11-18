@@ -20,10 +20,6 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
-      dockwidgets_v2:
-        description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'ON'
-        required: false
   workflow_call:
     inputs:
       platforms:
@@ -49,11 +45,6 @@ on:
       build_number:
         description: "Build number (if not provided, will be generated)"
         default: ""
-        type: string
-        required: false
-      dockwidgets_v2:
-        description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'ON'
         type: string
         required: false
       app_repo:
@@ -252,11 +243,10 @@ jobs:
     - name: Build
       shell: cmd
       env:
-        DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
         # Debug info is needed only for uploading symbols, without it the ccache is much smaller
         DEBUG_INFO: ${{ env.DO_UPLOAD_SYMBOLS == 'true' && 'ON' || 'OFF' }}
       run: |
-        buildscripts\ci\windows\build.bat -n %BUILD_NUMBER% --crash_log_url "%SENTRY_URL%" --dockwidgets_v2 %DOCKWIDGETS_V2% --debug_info %DEBUG_INFO%
+        buildscripts\ci\windows\build.bat -n %BUILD_NUMBER% --crash_log_url "%SENTRY_URL%" --debug_info %DEBUG_INFO%
     - name: Show ccache stats
       shell: bash
       run: |
@@ -458,10 +448,8 @@ jobs:
       # Note: no --crash_log_url, because we don't upload dump symbols for the portable build,
       # so crash reports from it would not be usable anyway.
       shell: cmd
-      env:
-        DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
-        buildscripts\ci\windows\build.bat --portable ON -n %BUILD_NUMBER% --dockwidgets_v2 %DOCKWIDGETS_V2% --debug_info OFF
+        buildscripts\ci\windows\build.bat --portable ON -n %BUILD_NUMBER% --debug_info OFF
     - name: Show ccache stats
       shell: bash
       run: |
