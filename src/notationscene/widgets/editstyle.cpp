@@ -513,7 +513,7 @@ void EditStyle::classBegin()
 
         { StyleId::arpeggioNoteDistance,    false, arpeggioNoteDistance,    arpeggioNoteDistanceReset },
         { StyleId::arpeggioLineWidth,       false, arpeggioLineWidth,       arpeggioLineWidthReset },
-        { StyleId::arpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
+        { StyleId::arpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, arpeggioHiddenInStdIfTabReset },
 
         { StyleId::chordBracketNoteDistance, false, chordBracketNoteDistance, chordBracketNoteDistanceReset },
         { StyleId::chordBracketLineWidth,    false, chordBracketLineWidth,    chordBracketLineWidthReset },

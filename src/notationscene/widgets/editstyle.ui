@@ -7338,15 +7338,40 @@
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="arpeggioNoteDistanceReset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Distance to note' value</string>
+             </property>
              <property name="text">
-              <string/>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="arpeggioLineWidthReset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Line thickness' value</string>
+             </property>
              <property name="text">
-              <string/>
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="arpeggioHiddenInStdIfTabReset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Do not show arpeggios in standard notation when displayed in tablature' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -12150,55 +12175,100 @@ followed by dashes</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_98">
-               <property name="text">
-                <string>from top of staff</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_99">
-               <property name="text">
-                <string>of font height</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
-               <property name="keyboardTracking">
-                <bool>false</bool>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="minimum">
-                <double>-25.000000000000000</double>
-               </property>
-               <property name="maximum">
-                <double>25.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.500000000000000</double>
-               </property>
-               <property name="value">
-                <double>6.000000000000000</double>
-               </property>
-              </widget>
-             </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="labelFBFont">
+              <property name="text">
+               <string>Font:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::PlainText</enum>
+              </property>
+              <property name="buddy">
+               <cstring>comboFBFont</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="comboFBFont">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="resetComboFBFont">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Font' value</string>
+              </property>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="resetDoubleSpinFBSize">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Size' value</string>
+              </property>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelFBVertPos">
+              <property name="text">
+               <string>Vertical position:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::PlainText</enum>
+              </property>
+              <property name="buddy">
+               <cstring>doubleSpinFBVertPos</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
+              <property name="keyboardTracking">
+               <bool>false</bool>
+              </property>
+              <property name="suffix">
+               <string>sp</string>
+              </property>
+              <property name="minimum">
+               <double>-25.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>25.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.500000000000000</double>
+              </property>
+              <property name="value">
+               <double>6.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QToolButton" name="resetDoubleSpinFBVertPos">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Vertical position' value</string>
+              </property>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
              <item row="3" column="0">
               <widget class="QLabel" name="labelFBLineHeight">
                <property name="text">
@@ -12234,93 +12304,122 @@ followed by dashes</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelFBFont">
-               <property name="text">
-                <string>Font:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::PlainText</enum>
-               </property>
-               <property name="buddy">
-                <cstring>comboFBFont</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="comboFBFont">
-               <property name="sizeAdjustPolicy">
-                <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelFBVertPos">
-               <property name="text">
-                <string>Vertical position:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::TextFormat::PlainText</enum>
-               </property>
-               <property name="buddy">
-                <cstring>doubleSpinFBVertPos</cstring>
-               </property>
-              </widget>
-             </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="resetSpinFBLineHeight">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line height' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+               </widget>
+              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupFBAlign">
-             <property name="accessibleName">
-              <string>Alignment</string>
-             </property>
-             <property name="title">
-              <string>Alignment</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_11">
-              <item>
-               <widget class="QRadioButton" name="radioFBTop">
-                <property name="text">
-                 <string>Top</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioFBBottom">
-                <property name="text">
-                 <string>Bottom</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupFBStyle">
-             <property name="accessibleName">
-              <string>Style</string>
-             </property>
-             <property name="title">
-              <string>Style</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_33">
-              <item>
-               <widget class="QRadioButton" name="radioFBModern">
-                <property name="text">
-                 <string>Modern</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioFBHistoric">
-                <property name="text">
-                 <string>Historic</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
+            <item>
+             <widget class="QLabel" name="labelFBAlign">
+              <property name="text">
+               <string>Alignment:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::PlainText</enum>
+              </property>
+              <property name="buddy">
+               <cstring>groupFBAlign</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1" colspan="2">
+             <widget class="QGroupBox" name="groupFBAlign">
+              <property name="accessibleName">
+               <string>Alignment</string>
+              </property>
+              <property name="title">
+               <string>Alignment</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <item>
+                <widget class="QRadioButton" name="radioFBTop">
+                 <property name="text">
+                  <string>Top</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioFBBottom">
+                 <property name="text">
+                  <string>Bottom</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QToolButton" name="resetFbAlign">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Alignment' value</string>
+              </property>
+              <property name="text">
+               <string notr="true"/></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelFBStyle">
+              <property name="text">
+               <string>Style:</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::PlainText</enum>
+              </property>
+              <property name="buddy">
+               <cstring>groupFBStyle</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="2">
+             <widget class="QGroupBox" name="groupFBStyle">
+              <property name="accessibleName">
+               <string>Style</string>
+              </property>
+              <property name="title">
+               <string>Style</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_33">
+               <item>
+                <widget class="QRadioButton" name="radioFBModern">
+                 <property name="text">
+                  <string>Modern</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioFBHistoric">
+                 <property name="text">
+                  <string>Historic</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QToolButton" name="resetFbStyle">
+              <property name="toolTip">
+               <string>Reset to default</string>
+              </property>
+              <property name="accessibleName">
+               <string>Reset 'Style' value</string>
+              </property>
+              <property name="text">
+               <string notr="true"/></property>
+             </widget>
+            </item>
           </layout>
          </widget>
         </item>
