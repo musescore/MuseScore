@@ -4897,7 +4897,7 @@ do lewej, po których są łączniki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
+        <source>To key</source>
         <translation>Do oznaczenia tonacji</translation>
     </message>
     <message>

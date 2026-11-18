@@ -4898,7 +4898,7 @@ urmate de cratime</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
+        <source>To key</source>
         <translation>în gama</translation>
     </message>
     <message>

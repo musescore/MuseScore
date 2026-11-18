@@ -4897,7 +4897,7 @@ u nepravidelných rytmických skupin</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
+        <source>To key</source>
         <translation>Do tóniny</translation>
     </message>
     <message>

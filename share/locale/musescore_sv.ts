@@ -4897,7 +4897,7 @@ som följs av streck</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
+        <source>To key</source>
         <translation>Till tonart</translation>
     </message>
     <message>

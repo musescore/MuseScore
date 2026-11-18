@@ -35,7 +35,7 @@
          <string>Transpose to key (specified at concert pitch)</string>
         </property>
         <property name="title">
-         <string>To Key</string>
+         <string>To key</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -623,3 +623,4 @@
   </connection>
  </connections>
 </ui>
+
