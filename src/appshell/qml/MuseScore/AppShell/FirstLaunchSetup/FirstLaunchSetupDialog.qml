@@ -38,8 +38,17 @@ StyledDialogView {
 
     readonly property Page currentPage: pageLoader.item as Page
 
+    property bool isCloseApproved: false
+
     FirstLaunchSetupModel {
         id: model
+
+        onCloseRequested: {
+            //! NOTE Closing calls onAboutToClose again, so the close is approved first,
+            //! and it is closed after the current handler returns
+            root.isCloseApproved = true
+            Qt.callLater(root.hide)
+        }
     }
 
     Component.onCompleted: {
@@ -47,18 +56,13 @@ StyledDialogView {
     }
 
     onAboutToClose: function(closeEvent) {
-        if (model.canFinish) {
-            model.finish()
+        if (root.isCloseApproved) {
             return
         }
 
-        let shouldClose = model.askAboutClosingEarly()
-        if (!shouldClose) {
-            closeEvent.accepted = false
-            return
-        }
-
-        model.finish()
+        //! NOTE The model decides, and asks to close when it can
+        closeEvent.accepted = false
+        model.onAboutToClose()
     }
 
     ColumnLayout {

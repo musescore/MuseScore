@@ -879,25 +879,33 @@ void OpenProjectScenario::warnProjectCriticallyCorrupted(const String& projectNa
 void OpenProjectScenario::warnProjectCannotBeOpened(const Ret& ret, const muse::io::path_t& filepath)
 {
     std::string title = muse::mtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toString()).toStdString();
-    std::string body;
+    IInteractive::Text text;
 
     switch (ret.code()) {
     case int(engraving::Err::FileNotFound):
-        body = muse::trc("project", "This file does not exist or cannot be accessed at the moment.");
+        text.text = muse::trc("project", "This file does not exist or cannot be accessed at the moment.");
         break;
     case int(engraving::Err::FileOpenError):
-        body = muse::trc("project",
-                         "This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.");
+        text.text = muse::trc("project",
+                              "This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.");
+        break;
+    case int(engraving::Err::FileBadFormat):
+        text.text = muse::trc("project", "This file is damaged or is not in a supported format.");
+
+        //! NOTE An importer may tell what exactly is wrong with the file
+        if (ret.text() != engraving::make_ret(engraving::Err::FileBadFormat).text()) {
+            text.detailedText = ret.text();
+        }
         break;
     default:
         if (!ret.text().empty()) {
-            body = ret.text();
+            text.text = ret.text();
         } else {
-            body = muse::trc("project", "An error occurred while reading this file.");
+            text.text = muse::trc("project", "An error occurred while reading this file.");
         }
     }
 
-    interactive()->error(title, body);
+    interactive()->error(title, text);
 }
 
 async::Promise<io::path_t> OpenProjectScenario::selectScoreOpeningFile() const

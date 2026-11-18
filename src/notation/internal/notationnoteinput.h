@@ -61,11 +61,16 @@ public:
     bool usingNoteInputMethod(NoteInputMethod method) const override;
     void setNoteInputMethod(NoteInputMethod method) override;
 
+    muse::Ret canAddNote(NoteAddingMode addingMode) const override;
     void addNote(const NoteInputParams& params, NoteAddingMode addingMode) override;
+
     void setDuration(DurationType duration) override;
     void toggleRest() override;
     void toggleDots(int dots) override;
+
+    muse::Ret canPutNote(const muse::PointF& pos) const override;
     muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
+
     void removeNote(const muse::PointF& pos) override;
 
     void addTuplet(const TupletOptions& options) override;

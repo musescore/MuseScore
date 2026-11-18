@@ -73,8 +73,6 @@ target_sources(engraving PRIVATE
     iengravingfont.h
     iengravingfontsprovider.h
 
-    infrastructure/messagebox.cpp
-    infrastructure/messagebox.h
     infrastructure/imimedata.h
     infrastructure/mscio.h
     infrastructure/mscreader.cpp

@@ -152,13 +152,6 @@ bool LayoutPanelTreeModel::removeRows(int row, int count, const QModelIndex& par
         parentItem = m_rootItem;
     }
 
-    if (parentItem == m_rootItem && needWarnOnRemoveRows(row, count)) {
-        // When removing instruments, the user needs to be warned in some cases
-        if (!warnAboutRemovingInstrumentsIfNecessary(count)) {
-            return false;
-        }
-    }
-
     setLoadingBlocked(true);
     beginRemoveRows(parent, row, row + count - 1);
 
@@ -625,7 +618,19 @@ void LayoutPanelTreeModel::removeSelectedRows()
         return f.row() < s.row();
     });
 
-    removeRows(firstIndex.row(), selectedIndexList.size(), firstIndex.parent());
+    const int count = selectedIndexList.size();
+
+    // When removing instruments, the user needs to be warned in some cases
+    if (firstIndex.parent().isValid() || !needWarnOnRemoveRows(firstIndex.row(), count) || m_masterNotation->excerpts().empty()) {
+        removeRows(firstIndex.row(), count, firstIndex.parent());
+        return;
+    }
+
+    askAboutRemovingInstruments(count).onResolve(this, [this, first = QPersistentModelIndex(firstIndex), count](bool remove) {
+        if (remove && first.isValid()) {
+            removeRows(first.row(), count, first.parent());
+        }
+    });
 }
 
 bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
@@ -1185,19 +1190,20 @@ bool LayoutPanelTreeModel::needWarnOnRemoveRows(int row, int count)
     return false;
 }
 
-bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
+muse::async::Promise<bool> LayoutPanelTreeModel::askAboutRemovingInstruments(int count)
 {
-    // Only warn if excerpts are existent
-    if (m_masterNotation->excerpts().empty()) {
-        return true;
-    }
+    return muse::async::make_promise<bool>([this, count](auto resolve) {
+        interactive()->warning(
+            muse::trc("layoutpanel", "Are you sure you want to delete the selected instrument(s)?", nullptr, count),
+            muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr, count),
+            { IInteractive::Button::No, IInteractive::Button::Yes }
+            )
+        .onResolve(this, [resolve](const IInteractive::Result& result) {
+            (void)resolve(result.standardButton() == IInteractive::Button::Yes);
+        });
 
-    return interactive()->warningSync(
-        muse::trc("layoutpanel", "Are you sure you want to delete the selected instrument(s)?", nullptr, count),
-        muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr, count),
-        { IInteractive::Button::No, IInteractive::Button::Yes }
-        )
-           .standardButton() == IInteractive::Button::Yes;
+        return muse::async::Promise<bool>::dummy_result();
+    }, muse::async::PromiseType::AsyncByBody);
 }
 
 AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSharedPartItem(const Part* part)

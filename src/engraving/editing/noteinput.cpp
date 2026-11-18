@@ -36,8 +36,6 @@
 #include "transaction/transaction.h"
 #include "transpose.h"
 
-#include "../infrastructure/messagebox.h"
-
 #include "../dom/accidental.h"
 #include "../dom/chord.h"
 #include "../dom/chordline.h"
@@ -728,6 +726,54 @@ std::pair<Note*, Note*> NoteInput::repitchReplaceNote(Transaction&, Score* score
 }
 
 //---------------------------------------------------------
+//   where the entry points enter the note
+//    shared with the checks whether they remove a measure repeat
+//---------------------------------------------------------
+
+//! Where a click puts the note
+static bool clickPosition(Score* score, const PointF& pos, Position& p)
+{
+    return score->getPosition(&p, pos, score->inputState().voice());
+}
+
+//! Whether a click repitches the note there, instead of putting one
+static bool clickRepitches(const Position& p)
+{
+    Score* posScore = p.segment->score();
+    // it is not safe to call repitchNote() if p is on a TAB staff
+    bool isTablature = posScore->staff(p.staffIdx)->isTabStaff(p.segment->tick());
+    return posScore->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature;
+}
+
+//! Where the notes are entered from the keyboard
+static Position inputPosition(const InputState& is)
+{
+    Position pos;
+    pos.segment = is.segment();
+    pos.staffIdx = is.track() / VOICES;
+    pos.beyondScore = is.beyondScore();
+    return pos;
+}
+
+//! The note, to whose chord a note is added
+static Note* selectedNote(const Score* score)
+{
+    EngravingItem* el = score->selection().element();
+    return el && el->isNote() ? toNote(el) : nullptr;
+}
+
+//! Whether entering a note at `pos` removes the measure repeat there
+static bool removesMeasureRepeat(const Position& pos)
+{
+    if (!pos.segment || pos.beyondScore) {
+        return false;
+    }
+
+    const Measure* measure = pos.segment->measure();
+    return measure && measure->isMeasureRepeatGroup(pos.staffIdx);
+}
+
+//---------------------------------------------------------
 //   putNote
 //    mouse click in state NoteType::ENTRY
 //---------------------------------------------------------
@@ -735,14 +781,12 @@ std::pair<Note*, Note*> NoteInput::repitchReplaceNote(Transaction&, Score* score
 Ret NoteInput::putNote(Transaction& tx, Score* score, const PointF& pos, bool replace, bool insert)
 {
     Position p;
-    if (!score->getPosition(&p, pos, score->inputState().voice())) {
+    if (!clickPosition(score, pos, p)) {
         LOGD("cannot put note here, get position failed");
         return make_ret(Ret::Code::UnknownError);
     }
 
     Score* posScore = p.segment->score();
-    // it is not safe to call repitchNote() if p is on a TAB staff
-    bool isTablature = posScore->staff(p.staffIdx)->isTabStaff(p.segment->tick());
 
     //  calculate actual clicked line from staffType offset and stepOffset
     Staff* ss = posScore->staff(p.staffIdx);
@@ -751,7 +795,7 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const PointF& pos, bool re
     double lineDist = ss->staffType(p.segment->tick())->lineDistance().val();
     p.line -= stepOffset + 2 * stYOffset / lineDist;
 
-    if (posScore->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {
+    if (clickRepitches(p)) {
         return repitchNote(tx, posScore, p, replace);
     } else {
         if (insert || posScore->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
@@ -792,18 +836,10 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
         return make_ret(Ret::Code::UnknownError);
     }
 
-    // warn and delete MeasureRepeat if necessary
+    // delete MeasureRepeat if necessary, the user is asked beforehand
     Measure* m = is.segment()->measure();
     staff_idx_t staffIdx = track2staff(is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
-        auto b = MessageBox(score->iocContext()).warning(muse::trc("engraving", "Note input will remove measure repeat"),
-                                                         muse::trc("engraving", "This measure contains a measure repeat."
-                                                                                " If you enter notes here, it will be deleted."
-                                                                                " Do you want to continue?"));
-        if (b == MessageBox::Cancel) {
-            return make_ret(Ret::Code::Cancel);
-        }
-
         score->deleteItem(m->measureRepeatElement(staffIdx));
     }
 
@@ -1268,10 +1304,8 @@ void NoteInput::addPitch(Transaction& tx, Score* score, int step, bool addFlag, 
     insert = insert || is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
     Position pos;
     if (addFlag) {
-        EngravingItem* el = score->selection().element();
-        if (el && el->isNote()) {
-            Note* selectedNote = toNote(el);
-            Chord* chord  = selectedNote->chord();
+        if (Note* note = selectedNote(score)) {
+            Chord* chord  = note->chord();
             Segment* seg  = chord->segment();
             pos.segment   = seg;
             pos.staffIdx  = chord->vStaffIdx();
@@ -1297,11 +1331,9 @@ void NoteInput::addPitch(Transaction& tx, Score* score, int step, bool addFlag, 
         }
     }
 
-    pos.segment   = is.segment();
-    pos.staffIdx  = is.track() / VOICES;
+    pos           = inputPosition(is);
     ClefType clef = score->staff(pos.staffIdx)->clef(pos.segment->tick());
     pos.line      = relStep(step, clef);
-    pos.beyondScore = is.beyondScore();
 
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         repitchNote(tx, score, pos, !addFlag);
@@ -1331,13 +1363,48 @@ void NoteInput::addFret(Transaction& tx, Score* score, int fret)
         return;
     }
     is.setRest(false);
-    Position pos;
-    pos.segment   = is.segment();
-    pos.staffIdx  = is.track() / VOICES;
+    Position pos  = inputPosition(is);
     pos.line      = score->staff(pos.staffIdx)->staffType(is.tick())->physStringToVisual(is.string());
     pos.fret      = fret;
-    pos.beyondScore = is.beyondScore();
     putNote(tx, score, pos, false);
+}
+
+bool NoteInput::putNoteRemovesMeasureRepeat(Score* score, const PointF& pos)
+{
+    Position p;
+    if (!clickPosition(score, pos, p) || clickRepitches(p)) {
+        return false;
+    }
+
+    return removesMeasureRepeat(p);
+}
+
+bool NoteInput::addPitchRemovesMeasureRepeat(Score* score, bool addFlag)
+{
+    const InputState& is = score->inputState();
+    if (!is.isValid()) {
+        return false;
+    }
+
+    if (addFlag && selectedNote(score)) {
+        return false; // added to the chord
+    }
+
+    if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
+        return false;
+    }
+
+    return removesMeasureRepeat(inputPosition(is));
+}
+
+bool NoteInput::addFretRemovesMeasureRepeat(Score* score)
+{
+    const InputState& is = score->inputState();
+    if (is.track() == muse::nidx || !is.segment()) {
+        return false;
+    }
+
+    return removesMeasureRepeat(inputPosition(is));
 }
 
 //---------------------------------------------------------

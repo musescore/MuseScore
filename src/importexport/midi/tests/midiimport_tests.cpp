@@ -28,6 +28,7 @@
 #include "global/io/path.h"
 #include "global/types/string.h"
 
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/types/constants.h"
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"
@@ -49,7 +50,7 @@ using namespace mu::iex::midi;
 
 // forward declaration of private functions used in tests
 namespace mu::iex::midi {
-extern engraving::Err importMidi(engraving::MasterScore*, const QString& name);
+extern muse::Ret importMidi(engraving::MasterScore*, const QString& name);
 
 namespace MidiTuplet {
 bool isTupletAllowed(const TupletInfo& tupletInfo);
@@ -176,7 +177,7 @@ void MidiImportTests::importThenCompareWithRef(const char* file)
 std::unique_ptr<engraving::MasterScore> MidiImportTests::importMidi(const String& fileName, engraving::Err* err)
 {
     const auto doImportMidi = [err](engraving::MasterScore* score, const io::path_t& path) -> mu::engraving::Err {
-        const engraving::Err rv = mu::iex::midi::importMidi(score, path.toQString());
+        const engraving::Err rv = engraving::Err(mu::iex::midi::importMidi(score, path.toQString()).code());
         if (err) {
             *err = rv;
         }
@@ -1510,6 +1511,17 @@ TEST_F(MidiImportTests, tupletTickSetCorrectly)
         << "Tuplet tick must not be 0: tuplet is in measure 2, not measure 1";
     EXPECT_EQ(firstTuplet->tick(), firstTuplet->elements().front()->tick())
         << "Tuplet tick must match first element tick";
+}
+
+//! A file that is not MIDI is rejected with the error of the reader, for the caller to show it
+TEST_F(MidiImportTests, notMidi_ReportsTheError) {
+    engraving::MasterScore* score = engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
+    muse::Ret ret = mu::iex::midi::importMidi(score, midiFilePath("not_a_midi").toQString());
+    delete score;
+
+    //! The error is the details, the message for the user is up to the caller
+    EXPECT_EQ(ret.code(), int(engraving::Err::FileBadFormat));
+    EXPECT_NE(ret.text().find("MThd expected"), std::string::npos);
 }
 
 // SysEx length guard in MidiFile::readEvent() (midishared/midifile.cpp)

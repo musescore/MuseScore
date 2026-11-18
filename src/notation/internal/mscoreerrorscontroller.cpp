@@ -192,6 +192,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Cannot create tuplet");
         message = muse::trc("notation", "Note value is too short");
         break;
+    case MsError::TUPLET_RATIO_NOT_POSSIBLE:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "This ratio cannot be used for a tuplet of this duration.");
+        break;
     }
 
     m_currentDialogError = err;

@@ -1618,3 +1618,69 @@ TEST_F(Engraving_TupletTests, nestedTupletsAvoidEachOther)
 
     delete score;
 }
+
+//! A measure of four quarters
+static Measure* measureWithQuarters(MasterScore* score)
+{
+    InputState& is = score->inputState();
+    is.setTrack(0);
+    is.setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
+    is.setNoteEntryMode(true);
+    is.setNoteEntryMethod(NoteEntryMethod::BY_DURATION);
+    is.setDuration(DurationType::V_QUARTER);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction& tx) {
+        for (int i = 0; i < 4; ++i) {
+            NoteVal nval(60);
+            NoteInput::addPitch(tx, score, nval, false);
+        }
+    });
+    return score->firstMeasure();
+}
+
+//! A tuplet that cannot be created is reported through the error, for the caller to show it
+TEST_F(Engraving_TupletTests, addTuplet_RatioNotPossible_ReportsTheError)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureWithQuarters(score);
+    ChordRest* quarter = toChordRest(m1->first(SegmentType::ChordRest)->element(0));
+    MScore::setError(MsError::MS_NO_ERROR);
+
+    //! [WHEN] A quarter is divided by 3, which gives no note value (1/12)...
+    Tuplet* tuplet = nullptr;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        tuplet = score->addTuplet(quarter, Fraction(7, 3), TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+
+    //! [THEN] ...there is no tuplet, and the error tells why
+    EXPECT_FALSE(tuplet);
+    EXPECT_EQ(MScore::_error, MsError::TUPLET_RATIO_NOT_POSSIBLE);
+    EXPECT_EQ(rhythm(m1), "4 4 4 4");
+
+    MScore::setError(MsError::MS_NO_ERROR);
+    delete score;
+}
+
+TEST_F(Engraving_TupletTests, addTuplet_NoSpace_ReportsTheError)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    Measure* m1 = measureWithQuarters(score);
+    ChordRest* lastQuarter = toChordRest(m1->last(SegmentType::ChordRest)->element(0));
+    MScore::setError(MsError::MS_NO_ERROR);
+
+    //! [WHEN] A half note triplet starts on the last quarter of the measure...
+    Tuplet* tuplet = nullptr;
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Tuplet tests"), [&](Transaction&) {
+        tuplet = score->addTuplet(lastQuarter, Fraction(3, 2), TDuration(DurationType::V_QUARTER),
+                                  TupletNumberType::SHOW_NUMBER, TupletBracketType::AUTO_BRACKET);
+    });
+
+    //! [THEN] ...there is no tuplet, and the error tells why
+    EXPECT_FALSE(tuplet);
+    EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+    EXPECT_EQ(rhythm(m1), "4 4 4 4");
+
+    MScore::setError(MsError::MS_NO_ERROR);
+    delete score;
+}

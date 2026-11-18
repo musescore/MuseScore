@@ -25,6 +25,7 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "project/iprojectsession.h"
 #include "interactive/iinteractive.h"
@@ -35,7 +36,7 @@
 #include "playbacktypes.h"
 
 namespace mu::playback {
-class SoundProfilesModel : public QAbstractListModel, public muse::Contextable
+class SoundProfilesModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -84,7 +85,8 @@ private:
 
     mu::notation::INotationPlaybackPtr notationPlayback() const;
 
-    bool askAboutChangingSounds();
+    muse::async::Promise<bool> askAboutChangingSounds();
+    void applyActiveProfile(const QString& newActiveProfile);
 
     std::vector<SoundProfile> m_profiles;
 

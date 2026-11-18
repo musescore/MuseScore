@@ -26,6 +26,7 @@
 
 #include "ui_customizekitdialog.h"
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "project/iprojectsession.h"
@@ -43,7 +44,7 @@ namespace mu::palette {
 //   CustomizeKitDialog
 //---------------------------------------------------------
 
-class CustomizeKitDialog : public muse::ui::WidgetDialog, private Ui::CustomizeKitDialog
+class CustomizeKitDialog : public muse::ui::WidgetDialog, private Ui::CustomizeKitDialog, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -74,6 +75,9 @@ private slots:
 
 private:
     void initDrumsetAndKey();
+
+    bool isDrumsetFileTooOld(const muse::io::path_t& fname) const;
+    void loadDrumset(const muse::io::path_t& fname);
 
     void apply();
     void cancel();

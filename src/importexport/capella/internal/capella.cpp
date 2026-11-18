@@ -65,11 +65,8 @@
 #include "engraving/editing/transpose.h"
 
 #include "engraving/engravingerrors.h"
-#include "engraving/infrastructure/messagebox.h"
 
 #include "log.h"
-
-#include "translation.h"
 
 extern QString rtf2html(const QString&);
 
@@ -2858,32 +2855,37 @@ void Capella::read(QFile* fp)
 //   importCapella
 //---------------------------------------------------------
 
-Err importCapella(MasterScore* score, const QString& name)
+muse::Ret importCapella(MasterScore* score, const QString& name, bool forceMode)
 {
     QFile fp(name);
     if (!fp.exists()) {
-        return Err::FileNotFound;
+        return make_ret(Err::FileNotFound, muse::io::path_t(name));
     }
     if (!fp.open(QIODevice::ReadOnly)) {
-        return Err::FileOpenError;
+        return make_ret(Err::FileOpenError, muse::io::path_t(name));
     }
 
     Capella cf;
     try {
         cf.read(&fp);
-        fp.close();
+    }
+    catch (Capella::Error errNo) {
+        //! NOTE Nothing is imported from a file that cannot be read, the caller tells the user about it,
+        //! the error is the details
+        return make_ret(Err::FileBadFormat, muse::String::fromQString(cf.error(errNo)));
+    }
+    fp.close();
+
+    try {
         convertCapella(score, &cf, false);
     }
     catch (Capella::Error errNo) {
-        if (!MScore::noGui) {
-            MessageBox(score->iocContext()).warning(muse::trc("iex_capella", "Import Capella"),
-                                                    muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
-                                                    { MessageBox::Ok });
+        //! NOTE What is converted until the error can be opened: the user decides whether to open it anyway,
+        //! then it is imported again in the force mode. The caller tells the user about it, the error is the details
+        if (!forceMode && !MScore::noGui) {
+            return make_ret(Err::FileCorrupted, muse::String::fromQString(cf.error(errNo)));
         }
-        fp.close();
-        // avoid another error message box
-        return Err::NoError;
     }
-    return Err::NoError;
+    return muse::make_ok();
 }
 }

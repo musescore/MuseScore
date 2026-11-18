@@ -26,11 +26,12 @@
 #include <QKeySequence>
 #include <qqmlintegration.h>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 
 namespace mu::notation {
-class EditPercussionShortcutModel : public QObject, public muse::Contextable
+class EditPercussionShortcutModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -49,7 +50,7 @@ public:
     Q_INVOKABLE void load(const QVariant& originDrum, const QVariantList& drumsWithShortcut, const QVariantList& applicationShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key);
     Q_INVOKABLE void clear();
-    Q_INVOKABLE bool trySave();
+    Q_INVOKABLE void trySave();
 
     Q_INVOKABLE int conflictDrumPitch() const;
 
@@ -60,11 +61,15 @@ public:
     bool cleared() const { return m_cleared; }
 
 signals:
+    void closeRequested(bool accepted);
+
     void originShortcutTextChanged();
     void newShortcutTextChanged();
     void clearedChanged();
 
 private:
+    friend class EditPercussionShortcutModelTests;
+
     bool checkDrumShortcutsForConflict();
     bool checkApplicationShortcutsForConflict();
 
@@ -82,5 +87,6 @@ private:
 
     bool m_conflictInAppShortcuts = false;
     bool m_cleared = false;
+    bool m_isAskingToSave = false;
 };
 }

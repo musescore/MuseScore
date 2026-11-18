@@ -25,6 +25,8 @@
 
 #include "async/changednotify.h"
 #include "async/notifylist.h"
+#include "async/processevents.h"
+#include "async/promise.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/excerpt.h"
@@ -254,6 +256,13 @@ protected:
     bool moveRootRows(int sourceRow, int count, int destinationRow)
     {
         return m_model->moveRows(QModelIndex(), sourceRow, count, QModelIndex(), destinationRow);
+    }
+
+    static async::Promise<IInteractive::Result> dialogResult(IInteractive::Button button)
+    {
+        return async::make_promise<IInteractive::Result>([button](auto resolve) {
+            return resolve(IInteractive::Result(static_cast<int>(button)));
+        });
     }
 
     template<typename Signal>
@@ -746,7 +755,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_WithoutPar
     std::shared_ptr<int> emptyChanges = countEmits(&LayoutPanelTreeModel::isEmptyChanged);
 
     // [THEN] B is removed without asking
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_parts, removeParts(_)).Times(1);
 
     // [WHEN] B is removed
@@ -771,13 +780,14 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_WithParts_
     });
 
     // [THEN] The user is asked, and says yes
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillOnce(Return(IInteractive::Result(static_cast<int>(IInteractive::Button::Yes))));
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillOnce(Return(dialogResult(IInteractive::Button::Yes)));
     EXPECT_CALL(*m_parts, removeParts(_)).Times(1);
 
     // [WHEN] B is removed
     m_model->selectRow(row(2));
     m_model->removeSelectedRows();
+    async::processMessages(); // the answer
 
     // [THEN] Its row is gone
     EXPECT_EQ(rowNames(), "[A:0] A");
@@ -796,13 +806,14 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_WithParts_
     });
 
     // [THEN] The user is asked, and says no
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _))
-    .WillOnce(Return(IInteractive::Result(static_cast<int>(IInteractive::Button::No))));
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _))
+    .WillOnce(Return(dialogResult(IInteractive::Button::No)));
     EXPECT_CALL(*m_parts, removeParts(_)).Times(0);
 
     // [WHEN] B is removed
     m_model->selectRow(row(2));
     m_model->removeSelectedRows();
+    async::processMessages(); // the answer
 
     // [THEN] Its row stays
     EXPECT_EQ(rowNames(), "[A:0] A B");
@@ -818,7 +829,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_MarkingsWi
     createModel(); // [A:0] A [B:0] B
 
     // [THEN] Markings are removed without asking
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_parts, removeSystemObjects(_)).Times(1);
 
     // [WHEN] The markings row above B is removed
@@ -837,7 +848,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_StaffWithP
     createModel(); // [A:0] A
 
     // [THEN] The staff is removed without asking
-    EXPECT_CALL(*m_interactive, warningSync(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_masterParts, removeStaves(_)).Times(1);
 
     // [WHEN] The first staff is removed

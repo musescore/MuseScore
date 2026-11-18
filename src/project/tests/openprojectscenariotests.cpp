@@ -54,6 +54,7 @@
 #include "utils/promisetest.h"
 
 using ::testing::_;
+using ::testing::Field;
 using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
@@ -904,6 +905,38 @@ TEST_F(OpenProjectScenarioTests, OpenProject_UnreadableFile_IsReportedAndNotRetr
 
     //! [WHEN] Opening it...
     Ret ret = openProject("missing.mscz");
+
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_BadFormatWithDetails_ShowsThemAsDetails)
+{
+    //! [GIVEN] A file the importer cannot read, telling what exactly is wrong...
+    ON_CALL(*m_project, load(_, _, _))
+    .WillByDefault(Return(make_ret(engraving::Err::FileBadFormat, String(u"A is expected"))));
+
+    //! [THEN] The user is told about it, and what is wrong is in the details
+    EXPECT_CALL(*m_interactive, error(_, Field(&IInteractive::Text::detailedText, std::string("A is expected")), _, _, _, _))
+    .Times(1);
+
+    //! [WHEN] Opening it...
+    Ret ret = openProject("broken.mid");
+
+    EXPECT_FALSE(ret);
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_BadFormatWithoutDetails_ShowsNoDetails)
+{
+    //! [GIVEN] A file the importer cannot read, without telling why...
+    ON_CALL(*m_project, load(_, _, _))
+    .WillByDefault(Return(make_ret(engraving::Err::FileBadFormat)));
+
+    //! [THEN] The user is told about it, without the details
+    EXPECT_CALL(*m_interactive, error(_, Field(&IInteractive::Text::detailedText, std::string()), _, _, _, _))
+    .Times(1);
+
+    //! [WHEN] Opening it...
+    Ret ret = openProject("broken.mid");
 
     EXPECT_FALSE(ret);
 }

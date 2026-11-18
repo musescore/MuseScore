@@ -92,6 +92,10 @@ public:
     static void addPitch(Transaction& tx, Score* score, int step, bool addFlag, bool insert);
     static void addFret(Transaction& tx, Score* score, int fret);
 
+    static bool putNoteRemovesMeasureRepeat(Score* score, const muse::PointF& pos);
+    static bool addPitchRemovesMeasureRepeat(Score* score, bool addFlag);
+    static bool addFretRemovesMeasureRepeat(Score* score);
+
     static void setDuration(Transaction& tx, Score* score, DurationType duration);
     static void toggleRest(Transaction& tx, Score* score);
     static void toggleDots(Transaction& tx, Score* score, int dots, bool toggleForSelectionOnly = false);

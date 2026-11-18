@@ -21,6 +21,8 @@
  */
 #include "notationnoteinput.h"
 
+#include "../notationerrors.h"
+
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
@@ -455,6 +457,16 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     notifyAboutStateChanged();
 }
 
+Ret NotationNoteInput::canAddNote(NoteAddingMode addingMode) const
+{
+    const bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
+    if (NoteInput::addPitchRemovesMeasureRepeat(score(), addToUpOnCurrentChord)) {
+        return make_ret(notation::Err::NoteInputRemovesMeasureRepeat);
+    }
+
+    return make_ok();
+}
+
 void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode addingMode)
 {
     TRACEFUNC;
@@ -522,6 +534,15 @@ void NotationNoteInput::toggleDots(int dots)
     applyNoteValueChange(muse::TranslatableString("undoableAction", "Toggle dots"), [this, dots](mu::engraving::Transaction& tx) {
         NoteInput::toggleDots(tx, score(), dots);
     });
+}
+
+Ret NotationNoteInput::canPutNote(const PointF& pos) const
+{
+    if (NoteInput::putNoteRemovesMeasureRepeat(score(), pos)) {
+        return make_ret(notation::Err::NoteInputRemovesMeasureRepeat);
+    }
+
+    return make_ok();
 }
 
 Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
@@ -784,6 +805,8 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     apply();
 
     notifyAboutStateChanged();
+
+    m_interaction->checkAndShowError();
 }
 
 static muse::RectF segmentContentRect(const Segment* segment, track_idx_t track)

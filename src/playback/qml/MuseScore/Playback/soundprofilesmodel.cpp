@@ -110,7 +110,16 @@ void SoundProfilesModel::setActiveProfile(const QString& newActiveProfile)
         return;
     }
 
-    if (!askAboutChangingSounds()) {
+    askAboutChangingSounds().onResolve(this, [this, newActiveProfile](bool change) {
+        if (change) {
+            applyActiveProfile(newActiveProfile);
+        }
+    });
+}
+
+void SoundProfilesModel::applyActiveProfile(const QString& newActiveProfile)
+{
+    if (m_activeProfile == newActiveProfile) {
         return;
     }
 
@@ -148,37 +157,42 @@ mu::notation::INotationPlaybackPtr SoundProfilesModel::notationPlayback() const
     return project ? project->masterNotation()->playback() : nullptr;
 }
 
-bool SoundProfilesModel::askAboutChangingSounds()
+muse::async::Promise<bool> SoundProfilesModel::askAboutChangingSounds()
 {
-    if (!config()->needToShowResetSoundFlagsWhenChangePlaybackProfileWarning()) {
-        return true;
+    if (!config()->needToShowResetSoundFlagsWhenChangePlaybackProfileWarning()
+        || !notationPlayback()->hasSoundFlags(notationPlayback()->existingTrackIdSet())) {
+        return muse::async::make_promise<bool>([](auto resolve) {
+            return resolve(true);
+        });
     }
 
-    if (!notationPlayback()->hasSoundFlags(notationPlayback()->existingTrackIdSet())) {
-        return true;
-    }
+    return muse::async::make_promise<bool>([this](auto resolve) {
+        int changeBtn = int(muse::IInteractive::Button::Apply);
+        muse::IInteractive::Options options = muse::IInteractive::Option::WithIcon | muse::IInteractive::Option::WithDontShowAgainCheckBox;
+        muse::IInteractive::ButtonDatas buttons = {
+            interactive()->buttonData(muse::IInteractive::Button::Cancel),
+            muse::IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sounds"), true /*accent*/)
+        };
 
-    int changeBtn = int(muse::IInteractive::Button::Apply);
-    muse::IInteractive::Options options = muse::IInteractive::Option::WithIcon | muse::IInteractive::Option::WithDontShowAgainCheckBox;
-    muse::IInteractive::ButtonDatas buttons = {
-        interactive()->buttonData(muse::IInteractive::Button::Cancel),
-        muse::IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sounds"), true /*accent*/)
-    };
+        interactive()->warning(muse::trc("playback", "Are you sure you want to change sounds?"),
+                               muse::IInteractive::Text(muse::trc("playback",
+                                                                  "Sound flags may be reset, but staff text will remain. This action can’t be undone.")),
+                               buttons, changeBtn, options)
+        .onResolve(this, [this, changeBtn, resolve](const muse::IInteractive::Result& result) {
+            if (result.button() != changeBtn) {
+                (void)resolve(false);
+                return;
+            }
 
-    muse::IInteractive::Result result = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change sounds?"),
-                                                                   muse::trc("playback",
-                                                                             "Sound flags may be reset, but staff text will remain. This action can’t be undone."),
-                                                                   buttons, changeBtn, options);
+            if (!result.showAgain()) {
+                config()->setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(false);
+            }
 
-    if (result.button() == changeBtn) {
-        if (!result.showAgain()) {
-            config()->setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(false);
-        }
+            (void)resolve(true);
+        });
 
-        return true;
-    } else {
-        return false;
-    }
+        return muse::async::Promise<bool>::dummy_result();
+    }, muse::async::PromiseType::AsyncByBody);
 }
 
 const QString& SoundProfilesModel::currentlySelectedProfile() const

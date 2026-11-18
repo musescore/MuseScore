@@ -21,6 +21,7 @@
  */
 
 #include "editpercussionshortcutmodel.h"
+
 #include "translation.h"
 
 #include "shortcuts_v2/shortcutstypes.h"
@@ -54,7 +55,7 @@ void EditPercussionShortcutModel::load(const QVariant& originDrum, const QVarian
 
 void EditPercussionShortcutModel::inputKey(Qt::Key key)
 {
-    if (needIgnoreKey(key)) {
+    if (m_isAskingToSave || needIgnoreKey(key)) {
         return;
     }
 
@@ -77,6 +78,10 @@ void EditPercussionShortcutModel::inputKey(Qt::Key key)
 
 void EditPercussionShortcutModel::clear()
 {
+    if (m_isAskingToSave) {
+        return;
+    }
+
     m_newShortcut = QKeySequence();
     m_conflictShortcut.clear();
 
@@ -86,33 +91,40 @@ void EditPercussionShortcutModel::clear()
     emit clearedChanged();
 }
 
-bool EditPercussionShortcutModel::trySave()
+void EditPercussionShortcutModel::trySave()
 {
+    //! NOTE The shortcut must stay as the user approves it
+    if (m_isAskingToSave) {
+        return;
+    }
+
     const QString newShortcut = m_newShortcut.toString();
     const bool alreadyEmpty = originShortcutText().isEmpty() && m_cleared;
     if (alreadyEmpty || originShortcutText() == newShortcut) {
-        return false;
+        emit closeRequested(false);
+        return;
     }
 
     if (m_conflictShortcut.isEmpty()) {
         // No conflicts to warn about, apply the changes...
-        return true;
+        emit closeRequested(true);
+        return;
     }
 
     const QString originTitle = m_originDrum.value("title").toString();
     const QString headerText = qtrc("shortcuts", "Reassign shortcut for <b>%1</b>").arg(originTitle);
     const IInteractive::Text text(getConflictWarningText().toStdString(), IInteractive::TextFormat::RichText);
 
-    const IInteractive::Button btn = interactive()->warningSync(headerText.toStdString(), text, {
+    m_isAskingToSave = true;
+
+    interactive()->warning(headerText.toStdString(), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
-    }, (int)IInteractive::Button::Ok).standardButton();
-
-    if (btn != IInteractive::Button::Ok) {
-        return false;
-    }
-
-    return true;
+    }, (int)IInteractive::Button::Ok)
+    .onResolve(this, [this](const IInteractive::Result& result) {
+        m_isAskingToSave = false;
+        emit closeRequested(result.standardButton() == IInteractive::Button::Ok);
+    });
 }
 
 int EditPercussionShortcutModel::conflictDrumPitch() const

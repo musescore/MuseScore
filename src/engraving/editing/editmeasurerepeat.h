@@ -25,6 +25,7 @@
 #include "../types/types.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Fraction;
 class Measure;
 class MeasureRepeat;
@@ -36,6 +37,11 @@ class EditMeasureRepeat
 public:
     static void addMeasureRepeat(Transaction& tx, Score* score, Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx);
     static bool makeMeasureRepeatGroup(Transaction& tx, Score* score, Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx);
+
+    //! Whether adding a measure repeat replaces the contents of the measures
+    static bool addingReplacesContents(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx);
+    //! The same for dropping a measure repeat of `numMeasures` onto `target` (a measure, or a full-measure rest)
+    static bool droppingReplacesContents(EngravingItem* target, track_idx_t track, int numMeasures);
 
     // Creates one MeasureRepeat at tick of subtype numMeasures, creating a segment if necessary.
     // Does NOT set measureRepeatCount or do anything else with the measure(s)!

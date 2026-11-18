@@ -26,6 +26,7 @@
 #include "../../../internal/inotationviewcontroller.h"
 
 #include "modularity/ioc.h"
+#include "interactive/iinteractive.h"
 
 #include "async/asyncable.h"
 
@@ -108,6 +109,7 @@ public:
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IDragController> dragController = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
 
 public:
@@ -266,6 +268,7 @@ private:
     std::vector<int> pitchesBeingDragged() const;
 
     DragMoveEvent m_lastDragMoveEvent;
+    bool m_isDropConfirmationPending = false;
 
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
     std::vector<const mu::engraving::EngravingItem*> m_notesBeingDragged;

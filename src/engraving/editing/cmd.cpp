@@ -30,7 +30,6 @@
 
 #include "translation.h"
 
-#include "infrastructure/messagebox.h"
 #include "style/style.h"
 
 #include "rw/xmlreader.h"

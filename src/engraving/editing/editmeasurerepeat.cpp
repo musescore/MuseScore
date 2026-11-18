@@ -24,19 +24,16 @@
 
 #include <vector>
 
-#include "translation.h"
-
 #include "../dom/barline.h"
 #include "../dom/factory.h"
 #include "../dom/measure.h"
 #include "../dom/measurerepeat.h"
+#include "../dom/rest.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/select.h"
 #include "../dom/staff.h"
 #include "../dom/utils.h"
-
-#include "../infrastructure/messagebox.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -76,9 +73,88 @@ void EditMeasureRepeat::addMeasureRepeat(Transaction& tx, Score* score, Measure*
 }
 
 //---------------------------------------------------------
+//   the measures of a measure repeat group
+//    empty if there are not enough of them, with equal durations
+//---------------------------------------------------------
+
+static std::vector<Measure*> groupMeasures(Measure* firstMeasure, int numMeasures)
+{
+    std::vector<Measure*> measures;
+    Measure* measure = firstMeasure;
+    for (int i = 1; i <= numMeasures; ++i) {
+        if (!measure || measure->ticks() != firstMeasure->ticks()) {
+            return {};
+        }
+        measures.push_back(measure);
+        measure = measure->nextMeasure();
+    }
+
+    return measures;
+}
+
+//---------------------------------------------------------
+//   whether there is something in the measures, deleted to make room for a measure repeat
+//---------------------------------------------------------
+
+static bool hasContentsToReplace(const std::vector<Measure*>& measures, staff_idx_t staffIdx)
+{
+    for (const Measure* m : measures) {
+        if (m != measures.back()) {
+            if (m->endBarLineType() != BarLineType::NORMAL) {
+                return true;
+            }
+        }
+        for (const Segment* seg = m->first(); seg; seg = seg->next()) {
+            if (seg->segmentType() & SegmentType::ChordRest) {
+                track_idx_t strack = staffIdx * VOICES;
+                track_idx_t etrack = strack + VOICES;
+                for (track_idx_t track = strack; track < etrack; ++track) {
+                    const EngravingItem* e = seg->element(track);
+                    if (e && !e->generated() && !e->isRest()) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool EditMeasureRepeat::addingReplacesContents(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx)
+{
+    const std::vector<Measure*> measures = groupMeasures(firstMeasure, numMeasures);
+    return !measures.empty() && hasContentsToReplace(measures, staffIdx);
+}
+
+bool EditMeasureRepeat::droppingReplacesContents(EngravingItem* target, track_idx_t track, int numMeasures)
+{
+    if (!target) {
+        return false;
+    }
+
+    if (target->isMeasure()) {
+        if (track == muse::nidx) {
+            return false;
+        }
+        return addingReplacesContents(toMeasure(target), numMeasures, track2staff(track));
+    }
+
+    if (target->isRest()) {
+        Rest* rest = toRest(target);
+        if (rest->durationType().type() != DurationType::V_MEASURE) {
+            return false;
+        }
+        return addingReplacesContents(rest->measure(), numMeasures, rest->staffIdx());
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
 //   makeMeasureRepeatGroup
 ///   clear measures, apply noBreak, set measureRepeatCount
-///   returns false if these measures won't work or user aborted
+///   returns false if these measures won't work
 //---------------------------------------------------------
 
 bool EditMeasureRepeat::makeMeasureRepeatGroup(Transaction&, Score* score, Measure* firstMeasure, int numMeasures,
@@ -87,50 +163,13 @@ bool EditMeasureRepeat::makeMeasureRepeatGroup(Transaction&, Score* score, Measu
     //
     // check that sufficient measures exist, with equal durations
     //
-    std::vector<Measure*> measures;
-    Measure* measure = firstMeasure;
-    for (int i = 1; i <= numMeasures; ++i) {
-        if (!measure || measure->ticks() != firstMeasure->ticks()) {
-            MScore::setError(MsError::INSUFFICIENT_MEASURES);
-            return false;
-        }
-        measures.push_back(measure);
-        measure = measure->nextMeasure();
+    std::vector<Measure*> measures = groupMeasures(firstMeasure, numMeasures);
+    if (measures.empty()) {
+        MScore::setError(MsError::INSUFFICIENT_MEASURES);
+        return false;
     }
 
-    //
-    // warn user if things will have to be deleted to make room for measure repeat
-    //
-    bool empty = true;
-    for (auto m : measures) {
-        if (m != measures.back()) {
-            if (m->endBarLineType() != BarLineType::NORMAL) {
-                empty = false;
-                break;
-            }
-        }
-        for (auto seg = m->first(); seg && empty; seg = seg->next()) {
-            if (seg->segmentType() & SegmentType::ChordRest) {
-                track_idx_t strack = staffIdx * VOICES;
-                track_idx_t etrack = strack + VOICES;
-                for (track_idx_t track = strack; track < etrack; ++track) {
-                    EngravingItem* e = seg->element(track);
-                    if (e && !e->generated() && !e->isRest()) {
-                        empty = false;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    if (!empty) {
-        auto b = MessageBox(score->iocContext()).warning(muse::trc("engraving", "Current contents of measures will be replaced"),
-                                                         muse::trc("engraving", "Continue with inserting measure repeat?"));
-        if (b == MessageBox::Button::Cancel) {
-            return false;
-        }
-    }
+    // the contents of the measures are replaced, the user is asked beforehand
 
     //
     // group measures and clear current contents

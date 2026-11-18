@@ -868,9 +868,22 @@ void NotationActionController::doAddNote(const NoteInputParams& params, const No
         }
     }
 
-    noteInput->addNote(params, addingMode);
+    auto addNote = [this, noteInput, params, addingMode]() {
+        noteInput->addNote(params, addingMode);
+        seekAndPlaySelectedElement();
+    };
 
-    seekAndPlaySelectedElement();
+    Ret ret = noteInput->canAddNote(addingMode);
+    if (!ret) {
+        interactive()->askToContinue(ret).onResolve(this, [addNote](bool proceed) {
+            if (proceed) {
+                addNote();
+            }
+        });
+        return;
+    }
+
+    addNote();
 }
 
 muse::Ret NotationActionController::setDuration(const SetDurationCommand& command)
@@ -1301,10 +1314,23 @@ muse::Ret NotationActionController::putNote(const muse::rcommand::Params& params
 
     PointF pos = PointF(posX, posY);
 
-    Ret ret = noteInput->putNote(pos, replace, insert);
-    if (ret) {
-        seekAndPlaySelectedElement();
+    auto putNote = [this, noteInput, pos, replace, insert]() {
+        if (noteInput->putNote(pos, replace, insert)) {
+            seekAndPlaySelectedElement();
+        }
+    };
+
+    Ret ret = noteInput->canPutNote(pos);
+    if (!ret) {
+        interactive()->askToContinue(ret).onResolve(this, [putNote](bool proceed) {
+            if (proceed) {
+                putNote();
+            }
+        });
+        return muse::make_ok();
     }
+
+    putNote();
 
     return muse::make_ok();
 }
@@ -1326,8 +1352,23 @@ muse::Ret NotationActionController::removeNote(const muse::rcommand::Params& par
     float posY = params.at("pos_y").toFloat();
 
     PointF pos = PointF(posX, posY);
-    noteInput->removeNote(pos);
-    seekSelectedElement();
+
+    auto removeNote = [this, noteInput, pos]() {
+        noteInput->removeNote(pos);
+        seekSelectedElement();
+    };
+
+    Ret ret = noteInput->canPutNote(pos);
+    if (!ret) {
+        interactive()->askToContinue(ret).onResolve(this, [removeNote](bool proceed) {
+            if (proceed) {
+                removeNote();
+            }
+        });
+        return muse::make_ok();
+    }
+
+    removeNote();
 
     return muse::make_ok();
 }
@@ -1920,8 +1961,23 @@ muse::Ret NotationActionController::addFret(const AddFretCommand& command)
         return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    interaction->addFret(command.num);
-    seekAndPlaySelectedElement(currentNotationScore()->playChord());
+    auto addFret = [this, interaction, command]() {
+        interaction->addFret(command.num);
+        seekAndPlaySelectedElement(currentNotationScore()->playChord());
+    };
+
+    Ret ret = interaction->canAddFret();
+    if (!ret) {
+        interactive()->askToContinue(ret).onResolve(this, [addFret](bool proceed) {
+            if (proceed) {
+                addFret();
+            }
+        });
+        return muse::make_ok();
+    }
+
+    addFret();
+
     return muse::make_ok();
 }
 

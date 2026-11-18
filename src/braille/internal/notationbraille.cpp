@@ -564,6 +564,11 @@ void NotationBraille::setKeys(const QString& sequence)
                 return;
             }
 
+            //! NOTE There is no one to ask whether to remove a measure repeat for it
+            if (!interaction()->noteInput()->canAddNote(NoteAddingMode::NextChord)) {
+                return;
+            }
+
             interaction()->noteInput()->addNote(params, NoteAddingMode::NextChord);
 
             if (brailleInput()->addedOctave() != -1) {
@@ -624,6 +629,11 @@ void NotationBraille::setKeys(const QString& sequence)
             const int note = static_cast<int>(brailleInput()->noteName());
             bool ok = mu::engraving::NoteInput::resolveNoteInputParams(score(), note, /*addFlag*/ true, params);
             if (!ok) {
+                return;
+            }
+
+            //! NOTE There is no one to ask whether to remove a measure repeat for it
+            if (!interaction()->noteInput()->canAddNote(NoteAddingMode::CurrentChord)) {
                 return;
             }
 

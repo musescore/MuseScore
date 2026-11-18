@@ -96,7 +96,6 @@
 #include "../dom/tupletmap.h"
 #include "../dom/utils.h"
 #include "../dom/volta.h"
-#include "../infrastructure/messagebox.h"
 
 #include "addremoveelement.h"
 #include "editstaffbrackets.h"
@@ -271,9 +270,8 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     Fraction fr = f * Fraction(1, _ratio.denominator());
     if (!TDuration::isValid(fr)) {
-        MessageBox(iocContext()).warning(muse::mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
-                                         .arg(_ratio.toString(), f.toString()).toStdString(),
-                                         std::string(), { MessageBox::Ok });
+        LOGD() << "cannot create tuplet with ratio " << _ratio.toString() << " for duration " << f.toString();
+        MScore::setError(MsError::TUPLET_RATIO_NOT_POSSIBLE);
         return nullptr;
     }
 
@@ -376,10 +374,9 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, const Fraction& ratio,
                          TupletNumberType numberType, TupletBracketType bracketType)
 {
     if (!canAddTuplet(destinationChordRest, ratio, baseLen)) {
-        const Fraction duration = baseLen.fraction() * ratio.denominator();
-        MessageBox(iocContext()).warning(muse::mtrc("engraving", "Cannot create tuplet with ratio %1 for duration %2")
-                                         .arg(ratio.toString(), duration.toString()).toStdString(),
-                                         std::string(), { MessageBox::Ok });
+        LOGD() << "cannot create tuplet with ratio " << ratio.toString()
+               << " for duration " << (baseLen.fraction() * ratio.denominator()).toString();
+        MScore::setError(isValidTuplet(ratio, baseLen) ? MsError::NO_SPACE_FOR_TUPLET : MsError::TUPLET_RATIO_NOT_POSSIBLE);
         return nullptr;
     }
 
