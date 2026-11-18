@@ -512,13 +512,27 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
         return;
     }
 
-    Drumset updatedDrumset = *m_padListModel->drumset();
-    if (!PercussionUtilities(iocContext()).editPercussionShortcut(updatedDrumset, pitch)) {
-        return;
-    }
-
     const InstrumentKey key = { inst->id(), part->id() };
-    notation()->parts()->replaceDrumset(key, updatedDrumset);
+    std::weak_ptr<INotation> weakNotation = notation();
+
+    PercussionUtilities(iocContext()).openPercussionShortcutDialog(*m_padListModel->drumset(), pitch)
+    .onResolve(this, [this, weakNotation, key, pitch](const muse::Val& dialogResult) {
+        //! NOTE The notation or its instrument may change while the user is defining the shortcut
+        const INotationPtr currentNotation = weakNotation.lock();
+        if (!currentNotation || currentNotation != notation()) {
+            return;
+        }
+
+        const std::pair<Instrument*, Part*> currentInstAndPart = getCurrentInstrumentAndPart();
+        if (!currentInstAndPart.first || !currentInstAndPart.second
+            || currentInstAndPart.first->id() != key.instrumentId || currentInstAndPart.second->id() != key.partId) {
+            return;
+        }
+
+        Drumset updatedDrumset = *m_padListModel->drumset();
+        PercussionUtilities::applyPercussionShortcut(updatedDrumset, pitch, dialogResult);
+        currentNotation->parts()->replaceDrumset(key, updatedDrumset);
+    });
 }
 
 void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMode)

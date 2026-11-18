@@ -730,14 +730,19 @@ void CustomizeKitDialog::defineShortcut()
     }
 
     const int originPitch = item->data(Column::PITCH, Qt::UserRole).toInt();
-    if (!PercussionUtilities(iocContext()).editPercussionShortcut(m_editedDrumset, originPitch)) {
-        return;
-    }
 
-    const QString editedShortcutText = m_editedDrumset.shortcut(originPitch);
-    shortcut->setText(!editedShortcutText.isEmpty() ? editedShortcutText : muse::qtrc("shortcuts", "None"));
-    item->setText(Column::SHORTCUT, !editedShortcutText.isEmpty() ? editedShortcutText : QString());
-    // TODO: Update the item of the conflict shortcut too (#26226)
+    PercussionUtilities(iocContext()).openPercussionShortcutDialog(m_editedDrumset, originPitch)
+    .onResolve(this, [this, originPitch](const muse::Val& dialogResult) {
+        PercussionUtilities::applyPercussionShortcut(m_editedDrumset, originPitch, dialogResult);
 
-    valueChanged();
+        QTreeWidgetItem* item = pitchList->currentItem();
+        if (item && item->data(Column::PITCH, Qt::UserRole).toInt() == originPitch) {
+            const QString editedShortcutText = m_editedDrumset.shortcut(originPitch);
+            shortcut->setText(!editedShortcutText.isEmpty() ? editedShortcutText : muse::qtrc("shortcuts", "None"));
+            item->setText(Column::SHORTCUT, !editedShortcutText.isEmpty() ? editedShortcutText : QString());
+            // TODO: Update the item of the conflict shortcut too (#26226)
+        }
+
+        valueChanged();
+    });
 }
