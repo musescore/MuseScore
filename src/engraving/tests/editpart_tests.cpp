@@ -1453,6 +1453,108 @@ TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_MovesAndCreates)
+{
+    // [GIVEN] Flute, oboe and clarinet
+    MasterScore* score = createMasterScore({ u"flute", u"oboe", u"clarinet" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute = score->parts().at(0);
+    Part* oboe = score->parts().at(1);
+    Part* clarinet = score->parts().at(2);
+
+    // [WHEN] The clarinet and the flute are moved to a new shared part
+    SharedPart* sharedPart = nullptr;
+    edit(score, [score, flute, clarinet, &sharedPart](Transaction& tx) {
+        sharedPart = EditPart::movePartsToNewSharedPart(tx, score, { clarinet, flute });
+    });
+
+    // [THEN] The clarinet is after the flute, and both are in the new shared part, before them
+    ASSERT_TRUE(sharedPart);
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute, clarinet, oboe }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute, clarinet }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] The order is restored and the shared part is gone
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ flute, oboe, clarinet }));
+    EXPECT_FALSE(flute->sharedPart());
+    EXPECT_FALSE(clarinet->sharedPart());
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_MiddleMember_MovesBelowGroup)
+{
+    // [GIVEN] Three flutes in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+    Part* flute3 = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, flute3, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2, flute3 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The second flute is moved to a new shared part
+    SharedPart* newSharedPart = nullptr;
+    edit(score, [score, flute2, &newSharedPart](Transaction& tx) {
+        newSharedPart = EditPart::movePartsToNewSharedPart(tx, score, { flute2 });
+    });
+
+    // [THEN] The new shared part is below the old one, which keeps the other flutes
+    ASSERT_TRUE(newSharedPart);
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute3, newSharedPart, flute2 }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute3 }));
+    EXPECT_EQ(newSharedPart->originParts(), std::vector<Part*>({ flute2 }));
+    EXPECT_TRUE(EditPart::isValidPartsLayout(layout(score->parts())));
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] The order and the old shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, flute3 }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2, flute3 }));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_LastMember_KeepsPosition)
+{
+    // [GIVEN] Two flutes in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 2u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The second flute is moved to a new shared part
+    SharedPart* newSharedPart = nullptr;
+    edit(score, [score, flute2, &newSharedPart](Transaction& tx) {
+        newSharedPart = EditPart::movePartsToNewSharedPart(tx, score, { flute2 });
+    });
+
+    // [THEN] The new shared part is right above the second flute
+    ASSERT_TRUE(newSharedPart);
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, newSharedPart, flute2 }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_EQ(newSharedPart->originParts(), std::vector<Part*>({ flute2 }));
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, ReorderStavesChangesScore_DetectsOrderChange)
 {
     // [GIVEN] Flute and piano

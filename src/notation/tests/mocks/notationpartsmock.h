@@ -84,6 +84,7 @@ public:
     MOCK_METHOD(void, removeSystemObjects, (const muse::IDList& stavesIds), (override));
 
     MOCK_METHOD(void, toggleStaveSharing, (bool on), (override));
+    MOCK_METHOD(const SharedPart*, movePartsToNewSharedPart, (const muse::IDList& partIds), (override));
     MOCK_METHOD(void, movePartsToSharedPart, (const muse::IDList& partIds, const muse::ID& sharedPartId), (override));
     MOCK_METHOD(void, ungroupSharedPart, (const muse::ID& sharedPartId), (override));
 

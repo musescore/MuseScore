@@ -130,6 +130,7 @@ public:
     virtual void removeSystemObjects(const muse::IDList& stavesIds) = 0;
 
     virtual void toggleStaveSharing(bool on) = 0;
+    virtual const SharedPart* movePartsToNewSharedPart(const muse::IDList& partIds) = 0;
     virtual void movePartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) = 0;
     virtual void ungroupSharedPart(const muse::ID& sharedPartId) = 0;
 
