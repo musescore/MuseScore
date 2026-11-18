@@ -56,7 +56,7 @@ public:
     const Staff* staff(const muse::ID& staffId) const override;
     bool staffExists(const muse::ID& staffId) const override;
 
-    StaffConfig staffConfig(const muse::ID& staffId, Fraction tick = Fraction(0, 1)) const override;
+    StaffConfig staffConfig(const muse::ID& staffId, engraving::Fraction tick = engraving::Fraction(0, 1)) const override;
     ScoreOrder scoreOrder() const override;
 
     void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
@@ -71,7 +71,7 @@ public:
                                        const QString& shortName) override;
     void setInstrumentNumber(const InstrumentKey& instrumentKey, int v) override;
     void setStaffType(const muse::ID& staffId, StaffTypeId type) override;
-    void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) override;
+    void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, engraving::Fraction tick = engraving::Fraction(0, 1)) override;
     void setSharedPartEnabled(const muse::ID& partId, bool enable) override;
 
     void removeParts(const muse::IDList& partsIds) override;

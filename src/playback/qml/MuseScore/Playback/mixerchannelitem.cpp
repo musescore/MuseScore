@@ -546,7 +546,7 @@ mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
     return project ? project->masterNotation()->playback() : nullptr;
 }
 
-std::optional<notation::AutomationCurveKey> MixerChannelItem::automationCurveKey(notation::AutomationType type) const
+std::optional<mu::notation::AutomationCurveKey> MixerChannelItem::automationCurveKey(notation::AutomationType type) const
 {
     if (m_type == Type::Master) {
         return notation::AutomationCurveKey::global(type);
