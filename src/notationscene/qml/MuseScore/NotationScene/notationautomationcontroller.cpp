@@ -560,9 +560,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
 
-        // TODO: This is a placeholder, send the actual point/value...
-        m_editedPointDataChannel.send(QPointF(0, 0), QString("Hello world"));
-        m_currentlyEditedPolyline = polyline;
+        updateEditedPoint(polyline, clampedX, y);
 
         // Live drag preview
         setPreviewPoint({ clampedX, y });
@@ -588,9 +586,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
 
-        // TODO: This is a placeholder, send the actual point/value...
-        m_editedPointDataChannel.send(QPointF(0, 0), QString("Hello world"));
-        m_currentlyEditedPolyline = polyline;
+        updateEditedPoint(polyline, x, y);
 
         QVector<PointData> pointsData = data.pointsData;
 
@@ -1515,6 +1511,21 @@ muse::real_t NotationAutomationController::automationValueFromDisplay(Automation
     }
 
     return muse::real_t(displayValue);
+}
+
+void NotationAutomationController::updateEditedPoint(PolylinePlot* polyline, qreal x, qreal y)
+{
+    IF_ASSERT_FAILED(polyline && m_linesParent) {
+        return;
+    }
+
+    // x & y are normalized (0..1) relative to the polyline
+    const QPointF pointPos(x * polyline->width(), y * polyline->height());
+    const QPointF viewPos = polyline->mapToItem(m_linesParent, pointPos);
+    const QString val = QString::number(1.0 - y, 'f', 1); // TODO: Use the actual units of the edited parameter...
+
+    m_editedPointDataChannel.send(viewPos, val);
+    m_currentlyEditedPolyline = polyline;
 }
 
 muse::async::Channel<const QPointF&, const QString&> NotationAutomationController::editedPointDataChannel() const

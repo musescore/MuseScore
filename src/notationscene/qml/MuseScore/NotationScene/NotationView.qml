@@ -177,7 +177,7 @@ FocusScope {
 
                     onShowAutomationTooltipRequested: function(viewPos, val) {
                         automationTooltipAnchor.x = viewPos.x
-                        automationTooltipAnchor.y = viewPos.y
+                        automationTooltipAnchor.y = viewPos.y - 8 // 8 for padding between tooltip and point
                         automationTooltip.value = val
                         automationTooltip.show(/*noDelay*/ true)
                     }

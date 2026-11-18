@@ -191,6 +191,8 @@ private:
     muse::real_t automationValueFromDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
                                             double displayValue, std::optional<muse::real_t> existingValue = std::nullopt) const;
 
+    void updateEditedPoint(muse::uicomponents::PolylinePlot* polyline, qreal x, qreal y);
+
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
     INotationPtr currentNotation() const;
