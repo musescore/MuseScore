@@ -119,7 +119,8 @@ void NotationActionController::init()
 
     // note input commands
     registerCommand<ToggleNoteInputCommand>(&Controller::toggleNoteInput);
-    registerCommand<ToggleInsertModeCommand>([this]() { return toggleNoteInputInsert(); });
+    registerCommand<ToggleInsertModeCommand>(&Controller::toggleNoteInputInsert);
+    registerCommand<RealtimeAdvanceCommand>(&Controller::realtimeAdvance);
 
     registerCommand<SetDurationCommand>(&Controller::setDuration);
     registerCommand<ChangeDurationCommand>(&Controller::changeDuration);
@@ -147,12 +148,13 @@ void NotationActionController::init()
     registerCommand<SetBeamSelectedRangeCommand>(&Controller::setBeamSelectedRange);
     registerCommand<AddOrnamentCommand>(&Controller::addOrnament);
     registerCommand<AddFretCommand>(&Controller::addFret);
+    registerCommand<ToggleTieCommand>(&Controller::addTie);
+    registerCommand<AddSlurCommand>(&Controller::addSlur);
+    registerCommand<ToggleLaissezVibrerCommand>(&Controller::addLaissezVib);
 
     registerCommand<EditTextAdvanceCommand>(&Controller::editTextAdvance);
     registerCommand<EditTextFontStyleCommand>(&Controller::toggleFontStyle);
     registerCommand<EditTextValignCommand>(&Controller::toggleValign);
-
-    // text navigation commands
     registerCommand<TextNavigateCommand>(&Controller::navigateToText);
 
     // lyrics editing commands
@@ -162,13 +164,8 @@ void NotationActionController::init()
     registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
     registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
 
-    registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
-
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
-    registerCommand<ToggleTieCommand>(&Controller::addTie);
-    registerCommand<AddSlurCommand>(&Controller::addSlur);
-    registerCommand<ToggleLaissezVibrerCommand>(&Controller::addLaissezVib);
     registerCommand(TOGGLE_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
     registerCommand(TOGGLE_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
     registerCommand(TOGGLE_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
@@ -1533,16 +1530,18 @@ muse::Ret NotationActionController::changeDuration(ChangeDurationMode mode)
     return muse::make_ok();
 }
 
-void NotationActionController::realtimeAdvance()
+muse::Ret NotationActionController::realtimeAdvance()
 {
     TRACEFUNC;
 
     INotationMidiInputPtr midiInput = currentNotationMidiInput();
     if (!midiInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     midiInput->onRealtimeAdvance();
+
+    return muse::make_ok();
 }
 
 bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) const
@@ -2551,7 +2550,6 @@ muse::Ret NotationActionController::navigateToText(const TextNavigateCommand& co
 
     return muse::make_ok();
 }
-
 
 void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest, bool moveOnly)
 {

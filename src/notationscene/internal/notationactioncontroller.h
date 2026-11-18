@@ -193,7 +193,7 @@ private:
     muse::Ret putNote(const muse::rcommand::Params& params);
     muse::Ret removeNote(const muse::rcommand::Params& params);
 
-    void realtimeAdvance();
+    muse::Ret realtimeAdvance();
 
     void toggleArticulation(SymbolId articulationSymbolId);
 
