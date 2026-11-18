@@ -1315,6 +1315,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(measureNumberTextStyle,                     TextStyleType::MEASURE_NUMBER),
     styleDef(measureNumberAlignToBarline,                true),
+    styleDef(measureNumberAvoidance,                     MeasureNumberAvoidance::FIT_IN_GAPS),
 
     styleDef(measureNumberAlternateFontFace,             "Edwin"),
     styleDef(measureNumberAlternateFontSize,             10.0),
