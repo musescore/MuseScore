@@ -35,12 +35,12 @@
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
+public:
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::GlobalInject<IMuseSoundsCheckUpdateService> service;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
-public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
