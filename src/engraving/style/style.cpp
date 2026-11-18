@@ -352,6 +352,7 @@ void MStyle::applyCompatStyleVals(int mscVersion)
         set(Sid::maskTies, false);
         set(Sid::dashBarWidth, value(Sid::barWidth));
         set(Sid::lyricsStackingOrder, int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
+        set(Sid::bendAlign, Align(AlignH::LEFT, AlignV::TOP));  // pre-5.0 this had no effect but was set incorrectly
     }
 
     if (mscVersion < 470) {

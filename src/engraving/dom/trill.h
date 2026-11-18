@@ -47,7 +47,7 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 
     void remove(EngravingItem*) override;
 

@@ -223,15 +223,15 @@ void SlurTieSegment::endDragGrip(EditData& ed)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* SlurTieSegment::propertyDelegate(Pid pid) const
+PropertyDelegate SlurTieSegment::resolvePropertyDelegate(Pid pid) const
 {
     switch (pid) {
     case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
     case Pid::MASK_SLURTIE:
-        return slurTie();
+        return PropertyDelegate(slurTie());
     default:
-        return SpannerSegment::propertyDelegate(pid);
+        return SpannerSegment::resolvePropertyDelegate(pid);
     }
 }
 
@@ -241,8 +241,8 @@ EngravingObject* SlurTieSegment::propertyDelegate(Pid pid) const
 
 PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
-    if (EngravingObject* e = const_cast<SlurTieSegment*>(this)->propertyDelegate(propertyId)) {
-        return e->getProperty(propertyId);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->getProperty(propertyId) : propertyDefault(propertyId);
     }
 
     switch (propertyId) {
@@ -265,8 +265,8 @@ PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 
 bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 {
-    if (EngravingObject* e = const_cast<SlurTieSegment*>(this)->propertyDelegate(propertyId)) {
-        return e->setProperty(propertyId, v);
+    if (const PropertyDelegate d = resolvePropertyDelegate(propertyId); d.hasDelegate) {
+        return d.delegate ? d.delegate->setProperty(propertyId, v) : false;
     }
 
     switch (propertyId) {
@@ -295,8 +295,8 @@ bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 
 PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 {
-    if (EngravingObject* e = const_cast<SlurTieSegment*>(this)->propertyDelegate(id)) {
-        return e->propertyDefault(id);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyDefault(id) : PropertyValue();
     }
 
     switch (id) {

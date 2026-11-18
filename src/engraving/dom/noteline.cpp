@@ -70,13 +70,13 @@ NoteLineSegment::NoteLineSegment(NoteLine* sp)
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
-EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
+PropertyDelegate NoteLineSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::NOTELINE_PLACEMENT) {
-        return noteLine();
+        return PropertyDelegate(noteLine());
     }
 
-    return TextLineBaseSegment::propertyDelegate(pid);
+    return TextLineBaseSegment::resolvePropertyDelegate(pid);
 }
 
 NoteLine::NoteLine(DummyParentOr<Note> parent)

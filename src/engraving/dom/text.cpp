@@ -63,13 +63,13 @@ Text::Text(DummyParentOr<EngravingItem> parent, TextStyleType tid)
     initElementStyle(&defaultStyle);
 }
 
-EngravingObject* Text::propertyDelegate(Pid id) const
+PropertyDelegate Text::resolvePropertyDelegate(Pid id) const
 {
     if (id == Pid::TEXT_STYLE && parent() && parent()->isTextLineBaseSegment()) {
-        return parent();
+        return PropertyDelegate(parent());
     }
 
-    return nullptr;
+    return PropertyDelegate();
 }
 
 //---------------------------------------------------------
@@ -78,8 +78,8 @@ EngravingObject* Text::propertyDelegate(Pid id) const
 
 engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
-    if (EngravingObject* item = propertyDelegate(id)) {
-        return item->propertyDefault(id);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyDefault(id) : PropertyValue();
     }
 
     switch (id) {

@@ -110,7 +110,7 @@ static std::vector<Fraction> userModifiedStaveSharingTicks(const Score* score, c
 
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
 {
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
     ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
@@ -128,7 +128,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
 
 TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
 {
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
     ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
@@ -154,7 +154,7 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
 
 TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
 {
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
     ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
@@ -200,7 +200,7 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
 
 TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
 {
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
     ASSERT_TRUE(score);
 
     score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
@@ -1081,7 +1081,7 @@ TEST_F(Engraving_StaveSharingTests, testUserTrackMapWithVoiceCrossing)
     // Test a user track map is valid when it causes voice crossing, even if voice crossing is disabled in the style
 
     // [GIVEN] A score of 4 measures with 2 flute staves, in unison in measures 1 and 2, with flute 1 above flute 2 in measures 3 and 4
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_17.mscz");
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_17.mscx");
     ASSERT_TRUE(score);
     ASSERT_FALSE(score->style().styleB(Sid::allowVoiceCrossing));
 

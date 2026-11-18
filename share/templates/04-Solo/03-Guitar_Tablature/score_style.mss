@@ -961,7 +961,7 @@
     <bendFontSpatiumDependent>1</bendFontSpatiumDependent>
     <bendFontStyle>0</bendFontStyle>
     <bendColor r="0" g="0" b="0" a="255"/>
-    <bendAlign>left,baseline</bendAlign>
+    <bendAlign>left,top</bendAlign>
     <bendOffset x="0" y="0"/>
     <bendFrameType>0</bendFrameType>
     <bendFramePadding>0.2</bendFramePadding>

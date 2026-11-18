@@ -136,7 +136,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }

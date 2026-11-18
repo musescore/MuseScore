@@ -258,6 +258,15 @@ DummyParentOr<T> parentOrDummy(T* parent, DummyParent* dummy)
     return parent ? DummyParentOr<T>(parent) : DummyParentOr<T>(dummy);
 }
 
+struct PropertyDelegate {
+    PropertyDelegate() = default;
+    explicit PropertyDelegate(EngravingObject* item)
+        : hasDelegate(true), delegate(item) {}
+
+    bool hasDelegate = false;
+    EngravingObject* delegate = nullptr;
+};
+
 class EngravingObject
 {
 public:
@@ -304,7 +313,9 @@ public:
     bool isInScoreTree() const;
     const MStyle& style() const;
 
-    virtual EngravingObject* propertyDelegate(Pid) const { return nullptr; }
+    virtual PropertyDelegate resolvePropertyDelegate(Pid) const;
+    bool hasPropertyDelegate(Pid) const;
+    EngravingObject* propertyDelegate(Pid) const;
     virtual PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const PropertyValue&) = 0;
     virtual PropertyValue propertyDefault(Pid) const;

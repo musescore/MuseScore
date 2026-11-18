@@ -330,6 +330,21 @@ const MStyle& EngravingObject::style() const
     return score()->style();
 }
 
+PropertyDelegate EngravingObject::resolvePropertyDelegate(Pid) const
+{
+    return PropertyDelegate();
+}
+
+bool EngravingObject::hasPropertyDelegate(Pid pid) const
+{
+    return resolvePropertyDelegate(pid).hasDelegate;
+}
+
+EngravingObject* EngravingObject::propertyDelegate(Pid pid) const
+{
+    return resolvePropertyDelegate(pid).delegate;
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -652,11 +667,11 @@ int EngravingObject::getPropertyFlagsIdx(Pid id) const
 
 PropertyFlags EngravingObject::propertyFlags(Pid id) const
 {
-    if (EngravingObject* e = propertyDelegate(id)) {
-        return e->propertyFlags(id);
-    }
-
     static PropertyFlags f = PropertyFlags::NOSTYLE;
+
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        return d.delegate ? d.delegate->propertyFlags(id) : f;
+    }
 
     int i = getPropertyFlagsIdx(id);
     if (i == -1) {
@@ -671,8 +686,10 @@ PropertyFlags EngravingObject::propertyFlags(Pid id) const
 
 void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
 {
-    if (EngravingObject* e = propertyDelegate(id)) {
-        e->setPropertyFlags(id, f);
+    if (const PropertyDelegate d = resolvePropertyDelegate(id); d.hasDelegate) {
+        if (d.delegate) {
+            d.delegate->setPropertyFlags(id, f);
+        }
         return;
     }
 

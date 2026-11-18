@@ -782,7 +782,7 @@ void LineSegment::localSpatiumChanged(double ov, double nv)
 //   propertyDelegate
 //---------------------------------------------------------
 
-EngravingObject* LineSegment::propertyDelegate(Pid pid) const
+PropertyDelegate LineSegment::resolvePropertyDelegate(Pid pid) const
 {
     if (pid == Pid::DIAGONAL
         || pid == Pid::COLOR
@@ -790,9 +790,9 @@ EngravingObject* LineSegment::propertyDelegate(Pid pid) const
         || pid == Pid::LINE_STYLE
         || pid == Pid::DASH_LINE_LEN
         || pid == Pid::DASH_GAP_LEN) {
-        return spanner();
+        return PropertyDelegate(spanner());
     }
-    return SpannerSegment::propertyDelegate(pid);
+    return SpannerSegment::resolvePropertyDelegate(pid);
 }
 
 //---------------------------------------------------------

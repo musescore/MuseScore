@@ -92,7 +92,7 @@ public:
     using EngravingItem::undoChangeProperty;
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     PropertyValue propertyDefault(Pid id) const override;
-    EngravingObject* propertyDelegate(Pid) const override;
+    PropertyDelegate resolvePropertyDelegate(Pid) const override;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
