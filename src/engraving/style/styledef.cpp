@@ -797,6 +797,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tupletPosition,                             AlignH::HCENTER),
     styleDef(tupletExtendToEndOfDuration,                false),
     styleDef(tupletNumberRythmicCenter,                  false),
+    styleDef(tupletNestedOppositeSide,                   false),
 
     styleDef(scaleBarlines,                              false),
     styleDef(barGraceDistance,                           1.0_sp),

@@ -54,7 +54,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     createNumber(item, ctx);
 
-    computeDirection(item);
+    computeDirection(item, ctx);
 
     const ChordRest* cr1 = nullptr;
     const ChordRest* cr2 = nullptr;
@@ -209,15 +209,13 @@ void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
     item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
 }
 
-void TupletLayout::computeDirection(Tuplet* item)
+// Stem direction votes of the chords in a tuplet, including those in nested tuplets unless the group
+// is cross-staff (a cross-staff beam sets the stems)
+static int stemDirectionVotes(const Tuplet* tuplet)
 {
-    if (item->direction() != DirectionV::AUTO) {
-        item->setIsUp(item->direction() == DirectionV::UP);
-        return;
-    }
-
+    const bool countNested = !tuplet->inCrossStaffGroup();
     int up = 0;
-    for (const DurationElement* e : item->elements()) {
+    for (const DurationElement* e : tuplet->elements()) {
         if (e->isChord()) {
             const Chord* c = toChord(e);
             if (c->stemDirection() != DirectionV::AUTO) {
@@ -225,8 +223,17 @@ void TupletLayout::computeDirection(Tuplet* item)
             } else {
                 up += c->up() ? 1 : -1;
             }
+        } else if (e->isTuplet() && countNested) {
+            up += stemDirectionVotes(toTuplet(e));
         }
     }
+    return up;
+}
+
+// Whether a tuplet with Auto direction goes above, by the stems of its chords
+static bool isUpByStems(const Tuplet* item)
+{
+    int up = stemDirectionVotes(item);
     if (up == 0) {
         // this is a tuplet full of rests, default to up but also take voices into consideration
         Measure* m = item->measure();
@@ -236,8 +243,30 @@ void TupletLayout::computeDirection(Tuplet* item)
             up = 1;             // default up
         }
     }
+    return up > 0;
+}
 
-    item->setIsUp(up > 0);
+void TupletLayout::computeDirection(Tuplet* item, const LayoutContext& ctx)
+{
+    if (item->direction() != DirectionV::AUTO) {
+        item->setIsUp(item->direction() == DirectionV::UP);
+        return;
+    }
+
+    // with the style, nested tuplets go opposite the outermost tuplet, unless other voices share its span
+    // or the group is cross-staff
+    const Tuplet* outermost = item->topTuplet();
+    const Measure* m = outermost ? outermost->measure() : nullptr;
+    if (m && ctx.conf().styleB(Sid::tupletNestedOppositeSide) && !outermost->inCrossStaffGroup()
+        && !m->hasVoices(outermost->staffIdx(), outermost->tick(), outermost->ticks())) {
+        bool outermostUp = outermost->direction() != DirectionV::AUTO
+                           ? outermost->direction() == DirectionV::UP
+                           : isUpByStems(outermost);
+        item->setIsUp(!outermostUp);
+        return;
+    }
+
+    item->setIsUp(isUpByStems(item));
 }
 
 void TupletLayout::computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2)

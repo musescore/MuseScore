@@ -587,6 +587,7 @@ void EditStyle::classBegin()
         { StyleId::tupletDirection,         false, tupletDirection,         resetTupletDirection },
         { StyleId::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType },
         { StyleId::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType },
+        { StyleId::tupletNestedOppositeSide, false, tupletNestedOppositeSide, 0 },
         { StyleId::tupletMaxSlope,          true,  tupletMaxSlope,          resetTupletMaxSlope },
         { StyleId::tupletOutOfStaff,        false, tupletOutOfStaff,        0 },
         { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        resetTupletUseSymbols },

@@ -6801,6 +6801,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item row="2" column="0" colspan="3">
+                     <widget class="QCheckBox" name="tupletNestedOppositeSide">
+                      <property name="text">
+                       <string>Place nested tuplets opposite the outer tuplet</string>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                   <item>
@@ -14311,6 +14318,7 @@ followed by dashes</string>
   <tabstop>resetTupletDirection</tabstop>
   <tabstop>tupletNumberType</tabstop>
   <tabstop>resetTupletNumberType</tabstop>
+  <tabstop>tupletNestedOppositeSide</tabstop>
   <tabstop>tupletBracketType</tabstop>
   <tabstop>resetTupletBracketType</tabstop>
   <tabstop>tupletBracketWidth</tabstop>

@@ -806,6 +806,7 @@ enum class Sid : short {
     tupletPosition,
     tupletExtendToEndOfDuration,
     tupletNumberRythmicCenter,
+    tupletNestedOppositeSide,
 
     scaleBarlines,
     barGraceDistance,

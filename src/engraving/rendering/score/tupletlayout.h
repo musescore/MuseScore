@@ -42,7 +42,7 @@ public:
 
 private:
     static void createNumber(Tuplet* item, LayoutContext& ctx);
-    static void computeDirection(Tuplet* item);
+    static void computeDirection(Tuplet* item, const LayoutContext& ctx);
     static void computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2);
     static void layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
     static bool placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
