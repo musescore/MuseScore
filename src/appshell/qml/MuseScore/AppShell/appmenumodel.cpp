@@ -720,7 +720,7 @@ MenuItemList AppMenuModel::makeTextItems()
 MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem(ADD_SLUR_COMMAND),
+        makeMenuItem(AddSlurCommand::id),
         makeMenuItem(ADD_HAIRPIN_COMMAND),
         makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
         makeMenuItem(ADD_OTTAVA_8VA_COMMAND),

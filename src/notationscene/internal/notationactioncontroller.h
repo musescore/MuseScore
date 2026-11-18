@@ -203,9 +203,9 @@ private:
     void movePitchDiatonic(MoveDirection direction, bool);
 
     void repeatSelection();
-    void addTie();
-    void addLaissezVib();
-    void addSlur();
+    muse::Ret addTie();
+    muse::Ret addLaissezVib();
+    muse::Ret addSlur();
     void addHammerOnPullOff();
 
     void insertClef(mu::engraving::ClefType type);
