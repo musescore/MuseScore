@@ -689,83 +689,17 @@ static const std::vector<CommandInfo> s_commandInfos = {
         }),
         Decoration()
     },
-    CommandInfo{
-        OPEN_PAGE_SETTINGS_COMMAND,
-        TranslatableString("action", "&Page settings…"),
-        TranslatableString("action", "Page settings"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_STAFF_PROPERTIES_COMMAND,
-        TranslatableString("action", "Instrument / Staff properties…"),
-        TranslatableString("action", "Instrument / Staff properties"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_EDIT_STRINGS_COMMAND,
-        TranslatableString("action", "Edit strings…"),
-        TranslatableString("action", "Edit strings"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_BREAKS_COMMAND,
-        TranslatableString("action", "Measures per s&ystem…"),
-        TranslatableString("action", "Measures per system"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_STAFF_TEXT_PROPERTIES_COMMAND,
-        TranslatableString("action", "Staff text properties…"),
-        TranslatableString("action", "Staff text properties"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND,
-        TranslatableString("action", "System text properties…"),
-        TranslatableString("action", "System text properties"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_MEASURE_PROPERTIES_COMMAND,
-        TranslatableString("action", "Measure properties…"),
-        TranslatableString("action", "Measure properties"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_TRANSPOSE_COMMAND,
-        TranslatableString("action", "&Transpose…"),
-        TranslatableString("action", "Transpose"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_PARTS_COMMAND,
-        TranslatableString("action", "&Parts…"),
-        TranslatableString("action", "Parts"),
-        InputSchema(),
-        Decoration(IconCode::Code::PAGE)
-    },
-    CommandInfo{
-        OPEN_EDITGRIDSIZE_COMMAND,
-        TranslatableString("action", "&Grid size…"),
-        TranslatableString("action", "Grid size"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_REALIZECHORDSYMBOLS_COMMAND,
-        TranslatableString("action", "Realize &chord symbols"),
-        TranslatableString("action", "Realize chord symbols"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<OpenPageSettingsCommand>(),
+    makeCommandInfo<OpenStaffPropertiesCommand>(),
+    makeCommandInfo<OpenEditStringsCommand>(),
+    makeCommandInfo<OpenBreaksCommand>(),
+    makeCommandInfo<OpenStaffTextPropertiesCommand>(),
+    makeCommandInfo<OpenSystemTextPropertiesCommand>(),
+    makeCommandInfo<OpenMeasurePropertiesCommand>(),
+    makeCommandInfo<OpenTransposeCommand>(),
+    makeCommandInfo<OpenPartsCommand>(),
+    makeCommandInfo<OpenEditGridSizeCommand>(),
+    makeCommandInfo<OpenRealizeChordSymbolsCommand>(),
 
     // style commands
     CommandInfo{

@@ -2663,17 +2663,84 @@ inline static const muse::rcommand::Command STRETCH_INCREASE_COMMAND("command://
 inline static const muse::rcommand::Command STRETCH_RESET_COMMAND("command://notation/stretch-reset");
 
 // open properties
-inline static const muse::rcommand::Command OPEN_PAGE_SETTINGS_COMMAND("command://notation/open-page-settings");
-inline static const muse::rcommand::Command OPEN_EDIT_STRINGS_COMMAND("command://notation/open-edit-strings");
-inline static const muse::rcommand::Command OPEN_BREAKS_COMMAND("command://notation/open-breaks");
-inline static const muse::rcommand::Command OPEN_STAFF_PROPERTIES_COMMAND("command://notation/open-staff-properties");
-inline static const muse::rcommand::Command OPEN_STAFF_TEXT_PROPERTIES_COMMAND("command://notation/open-staff-text-properties");
-inline static const muse::rcommand::Command OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND("command://notation/open-system-text-properties");
-inline static const muse::rcommand::Command OPEN_MEASURE_PROPERTIES_COMMAND("command://notation/open-measure-properties");
-inline static const muse::rcommand::Command OPEN_TRANSPOSE_COMMAND("command://notation/open-transpose");
-inline static const muse::rcommand::Command OPEN_PARTS_COMMAND("command://notation/open-parts");
-inline static const muse::rcommand::Command OPEN_EDITGRIDSIZE_COMMAND("command://notation/open-editgridsize");
-inline static const muse::rcommand::Command OPEN_REALIZECHORDSYMBOLS_COMMAND("command://notation/open-realizechordsymbols");
+
+struct OpenPageSettingsCommand {
+    cprop_decl id = Command("command://notation/open-page-settings");
+    cprop_decl title = MnemonicString("action", "&Page settings…");
+    cprop_decl description = TranslatableString("action", "Page settings");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenEditStringsCommand {
+    cprop_decl id = Command("command://notation/open-edit-strings");
+    cprop_decl title = MnemonicString("action", "Edit strings…");
+    cprop_decl description = TranslatableString("action", "Edit strings");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenBreaksCommand {
+    cprop_decl id = Command("command://notation/open-breaks");
+    cprop_decl title = MnemonicString("action", "Measures per s&ystem…");
+    cprop_decl description = TranslatableString("action", "Measures per system");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenStaffPropertiesCommand {
+    cprop_decl id = Command("command://notation/open-staff-properties");
+    cprop_decl title = MnemonicString("action", "Instrument / Staff properties…");
+    cprop_decl description = TranslatableString("action", "Instrument / Staff properties");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenStaffTextPropertiesCommand {
+    cprop_decl id = Command("command://notation/open-staff-text-properties");
+    cprop_decl title = MnemonicString("action", "Staff text properties…");
+    cprop_decl description = TranslatableString("action", "Staff text properties");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenSystemTextPropertiesCommand {
+    cprop_decl id = Command("command://notation/open-system-text-properties");
+    cprop_decl title = MnemonicString("action", "System text properties…");
+    cprop_decl description = TranslatableString("action", "System text properties");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenMeasurePropertiesCommand {
+    cprop_decl id = Command("command://notation/open-measure-properties");
+    cprop_decl title = MnemonicString("action", "Measure properties…");
+    cprop_decl description = TranslatableString("action", "Measure properties");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenTransposeCommand {
+    cprop_decl id = Command("command://notation/open-transpose");
+    cprop_decl title = MnemonicString("action", "&Transpose…");
+    cprop_decl description = TranslatableString("action", "Transpose");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenPartsCommand {
+    cprop_decl id = Command("command://notation/open-parts");
+    cprop_decl title = MnemonicString("action", "&Parts…");
+    cprop_decl description = TranslatableString("action", "Parts");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::PAGE);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenEditGridSizeCommand {
+    cprop_decl id = Command("command://notation/open-editgridsize");
+    cprop_decl title = MnemonicString("action", "&Grid size…");
+    cprop_decl description = TranslatableString("action", "Grid size");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct OpenRealizeChordSymbolsCommand {
+    cprop_decl id = Command("command://notation/open-realizechordsymbols");
+    cprop_decl title = MnemonicString("action", "Realize &chord symbols");
+    cprop_decl description = TranslatableString("action", "Realize chord symbols");
+    cprop_decl availabilities = Availability::All;
+};
 
 // style commands
 inline static const muse::rcommand::Command LOAD_STYLE_COMMAND("command://notation/load-style");

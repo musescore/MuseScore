@@ -106,7 +106,7 @@ MenuItemList NotationContextMenuModel::makePageItems()
 {
     MenuItemList items {
         makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
-        makeMenuItem(OPEN_PAGE_SETTINGS_COMMAND),
+        makeMenuItem(OpenPageSettingsCommand::id),
         makeMenuItem(LOAD_STYLE_COMMAND),
     };
 
@@ -150,7 +150,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
         items << makeMenuItem(OPEN_CUSTOMIZE_KIT_COMMAND);
     }
 
-    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
+    items << makeMenuItem(OpenStaffPropertiesCommand::id);
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
     if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
@@ -158,7 +158,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     }
     items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
     items << makeSeparator();
-    items << makeMenuItem(OPEN_MEASURE_PROPERTIES_COMMAND);
+    items << makeMenuItem(OpenMeasurePropertiesCommand::id);
 
     return items;
 }
@@ -167,7 +167,7 @@ MenuItemList NotationContextMenuModel::makeStaffTextItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem(OPEN_STAFF_TEXT_PROPERTIES_COMMAND);
+    items << makeMenuItem(OpenStaffTextPropertiesCommand::id);
 
     return items;
 }
@@ -176,7 +176,7 @@ MenuItemList NotationContextMenuModel::makeSystemTextItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem(OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND);
+    items << makeMenuItem(OpenSystemTextPropertiesCommand::id);
 
     return items;
 }
@@ -194,7 +194,7 @@ MenuItemList NotationContextMenuModel::makeInstrumentNameItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem(OPEN_STAFF_PROPERTIES_COMMAND);
+    items << makeMenuItem(OpenStaffPropertiesCommand::id);
 
     return items;
 }
@@ -217,7 +217,7 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
         }
     }
 
-    items << makeMenuItem(OPEN_REALIZECHORDSYMBOLS_COMMAND);
+    items << makeMenuItem(OpenRealizeChordSymbolsCommand::id);
 
     return items;
 }

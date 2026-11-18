@@ -82,10 +82,12 @@ static const std::vector<Command> UNDO_REDO_COMMANDS = {
 };
 
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
+    EditTextFontStyleCommand::id,
     EditTextBoldCommand::id,
     EditTextItalicCommand::id,
     EditTextUnderlineCommand::id,
     EditTextStrikeCommand::id,
+    EditTextValignCommand::id,
     EditTextSubScriptCommand::id,
     EditTextSuperScriptCommand::id,
     TextNavigateNextElementCommand::id,

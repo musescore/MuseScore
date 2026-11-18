@@ -306,7 +306,7 @@ void TextSettingsModel::insertSpecialCharacters()
 
 void TextSettingsModel::showStaffTextProperties()
 {
-    commandDispatcher()->dispatch(OPEN_STAFF_TEXT_PROPERTIES_COMMAND);
+    commandDispatcher()->dispatch(OpenStaffTextPropertiesCommand::id);
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const

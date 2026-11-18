@@ -351,9 +351,9 @@ MenuItem* AppMenuModel::makeFormatMenu()
 {
     MenuItemList formatItems {
         makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
-        makeMenuItem(OPEN_PAGE_SETTINGS_COMMAND),
+        makeMenuItem(OpenPageSettingsCommand::id),
         makeSeparator(),
-        makeMenuItem(OPEN_BREAKS_COMMAND),
+        makeMenuItem(OpenBreaksCommand::id),
         makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), {
             makeMenuItem(STRETCH_INCREASE_COMMAND),
             makeMenuItem(STRETCH_DECREASE_COMMAND),
@@ -375,11 +375,11 @@ MenuItem* AppMenuModel::makeFormatMenu()
 MenuItem* AppMenuModel::makeToolsMenu()
 {
     MenuItemList toolsItems {
-        makeMenuItem(OPEN_TRANSPOSE_COMMAND),
+        makeMenuItem(OpenTransposeCommand::id),
         makeSeparator(),
         makeMenuItem(STAFF_EXPLODE_COMMAND),
         makeMenuItem(STAFF_IMPLODE_COMMAND),
-        makeMenuItem(OPEN_REALIZECHORDSYMBOLS_COMMAND),
+        makeMenuItem(OpenRealizeChordSymbolsCommand::id),
         makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), {
             makeMenuItem(SWAP_VOICE_X12_COMMAND),
             makeMenuItem(SWAP_VOICE_X13_COMMAND),

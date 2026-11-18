@@ -232,16 +232,16 @@ private:
     void resetBeamMode();
 
     muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
-    void openPageSettingsDialog();
-    void openStaffProperties();
-    void openEditStringsDialog();
-    void openBreaksDialog();
-    void openTransposeDialog();
-    void openPartsDialog();
-    void openStaffTextPropertiesDialog();
-    void openMeasurePropertiesDialog();
-    void openEditGridSizeDialog();
-    void openRealizeChordSymbolsDialog();
+    muse::Ret openPageSettingsDialog();
+    muse::Ret openStaffProperties();
+    muse::Ret openEditStringsDialog();
+    muse::Ret openBreaksDialog();
+    muse::Ret openTransposeDialog();
+    muse::Ret openPartsDialog();
+    muse::Ret openStaffTextPropertiesDialog();
+    muse::Ret openMeasurePropertiesDialog();
+    muse::Ret openEditGridSizeDialog();
+    muse::Ret openRealizeChordSymbolsDialog();
     muse::io::path_t selectStyleFile(bool forLoad);
     void loadStyle();
     void saveStyle();

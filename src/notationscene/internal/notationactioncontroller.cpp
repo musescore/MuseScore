@@ -264,17 +264,19 @@ void NotationActionController::init()
     registerCommand(STRETCH_RESET_COMMAND, &Controller::resetStretch);
 
     // open properties
-    registerCommand(OPEN_PAGE_SETTINGS_COMMAND, &Controller::openPageSettingsDialog);
-    registerCommand(OPEN_STAFF_PROPERTIES_COMMAND, &Controller::openStaffProperties);
-    registerCommand(OPEN_EDIT_STRINGS_COMMAND, &Controller::openEditStringsDialog);
-    registerCommand(OPEN_BREAKS_COMMAND, &Controller::openBreaksDialog);
-    registerCommand(OPEN_STAFF_TEXT_PROPERTIES_COMMAND, &Controller::openStaffTextPropertiesDialog);
-    registerCommand(OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND, &Controller::openStaffTextPropertiesDialog);
-    registerCommand(OPEN_MEASURE_PROPERTIES_COMMAND, &Controller::openMeasurePropertiesDialog);
-    registerCommand(OPEN_TRANSPOSE_COMMAND, &Controller::openTransposeDialog);
-    registerCommand(OPEN_PARTS_COMMAND, &Controller::openPartsDialog);
-    registerCommand(OPEN_EDITGRIDSIZE_COMMAND, &Controller::openEditGridSizeDialog);
-    registerCommand(OPEN_REALIZECHORDSYMBOLS_COMMAND, &Controller::openRealizeChordSymbolsDialog);
+    registerCommand<OpenPageSettingsCommand>(&Controller::openPageSettingsDialog);
+    registerCommand<OpenStaffPropertiesCommand>(&Controller::openStaffProperties);
+    registerCommand<OpenEditStringsCommand>(&Controller::openEditStringsDialog);
+    registerCommand<OpenBreaksCommand>(&Controller::openBreaksDialog);
+    registerCommand<OpenStaffTextPropertiesCommand>(&Controller::openStaffTextPropertiesDialog);
+    //! NOTE Staff and system text share one dialog: it picks the title from the
+    //! edited element type.
+    registerCommand<OpenSystemTextPropertiesCommand>(&Controller::openStaffTextPropertiesDialog);
+    registerCommand<OpenMeasurePropertiesCommand>(&Controller::openMeasurePropertiesDialog);
+    registerCommand<OpenTransposeCommand>(&Controller::openTransposeDialog);
+    registerCommand<OpenPartsCommand>(&Controller::openPartsDialog);
+    registerCommand<OpenEditGridSizeCommand>(&Controller::openEditGridSizeDialog);
+    registerCommand<OpenRealizeChordSymbolsCommand>(&Controller::openRealizeChordSymbolsDialog);
 
     // style commands
     registerCommand(LOAD_STYLE_COMMAND, &Controller::loadStyle);
@@ -2379,36 +2381,42 @@ muse::Ret NotationActionController::openEditStyleDialog(const muse::rcommand::Pa
     return muse::make_ok();
 }
 
-void NotationActionController::openPageSettingsDialog()
+muse::Ret NotationActionController::openPageSettingsDialog()
 {
     interactive()->open("musescore://notation/pagesettings");
+    return muse::make_ok();
 }
 
-void NotationActionController::openStaffProperties()
+muse::Ret NotationActionController::openStaffProperties()
 {
     interactive()->open("musescore://notation/staffproperties");
+    return muse::make_ok();
 }
 
-void NotationActionController::openEditStringsDialog()
+muse::Ret NotationActionController::openEditStringsDialog()
 {
     interactive()->open("musescore://notation/editstrings");
+    return muse::make_ok();
 }
 
-void NotationActionController::openBreaksDialog()
+muse::Ret NotationActionController::openBreaksDialog()
 {
     interactive()->open("musescore://notation/breaks");
+    return muse::make_ok();
 }
 
-void NotationActionController::openTransposeDialog()
+muse::Ret NotationActionController::openTransposeDialog()
 {
     interactive()->open("musescore://notation/transpose").onResolve(this, [this](const Val&) {
         currentNotationInteraction()->checkAndShowError();
     });
+    return muse::make_ok();
 }
 
-void NotationActionController::openPartsDialog()
+muse::Ret NotationActionController::openPartsDialog()
 {
     interactive()->open("musescore://notation/parts");
+    return muse::make_ok();
 }
 
 muse::io::path_t NotationActionController::selectStyleFile(bool forLoad)
@@ -2611,6 +2619,10 @@ muse::Ret NotationActionController::toggleFontStyle(const EditTextFontStyleComma
         return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
+    if (!interaction->isTextEditingStarted()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
     interaction->toggleTextFontStyle(command.style);
 
     return muse::make_ok();
@@ -2625,7 +2637,7 @@ muse::Ret NotationActionController::setBeamSelectedRange()
         return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    if (interaction->selection()->isNone()) {
+    if (!interaction->selection()->isRange()) {
         return muse::make_ret(muse::Ret::Code::NotAllowed);
     }
 
@@ -2724,26 +2736,32 @@ muse::Ret NotationActionController::openTupletOtherDialog()
     return muse::make_ok();
 }
 
-void NotationActionController::openStaffTextPropertiesDialog()
+muse::Ret NotationActionController::openStaffTextPropertiesDialog()
 {
     interactive()->open("musescore://notation/stafftextproperties");
+    return muse::make_ok();
 }
 
-void NotationActionController::openMeasurePropertiesDialog()
+muse::Ret NotationActionController::openMeasurePropertiesDialog()
 {
-    if (currentNotationInteraction()->selectedMeasure() != nullptr) {
-        interactive()->open("musescore://notation/measureproperties");
+    if (currentNotationInteraction()->selectedMeasure() == nullptr) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
     }
+
+    interactive()->open("musescore://notation/measureproperties");
+    return muse::make_ok();
 }
 
-void NotationActionController::openEditGridSizeDialog()
+muse::Ret NotationActionController::openEditGridSizeDialog()
 {
     interactive()->open("musescore://notation/editgridsize");
+    return muse::make_ok();
 }
 
-void NotationActionController::openRealizeChordSymbolsDialog()
+muse::Ret NotationActionController::openRealizeChordSymbolsDialog()
 {
     interactive()->open("musescore://notation/realizechordsymbols");
+    return muse::make_ok();
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
