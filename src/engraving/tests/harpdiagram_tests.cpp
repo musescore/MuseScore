@@ -219,7 +219,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     // Test undo
     score->undoRedo(true, &dd);
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, beforeFile, /*compareWithSavedFile*/ true));
 }
 
 TEST_F(Engraving_HarpDiagramTests, testmap)

@@ -112,12 +112,14 @@ static std::vector<Edit> computeDiff(const std::vector<std::string_view>& lines1
     return edits;
 }
 
-bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const String& compareWithLocalPath)
+// compareWithSavedFile: compare with a file this test saved earlier, not a reference file in the test data folder
+bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const String& compareWith, bool compareWithSavedFile)
 {
     if (!ScoreRW::saveScore(score, saveName)) {
         return false;
     }
-    return ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+    const String comparePath = compareWithSavedFile ? compareWith : ScoreRW::rootPath() + u"/" + compareWith;
+    return ScoreComp::compareFiles(comparePath, saveName);
 }
 
 bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String& saveName, const muse::String& compareWithLocalPath)
@@ -126,15 +128,6 @@ bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String
         return false;
     }
     return ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
-}
-
-// Compares with a file this test saved earlier, e.g. the score before a command that was then undone
-bool ScoreComp::saveCompareWithSavedScore(Score* score, const String& saveName, const String& savedName)
-{
-    if (!ScoreRW::saveScore(score, saveName)) {
-        return false;
-    }
-    return ScoreComp::compareFiles(savedName, saveName);
 }
 
 bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)

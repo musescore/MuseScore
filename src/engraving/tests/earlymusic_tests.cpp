@@ -97,6 +97,6 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_BREVE);
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"mensurstrich01.mscx", u"mensurstrich01-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", u"mensurstrich01-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }

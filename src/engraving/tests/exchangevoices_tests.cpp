@@ -107,7 +107,8 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
     score->undoStack()->undo(&ed);
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"exchangevoices-range.mscx", u"exchangevoices-range-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx", u"exchangevoices-range-before.mscx",
+                                            /*compareWithSavedFile*/ true));
 }
 
 TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)

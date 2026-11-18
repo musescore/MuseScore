@@ -71,7 +71,7 @@ TEST_F(Engraving_BoxTests, undoRemoveVBox)
     score->undoStack()->undo(nullptr);
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }

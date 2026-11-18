@@ -70,7 +70,7 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName, bool undoRe
     score->undoStack()->undo(&ed);
     score->doLayout();
     if (undoRestoresScore) {
-        EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
     } else {
         // undo doesn't restore this score exactly yet
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, IMPLODEEXP_DATA_DIR + fileName + "02-ref.mscx"));
@@ -108,7 +108,7 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }

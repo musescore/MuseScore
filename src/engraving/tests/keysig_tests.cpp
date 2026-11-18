@@ -114,15 +114,15 @@ TEST_F(Engraving_KeySigTests, keysig)
     // undo remove
     EditData ed;
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile4, writeFile2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile4, writeFile2, /*compareWithSavedFile*/ true));
 
     // undo change
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile5, writeFile1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile5, writeFile1, /*compareWithSavedFile*/ true));
 
     // undo add
     score->transactionManager()->undoRedo(true, &ed);
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile6, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile6, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }

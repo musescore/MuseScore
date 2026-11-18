@@ -62,7 +62,7 @@ public:
         EditData ed;
         score->transactionManager()->undoRedo(true, &ed);
         if (undoRestoresScore) {
-            EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+            EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
         } else {
             // undo doesn't restore this score exactly yet
             EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, TRANSPOSE_DATA_DIR + scoreName + "02-ref.mscx"));
@@ -97,7 +97,7 @@ public:
         // undo
         EditData ed;
         score->transactionManager()->undoRedo(true, &ed);
-        EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
         delete score;
     }

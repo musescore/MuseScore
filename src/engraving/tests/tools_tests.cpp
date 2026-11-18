@@ -69,7 +69,7 @@ TEST_F(Engraving_ToolsTests, undoSlashFill)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -127,7 +127,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -155,7 +155,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -183,7 +183,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -211,7 +211,7 @@ TEST_F(Engraving_ToolsTests, undoResequencePart)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }

@@ -72,7 +72,7 @@ TEST_F(Engraving_BreathTests, breath)
     // undo
     score->undoStack()->undo(0);
     score->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, writeFile2, beforeFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }

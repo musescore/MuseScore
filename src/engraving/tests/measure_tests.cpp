@@ -124,7 +124,8 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx",
+                                            /*compareWithSavedFile*/ true));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -136,7 +137,8 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", u"measure-insert_bf_clef-before.mscx",
+                                            /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -159,7 +161,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx",
+                                            /*compareWithSavedFile*/ true));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -172,7 +175,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->undoRedo(true, 0);
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key_undo.mscx", u"measure-insert_bf_key-before.mscx",
+                                            /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -480,8 +484,8 @@ TEST_F(Engraving_MeasureTests, undoDelInitialVBox_269919)
     // 4. Undo to restore initial VBox resulted in assert failure crash
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"undoDelInitialVBox_269919.mscx",
-                                                     u"undoDelInitialVBox_269919-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"undoDelInitialVBox_269919.mscx",
+                                            u"undoDelInitialVBox_269919-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 

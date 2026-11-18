@@ -88,7 +88,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     score->endCmd();
 
     // Compare
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"hiddenStaff2.mscx", u"hiddenStaff-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"hiddenStaff2.mscx", u"hiddenStaff-before.mscx", /*compareWithSavedFile*/ true));
 }
 
 TEST_F(Engraving_StaffMoveTests, linkedStaff)
@@ -120,6 +120,6 @@ TEST_F(Engraving_StaffMoveTests, linkedStaff)
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     EditCrossStaff::moveUp(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"linkedStaff3.mscx", u"linkedStaff-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff3.mscx", u"linkedStaff-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }

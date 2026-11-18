@@ -399,7 +399,7 @@ TEST_F(Engraving_SpannersTests, spanners09)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline02.mscx", u"lyricsline02-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline02.mscx", u"lyricsline02-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -433,7 +433,7 @@ TEST_F(Engraving_SpannersTests, spanners10)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline03.mscx", u"lyricsline03-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline03.mscx", u"lyricsline03-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -467,7 +467,7 @@ TEST_F(Engraving_SpannersTests, spanners11)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline04.mscx", u"lyricsline04-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline04.mscx", u"lyricsline04-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -501,7 +501,7 @@ TEST_F(Engraving_SpannersTests, spanners12)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline05.mscx", u"lyricsline05-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline05.mscx", u"lyricsline05-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 
@@ -542,7 +542,7 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
     EditData ed;
     score->undoStack()->undo(&ed);
     score->doLayout();        // systems need to be re-computed
-    EXPECT_TRUE(ScoreComp::saveCompareWithSavedScore(score, u"lyricsline06.mscx", u"lyricsline06-before.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"lyricsline06.mscx", u"lyricsline06-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }
 
