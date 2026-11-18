@@ -2032,3 +2032,727 @@ TEST_F(Engraving_StaveSharingTests, testUserTrackMapValidAfterLocalTimeSig)
 
     delete score;
 }
+
+static void expectClefAt(const Measure* measure, const Fraction& tick, track_idx_t track, ClefType expectedType)
+{
+    const Segment* seg = measure->findSegment(SegmentType::Clef, tick);
+    const EngravingItem* clef = seg ? seg->element(track) : nullptr;
+    EXPECT_TRUE(clef && clef->isClef()) << "No clef on track " << track << " at tick " << tick.toString().toStdString();
+    if (clef && clef->isClef()) {
+        EXPECT_EQ(toClef(clef)->clefType(), expectedType) << "Track " << track << " at tick " << tick.toString().toStdString();
+    }
+}
+
+static void expectKeySigAt(const Measure* measure, track_idx_t track, Key expectedKey)
+{
+    const Segment* seg = measure->findSegment(SegmentType::KeySig, measure->tick());
+    const EngravingItem* keySig = seg ? seg->element(track) : nullptr;
+    EXPECT_TRUE(keySig && keySig->isKeySig()) << "No key signature on track " << track << " at tick "
+                                              << measure->tick().toString().toStdString();
+    if (keySig && keySig->isKeySig()) {
+        EXPECT_EQ(toKeySig(keySig)->key(), expectedKey) << "Track " << track << " at tick " << measure->tick().toString().toStdString();
+    }
+}
+
+TEST_F(Engraving_StaveSharingTests, testClefAtSharingChangeMovingPlayerInOtherClef)
+{
+    // PR #35482 review comment 6913362608: a stave sharing change moving a player in another clef onto a staff
+    // must draw that player's clef at the change
+
+    // [GIVEN] Three clarinets in unison, with Cl.2 in tenor clef, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeClarinets.mscx");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m1 && m2);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clef"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, originParts.at(1)->staff(0), m1, ClefType::C4);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    // [THEN] Cl.1 and Cl.3 share the first shared staff, and Cl.2 is on the second
+    const SharedTrackMap& m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    ASSERT_EQ(m1TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared2 }, { origin3, shared1 } })) << dump(m1TrackMap);
+
+    // [WHEN] A stave sharing change at bar 2 swaps the players on the two shared staves
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared1 }, { origin3, shared2 } };
+    Segment* seg = m2->first(SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+        for (const auto& [originTrack, sharedTrack] : userTrackMap) {
+            EditStaveSharing::setTrackMapping(tx, seg, sharedPart, originTrack, sharedTrack);
+        }
+    });
+    score->doLayout();
+
+    ASSERT_EQ(m1->system(), m2->system());
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(m2->tick());
+    ASSERT_TRUE(state && state->isUserMapValid());
+    const SharedTrackMap& m2TrackMap = sharedPart->staveSharingStateAtTick(m2->tick()).sharedTrackMap();
+    ASSERT_EQ(m2TrackMap, userTrackMap) << dump(m2TrackMap);
+    ASSERT_EQ(sharedPart->staff(0)->clefType(m2->tick()), originParts.at(1)->staff(0)->clefType(m2->tick()));
+    ASSERT_EQ(sharedPart->staff(1)->clefType(m2->tick()), originParts.at(0)->staff(0)->clefType(m2->tick()));
+    ASSERT_EQ(sharedPart->staff(0)->clefType(m2->tick()).transposingClef, ClefType::C4);
+    ASSERT_EQ(sharedPart->staff(1)->clefType(m2->tick()).transposingClef, ClefType::G);
+
+    // [THEN] Each shared staff shows the clef of the players moved onto it at the end of bar 1
+    expectClefAt(m1, m2->tick(), shared1, ClefType::C4);
+    expectClefAt(m1, m2->tick(), shared2, ClefType::G);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testKeySigsAtSharingChangeSwappingTranspositions)
+{
+    // PR #35482 review comment 6913522087: a stave sharing change or reset swapping players with different
+    // transpositions must draw their key signatures at the change
+
+    // [GIVEN] Cl.1 and Cl.2 in B flat in unison, Cl.3 in A, in concert C, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeTranspositions.mscx");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    Measure* m6 = score->crMeasure(5);
+    ASSERT_TRUE(m1 && m3 && m6);
+
+    // [THEN] Cl.1 and Cl.2 share the first shared staff, and Cl.3 is on the second
+    const SharedTrackMap defaultTrackMap = { { origin1, shared1 }, { origin2, shared1 }, { origin3, shared2 } };
+    const SharedTrackMap& m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    ASSERT_EQ(m1TrackMap, defaultTrackMap) << dump(m1TrackMap);
+
+    // [WHEN] A stave sharing change at bar 3 swaps the players, and a reset at bar 6 swaps them back
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared2 }, { origin3, shared1 } };
+    Segment* m3Seg = m3->first(SegmentType::ChordRest);
+    Segment* m6Seg = m6->first(SegmentType::ChordRest);
+    ASSERT_TRUE(m3Seg && m6Seg);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m3Seg, sharedPart, false);
+        for (const auto& [originTrack, sharedTrack] : userTrackMap) {
+            EditStaveSharing::setTrackMapping(tx, m3Seg, sharedPart, originTrack, sharedTrack);
+        }
+    });
+    score->doLayout();
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing reset"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m6Seg, sharedPart, true);
+    });
+    score->doLayout();
+
+    ASSERT_EQ(m3->system(), m6->system());
+    ASSERT_FALSE(m3->isFirstInSystem());
+    ASSERT_FALSE(m6->isFirstInSystem());
+
+    std::optional<StaveSharingState> m3State = sharedPart->exactStaveSharingStateAtTick(m3->tick());
+    ASSERT_TRUE(m3State && m3State->isUserMapValid());
+    const SharedTrackMap& m3TrackMap = sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap();
+    ASSERT_EQ(m3TrackMap, userTrackMap) << dump(m3TrackMap);
+
+    std::optional<StaveSharingState> m6State = sharedPart->exactStaveSharingStateAtTick(m6->tick());
+    ASSERT_TRUE(m6State && m6State->isReset());
+    const SharedTrackMap& m6TrackMap = sharedPart->staveSharingStateAtTick(m6->tick()).sharedTrackMap();
+    ASSERT_EQ(m6TrackMap, defaultTrackMap) << dump(m6TrackMap);
+
+    ASSERT_EQ(sharedPart->staff(0)->key(m3->tick()), Key::E_B);
+    ASSERT_EQ(sharedPart->staff(1)->key(m3->tick()), Key::D);
+    ASSERT_EQ(sharedPart->staff(0)->key(m6->tick()), Key::D);
+    ASSERT_EQ(sharedPart->staff(1)->key(m6->tick()), Key::E_B);
+
+    // [THEN] Each shared staff shows the key signature of the players moved onto it at the change and at the reset
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+    expectKeySigAt(m6, shared1, Key::D);
+    expectKeySigAt(m6, shared2, Key::E_B);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testKeySigOnStaffBroughtInBySharingChange)
+{
+    // PR #35482 review comment 6913617268: a shared staff brought in by a stave sharing change mid-system
+    // must draw its key signature at the change
+
+    // [GIVEN] Three clarinets in unison in written D major, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeClarinets.mscx");
+    ASSERT_TRUE(score);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
+    score->doLayout();
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const staff_idx_t sharedStaff2 = sharedPart->staff(1)->idx();
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedStaff2);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m3);
+
+    // [THEN] All players share the first shared staff, so nothing is mapped to the second
+    const SharedTrackMap& m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    ASSERT_EQ(m1TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared1 }, { origin3, shared1 } })) << dump(m1TrackMap);
+
+    // [WHEN] A stave sharing change at bar 3 moves Cl.3 onto the second shared staff
+    Segment* seg = m3->first(SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+        EditStaveSharing::setTrackMapping(tx, seg, sharedPart, origin3, shared2);
+    });
+    score->doLayout();
+
+    ASSERT_EQ(m1->system(), m3->system());
+    const SharedTrackMap& m3TrackMap = sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap();
+    ASSERT_EQ(m3TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared1 }, { origin3, shared2 } })) << dump(m3TrackMap);
+    ASSERT_TRUE(m3->system()->staff(sharedStaff2)->show());
+    ASSERT_EQ(score->staff(sharedStaff2)->key(m3->tick()), Key::D);
+
+    // [THEN] The second shared staff shows Cl.3's key signature at the change
+    expectKeySigAt(m3, shared2, Key::D);
+
+    delete score;
+}
+
+static void addSharingChange(MasterScore* score, Segment* seg, SharedPart* sharedPart, const SharedTrackMap& trackMap)
+{
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add stave sharing change"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, seg, sharedPart, false);
+        for (const auto& [originTrack, sharedTrack] : trackMap) {
+            EditStaveSharing::setTrackMapping(tx, seg, sharedPart, originTrack, sharedTrack);
+        }
+    });
+    score->doLayout();
+}
+
+static void toggleStaveSharing(MasterScore* score, bool enable)
+{
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Toggle stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, enable);
+    });
+    score->doLayout();
+}
+
+static void expectGeneratedItemAt(const Measure* measure, SegmentType segType, const Fraction& tick, track_idx_t track)
+{
+    const Segment* seg = measure->findSegment(segType, tick);
+    const EngravingItem* item = seg ? seg->element(track) : nullptr;
+    ASSERT_TRUE(item) << "Nothing on track " << track << " at tick " << tick.toString().toStdString();
+    EXPECT_TRUE(item->generated()) << item->typeName() << " on track " << track << " at tick " << tick.toString().toStdString();
+    EXPECT_TRUE(seg->enabled()) << item->typeName() << " on track " << track << " at tick " << tick.toString().toStdString();
+}
+
+static void expectTimeSigAt(const Measure* measure, track_idx_t track, const Fraction& expectedSig)
+{
+    const Segment* seg = measure->findSegment(SegmentType::TimeSig, measure->tick());
+    const EngravingItem* timeSig = seg ? seg->element(track) : nullptr;
+    EXPECT_TRUE(timeSig && timeSig->isTimeSig()) << "No time signature on track " << track << " at tick "
+                                                 << measure->tick().toString().toStdString();
+    if (timeSig && timeSig->isTimeSig()) {
+        EXPECT_EQ(toTimeSig(timeSig)->sig(), expectedSig) << "Track " << track << " at tick " << measure->tick().toString().toStdString();
+    }
+}
+
+static void expectKeySigAt(const Measure* measure, const Fraction& tick, track_idx_t track, Key expectedKey)
+{
+    const Segment* seg = measure->findSegment(SegmentType::KeySig, tick);
+    const EngravingItem* keySig = seg ? seg->element(track) : nullptr;
+    EXPECT_TRUE(keySig && keySig->isKeySig()) << "No key signature on track " << track << " at tick " << tick.toString().toStdString();
+    if (keySig && keySig->isKeySig()) {
+        EXPECT_EQ(toKeySig(keySig)->key(), expectedKey) << "Track " << track << " at tick " << tick.toString().toStdString();
+    }
+}
+
+static void expectNoGeneratedClefKeyTimeSigsMidSystem(const Score* score, const std::vector<Staff*>& staves)
+{
+    // System headers and trailers (courtesies) are expected to be generated
+    for (const Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (const Segment& seg : m->segments()) {
+            if (!seg.isType(SegmentType::Clef | SegmentType::KeySig | SegmentType::TimeSig) || seg.trailer()
+                || (seg.header() && m->isFirstInSystem())) {
+                continue;
+            }
+            for (const Staff* staff : staves) {
+                const EngravingItem* item = seg.element(staff2track(staff->idx()));
+                EXPECT_FALSE(item && item->generated())
+                    << "Generated " << seg.subTypeName() << " in measure " << m->measureNumber() + 1 << " on staff " << staff->idx();
+            }
+        }
+    }
+}
+
+static void expectNoStaleHeaderKeySigs(const Score* score)
+{
+    for (const Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        if (m->isFirstInSystem()) {
+            continue;
+        }
+        for (const Segment& seg : m->segments()) {
+            if (!seg.isKeySigType() || !seg.header() || !seg.enabled()) {
+                continue;
+            }
+            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                const EngravingItem* item = seg.element(staff2track(staffIdx));
+                EXPECT_FALSE(item && item->generated())
+                    << "Header key signature in measure " << m->measureNumber() + 1 << " on staff " << staffIdx;
+            }
+        }
+    }
+}
+
+static std::vector<Staff*> originStaves(const std::vector<Part*>& originParts)
+{
+    std::vector<Staff*> staves;
+    for (const Part* part : originParts) {
+        muse::join(staves, part->staves());
+    }
+    return staves;
+}
+
+TEST_F(Engraving_StaveSharingTests, testTimeSigsAtSharingChangeSwappingLocalTimeSig)
+{
+    // [GIVEN] Two flutes resting, Fl.2 in a local 3/4 from bar 2 against the global 4/4, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"localTimeSigSwap.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m2 && m3);
+
+    // [THEN] The different time signatures keep the flutes on separate shared staves
+    const SharedTrackMap& m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    ASSERT_EQ(m1TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared2 } })) << dump(m1TrackMap);
+
+    // [WHEN] A stave sharing change at bar 3 swaps the flutes
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared1 } };
+    addSharingChange(score, m3->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m3->system());
+    ASSERT_FALSE(m3->isFirstInSystem());
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(m3->tick());
+    ASSERT_TRUE(state && state->isUserMapValid());
+    const SharedTrackMap& m3TrackMap = sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap();
+    ASSERT_EQ(m3TrackMap, userTrackMap) << dump(m3TrackMap);
+
+    // [THEN] The staff Fl.2 moves onto shows 3/4 at bar 3, and the staff it leaves shows 4/4
+    expectTimeSigAt(m3, shared1, Fraction(3, 4));
+    expectTimeSigAt(m3, shared2, Fraction(4, 4));
+    expectGeneratedItemAt(m3, SegmentType::TimeSig, m3->tick(), shared1);
+    expectGeneratedItemAt(m3, SegmentType::TimeSig, m3->tick(), shared2);
+
+    // [THEN] The shared staves are stretched like the flute they show
+    EXPECT_EQ(sharedPart->staff(0)->timeStretch(m2->tick()), Fraction(1, 1));
+    EXPECT_EQ(sharedPart->staff(1)->timeStretch(m2->tick()), Fraction(3, 4));
+    EXPECT_EQ(sharedPart->staff(0)->timeStretch(m3->tick()), Fraction(3, 4));
+    EXPECT_EQ(sharedPart->staff(1)->timeStretch(m3->tick()), Fraction(1, 1));
+
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testTimeSigsAtSharingChangeSwappingLocalTimeSigAtSystemStart)
+{
+    // [GIVEN] Two flutes resting, Fl.2 in a local 3/4 from bar 2 against the global 4/4, a system break after bar 2,
+    // and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"localTimeSigSwap.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m2 && m3);
+    score->startCmd(muse::TranslatableString::untranslatable("Add system break"));
+    m2->undoSetLineBreak(true);
+    score->endCmd();
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 2);
+    ASSERT_EQ(sharedPart->nstaves(), 2);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    const SharedTrackMap& m2TrackMap = sharedPart->staveSharingStateAtTick(m2->tick()).sharedTrackMap();
+    ASSERT_EQ(m2TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared2 } })) << dump(m2TrackMap);
+
+    // [WHEN] A stave sharing change at bar 3, the first bar of the second system, swaps the flutes
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared1 } };
+    addSharingChange(score, m3->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_TRUE(m3->isFirstInSystem());
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(m3->tick());
+    ASSERT_TRUE(state && state->isUserMapValid());
+    const SharedTrackMap& m3TrackMap = sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap();
+    ASSERT_EQ(m3TrackMap, userTrackMap) << dump(m3TrackMap);
+
+    // [THEN] Bar 3's time signature segment shows 3/4 on the staff Fl.2 moves onto and 4/4 on the staff it leaves
+    expectTimeSigAt(m3, shared1, Fraction(3, 4));
+    expectTimeSigAt(m3, shared2, Fraction(4, 4));
+    expectGeneratedItemAt(m3, SegmentType::TimeSig, m3->tick(), shared1);
+    expectGeneratedItemAt(m3, SegmentType::TimeSig, m3->tick(), shared2);
+
+    EXPECT_EQ(sharedPart->staff(0)->timeStretch(m3->tick()), Fraction(3, 4));
+    EXPECT_EQ(sharedPart->staff(1)->timeStretch(m3->tick()), Fraction(1, 1));
+
+    EXPECT_TRUE(score->sanityCheck());
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testKeySigsAtMidMeasureSharingChangeSwappingTranspositions)
+{
+    // [GIVEN] Cl.1 and Cl.2 in B flat in unison, Cl.3 in A, in concert C, in half notes, and stave sharing enabled
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeTranspositionsHalves.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m3);
+
+    const SharedTrackMap& m1TrackMap = sharedPart->staveSharingStateAtTick(m1->tick()).sharedTrackMap();
+    ASSERT_EQ(m1TrackMap, SharedTrackMap({ { origin1, shared1 }, { origin2, shared1 }, { origin3, shared2 } })) << dump(m1TrackMap);
+
+    // [WHEN] A stave sharing change on beat 3 of bar 3 swaps the players
+    Segment* firstSeg = m3->first(SegmentType::ChordRest);
+    Segment* midSeg = firstSeg ? firstSeg->next(SegmentType::ChordRest) : nullptr;
+    ASSERT_TRUE(midSeg);
+    const Fraction changeTick = midSeg->tick();
+    ASSERT_EQ(changeTick, m3->tick() + Fraction(1, 2));
+
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared2 }, { origin3, shared1 } };
+    addSharingChange(score, midSeg, sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m3->system());
+    std::optional<StaveSharingState> state = sharedPart->exactStaveSharingStateAtTick(changeTick);
+    ASSERT_TRUE(state && state->isUserMapValid());
+    const SharedTrackMap& changeTrackMap = sharedPart->staveSharingStateAtTick(changeTick).sharedTrackMap();
+    ASSERT_EQ(changeTrackMap, userTrackMap) << dump(changeTrackMap);
+    ASSERT_EQ(sharedPart->staff(0)->key(changeTick), Key::E_B);
+    ASSERT_EQ(sharedPart->staff(1)->key(changeTick), Key::D);
+
+    // [THEN] Each shared staff shows the key signature of the players moved onto it in the middle of bar 3
+    expectKeySigAt(m3, changeTick, shared1, Key::E_B);
+    expectKeySigAt(m3, changeTick, shared2, Key::D);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, changeTick, shared1);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, changeTick, shared2);
+
+    // [THEN] There is no key signature at the start of bar 3
+    const Segment* m3StartKeySigSeg = m3->findSegment(SegmentType::KeySig, m3->tick());
+    if (m3StartKeySigSeg && m3StartKeySigSeg->enabled()) {
+        EXPECT_FALSE(m3StartKeySigSeg->element(shared1));
+        EXPECT_FALSE(m3StartKeySigSeg->element(shared2));
+    }
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testNoStaleClefAfterUndoingSharingChange)
+{
+    // [GIVEN] Three clarinets in unison, with Cl.2 in tenor clef, stave sharing enabled,
+    // and a stave sharing change at bar 2 swapping the players on the two shared staves
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeClarinets.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m1 && m2);
+
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Change clef"), [&](Transaction& tx) {
+        EditClef::undoChangeClef(tx, score, originParts.at(1)->staff(0), m1, ClefType::C4);
+    });
+    score->setLayoutAll();
+    score->doLayout();
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared1 }, { origin3, shared2 } };
+    addSharingChange(score, m2->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m2->system());
+    ASSERT_EQ(sharedPart->staveSharingStateAtTick(m2->tick()).sharedTrackMap(), userTrackMap);
+    expectClefAt(m1, m2->tick(), shared1, ClefType::C4);
+    expectClefAt(m1, m2->tick(), shared2, ClefType::G);
+    expectGeneratedItemAt(m1, SegmentType::Clef, m2->tick(), shared1);
+    expectGeneratedItemAt(m1, SegmentType::Clef, m2->tick(), shared2);
+
+    // [WHEN] The change is undone
+    score->undoRedo(true, nullptr);
+    score->doLayout();
+
+    ASSERT_FALSE(sharedPart->exactStaveSharingStateAtTick(m2->tick()));
+
+    // [THEN] No generated clef, key or time signature remains on the shared staves mid-system
+    expectNoGeneratedClefKeyTimeSigsMidSystem(score, sharedPart->staves());
+    expectNoStaleHeaderKeySigs(score);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testNoStaleKeySigsAfterUndoingSharingChange)
+{
+    // [GIVEN] Cl.1 and Cl.2 in B flat in unison, Cl.3 in A, in concert C, stave sharing enabled,
+    // and a stave sharing change at bar 3 swapping the players
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeTranspositions.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m3);
+
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared2 }, { origin3, shared1 } };
+    addSharingChange(score, m3->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m3->system());
+    ASSERT_EQ(sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap(), userTrackMap);
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared1);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared2);
+
+    // [WHEN] The change is undone
+    score->undoRedo(true, nullptr);
+    score->doLayout();
+
+    ASSERT_FALSE(sharedPart->exactStaveSharingStateAtTick(m3->tick()));
+
+    // [THEN] No generated clef, key or time signature remains on the shared staves mid-system
+    expectNoGeneratedClefKeyTimeSigsMidSystem(score, sharedPart->staves());
+    expectNoStaleHeaderKeySigs(score);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testKeySigsAtSharingChangeAfterRemovingSystemBreak)
+{
+    // [GIVEN] Cl.1 and Cl.2 in B flat in unison, Cl.3 in A, in concert C, stave sharing enabled,
+    // and a stave sharing change at bar 3 swapping the players
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeTranspositions.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m2 = score->crMeasure(1);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m2 && m3);
+
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared2 }, { origin3, shared1 } };
+    addSharingChange(score, m3->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m3->system());
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+
+    // [WHEN] A system break is added after bar 2, so bar 3 starts a system
+    score->startCmd(muse::TranslatableString::untranslatable("Add system break"));
+    m2->undoSetLineBreak(true);
+    score->endCmd();
+    score->doLayout();
+
+    ASSERT_TRUE(m3->isFirstInSystem());
+    ASSERT_EQ(sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap(), userTrackMap);
+
+    // [THEN] Bar 3's header shows the swapped players' key signatures
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+
+    // [WHEN] The system break is removed
+    score->startCmd(muse::TranslatableString::untranslatable("Remove system break"));
+    m2->undoSetLineBreak(false);
+    score->endCmd();
+    score->doLayout();
+
+    ASSERT_EQ(m1->system(), m3->system());
+    ASSERT_FALSE(m3->isFirstInSystem());
+    ASSERT_EQ(sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap(), userTrackMap);
+
+    // [THEN] No header key signature is left mid-system, and the origin staves have no key signature at bar 3
+    expectNoStaleHeaderKeySigs(score);
+    const Segment* keySigSeg = m3->findSegment(SegmentType::KeySig, m3->tick());
+    ASSERT_TRUE(keySigSeg);
+    for (const Staff* staff : originStaves(originParts)) {
+        EXPECT_FALSE(keySigSeg->element(staff2track(staff->idx()))) << "Key signature at bar 3 on staff " << staff->idx();
+    }
+
+    // [THEN] The generated key signatures are back at bar 3
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared1);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared2);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, testKeySigsAtSharingChangeAfterTogglingStaveSharing)
+{
+    // [GIVEN] Cl.1 and Cl.2 in B flat in unison, Cl.3 in A, in concert C, stave sharing enabled,
+    // and a stave sharing change at bar 3 swapping the players
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"sharingChangeTranspositions.mscx");
+    ASSERT_TRUE(score);
+    toggleStaveSharing(score, true);
+
+    SharedPart* sharedPart = nullptr;
+    std::vector<Part*> originParts;
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(originParts.size(), 3);
+
+    const track_idx_t origin1 = staff2track(originParts.at(0)->staff(0)->idx());
+    const track_idx_t origin2 = staff2track(originParts.at(1)->staff(0)->idx());
+    const track_idx_t origin3 = staff2track(originParts.at(2)->staff(0)->idx());
+    const track_idx_t shared1 = staff2track(sharedPart->staff(0)->idx());
+    const track_idx_t shared2 = staff2track(sharedPart->staff(1)->idx());
+
+    Measure* m1 = score->crMeasure(0);
+    Measure* m3 = score->crMeasure(2);
+    ASSERT_TRUE(m1 && m3);
+
+    const SharedTrackMap userTrackMap = { { origin1, shared2 }, { origin2, shared2 }, { origin3, shared1 } };
+    addSharingChange(score, m3->first(SegmentType::ChordRest), sharedPart, userTrackMap);
+
+    ASSERT_EQ(m1->system(), m3->system());
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+
+    // [WHEN] Stave sharing is turned off and on again
+    toggleStaveSharing(score, false);
+    toggleStaveSharing(score, true);
+
+    collectSharedAndOriginParts(score, &sharedPart, originParts);
+    ASSERT_TRUE(checkSharedPartExist(sharedPart, originParts));
+    ASSERT_EQ(m1->system(), m3->system());
+    ASSERT_FALSE(m3->isFirstInSystem());
+    ASSERT_EQ(sharedPart->staveSharingStateAtTick(m3->tick()).sharedTrackMap(), userTrackMap);
+
+    // [THEN] Each shared staff has a single generated key signature at bar 3 with the swapped players' key
+    size_t keySigSegsAtM3 = 0;
+    for (const Segment& seg : m3->segments()) {
+        if (seg.isKeySigType() && seg.tick() == m3->tick()) {
+            ++keySigSegsAtM3;
+        }
+    }
+    EXPECT_EQ(keySigSegsAtM3, 1);
+    expectKeySigAt(m3, shared1, Key::E_B);
+    expectKeySigAt(m3, shared2, Key::D);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared1);
+    expectGeneratedItemAt(m3, SegmentType::KeySig, m3->tick(), shared2);
+
+    // [THEN] No generated items are on the origin staves mid-system, and no header key signature is left mid-system
+    expectNoGeneratedClefKeyTimeSigsMidSystem(score, originStaves(originParts));
+    expectNoStaleHeaderKeySigs(score);
+
+    delete score;
+}
