@@ -45,6 +45,7 @@ class ItemMultiSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
+class RootTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
@@ -148,7 +149,6 @@ private slots:
     void updateIsAddingSystemMarkingsAvailable();
     void updateIsStaveSharingEnabled();
     void updateIsHideEmptyStavesEnabled();
-    void updateSharedGroupRoles();
 
 private:
     void classBegin() override;
@@ -220,7 +220,7 @@ private:
 
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
-    AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
+    RootTreeItem* m_rootItem = nullptr;
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
     mu::notation::INotationPtr m_notation = nullptr;

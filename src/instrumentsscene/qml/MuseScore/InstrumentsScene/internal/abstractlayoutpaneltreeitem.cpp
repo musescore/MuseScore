@@ -133,7 +133,7 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
 
     int destinationRow_ = destinationRow;
     for (AbstractLayoutPanelTreeItem* child: childrenToMove) {
-        destinationParent->insertChild(child, destinationRow_);
+        destinationParent->doInsertChild(child, destinationRow_);
         destinationRow_++;
     }
 
@@ -143,7 +143,12 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
         childToRemoveIndex = sourceRow + count;
     }
 
-    AbstractLayoutPanelTreeItem::removeChildren(childToRemoveIndex, count);
+    doRemoveChildren(childToRemoveIndex, count, false);
+
+    onChildrenChanged();
+    if (destinationParent != this) {
+        destinationParent->onChildrenChanged();
+    }
 }
 
 void AbstractLayoutPanelTreeItem::applyToScore()
@@ -151,6 +156,12 @@ void AbstractLayoutPanelTreeItem::applyToScore()
 }
 
 void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool deleteChild)
+{
+    doRemoveChildren(row, count, deleteChild);
+    onChildrenChanged();
+}
+
+void AbstractLayoutPanelTreeItem::doRemoveChildren(int row, int count, bool deleteChild)
 {
     for (int i = row + count - 1; i >= row; --i) {
         AbstractLayoutPanelTreeItem* child = m_children.at(i);
@@ -169,6 +180,10 @@ void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool delete
 }
 
 void AbstractLayoutPanelTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
+{
+}
+
+void AbstractLayoutPanelTreeItem::onChildrenChanged()
 {
 }
 
@@ -232,27 +247,28 @@ void AbstractLayoutPanelTreeItem::setIsLastChild(bool isLast)
     emit isLastChildChanged(isLast);
 }
 
+void AbstractLayoutPanelTreeItem::setChildren(const QList<AbstractLayoutPanelTreeItem*>& children)
+{
+    for (AbstractLayoutPanelTreeItem* child : children) {
+        doInsertChild(child, m_children.size());
+    }
+
+    onChildrenChanged();
+}
+
 void AbstractLayoutPanelTreeItem::appendChild(AbstractLayoutPanelTreeItem* child)
 {
-    if (!child) {
-        return;
-    }
-
-    child->setParentItem(this);
-
-    if (!m_children.isEmpty()) {
-        m_children.last()->setIsLastChild(false);
-    }
-
-    m_children.append(child);
-    child->setIsLastChild(true);
-
-    if (isSelected()) {
-        child->setIsSelected(true);
-    }
+    doInsertChild(child, m_children.size());
+    onChildrenChanged();
 }
 
 void AbstractLayoutPanelTreeItem::insertChild(AbstractLayoutPanelTreeItem* child, int beforeRow)
+{
+    doInsertChild(child, beforeRow);
+    onChildrenChanged();
+}
+
+void AbstractLayoutPanelTreeItem::doInsertChild(AbstractLayoutPanelTreeItem* child, int beforeRow)
 {
     if (!child) {
         return;

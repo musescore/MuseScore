@@ -27,6 +27,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"

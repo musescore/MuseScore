@@ -234,7 +234,6 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
         updateIsStaveSharingEnabled();
-        updateSharedGroupRoles();
     }, Mode::SetReplace);
 }
 
@@ -373,11 +372,7 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
     updateIsStaveSharingEnabled();
     updateIsHideEmptyStavesEnabled();
 
-    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-        item->onScoreChanged(changes);
-    }
-
-    updateSharedGroupRoles();
+    m_rootItem->onScoreChanged(changes);
 
     m_scoreChanged = false;
 }
@@ -439,6 +434,8 @@ void LayoutPanelTreeModel::load()
     const bool hidesOtherInstruments = !isMasterScore() && !m_showsOtherInstruments;
     bool hasHiddenOtherInstruments = false;
 
+    QList<AbstractLayoutPanelTreeItem*> rows;
+
     for (const Part* part : masterParts) {
         if (!isMasterScore() && part->isSharedPart()) {
             continue;
@@ -452,21 +449,23 @@ void LayoutPanelTreeModel::load()
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
                 if (!staff->hasSystemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
-                    m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
+                    rows << buildSystemObjectsLayerItem(staff, systemObjects[staff]);
                 }
             }
         }
 
-        m_rootItem->appendChild(part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
+        rows << (part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
                 if (staff->hasSystemObjectsBelowBottomStaff()) {
-                    m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
+                    rows << buildSystemObjectsLayerItem(staff, systemObjects[staff]);
                 }
             }
         }
     }
+
+    m_rootItem->setChildren(rows);
 
     endResetModel();
 
@@ -479,7 +478,6 @@ void LayoutPanelTreeModel::load()
 
     updateIsStaveSharingEnabled();
     updateIsHideEmptyStavesEnabled();
-    updateSharedGroupRoles();
     setHasHiddenOtherInstruments(hasHiddenOtherInstruments);
 
     emit scoreChanged();
@@ -609,7 +607,17 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
+    if (sourceRowFirst.parent().isValid()) {
+        moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
+                 sourceRowFirst.row() - 1);
+        return;
+    }
+
+    const std::optional<RootTreeItem::StepMove> move = m_rootItem->resolveStepMove(sourceRowFirst.row(),
+                                                                                   selectedIndexList.last().row(), true);
+    if (move) {
+        moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
+    }
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -630,7 +638,16 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
     const QModelIndex& sourceRowLast = selectedIndexList.last();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
+    if (sourceRowFirst.parent().isValid()) {
+        moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
+                 sourceRowLast.row() + 1);
+        return;
+    }
+
+    const std::optional<RootTreeItem::StepMove> move = m_rootItem->resolveStepMove(sourceRowFirst.row(), sourceRowLast.row(), false);
+    if (move) {
+        moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
+    }
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -729,7 +746,6 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         updateSystemObjectLayers();
     }
 
-    updateSharedGroupRoles();
     updateRearrangementAvailability();
 
     return true;
@@ -1013,8 +1029,24 @@ void LayoutPanelTreeModel::updateRearrangementAvailability()
         }
     }
 
-    updateMovingUpAvailability(isRearrangementAvailable, selectedIndexList.first());
-    updateMovingDownAvailability(isRearrangementAvailable, selectedIndexList.last());
+    const QModelIndex& first = selectedIndexList.first();
+    QModelIndex last = selectedIndexList.last();
+    bool isMovingUpAllowed = isRearrangementAvailable;
+    bool isMovingDownAllowed = isRearrangementAvailable;
+
+    if (!first.parent().isValid()) {
+        const std::optional<RootTreeItem::StepMove> upMove = m_rootItem->resolveStepMove(first.row(), last.row(), true);
+        const std::optional<RootTreeItem::StepMove> downMove = m_rootItem->resolveStepMove(first.row(), last.row(), false);
+        isMovingUpAllowed = isMovingUpAllowed && upMove.has_value();
+        isMovingDownAllowed = isMovingDownAllowed && downMove.has_value();
+
+        if (downMove) {
+            last = index(downMove->sourceRow + downMove->count - 1, 0, QModelIndex());
+        }
+    }
+
+    updateMovingUpAvailability(isMovingUpAllowed, first);
+    updateMovingDownAvailability(isMovingDownAllowed, last);
 }
 
 void LayoutPanelTreeModel::updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex)
@@ -1164,53 +1196,6 @@ void LayoutPanelTreeModel::updateIsHideEmptyStavesEnabled()
 
     m_isHideEmptyStavesEnabled = enabled;
     emit isHideEmptyStavesEnabledChanged(enabled);
-}
-
-static const PartTreeItem* nextPartItemAfter(const QList<AbstractLayoutPanelTreeItem*>& items, int row)
-{
-    for (int i = row + 1; i < items.size(); ++i) {
-        if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            return dynamic_cast<const PartTreeItem*>(items.at(i));
-        }
-    }
-
-    return nullptr;
-}
-
-void LayoutPanelTreeModel::updateSharedGroupRoles()
-{
-    if (!m_rootItem) {
-        return;
-    }
-
-    const QList<AbstractLayoutPanelTreeItem*>& items = m_rootItem->childItems();
-    PartTreeItem* currentHeader = nullptr;
-
-    for (int i = 0; i < items.size(); ++i) {
-        PartTreeItem* partItem = dynamic_cast<PartTreeItem*>(items.at(i));
-        if (!partItem) {
-            // Markings rows sit next to their instrument, even inside a group
-            if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-                currentHeader = nullptr;
-            }
-            continue;
-        }
-
-        LayoutPanelItemType::SharedGroupRole role = LayoutPanelItemType::NOT_IN_GROUP;
-
-        if (partItem->type() == LayoutPanelItemType::SHARED_PART) {
-            currentHeader = partItem;
-            role = LayoutPanelItemType::GROUP_HEADER;
-        } else if (currentHeader && partItem->part()->sharedPart() == currentHeader->part()) {
-            const PartTreeItem* nextPartItem = nextPartItemAfter(items, i);
-            const bool isLast = !nextPartItem || nextPartItem->part()->sharedPart() != currentHeader->part();
-            role = isLast ? LayoutPanelItemType::GROUP_LAST_MEMBER : LayoutPanelItemType::GROUP_MEMBER;
-        } else {
-            currentHeader = nullptr;
-        }
-
-        partItem->setSharedGroup(role, currentHeader);
-    }
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

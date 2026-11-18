@@ -102,6 +102,7 @@ public:
 
     LayoutPanelItemType::ItemType childType(int row) const;
 
+    void setChildren(const QList<AbstractLayoutPanelTreeItem*>& children);
     void appendChild(AbstractLayoutPanelTreeItem* child);
     void insertChild(AbstractLayoutPanelTreeItem* child, int beforeRow);
 
@@ -138,9 +139,14 @@ protected:
     notation::IMasterNotationPtr masterNotation() const;
     notation::INotationPtr notation() const;
 
+    //! Called once after children are set, added, moved or removed
+    virtual void onChildrenChanged();
+
 private:
     int indexOf(const AbstractLayoutPanelTreeItem* item) const;
     void setIsLastChild(bool isLast);
+    void doInsertChild(AbstractLayoutPanelTreeItem* child, int beforeRow);
+    void doRemoveChildren(int row, int count, bool deleteChild);
 
     QList<AbstractLayoutPanelTreeItem*> m_children;
     AbstractLayoutPanelTreeItem* m_parent = nullptr;
