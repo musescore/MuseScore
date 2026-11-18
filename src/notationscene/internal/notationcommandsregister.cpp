@@ -562,20 +562,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // snap commands
-    CommandInfo{
-        TOGGLE_SNAP_TO_PREV_COMMAND,
-        TranslatableString("action", "Snap to &previous"),
-        TranslatableString("action", "Snap to previous"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        TOGGLE_SNAP_TO_NEXT_COMMAND,
-        TranslatableString("action", "Snap to &next"),
-        TranslatableString("action", "Snap to next"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
+    makeCommandInfo<ToggleSnapToCommand>(),
+    makeCommandInfo<ToggleSnapToPrevCommand>(),
+    makeCommandInfo<ToggleSnapToNextCommand>(),
 
     // layout commands
     CommandInfo{

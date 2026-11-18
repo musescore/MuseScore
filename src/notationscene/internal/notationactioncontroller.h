@@ -209,6 +209,7 @@ private:
     void addHammerOnPullOff();
 
     muse::Ret insertClef(const AddClefCommand& command);
+    muse::Ret toggleSnapTo(const ToggleSnapToCommand& command);
 
     void addDynamic();
     void addImage();

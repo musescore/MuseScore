@@ -343,6 +343,13 @@ struct ClefTypeContract {
         { "G8vbc", ClefType::G8_VB_C, "G clef ottava bassa with C clef" },
     } };
 };
+
+struct SnapDirectionContract {
+    static constexpr EnumTable<SnapDirection, 2> table { {
+        { "prev", SnapDirection::Prev, "snap to the previous item" },
+        { "next", SnapDirection::Next, "snap to the next item" },
+    } };
+};
 }
 
 namespace muse::rcommand {
@@ -367,6 +374,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ClefTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::SnapDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextMoveDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextNavigationModeContract);
 }

@@ -236,8 +236,7 @@ void NotationActionController::init()
     registerCommand(TOGGLE_VISIBLE_COMMAND, &Interaction::toggleVisible);
 
     // snap commands
-    registerCommand(TOGGLE_SNAP_TO_PREV_COMMAND, &Interaction::toggleSnapToPrevious);
-    registerCommand(TOGGLE_SNAP_TO_NEXT_COMMAND, &Interaction::toggleSnapToNext);
+    registerCommand<ToggleSnapToCommand>(&Controller::toggleSnapTo);
 
     // layout commands
     registerCommand(TOGGLE_SYSTEM_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::LINE);
@@ -1970,6 +1969,24 @@ muse::Ret NotationActionController::addFret(const AddFretCommand& command)
     }
 
     addFret();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleSnapTo(const ToggleSnapToCommand& command)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (interaction->selection()->isNone()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->toggleSnapTo(command.direction);
 
     return muse::make_ok();
 }
