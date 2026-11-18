@@ -183,7 +183,7 @@ private:
     muse::Ret addGraceNotes(const AddGraceNoteCommand& command);
     muse::Ret addInterval(const AddIntervalCommand& command);
     muse::Ret addText(const AddTextCommand& command);
-    muse::Ret addBeam(const AddBeamCommand& command);
+    muse::Ret setBeamMode(const SetBeamCommand& command);
     muse::Ret addOrnament(const AddOrnamentCommand& command);
     muse::Ret flipSelection();
 
@@ -278,6 +278,7 @@ private:
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     muse::Ret toggleFontStyle(const EditTextFontStyleCommand& command);
     muse::Ret toggleValign(const EditTextValignCommand& command);
+    muse::Ret setBeamSelectedRange();
     muse::Ret editTextAdvance(const EditTextAdvanceCommand& command);
     void navigateToTextItemByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
