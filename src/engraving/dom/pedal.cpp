@@ -290,7 +290,9 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     }
 
     if (endSeg->rtick() == Fraction(0, 1)) {
-        Segment* prevSeg = endSeg->prev1(SegmentType::EndBarLine);
+        Segment* prevSeg = style().styleB(Sid::createMultiMeasureRests)
+                           ? endSeg->prev1MM(SegmentType::EndBarLine)
+                           : endSeg->prev1(SegmentType::EndBarLine);
         if (prevSeg) {
             endSeg = prevSeg;
         }

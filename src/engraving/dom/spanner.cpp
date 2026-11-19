@@ -1168,6 +1168,15 @@ Segment* Spanner::endSegment() const
     track_idx_t trackIdx = effectiveTrack2();
     staff_idx_t staffIdx = track2staff(trackIdx);
 
+    if (mmRest) {
+        // An end tick inside an MM rest would otherwise resolve to the MM rest's start,
+        // drawing the spanner backwards: end it with the MM rest instead.
+        Measure* mmRestMeasure = score()->tick2measureMM(endTick);
+        if (mmRestMeasure && mmRestMeasure->isMMRest() && endTick > mmRestMeasure->tick() && endTick < mmRestMeasure->endTick()) {
+            endTick = mmRestMeasure->endTick();
+        }
+    }
+
     Segment* endSeg = score()->tick2segment(endTick, true, SegmentType::ChordRest, mmRest);
 
     if (!endSeg || !endSeg->hasElements(staffIdx) || (isVoiceSpecific() && !endSeg->element(trackIdx))) {
