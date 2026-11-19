@@ -32,6 +32,7 @@ install(FILES
       "TC9_BigScore(perfomance).js"
       "TC10_PlayToggle.js"
       TC11_MeasuresUndoRedo.js
+      TC12_ScorePartsSaveReopen.js
       TC13_Tuplets.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts
       )
