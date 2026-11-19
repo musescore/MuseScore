@@ -41,6 +41,7 @@
 
 #include "imscmetareader.h"
 #include "iprojectautosaver.h"
+#include "iprojectmigrator.h"
 #include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "iprojectcreator.h"
@@ -68,6 +69,7 @@ public:
     muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckStatusScenario> museSamplerCheckStatusScenario = { this };
     muse::ContextInject<IConvertFileToScoreScenario> convertFileToScoreScenario = { this };
+    muse::ContextInject<IProjectMigrator> migrator = { this };
 
     OpenProjectScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
@@ -127,6 +129,7 @@ private:
     muse::async::Promise<muse::RetVal<muse::Val> > openDialog(const muse::UriQuery& query) const;
     muse::async::Promise<muse::RetVal<muse::Val> > ensureAuthorization() const;
 
+    muse::async::Promise<muse::Ret> askAboutMigrationIfNeed(const muse::io::path_t& filePath);
     muse::async::Promise<bool> shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
     muse::async::Promise<bool> askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     void warnFileTooNew(const muse::io::path_t& filepath);

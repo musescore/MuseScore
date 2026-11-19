@@ -26,6 +26,8 @@
 #include "types/ret.h"
 #include "engraving/engravingproject.h"
 
+#include "types/migrationtypes.h"
+
 namespace mu::project {
 class IProjectMigrator : MODULE_CONTEXT_INTERFACE
 {
@@ -34,6 +36,7 @@ class IProjectMigrator : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IProjectMigrator() = default;
 
+    virtual MigrationType migrationType(int mscVersion) const = 0;
     virtual muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
 };
 }

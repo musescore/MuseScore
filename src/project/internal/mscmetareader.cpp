@@ -303,13 +303,20 @@ void MscMetaReader::doReadMeta(XmlStreamReader& xmlReader, ProjectMeta& meta) co
     while (xmlReader.readNextStartElement()) {
         if (xmlReader.name() == "museScore") {
             const std::string version(xmlReader.asciiAttribute("version"));
+            const QStringList versionParts = QString::fromStdString(version).split(u'.');
+            if (versionParts.size() == 2) {
+                meta.mscVersion = versionParts[0].toInt() * 100 + versionParts[1].toInt();
+            }
+
             bool suitedVersion = version.rfind("1", 0) == 0;
 
             if (suitedVersion) {
                 rawMeta = doReadRawMeta(xmlReader);
             } else {
                 while (xmlReader.readNextStartElement()) {
-                    if (xmlReader.name() == "Score") {
+                    if (xmlReader.name() == "programVersion") {
+                        meta.musescoreVersion = xmlReader.readText().toQString();
+                    } else if (xmlReader.name() == "Score") {
                         rawMeta = doReadRawMeta(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();

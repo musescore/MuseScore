@@ -33,6 +33,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/openprojectscenariomock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectautosavermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectcreatormock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/projectmigratormock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/saveprojectscenariomock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/utils/promisetest.h
@@ -49,6 +50,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/closeprojectscenariotests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/recentfilescontroller_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/projectmigratortests.cpp
 )
 
 set(MODULE_TEST_INCLUDE

@@ -67,7 +67,7 @@ TEST(ProjectMscMetaReaderTests, testReadFromMeta)
     EXPECT_TRUE(meta.platform.isEmpty());
     EXPECT_TRUE(meta.musescoreVersion.isEmpty());
     EXPECT_EQ(meta.musescoreRevision, 0);
-    EXPECT_EQ(meta.mscVersion, 0);
+    EXPECT_EQ(meta.mscVersion, 460);
 }
 
 TEST(ProjectMscMetaReaderTests, testReadFromMetaAndBox)
@@ -93,7 +93,7 @@ TEST(ProjectMscMetaReaderTests, testReadFromMetaAndBox)
     EXPECT_TRUE(meta.platform.isEmpty());
     EXPECT_TRUE(meta.musescoreVersion.isEmpty());
     EXPECT_EQ(meta.musescoreRevision, 0);
-    EXPECT_EQ(meta.mscVersion, 0);
+    EXPECT_EQ(meta.mscVersion, 460);
 }
 
 TEST(ProjectMscMetaReaderTests, testReadCloudInfo)

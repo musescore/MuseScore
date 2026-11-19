@@ -32,6 +32,7 @@ inline const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
 inline const muse::Uri HOME_PAGE_URI("musescore://home");
 inline const muse::Uri NEW_SCORE_URI("musescore://project/newscore");
 inline const muse::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
+inline const muse::Uri MIGRATION_URI("musescore://project/migration");
 inline const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
 
 inline const QString MUSESCORE_URL_SCHEME("musescore");
