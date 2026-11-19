@@ -2029,8 +2029,10 @@ void NotationActionController::addImage()
             muse::trc("notation", "TIFF") + " (*.tif *.tiff)",
             muse::trc("notation", "All") + " (*)" };
 
-    muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Insert Image"), "", filter);
-    interaction->addImageToItem(path, item);
+    interactive()->selectOpeningFile(muse::trc("notation", "Insert Image"), "", filter)
+    .onResolve(this, [interaction, item](const muse::io::path_t& path) {
+        interaction->addImageToItem(path, item);
+    });
 }
 
 void NotationActionController::addFiguredBass()
@@ -2416,7 +2418,7 @@ muse::Ret NotationActionController::openPartsDialog()
     return muse::make_ok();
 }
 
-muse::io::path_t NotationActionController::selectStyleFile(bool forLoad)
+muse::async::Promise<muse::io::path_t> NotationActionController::selectStyleFile(bool forLoad)
 {
     muse::io::path_t dir = configuration()->userStylesPath();
     std::string filterName = forLoad
@@ -2424,15 +2426,18 @@ muse::io::path_t NotationActionController::selectStyleFile(bool forLoad)
                              : muse::trc("notation", "MuseScore style file");
     std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
-           ? interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter)
-           : interactive()->selectSavingFileSync(muse::trc("notation", "Save style"), dir, filter);
+           ? interactive()->selectOpeningFile(muse::trc("notation", "Load style"), dir, filter)
+           : interactive()->selectSavingFile(muse::trc("notation", "Save style"), dir, filter);
 }
 
 void NotationActionController::loadStyle()
 {
     TRACEFUNC;
-    auto path = selectStyleFile(true);
-    if (!path.empty()) {
+    selectStyleFile(true).onResolve(this, [this](const muse::io::path_t& path) {
+        if (path.empty()) {
+            return;
+        }
+
         File f(path.toQString());
         if (!f.open(IODevice::ReadOnly) || !mu::engraving::MStyle::isValid(&f)) {
             interactive()->error(muse::trc("notation", "The style file could not be loaded."),
@@ -2452,19 +2457,22 @@ void NotationActionController::loadStyle()
                 }
             });
         }
-    }
+    });
 }
 
 void NotationActionController::saveStyle()
 {
     TRACEFUNC;
-    auto path = selectStyleFile(false);
-    if (!path.empty()) {
+    selectStyleFile(false).onResolve(this, [this](const muse::io::path_t& path) {
+        if (path.empty()) {
+            return;
+        }
+
         if (!notationStyle()->saveStyle(path)) {
             interactive()->error(muse::trc("notation", "The style file could not be saved."),
                                  muse::trc("notation", "An error occurred."));
         }
-    }
+    });
 }
 
 bool NotationActionController::isTextEditing() const

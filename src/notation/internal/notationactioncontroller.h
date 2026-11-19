@@ -129,6 +129,8 @@ public:
     muse::async::Notification currentMasterNotationChanged() const;
 
 private:
+    friend class NotationScene_NotationActionControllerTests;
+
     INotationPtr currentNotation() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
@@ -242,9 +244,10 @@ private:
     muse::Ret openMeasurePropertiesDialog();
     muse::Ret openEditGridSizeDialog();
     muse::Ret openRealizeChordSymbolsDialog();
-    muse::io::path_t selectStyleFile(bool forLoad);
     void loadStyle();
     void saveStyle();
+
+    muse::async::Promise<muse::io::path_t> selectStyleFile(bool forLoad);
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleConcertPitch();
