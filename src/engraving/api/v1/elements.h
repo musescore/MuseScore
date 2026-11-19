@@ -769,7 +769,8 @@ class EngravingItem : public apiv1::ScoreElement
     /// PluginAPI::PluginAPI::AccidentalRole values
     API_PROPERTY(role,                    ACCIDENTAL_ROLE)
     /// The track of a given element.
-    API_PROPERTY_T(int, track,            TRACK) // does conversion work from P_TYPE::SIZE_T ?
+    /// In a score, only items that can change voice can change it, within their staff (see \ref voice).
+    API_PROPERTY_T(int, track,            TRACK)
 
     /// For fretboard diagrams: The number of strings to display.
     API_PROPERTY_T(int, fretStrings,      FRET_STRINGS)
@@ -1054,6 +1055,9 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int, locationNote,     LOCATION_NOTE)
 
     /// The voice of this element.
+    /// In a score, only annotations (apart from system items such as tempo text) and
+    /// hairpins, trills and Let Ring lines can change it. To move notes and rests to
+    /// another voice, select them and use the voice commands.
     API_PROPERTY_T(int, voice,            VOICE)
 
     API_PROPERTY(position,                POSITION)
@@ -2573,6 +2577,7 @@ class Spanner : public EngravingItem
     /// The duration of this spanner.
     API_PROPERTY(spannerTicks,            SPANNER_TICKS)
     /// The track this spanner end at.
+    /// In a score, it must be in the same part, with a chord or rest where the spanner ends.
     API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
 
     /// The starting element of the spanner.

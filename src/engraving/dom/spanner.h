@@ -192,6 +192,7 @@ public:
     track_idx_t track2() const;
     void setTrack2(track_idx_t v);
     track_idx_t effectiveTrack2() const;
+    bool canBeCrossStaff() const;
 
     bool playSpanner() const { return m_playSpanner; }
     void setPlaySpanner(bool p) { m_playSpanner = p; }
@@ -295,8 +296,6 @@ protected:
     virtual bool isInSpannerMap() const { return true; }
 
 private:
-    bool canBeCrossStaff() const;
-
     friend class SpannerSegment;
 
     EngravingItem* m_startElement = nullptr;

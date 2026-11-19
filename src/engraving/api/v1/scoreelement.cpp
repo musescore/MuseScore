@@ -26,6 +26,9 @@
 #include "engraving/dom/range.h"
 #include "engraving/dom/engravingobject.h"
 #include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/staff.h"
 
 // api
 #include "apitypes.h"
@@ -160,6 +163,65 @@ static mu::engraving::AlignV alignVFromApiValue(enums::Align apiValue)
     return mu::engraving::AlignV::TOP;
 }
 
+// Only annotations and the lines the app puts in a voice can change voice this way:
+// notes, rests and other items in a segment need the voice commands, other lines are
+// in voice 1, and system items stay on the staves that show them
+static bool canChangeVoice(const mu::engraving::EngravingItem* item)
+{
+    if (item->systemFlag()) {
+        return false;
+    }
+
+    if (item->isSpanner()) {
+        const mu::engraving::Spanner* spanner = mu::engraving::toSpanner(item);
+        return spanner->isVoiceSpecific() || spanner->hasVoiceAssignmentProperties();
+    }
+
+    const mu::engraving::EngravingItem* parent = item->ownershipParentItem();
+    if (!parent || !parent->isSegment()) {
+        return false;
+    }
+    const std::vector<mu::engraving::EngravingItem*>& annotations = mu::engraving::toSegment(parent)->annotations();
+    return std::find(annotations.begin(), annotations.end(), item) != annotations.end();
+}
+
+static bool canSetIndexInScore(const mu::engraving::EngravingItem* item, mu::engraving::Pid pid, size_t index)
+{
+    using mu::engraving::Pid;
+
+    switch (pid) {
+    case Pid::VOICE:
+        return canChangeVoice(item);
+    case Pid::TRACK:
+        // only within its staff
+        return canChangeVoice(item) && mu::engraving::track2staff(index) == item->staffIdx();
+    case Pid::SPANNER_TRACK2: {
+        if (!item->isSpanner()) {
+            return false;
+        }
+        const mu::engraving::Spanner* spanner = mu::engraving::toSpanner(item);
+        if (!spanner->canBeCrossStaff()) {
+            // it ends on its start track
+            return index == spanner->track();
+        }
+        if (spanner->anchor() != mu::engraving::Spanner::Anchor::SEGMENT
+            && spanner->anchor() != mu::engraving::Spanner::Anchor::CHORDREST) {
+            return false;
+        }
+        const mu::engraving::Score* score = spanner->score();
+        if (index >= score->ntracks() || score->staff(mu::engraving::track2staff(index))->part() != spanner->part()) {
+            return false;
+        }
+        // layout ends the spanner on the chord or rest in that track
+        const mu::engraving::Segment* endSegment
+            = score->tick2segmentMM(spanner->tick2(), false, mu::engraving::SegmentType::ChordRest);
+        return endSegment && endSegment->element(index);
+    }
+    default:
+        return true;
+    }
+}
+
 //---------------------------------------------------------
 //   ScoreElement::set
 //---------------------------------------------------------
@@ -209,6 +271,30 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     case P_TYPE::ABSOLUTE:
         newValue = val.toReal() * spatium();
         break;
+    case P_TYPE::SIZE_T: {
+        // track, voice, spannerTrack2, bracketColumn
+        const int index = val.toInt();
+        if (index < 0 || (pid == Pid::VOICE && index >= static_cast<int>(mu::engraving::MAX_VOICES))) {
+            LOGW() << "trying to assign an invalid value to an index property: " << index;
+            return;
+        }
+        if (m_ownership != Ownership::SCORE || !e->isEngravingItem()) {
+            newValue = PropertyValue::fromQVariant(val, P_TYPE::SIZE_T);
+            break;
+        }
+        mu::engraving::EngravingItem* item = toEngravingItem(e);
+        if (!canSetIndexInScore(item, pid, static_cast<size_t>(index))) {
+            LOGW() << "can't set " << propertyName(pid) << " of " << item->typeName() << " to " << index;
+            return;
+        }
+        if (pid == Pid::TRACK) {
+            // as a voice, which reaches parts and shared staves
+            pid = Pid::VOICE;
+            newValue = PropertyValue(static_cast<size_t>(index) % mu::engraving::VOICES);
+        } else {
+            newValue = PropertyValue::fromQVariant(val, P_TYPE::SIZE_T);
+        }
+    } break;
     case P_TYPE::ALIGN: {
         apiv1::enums::Align apiValue = apiv1::enums::Align(val.toInt());
 
@@ -225,6 +311,10 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
 
     if (m_ownership == Ownership::SCORE) {
         e->undoChangeProperty(pid, newValue, newFlags);
+        // as the voice commands do
+        if (pid == Pid::VOICE && e->isEngravingItem() && toEngravingItem(e)->hasVoiceAssignmentProperties()) {
+            e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, mu::engraving::VoiceAssignment::CURRENT_VOICE_ONLY);
+        }
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
         e->setProperty(pid, newValue);
         e->setPropertyFlags(pid, newFlags);
