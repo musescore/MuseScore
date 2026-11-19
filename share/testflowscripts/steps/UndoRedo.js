@@ -49,21 +49,52 @@ function runAll(command, what)
     return steps
 }
 
+//! NOTE Runs `command` exactly `count` times, failing if it becomes unavailable
+//! early or is still available afterwards (so the undo/redo stack holds exactly
+//! `count` steps)
+function runExactly(command, count, what)
+{
+    for (var i = 0; i < count; ++i) {
+        if (!api.testflow.isCommandEnabled(command)) {
+            api.testflow.fatal(what + ": expected " + count + " steps, but only " + i + " were available")
+            return
+        }
+        api.dispatcher.dispatch(command)
+        api.testflow.sleep(STEP_WAIT_MS)
+    }
+    if (api.testflow.isCommandEnabled(command)) {
+        var extra = runAll(command, what + " (extra steps)")
+        api.testflow.fatal(what + ": expected " + count + " steps, but there were " + (count + extra))
+        return
+    }
+    api.log.info("[testflow] " + what + ": " + count + " steps, as expected")
+}
+
 module.exports = {
     undoAll: function() { return runAll(UNDO_COMMAND, "undo all") },
     redoAll: function() { return runAll(REDO_COMMAND, "redo all") },
 
     //! NOTE Undoes everything and checks the score is back to `initial`,
     //! then redoes everything and checks the score is back to `final`.
+    //! If `expectedSteps` is given, also checks that exactly that many undo
+    //! and redo steps were available.
     //! A crash during undo or redo fails the test case too.
     //! Must run before the score is closed: closing clears the undo history.
-    fullCycle: function(initial, final)
+    fullCycle: function(initial, final, expectedSteps)
     {
-        runAll(UNDO_COMMAND, "undo all")
+        if (expectedSteps === undefined) {
+            runAll(UNDO_COMMAND, "undo all")
+        } else {
+            runExactly(UNDO_COMMAND, expectedSteps, "undo all")
+        }
         api.testflow.seeChanges()
         ScoreState.expectEquals(initial, "after undo all")
 
-        runAll(REDO_COMMAND, "redo all")
+        if (expectedSteps === undefined) {
+            runAll(REDO_COMMAND, "redo all")
+        } else {
+            runExactly(REDO_COMMAND, expectedSteps, "redo all")
+        }
         api.testflow.seeChanges()
         ScoreState.expectEquals(final, "after redo all")
     }
