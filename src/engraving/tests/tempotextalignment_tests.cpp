@@ -18,6 +18,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/editing/editpart.h"
 #include "engraving/types/constants.h"
 #include "utils/scorerw.h"
 
@@ -183,4 +184,36 @@ TEST(Engraving_TempoTextAlignmentTests, visibleStavesAndTimeSignature)
     EXPECT_GT(tempo->pos().x(), alignedX);
     score->staff(0)->setVisible(false);
     EXPECT_FALSE(tempo->graceNoteAlignmentOffset().has_value());
+}
+
+TEST(Engraving_TempoTextAlignmentTests, systemMarkingCopies)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"note_data/grace.mscx"));
+    ASSERT_NE(score, nullptr);
+    score->style().set(Sid::tempoAlignToGraceNotes, true);
+    Segment* segment = score->firstMeasure()->first(SegmentType::ChordRest);
+    TempoText* tempo = Factory::createTempoText(segment);
+    tempo->setOwnershipParent(segment);
+    tempo->setTrack(0);
+    tempo->setXmlText(u"Allegro");
+    segment->add(tempo);
+
+    score->startCmd(muse::TranslatableString::untranslatable("Add system markings"));
+    EditPart::addSystemObjects(score.get(), { score->staff(1) });
+    score->endCmd();
+    auto* copy = toTempoText(segment->findAnnotation(ElementType::TEMPO_TEXT, 4, 4));
+    ASSERT_NE(copy, nullptr);
+    ASSERT_TRUE(copy->alignToGraceNotes());
+
+    score->startCmd(muse::TranslatableString::untranslatable("Change grace-note alignment"));
+    EngravingItem* marking = tempo;
+    marking->undoChangeProperty(Pid::TEMPO_ALIGN_TO_GRACE_NOTES, false, PropertyFlags::UNSTYLED);
+    score->endCmd();
+    EXPECT_FALSE(copy->alignToGraceNotes());
+
+    score->startCmd(muse::TranslatableString::untranslatable("Reset grace-note alignment"));
+    copy->undoResetProperty(Pid::TEMPO_ALIGN_TO_GRACE_NOTES);
+    score->endCmd();
+    EXPECT_TRUE(tempo->alignToGraceNotes());
+    EXPECT_EQ(tempo->propertyFlags(Pid::TEMPO_ALIGN_TO_GRACE_NOTES), PropertyFlags::STYLED);
 }
