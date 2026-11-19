@@ -377,26 +377,23 @@ int PercussionPanelPadListModel::createModelIndexForPitch(int pitch) const
     return modelIndex;
 }
 
-muse::RetVal<muse::Val> PercussionPanelPadListModel::openPadSwapDialog()
+muse::async::Promise<muse::Val> PercussionPanelPadListModel::openPadSwapDialog()
 {
     const bool moveMidiNotesAndShortcuts = configuration()->percussionPanelMoveMidiNotesAndShortcuts();
 
     muse::UriQuery query("musescore://notation/percussionpanelpadswap?modal=true");
     query.addParam("moveMidiNotesAndShortcuts", muse::Val(moveMidiNotesAndShortcuts));
-    muse::RetVal<muse::Val> rv = interactive()->openSync(query);
 
-    const QVariantMap vals = rv.val.toQVariant().toMap();
-    if (!rv.ret) {
-        return rv;
-    }
+    return interactive()->open(query).then<muse::Val>(this, [this, moveMidiNotesAndShortcuts](const muse::Val& val, auto resolve) {
+        const QVariantMap vals = val.toQVariant().toMap();
+        const bool rememberMyChoice = vals["rememberMyChoice"].toBool();
+        if (rememberMyChoice) {
+            configuration()->setPercussionPanelMoveMidiNotesAndShortcuts(moveMidiNotesAndShortcuts);
+        }
+        configuration()->setShowPercussionPanelPadSwapDialog(!rememberMyChoice);
 
-    const bool rememberMyChoice = vals["rememberMyChoice"].toBool();
-    if (rememberMyChoice) {
-        configuration()->setPercussionPanelMoveMidiNotesAndShortcuts(moveMidiNotesAndShortcuts);
-    }
-    configuration()->setShowPercussionPanelPadSwapDialog(!rememberMyChoice);
-
-    return rv;
+        return resolve(val);
+    });
 }
 
 void PercussionPanelPadListModel::swapMidiNotesAndShortcuts(int fromIndex, int toIndex)

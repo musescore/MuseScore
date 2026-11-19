@@ -28,6 +28,7 @@
 
 #include "project/internal/openprojectscenario.h"
 #include "project/projecterrors.h"
+#include "project/types/projecturis.h"
 
 #include "cloud/clouderrors.h"
 #include "engraving/engravingerrors.h"
@@ -49,6 +50,7 @@
 #include "mocks/projectautosavermock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "mocks/projectcreatormock.h"
+#include "mocks/projectmigratormock.h"
 #include "mocks/recentfilescontrollermock.h"
 #include "mocks/projectsessionmock.h"
 #include "utils/promisetest.h"
@@ -85,6 +87,7 @@ protected:
         m_museSampler = std::make_shared<NiceMock<musesounds::MuseSamplerCheckStatusScenarioMock> >();
         m_mscMetaReader = std::make_shared<NiceMock<notation::MscMetaReaderMock> >();
         m_convertFileToScoreScenario = std::make_shared<NiceMock<ConvertFileToScoreScenarioMock> >();
+        m_migrator = std::make_shared<NiceMock<ProjectMigratorMock> >();
 
         m_scenario->configuration.set(m_configuration);
         m_scenario->fileSystem.set(m_fileSystem);
@@ -100,6 +103,7 @@ protected:
         m_scenario->museSamplerCheckStatusScenario.set(m_museSampler);
         m_scenario->mscMetaReader.set(m_mscMetaReader);
         m_scenario->convertFileToScoreScenario.set(m_convertFileToScoreScenario);
+        m_scenario->migrator.set(m_migrator);
 
         m_project = std::make_shared<NiceMock<NotationProjectMock> >();
         m_masterNotation = std::make_shared<NiceMock<notation::MasterNotationMock> >();
@@ -257,6 +261,7 @@ protected:
     std::shared_ptr<musesounds::MuseSamplerCheckStatusScenarioMock> m_museSampler;
     std::shared_ptr<notation::MscMetaReaderMock> m_mscMetaReader;
     std::shared_ptr<ConvertFileToScoreScenarioMock> m_convertFileToScoreScenario;
+    std::shared_ptr<ProjectMigratorMock> m_migrator;
 
     std::shared_ptr<NotationProjectMock> m_project;
     std::shared_ptr<notation::MasterNotationMock> m_masterNotation;
@@ -950,6 +955,140 @@ TEST_F(OpenProjectScenarioTests, OpenProject_UserCancelledTheLoad_AsksNothingFur
     //! [THEN] Cancelling is not an error to report, and nothing is retried
     EXPECT_CALL(*m_interactive, error(_, _, _, _, _, _)).Times(0);
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
+
+    //! [WHEN] Opening it...
+    openProject("score.mscz");
+}
+
+// ─── Migrating a score from an older version ─────────────────────────────────
+
+TEST_F(OpenProjectScenarioTests, OpenProject_FileToAskAboutMigration_AsksBeforeLoadingAndRemembersTheAnswer)
+{
+    //! [GIVEN] A score written by 3.6, about which the user is to be asked
+    ProjectMeta meta;
+    meta.mscVersion = 302;
+    meta.musescoreVersion = "3.6.2";
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(RetVal<ProjectMeta>::make_ok(meta)));
+    ON_CALL(*m_migrator, migrationType(302)).WillByDefault(Return(MigrationType::Ver_3_6));
+
+    ::testing::InSequence seq;
+
+    //! [THEN] The dialog tells the version the file was written by, and the user answers
+    EXPECT_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_)))
+    .WillOnce([](const UriQuery& query) {
+        EXPECT_EQ(query.uri(), MIGRATION_URI);
+        EXPECT_EQ(query.param("appVersion").toString(), "3.6.2");
+
+        return dialogAnswer(RetVal<Val>::make_ok(Val::fromQVariant(QVariantMap {
+                { "isApplyMigration", true },
+                { "isAskAgain", false },
+                { "isApplyLeland", true },
+                { "isApplyEdwin", false },
+                { "isRemapPercussion", true },
+            })));
+    });
+
+    //! [THEN] The answer is remembered for the migration, and only then the score is loaded
+    EXPECT_CALL(*m_configuration, setMigrationOptions(MigrationType::Ver_3_6, _, _))
+    .WillOnce([](MigrationType, const MigrationOptions& options, bool) {
+        EXPECT_TRUE(options.isApplyMigration);
+        EXPECT_FALSE(options.isAskAgain);
+        EXPECT_FALSE(options.isApplyEdwin);
+        EXPECT_TRUE(options.isValid());
+    });
+    EXPECT_CALL(*m_project, load(_, _, _)).WillOnce(Return(make_ok()));
+
+    //! [WHEN] Opening it...
+    Ret ret = openProject("score.mscz");
+
+    EXPECT_TRUE(ret);
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_UserCancelsTheMigrationQuestion_LoadsNothing)
+{
+    //! [GIVEN] A score about which the user is to be asked, and a user who cancels
+    ProjectMeta meta;
+    meta.mscVersion = 302;
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(RetVal<ProjectMeta>::make_ok(meta)));
+    ON_CALL(*m_migrator, migrationType(_)).WillByDefault(Return(MigrationType::Ver_3_6));
+    ON_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_)))
+    .WillByDefault([] { return dialogAnswer(RetVal<Val>(make_ret(Ret::Code::Cancel))); });
+
+    //! [THEN] Nothing is remembered, loaded or opened
+    EXPECT_CALL(*m_configuration, setMigrationOptions(_, _, _)).Times(0);
+    EXPECT_CALL(*m_project, load(_, _, _)).Times(0);
+    EXPECT_CALL(*m_projectSession, setProject(_)).Times(0);
+
+    //! [WHEN] Opening it...
+    Ret ret = openProject("score.mscz");
+
+    EXPECT_EQ(ret.code(), static_cast<int>(Ret::Code::Cancel));
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_FileToAskAboutMigrationWithABrokenThumbnail_StillAsks)
+{
+    //! [GIVEN] A score written by 3.6, whose thumbnail cannot be decoded
+    ProjectMeta meta;
+    meta.mscVersion = 302;
+    RetVal<ProjectMeta> rv;
+    rv.ret = make_ret(Ret::Code::BadData);
+    rv.val = meta;
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(rv));
+    ON_CALL(*m_migrator, migrationType(302)).WillByDefault(Return(MigrationType::Ver_3_6));
+
+    //! [THEN] The user is still asked about the migration
+    EXPECT_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_)))
+    .WillOnce([] { return dialogAnswer(RetVal<Val>::make_ok(Val::fromQVariant(QVariantMap()))); });
+
+    //! [WHEN] Opening it...
+    openProject("score.mscz");
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_UnreadableFile_AsksNothingAboutMigration)
+{
+    //! [GIVEN] A file whose version cannot be read
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(RetVal<ProjectMeta>(make_ret(Ret::Code::InternalError))));
+
+    //! [THEN] Nothing is asked, loading tells what is wrong with it
+    EXPECT_CALL(*m_migrator, migrationType(_)).Times(0);
+    EXPECT_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_))).Times(0);
+    EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
+
+    //! [WHEN] Opening it...
+    openProject("score.mscz");
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_NothingToAskAboutMigration_JustLoads)
+{
+    //! [GIVEN] A score that needs no migration
+    ProjectMeta meta;
+    meta.mscVersion = 460;
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(RetVal<ProjectMeta>::make_ok(meta)));
+    ON_CALL(*m_migrator, migrationType(_)).WillByDefault(Return(MigrationType::Unknown));
+
+    //! [THEN] No dialog, the score is loaded
+    EXPECT_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_))).Times(0);
+    EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
+
+    //! [WHEN] Opening it...
+    openProject("score.mscz");
+}
+
+TEST_F(OpenProjectScenarioTests, OpenProject_UserChoseNotToBeAskedAgain_JustLoads)
+{
+    //! [GIVEN] A score written by 3.6, and the user chose not to be asked again
+    ProjectMeta meta;
+    meta.mscVersion = 302;
+    ON_CALL(*m_mscMetaReader, readMeta(_)).WillByDefault(Return(RetVal<ProjectMeta>::make_ok(meta)));
+    ON_CALL(*m_migrator, migrationType(302)).WillByDefault(Return(MigrationType::Ver_3_6));
+
+    MigrationOptions saved;
+    saved.isAskAgain = false;
+    ON_CALL(*m_configuration, migrationOptions(MigrationType::Ver_3_6)).WillByDefault(Return(saved));
+
+    //! [THEN] No dialog, the score is loaded
+    EXPECT_CALL(*m_interactive, open(::testing::Matcher<const UriQuery&>(_))).Times(0);
     EXPECT_CALL(*m_project, load(_, _, _)).Times(1);
 
     //! [WHEN] Opening it...

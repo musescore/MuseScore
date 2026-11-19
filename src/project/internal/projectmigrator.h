@@ -24,26 +24,23 @@
 #include "iprojectmigrator.h"
 
 #include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
 #include "iprojectconfiguration.h"
 
 namespace mu::project {
 class ProjectMigrator : public IProjectMigrator, public muse::Contextable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::ContextInject<muse::IInteractive> interactive = { this };
+
 public:
     ProjectMigrator(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx)
     {
     }
 
+    MigrationType migrationType(int mscVersion) const override;
     muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
 
 private:
-
-    muse::Ret askAboutMigration(MigrationOptions& out, const QString& appVersion, MigrationType migrationType);
-
     muse::Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
 
     bool applyLelandStyle(mu::engraving::MasterScore* score);

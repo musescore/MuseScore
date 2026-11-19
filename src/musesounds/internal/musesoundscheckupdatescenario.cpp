@@ -81,7 +81,7 @@ async::Notification MuseSoundsCheckUpdateScenario::checkInProgressChanged() cons
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
 {
-    if (m_checkInProgress || !service()->needCheckForUpdate()) {
+    if (m_checkInProgress || m_releaseInfoOpened || !service()->needCheckForUpdate()) {
         return false;
     }
 
@@ -97,14 +97,14 @@ bool MuseSoundsCheckUpdateScenario::hasUpdate() const
     return !shouldIgnoreUpdate(lastCheckResult.val);
 }
 
-muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
+void MuseSoundsCheckUpdateScenario::showUpdate()
 {
     const RetVal<ReleaseInfo>& lastCheckResult = service()->lastCheckResult();
     if (!lastCheckResult.ret) {
-        return lastCheckResult.ret;
+        return;
     }
 
-    return showReleaseInfo(lastCheckResult.val);
+    showReleaseInfo(lastCheckResult.val);
 }
 
 bool MuseSoundsCheckUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
@@ -117,15 +117,11 @@ void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
     configuration()->setLastShownMuseSoundsReleaseVersion(version);
 }
 
-muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
+void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
-    Ret ret = make_ok();
-
-    DEFER {
-        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            setIgnoredUpdate(info.version);
-        }
-    };
+    if (m_releaseInfoOpened) {
+        return;
+    }
 
     UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
 
@@ -152,19 +148,26 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
         query.addParam("imageUrl", Val(info.imageUrl));
     }
 
-    RetVal<Val> rv = interactive()->openSync(query);
-    if (!rv.ret) {
-        LOGD() << rv.ret.toString();
-        ret = rv.ret;
-        return ret;
-    }
+    const std::string version = info.version;
+    const ValList actions = info.actions;
 
-    std::string actionCode = rv.val.toString();
-    if (actionCode == "openMuseHub") {
-        tryOpenMuseHub(info.actions);
-    }
+    m_releaseInfoOpened = true;
 
-    return ret;
+    interactive()->open(query).onResolve(this, [this, version, actions](const Val& val) {
+        m_releaseInfoOpened = false;
+        setIgnoredUpdate(version);
+
+        if (val.toString() == "openMuseHub") {
+            tryOpenMuseHub(actions);
+        }
+    }).onReject(this, [this, version](int code, const std::string& msg) {
+        m_releaseInfoOpened = false;
+        LOGD() << code << " " << msg;
+
+        if (code == static_cast<int>(Ret::Code::Cancel)) {
+            setIgnoredUpdate(version);
+        }
+    });
 }
 
 void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const

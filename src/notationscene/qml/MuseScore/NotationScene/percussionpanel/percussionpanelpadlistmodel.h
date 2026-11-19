@@ -109,7 +109,7 @@ private:
 
     void movePad(int fromIndex, int toIndex);
 
-    muse::RetVal<muse::Val> openPadSwapDialog();
+    muse::async::Promise<muse::Val> openPadSwapDialog();
     void swapMidiNotesAndShortcuts(int fromIndex, int toIndex);
 
     int numEmptySlotsAtRow(int row) const;

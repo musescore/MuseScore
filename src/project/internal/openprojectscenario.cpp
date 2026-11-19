@@ -33,12 +33,14 @@
 #include "cloud/cloudtypes.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/infrastructure/mscio.h"
+#include "engraving/types/constants.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 
 #include "inotationproject.h"
 #include "projecterrors.h"
+#include "types/projectmeta.h"
 #include "types/projecturis.h"
 
 #include "log.h"
@@ -383,21 +385,77 @@ Promise<Ret> OpenProjectScenario::loadWithFallback(const std::shared_ptr<INotati
                                                    const muse::io::path_t& loadPath,
                                                    const std::string& format)
 {
-    Ret result = project->load(loadPath, OpenParams(), format);
+    return askAboutMigrationIfNeed(loadPath)
+           .then<Ret>(this, [this, project, loadPath, format](const Ret& answered, auto resolve) {
+        if (!answered) {
+            return resolve(answered);
+        }
 
-    if (result || result.code() == static_cast<int>(Ret::Code::Cancel)) {
-        return resolvedPromise(result);
-    }
+        Ret result = project->load(loadPath, OpenParams(), format);
 
-    return shouldRetryLoadAfterError(result, loadPath)
-           .then<Ret>(this, [project, loadPath, format, result](bool forceLoad, auto resolve) {
-        if (!forceLoad) {
+        if (result || result.code() == static_cast<int>(Ret::Code::Cancel)) {
             return resolve(result);
         }
 
-        OpenParams params;
-        params.forceMode = forceLoad;
-        return resolve(project->load(loadPath, params, format));
+        shouldRetryLoadAfterError(result, loadPath)
+        .onResolve(this, [project, loadPath, format, result, resolve](bool forceLoad) {
+            if (!forceLoad) {
+                (void)resolve(result);
+                return;
+            }
+
+            OpenParams params;
+            params.forceMode = forceLoad;
+            (void)resolve(project->load(loadPath, params, format));
+        });
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Promise<Ret> OpenProjectScenario::askAboutMigrationIfNeed(const muse::io::path_t& filePath)
+{
+    //! NOTE The version is read even if the thumbnail is broken; without it, loading tells what is wrong with the file
+    const RetVal<ProjectMeta> meta = mscMetaReader()->readMeta(filePath);
+    if (meta.val.mscVersion == 0) {
+        return resolvedPromise(make_ok());
+    }
+
+    const MigrationType migrationType = migrator()->migrationType(meta.val.mscVersion);
+    if (migrationType == MigrationType::Unknown) {
+        return resolvedPromise(make_ok());
+    }
+
+    const MigrationOptions options = configuration()->migrationOptions(migrationType);
+    if (!options.isAskAgain) {
+        return resolvedPromise(make_ok());
+    }
+
+    UriQuery query(MIGRATION_URI);
+    query.addParam("appVersion", Val(meta.val.musescoreVersion));
+    query.addParam("migrationType", Val(migrationType));
+    query.addParam("isApplyLeland", Val(options.isApplyLeland));
+    query.addParam("isApplyEdwin", Val(options.isApplyEdwin));
+    query.addParam("isRemapPercussion", Val(options.isRemapPercussion));
+
+    return openDialog(query).then<Ret>(this, [this, migrationType](const RetVal<Val>& rv, auto resolve) {
+        if (!rv.ret) {
+            return resolve(rv.ret);
+        }
+
+        const QVariantMap vals = rv.val.toQVariant().toMap();
+
+        MigrationOptions answer;
+        answer.appVersion = mu::engraving::Constants::MSC_VERSION;
+        answer.isApplyMigration = vals.value("isApplyMigration").toBool();
+        answer.isAskAgain = vals.value("isAskAgain").toBool();
+        answer.isApplyLeland = vals.value("isApplyLeland").toBool();
+        answer.isApplyEdwin = vals.value("isApplyEdwin").toBool();
+        answer.isRemapPercussion = vals.value("isRemapPercussion").toBool();
+
+        configuration()->setMigrationOptions(migrationType, answer);
+
+        return resolve(make_ok());
     });
 }
 
