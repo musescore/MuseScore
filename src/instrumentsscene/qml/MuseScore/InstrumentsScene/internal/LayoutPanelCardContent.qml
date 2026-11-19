@@ -46,11 +46,12 @@ RowLayout {
     required property int navigationRow
 
     readonly property string title: root.item ? root.item.title : ""
-    readonly property alias isPopupOpened: settingsPopup.isOpened
+    readonly property bool isPopupOpened: settingsPopup.isOpened || groupMenu.isMenuOpened
 
     signal visibilityToggled(bool visible)
     signal expandToggled(bool expand)
     signal enabledToggled(bool enabled)
+    signal ungroupRequested()
 
     QtObject {
         id: prv
@@ -90,11 +91,11 @@ RowLayout {
         enabled: root.visible && Boolean(root.item) && (root.item.settingsEnabled || settingsPopup.showsSystemObjectsHelp)
 
         // Transparent rather than hidden, to stay keyboard-accessible
-        opacity: root.isHovered || root.isHighlighted || settingsPopup.isOpened || settingsButton.mouseArea.containsMouse
+        opacity: root.isHovered || root.isHighlighted || root.isPopupOpened || settingsButton.mouseArea.containsMouse
                  || settingsButton.navigation.highlight || sharedPartToggle.navigation.highlight ? 1 : 0
 
-        transparent: !settingsPopup.isOpened
-        accentButton: settingsPopup.isOpened
+        transparent: !root.isPopupOpened
+        accentButton: root.isPopupOpened
 
         objectName: "SettingsBtn"
         navigation.panel: root.navigationPanel
@@ -105,6 +106,13 @@ RowLayout {
         icon: IconCode.SETTINGS_COG
 
         onClicked: {
+            if (prv.isSharedPart) {
+                groupMenu.toggleOpened([
+                    { id: "ungroup-instruments", title: qsTrc("layoutpanel", "Ungroup instruments") }
+                ])
+                return
+            }
+
             settingsPopup.toggle(settingsButton)
         }
 
@@ -116,6 +124,19 @@ RowLayout {
             id: settingsPopup
 
             item: root.item
+        }
+
+        StyledMenuLoader {
+            id: groupMenu
+
+            menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
+            placementPolicies: PopupView.PreferRight
+
+            onHandleMenuItem: function(itemId) {
+                if (itemId === "ungroup-instruments") {
+                    root.ungroupRequested()
+                }
+            }
         }
     }
 

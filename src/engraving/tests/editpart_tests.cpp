@@ -57,9 +57,9 @@ protected:
     {
         MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
 
-        edit(score, [score, &ids]() {
+        edit(score, [score, &ids](Transaction& tx) {
             for (const String& id : ids) {
-                EditPart::insertPart(score, searchTemplate(id), score->parts().size());
+                EditPart::insertPart(tx, score, searchTemplate(id), score->parts().size());
             }
         });
 
@@ -87,9 +87,24 @@ protected:
         return result;
     }
 
+    //! The parts in the given order, each staying in its shared part
+    static EditPart::PartsLayout layout(const std::vector<Part*>& parts, const std::vector<EditPart::SystemObjectsMove>& moves = {})
+    {
+        EditPart::PartsLayout result;
+        result.parts.reserve(parts.size());
+
+        for (Part* part : parts) {
+            result.parts.push_back({ part, part->sharedPart() });
+        }
+
+        result.systemObjects = moves;
+
+        return result;
+    }
+
     Excerpt* addExcerpt(MasterScore* score, Excerpt* excerpt)
     {
-        edit(score, [score, excerpt]() {
+        edit(score, [score, excerpt](Transaction&) {
             score->initAndAddExcerpt(excerpt, false);
         });
 
@@ -110,10 +125,10 @@ protected:
         return addExcerpt(score, excerpt);
     }
 
-    void edit(MasterScore* score, const std::function<void()>& func)
+    void edit(MasterScore* score, const std::function<void(Transaction&)>& func)
     {
         score->startCmd(TranslatableString::untranslatable("Edit part tests"));
-        func();
+        func(score->transactionManager()->currentOrDummyTransaction());
         score->endCmd();
     }
 
@@ -132,7 +147,7 @@ protected:
         SystemText* text = Factory::createSystemText(firstSegment(score));
         text->setTrack(0);
 
-        edit(score, [score, text]() {
+        edit(score, [score, text](Transaction&) {
             score->undoAddElement(text);
         });
     }
@@ -152,7 +167,7 @@ protected:
 
     const Note* addNote(MasterScore* score, int pitch)
     {
-        edit(score, [this, score, pitch]() {
+        edit(score, [this, score, pitch](Transaction&) {
             score->setNoteRest(firstSegment(score), 0, NoteVal(pitch), Fraction(1, 4));
         });
 
@@ -169,8 +184,8 @@ TEST_F(Engraving_EditPartTests, InsertPart_Template_InsertsPartWithTemplateStave
     ASSERT_EQ(parts.size(), 2u);
 
     // [WHEN] A violin is inserted between them
-    edit(score, [score]() {
-        EditPart::insertPart(score, searchTemplate(u"violin"), 1);
+    edit(score, [score](Transaction& tx) {
+        EditPart::insertPart(tx, score, searchTemplate(u"violin"), 1);
     });
 
     // [THEN] The violin is the second part, with one staff
@@ -207,8 +222,8 @@ TEST_F(Engraving_EditPartTests, InsertPart_PartCopyIntoExcerpt_LinksStavesToMast
     pianoCopy->setSharedPart(nullptr);
 
     // [WHEN] A copy of the piano is inserted into the part score
-    edit(score, [excerptScore, pianoCopy]() {
-        EditPart::insertPart(excerptScore, pianoCopy, 1);
+    edit(score, [excerptScore, pianoCopy](Transaction& tx) {
+        EditPart::insertPart(tx, excerptScore, pianoCopy, 1);
     });
 
     // [THEN] The part score has the piano after the flute
@@ -238,8 +253,8 @@ TEST_F(Engraving_EditPartTests, ReplacePart_Template_ReplacesPartAtSameIndex)
     ASSERT_EQ(parts.size(), 2u);
 
     // [WHEN] The flute is replaced with a violin
-    edit(score, [score, &parts]() {
-        EditPart::replacePart(score, parts.at(0), searchTemplate(u"violin"));
+    edit(score, [score, &parts](Transaction& tx) {
+        EditPart::replacePart(tx, score, parts.at(0), searchTemplate(u"violin"));
     });
 
     // [THEN] The violin takes the flute's place
@@ -266,8 +281,8 @@ TEST_F(Engraving_EditPartTests, ReplacePart_PartCopyInExcerpt_LinksStavesToMaste
     fluteCopy->setSharedPart(nullptr);
 
     // [WHEN] The part score's flute is replaced with a copy of the main score's flute
-    edit(score, [excerptScore, &excerptParts, fluteCopy]() {
-        EditPart::replacePart(excerptScore, excerptParts.at(0), fluteCopy);
+    edit(score, [excerptScore, &excerptParts, fluteCopy](Transaction& tx) {
+        EditPart::replacePart(tx, excerptScore, excerptParts.at(0), fluteCopy);
     });
 
     // [THEN] The part score has the copy, with the main score's id and its staff linked to the main score
@@ -300,8 +315,8 @@ TEST_F(Engraving_EditPartTests, RemoveParts_MasterScore_UpdatesExcerpts)
     ASSERT_EQ(instrumentIds(allPartsScore), InstrumentIds({ u"flute", u"piano" }));
 
     // [WHEN] The flute is removed from the main score
-    edit(score, [score, &parts]() {
-        EditPart::removeParts(score, { parts.at(0) });
+    edit(score, [score, &parts](Transaction& tx) {
+        EditPart::removeParts(tx, score, { parts.at(0) });
     });
 
     // [THEN] Only the piano is left
@@ -339,8 +354,8 @@ TEST_F(Engraving_EditPartTests, RemoveParts_ExcerptScore_KeepsMaster)
     ASSERT_EQ(instrumentIds(allPartsScore), InstrumentIds({ u"flute", u"piano" }));
 
     // [WHEN] The flute is removed from the part score
-    edit(score, [allPartsScore, &allParts]() {
-        EditPart::removeParts(allPartsScore, { allParts.at(0) });
+    edit(score, [allPartsScore, &allParts](Transaction& tx) {
+        EditPart::removeParts(tx, allPartsScore, { allParts.at(0) });
     });
 
     // [THEN] Only the part score loses the flute
@@ -368,8 +383,8 @@ TEST_F(Engraving_EditPartTests, RemoveStaves_MasterScore_UpdatesExcerpts)
     const ID keptStaffId = piano->staff(0)->id();
 
     // [WHEN] The piano's lower staff is removed from the main score
-    edit(score, [score, piano]() {
-        EditPart::removeStaves(score, { piano->staff(1) });
+    edit(score, [score, piano](Transaction& tx) {
+        EditPart::removeStaves(tx, score, { piano->staff(1) });
     });
 
     // [THEN] Both scores keep only the piano's upper staff
@@ -407,8 +422,8 @@ TEST_F(Engraving_EditPartTests, AppendStaff_MasterScore_AppendsLinkedStaffToExce
 
     // [WHEN] A staff is appended to the main score's flute
     Staff* staff = nullptr;
-    edit(score, [score, flute, &staff]() {
-        staff = EditPart::appendStaff(score, flute);
+    edit(score, [score, flute, &staff](Transaction& tx) {
+        staff = EditPart::appendStaff(tx, score, flute);
     });
 
     // [THEN] The flute has a second staff with its own id
@@ -451,8 +466,8 @@ TEST_F(Engraving_EditPartTests, AppendLinkedStaff_MasterScore_UpdatesExcerpts)
 
     // [WHEN] A staff linked to the flute's staff is appended to the main score
     const Staff* linkedStaff = nullptr;
-    edit(score, [score, sourceStaff, flute, &linkedStaff]() {
-        linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, flute);
+    edit(score, [score, sourceStaff, flute, &linkedStaff](Transaction& tx) {
+        linkedStaff = EditPart::appendLinkedStaff(tx, score, sourceStaff, flute);
     });
 
     // [THEN] The new staff is linked to the source staff
@@ -489,8 +504,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_MainInstrument_UpdatesExcerpts
 
     // [WHEN] The flute's main instrument is replaced with a violin
     bool replaced = false;
-    edit(score, [score, flute, &violin, &replaced]() {
-        replaced = EditPart::replaceInstrument(score, flute, Part::MAIN_INSTRUMENT_TICK, violin);
+    edit(score, [score, flute, &violin, &replaced](Transaction& tx) {
+        replaced = EditPart::replaceInstrument(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, violin);
     });
 
     // [THEN] Both scores have the violin, and the part score is renamed after it
@@ -526,8 +541,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_SameName_KeepsExcerptName)
     newFlute.setLongName(flute->instrument()->longName());
 
     // [WHEN] The main instrument is replaced with one that has the same name
-    edit(score, [score, flute, &newFlute]() {
-        EditPart::replaceInstrument(score, flute, Part::MAIN_INSTRUMENT_TICK, newFlute);
+    edit(score, [score, flute, &newFlute](Transaction& tx) {
+        EditPart::replaceInstrument(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, newFlute);
     });
 
     // [THEN] The part score keeps its name
@@ -551,8 +566,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_DifferentClef_ChangesClefAndSt
     const StaffType* staffType = StaffType::preset(StaffTypes::PERC_1LINE);
 
     // [WHEN] The flute is replaced with a cello and a new staff type
-    edit(score, [score, flute, &cello, staffType]() {
-        EditPart::replaceInstrument(score, flute, Part::MAIN_INSTRUMENT_TICK, cello, staffType);
+    edit(score, [score, flute, &cello, staffType](Transaction& tx) {
+        EditPart::replaceInstrument(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, cello, staffType);
     });
 
     // [THEN] Both scores get the bass clef and the new staff type
@@ -582,8 +597,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_TransposingInstrument_Transpos
     const Instrument clarinet = Instrument::fromTemplate(searchTemplate(u"bb-clarinet"));
 
     // [WHEN] The flute is replaced with a B♭ clarinet
-    edit(score, [score, flute, &clarinet]() {
-        EditPart::replaceInstrument(score, flute, Part::MAIN_INSTRUMENT_TICK, clarinet);
+    edit(score, [score, flute, &clarinet](Transaction& tx) {
+        EditPart::replaceInstrument(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, clarinet);
     });
 
     // [THEN] The note is written a major second higher
@@ -611,7 +626,7 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_InstrumentChangeTick_ChangesIn
 
     InstrumentChange* instrumentChange = Factory::createInstrumentChange(segment, *flute->instrument());
     instrumentChange->setTrack(0);
-    edit(score, [score, instrumentChange]() {
+    edit(score, [score, instrumentChange](Transaction&) {
         score->undoAddElement(instrumentChange);
     });
 
@@ -619,8 +634,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_InstrumentChangeTick_ChangesIn
 
     // [WHEN] The instrument at the instrument change is replaced with a violin
     bool replaced = false;
-    edit(score, [score, flute, tick, &violin, &replaced]() {
-        replaced = EditPart::replaceInstrument(score, flute, tick, violin);
+    edit(score, [score, flute, tick, &violin, &replaced](Transaction& tx) {
+        replaced = EditPart::replaceInstrument(tx, score, flute, tick, violin);
     });
 
     // [THEN] Both scores switch to the violin there, the main instrument stays
@@ -651,8 +666,8 @@ TEST_F(Engraving_EditPartTests, ReplaceInstrument_NoInstrumentChangeAtTick_Retur
 
     // [WHEN] The instrument in the second measure is replaced
     bool replaced = true;
-    edit(score, [score, &parts, &violin, &replaced]() {
-        replaced = EditPart::replaceInstrument(score, parts.at(0), Fraction(1, 1), violin);
+    edit(score, [score, &parts, &violin, &replaced](Transaction& tx) {
+        replaced = EditPart::replaceInstrument(tx, score, parts.at(0), Fraction(1, 1), violin);
     });
 
     // [THEN] Nothing is replaced
@@ -682,8 +697,8 @@ TEST_F(Engraving_EditPartTests, ReplaceDrumset_Undoable_UpdatesExcerpts)
     drumset.drum(36).name = u"Test drum";
 
     // [WHEN] The drumset is replaced
-    edit(score, [score, drums, &drumset]() {
-        EditPart::replaceDrumset(score, drums, Part::MAIN_INSTRUMENT_TICK, drumset);
+    edit(score, [score, drums, &drumset](Transaction& tx) {
+        EditPart::replaceDrumset(tx, score, drums, Part::MAIN_INSTRUMENT_TICK, drumset);
     });
 
     // [THEN] Both scores have the new drumset
@@ -719,8 +734,8 @@ TEST_F(Engraving_EditPartTests, ReplaceDrumset_NotUndoable_UpdatesExcerpts)
     drumset.drum(36).name = u"Test drum";
 
     // [WHEN] The drumset is replaced without undo
-    edit(score, [score, drums, &drumset]() {
-        EditPart::replaceDrumset(score, drums, Part::MAIN_INSTRUMENT_TICK, drumset, false);
+    edit(score, [score, drums, &drumset](Transaction& tx) {
+        EditPart::replaceDrumset(tx, score, drums, Part::MAIN_INSTRUMENT_TICK, drumset, false);
     });
 
     // [THEN] Both scores have the new drumset
@@ -741,8 +756,8 @@ TEST_F(Engraving_EditPartTests, SetPartVisible_HidesPart)
     const Part* piano = parts.at(1);
 
     // [WHEN] The flute is hidden
-    edit(score, [score, flute]() {
-        EditPart::setPartVisible(score, flute, false);
+    edit(score, [score, flute](Transaction& tx) {
+        EditPart::setPartVisible(tx, score, flute, false);
     });
 
     // [THEN] Only the flute is hidden
@@ -765,8 +780,8 @@ TEST_F(Engraving_EditPartTests, SetStaffVisible_HidesOnlyThatStaff)
     ASSERT_EQ(score->nstaves(), 3u);
 
     // [WHEN] The piano's lower staff is hidden
-    edit(score, [score]() {
-        EditPart::setStaffVisible(score, score->staff(2), false);
+    edit(score, [score](Transaction& tx) {
+        EditPart::setStaffVisible(tx, score, score->staff(2), false);
     });
 
     // [THEN] Only that staff is hidden
@@ -788,8 +803,8 @@ TEST_F(Engraving_EditPartTests, SetPartSharpFlat_ChangesPreference)
     const Part* piano = parts.at(1);
 
     // [WHEN] The flute is set to prefer flats
-    edit(score, [score, flute]() {
-        EditPart::setPartSharpFlat(score, flute, PreferSharpFlat::FLATS);
+    edit(score, [score, flute](Transaction& tx) {
+        EditPart::setPartSharpFlat(tx, score, flute, PreferSharpFlat::FLATS);
     });
 
     // [THEN] Only the flute prefers flats
@@ -811,8 +826,8 @@ TEST_F(Engraving_EditPartTests, SetInstrumentName_ChangesLongName)
     const String pianoName = piano->longName();
 
     // [WHEN] The flute is renamed
-    edit(score, [score, flute]() {
-        EditPart::setInstrumentName(score, flute, Part::MAIN_INSTRUMENT_TICK, u"Long name");
+    edit(score, [score, flute](Transaction& tx) {
+        EditPart::setInstrumentName(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, u"Long name");
     });
 
     // [THEN] Only the flute has the new name
@@ -834,8 +849,8 @@ TEST_F(Engraving_EditPartTests, SetInstrumentAbbreviature_ChangesShortName)
     const String pianoName = piano->shortName();
 
     // [WHEN] The flute's abbreviation is changed
-    edit(score, [score, flute]() {
-        EditPart::setInstrumentAbbreviature(score, flute, Part::MAIN_INSTRUMENT_TICK, u"Short name");
+    edit(score, [score, flute](Transaction& tx) {
+        EditPart::setInstrumentAbbreviature(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, u"Short name");
     });
 
     // [THEN] Only the flute has the new abbreviation
@@ -856,8 +871,8 @@ TEST_F(Engraving_EditPartTests, SetInstrumentGroupNameOptions_ChangesOptionsOnce
 
     // [WHEN] A custom group name is set
     bool changed = false;
-    edit(score, [score, flute, &changed]() {
-        changed = EditPart::setInstrumentGroupNameOptions(score, flute, Part::MAIN_INSTRUMENT_TICK, true, u"Group", u"Gr.");
+    edit(score, [score, flute, &changed](Transaction& tx) {
+        changed = EditPart::setInstrumentGroupNameOptions(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, true, u"Group", u"Gr.");
     });
 
     // [THEN] The instrument uses it
@@ -868,8 +883,8 @@ TEST_F(Engraving_EditPartTests, SetInstrumentGroupNameOptions_ChangesOptionsOnce
     EXPECT_EQ(label.customNameShortGroup(), u"Gr.");
 
     // [WHEN] The same options are set again
-    edit(score, [score, flute, &changed]() {
-        changed = EditPart::setInstrumentGroupNameOptions(score, flute, Part::MAIN_INSTRUMENT_TICK, true, u"Group", u"Gr.");
+    edit(score, [score, flute, &changed](Transaction& tx) {
+        changed = EditPart::setInstrumentGroupNameOptions(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, true, u"Group", u"Gr.");
     });
 
     // [THEN] Nothing changes
@@ -889,8 +904,8 @@ TEST_F(Engraving_EditPartTests, SetInstrumentNumber_ChangesNumber)
     const Part* piano = parts.at(1);
 
     // [WHEN] The flute is numbered
-    edit(score, [score, flute]() {
-        EditPart::setInstrumentNumber(score, flute, Part::MAIN_INSTRUMENT_TICK, 3);
+    edit(score, [score, flute](Transaction& tx) {
+        EditPart::setInstrumentNumber(tx, score, flute, Part::MAIN_INSTRUMENT_TICK, 3);
     });
 
     // [THEN] Only the flute has the number
@@ -909,7 +924,7 @@ TEST_F(Engraving_EditPartTests, SetSharedPartEnabled_DisablesSharedPart)
 
     const Part* flute = parts.at(0);
 
-    score->transactionManager()->transaction(TranslatableString::untranslatable("Edit part tests"), [score](Transaction& tx) {
+    edit(score, [score](Transaction& tx) {
         EditStaveSharing::toggleStaveSharing(tx, score, true);
     });
 
@@ -918,8 +933,8 @@ TEST_F(Engraving_EditPartTests, SetSharedPartEnabled_DisablesSharedPart)
     ASSERT_TRUE(sharedPart->enabled());
 
     // [WHEN] The shared part is disabled
-    edit(score, [score, sharedPart]() {
-        EditPart::setSharedPartEnabled(score, sharedPart, false);
+    edit(score, [score, sharedPart](Transaction& tx) {
+        EditPart::setSharedPartEnabled(tx, score, sharedPart, false);
     });
 
     // [THEN] It's disabled
@@ -937,8 +952,8 @@ TEST_F(Engraving_EditPartTests, SetStaffType_ChangesStaffType)
     Staff* staff = score->staff(0);
 
     // [WHEN] The flute's staff becomes a one-line percussion staff
-    edit(score, [score, staff]() {
-        EditPart::setStaffType(score, staff, StaffTypes::PERC_1LINE);
+    edit(score, [score, staff](Transaction& tx) {
+        EditPart::setStaffType(tx, score, staff, StaffTypes::PERC_1LINE);
     });
 
     // [THEN] Only the flute's staff has the new type
@@ -965,8 +980,8 @@ TEST_F(Engraving_EditPartTests, SetStaffConfig_ChangesStaffProperties)
     config.staffType = *staff->staffType();
 
     // [WHEN] A new config is applied to the flute's staff
-    edit(score, [score, staff, &config]() {
-        EditPart::setStaffConfig(score, staff, config);
+    edit(score, [score, staff, &config](Transaction& tx) {
+        EditPart::setStaffConfig(tx, score, staff, config);
     });
 
     // [THEN] The flute's staff has the new properties
@@ -989,8 +1004,8 @@ TEST_F(Engraving_EditPartTests, SetStaffConfig_HiddenStaff_ShowsStaff)
 
     Staff* staff = score->staff(0);
 
-    edit(score, [score, staff]() {
-        EditPart::setStaffVisible(score, staff, false);
+    edit(score, [score, staff](Transaction& tx) {
+        EditPart::setStaffVisible(tx, score, staff, false);
     });
     ASSERT_FALSE(staff->visible());
 
@@ -1000,8 +1015,8 @@ TEST_F(Engraving_EditPartTests, SetStaffConfig_HiddenStaff_ShowsStaff)
     config.staffType = *staff->staffType();
 
     // [WHEN] A visible config is applied
-    edit(score, [score, staff, &config]() {
-        EditPart::setStaffConfig(score, staff, config);
+    edit(score, [score, staff, &config](Transaction& tx) {
+        EditPart::setStaffConfig(tx, score, staff, config);
     });
 
     // [THEN] The staff is shown
@@ -1026,8 +1041,8 @@ TEST_F(Engraving_EditPartTests, SetVoiceVisible_HidesVoicesOnlyInExcerpts)
 
     // [WHEN] A voice is hidden in the main score
     bool changed = true;
-    edit(score, [score, masterStaff, &changed]() {
-        changed = EditPart::setVoiceVisible(score, masterStaff, 1, false);
+    edit(score, [score, masterStaff, &changed](Transaction& tx) {
+        changed = EditPart::setVoiceVisible(tx, score, masterStaff, 1, false);
     });
 
     // [THEN] Nothing changes
@@ -1037,8 +1052,8 @@ TEST_F(Engraving_EditPartTests, SetVoiceVisible_HidesVoicesOnlyInExcerpts)
     // [WHEN] All voices but the first are hidden in the part score
     // [THEN] Each one is hidden (the part score's staff is replaced on each change)
     for (int voice = 1; voice < static_cast<int>(VOICES); ++voice) {
-        edit(score, [excerptScore, voice, &changed]() {
-            changed = EditPart::setVoiceVisible(excerptScore, excerptScore->staff(0), voice, false);
+        edit(score, [excerptScore, voice, &changed](Transaction& tx) {
+            changed = EditPart::setVoiceVisible(tx, excerptScore, excerptScore->staff(0), voice, false);
         });
 
         EXPECT_TRUE(changed);
@@ -1047,8 +1062,8 @@ TEST_F(Engraving_EditPartTests, SetVoiceVisible_HidesVoicesOnlyInExcerpts)
     }
 
     // [WHEN] The first voice is hidden too
-    edit(score, [excerptScore, &changed]() {
-        changed = EditPart::setVoiceVisible(excerptScore, excerptScore->staff(0), 0, false);
+    edit(score, [excerptScore, &changed](Transaction& tx) {
+        changed = EditPart::setVoiceVisible(tx, excerptScore, excerptScore->staff(0), 0, false);
     });
 
     // [THEN] It stays visible, as the last visible voice
@@ -1074,8 +1089,8 @@ TEST_F(Engraving_EditPartTests, MoveParts_MovesPartAfterDestination)
     Part* piano = parts.at(2);
 
     // [WHEN] The flute is moved after the piano
-    edit(score, [score, flute, piano]() {
-        EditPart::moveParts(score, { flute }, piano, true);
+    edit(score, [score, flute, piano](Transaction& tx) {
+        EditPart::moveParts(tx, score, { flute }, piano, true);
     });
 
     // [THEN] The flute is last, with its staff
@@ -1100,8 +1115,8 @@ TEST_F(Engraving_EditPartTests, MoveStaves_MovesStaffBeforeDestination)
     Staff* lower = score->staff(2);
 
     // [WHEN] The piano's lower staff is moved before the upper one
-    edit(score, [score, upper, lower]() {
-        EditPart::moveStaves(score, { lower }, upper, false);
+    edit(score, [score, upper, lower](Transaction& tx) {
+        EditPart::moveStaves(tx, score, { lower }, upper, false);
     });
 
     // [THEN] The piano's staves are swapped
@@ -1114,7 +1129,7 @@ TEST_F(Engraving_EditPartTests, MoveStaves_MovesStaffBeforeDestination)
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderPartsChangesScore_DetectsOrderAndMarkingChanges)
+TEST_F(Engraving_EditPartTests, PartsLayoutChangesScore_DetectsOrderAndMarkingChanges)
 {
     // [GIVEN] Flute and piano
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1127,24 +1142,24 @@ TEST_F(Engraving_EditPartTests, ReorderPartsChangesScore_DetectsOrderAndMarkingC
 
     // [WHEN] The order is unchanged
     // [THEN] The score doesn't change
-    EXPECT_FALSE(EditPart::reorderPartsChangesScore(score, { flute, piano }, {}));
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano })));
 
     // [WHEN] The parts are swapped
     // [THEN] The score changes
-    EXPECT_TRUE(EditPart::reorderPartsChangesScore(score, { piano, flute }, {}));
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, layout({ piano, flute })));
 
     // [WHEN] Markings move below the bottom staff
     // [THEN] The score changes
-    EXPECT_TRUE(EditPart::reorderPartsChangesScore(score, { flute, piano }, { { pianoUpper, nullptr, true } }));
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano }, { { pianoUpper, nullptr, true } })));
 
     // [WHEN] Markings stay on their staff
     // [THEN] The score doesn't change
-    EXPECT_FALSE(EditPart::reorderPartsChangesScore(score, { flute, piano }, { { pianoUpper, pianoUpper, false } }));
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout({ flute, piano }, { { pianoUpper, pianoUpper, false } })));
 
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_MasterScore_KeepsExcerptOrder)
 {
     // [GIVEN] Flute and piano, with a part score of both
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1158,8 +1173,8 @@ TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
     ASSERT_EQ(instrumentIds(allPartsScore), InstrumentIds({ u"flute", u"piano" }));
 
     // [WHEN] The parts are swapped in the main score
-    edit(score, [score, flute, piano]() {
-        EditPart::reorderParts(score, { piano, flute }, {});
+    edit(score, [score, flute, piano](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, layout({ piano, flute }));
     });
 
     // [THEN] The main score has the new order, with the staves
@@ -1186,7 +1201,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_MasterScore_KeepsExcerptOrder)
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsStyle)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_SystemObjectsBelowBottomStaff_SetsStyle)
 {
     // [GIVEN] Flute and piano, with system markings on the piano's upper staff
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1195,14 +1210,14 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsS
     Staff* pianoUpper = score->staff(1);
     const Staff* pianoLower = score->staff(2);
 
-    edit(score, [score, pianoUpper]() {
-        EditPart::addSystemObjects(score, { pianoUpper });
+    edit(score, [score, pianoUpper](Transaction& tx) {
+        EditPart::addSystemObjects(tx, score, { pianoUpper });
     });
     ASSERT_TRUE(pianoUpper->isSystemObjectStaff());
 
     // [WHEN] The markings are moved below the bottom staff
-    edit(score, [score, pianoUpper]() {
-        EditPart::reorderParts(score, score->parts(), { { pianoUpper, nullptr, true } });
+    edit(score, [score, pianoUpper](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, nullptr, true } }));
     });
 
     // [THEN] The bottom staff has the markings, below it
@@ -1213,7 +1228,7 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsBelowBottomStaff_SetsS
     delete score;
 }
 
-TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndMeasureNumbers)
+TEST_F(Engraving_EditPartTests, SetPartsLayout_SystemObjectsMove_MovesMarkingsAndMeasureNumbers)
 {
     // [GIVEN] Flute and piano, with a system text copied to the piano's upper staff, which shows measure numbers
     MasterScore* score = createMasterScore({ u"flute", u"piano" });
@@ -1223,15 +1238,15 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndM
     Staff* pianoLower = score->staff(2);
 
     addSystemText(score);
-    edit(score, [score, pianoUpper]() {
-        EditPart::addSystemObjects(score, { pianoUpper });
+    edit(score, [score, pianoUpper](Transaction& tx) {
+        EditPart::addSystemObjects(tx, score, { pianoUpper });
         pianoUpper->undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, AutoOnOff::ON);
     });
     ASSERT_EQ(systemTextStaves(score), std::vector<staff_idx_t>({ 0, 1 }));
 
     // [WHEN] The markings are moved to the lower staff
-    edit(score, [score, pianoUpper, pianoLower]() {
-        EditPart::reorderParts(score, score->parts(), { { pianoUpper, pianoLower, false } });
+    edit(score, [score, pianoUpper, pianoLower](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, pianoLower, false } }));
     });
 
     // [THEN] The lower staff has the markings, the text copy and the measure numbers, above it
@@ -1241,6 +1256,232 @@ TEST_F(Engraving_EditPartTests, ReorderParts_SystemObjectsMove_MovesMarkingsAndM
     EXPECT_EQ(systemTextStaves(score), std::vector<staff_idx_t>({ 0, 2 }));
     EXPECT_EQ(pianoLower->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>(), AutoOnOff::ON);
     EXPECT_EQ(pianoUpper->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>(), AutoOnOff::AUTO);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, PartsLayoutChangesScore_DetectsSharedPartChanges)
+{
+    // [GIVEN] Two flutes, the first in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 2u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] Every part keeps its shared part
+    // [THEN] The score doesn't change
+    EXPECT_FALSE(EditPart::partsLayoutChangesScore(score, layout(score->parts())));
+
+    // [WHEN] The second flute joins the shared part
+    // [THEN] The score changes
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, { { { sharedPart, nullptr }, { flute1, sharedPart },
+                                                             { flute2, sharedPart } }, {} }));
+
+    // [WHEN] The first flute leaves the shared part
+    // [THEN] The score changes
+    EXPECT_TRUE(EditPart::partsLayoutChangesScore(score, { { { sharedPart, nullptr }, { flute1, nullptr },
+                                                             { flute2, nullptr } }, {} }));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetPartsLayout_JoinSharedPart_MovesAndJoinsInOneUndoStep)
+{
+    // [GIVEN] Flute, piano and flute, the first flute in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"piano", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    Part* flute2 = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+
+    // [WHEN] The second flute moves after the first one and joins the shared part
+    edit(score, [score, sharedPart, flute1, piano, flute2](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
+                                                { piano, nullptr } }, {} });
+    });
+
+    // [THEN] Both flutes are next to each other, in the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+    EXPECT_EQ(flute2->sharedPart(), sharedPart);
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetPartsLayout_LeaveSharedPart_MovesAndLeavesInOneUndoStep)
+{
+    // [GIVEN] Two flutes in a shared part, and piano
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"piano" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+    Part* piano = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+
+    // [WHEN] The second flute moves after the piano and leaves the shared part
+    edit(score, [score, sharedPart, flute1, flute2, piano](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { piano, nullptr },
+                                                { flute2, nullptr } }, {} });
+    });
+
+    // [THEN] The second flute is after the piano, out of the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, piano }));
+    EXPECT_EQ(flute2->sharedPart(), sharedPart);
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2 }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DetectsSplitSharedPart)
+{
+    // [GIVEN] Two flutes in a shared part, and oboe
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"oboe" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+    Part* oboe = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, flute2, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1, flute2 });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The order is unchanged
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout(layout(score->parts())));
+
+    // [WHEN] The oboe goes between the flutes
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { oboe, nullptr },
+                                                  { flute2, sharedPart } }, {} }));
+
+    // [WHEN] A flute goes before the shared part
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { flute1, sharedPart }, { sharedPart, nullptr }, { flute2, sharedPart },
+                                                  { oboe, nullptr } }, {} }));
+
+    // [WHEN] The oboe joins the shared part after the flutes
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
+                                                 { oboe, sharedPart } }, {} }));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, MovePartsToSharedPart_MovesAndJoins)
+{
+    // [GIVEN] Flute, piano, flute and oboe, the first flute in a shared part
+    MasterScore* score = createMasterScore({ u"flute", u"piano", u"flute", u"oboe" });
+    ASSERT_EQ(score->parts().size(), 4u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* piano = score->parts().at(1);
+    Part* flute2 = score->parts().at(2);
+    Part* oboe = score->parts().at(3);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2, oboe }));
+
+    // [WHEN] The oboe and the second flute are moved to the shared part, along with the shared part and its member
+    edit(score, [score, sharedPart, flute1, flute2, oboe](Transaction& tx) {
+        EditPart::movePartsToSharedPart(tx, score, { oboe, sharedPart, flute2, flute1 }, sharedPart);
+    });
+
+    // [THEN] The second flute and the oboe are after the first flute, in score order, and in the shared part
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute2, oboe, piano }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute2, oboe }));
+    EXPECT_EQ(sharedPart->nstaves(), 3u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] Both the order and the shared part are restored
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, piano, flute2, oboe }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1 }));
+    EXPECT_FALSE(flute2->sharedPart());
+    EXPECT_FALSE(oboe->sharedPart());
+    EXPECT_EQ(sharedPart->nstaves(), 1u);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_MovesAndCreates)
+{
+    // [GIVEN] Flute, oboe and clarinet
+    MasterScore* score = createMasterScore({ u"flute", u"oboe", u"clarinet" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* flute = score->parts().at(0);
+    Part* oboe = score->parts().at(1);
+    Part* clarinet = score->parts().at(2);
+
+    // [WHEN] The clarinet and the flute are moved to a new shared part
+    SharedPart* sharedPart = nullptr;
+    edit(score, [score, flute, clarinet, &sharedPart](Transaction& tx) {
+        sharedPart = EditPart::movePartsToNewSharedPart(tx, score, { clarinet, flute });
+    });
+
+    // [THEN] The clarinet is after the flute, and both are in the new shared part, before them
+    ASSERT_TRUE(sharedPart);
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute, clarinet, oboe }));
+    EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute, clarinet }));
+    EXPECT_EQ(sharedPart->nstaves(), 2u);
+
+    // [WHEN] Undo once
+    undo(score);
+
+    // [THEN] The order is restored and the shared part is gone
+    EXPECT_EQ(score->parts(), std::vector<Part*>({ flute, oboe, clarinet }));
+    EXPECT_FALSE(flute->sharedPart());
+    EXPECT_FALSE(clarinet->sharedPart());
 
     delete score;
 }
@@ -1281,8 +1522,8 @@ TEST_F(Engraving_EditPartTests, ReorderStaves_ReordersPartStaves)
     Staff* lower = score->staff(2);
 
     // [WHEN] The piano's staves are swapped
-    edit(score, [score, upper, lower]() {
-        EditPart::reorderStaves(score, { lower, upper });
+    edit(score, [score, upper, lower](Transaction& tx) {
+        EditPart::reorderStaves(tx, score, { lower, upper });
     });
 
     // [THEN] Only the piano's staves move
@@ -1307,8 +1548,8 @@ TEST_F(Engraving_EditPartTests, AddSystemObjects_CopiesTopStaffMarkings)
     ASSERT_EQ(systemTextStaves(score), std::vector<staff_idx_t>({ 0 }));
 
     // [WHEN] The piano's upper staff gets system markings
-    edit(score, [score, staff]() {
-        EditPart::addSystemObjects(score, { staff });
+    edit(score, [score, staff](Transaction& tx) {
+        EditPart::addSystemObjects(tx, score, { staff });
     });
 
     // [THEN] Only that staff is a system object staff, with a copy of the text
@@ -1336,14 +1577,14 @@ TEST_F(Engraving_EditPartTests, RemoveSystemObjects_RemovesMarkingCopies)
     Staff* staff = score->staff(1);
     addSystemText(score);
 
-    edit(score, [score, staff]() {
-        EditPart::addSystemObjects(score, { staff });
+    edit(score, [score, staff](Transaction& tx) {
+        EditPart::addSystemObjects(tx, score, { staff });
     });
     ASSERT_EQ(systemTextStaves(score), std::vector<staff_idx_t>({ 0, 1 }));
 
     // [WHEN] The staff's system markings are removed
-    edit(score, [score, staff]() {
-        EditPart::removeSystemObjects(score, { staff });
+    edit(score, [score, staff](Transaction& tx) {
+        EditPart::removeSystemObjects(tx, score, { staff });
     });
 
     // [THEN] It isn't a system object staff anymore, only the top staff has the text
@@ -1362,18 +1603,18 @@ TEST_F(Engraving_EditPartTests, RemoveSystemObjects_BelowBottomStaff_ResetsStyle
     Staff* pianoUpper = score->staff(1);
     Staff* pianoLower = score->staff(2);
 
-    edit(score, [score, pianoUpper]() {
-        EditPart::addSystemObjects(score, { pianoUpper });
+    edit(score, [score, pianoUpper](Transaction& tx) {
+        EditPart::addSystemObjects(tx, score, { pianoUpper });
     });
-    edit(score, [score, pianoUpper]() {
-        EditPart::reorderParts(score, score->parts(), { { pianoUpper, nullptr, true } });
+    edit(score, [score, pianoUpper](Transaction& tx) {
+        EditPart::setPartsLayout(tx, score, layout(score->parts(), { { pianoUpper, nullptr, true } }));
     });
     ASSERT_TRUE(pianoLower->isSystemObjectStaff());
     ASSERT_TRUE(score->style().styleB(Sid::systemObjectsBelowBottomStaff));
 
     // [WHEN] The bottom staff's system markings are removed
-    edit(score, [score, pianoLower]() {
-        EditPart::removeSystemObjects(score, { pianoLower });
+    edit(score, [score, pianoLower](Transaction& tx) {
+        EditPart::removeSystemObjects(tx, score, { pianoLower });
     });
 
     // [THEN] No markings are below the bottom staff anymore
@@ -1395,12 +1636,12 @@ TEST_F(Engraving_EditPartTests, SetParts_RemovesAndAddsParts)
 
     // [WHEN] The parts are set to a soloist piano and a new violin
     EditPart::SetPartsResult result;
-    edit(score, [score, piano, &result]() {
+    edit(score, [score, piano, &result](Transaction& tx) {
         const std::vector<EditPart::PartEntry> entries {
             { piano, nullptr, true },
             { nullptr, searchTemplate(u"violin"), false },
         };
-        result = EditPart::setParts(score, entries, score->scoreOrder());
+        result = EditPart::setParts(tx, score, entries, score->scoreOrder());
     });
 
     // [THEN] The flute is removed and the violin is added after the piano
@@ -1437,12 +1678,12 @@ TEST_F(Engraving_EditPartTests, SetParts_SameInstruments_NumbersThem)
 
     // [WHEN] A second violin is added
     EditPart::SetPartsResult result;
-    edit(score, [score, violin, &result]() {
+    edit(score, [score, violin, &result](Transaction& tx) {
         const std::vector<EditPart::PartEntry> entries {
             { violin, nullptr, false },
             { nullptr, searchTemplate(u"violin"), false },
         };
-        result = EditPart::setParts(score, entries, score->scoreOrder());
+        result = EditPart::setParts(tx, score, entries, score->scoreOrder());
     });
 
     // [THEN] The violins are numbered 1 and 2
@@ -1468,12 +1709,12 @@ TEST_F(Engraving_EditPartTests, SetParts_InstrumentNumberedInName_KeepsNameNumbe
 
     // [WHEN] A second violin is added
     EditPart::SetPartsResult result;
-    edit(score, [score, violin, &result]() {
+    edit(score, [score, violin, &result](Transaction& tx) {
         const std::vector<EditPart::PartEntry> entries {
             { violin, nullptr, false },
             { nullptr, searchTemplate(u"violin"), false },
         };
-        result = EditPart::setParts(score, entries, score->scoreOrder());
+        result = EditPart::setParts(tx, score, entries, score->scoreOrder());
     });
 
     // [THEN] The first violin isn't numbered, but still counts
@@ -1497,8 +1738,8 @@ TEST_F(Engraving_EditPartTests, SetParts_ExistingParts_ReordersThem)
 
     // [WHEN] The parts are set in the opposite order
     EditPart::SetPartsResult result;
-    edit(score, [score, flute, piano, &result]() {
-        result = EditPart::setParts(score, { { piano, nullptr, false }, { flute, nullptr, false } }, score->scoreOrder());
+    edit(score, [score, flute, piano, &result](Transaction& tx) {
+        result = EditPart::setParts(tx, score, { { piano, nullptr, false }, { flute, nullptr, false } }, score->scoreOrder());
     });
 
     // [THEN] Nothing is added or removed, the parts are swapped
@@ -1531,7 +1772,7 @@ TEST_F(Engraving_EditPartTests, ChangePatch_ChangesChannelProgram)
     patch.synti = channel->synti();
 
     // [WHEN] The channel's patch is changed
-    edit(score, [score, channel, &patch]() {
+    edit(score, [score, channel, &patch](Transaction&) {
         score->undo(new ChangePatch(score, channel, patch));
     });
 
@@ -1560,7 +1801,7 @@ TEST_F(Engraving_EditPartTests, SetUserBankController_ChangesChannel)
     const bool oldValue = channel->userBankController();
 
     // [WHEN] The user bank controller is toggled
-    edit(score, [score, channel, oldValue]() {
+    edit(score, [score, channel, oldValue](Transaction&) {
         score->undo(new SetUserBankController(channel, !oldValue));
     });
 
@@ -1591,7 +1832,7 @@ TEST_F(Engraving_EditPartTests, ChangeStringData_ChangesFrets)
     const StringData stringData(oldFrets + 1, strings);
 
     // [WHEN] The guitar gets one more fret
-    edit(score, [score, instrument, &stringData]() {
+    edit(score, [score, instrument, &stringData](Transaction&) {
         score->undo(new ChangeStringData(instrument, stringData));
     });
 

@@ -246,6 +246,7 @@ public:
 class InstrumentTemplate;
 class Staff;
 class StaffType;
+class Transaction;
 
 class EditPart
 {
@@ -261,24 +262,25 @@ public:
         std::vector<Part*> removedParts;
     };
 
-    static SetPartsResult setParts(Score* score, const std::vector<PartEntry>& entries, const ScoreOrder& order);
-    static void setScoreOrder(Score* score, const ScoreOrder& order);
+    static SetPartsResult setParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries, const ScoreOrder& order);
+    static void setScoreOrder(Transaction& tx, Score* score, const ScoreOrder& order);
 
-    static void setPartVisible(Score* score, Part* part, bool visible);
-    static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
-    static void setStaffVisible(Score* score, Staff* staff, bool visible);
-    static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
-    static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
-    static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
-    static bool setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
-                                              const String& shortName);
-    static void setInstrumentNumber(Score* score, Part* part, const Fraction& tick, int number);
-    static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
-    static void setStaffConfig(Score* score, Staff* staff, const StaffConfig& config, const Fraction& tick = Fraction(0, 1));
-    static void setSharedPartEnabled(Score* score, Part* part, bool enabled);
+    static void setPartVisible(Transaction& tx, Score* score, Part* part, bool visible);
+    static bool setVoiceVisible(Transaction& tx, Score* score, Staff* staff, int voiceIndex, bool visible);
+    static void setStaffVisible(Transaction& tx, Score* score, Staff* staff, bool visible);
+    static void setPartSharpFlat(Transaction& tx, Score* score, Part* part, PreferSharpFlat sharpFlat);
+    static void setInstrumentName(Transaction& tx, Score* score, Part* part, const Fraction& tick, const String& name);
+    static void setInstrumentAbbreviature(Transaction& tx, Score* score, Part* part, const Fraction& tick, const String& abbreviature);
+    static bool setInstrumentGroupNameOptions(Transaction& tx, Score* score, Part* part, const Fraction& tick, bool useCustom,
+                                              const String& longName, const String& shortName);
+    static void setInstrumentNumber(Transaction& tx, Score* score, Part* part, const Fraction& tick, int number);
+    static void setStaffType(Transaction& tx, Score* score, Staff* staff, StaffTypes typeId);
+    static void setStaffConfig(Transaction& tx, Score* score, Staff* staff, const StaffConfig& config,
+                               const Fraction& tick = Fraction(0, 1));
+    static void setSharedPartEnabled(Transaction& tx, Score* score, Part* part, bool enabled);
 
-    static void removeParts(Score* score, const std::vector<Part*>& parts);
-    static void removeStaves(Score* score, const std::vector<Staff*>& staves);
+    static void removeParts(Transaction& tx, Score* score, const std::vector<Part*>& parts);
+    static void removeStaves(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
 
     struct SystemObjectsMove {
         Staff* staff = nullptr;
@@ -286,65 +288,84 @@ public:
         bool belowBottomStaff = false;
     };
 
-    static bool reorderPartsChangesScore(const Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
-    static void reorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+    //! A part and its shared part afterwards
+    struct PartPlacement {
+        Part* part = nullptr;
+        SharedPart* sharedPart = nullptr; // nullptr: not in a shared part
+    };
+
+    //! The parts' new order and shared parts, and where their system markings go
+    struct PartsLayout {
+        std::vector<PartPlacement> parts;
+        std::vector<SystemObjectsMove> systemObjects;
+    };
+
+    static bool isValidPartsLayout(const PartsLayout& layout);
+    static bool partsLayoutChangesScore(const Score* score, const PartsLayout& layout);
+    static void setPartsLayout(Transaction& tx, Score* score, const PartsLayout& layout);
 
     static bool reorderStavesChangesScore(const std::vector<Staff*>& staves);
-    static void reorderStaves(Score* score, const std::vector<Staff*>& staves);
+    static void reorderStaves(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
 
-    static void moveParts(Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
-    static void moveStaves(Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff, bool insertAfter);
+    static void moveParts(Transaction& tx, Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
 
-    static Staff* appendStaff(Score* score, Part* destinationPart);
-    static void appendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
+    static void movePartsToSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts, SharedPart* sharedPart);
+    static SharedPart* movePartsToNewSharedPart(Transaction& tx, Score* score, const std::vector<Part*>& parts);
+    static void moveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff,
+                           bool insertAfter);
 
-    static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
-    static void appendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
+    static Staff* appendStaff(Transaction& tx, Score* score, Part* destinationPart);
+    static void appendStaff(Transaction& tx, Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 
-    static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
-    static void insertPart(Score* score, Part* part, size_t index);
+    static Staff* appendLinkedStaff(Transaction& tx, Score* score, Staff* sourceStaff, Part* destinationPart);
+    static void appendLinkedStaff(Transaction& tx, Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
 
-    static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
-    static void replacePart(Score* score, Part* oldPart, Part* newPart);
+    static void insertPart(Transaction& tx, Score* score, const InstrumentTemplate* templ, size_t index);
+    static void insertPart(Transaction& tx, Score* score, Part* part, size_t index);
 
-    static bool replaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+    static void replacePart(Transaction& tx, Score* score, Part* oldPart, const InstrumentTemplate* templ);
+    static void replacePart(Transaction& tx, Score* score, Part* oldPart, Part* newPart);
+
+    static bool replaceInstrument(Transaction& tx, Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
                                   const StaffType* newStaffType = nullptr);
-    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr);
-    static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable = true);
+    static void replacePartInstrument(Transaction& tx, Score* score, Part* part, const Instrument& newInstrument,
+                                      const StaffType* newStaffType = nullptr);
+    static void replaceDrumset(Transaction& tx, Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset,
+                               bool undoable = true);
 
-    static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
-    static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
-    static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+    static void addSystemObjects(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
+    static void removeSystemObjects(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
+    static void moveSystemObjects(Transaction& tx, Score* score, Staff* sourceStaff, Staff* destinationStaff);
 
 private:
-    static bool doReplaceInstrument(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
+    static bool doReplaceInstrument(Transaction& tx, Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument,
                                     const StaffType* newStaffType);
-    static void renameExcerptOfPart(MasterScore* master, const Part* part);
+    static void renameExcerptOfPart(Transaction& tx, MasterScore* master, const Part* part);
 
-    static void doRemoveParts(Score* score, const std::vector<Part*>& parts);
-    static void doRemoveStaves(Score* score, const std::vector<Staff*>& staves);
-    static void doReorderParts(Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
+    static void doRemoveParts(Transaction& tx, Score* score, const std::vector<Part*>& parts);
+    static void doRemoveStaves(Transaction& tx, Score* score, const std::vector<Staff*>& staves);
+    static void doReorderParts(Transaction& tx, Score* score, const std::vector<Part*>& parts, const std::vector<SystemObjectsMove>& moves);
 
-    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests);
-    static void doAppendLinkedStaff(Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
+    static void doAppendStaff(Transaction& tx, Score* score, Staff* staff, Part* destinationPart, bool createRests);
+    static void doAppendLinkedStaff(Transaction& tx, Score* score, Staff* staff, Staff* sourceStaff, Part* destinationPart);
 
-    static void doReplaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable);
+    static void doReplaceDrumset(Transaction& tx, Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset, bool undoable);
 
-    static void removeLocksContainingMMRests(Score* score);
+    static void removeLocksContainingMMRests(Transaction& tx, Score* score);
 
-    static void appendStaves(Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
-    static Part* insertPart(Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
-    static void doInsertPart(Score* score, Part* part, size_t index);
-    static void insertPartCopy(Score* score, Part* part, size_t index);
+    static void appendStaves(Transaction& tx, Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
+    static Part* insertPart(Transaction& tx, Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
+    static void doInsertPart(Transaction& tx, Score* score, Part* part, size_t index);
+    static void insertPartCopy(Transaction& tx, Score* score, Part* part, size_t index);
 
-    static std::vector<Part*> removeMissingParts(Score* score, const std::vector<PartEntry>& entries);
-    static std::vector<Part*> insertNewParts(Score* score, const std::vector<PartEntry>& entries, const KeyList& keyList);
+    static std::vector<Part*> removeMissingParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
+    static std::vector<Part*> insertNewParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries, const KeyList& keyList);
     static std::vector<int> resolveInstrumentNumbers(const std::vector<PartEntry>& entries);
-    static void updateSoloist(Score* score, const std::vector<PartEntry>& entries);
-    static void sortParts(Score* score, const std::vector<PartEntry>& entries);
-    static void sortStaves(Score* score, const std::vector<Part*>& orderedParts);
+    static void updateSoloist(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
+    static void sortParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
+    static void sortStaves(Transaction& tx, Score* score, const std::vector<Part*>& orderedParts);
 
-    static void deleteExcerptsOfParts(MasterScore* master, const std::vector<Part*>& parts);
-    static bool moveSystemObjects(Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
+    static void deleteExcerptsOfParts(Transaction& tx, MasterScore* master, const std::vector<Part*>& parts);
+    static bool moveSystemObjects(Transaction& tx, Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
 };
 }

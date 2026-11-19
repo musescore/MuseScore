@@ -266,6 +266,10 @@ DropArea {
                 root.treeModel.changeEnabled(modelIndex, enabled)
             }
 
+            onUngroupRequested: {
+                Qt.callLater(root.treeModel.ungroupSharedGroup, card.item.id)
+            }
+
             onMousePressed: {
                 root.cardPressed(card)
             }

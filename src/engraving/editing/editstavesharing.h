@@ -44,7 +44,11 @@ class EditStaveSharing
 {
 public:
     static void toggleStaveSharing(Transaction& tx, Score* score, bool on);
-    static void handleRemovePart(Transaction& tx, Part* part);
+    static void disconnectBeforeRemovingPart(Transaction& tx, Part* part);
+
+    static SharedPart* createSharedPart(Transaction& tx, const std::vector<Part*>& parts);
+    static void addPartsToSharedPart(Transaction& tx, const std::vector<Part*>& parts, SharedPart* sharedPart);
+    static void removePartsFromSharedPart(Transaction& tx, const std::vector<Part*>& parts);
 
     static void addStaveSharingChange(Transaction& tx, Segment* seg, Part* part, bool reset);
     static void addStaveSharingChangeToRange(Transaction& tx, Segment* startSeg, Segment* endSeg, staff_idx_t startStaff,
@@ -59,8 +63,7 @@ public:
     static void restoreStaveSharingStates(Transaction& tx, const StaveSharingStatesByPart& states);
 
 private:
-    static void cmdCreateSharedStaves(Transaction& tx, Score* score);
-    static void cmdRemoveSharedStaves(Score* score);
+    static void createSharedStaves(Transaction& tx, Score* score);
 
     static StaveSharingGroups computeGroups(Score* score);
     static void createSharedParts(Transaction& tx, const StaveSharingGroups& groups, Score* score);
@@ -69,5 +72,6 @@ private:
 
     static void connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
     static void disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
+    static void disconnectFromCurrentSharedPart(Transaction& tx, Part* part);
 };
 }
