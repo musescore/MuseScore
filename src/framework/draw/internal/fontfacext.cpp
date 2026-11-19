@@ -342,7 +342,6 @@ std::vector<ShapedGlyph> FontFaceXT::glyphs(const char32_t* text, int text_lengt
 
         glyph_idx_t idx = glyphIndex(ch);
         if (idx == 0) {
-            LOGE() << "font: " << m_key.dataKey.family().id() << " not found glyph: " << (int)ch;
             continue;
         }
 

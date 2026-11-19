@@ -156,6 +156,8 @@ void FontsEngine::clearLoadedFaces()
         delete f;
     }
     m_loadedFaces.clear();
+
+    m_reportedMissingChars.clear();
 }
 
 double FontsEngine::lineSpacing(const Font& f) const
@@ -690,5 +692,38 @@ std::vector<FontsEngine::FontFaceTextBlock> FontsEngine::splitTextByFontFaces(co
         }
     }
 
+    logMissingChars(rf, textBlocks);
+
     return textBlocks;
+}
+
+void FontsEngine::logMissingChars(const RequireFace* rf, const std::vector<FontFaceTextBlock>& blocks) const
+{
+    std::vector<char32_t> codes;
+    for (const FontFaceTextBlock& block : blocks) {
+        if (block.face) {
+            continue;
+        }
+
+        for (int i = 0; i < block.text.lenght; ++i) {
+            const char32_t ch = block.text.text[i];
+            if (ch == 0 || isZeroAdvanceChar(ch)) {
+                continue;
+            }
+
+            const auto [it, isFirstReport] = m_reportedMissingChars.insert({ rf->actualDataKey, ch });
+            if (isFirstReport) {
+                codes.push_back(ch);
+            }
+        }
+    }
+
+    if (codes.empty()) {
+        return;
+    }
+
+    const FontDataKey& font = rf->actualDataKey;
+    LOGE() << "font: " << font.family().id()
+           << (font.bold() ? " bold" : "") << (font.italic() ? " italic" : "")
+           << " not found glyphs: " << codes;
 }

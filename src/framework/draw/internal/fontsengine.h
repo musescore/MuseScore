@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <set>
 #include <vector>
 #include <functional>
 
@@ -102,11 +103,13 @@ private:
     IFontFace* sdfFontFaceFor(const IFontFace* layoutFace) const;
 
     std::vector<FontFaceTextBlock> splitTextByFontFaces(const RequireFace* rf, const TextBlock& text) const;
+    void logMissingChars(const RequireFace* rf, const std::vector<FontFaceTextBlock>& blocks) const;
 
     FontFaceFactory m_fontFaceFactory;
 
     mutable std::vector<IFontFace*> m_loadedFaces;
     mutable std::vector<RequireFace*> m_requiredFaces;
+    mutable std::set<std::pair<FontDataKey, char32_t> > m_reportedMissingChars;
 
     mutable FontRenderCache m_renderCache;
 };
