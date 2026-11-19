@@ -30,6 +30,7 @@
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
+#include "../dom/dynamic.h"
 #include "../dom/fret.h"
 #include "../dom/lyrics.h"
 #include "../dom/masterscore.h"
@@ -244,6 +245,8 @@ void TextBase::endEdit(EditData& ed)
             if (dynamicInfo.first != DynamicType::OTHER || !dynamicInfo.second.isEmpty()) {
                 // Set DYNAMIC_TYPE with the parsed DynamicType enum (not the string)
                 undoChangeProperty(Pid::DYNAMIC_TYPE, dynamicInfo.first);
+                // Apply the parser's normalized text via the undoable TEXT property update
+                undoChangeProperty(Pid::TEXT, dynamicInfo.second);
             }
         }
 

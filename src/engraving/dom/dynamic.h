@@ -143,12 +143,13 @@ public:
 
     static Dyn dynInfo(DynamicType type);
 
+    std::pair<DynamicType, String> parseDynamicText(const String&) const;
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
-    std::pair<DynamicType, String> parseDynamicText(const String&) const;
     DynamicType m_dynamicType = DynamicType::OTHER;
     bool m_playDynamic = true;
 
