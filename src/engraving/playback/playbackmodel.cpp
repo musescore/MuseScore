@@ -22,6 +22,12 @@
 
 #include "playbackmodel.h"
 
+#include <utility>
+#include <vector>
+
+#include "practiceemphasis.h"
+#include "practiceemphasisdata.h"
+
 #include "dom/fret.h"
 #include "dom/harmony.h"
 #include "dom/instrument.h"
@@ -464,6 +470,11 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
 {
     m_playbackCtx->update(trackFrom, trackTo, tickFrom, tickTo, m_expandRepeats);
 
+    const MasterScore* master = m_score ? m_score->masterScore() : nullptr;
+    const std::vector<PracticeEmphasis::VoiceKey> emphasizedVoices = master
+                                                                     ? master->practiceEmphasis().emphasizedVoices(m_score)
+                                                                     : std::vector<PracticeEmphasis::VoiceKey> {};
+
     for (const Part* part : m_score->parts()) {
         const TrackRange trackRange = part->trackRange();
         if (trackTo <= trackRange.startTrack || trackFrom >= trackRange.endTrack) {
@@ -479,8 +490,11 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
             continue;
         }
 
+        muse::mpe::DynamicAutomationLayers dynamics = m_playbackCtx->dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+        PracticeEmphasis::applyToDynamics(m_score, dynamics, emphasizedVoices);
+
         const PartData data {
-            m_playbackCtx->dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack),
+            dynamics,
             m_playbackCtx->soundPresets(trackRange.startTrack, trackRange.endTrack),
             m_playbackCtx->textArticulations(trackRange.startTrack, trackRange.endTrack),
             m_playbackCtx->syllables(trackRange.startTrack, trackRange.endTrack)

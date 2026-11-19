@@ -28,6 +28,7 @@
 #include "dom/utils.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "playback/practiceemphasis.h"
 #include "playback/utils/expressionutils.h"
 
 #include "noterenderer.h"
@@ -334,9 +335,10 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
 
         NominalNoteCtx noteCtx(note, ornamentCtx);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.articulations);
+        PracticeEmphasis::applyToNote(note, noteCtx);
 
         convert(preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, ornamentCtx.beatsPerSecond.val),
-                std::move(noteCtx), result);
+                note, std::move(noteCtx), result);
     }
 }
 
@@ -355,8 +357,8 @@ void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const Articulat
     meta.overallDuration = ctx.nominalDuration;
 }
 
-void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
-                                mpe::PlaybackEventList& result)
+void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, const Note* note,
+                                NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result)
 {
     if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
         result.emplace_back(buildNoteEvent(noteCtx));
@@ -365,7 +367,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
 
     // convert prefix
     if (!pattern.prefixPitchOffsets.empty()) {
-        createEvents(type, noteCtx, 1, pattern.prefixDurationTicks,
+        createEvents(type, note, noteCtx, 1, pattern.prefixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks, pattern.prefixPitchOffsets, result);
     }
 
@@ -382,7 +384,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
         if (alterationsCount == 0) {
             result.emplace_back(buildNoteEvent(noteCtx));
         } else {
-            createEvents(type, noteCtx, alterationsCount,
+            createEvents(type, note, noteCtx, alterationsCount,
                          noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
                          noteCtx.chordCtx.nominalDurationTicks,
                          pattern.alterationStepPitchOffsets, result);
@@ -391,7 +393,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePat
 
     // convert suffix
     if (!pattern.suffixPitchOffsets.empty()) {
-        createEvents(type, noteCtx, 1,
+        createEvents(type, note, noteCtx, 1,
                      pattern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
                      pattern.suffixPitchOffsets, result);
@@ -406,25 +408,30 @@ int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, co
     return static_cast<int>(std::max(subNotesCount / 2, 0.f));
 }
 
-void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
-                                     const int availableDurationTicks, const int overallDurationTicks,
-                                     const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result)
+void OrnamentsRenderer::createEvents(const ArticulationType type, const Note* note, NominalNoteCtx& noteCtx,
+                                     const int alterationsCount, const int availableDurationTicks,
+                                     const int overallDurationTicks, const std::vector<mpe::pitch_level_t>& pitchOffsets,
+                                     mpe::PlaybackEventList& result)
 {
     float availableDurationRatio = availableDurationTicks / static_cast<float>(overallDurationTicks);
 
     size_t totalNotesCount = alterationsCount * pitchOffsets.size();
     float durationStep = (noteCtx.duration * availableDurationRatio) / totalNotesCount;
 
-    track_idx_t trackIdx = staff2track(noteCtx.staffIdx, noteCtx.voiceIdx);
+    track_idx_t trackIdx = note ? note->track() : staff2track(noteCtx.staffIdx, noteCtx.voiceIdx);
 
     for (int alterationStep = 0; alterationStep < alterationsCount; ++alterationStep) {
         for (size_t alterationSubNoteIdx = 0; alterationSubNoteIdx < pitchOffsets.size(); ++alterationSubNoteIdx) {
             NominalNoteCtx subNoteCtx(noteCtx);
             subNoteCtx.duration = durationStep;
             subNoteCtx.pitchLevel += pitchOffsets.at(alterationSubNoteIdx);
+            if (note) {
+                subNoteCtx.staffIdx = note->staffIdx();
+            }
 
             int utick = timestampToTick(subNoteCtx.chordCtx.score, subNoteCtx.timestamp);
             subNoteCtx.dynamicLevel = noteCtx.chordCtx.playbackCtx->appliableDynamicLevel(trackIdx, utick);
+            PracticeEmphasis::applyToNote(note, subNoteCtx);
 
             updateArticulationBoundaries(type, subNoteCtx.timestamp,
                                          subNoteCtx.duration, subNoteCtx.articulations);

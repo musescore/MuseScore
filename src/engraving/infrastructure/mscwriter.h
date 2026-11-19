@@ -67,6 +67,7 @@ public:
     void writeAudioSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
     void writeViewSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
     void writeAutomationJsonFile(const muse::ByteArray& data);
+    void writePracticeEmphasisJsonFile(const muse::ByteArray& data);
 
 private:
 
