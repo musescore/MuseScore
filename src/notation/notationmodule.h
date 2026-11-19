@@ -30,6 +30,7 @@ namespace mu::notation {
 class NotationConfiguration;
 class InstrumentsRepository;
 class EngravingFontsController;
+class NotationActionController;
 class NotationModule : public muse::modularity::IModuleSetup, public muse::async::Asyncable
 {
 public:
@@ -55,5 +56,10 @@ public:
         : muse::modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
+    void resolveImports() override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<NotationActionController> m_actionController;
 };
 }

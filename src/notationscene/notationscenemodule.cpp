@@ -23,15 +23,9 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractiveuriregister.h"
-#include "rcommand/icommandsregister.h"
-#include "rcommand/icommandsstate.h"
 
 #include "internal/notationsceneconfiguration.h"
-#include "internal/notationactioncontroller.h"
 #include "internal/midiinputoutputcontroller.h"
-#include "internal/notationcommandsregister.h"
-#include "internal/notationcommandsstate.h"
-#include "internal/notationactioncontroller.h"
 
 #include "widgets/breaksdialog.h"
 #include "widgets/editstaff.h"
@@ -87,11 +81,6 @@ void NotationSceneModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore.NotationScene", "PercussionPanelPadSwapDialog");
         ir->registerQmlUri(Uri("musescore://notation/editpercussionshortcut"), "MuseScore.NotationScene", "EditPercussionShortcutDialog");
     }
-
-    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
-    if (cr) {
-        cr->reg(std::make_shared<NotationCommandsRegister>());
-    }
 }
 
 void NotationSceneModule::onInit(const IApplication::RunMode&)
@@ -106,24 +95,11 @@ IContextSetup* NotationSceneModule::newContext(const muse::modularity::ContextPt
 
 void NotationSceneContext::registerExports()
 {
-    m_actionController = std::make_shared<NotationActionController>(iocContext());
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>(iocContext());
-
-    ioc()->registerExport<INotationCommandsController>(mname, m_actionController);
-}
-
-void NotationSceneContext::resolveImports()
-{
-    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
-    if (cs) {
-        cs->reg(std::make_shared<NotationCommandsState>(iocContext()));
-    }
 }
 
 void NotationSceneContext::onInit(const IApplication::RunMode& mode)
 {
-    m_actionController->init();
-
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();
     }

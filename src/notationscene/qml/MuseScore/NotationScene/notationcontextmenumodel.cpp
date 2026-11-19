@@ -36,7 +36,7 @@
 #include "notation/inotation.h"
 #include "notation/inotationselection.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 #include "palette/palettecommands.h"
 #include "instrumentsscene/instrumentscommands.h"
 

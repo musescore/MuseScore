@@ -33,11 +33,11 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationundostack.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "appshell/appshellcommands.h"
 #include "project/projectcommands.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 #include "playback/playbackcommands.h"
 #include "palette/palettecommands.h"
 #include "dockwindow/dockcommands.h"

@@ -38,7 +38,7 @@
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 
 #include "palette/palettecommands.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "log.h"
 

@@ -24,6 +24,8 @@
 #include "modularity/ioc.h"
 #include "project/inotationwritersregister.h"
 #include "global/api/ifilesystemapirestriction.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 
 #include "internal/notationconfiguration.h"
 #include "internal/notationcontextconfiguration.h"
@@ -31,6 +33,9 @@
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
 #include "internal/engravingfontscontroller.h"
+#include "internal/notationactioncontroller.h"
+#include "internal/notationcommandsregister.h"
+#include "internal/notationcommandsstate.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -66,6 +71,11 @@ void NotationModule::resolveImports()
         writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
         writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
         writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
+    }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<NotationCommandsRegister>());
     }
 }
 
@@ -111,5 +121,21 @@ IContextSetup* NotationModule::newContext(const ContextPtr& ctx) const
 
 void NotationContext::registerExports()
 {
+    m_actionController = std::make_shared<NotationActionController>(iocContext());
+
     ioc()->registerExport<INotationContextConfiguration>(mname, new NotationContextConfiguration(iocContext()));
+    ioc()->registerExport<INotationCommandsController>(mname, m_actionController);
+}
+
+void NotationContext::resolveImports()
+{
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<NotationCommandsState>(iocContext()));
+    }
+}
+
+void NotationContext::onInit(const IApplication::RunMode&)
+{
+    m_actionController->init();
 }

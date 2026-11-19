@@ -50,7 +50,7 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace muse::rcommand;
 using namespace mu;
@@ -1794,6 +1794,11 @@ muse::PointF NotationViewInputController::selectionElementPos() const
     return muse::PointF();
 }
 
+bool NotationViewInputController::elementHasEditPopup(const EngravingItem* item) const
+{
+    return AbstractElementPopupModel::hasElementEditPopup(item);
+}
+
 void NotationViewInputController::togglePopupForItemIfSupports(const EngravingItem* item)
 {
     if (!item) {
@@ -1802,7 +1807,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 
     ElementType type = item->type();
 
-    if (AbstractElementPopupModel::hasElementEditPopup(item)) {
+    if (elementHasEditPopup(item)) {
         m_view->toggleElementPopup(type);
     }
 }

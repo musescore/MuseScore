@@ -22,7 +22,7 @@
 
 #include "noteinputpreferencesmodel.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace mu::preferences;
 

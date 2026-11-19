@@ -33,7 +33,7 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 // api
 #include "engravingapiv1.h"

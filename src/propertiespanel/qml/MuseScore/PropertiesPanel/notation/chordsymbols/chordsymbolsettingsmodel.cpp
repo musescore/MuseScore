@@ -27,7 +27,7 @@
 #include "engraving/dom/harmony.h"
 
 #include "notation/inotationstyle.h" // IWYU pragma: keep
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;

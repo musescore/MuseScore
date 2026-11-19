@@ -23,7 +23,7 @@
 #include "stringtuningssettingsmodel.h"
 
 #include "notation/inotationselection.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "translation.h"
 

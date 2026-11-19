@@ -31,7 +31,7 @@
 #include "rcommand/icommandsregister.h"
 #include "project/iprojectsession.h"
 #include "ui/iuistate.h"
-#include "notationscene/inotationcommandscontroller.h"
+#include "notation/inotationcommandscontroller.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public QQmlParserStatus

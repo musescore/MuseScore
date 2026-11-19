@@ -49,9 +49,6 @@
 
 #include "project/inotationproject.h"
 
-#include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
-#include "qml/MuseScore/NotationScene/notationviewinputcontroller.h"
-
 #include "../notationcommands.h"
 #include "../notationcommandsenums.h"
 #include "playback/playbackcommands.h"
@@ -2915,7 +2912,11 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
 
 bool NotationActionController::elementHasPopup(const EngravingItem* e) const
 {
-    return AbstractElementPopupModel::hasElementEditPopup(e);
+    if (!m_viewController) {
+        return false;
+    }
+
+    return m_viewController->elementHasEditPopup(e);
 }
 
 bool NotationActionController::canUndo() const

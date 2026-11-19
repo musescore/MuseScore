@@ -24,7 +24,7 @@
 
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"
 
-#include "notationcommands.h"
+#include "notation/notationcommands.h"
 #include "appshell/appshellcommands.h"
 
 using namespace muse;
