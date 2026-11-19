@@ -542,6 +542,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
         };
 
         if (completed) {
+            m_editedPointDataChannel.send(QPointF(), QString());
             m_currentlyEditedPolyline = nullptr;
 
             if (oldPointData.isPending) {
@@ -559,6 +560,8 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
 
+        // TODO: This is a placeholder, send the actual point/value...
+        m_editedPointDataChannel.send(QPointF(0, 0), QString("Hello world"));
         m_currentlyEditedPolyline = polyline;
 
         // Live drag preview
@@ -568,6 +571,7 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointAdded,
                      [this, key, polyline](qreal x, qreal y, bool completed) {
         if (completed) {
+            m_editedPointDataChannel.send(QPointF(), QString());
             m_currentlyEditedPolyline = nullptr;
             requestAddPoint(key, x, y, /*useCurveValue*/ true);
             rebuildPolylinePoints(key);
@@ -584,6 +588,8 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
 
+        // TODO: This is a placeholder, send the actual point/value...
+        m_editedPointDataChannel.send(QPointF(0, 0), QString("Hello world"));
         m_currentlyEditedPolyline = polyline;
 
         QVector<PointData> pointsData = data.pointsData;
@@ -1104,7 +1110,10 @@ void NotationAutomationController::processPendingChanges()
 
 void NotationAutomationController::rebuildAllPolylines()
 {
-    m_currentlyEditedPolyline = nullptr;
+    if (m_currentlyEditedPolyline) {
+        m_editedPointDataChannel.send(QPointF(), QString());
+        m_currentlyEditedPolyline = nullptr;
+    }
 
     // TODO: More efficient if we don't clear/recreate the polylines every time...
     for (const auto& [key, data] : m_polylinesDataMap) {
@@ -1506,6 +1515,11 @@ muse::real_t NotationAutomationController::automationValueFromDisplay(Automation
     }
 
     return muse::real_t(displayValue);
+}
+
+muse::async::Channel<const QPointF&, const QString&> NotationAutomationController::editedPointDataChannel() const
+{
+    return m_editedPointDataChannel;
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const

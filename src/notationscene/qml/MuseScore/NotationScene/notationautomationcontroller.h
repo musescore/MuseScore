@@ -28,6 +28,7 @@
 #include <QPointF>
 #include <QQuickItem>
 
+#include "global/async/channel.h"
 #include "project/iprojectsession.h"
 #include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
@@ -64,6 +65,8 @@ public:
 
     void init();
     void setViewMatrix(const muse::draw::Transform& viewMatrix);
+
+    muse::async::Channel</*viewPos*/ const QPointF&, /*val*/ const QString&> editedPointDataChannel() const;
 
 private:
     // A polyline can be uniquely identified using the system, staff, and startTick...
@@ -203,5 +206,7 @@ private:
     bool m_updateScheduled = false;
 
     muse::uicomponents::PolylinePlot* m_currentlyEditedPolyline = nullptr;
+
+    muse::async::Channel</*viewPos*/ const QPointF&, /*val*/ const QString&> m_editedPointDataChannel;
 };
 }

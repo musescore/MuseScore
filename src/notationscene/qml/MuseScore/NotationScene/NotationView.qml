@@ -175,6 +175,17 @@ FocusScope {
                         popUpLoader.updateShow(AbstractElementPopupModel.TYPE_UNDEFINED);
                     }
 
+                    onShowAutomationTooltipRequested: function(viewPos, val) {
+                        automationTooltipAnchor.x = viewPos.x
+                        automationTooltipAnchor.y = viewPos.y
+                        automationTooltip.value = val
+                        automationTooltip.show(/*noDelay*/ true)
+                    }
+
+                    onHideAutomationTooltipRequested: {
+                        automationTooltip.hide(/*noDelay*/ true)
+                    }
+
                     onViewportChanged: {
                         notationNavigator.setCursorRect(viewport)
                     }
@@ -223,6 +234,17 @@ FocusScope {
 
                         onClosed: {
                             notationView.onElementPopupIsOpenChanged(AbstractElementPopupModel.TYPE_UNDEFINED)
+                        }
+                    }
+
+                    Item {
+                        id: automationTooltipAnchor
+
+                        width: 0
+                        height: 0
+
+                        ValueTooltip {
+                            id: automationTooltip
                         }
                     }
 
