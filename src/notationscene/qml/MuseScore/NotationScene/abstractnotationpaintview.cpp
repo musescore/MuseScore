@@ -88,6 +88,10 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
         m_notation->interaction()->setGetViewRectFunc(nullptr);
     }
 
+    if (m_notationAutomationController) {
+        m_notationAutomationController->editedPointDataChannel().disconnect(this);
+    }
+
     clear();
 }
 
@@ -110,7 +114,18 @@ void AbstractNotationPaintView::load()
         m_automationLinesContainer->setHeight(height());
     });
 
+    if (m_notationAutomationController) {
+        m_notationAutomationController->editedPointDataChannel().disconnect(this);
+    }
     m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+    m_notationAutomationController->editedPointDataChannel().onReceive(this, [this](const QPointF& viewPos, const QString& val) {
+        if (val.isEmpty()) {
+            emit hideAutomationTooltipRequested();
+            return;
+        }
+        emit showAutomationTooltipRequested(viewPos, val);
+    });
+
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
