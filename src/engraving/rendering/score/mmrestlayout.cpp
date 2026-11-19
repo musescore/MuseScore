@@ -667,6 +667,7 @@ bool MMRestLayout::breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         ElementType::VOLTA,
         ElementType::GRADUAL_TEMPO_CHANGE,
         ElementType::TEXTLINE,
+        ElementType::BOXLINE
     };
     // Break for spanners/textLines in this measure
     auto sl = ctx.dom().spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
