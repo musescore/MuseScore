@@ -251,8 +251,8 @@ public:
 
     Q_INVOKABLE void resetPalette(const QModelIndex&);
 
-    Q_INVOKABLE bool savePalette(const QModelIndex&);
-    Q_INVOKABLE bool loadPalette(const QModelIndex&);
+    Q_INVOKABLE void savePalette(const QModelIndex&);
+    Q_INVOKABLE void loadPalette(const QModelIndex&);
 
     Q_INVOKABLE void setSearching(bool searching);
     Q_INVOKABLE void setFilter(const QString&);
@@ -301,7 +301,7 @@ private:
     FilterPaletteTreeModel* customElementsPaletteModel();
     AbstractPaletteController* customElementsPaletteController();
 
-    QString getPaletteFilename(bool open, const QString& name = "") const;
+    muse::async::Promise<muse::io::path_t> selectPaletteFile(bool open, const QString& name = "") const;
 
     void doResetPalette(const QModelIndex& index);
 
