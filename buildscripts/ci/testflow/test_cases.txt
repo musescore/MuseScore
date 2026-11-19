@@ -13,3 +13,4 @@ TC2_CreateSimpleScoreByTemplate
 TC3_UsingNoteInputToolbar
 TC5_UsingInstruments
 TC8_EngravingText
+TC11_MeasuresUndoRedo
