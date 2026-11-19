@@ -4236,7 +4236,7 @@ MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
             // Find previous section break
             auto inCurrentSection { true };
             while (inCurrentSection && destination) {
-                if (destination->index()) {
+                if (destination->measureBaseIndex()) {
                     // Safety: SegFaults if invoking prev() when index=0
                     //         even when MeasureBase* is valid!
                     destination = destination->prev();

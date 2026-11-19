@@ -3421,6 +3421,32 @@ void Measure::triggerLayout(staff_idx_t staffIdx) const
 }
 
 //---------------------------------------------------------
+//   measureIndex
+//    returns index of measure counting only Measures but
+//    skipping other MeasureBase descendants
+//---------------------------------------------------------
+
+int Measure::measureIndex() const
+{
+    int idx = 0;
+    MeasureBase* m = score()->firstMeasure();
+    Measure* mmRestFirst = nullptr;
+    if (isMMRest()) {
+        mmRestFirst = this->mmRestFirst();
+    }
+    while (m) {
+        if (m == this || m == mmRestFirst) {
+            return idx;
+        }
+        m = m->next();
+        if (m && m->isMeasure()) {
+            ++idx;
+        }
+    }
+    return -1;
+}
+
+//---------------------------------------------------------
 //   setEndBarLineType
 //     Create a *generated* barline with the given type and
 //     properties if none exists. Modify if it exists.

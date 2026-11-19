@@ -167,8 +167,7 @@ public:
 
     virtual void computeMinWidth() { }
 
-    int index() const;
-    int measureIndex() const;
+    int measureBaseIndex() const; //! NOTE: counts all MeasureBase types (i.e. boxes too)
 
     bool isBefore(const EngravingItem* other) const override;
     bool isBefore(const MeasureBase* other) const;
