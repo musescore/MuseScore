@@ -24,13 +24,16 @@
 
 #include "engraving/api/v1/apistructs.h"
 #include "engraving/api/v1/cursor.h"
+#include "engraving/api/v1/elements.h"
 
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/editing/edittimesig.h"
@@ -410,6 +413,149 @@ TEST(Engraving_ApiCursorTests, addTupletInsideLongerChord)
     EXPECT_FALSE(half->tuplet());
     EXPECT_EQ(half->ticks(), Fraction(1, 2));
     EXPECT_FALSE(chordRestAt(score, Fraction(1, 8), 1));
+
+    delete score;
+}
+
+// adding lines (spanners) via Cursor::add()
+
+static Spanner* addLine(Score* score, apiv1::Cursor& cursor, ElementType type, const Fraction& presetTicks = Fraction(0, 1))
+{
+    EngravingItem* item = Factory::createItem(type, score->dummy());
+    Spanner* spanner = toSpanner(item);
+    if (presetTicks > Fraction(0, 1)) {
+        spanner->setTicks(presetTicks);
+    }
+    apiv1::EngravingItem* wrapped = apiv1::wrap(item, apiv1::Ownership::PLUGIN);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving API cursor tests"));
+    cursor.add(wrapped);
+    score->endCmd();
+
+    return spanner;
+}
+
+static void expectLine(Score* score, Spanner* spanner, ElementType type, const Fraction& tick, const Fraction& tick2,
+                       track_idx_t track)
+{
+    ASSERT_TRUE(spanner);
+    EXPECT_EQ(spanner->type(), type);
+    EXPECT_FALSE(spanner->ownershipParent() && spanner->ownershipParent()->isSegment());
+    EXPECT_EQ(spanner->tick(), tick);
+    EXPECT_EQ(spanner->tick2(), tick2);
+    EXPECT_EQ(spanner->track(), track);
+
+    const auto& spanners = score->spannerMap().map();
+    const bool inMap = std::any_of(spanners.begin(), spanners.end(), [spanner](const auto& p) { return p.second == spanner; });
+    EXPECT_TRUE(inMap);
+}
+
+TEST(Engraving_ApiCursorTests, addBoxLine)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    // Add a boxLine that spans one chord
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 2);
+    Spanner* spanner = addLine(score, cursor, ElementType::BOXLINE);
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    expectLine(score, spanner, ElementType::BOXLINE, Fraction(2, 8), Fraction(3, 8), 0);
+    ASSERT_FALSE(spanner->segmentsEmpty());
+    EXPECT_TRUE(spanner->frontSegment()->isBoxLineSegment());
+
+    // undo removes it, redo brings it back
+    EditData ed;
+    score->undoRedo(true, &ed);
+    EXPECT_TRUE(score->spannerMap().map().empty());
+    score->undoRedo(false, &ed);
+    expectLine(score, spanner, ElementType::BOXLINE, Fraction(2, 8), Fraction(3, 8), 0);
+
+    delete score;
+}
+
+// issue #33056: adding a text line used to assert in Segment::add()
+TEST(Engraving_ApiCursorTests, addTextLine)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 0);
+    Spanner* spanner = addLine(score, cursor, ElementType::TEXTLINE);
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    expectLine(score, spanner, ElementType::TEXTLINE, Fraction(0, 1), Fraction(1, 8), 0);
+
+    delete score;
+}
+
+// a line on the last chord of a measure ends at the end of the measure
+TEST(Engraving_ApiCursorTests, addLineOnLastChordOfMeasure)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 7);
+    Spanner* spanner = addLine(score, cursor, ElementType::BOXLINE);
+
+    expectLine(score, spanner, ElementType::BOXLINE, Fraction(7, 8), Fraction(1, 1), 0);
+
+    delete score;
+}
+
+// a length set before adding the line is kept
+TEST(Engraving_ApiCursorTests, addLineWithPresetLength)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 1);
+    Spanner* spanner = addLine(score, cursor, ElementType::BOXLINE, Fraction(3, 2));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    expectLine(score, spanner, ElementType::BOXLINE, Fraction(1, 8), Fraction(13, 8), 0);
+
+    delete score;
+}
+
+// a line is added to the cursor's staff
+TEST(Engraving_ApiCursorTests, addLineOnSecondStaff)
+{
+    MasterScore* score = readScoreWithLocalTimeSig(Fraction(4, 4), Fraction(4, 4));
+    ASSERT_TRUE(score);
+    ASSERT_GE(score->nstaves(), 2u);
+
+    apiv1::Cursor cursor(score);
+    cursor.setStaffIdx(1);
+    cursor.rewind(apiv1::Cursor::SCORE_START);
+    Spanner* spanner = addLine(score, cursor, ElementType::BOXLINE);
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    expectLine(score, spanner, ElementType::BOXLINE, Fraction(0, 1), Fraction(1, 1), staff2track(1));
+
+    delete score;
+}
+
+TEST(Engraving_ApiCursorTests, addHairpin)
+{
+    MasterScore* score = readScoreWithEighths();
+    ASSERT_TRUE(score);
+
+    apiv1::Cursor cursor(score);
+    rewindTo(cursor, 3);
+    Spanner* spanner = addLine(score, cursor, ElementType::HAIRPIN, Fraction(1, 4));
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    expectLine(score, spanner, ElementType::HAIRPIN, Fraction(3, 8), Fraction(5, 8), 0);
 
     delete score;
 }

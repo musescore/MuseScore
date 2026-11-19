@@ -36,7 +36,7 @@ class EditSpanner
 public:
     static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, const PointF& pos, bool systemStavesOnly = false);
     static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
-                           Segment* endSegment, bool ctrlModifier = false);
+                           Segment* endSegment, bool ctrlModifier = false, voice_idx_t voice = 0);
 };
 
 class ChangeSpannerElements : public UndoableCommand
