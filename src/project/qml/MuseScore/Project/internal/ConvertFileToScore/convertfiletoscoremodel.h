@@ -98,7 +98,7 @@ public:
     Q_INVOKABLE void load(const QStringList& paths, int type);
 
     Q_INVOKABLE bool validateAndAddFiles(const QStringList& pathsOrUrls);
-    Q_INVOKABLE bool selectAndValidateFiles();
+    Q_INVOKABLE void selectAndValidateFiles();
 
     Q_INVOKABLE QString validateFileName(const QString& name) const;
     Q_INVOKABLE bool validateLink(const QString& link) const;
@@ -114,13 +114,15 @@ signals:
     void fileRequirementsChanged();
     void cancelConfirmed();
     void goingBackConfirmed();
+    void selectedFilesAdded();
 
 private:
     void setConvertType(int type);
 
     QStringList boldLinkSources() const;
 
-    QStringList selectFiles(const QStringList& existingPaths = {});
+    std::vector<std::string> filePickerFilters(const QStringList& existingPaths) const;
+    void onFilesSelected(const muse::io::paths_t& files);
 
     ConvertType m_convertType = ConvertType::Omr;
     FileListModel* m_fileListModel = nullptr;

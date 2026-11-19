@@ -50,6 +50,14 @@ async::Promise<IInteractive::Result> resolvedResultPromise(const IInteractive::R
     return resolvedPromise(result);
 }
 
+template<typename T>
+async::Promise<T> cancelledPromise()
+{
+    return async::make_promise<T>([](auto, auto reject) {
+        return reject(int(Ret::Code::Cancel), "");
+    });
+}
+
 Matcher<const IInteractive::Text&> TextIs(const std::string& text)
 {
     return Field(&IInteractive::Text::text, text);
@@ -128,6 +136,20 @@ protected:
 
         ON_CALL(*m_scenario, config())
         .WillByDefault(ReturnRef(m_config));
+    }
+
+    //! Whether the selected files were added, once the user answers
+    bool selectAndValidateFiles()
+    {
+        bool added = false;
+        QMetaObject::Connection connection = QObject::connect(&m_model, &ConvertFileToScoreModel::selectedFilesAdded,
+                                                              [&added]() { added = true; });
+
+        m_model.selectAndValidateFiles();
+        async::processMessages();
+
+        QObject::disconnect(connection);
+        return added;
     }
 
     void setAudioComUrl(const QString& url)
@@ -691,10 +713,10 @@ TEST_F(Project_ConvertFileToScoreModelTest, SelectAndValidateFiles_NoFiles_Offer
     // [THEN] The multiple files picker is opened, offering every supported format
     const io::path_t pickedFile = "/some/dir/file.png";
     EXPECT_CALL(*m_interactive,
-                selectOpeningFilesSync(muse::trc("ui", "Choose file"), defaultDir,
-                                       filePickerFilters("*.pdf *.png *.jpg *.jpeg *.mp3"), _))
-    .WillOnce(Return(io::paths_t { pickedFile }));
-    EXPECT_CALL(*m_interactive, selectOpeningFileSync(_, _, _, _)).Times(0);
+                selectOpeningFiles(muse::trc("ui", "Choose file"), defaultDir,
+                                   filePickerFilters("*.pdf *.png *.jpg *.jpeg *.mp3")))
+    .WillOnce(Return(resolvedPromise(io::paths_t { pickedFile })));
+    EXPECT_CALL(*m_interactive, selectOpeningFile(_, _, _)).Times(0);
 
     // [THEN] The directory of the picked file is remembered
     EXPECT_CALL(*m_configuration, setLastOpenedConvertFilePath(io::dirpath(pickedFile)))
@@ -703,10 +725,10 @@ TEST_F(Project_ConvertFileToScoreModelTest, SelectAndValidateFiles_NoFiles_Offer
     expectValidateFiles({ pickedFile }, ConvertType::Omr, FileCategory::Image);
 
     // [WHEN] Selecting files
-    const bool ok = m_model.selectAndValidateFiles();
+    const bool added = selectAndValidateFiles();
 
     // [THEN] The picked file is added
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(added);
     EXPECT_EQ(m_model.fileListModel()->paths(), QStringList({ pickedFile.toQString() }));
 }
 
@@ -719,17 +741,17 @@ TEST_F(Project_ConvertFileToScoreModelTest, SelectAndValidateFiles_SingleFileOnl
 
     // [THEN] The single file picker is opened
     const io::path_t pickedFile = "/some/dir/file.pdf";
-    EXPECT_CALL(*m_interactive, selectOpeningFileSync(_, _, _, _))
-    .WillOnce(Return(pickedFile));
-    EXPECT_CALL(*m_interactive, selectOpeningFilesSync(_, _, _, _)).Times(0);
+    EXPECT_CALL(*m_interactive, selectOpeningFile(_, _, _))
+    .WillOnce(Return(resolvedPromise(pickedFile)));
+    EXPECT_CALL(*m_interactive, selectOpeningFiles(_, _, _)).Times(0);
 
     expectValidateFiles({ pickedFile }, ConvertType::Omr, FileCategory::Pdf);
 
     // [WHEN] Selecting files
-    const bool ok = m_model.selectAndValidateFiles();
+    const bool added = selectAndValidateFiles();
 
     // [THEN] The picked file is added
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(added);
     EXPECT_EQ(m_model.fileListModel()->paths(), QStringList({ pickedFile.toQString() }));
 }
 
@@ -740,34 +762,34 @@ TEST_F(Project_ConvertFileToScoreModelTest, SelectAndValidateFiles_ExistingFiles
     m_model.load({ "/some/first.JPG" }, int(ConvertType::Omr));
 
     // [THEN] The picker only offers JPG/JPEG files
-    EXPECT_CALL(*m_interactive, selectOpeningFilesSync(_, _, filePickerFilters("*.jpg *.jpeg"), _))
-    .WillOnce(Return(io::paths_t { "/some/second.jpeg" }));
+    EXPECT_CALL(*m_interactive, selectOpeningFiles(_, _, filePickerFilters("*.jpg *.jpeg")))
+    .WillOnce(Return(resolvedPromise(io::paths_t { "/some/second.jpeg" })));
 
     expectValidateFiles({ "/some/first.JPG", "/some/second.jpeg" }, ConvertType::Omr, FileCategory::Image);
 
     // [WHEN] Selecting more files
-    const bool ok = m_model.selectAndValidateFiles();
+    const bool added = selectAndValidateFiles();
 
     // [THEN] The picked file is appended
-    EXPECT_TRUE(ok);
+    EXPECT_TRUE(added);
     EXPECT_EQ(m_model.fileListModel()->paths(), QStringList({ "/some/first.JPG", "/some/second.jpeg" }));
 }
 
 TEST_F(Project_ConvertFileToScoreModelTest, SelectAndValidateFiles_Cancelled_DoesNothing)
 {
     // [GIVEN] The user cancels the file picker
-    EXPECT_CALL(*m_interactive, selectOpeningFilesSync(_, _, _, _))
-    .WillOnce(Return(io::paths_t()));
+    EXPECT_CALL(*m_interactive, selectOpeningFiles(_, _, _))
+    .WillOnce(Return(cancelledPromise<io::paths_t>()));
 
     // [THEN] Nothing is validated or remembered
     EXPECT_CALL(*m_scenario, validateFiles(_)).Times(0);
     EXPECT_CALL(*m_configuration, setLastOpenedConvertFilePath(_)).Times(0);
 
     // [WHEN] Selecting files
-    const bool ok = m_model.selectAndValidateFiles();
+    const bool added = selectAndValidateFiles();
 
     // [THEN] No files are added
-    EXPECT_FALSE(ok);
+    EXPECT_FALSE(added);
     EXPECT_EQ(m_model.fileListModel()->rowCount(), 0);
 }
 
