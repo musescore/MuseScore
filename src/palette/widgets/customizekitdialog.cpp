@@ -610,27 +610,28 @@ void CustomizeKitDialog::load()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
-    muse::io::path_t fname = interactive()->selectOpeningFileSync(muse::trc("palette", "Load drumset"), dir, filter);
-
-    if (fname.empty()) {
-        return;
-    }
-
-    if (!isDrumsetFileTooOld(fname)) {
-        loadDrumset(fname);
-        return;
-    }
-
-    interactive()->warning(
-        muse::trc("palette", "Drumset file too old"),
-        muse::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
-        muse::IInteractive::Button::Cancel,
-        muse::IInteractive::Button::Ignore
-    }, muse::IInteractive::Button::Cancel)
-    .onResolve(this, [this, fname](const muse::IInteractive::Result& result) {
-        if (result.standardButton() == muse::IInteractive::Button::Ignore) { // Cancel and Esc do not load
-            loadDrumset(fname);
+    interactive()->selectOpeningFile(muse::trc("palette", "Load drumset"), dir, filter)
+    .onResolve(this, [this](const muse::io::path_t& fname) {
+        if (fname.empty()) {
+            return;
         }
+
+        if (!isDrumsetFileTooOld(fname)) {
+            loadDrumset(fname);
+            return;
+        }
+
+        interactive()->warning(
+            muse::trc("palette", "Drumset file too old"),
+            muse::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
+            muse::IInteractive::Button::Cancel,
+            muse::IInteractive::Button::Ignore
+        }, muse::IInteractive::Button::Cancel)
+        .onResolve(this, [this, fname](const muse::IInteractive::Result& result) {
+            if (result.standardButton() == muse::IInteractive::Button::Ignore) { // Cancel and Esc do not load
+                loadDrumset(fname);
+            }
+        });
     });
 }
 
@@ -687,12 +688,18 @@ void CustomizeKitDialog::save()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
-    muse::io::path_t fname = interactive()->selectSavingFileSync(muse::trc("palette", "Save drumset"), dir, filter);
+    interactive()->selectSavingFile(muse::trc("palette", "Save drumset"), dir, filter)
+    .onResolve(this, [this](const muse::io::path_t& fname) {
+        if (fname.empty()) {
+            return;
+        }
 
-    if (fname.empty()) {
-        return;
-    }
+        saveDrumset(fname);
+    });
+}
 
+void CustomizeKitDialog::saveDrumset(const muse::io::path_t& fname)
+{
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
     valueChanged();    //save last changes in name
     XmlWriter xml(&outBuf);
