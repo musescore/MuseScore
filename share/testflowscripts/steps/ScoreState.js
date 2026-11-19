@@ -22,9 +22,43 @@
 
 var engraving = require("MuseApi.Engraving")
 
+//! NOTE A note as stored in a snapshot: where it starts, how long it is and its pitch
+function noteKey(tick, duration, pitch)
+{
+    return tick + ":" + duration + ":" + pitch
+}
+
+//! NOTE All notes on one track, in score order: [{tick, duration, pitch}]
+//! tick and duration are in ticks (a quarter note is 480).
+function notesOnTrack(track)
+{
+    var score = engraving.curScore
+    var result = []
+    if (!score) {
+        return result
+    }
+
+    var cursor = score.newCursor()
+    cursor.track = track
+    cursor.rewind(0) // SCORE_START
+    while (cursor.segment) {
+        var el = cursor.element
+        if (el && el.type === engraving.Element.CHORD) {
+            var duration = el.actualDuration.ticks
+            var notes = el.notes
+            for (var n = 0; n < notes.length; ++n) {
+                result.push({ tick: cursor.tick, duration: duration, pitch: notes[n].pitch })
+            }
+        }
+        cursor.next()
+    }
+    return result
+}
+
 //! NOTE A compact description of the score content, used to check that an action
 //! (or its undo/redo) left the score in the expected state.
-//! Contains the measure count, the track count and the pitches of all notes per track.
+//! Contains the measure count, the track count, and for every track the
+//! position (tick), duration and pitch of each note.
 function snapshot()
 {
     var score = engraving.curScore
@@ -36,29 +70,32 @@ function snapshot()
         measures: score.nmeasures,
         tracks: score.ntracks,
         notes: 0,
-        pitches: []
+        content: []
     }
 
-    var cursor = score.newCursor()
     for (var t = 0; t < score.ntracks; ++t) {
-        cursor.track = t
-        cursor.rewind(0) // SCORE_START
-        var pitches = []
-        while (cursor.segment) {
-            var el = cursor.element
-            if (el && el.type === engraving.Element.CHORD) {
-                var notes = el.notes
-                for (var n = 0; n < notes.length; ++n) {
-                    pitches.push(notes[n].pitch)
-                }
-            }
-            cursor.next()
-        }
-        state.notes += pitches.length
-        state.pitches.push(pitches.join(","))
+        var keys = notesOnTrack(t).map(function(n) { return noteKey(n.tick, n.duration, n.pitch) })
+        state.notes += keys.length
+        state.content.push(keys.join(","))
     }
 
     return state
+}
+
+//! NOTE Describes the first difference between two snapshots, for error messages
+function firstDifference(expected, actual)
+{
+    if (!expected || !actual) {
+        return ""
+    }
+    for (var t = 0; t < expected.content.length; ++t) {
+        var e = expected.content[t] || ""
+        var a = (actual.content && actual.content[t]) || ""
+        if (e !== a) {
+            return "; track " + t + " expected notes (tick:duration:pitch) [" + e + "], got [" + a + "]"
+        }
+    }
+    return ""
 }
 
 function describe(state)
@@ -79,7 +116,8 @@ function expectEquals(expected, what)
 {
     var actual = snapshot()
     if (!equals(actual, expected)) {
-        api.testflow.fatal(what + ": expected [" + describe(expected) + "], got [" + describe(actual) + "]")
+        api.testflow.fatal(what + ": expected [" + describe(expected) + "], got [" + describe(actual) + "]"
+                           + firstDifference(expected, actual))
     }
     api.log.info("[testflow] " + what + ": OK [" + describe(actual) + "]")
 }
@@ -102,6 +140,18 @@ function expectNotes(count, what)
     api.log.info("[testflow] " + what + ": OK (" + actual + " notes)")
 }
 
+//! NOTE Fails the test case if the notes on `track` are not exactly `expected`
+//! ([{tick, duration, pitch}], in score order)
+function expectTrackNotes(track, expected, what)
+{
+    var actual = notesOnTrack(track)
+    var e = expected.map(function(n) { return noteKey(n.tick, n.duration, n.pitch) }).join(",")
+    var a = actual.map(function(n) { return noteKey(n.tick, n.duration, n.pitch) }).join(",")
+    if (e !== a) {
+        api.testflow.fatal(what + ": track " + track + " expected notes (tick:duration:pitch) [" + e + "], got [" + a + "]")
+    }
+    api.log.info("[testflow] " + what + ": OK (" + actual.length + " notes at the expected positions)")
+}
 
 // Select `count` whole measures on all staves as a range, starting at the
 // measure with index `startIndex` (0 = first measure).
@@ -131,11 +181,13 @@ function selectMeasures(startIndex, count)
 }
 
 module.exports = {
-    selectMeasures,
+    selectMeasures: selectMeasures,
+    notesOnTrack: notesOnTrack,
     snapshot: snapshot,
     describe: describe,
     equals: equals,
     expectEquals: expectEquals,
     expectMeasures: expectMeasures,
-    expectNotes: expectNotes
+    expectNotes: expectNotes,
+    expectTrackNotes: expectTrackNotes
 }
