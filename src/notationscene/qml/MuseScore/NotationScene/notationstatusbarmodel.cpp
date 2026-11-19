@@ -42,7 +42,7 @@
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 #include "workspace/workspacecommands.h"
 
 using namespace mu::notation;

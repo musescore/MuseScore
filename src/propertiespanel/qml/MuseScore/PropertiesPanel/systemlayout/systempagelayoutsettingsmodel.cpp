@@ -30,7 +30,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;

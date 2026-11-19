@@ -26,7 +26,7 @@
 #include "notation/inotation.h"
 
 #include "project/projectcommands.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 #include "palette/palettecommands.h"
 #include "diagnostics/diagnosticscommands.h"
 

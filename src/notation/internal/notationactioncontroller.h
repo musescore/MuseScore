@@ -41,8 +41,8 @@
 #include "notation/inotation_fwd.h"
 #include "notation/notationtypes.h"
 
-#include "inotationviewcontroller.h"
-#include "notationcommands.h"
+#include "../inotationviewcontroller.h"
+#include "../notationcommands.h"
 
 namespace mu::notation {
 class NotationActionController : public INotationCommandsController, public muse::rcommand::Commandable, public muse::async::Asyncable,

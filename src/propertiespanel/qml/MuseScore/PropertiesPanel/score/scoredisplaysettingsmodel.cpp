@@ -23,7 +23,7 @@
 #include "scoredisplaysettingsmodel.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "translation.h"
 

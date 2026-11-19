@@ -23,7 +23,7 @@
 
 #include <QtEvents>
 
-#include "../../../internal/inotationviewcontroller.h"
+#include "notation/inotationviewcontroller.h"
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
@@ -38,7 +38,7 @@
 #include "notation/inotationcontextconfiguration.h"
 #include "notation/types/viewmode.h"
 
-#include "notationscene/inotationcommandscontroller.h"
+#include "notation/inotationcommandscontroller.h"
 
 #include "playback/iplaybackcontroller.h"
 
@@ -139,6 +139,7 @@ public:
     void openContextMenuOfSelection() override;
 
     void togglePopupForItemIfSupports(const EngravingItem* item) override;
+    bool elementHasEditPopup(const EngravingItem* item) const override;
 
     void showSearch() override;
 

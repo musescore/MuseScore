@@ -44,7 +44,7 @@
 #include "project/inotationproject.h" // IWYU pragma: keep
 #include "project/iprojectaudiosettings.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 #include "palette/palettecommands.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");

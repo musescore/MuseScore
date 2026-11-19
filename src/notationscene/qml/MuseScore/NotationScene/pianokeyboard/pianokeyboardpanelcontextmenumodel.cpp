@@ -25,7 +25,7 @@
 #include "types/number.h"
 #include "types/translatablestring.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "log.h"
 

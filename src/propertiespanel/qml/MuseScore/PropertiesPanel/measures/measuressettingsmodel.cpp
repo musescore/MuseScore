@@ -25,7 +25,7 @@
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace muse::rcommand;
 using namespace mu::propertiespanel;

@@ -24,7 +24,7 @@
 
 #include "translation.h"
 
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;

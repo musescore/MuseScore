@@ -40,7 +40,7 @@
 #include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "playback/playbackcommands.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "log.h"
 

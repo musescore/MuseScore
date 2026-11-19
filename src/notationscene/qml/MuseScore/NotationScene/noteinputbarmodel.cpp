@@ -30,7 +30,7 @@
 #include "notation/inotationselection.h"
 #include "notation/inotationundostack.h"
 
-#include "notationcommands.h"
+#include "notation/notationcommands.h"
 
 using namespace mu;
 using namespace mu::notation;

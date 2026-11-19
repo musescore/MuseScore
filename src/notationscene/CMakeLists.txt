@@ -25,23 +25,12 @@ target_sources(notationscene PRIVATE
     notationscenemodule.h
 
     inotationsceneconfiguration.h
-    inotationcommandscontroller.h
     iselectinstrumentscenario.h
 
-    notationcommands.h
-    notationcommandsenums.h
-
-    internal/inotationviewcontroller.h
     internal/notationsceneconfiguration.cpp
     internal/notationsceneconfiguration.h
     internal/midiinputoutputcontroller.cpp
     internal/midiinputoutputcontroller.h
-    internal/notationactioncontroller.cpp
-    internal/notationactioncontroller.h
-    internal/notationcommandsregister.cpp
-    internal/notationcommandsregister.h
-    internal/notationcommandsstate.cpp
-    internal/notationcommandsstate.h
 
     utilities/engravingitempreviewpainter.cpp
     utilities/engravingitempreviewpainter.h

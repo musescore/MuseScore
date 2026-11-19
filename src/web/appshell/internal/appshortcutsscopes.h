@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "shortcuts_v2/ishortcutsresolver.h"
 #include "ui/inavigationcontroller.h"
-#include "notationscene/inotationcommandscontroller.h"
+#include "notation/inotationcommandscontroller.h"
 
 namespace mu::appshell {
 //! NOTE Sets the shortcut scopes of the app: their titles and priorities.

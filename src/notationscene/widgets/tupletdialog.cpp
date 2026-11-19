@@ -24,7 +24,7 @@
 
 #include "notation/inotation.h"
 #include "notation/inotationstyle.h"
-#include "notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "ui/view/widgetstatestore.h"
 

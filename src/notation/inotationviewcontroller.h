@@ -53,6 +53,7 @@ public:
     virtual void openContextMenuOfSelection() = 0;
 
     virtual void togglePopupForItemIfSupports(const mu::engraving::EngravingItem* item) = 0;
+    virtual bool elementHasEditPopup(const mu::engraving::EngravingItem* item) const = 0;
 
     virtual void showSearch() = 0;
 

@@ -25,7 +25,7 @@
 #include "stringutils.h"
 
 #include "notation/imasternotation.h"
-#include "notationscene/notationcommands.h"
+#include "notation/notationcommands.h"
 
 #include "log.h"
 
