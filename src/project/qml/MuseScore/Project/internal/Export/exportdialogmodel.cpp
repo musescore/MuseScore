@@ -25,7 +25,6 @@
 #include <algorithm>
 
 #include <QItemSelectionModel>
-#include <QTimer>
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
@@ -415,7 +414,7 @@ void ExportDialogModel::setUnitType(UnitType unitType)
     emit selectedUnitTypeChanged(unitType);
 }
 
-bool ExportDialogModel::exportScores()
+void ExportDialogModel::exportScores()
 {
     INotationPtrList notations;
 
@@ -424,42 +423,21 @@ bool ExportDialogModel::exportScores()
     }
 
     if (notations.empty()) {
-        return false;
+        return;
     }
 
-    std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
+    exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, m_exportDirPath)
+    .onResolve(this, [this, notations](const muse::io::path_t& exportPath) {
+        if (exportPath.empty()) {
+            return;
+        }
 
-    RetVal<muse::io::path_t> exportPath
-        = scenario->askExportPath(notations, m_selectedExportType, m_selectedUnitType, m_exportDirPath);
-    if (!exportPath.ret) {
-        return false;
-    }
+        m_exportDirPath = io::absoluteDirpath(exportPath);
 
-    m_exportDirPath = io::absoluteDirpath(exportPath.val);
+        exportProjectScenario()->exportScores(notations, exportPath, m_selectedUnitType, shouldDestinationFolderBeOpenedOnExport());
 
-    struct Params {
-        INotationPtrList notations;
-        muse::io::path_t exportPath;
-        project::INotationWriter::UnitType selectedUnitType;
-        bool openFolderOnExport = false;
-    };
-
-    //! NOTE We want to call the scenario method on the next event loop.
-    //! But by that point, the dialog may already be destroyed.
-    //! Therefore, we save everything we need in variables
-    //! and pass them to the lambda.
-    //! We can't access the dialog class member in the lambda body.
-    Params params{ notations, exportPath.val, m_selectedUnitType,
-                   shouldDestinationFolderBeOpenedOnExport() };
-
-    //! NOTE We can't use Async here
-    // because the async::processMessages is called deep within the functions,
-    // and this can't be done in Async's callback.
-    QTimer::singleShot(0, [scenario, params]() {
-        scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
+        emit exportStarted();
     });
-
-    return true;
 }
 
 int ExportDialogModel::pdfResolution() const
