@@ -118,7 +118,8 @@ public:
     Ret openUrl(const QUrl& url) const override;
 
     Ret isAppExists(const std::string& appIdentifier) const override;
-    Ret canOpenApp(const UriQuery& uri) const override;
+    Ret canOpenAppSync(const UriQuery& uri) const override;
+    async::Promise<Ret> canOpenApp(const UriQuery& uri) const override;
     async::Promise<Ret> openApp(const UriQuery& uri) const override;
 
     Ret revealInFileBrowser(const io::path_t& filePath) const override;

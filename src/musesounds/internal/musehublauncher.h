@@ -43,6 +43,7 @@ public:
     void openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
 
 private:
-    void doOpen(const MuseHubUrls& urls);
+    void tryOpenMuseHub(const MuseHubUrls& urls);
+    void openMuseHubApp(const muse::UriQuery& museHubUri, const std::string& webUrl);
 };
 }

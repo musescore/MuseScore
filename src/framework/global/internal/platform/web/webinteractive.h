@@ -108,7 +108,8 @@ public:
     muse::Ret openUrl(const QUrl& url) const override;
 
     muse::Ret isAppExists(const std::string& appIdentifier) const override;
-    muse::Ret canOpenApp(const muse::UriQuery& uri) const override;
+    muse::Ret canOpenAppSync(const muse::UriQuery& uri) const override;
+    muse::async::Promise<muse::Ret> canOpenApp(const muse::UriQuery& uri) const override;
     muse::async::Promise<muse::Ret> openApp(const muse::UriQuery& uri) const override;
 
     muse::Ret revealInFileBrowser(const muse::io::path_t& filePath) const override;

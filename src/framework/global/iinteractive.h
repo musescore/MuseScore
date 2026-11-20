@@ -256,7 +256,9 @@ public:
     virtual Ret openUrl(const QUrl& url) const = 0;
 
     virtual Ret isAppExists(const std::string& appIdentifier) const = 0;
-    virtual Ret canOpenApp(const UriQuery& uri) const = 0;
+    //! NOTE: Deprecated, use canOpenApp
+    virtual Ret canOpenAppSync(const UriQuery& uri) const = 0;
+    virtual async::Promise<Ret> canOpenApp(const UriQuery& uri) const = 0;
     virtual async::Promise<Ret> openApp(const UriQuery& uri) const = 0;
 
     /// Opens a file browser at the parent directory of filePath,
