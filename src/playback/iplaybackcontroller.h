@@ -58,6 +58,9 @@ public:
 
     virtual muse::audio::secs_t playbackPosition() const = 0;
     virtual muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const = 0;
+
+    //! Raw (score) tick that "play from selection" would start from
+    virtual int playFromSelectionStartTick() const = 0;
 };
 
 class IPlaybackController : public IPlaybackState

@@ -4863,6 +4863,10 @@ void NotationInteraction::onElementDestroyed(EngravingItem* element)
         m_hitElementContext.element = nullptr;
         m_hitElementContext.staff = nullptr;
     }
+
+    if (m_selection) {
+        m_selection->onElementDestroyed(element);
+    }
 }
 
 void NotationInteraction::splitSelectedMeasure()
