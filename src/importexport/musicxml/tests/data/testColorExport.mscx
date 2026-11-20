@@ -214,6 +214,7 @@
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <color r="1" g="2" b="3" a="127"/>
               <Spanner type="Tie">
                 <prev>
                   <location>
