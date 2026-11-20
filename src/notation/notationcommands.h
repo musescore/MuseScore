@@ -2813,8 +2813,21 @@ struct OpenRealizeChordSymbolsCommand {
 };
 
 // style commands
-inline static const muse::rcommand::Command LOAD_STYLE_COMMAND("command://notation/load-style");
-inline static const muse::rcommand::Command SAVE_STYLE_COMMAND("command://notation/save-style");
+
+struct LoadStyleCommand {
+    cprop_decl id = Command("command://notation/load-style");
+    cprop_decl title = MnemonicString("action", "&Load style…");
+    cprop_decl description = TranslatableString("action", "Load style");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct SaveStyleCommand {
+    cprop_decl id = Command("command://notation/save-style");
+    cprop_decl title = MnemonicString("action", "S&ave style…");
+    cprop_decl description = TranslatableString("action", "Save style");
+    cprop_decl availabilities = Availability::All;
+};
+
 inline static const muse::rcommand::Command OPEN_EDIT_STYLE_COMMAND("command://notation/open-edit-style");
 inline static const muse::rcommand::Command TOGGLE_CONCERT_PITCH_COMMAND("command://notation/toggle-concert-pitch");
 

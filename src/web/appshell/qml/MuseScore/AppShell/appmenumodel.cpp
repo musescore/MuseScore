@@ -365,8 +365,8 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem(RESET_SHAPES_AND_POSITIONS_COMMAND),
         makeMenuItem(RESET_TO_DEFAULT_LAYOUT_COMMAND),
         makeSeparator(),
-        makeMenuItem(LOAD_STYLE_COMMAND),
-        makeMenuItem(SAVE_STYLE_COMMAND)
+        makeMenuItem(LoadStyleCommand::id),
+        makeMenuItem(SaveStyleCommand::id)
     };
 
     return makeMenu(TranslatableString("appshell/menu/format", "F&ormat"), formatItems, "menu-format");
