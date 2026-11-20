@@ -6243,7 +6243,7 @@ bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIt
     return true;
 }
 
-void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
@@ -6256,17 +6256,17 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
-    doAddText(type, item);
+    doAddText(type, item, placement);
 }
 
-void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
     }
 
     startEdit(TranslatableString("undoableAction", "Add text"));
-    mu::engraving::TextBase* text = score()->addText(type, item);
+    mu::engraving::TextBase* text = score()->addText(type, item, placement);
 
     if (!text) {
         rollback();
@@ -7232,6 +7232,215 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
     showItem(fbNew);
 }
 
+static bool isMultiVoiceChord(const Chord* chord)
+{
+    const Measure* measure = chord ? chord->measure() : nullptr;
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+    return measure->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
+}
+
+static bool shouldPreservePlacement(const TextBase* text)
+{
+    IF_ASSERT_FAILED(text) {
+        return false;
+    }
+    // for these types - the near text must have the same placement as the item we're navigating from
+    static const std::unordered_set<mu::engraving::TextStyleType> PRESERVE_PLACEMENT_TYPES {
+        TextStyleType::STICKING,
+        TextStyleType::FINGERING,
+        TextStyleType::RH_GUITAR_FINGERING,
+        TextStyleType::STRING_NUMBER,
+    };
+    return muse::contains(PRESERVE_PLACEMENT_TYPES, text->textStyleType());
+}
+
+// is item a TextBase with the same type, style, and placement as origText?
+static bool isMatchingText(const EngravingItem* item, const TextBase* origText)
+{
+    IF_ASSERT_FAILED(item && origText) {
+        return false;
+    }
+    if (item->type() != origText->type()) {
+        return false;
+    }
+    const TextBase* itemText = mu::engraving::toTextBase(item);
+    const bool matchingStyle = itemText->textStyleType() == origText->textStyleType();
+    const bool matchingPlacement = itemText->placement() == origText->placement();
+    return matchingStyle && (matchingPlacement || !shouldPreservePlacement(origText));
+}
+
+// Return whether text at note can have the same above/below placement as origText. For multi-voice
+// fingerings, the chord's automatic side must match, or the note must already have matching text...
+static bool canMatchPlacement(const Note* note, const TextBase* origText)
+{
+    IF_ASSERT_FAILED(note && origText) {
+        return false;
+    }
+
+    const Chord* chord = note->chord();
+    if (!shouldPreservePlacement(origText) || !origText->isFingering() || !isMultiVoiceChord(chord)) {
+        return true;
+    }
+
+    // only visit notes whose fingering is drawn on the same side as origText
+    const PlacementV chordPlacement = chord->up() ? PlacementV::ABOVE : PlacementV::BELOW;
+    if (chordPlacement == origText->placement()) {
+        return true;
+    }
+
+    for (const EngravingItem* item : note->el()) {
+        if (isMatchingText(item, origText)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static std::vector<Note*> notesInTextNavigationOrder(Chord* chord, bool back)
+{
+    IF_ASSERT_FAILED(chord) {
+        return {};
+    }
+
+    std::vector<Chord*> chords = chord->allGraceChordsOfMainChord();
+    if (back) {
+        std::reverse(chords.begin(), chords.end());
+    }
+
+    std::vector<Note*> result;
+    for (const Chord* groupChord : chords) {
+        std::vector<Note*> notes = groupChord->notes();
+        if (!back) {
+            std::reverse(notes.begin(), notes.end());
+        }
+
+        result.insert(result.end(), notes.begin(), notes.end());
+    }
+
+    return result;
+}
+
+static Note* findNoteInChord(Chord* chord, const TextBase* origText, bool back)
+{
+    for (Note* candidate : notesInTextNavigationOrder(chord, back)) {
+        if (canMatchPlacement(candidate, origText)) {
+            return candidate;
+        }
+    }
+
+    return nullptr;
+}
+
+// go to next/prev note in same chord, or go to next/prev chord, which may be in another voice
+static Note* findNearNote(Note* origNote, const TextBase* origText, bool back)
+{
+    Chord* chord = origNote->chord();
+
+    // first, try going to prev/next note in the current chord, or in the same group of grace chords
+    bool afterOrigNote = false;
+    for (Note* candidate : notesInTextNavigationOrder(chord, back)) {
+        if (candidate == origNote) {
+            afterOrigNote = true;
+            continue;
+        }
+        if (afterOrigNote && canMatchPlacement(candidate, origText)) {
+            return candidate;
+        }
+    }
+
+    Segment* segment = chord->segment();
+    if (!segment) {
+        LOGD("navigateToNearText: no segment");
+        return nullptr;
+    }
+
+    const int minTrack = static_cast<int>(trackZeroVoice(origText->track()));
+    const int maxTrack = minTrack + VOICES - 1;
+    const int inc = back ? -1 : 1;
+    const int eTrack = back ? minTrack : maxTrack;
+
+    // next, try going to prev/next chord in another voice
+    for (int track = static_cast<int>(origText->track()) + inc; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
+        EngravingItem* e = segment->element(track);
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        if (Note* note = findNoteInChord(toChord(e), origText, back)) {
+            return note;
+        }
+    }
+
+    // finally, try going to chord in prev/next segments
+    const int sTrack = back ? maxTrack : minTrack;
+    Segment* seg = back ? segment->prev1(SegmentType::ChordRest) : segment->next1(SegmentType::ChordRest);
+    while (seg) {
+        for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
+            EngravingItem* e = seg->element(track);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            if (Note* note = findNoteInChord(toChord(e), origText, back)) {
+                return note;
+            }
+        }
+
+        seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+    }
+
+    return nullptr;
+}
+
+static EngravingItem* findNearItem(Segment* origSegment, const TextBase* origText, bool back)
+{
+    const int minTrack = static_cast<int>(trackZeroVoice(origText->track()));
+    const int maxTrack = minTrack + VOICES - 1;
+    const mu::engraving::staff_idx_t staffIdx = origText->staffIdx();
+
+    // go to first segment with a chord or an existing text
+    Segment* seg = back ? origSegment->prev1(SegmentType::ChordRest) : origSegment->next1(SegmentType::ChordRest);
+    while (seg) {
+        for (int track = minTrack; track <= maxTrack; ++track) {
+            EngravingItem* e = seg->element(track);
+            if (e && e->isChord()) {
+                return e;
+            }
+        }
+
+        // this segment only contains rests, check for existing text
+        for (EngravingItem* e : seg->annotations()) {
+            if (e->staffIdx() == staffIdx && isMatchingText(e, origText)) {
+                return seg->firstElement(staffIdx);
+            }
+        }
+
+        seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+    }
+
+    return nullptr;
+}
+
+static TextBase* findMatchingText(EngravingItem* target, const TextBase* origText)
+{
+    if (target->isNote()) {
+        for (EngravingItem* item : toNote(target)->el()) {
+            if (isMatchingText(item, origText)) {
+                return toTextBase(item);
+            }
+        }
+    } else if (target->isChordRest()) {
+        for (EngravingItem* item : toChordRest(target)->segment()->annotations()) {
+            if (item->staffIdx() == origText->staffIdx() && isMatchingText(item, origText)) {
+                return toTextBase(item);
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 //! NOTE: Copied from ScoreView::textTab
 void NotationInteraction::navigateToNearText(MoveDirection direction)
 {
@@ -7246,195 +7455,45 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         return;
     }
 
-    TextBase* ot = mu::engraving::toTextBase(oe);
-    mu::engraving::TextStyleType textStyleType = ot->textStyleType();
-    ElementType type = ot->type();
-    mu::engraving::staff_idx_t staffIdx = ot->staffIdx();
-    bool back = direction == MoveDirection::Left;
-    int minTrack = static_cast<int>(trackZeroVoice(oe->track()));
-    int maxTrack = minTrack + VOICES - 1;
+    const TextBase* ot = mu::engraving::toTextBase(oe);
+    const bool back = direction == MoveDirection::Left;
 
-    mu::engraving::EngravingItem* el = nullptr;
-
+    EngravingItem* target = nullptr;
     if (op->isNote()) {
-        // go to next/prev note in same chord, or go to next/prev chord, which may be in another voice
-        Note* origNote = toNote(op);
-        Chord* ch = origNote->chord();
-        const std::vector<Note*>& notes = ch->notes();
-
-        // first, try going to prev/next note in the current chord
-        if (origNote != (back ? notes.back() : notes.front())) {
-            auto it = std::find(notes.begin(), notes.end(), origNote);
-            if (it != notes.end()) {
-                el = back ? *std::next(it) : *std::prev(it);
-            }
-        }
-
-        // next, try going to next/prev grace note chord in the same group as the current
-        const std::vector<Chord*> chordList = ch->allGraceChordsOfMainChord();
-
-        if (!el && ch != (back ? chordList.front() : chordList.back())) {
-            auto it = std::find(chordList.begin(), chordList.end(), ch);
-            if (it != chordList.end()) {
-                if (back) {
-                    const Chord* targetChord = *std::prev(it);
-                    el = targetChord->notes().front();
-                } else {
-                    const Chord* targetChord = *std::next(it);
-                    el = targetChord->notes().back();
-                }
-            }
-        }
-
-        // next, try going to prev/next chord in another voice
-        if (!el) {
-            Segment* seg = ch->segment();
-            if (!seg) {
-                LOGD("navigateToNearText: no segment");
-                return;
-            }
-            int inc = back ? -1 : 1;
-            int sTrack =  int(oe->track()) + inc;
-            int eTrack = back ? minTrack : maxTrack;
-            for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->isChord()) {
-                    const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
-                    if (back) {
-                        Chord* targetChord = targetChordList.back();
-                        el = targetChord->notes().front();
-                    } else {
-                        Chord* targetChord = targetChordList.front();
-                        el = targetChord->notes().back();
-                    }
-                    break;
-                }
-            }
-        }
-
-        // finally, try going to chord in prev/next segments
-        if (!el) {
-            Segment* seg = ch->segment();
-            seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
-            int sTrack = back ? maxTrack : minTrack;
-            int eTrack = back ? minTrack : maxTrack;
-            int inc = back ? -1 : 1;
-            while (seg) {
-                for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
-                    EngravingItem* e = seg->element(track);
-                    if (e && e->isChord()) {
-                        const std::vector<Chord*> targetChordList = toChord(e)->allGraceChordsOfMainChord();
-                        if (back) {
-                            Chord* targetChord = targetChordList.back();
-                            el = targetChord->notes().front();
-                        } else {
-                            Chord* targetChord = targetChordList.front();
-                            el = targetChord->notes().back();
-                        }
-                        break;
-                    }
-                }
-
-                if (el) {
-                    break;
-                }
-
-                seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
-            }
-        }
-    } else if (op->isSegment()) {
-        Segment* seg = toSegment(op);
-        seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
-
-        // go to first segment with a chord or an existing text
-        while (seg) {
-            for (int track = minTrack; track <= maxTrack; ++track) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->isChord()) {
-                    el = e;
-                    break;
-                }
-            }
-            if (el) {
-                break;
-            }
-
-            // this segment only contains rests, check for existing text
-            for (EngravingItem* e : seg->annotations()) {
-                if (e->staffIdx() != staffIdx || e->type() != type) {
-                    continue;
-                }
-                TextBase* nt = mu::engraving::toTextBase(e);
-                if (nt->textStyleType() == textStyleType) {
-                    el = seg->firstElement(staffIdx);
-                    break;
-                }
-            }
-            if (el) {
-                break;
-            }
-
-            seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
-        }
+        target = findNearNote(toNote(op), ot, back);
+    } else {
+        target = findNearItem(toSegment(op), ot, back);
     }
 
-    if (!el) {
+    if (!target) {
         return;
     }
 
-    // get existing text to edit
-    EngravingItem* textEl = nullptr;
-    if (op->isNote()) {
-        if (!el->isNote()) {
-            LOGD("navigateToNearText: new element is not Note.");
-            return;
-        }
-        // check element list of new note
-        for (mu::engraving::EngravingItem* e : toNote(el)->el()) {
-            if (e->type() != type) {
-                continue;
-            }
-            TextBase* nt = mu::engraving::toTextBase(e);
-            if (nt->textStyleType() == textStyleType) {
-                textEl = e;
-                break;
-            }
-        }
-    } else if (op->isSegment()) {
-        if (!el->isChordRest()) {
-            LOGD("navigateToNearText: new element is not ChordRest.");
-            return;
-        }
-        // check annotation list of new segment
-        mu::engraving::Segment* ns = toChordRest(el)->segment();
-        for (mu::engraving::EngravingItem* e : ns->annotations()) {
-            if (e->staffIdx() != staffIdx || e->type() != type) {
-                continue;
-            }
-            TextBase* nt = mu::engraving::toTextBase(e);
-            if (nt->textStyleType() == textStyleType) {
-                textEl = e;
-                break;
-            }
-        }
+    TextBase* existingText = findMatchingText(target, ot);
+
+    //! NOTE: see Fingering::calculateDefaultPlacement...
+    const bool voiceDependentPlacement = ot->isFingering() && target->isNote() && isMultiVoiceChord(toNote(target)->chord());
+
+    std::optional<PlacementV> newPlacement;
+    if (shouldPreservePlacement(ot) && !voiceDependentPlacement) {
+        newPlacement = ot->placement();
     }
+
+    // ot may be deleted when editing ends, so read what we need first
+    const ElementType type = ot->type();
+    const mu::engraving::TextStyleType textStyleType = ot->textStyleType();
 
     doEndEditElement();
 
-    if (textEl) {
-        // edit existing text
-        TextBase* text = toTextBase(textEl);
-
-        if (text) {
-            startEditText(text);
-            text->selectAll();
-            showItem(text);
-        }
+    if (existingText) {
+        startEditText(existingText);
+        existingText->selectAll();
+        showItem(existingText);
     } else {
         // add new text if no existing element to edit
         // TODO: for tempo text, would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
-            addTextToItem(textStyleType, el);
+            addTextToItem(textStyleType, target, newPlacement);
         }
     }
 }

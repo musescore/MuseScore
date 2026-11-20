@@ -91,6 +91,7 @@ using FontStyle = mu::engraving::FontStyle;
 using ClefType = mu::engraving::ClefType;
 using VerticalAlignment = mu::engraving::VerticalAlignment;
 using PageList = std::vector<Page*>;
+using PlacementV = mu::engraving::PlacementV;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using staff_idx_t = mu::engraving::staff_idx_t;

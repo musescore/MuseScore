@@ -438,7 +438,7 @@ public:
     void doUndoRemoveElement(EngravingItem*);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr);
+    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr, std::optional<PlacementV> placement = std::nullopt);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
