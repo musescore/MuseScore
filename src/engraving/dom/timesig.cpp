@@ -115,8 +115,7 @@ EngravingItem* TimeSig::drop(Transaction& tx, EditData& data)
         // ownership of e is transferred to EditTimeSig::addTimeSig
 
         if (tick() != measure()->endTick()) {
-            EditTimeSig::addTimeSig(tx, score(), measure(), staffIdx(), toTimeSig(e), false);
-            return nullptr;
+            return EditTimeSig::addTimeSig(tx, score(), measure(), staffIdx(), toTimeSig(e), data.modifiers & ControlModifier);
         }
 
         // This is a timesig at the end of a measure.
@@ -130,8 +129,7 @@ EngravingItem* TimeSig::drop(Transaction& tx, EditData& data)
         }
 
         // Apply change to next measure
-        EditTimeSig::addTimeSig(tx, score(), measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
-        return nullptr;
+        return EditTimeSig::addTimeSig(tx, score(), measure()->nextMeasure(), staffIdx(), toTimeSig(e), data.modifiers & ControlModifier);
     }
     delete e;
     return nullptr;

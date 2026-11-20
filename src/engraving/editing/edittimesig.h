@@ -34,7 +34,7 @@ class Transaction;
 class EditTimeSig
 {
 public:
-    static void addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local);
+    static TimeSig* addTimeSig(Transaction& tx, Score* score, Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local);
     static void removeTimeSig(Transaction& tx, Score* score, TimeSig* ts);
 
     static bool rewriteMeasures(Transaction& tx, Score* score, Measure* startMeasure, Measure* endMeasure, const Fraction& newTimeSig,
