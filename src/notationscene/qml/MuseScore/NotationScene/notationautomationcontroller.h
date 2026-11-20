@@ -158,6 +158,7 @@ private:
     void updatePolylinesColors();
     void onCurrentNotationChanged();
 
+    void deleteAllPolylines();
     void rebuildAllPolylines();
     void buildAndAddPolylinesForSystem(const System* system);
     void buildAndAddPolylinesForStaff(const System* system, staff_idx_t staffIdx);
