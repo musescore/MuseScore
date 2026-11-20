@@ -30,7 +30,6 @@
 #include <QApplication> // for QApplication::cursorFlashTime()
 #include <QClipboard>
 #include <QDrag>
-#include <QEventLoop>
 #include <QGuiApplication>
 #include <QKeyEvent>
 #include <QKeySequence>
@@ -1846,7 +1845,7 @@ Ret NotationInteraction::canDropSingle(const PointF& pos)
     return make_ok();
 }
 
-bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -2002,6 +2001,27 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     return accepted;
 }
 
+bool NotationInteraction::isDroppingInstrumentChange() const
+{
+    if (!m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    const EngravingItem* dropElement = m_dropData.elementDropData->ed.dropElement;
+    return dropElement && dropElement->isInstrumentChange();
+}
+
+bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers,
+                                     const std::optional<InstrumentTemplate>& instrument)
+{
+    m_chosenInstrument = instrument;
+    DEFER {
+        m_chosenInstrument.reset();
+    };
+
+    return doDropSingle(pos, modifiers);
+}
+
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
 bool NotationInteraction::doDropStandard(engraving::Transaction& tx)
 {
@@ -2024,10 +2044,12 @@ bool NotationInteraction::doDropStandard(engraving::Transaction& tx)
     EngravingItem* dropElement = el->drop(tx, edd.ed);
 
     if (dropElement && dropElement->isInstrumentChange()) {
-        if (!selectInstrument(toInstrumentChange(dropElement))) {
+        IF_ASSERT_FAILED(m_chosenInstrument) {
             rollback();
             return true; // Really?
         }
+
+        setupInstrumentChange(toInstrumentChange(dropElement), *m_chosenInstrument);
     }
 
     score()->addRefresh(el->canvasBoundingRect());
@@ -2157,37 +2179,6 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     checkAndShowError();
 
     return succeeded;
-}
-
-bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* instrumentChange)
-{
-    if (!instrumentChange) {
-        return false;
-    }
-
-#ifdef MUE_CONFIGURATION_IS_APPWEB
-    interactive()->info("", muse::trc("notation", "Sorry, instrument change on the web is not supported at this time."));
-    return false;
-#else
-
-    //! HACK To remake the asynchronous mode, a lot of refactoring is needed,
-    //! so for now this is a hack
-    bool result = false;
-    QEventLoop loop;
-    async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
-    templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
-        setupInstrumentChange(instrumentChange, val);
-        result = true;
-        loop.quit();
-    }).onReject(this, [&loop, &result](int, const std::string&) {
-        result = false;
-        loop.quit();
-    });
-
-    loop.exec();
-
-    return result;
-#endif
 }
 
 void NotationInteraction::setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument)

@@ -245,3 +245,34 @@ TEST_F(Notation_NotationInteractionTests, ApplyInstrumentChangeFromPalette_UserC
     EXPECT_EQ(findInstrumentChange(), nullptr);
     EXPECT_FALSE(m_notation->undoStack()->canUndo());
 }
+
+TEST_F(Notation_NotationInteractionTests, DropInstrumentChange_WithTheChosenInstrument_AddsItInOneUndoStep)
+{
+    //! [GIVEN] An instrument change is dragged onto the first chord
+    std::unique_ptr<InstrumentChange> paletteElement(Factory::createInstrumentChange(score()->dummy()));
+    ASSERT_TRUE(m_notation->interaction()->startDropSingle(paletteElement->mimeData().toQByteArray()));
+    EXPECT_TRUE(m_notation->interaction()->isDroppingInstrumentChange());
+
+    Segment* segment = score()->firstMeasure()->first(SegmentType::ChordRest);
+    m_notation->interaction()->setDropTarget(segment->element(0));
+
+    //! [THEN] The instrument is not asked during the drop, it is chosen before
+    EXPECT_CALL(*m_selectInstrumentScenario, selectInstrument(_)).Times(0);
+
+    //! [WHEN] It is dropped with the chosen instrument
+    const InstrumentTemplate* flute = searchTemplate(u"flute");
+    ASSERT_TRUE(flute);
+    EXPECT_TRUE(m_notation->interaction()->dropSingle(PointF(), Qt::NoModifier, *flute));
+    m_notation->interaction()->endDrop();
+
+    //! [THEN] The instrument change to that instrument is added
+    InstrumentChange* instrumentChange = findInstrumentChange();
+    ASSERT_TRUE(instrumentChange);
+    EXPECT_TRUE(instrumentChange->init());
+    EXPECT_EQ(instrumentChange->instrument()->id(), flute->id);
+
+    //! [THEN] It is undone in one step
+    m_notation->undoStack()->undo(nullptr);
+    EXPECT_EQ(findInstrumentChange(), nullptr);
+    EXPECT_FALSE(m_notation->undoStack()->canUndo());
+}

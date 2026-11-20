@@ -39,6 +39,7 @@
 #include "notation/types/viewmode.h"
 
 #include "notation/inotationcommandscontroller.h"
+#include "notationscene/iselectinstrumentscenario.h"
 
 #include "playback/iplaybackcontroller.h"
 
@@ -111,6 +112,7 @@ public:
     muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
+    muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
 
 public:
     NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);
@@ -265,11 +267,21 @@ private:
     };
 
     bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
+    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    void selectInstrumentForPendingDrop();
+    void finishPendingDrop(bool drop, const std::optional<InstrumentTemplate>& instrument = std::nullopt);
 
     std::vector<int> pitchesBeingDragged() const;
 
     DragMoveEvent m_lastDragMoveEvent;
-    bool m_isDropConfirmationPending = false;
+
+    //! NOTE The drop that waits for the user's answer
+    struct PendingDrop {
+        std::weak_ptr<INotationInteraction> interaction; // the notation may be closed while the user is asked
+        muse::PointF pos;
+        Qt::KeyboardModifiers modifiers;
+    };
+    std::optional<PendingDrop> m_pendingDrop;
 
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
     std::vector<const mu::engraving::EngravingItem*> m_notesBeingDragged;

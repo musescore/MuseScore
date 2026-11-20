@@ -34,6 +34,7 @@
 #include "notation/tests/mocks/notationselectionmock.h"
 #include "notation/tests/mocks/notationselectionrangemock.h"
 #include "playback/tests/mocks/playbackcontrollermock.h"
+#include "notationscene/tests/mocks/selectinstrumentsscenariomock.h"
 
 #include "engraving/tests/utils/scorerw.h"
 
@@ -94,6 +95,9 @@ public:
         });
         m_controller->interactive.set(m_interactive);
 
+        m_selectInstrumentScenario = std::make_shared<NiceMock<SelectInstrumentsScenarioMock> >();
+        m_controller->selectInstrumentScenario.set(m_selectInstrumentScenario);
+
         setNoWaylandForLinux();
     }
 
@@ -113,6 +117,7 @@ public:
     std::shared_ptr<muse::ui::UiConfigurationMock> m_uiConfiguration;
     std::shared_ptr<muse::ui::DragControllerMock> m_dragController;
     std::shared_ptr<InteractiveMock> m_interactive;
+    std::shared_ptr<SelectInstrumentsScenarioMock> m_selectInstrumentScenario;
     playback::IPlaybackController::PlayParams m_playParams;
 
     //! An element is dragged over the view and leaves it, where there is no system drag and drop (e.g. the web):
@@ -147,6 +152,33 @@ public:
             }
         };
     }
+
+    //! The user is asked for the instrument of a dropped instrument change and answers later
+    std::shared_ptr<async::Promise<InstrumentTemplate>::Resolve> givenTheUserIsAskedForAnInstrument(
+        std::shared_ptr<async::Promise<InstrumentTemplate>::Reject>& reject)
+    {
+        auto resolveAnswer = std::make_shared<async::Promise<InstrumentTemplate>::Resolve>();
+        reject = std::make_shared<async::Promise<InstrumentTemplate>::Reject>();
+        ON_CALL(*m_selectInstrumentScenario, selectInstrument(_)).WillByDefault([this, resolveAnswer, reject](const InstrumentKey&) {
+            ++m_instrumentQuestions;
+            return async::make_promise<InstrumentTemplate>([resolveAnswer, reject](auto resolve, auto rej) {
+                *resolveAnswer = resolve;
+                *reject = rej;
+                return async::Promise<InstrumentTemplate>::dummy_result();
+            }, async::PromiseType::AsyncByBody);
+        });
+
+        return resolveAnswer;
+    }
+
+    static void processMessages()
+    {
+        for (int i = 0; i < 10; ++i) {
+            async::processMessages();
+        }
+    }
+
+    int m_instrumentQuestions = 0;
 
     QMimeData m_dragMimeData;
 
@@ -998,7 +1030,8 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_UserAgrees_Drops
 
     int drops = 0;
     int endedDrops = 0;
-    ON_CALL(*m_interaction, dropSingle(_, _)).WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers) {
+    ON_CALL(*m_interaction, dropSingle(_, _, _))
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>&) {
         EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
         ++drops;
         return true;
@@ -1029,7 +1062,7 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_UserCancels_Ends
     std::function<void(IInteractive::Button)> answer = givenTheUserIsAsked();
 
     //! [THEN] Nothing is dropped
-    EXPECT_CALL(*m_interaction, dropSingle(_, _)).Times(0);
+    EXPECT_CALL(*m_interaction, dropSingle(_, _, _)).Times(0);
 
     //! [WHEN] The element is dropped...
     int endedDrops = 0;
@@ -1057,7 +1090,7 @@ TEST_F(NotationViewInputControllerTests, Drop_NoConfirmation_DropsAndEndsAtOnce)
     EXPECT_CALL(*m_interactive, warning(_, _, _, _, _, _)).Times(0);
     {
         InSequence seq;
-        EXPECT_CALL(*m_interaction, dropSingle(_, _)).WillOnce(Return(true));
+        EXPECT_CALL(*m_interaction, dropSingle(_, _, _)).WillOnce(Return(true));
         EXPECT_CALL(*m_interaction, endDrop()).Times(1);
     }
 
@@ -1107,4 +1140,165 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_NotationClosedBe
     //! [WHEN] The user agrees...
     //! [THEN] ...nothing is dropped into the closed notation (and nothing is accessed)
     answer(IInteractive::Button::Ok);
+}
+
+TEST_F(NotationViewInputControllerTests, Drop_InstrumentChange_UserChoosesAnInstrument_DropsItWithTheInstrument)
+{
+    //! [GIVEN] An instrument change is dropped, and the user is asked for the instrument
+    ON_CALL(*m_interaction, canDropSingle(_)).WillByDefault(Return(muse::make_ok()));
+    ON_CALL(*m_interaction, isDroppingInstrumentChange()).WillByDefault(Return(true));
+    std::shared_ptr<async::Promise<InstrumentTemplate>::Reject> reject;
+    auto resolve = givenTheUserIsAskedForAnInstrument(reject);
+
+    InstrumentTemplate flute;
+    flute.id = u"flute";
+
+    int drops = 0;
+    int endedDrops = 0;
+    ON_CALL(*m_interaction, dropSingle(_, _, _))
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+        EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
+        EXPECT_TRUE(instrument.has_value()) << "an instrument change is dropped with the chosen instrument";
+        EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
+        ++drops;
+        return true;
+    });
+    ON_CALL(*m_interaction, endDrop()).WillByDefault([&endedDrops]() {
+        ++endedDrops;
+    });
+
+    //! [WHEN] The element is dropped...
+    dragOverAndLeave();
+
+    //! [THEN] ...the drop is kept while the user is asked
+    EXPECT_EQ(drops, 0);
+    EXPECT_EQ(endedDrops, 0);
+
+    //! [WHEN] The user chooses an instrument...
+    (void)(*resolve)(flute);
+    processMessages();
+
+    //! [THEN] ...the element is dropped with that instrument, and the drop is ended
+    EXPECT_EQ(drops, 1);
+    EXPECT_EQ(endedDrops, 1);
+}
+
+TEST_F(NotationViewInputControllerTests, Drop_InstrumentChange_UserCancels_EndsTheDropAfterTheAnswer)
+{
+    //! [GIVEN] An instrument change is dropped, and the user is asked for the instrument
+    ON_CALL(*m_interaction, canDropSingle(_)).WillByDefault(Return(muse::make_ok()));
+    ON_CALL(*m_interaction, isDroppingInstrumentChange()).WillByDefault(Return(true));
+    std::shared_ptr<async::Promise<InstrumentTemplate>::Reject> reject;
+    givenTheUserIsAskedForAnInstrument(reject);
+
+    //! [THEN] Nothing is dropped
+    EXPECT_CALL(*m_interaction, dropSingle(_, _, _)).Times(0);
+
+    int endedDrops = 0;
+    ON_CALL(*m_interaction, endDrop()).WillByDefault([&endedDrops]() {
+        ++endedDrops;
+    });
+
+    //! [WHEN] The element is dropped...
+    dragOverAndLeave();
+
+    //! [THEN] ...the drop is kept while the user is asked
+    EXPECT_EQ(endedDrops, 0);
+
+    //! [WHEN] The user cancels...
+    (void)(*reject)(int(Ret::Code::Cancel), "");
+    processMessages();
+
+    //! [THEN] ...the drop is ended
+    EXPECT_EQ(endedDrops, 1);
+}
+
+TEST_F(NotationViewInputControllerTests, Drop_InstrumentChange_NotationClosedBeforeTheAnswer_DoesNothing)
+{
+    //! [GIVEN] An instrument change is dropped into a notation that is closed before the answer
+    auto closedInteraction = std::make_shared<NiceMock<NotationInteractionMock> >();
+    ON_CALL(*closedInteraction, canDropSingle(_)).WillByDefault(Return(muse::make_ok()));
+    ON_CALL(*closedInteraction, isDroppingInstrumentChange()).WillByDefault(Return(true));
+    ON_CALL(m_view, notationInteraction()).WillByDefault([&closedInteraction]() {
+        return closedInteraction;
+    });
+
+    std::shared_ptr<async::Promise<InstrumentTemplate>::Reject> reject;
+    auto resolve = givenTheUserIsAskedForAnInstrument(reject);
+    dragOverAndLeave();
+
+    std::weak_ptr<NotationInteractionMock> released = closedInteraction;
+    closedInteraction.reset();
+
+    //! [THEN] The waiting drop doesn't keep the interaction of the closed notation alive
+    EXPECT_TRUE(released.expired());
+
+    //! [WHEN] The user chooses an instrument
+    //! [THEN] Nothing is dropped into the closed notation (and nothing is accessed)
+    (void)(*resolve)(InstrumentTemplate());
+    processMessages();
+}
+
+TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_UserAgrees_ThenChoosesTheInstrument)
+{
+    //! [GIVEN] Dropping an instrument change needs a confirmation, and then its instrument
+    ON_CALL(*m_interaction, isDroppingInstrumentChange()).WillByDefault(Return(true));
+    ON_CALL(*m_interaction, canDropSingle(_)).WillByDefault(Return(Ret(int(Ret::Code::UnknownError), "Drop A?")));
+    std::function<void(IInteractive::Button)> answer = givenTheUserIsAsked();
+    std::shared_ptr<async::Promise<InstrumentTemplate>::Reject> reject;
+    auto resolve = givenTheUserIsAskedForAnInstrument(reject);
+
+    InstrumentTemplate flute;
+    flute.id = u"flute";
+
+    int drops = 0;
+    ON_CALL(*m_interaction, dropSingle(_, _, _))
+    .WillByDefault([&drops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+        EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
+        ++drops;
+        return true;
+    });
+
+    //! [WHEN] The element is dropped
+    dragOverAndLeave();
+
+    //! [THEN] The instrument is not asked before the confirmation
+    EXPECT_EQ(m_instrumentQuestions, 0);
+
+    //! [WHEN] The user agrees
+    answer(IInteractive::Button::Ok);
+
+    //! [THEN] The instrument is asked, and nothing is dropped until it is chosen
+    EXPECT_EQ(m_instrumentQuestions, 1);
+    EXPECT_EQ(drops, 0);
+
+    //! [WHEN] The user chooses an instrument
+    (void)(*resolve)(flute);
+    processMessages();
+
+    //! [THEN] The element is dropped once, with that instrument
+    EXPECT_EQ(drops, 1);
+}
+
+TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_UserCancels_DoesNotAskTheInstrument)
+{
+    //! [GIVEN] Dropping an instrument change needs a confirmation
+    ON_CALL(*m_interaction, isDroppingInstrumentChange()).WillByDefault(Return(true));
+    ON_CALL(*m_interaction, canDropSingle(_)).WillByDefault(Return(Ret(int(Ret::Code::UnknownError), "Drop A?")));
+    std::function<void(IInteractive::Button)> answer = givenTheUserIsAsked();
+
+    //! [THEN] Neither the instrument is asked, nor anything dropped, and the drop is ended
+    EXPECT_CALL(*m_selectInstrumentScenario, selectInstrument(_)).Times(0);
+    EXPECT_CALL(*m_interaction, dropSingle(_, _, _)).Times(0);
+
+    int endedDrops = 0;
+    ON_CALL(*m_interaction, endDrop()).WillByDefault([&endedDrops]() {
+        ++endedDrops;
+    });
+
+    //! [WHEN] The element is dropped, and the user cancels
+    dragOverAndLeave();
+    answer(IInteractive::Button::Cancel);
+
+    EXPECT_EQ(endedDrops, 1);
 }
