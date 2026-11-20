@@ -22,7 +22,6 @@
 
 #include "engraving/dom/score.h"
 #include "engraving/engravingerrors.h"
-#include "io/file.h"
 
 #include "importtef.h"
 #include "tableditreader.h"
@@ -32,22 +31,20 @@ using namespace mu::engraving;
 
 muse::Ret TablEditReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
-    Err err = import(score, path);
+    TablEdit tablEdit{ score };
+    Err err = tablEdit.import(path);
+    if (err == Err::FileBadFormat) {
+        // Give a specific reason instead of the generic "Bad format" text.
+        return make_ret(err, tablEdit.errorMessage());
+    }
+
     return make_ret(err, path);
 }
 
 Err TablEditReader::import(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
-    if (!fileSystem()->exists(path)) {
-        return Err::FileNotFound;
-    }
-
-    muse::io::File file(path);
-    if (!file.open(muse::io::IODevice::ReadOnly)) {
-        return Err::FileOpenError;
-    }
-    TablEdit tablEdit{ &file, score };
-    Err err = tablEdit.import();
+    TablEdit tablEdit{ score };
+    Err err = tablEdit.import(path);
 
     return err;
 }
