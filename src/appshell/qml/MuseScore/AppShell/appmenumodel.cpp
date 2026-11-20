@@ -301,12 +301,12 @@ MenuItem* AppMenuModel::makeViewMenu()
 #endif
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Show"), {
-            makeMenuItem(SHOW_INVISIBLE_COMMAND),
-            makeMenuItem(SHOW_UNPRINTABLE_COMMAND),
-            makeMenuItem(SHOW_FRAMES_COMMAND),
-            makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
-            makeMenuItem(SHOW_IRREGULAR_COMMAND),
-            makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+            makeMenuItem(ShowInvisibleCommand::id),
+            makeMenuItem(ShowUnprintableCommand::id),
+            makeMenuItem(ShowFramesCommand::id),
+            makeMenuItem(ShowPageBordersCommand::id),
+            makeMenuItem(ShowIrregularCommand::id),
+            makeMenuItem(ShowSoundFlagsCommand::id),
         }, "menu-show"),
         makeSeparator(),
         makeMenuItem(DOCK_RESTORE_DEFAULT_LAYOUT_COMMAND),

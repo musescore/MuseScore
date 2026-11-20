@@ -256,7 +256,7 @@ private:
 
     muse::async::Promise<muse::io::path_t> selectStyleFile(bool forLoad);
 
-    void toggleScoreConfig(ScoreConfigType configType);
+    muse::Ret toggleScoreConfig(const ToggleScoreConfigCommand& command);
     void toggleConcertPitch();
 
     void seekAndPlaySelectedElement(bool playChord = true);

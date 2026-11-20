@@ -258,12 +258,12 @@ static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
 };
 
 static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
-    { SHOW_INVISIBLE_COMMAND, ScoreConfigType::ShowInvisibleElements },
-    { SHOW_UNPRINTABLE_COMMAND, ScoreConfigType::ShowUnprintableElements },
-    { SHOW_FRAMES_COMMAND, ScoreConfigType::ShowFrames },
-    { SHOW_PAGEBORDERS_COMMAND, ScoreConfigType::ShowPageMargins },
-    { SHOW_SOUNDFLAGS_COMMAND, ScoreConfigType::ShowSoundFlags },
-    { SHOW_IRREGULAR_COMMAND, ScoreConfigType::MarkIrregularMeasures }
+    { ShowInvisibleCommand::id, ScoreConfigType::ShowInvisibleElements },
+    { ShowUnprintableCommand::id, ScoreConfigType::ShowUnprintableElements },
+    { ShowFramesCommand::id, ScoreConfigType::ShowFrames },
+    { ShowPageBordersCommand::id, ScoreConfigType::ShowPageMargins },
+    { ShowSoundFlagsCommand::id, ScoreConfigType::ShowSoundFlags },
+    { ShowIrregularCommand::id, ScoreConfigType::MarkIrregularMeasures }
 };
 
 static const std::vector<Command> STYLE_COMMANDS = {

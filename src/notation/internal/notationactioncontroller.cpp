@@ -287,12 +287,7 @@ void NotationActionController::init()
     registerCommand(FREEZE_CURRENT_PLACEMENT_COMMAND, &Interaction::freezeSelectionPosition);
 
     // show commands
-    registerCommand(SHOW_INVISIBLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
-    registerCommand(SHOW_UNPRINTABLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
-    registerCommand(SHOW_FRAMES_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
-    registerCommand(SHOW_PAGEBORDERS_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
-    registerCommand(SHOW_SOUNDFLAGS_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
-    registerCommand(SHOW_IRREGULAR_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
+    registerCommand<ToggleScoreConfigCommand>(&Controller::toggleScoreConfig);
 
     // staff commands
     registerCommand(STAFF_EXPLODE_COMMAND, &Interaction::explodeSelectedStaff);
@@ -2786,20 +2781,19 @@ muse::Ret NotationActionController::openRealizeChordSymbolsDialog()
     return muse::make_ok();
 }
 
-void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
+muse::Ret NotationActionController::toggleScoreConfig(const ToggleScoreConfigCommand& command)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     ScoreConfig config = interaction->scoreConfig();
-
-    bool isShow = config.isShown(configType);
-    config.setShown(configType, !isShow);
-
+    config.setShown(command.type, !config.isShown(command.type));
     interaction->setScoreConfig(config);
+
+    return muse::make_ok();
 }
 
 void NotationActionController::toggleConcertPitch()

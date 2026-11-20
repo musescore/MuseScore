@@ -129,12 +129,12 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem(TOGGLE_MASTER_PALETTE_COMMAND),
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Show"), {
-            makeMenuItem(SHOW_INVISIBLE_COMMAND),
-            makeMenuItem(SHOW_UNPRINTABLE_COMMAND),
-            makeMenuItem(SHOW_FRAMES_COMMAND),
-            makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
-            makeMenuItem(SHOW_IRREGULAR_COMMAND),
-            makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+            makeMenuItem(ShowInvisibleCommand::id),
+            makeMenuItem(ShowUnprintableCommand::id),
+            makeMenuItem(ShowFramesCommand::id),
+            makeMenuItem(ShowPageBordersCommand::id),
+            makeMenuItem(ShowIrregularCommand::id),
+            makeMenuItem(ShowSoundFlagsCommand::id),
         }, "menu-show")
     };
 
