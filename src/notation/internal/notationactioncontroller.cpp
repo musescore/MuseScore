@@ -272,8 +272,8 @@ void NotationActionController::init()
     registerCommand<OpenRealizeChordSymbolsCommand>(&Controller::openRealizeChordSymbolsDialog);
 
     // style commands
-    registerCommand(LOAD_STYLE_COMMAND, &Controller::loadStyle);
-    registerCommand(SAVE_STYLE_COMMAND, &Controller::saveStyle);
+    registerCommand<LoadStyleCommand>(&Controller::loadStyle);
+    registerCommand<SaveStyleCommand>(&Controller::saveStyle);
     registerCommandWithParams(OPEN_EDIT_STYLE_COMMAND, &Controller::openEditStyleDialog);
     registerCommand(TOGGLE_CONCERT_PITCH_COMMAND, &Controller::toggleConcertPitch);
 
@@ -2445,7 +2445,7 @@ muse::async::Promise<muse::io::path_t> NotationActionController::selectStyleFile
            : interactive()->selectSavingFile(muse::trc("notation", "Save style"), dir, filter);
 }
 
-void NotationActionController::loadStyle()
+muse::Ret NotationActionController::loadStyle()
 {
     TRACEFUNC;
     selectStyleFile(true).onResolve(this, [this](const muse::io::path_t& path) {
@@ -2473,9 +2473,10 @@ void NotationActionController::loadStyle()
             });
         }
     });
+    return muse::make_ok();
 }
 
-void NotationActionController::saveStyle()
+muse::Ret NotationActionController::saveStyle()
 {
     TRACEFUNC;
     selectStyleFile(false).onResolve(this, [this](const muse::io::path_t& path) {
@@ -2488,6 +2489,7 @@ void NotationActionController::saveStyle()
                                  muse::trc("notation", "An error occurred."));
         }
     });
+    return muse::make_ok();
 }
 
 bool NotationActionController::isTextEditing() const

@@ -245,8 +245,14 @@ private:
     muse::Ret openMeasurePropertiesDialog();
     muse::Ret openEditGridSizeDialog();
     muse::Ret openRealizeChordSymbolsDialog();
+<<<<<<< HEAD
     void loadStyle();
     void saveStyle();
+=======
+    muse::io::path_t selectStyleFile(bool forLoad);
+    muse::Ret loadStyle();
+    muse::Ret saveStyle();
+>>>>>>> 36925d2a9e (improved notation style commands)
 
     muse::async::Promise<muse::io::path_t> selectStyleFile(bool forLoad);
 

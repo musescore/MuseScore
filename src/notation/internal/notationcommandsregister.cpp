@@ -679,20 +679,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<OpenRealizeChordSymbolsCommand>(),
 
     // style commands
-    CommandInfo{
-        LOAD_STYLE_COMMAND,
-        TranslatableString("action", "&Load style…"),
-        TranslatableString("action", "Load style"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SAVE_STYLE_COMMAND,
-        TranslatableString("action", "S&ave style…"),
-        TranslatableString("action", "Save style"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<LoadStyleCommand>(),
+    makeCommandInfo<SaveStyleCommand>(),
 
     // fretboard diagram commands
     CommandInfo{

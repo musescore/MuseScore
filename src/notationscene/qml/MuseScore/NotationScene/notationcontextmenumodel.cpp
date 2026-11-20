@@ -107,7 +107,7 @@ MenuItemList NotationContextMenuModel::makePageItems()
     MenuItemList items {
         makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
         makeMenuItem(OpenPageSettingsCommand::id),
-        makeMenuItem(LOAD_STYLE_COMMAND),
+        makeMenuItem(LoadStyleCommand::id),
     };
 
     return items;
