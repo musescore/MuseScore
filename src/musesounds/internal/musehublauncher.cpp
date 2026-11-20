@@ -26,52 +26,64 @@
 using namespace mu::musesounds;
 using namespace muse;
 
-void MuseHubLauncher::open(MuseHubPage page, const std::string& utmContent)
+async::Promise<Ret> MuseHubLauncher::open(MuseHubPage page, const std::string& utmContent)
 {
-    tryOpenMuseHub(configuration()->museHubUrls(page, utmContent));
+    return tryOpenMuseHub(configuration()->museHubUrls(page, utmContent));
 }
 
-void MuseHubLauncher::openSoundLibrary(const String& code, const std::string& utmContent)
+async::Promise<Ret> MuseHubLauncher::openSoundLibrary(const String& code, const std::string& utmContent)
 {
-    tryOpenMuseHub(configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code));
+    return tryOpenMuseHub(configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code));
 }
 
-void MuseHubLauncher::tryOpenMuseHub(const MuseHubUrls& urls)
+async::Promise<Ret> MuseHubLauncher::tryOpenMuseHub(const MuseHubUrls& urls)
 {
     LOGI() << "Opening MuseHub: " << urls.museHubUri;
 
-    const UriQuery museHubUri(urls.museHubUri);
-    async::Promise<Ret> canOpenPromise = interactive()->canOpenApp(museHubUri);
+    return async::make_promise<Ret>([this, urls](auto resolve, auto) {
+        const UriQuery museHubUri(urls.museHubUri);
+        async::Promise<Ret> canOpenPromise = interactive()->canOpenApp(museHubUri);
 
-    canOpenPromise.onResolve(this, [this, museHubUri, webUrl = urls.webUrl](const Ret& ret) {
-        if (!ret) {
-            LOGW() << "MuseHub can't be opened, opening web URL instead: " << ret.toString();
-            interactive()->openUrl(webUrl);
-            return;
-        }
+        canOpenPromise.onResolve(this, [this, museHubUri, webUrl = urls.webUrl, resolve](const Ret& ret) {
+            if (!ret) {
+                LOGW() << "MuseHub can't be opened, opening web URL instead: " << ret.toString();
+                openWebUrl(webUrl, resolve);
+                return;
+            }
 
-        openMuseHubApp(museHubUri, webUrl);
-    });
+            openMuseHubApp(museHubUri, webUrl, resolve);
+        });
 
-    canOpenPromise.onReject(this, [this, webUrl = urls.webUrl](int, const std::string& err) {
-        LOGW() << "MuseHub can't be opened, opening web URL instead: " << err;
-        interactive()->openUrl(webUrl);
+        canOpenPromise.onReject(this, [this, webUrl = urls.webUrl, resolve](int, const std::string& err) {
+            LOGW() << "MuseHub can't be opened, opening web URL instead: " << err;
+            openWebUrl(webUrl, resolve);
+        });
+
+        return async::Promise<Ret>::dummy_result();
     });
 }
 
-void MuseHubLauncher::openMuseHubApp(const UriQuery& museHubUri, const std::string& webUrl)
+void MuseHubLauncher::openMuseHubApp(const UriQuery& museHubUri, const std::string& webUrl, const Resolve& resolve)
 {
     async::Promise<Ret> promise = interactive()->openApp(museHubUri);
 
-    promise.onResolve(this, [this, webUrl](const Ret& ret) {
-        if (!ret) {
-            LOGW() << "Failed to open MuseHub, opening web URL instead: " << ret.toString();
-            interactive()->openUrl(webUrl);
+    promise.onResolve(this, [this, webUrl, resolve](const Ret& ret) {
+        if (ret) {
+            (void)resolve(ret);
+            return;
         }
+
+        LOGW() << "Failed to open MuseHub, opening web URL instead: " << ret.toString();
+        openWebUrl(webUrl, resolve);
     });
 
-    promise.onReject(this, [this, webUrl](int, const std::string& err) {
+    promise.onReject(this, [this, webUrl, resolve](int, const std::string& err) {
         LOGW() << "Failed to open MuseHub, opening web URL instead: " << err;
-        interactive()->openUrl(webUrl);
+        openWebUrl(webUrl, resolve);
     });
+}
+
+void MuseHubLauncher::openWebUrl(const std::string& webUrl, const Resolve& resolve)
+{
+    (void)resolve(interactive()->openUrl(webUrl));
 }

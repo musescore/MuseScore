@@ -24,6 +24,8 @@
 #include <string>
 
 #include "modularity/imoduleinterface.h"
+#include "async/promise.h"
+#include "types/ret.h"
 #include "types/string.h"
 
 #include "musesoundstypes.h"
@@ -37,7 +39,8 @@ public:
     virtual ~IMuseHubLauncher() = default;
 
     //! Opens the link in MuseHub if possible, otherwise opens its web page
-    virtual void open(MuseHubPage page, const std::string& utmContent = std::string()) = 0;
-    virtual void openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) = 0;
+    //! Resolves once either has been opened
+    virtual muse::async::Promise<muse::Ret> open(MuseHubPage page, const std::string& utmContent = std::string()) = 0;
+    virtual muse::async::Promise<muse::Ret> openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) = 0;
 };
 }

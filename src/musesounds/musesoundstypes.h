@@ -34,6 +34,7 @@ enum class MuseHubPage {
     MuseSoundsPro,
     Plugins,
     SoundLibrary,
+    MuseSamplerUpdate,
 };
 
 struct MuseHubUrls {

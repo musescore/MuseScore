@@ -23,10 +23,16 @@
 
 using namespace mu::musesounds;
 
-void MuseHubLauncherStub::open(MuseHubPage, const std::string&)
+muse::async::Promise<muse::Ret> MuseHubLauncherStub::open(MuseHubPage, const std::string&)
 {
+    return muse::async::make_promise<muse::Ret>([](auto resolve, auto) {
+        return resolve(muse::make_ret(muse::Ret::Code::NotSupported));
+    });
 }
 
-void MuseHubLauncherStub::openSoundLibrary(const muse::String&, const std::string&)
+muse::async::Promise<muse::Ret> MuseHubLauncherStub::openSoundLibrary(const muse::String&, const std::string&)
 {
+    return muse::async::make_promise<muse::Ret>([](auto resolve, auto) {
+        return resolve(muse::make_ret(muse::Ret::Code::NotSupported));
+    });
 }
