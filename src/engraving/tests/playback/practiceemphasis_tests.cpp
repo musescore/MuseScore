@@ -45,6 +45,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/tie.h"
 #include "engraving/editing/transaction/undostack.h"
 #include "engraving/types/types.h"
 #include "global/types/translatablestring.h"
@@ -1107,6 +1108,39 @@ TEST_F(Engraving_PracticeEmphasisTests, AddedNotesHighlightAsEditedAdded)
     delete score;
 }
 
+TEST_F(Engraving_PracticeEmphasisTests, ClickAppliesClickedMembershipToTiedNotes)
+{
+    MasterScore* score = ScoreRW::readScore(SCORE_FILE);
+    ASSERT_TRUE(score);
+
+    Note* e5 = findPitch(score, 76);
+    Note* d5 = findPitch(score, 74);
+    ASSERT_TRUE(e5);
+    ASSERT_TRUE(d5);
+
+    PracticeEmphasisData& emphasis = score->practiceEmphasis();
+    emphasis.setEditingPartId(score, "S1");
+    EXPECT_TRUE(emphasis.partContains(e5, "S1"));
+    EXPECT_TRUE(emphasis.partContains(d5, "S1"));
+
+    emphasis.editNote(d5);
+    EXPECT_FALSE(emphasis.partContains(d5, "S1"));
+    EXPECT_TRUE(emphasis.partContains(e5, "S1"));
+
+    Tie* tie = Factory::createTie(e5);
+    ASSERT_TRUE(tie);
+    tie->setStartNote(e5);
+    tie->setEndNote(d5);
+    e5->setTieFor(tie);
+    d5->setTieBack(tie);
+
+    emphasis.editNote(e5);
+    EXPECT_FALSE(emphasis.partContains(e5, "S1"));
+    EXPECT_FALSE(emphasis.partContains(d5, "S1"));
+
+    delete score;
+}
+
 TEST_F(Engraving_PracticeEmphasisTests, SidecarRoundTripsSoloAndOlderFilesDefaultOff)
 {
     MasterScore* score = ScoreRW::readScore(SCORE_FILE);
@@ -1162,6 +1196,22 @@ TEST(Engraving_PracticeEmphasis, UnreadableSidecarIsPreserved)
     PracticeEmphasisData rewrittenParsed;
     EXPECT_TRUE(rewrittenParsed.fromJson(rewritten));
     EXPECT_TRUE(rewrittenParsed.document().solo);
+}
+
+TEST(Engraving_PracticeEmphasis, NewerSidecarVersionIsPreservedUnread)
+{
+    PracticeEmphasisData parsed;
+    const muse::ByteArray newer(
+        "{"
+        "\"version\":4,"
+        "\"playbackActive\":true,"
+        "\"newField\":\"keep-me\","
+        "\"parts\":[{\"id\":\"S1\",\"name\":\"1st soprano\",\"staffIndex\":0,\"voice\":0,\"role\":\"top\",\"selected\":true}]"
+        "}");
+    EXPECT_FALSE(parsed.fromJson(newer));
+    EXPECT_FALSE(parsed.isDefault());
+    EXPECT_EQ(parsed.toJson(), newer);
+    EXPECT_FALSE(parsed.document().playbackActive);
 }
 
 TEST(Engraving_PracticeEmphasis, VersionOneOverridesAreIgnored)

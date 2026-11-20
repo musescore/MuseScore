@@ -447,6 +447,18 @@ bool PracticeEmphasisData::fromJson(const muse::ByteArray& json)
     }
 
     const muse::JsonObject root = doc.rootObject();
+    int version = CURRENT_VERSION;
+    if (root.contains("version")) {
+        version = root.value("version").toInt();
+    }
+    if (version > CURRENT_VERSION) {
+        LOGE() << "Ignoring practice-emphasis.json: unsupported version " << version;
+        if (m_document == Document()) {
+            m_unreadableSidecar = json;
+        }
+        return false;
+    }
+
     Document next;
     next.version = CURRENT_VERSION;
     next.playbackActive = root.value("playbackActive").toBool();
@@ -1054,14 +1066,15 @@ std::string PracticeEmphasisData::choosePartForStaff(const Score* score, int sta
 
 void PracticeEmphasisData::toggleMembership(PartRule& part, Note* note)
 {
+    std::unordered_set<std::string> visiting;
+    const bool currently = partContains(part, note, visiting);
+
     eachTiedNote(note, [&](Note* tied) {
         const std::string eid = assignNoteEid(tied);
         if (eid.empty()) {
             return;
         }
 
-        std::unordered_set<std::string> visiting;
-        const bool currently = partContains(part, tied, visiting);
         visiting.clear();
         const bool inBase = baseContains(part, tied, visiting);
 
