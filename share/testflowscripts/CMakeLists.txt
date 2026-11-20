@@ -51,6 +51,7 @@ install(FILES
       steps/UndoRedo.js
       steps/ScoreContent.js
       steps/Parts.js
+      steps/Tuplets.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts/steps
       )
 
