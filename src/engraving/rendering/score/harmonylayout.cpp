@@ -891,8 +891,8 @@ void HarmonyLayout::kernCharacters(const Harmony* item, const String& text, Harm
         { { u"\u266D", u"" }, -0.15 },  // b JAZZ
         { { u"\u266E", u"" }, -0.15 },  // natural JAZZ
         { { u"\u266F", u"" }, -0.15 },  // # JAZZ
-        { { u"\u1D12A", u"" }, -0.15 }, // ## JAZZ
-        { { u"\u1D12B", u"" }, -0.15 }, // bb JAZZ
+        { { u"\U0001D12A", u"" }, -0.15 }, // ## JAZZ
+        { { u"\U0001D12B", u"" }, -0.15 }, // bb JAZZ
     };
 
     HarmonyRenderItem* prevSeg = harmonyCtx.renderItemList.back();
