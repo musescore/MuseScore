@@ -2480,10 +2480,46 @@ struct TextNavigatePrevBeatCommand {
     cprop_decl redirect = TextNavigateCommand(TextMoveDirection::Prev, TextNavigationMode::Beat);
 };
 
+// lyrics navigation commands
+
+struct LyricsNavigateCommand {
+    cprop_decl id = Command("command://notation/lyrics-navigate");
+    cprop_decl title = MnemonicString("action", "Navigate lyrics");
+    cprop_decl description = TranslatableString("action", "Navigate between lyric verses or syllables");
+    cprop_decl availabilities = Availability::API;
+
+    LyricsNavigateAction action = LyricsNavigateAction::NextVerse;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "action", &LyricsNavigateCommand::action, "Lyrics navigation action" },
+    };
+};
+
+struct LyricsNavigateNextVerseCommand {
+    cprop_decl id = Command("command://notation/lyrics-navigate/next-verse");
+    cprop_decl title = MnemonicString("action", "Next lyric verse");
+    cprop_decl description = TranslatableString("action", "Move text/go to next lyric verse");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = LyricsNavigateCommand(LyricsNavigateAction::NextVerse);
+};
+
+struct LyricsNavigatePrevVerseCommand {
+    cprop_decl id = Command("command://notation/lyrics-navigate/prev-verse");
+    cprop_decl title = MnemonicString("action", "Previous lyric verse");
+    cprop_decl description = TranslatableString("action", "Move text/go to previous lyric verse");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = LyricsNavigateCommand(LyricsNavigateAction::PrevVerse);
+};
+
+struct LyricsNavigateNextSyllableCommand {
+    cprop_decl id = Command("command://notation/lyrics-navigate/next-syllable");
+    cprop_decl title = MnemonicString("action", "Next syllable");
+    cprop_decl description = TranslatableString("action", "Lyrics: enter hyphen");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = LyricsNavigateCommand(LyricsNavigateAction::NextSyllable);
+};
+
 // lyrics editing commands
-inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
-inline static const muse::rcommand::Command EDITLYRIC_PREV_VERSE_COMMAND("command://notation/editlyrics-prev-verse");
-inline static const muse::rcommand::Command EDITLYRIC_NEXT_SYLLABLE_COMMAND("command://notation/editlyrics-next-syllable");
 inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
 inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
 

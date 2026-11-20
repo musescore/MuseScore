@@ -326,6 +326,14 @@ struct TextNavigationModeContract {
     } };
 };
 
+struct LyricsNavigateActionContract {
+    static constexpr EnumTable<LyricsNavigateAction, 3> table { {
+        { "next-verse", LyricsNavigateAction::NextVerse, "next lyric verse" },
+        { "prev-verse", LyricsNavigateAction::PrevVerse, "previous lyric verse" },
+        { "next-syllable", LyricsNavigateAction::NextSyllable, "next syllable" },
+    } };
+};
+
 struct VerticalAlignmentContract {
     static constexpr EnumTable<VerticalAlignment, 2> table { {
         { "subscript", VerticalAlignment::AlignSubScript, "subscript" },
@@ -411,4 +419,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::ClefTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::SnapDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextMoveDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextNavigationModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::LyricsNavigateActionContract);
 }
