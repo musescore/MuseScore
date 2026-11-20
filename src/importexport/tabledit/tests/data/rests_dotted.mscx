@@ -95,7 +95,7 @@
             </KeySig>
           <TimeSig>
             <eid>J_J</eid>
-            <sigN>3</sigN>
+            <sigN>6</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
@@ -107,7 +107,7 @@
           <Rest>
             <eid>L_L</eid>
             <dots>1</dots>
-            <durationType>half</durationType>
+            <durationType>whole</durationType>
             </Rest>
           <BarLine>
             <eid>M_M</eid>
@@ -117,33 +117,51 @@
       <Measure>
         <eid>N_N</eid>
         <voice>
-          <Rest>
+          <TimeSig>
             <eid>O_O</eid>
+            <sigN>3</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>P_P</eid>
+            <dots>1</dots>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <eid>Q_Q</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>R_R</eid>
+        <voice>
+          <Rest>
+            <eid>S_S</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>P_P</eid>
+            <eid>T_T</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>U_U</eid>
             <dots>1</dots>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>R_R</eid>
+            <eid>V_V</eid>
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
           <Rest>
-            <eid>S_S</eid>
+            <eid>W_W</eid>
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
           <BarLine>
-            <eid>T_T</eid>
+            <eid>X_X</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -152,18 +170,18 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>U_U</eid>
+            <eid>Y_Y</eid>
             <linkedTo>I_I</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Rest>
-            <eid>V_V</eid>
+            <eid>Z_Z</eid>
             <linkedTo>L_L</linkedTo>
             <dots>1</dots>
-            <durationType>half</durationType>
+            <durationType>whole</durationType>
             </Rest>
           <BarLine>
-            <eid>W_W</eid>
+            <eid>a_a</eid>
             <linkedTo>M_M</linkedTo>
             </BarLine>
           </voice>
@@ -171,38 +189,52 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>X_X</eid>
-            <linkedTo>O_O</linkedTo>
+            <eid>b_b</eid>
+            <linkedTo>P_P</linkedTo>
+            <dots>1</dots>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <eid>c_c</eid>
+            <linkedTo>Q_Q</linkedTo>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>d_d</eid>
+            <linkedTo>S_S</linkedTo>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>Y_Y</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>e_e</eid>
+            <linkedTo>T_T</linkedTo>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>Z_Z</eid>
-            <linkedTo>Q_Q</linkedTo>
+            <eid>f_f</eid>
+            <linkedTo>U_U</linkedTo>
             <dots>1</dots>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>a_a</eid>
-            <linkedTo>R_R</linkedTo>
+            <eid>g_g</eid>
+            <linkedTo>V_V</linkedTo>
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
           <Rest>
-            <eid>b_b</eid>
-            <linkedTo>S_S</linkedTo>
+            <eid>h_h</eid>
+            <linkedTo>W_W</linkedTo>
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
           <BarLine>
-            <eid>c_c</eid>
-            <linkedTo>T_T</linkedTo>
+            <eid>i_i</eid>
+            <linkedTo>X_X</linkedTo>
             </BarLine>
           </voice>
         </Measure>
