@@ -254,6 +254,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::BARLINE_TYPE: {
         element(name, TConv::toXml(data.value<BarLineType>()));
     } break;
+    case P_TYPE::BARLINE_SPAN_STYLE: {
+        element(name, TConv::toXml(data.value<BarLineSpanStyle>()));
+    } break;
     case P_TYPE::NOTEHEAD_TYPE: {
         element(name, TConv::toXml(data.value<NoteHeadType>()));
     } break;

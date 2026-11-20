@@ -106,10 +106,12 @@ public:
     void setSpanStaff(const bool val) { m_spanStaff = val; }
     void setSpanFrom(int val) { m_spanFrom = val; }
     void setSpanTo(int val) { m_spanTo = val; }
+    void setSpanStyle(BarLineSpanStyle val) { m_spanStyle = val; }
     void setShowTips(bool val);
     bool spanStaff() const { return m_spanStaff; }
     int spanFrom() const { return m_spanFrom; }
     int spanTo() const { return m_spanTo; }
+    BarLineSpanStyle spanStyle() const { return m_spanStyle; }
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
@@ -165,6 +167,8 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         double y1 = 0.0;
         double y2 = 0.0;
+        double spanStartY = 0.0;
+        BarLineSpanStyle spanStyle = BarLineSpanStyle::DEFAULT;
     };
 
     DECLARE_LAYOUTDATA_METHODS(BarLine)
@@ -178,6 +182,7 @@ private:
     bool m_spanStaff = false;         // span barline to next staff if true
     int m_spanFrom = 0;          // line number on start and end staves
     int m_spanTo = 0;
+    BarLineSpanStyle m_spanStyle = BarLineSpanStyle::DEFAULT;
     BarLineType m_barLineType = BarLineType::NORMAL;
 
     ElementList m_el;          ///< fermata or other articulations

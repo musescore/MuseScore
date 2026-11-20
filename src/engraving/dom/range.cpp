@@ -1134,6 +1134,7 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
             }
             nbl->setGenerated(false);
             nbl->setBarLineType(blt);
+            nbl->setSpanStyle(bl->spanStyle());
             nbl->setVisible(bl->visible());
             nbl->setColor(bl->color());
 
