@@ -2319,6 +2319,7 @@ void TRead::read(BoxLine* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (readProperty(b, tag, e, ctx, Pid::BOXLINE_HEIGHT)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::BOXLINE_CENTER_ON_STAFF)) {
         } else if (!readProperties(static_cast<SLine*>(b), e, ctx)) {
             e.unknown();
         }

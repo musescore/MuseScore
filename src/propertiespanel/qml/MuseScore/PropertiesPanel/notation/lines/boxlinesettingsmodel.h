@@ -33,7 +33,7 @@ class BoxLineSettingsModel : public PropertiesPanelAbstractModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(mu::propertiespanel::PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * position READ position CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * height READ height CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * lineStyle READ lineStyle CONSTANT)
@@ -44,9 +44,17 @@ class BoxLineSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(double maxHeight READ maxHeight CONSTANT)
 
 public:
+    // Combines Pid::PLACEMENT and Pid::BOXLINE_CENTER_ON_STAFF into a single choice
+    enum class Position {
+        Above = int(mu::engraving::PlacementV::ABOVE),
+        Below = int(mu::engraving::PlacementV::BELOW),
+        Center
+    };
+    Q_ENUM(Position)
+
     explicit BoxLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
-    PropertyItem* placement() const;
+    PropertyItem* position() const;
     PropertyItem* height() const;
     PropertyItem* thickness() const;
     PropertyItem* lineStyle() const;
@@ -65,7 +73,11 @@ private:
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
     void updateDashPropertiesAvailability();
 
-    PropertyItem* m_placement = nullptr;
+    void loadPosition();
+    void setPosition(Position position);
+    void resetPosition();
+
+    PropertyItem* m_position = nullptr;
     PropertyItem* m_height = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_lineStyle = nullptr;

@@ -38,8 +38,8 @@ BoxLineSegment::BoxLineSegment(BoxLine* sp)
 std::vector<PointF> BoxLineSegment::gripsPositions(const EditData&) const
 {
     const RectF& r = ldata()->rect;
-    const bool above = boxLine()->placeAbove();
-    const double nearY = above ? r.bottom() : r.top(); // near = edge nearest the staff
+    const bool above = boxLine()->placeAbove() || boxLine()->centerOnStaff();
+    const double nearY = above ? r.bottom() : r.top(); // near = edge nearest the staff (bottom when centred)
     const double farY = above ? r.top() : r.bottom();
     const PointF pp = pagePos();
 
@@ -56,10 +56,16 @@ PropertyDelegate BoxLineSegment::resolvePropertyDelegate(Pid id) const
 {
     switch (id) {
     case Pid::BOXLINE_HEIGHT:
+    case Pid::BOXLINE_CENTER_ON_STAFF:
         return PropertyDelegate(spanner());
     default:
         return LineSegment::resolvePropertyDelegate(id);
     }
+}
+
+bool BoxLineSegment::autoplaceApplies() const
+{
+    return boxLine()->autoplaceApplies();
 }
 
 bool BoxLineSegment::edit(EditData& ed)
@@ -98,7 +104,14 @@ void BoxLineSegment::dragGrip(EditData& ed)
 
     BoxLine* box = boxLine();
     const double dy = ed.evtDelta.y() / absoluteFromSpatium(Spatium(1.0));
-    const double growth = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
+    double growth = 0.0;
+    if (box->centerOnStaff()) {
+        // The grip is on the top edge and the box grows equally in both directions,
+        // so the height changes twice as much as the mouse moves for the grip to follow it
+        growth = -2.0 * dy;
+    } else {
+        growth = box->placeAbove() ? -dy : dy; // Mouse movement away from the staff
+    }
     box->setBoxHeight(box->boxHeight() + Spatium(growth));
     triggerLayout();
 }
@@ -115,6 +128,7 @@ BoxLine::BoxLine(const BoxLine& other)
     : SLine(other)
 {
     m_height = other.m_height;
+    m_centerOnStaff = other.m_centerOnStaff;
 }
 
 LineSegment* BoxLine::createLineSegment()
@@ -129,6 +143,8 @@ PropertyValue BoxLine::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::BOXLINE_HEIGHT:
         return boxHeight();
+    case Pid::BOXLINE_CENTER_ON_STAFF:
+        return centerOnStaff();
     default:
         break;
     }
@@ -140,6 +156,9 @@ bool BoxLine::setProperty(Pid propertyId, const PropertyValue& val)
     switch (propertyId) {
     case Pid::BOXLINE_HEIGHT:
         setBoxHeight(val.value<Spatium>());
+        break;
+    case Pid::BOXLINE_CENTER_ON_STAFF:
+        setCenterOnStaff(val.toBool());
         break;
     case Pid::DIAGONAL:
         // BoxLineSegment::dragGrip relies on LineSegment::dragGrip resizing
@@ -157,6 +176,8 @@ PropertyValue BoxLine::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::BOXLINE_HEIGHT:
         return 2.0_sp;
+    case Pid::BOXLINE_CENTER_ON_STAFF:
+        return false;
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
     default:
@@ -166,6 +187,9 @@ PropertyValue BoxLine::propertyDefault(Pid propertyId) const
 
 PointF BoxLine::defaultPos() const
 {
+    if (m_centerOnStaff) {
+        return PointF();
+    }
     const double gap = 1.0 * spatium();
     return PointF(0.0, placeAbove() ? -gap : gap);
 }
@@ -174,6 +198,7 @@ void BoxLine::reset()
 {
     SLine::reset();
     undoResetProperty(Pid::BOXLINE_HEIGHT);
+    undoResetProperty(Pid::BOXLINE_CENTER_ON_STAFF);
 }
 
 void BoxLine::setBoxHeight(const Spatium& v)

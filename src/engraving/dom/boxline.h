@@ -44,10 +44,11 @@ public:
     BoxLine* boxLine() const { return toBoxLine(spanner()); }
 
     /**
-     * Grips: START/END are the corners on the edge nearest the staff and behave like
-     * ordinary (non-diagonal) line grips, i.e. they only resize horizontally and may
-     * re-anchor. MIDDLE is the centre of the box and moves it. HEIGHT is in the middle
-     * of the far edge and only changes the box height (no re-anchoring).
+     * Grips: START/END are the corners on the edge nearest the staff (the bottom edge when
+     * centred on the staff) and behave like ordinary (non-diagonal) line grips, i.e. they
+     * only resize horizontally and may re-anchor. MIDDLE is the centre of the box and moves
+     * it. HEIGHT is in the middle of the far edge (the top edge when centred) and only
+     * changes the box height (no re-anchoring).
      */
     static constexpr Grip HEIGHT = Grip(3);
 
@@ -57,6 +58,8 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     PropertyDelegate resolvePropertyDelegate(Pid id) const override;
+
+    bool autoplaceApplies() const override;
 
     struct LayoutData : public EngravingItem::LayoutData {
         RectF rect; // box in segment-local coordinates
@@ -105,10 +108,16 @@ public:
 
     void reset() override;
 
+    bool autoplaceApplies() const override { return !m_centerOnStaff; }
+
     Spatium boxHeight() const { return m_height; }
     void setBoxHeight(const Spatium& v);
 
+    bool centerOnStaff() const { return m_centerOnStaff; }
+    void setCenterOnStaff(bool v) { m_centerOnStaff = v; }
+
 private:
     Spatium m_height = 2.0_sp;
+    bool m_centerOnStaff = false; // When true, every segment is vertically centred on its staff and placement is ignored
 };
 } // namespace mu::engraving

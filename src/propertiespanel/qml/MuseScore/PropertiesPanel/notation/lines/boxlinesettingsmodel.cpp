@@ -43,9 +43,9 @@ BoxLineSettingsModel::BoxLineSettingsModel(QObject* parent, const muse::modulari
     createProperties();
 }
 
-PropertyItem* BoxLineSettingsModel::placement() const
+PropertyItem* BoxLineSettingsModel::position() const
 {
-    return m_placement;
+    return m_position;
 }
 
 PropertyItem* BoxLineSettingsModel::height() const
@@ -85,7 +85,11 @@ double BoxLineSettingsModel::maxHeight() const
 
 void BoxLineSettingsModel::createProperties()
 {
-    m_placement = buildPropertyItem(Pid::PLACEMENT);
+    m_position = buildPropertyItem(
+        Pid::PLACEMENT,
+        [this](const Pid, const QVariant& newValue) { setPosition(static_cast<Position>(newValue.toInt())); },
+        nullptr,
+        [this](const Pid) { resetPosition(); });
     m_height = buildPropertyItem(Pid::BOXLINE_HEIGHT);
     m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
     m_lineStyle = buildPropertyItem(Pid::LINE_STYLE);
@@ -97,6 +101,7 @@ void BoxLineSettingsModel::loadProperties()
 {
     static const PropertyIdSet propertyIdSet {
         Pid::PLACEMENT,
+        Pid::BOXLINE_CENTER_ON_STAFF,
         Pid::BOXLINE_HEIGHT,
         Pid::LINE_WIDTH,
         Pid::LINE_STYLE,
@@ -114,8 +119,8 @@ void BoxLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
 
 void BoxLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (muse::contains(propertyIdSet, Pid::PLACEMENT)) {
-        loadPropertyItem(m_placement);
+    if (muse::contains(propertyIdSet, Pid::PLACEMENT) || muse::contains(propertyIdSet, Pid::BOXLINE_CENTER_ON_STAFF)) {
+        loadPosition();
     }
 
     if (muse::contains(propertyIdSet, Pid::BOXLINE_HEIGHT)) {
@@ -148,4 +153,91 @@ void BoxLineSettingsModel::updateDashPropertiesAvailability()
 
     m_dashLineLength->setIsEnabled(isDashed);
     m_dashGapLength->setIsEnabled(isDashed);
+}
+
+void BoxLineSettingsModel::loadPosition()
+{
+    QVariant value;
+    bool isUndefined = false;
+    bool isModified = false;
+
+    for (const EngravingItem* item : m_elementList) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        Position position = Position::Center;
+        if (!item->getProperty(Pid::BOXLINE_CENTER_ON_STAFF).toBool()) {
+            const PlacementV placement = item->getProperty(Pid::PLACEMENT).value<PlacementV>();
+            position = placement == PlacementV::ABOVE ? Position::Above : Position::Below;
+        }
+
+        if (!value.isValid()) {
+            value = static_cast<int>(position);
+        } else if (value.toInt() != static_cast<int>(position)) {
+            isUndefined = true;
+        }
+
+        for (Pid pid : { Pid::PLACEMENT, Pid::BOXLINE_CENTER_ON_STAFF }) {
+            if (item->getProperty(pid) != item->propertyDefault(pid)) {
+                isModified = true;
+            }
+        }
+
+        if (isUndefined && isModified) {
+            break;
+        }
+    }
+
+    m_position->setIsEnabled(value.isValid());
+    m_position->updateCurrentValue(isUndefined ? QVariant() : value);
+    m_position->setIsModified(isModified);
+}
+
+void BoxLineSettingsModel::setPosition(Position position)
+{
+    if (m_elementList.empty()) {
+        return;
+    }
+
+    beginCommand(muse::TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(Pid::PLACEMENT)));
+
+    const bool center = position == Position::Center;
+    for (EngravingItem* item : m_elementList) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        item->undoChangeProperty(Pid::BOXLINE_CENTER_ON_STAFF, center);
+        if (!center) {
+            const PlacementV placement = position == Position::Above ? PlacementV::ABOVE : PlacementV::BELOW;
+            item->undoChangeProperty(Pid::PLACEMENT, placement);
+        }
+    }
+
+    updateNotation();
+    endCommand();
+    loadPosition();
+}
+
+void BoxLineSettingsModel::resetPosition()
+{
+    if (m_elementList.empty()) {
+        return;
+    }
+
+    beginCommand(muse::TranslatableString("undoableAction", "Reset %1").arg(propertyUserName(Pid::PLACEMENT)));
+
+    for (EngravingItem* item : m_elementList) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        item->undoResetProperty(Pid::BOXLINE_CENTER_ON_STAFF);
+        item->undoResetProperty(Pid::PLACEMENT);
+    }
+
+    updateNotation();
+    endCommand();
+    loadPosition();
 }

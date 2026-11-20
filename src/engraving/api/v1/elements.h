@@ -1006,6 +1006,14 @@ class EngravingItem : public apiv1::ScoreElement
      */
     API_PROPERTY(boxLineHeight,           BOXLINE_HEIGHT)
 
+    /** APIDOC
+     * For box lines and their segments: whether the box is centred on the staff
+     * instead of being placed above or below it.
+     * @q_property {Boolean}
+     * @since 5.0
+     */
+    API_PROPERTY_T(bool, boxLineCenterOnStaff, BOXLINE_CENTER_ON_STAFF)
+
     /// For note-anchored-lines: Controls their placement relative to notes.
     /// One of PluginAPI::PluginAPI::NoteLineEndPlacement values.
     ///\since MuseScore 4.6

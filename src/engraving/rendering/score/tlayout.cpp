@@ -1444,11 +1444,23 @@ void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
     BoxLineSegment::LayoutData* ldata = item->mutldata();
     const BoxLine* box = item->boxLine();
 
-    if (item->staff()) {
-        ldata->setMag(item->staff()->staffMag(item->tick()));
+    Fraction tick = item->tick();
+
+    // A continuation segment may be on a system whose staff type differs from the one at the spanner's start
+    if (!item->isSingleBeginType() && item->system()) {
+        if (const Measure* m = item->system()->firstMeasure()) {
+            tick = m->tick();
+        }
     }
-    if (box->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
+
+    if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(tick));
+    }
+    const double staffHeight = item->staff() ? item->staff()->staffHeight(tick) : 0.0;
+    if (box->centerOnStaff()) {
+        ldata->setPosY(0.5 * staffHeight);
+    } else if (box->placeBelow()) {
+        ldata->setPosY(staffHeight);
     }
 
     ldata->move(item->defaultPos());
@@ -1457,8 +1469,13 @@ void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
     const double w = item->pos2().x();
     const double h = item->absoluteFromSpatium(box->boxHeight());
 
-    // Line y is the box's bottom edge when above, top edge when below
-    ldata->rect = box->placeAbove() ? RectF(0.0, -h, w, h) : RectF(0.0, 0.0, w, h);
+    // Line y is the box's vertical centre when centred on the staff,
+    // otherwise its bottom edge when above and its top edge when below
+    if (box->centerOnStaff()) {
+        ldata->rect = RectF(0.0, -0.5 * h, w, h);
+    } else {
+        ldata->rect = box->placeAbove() ? RectF(0.0, -h, w, h) : RectF(0.0, 0.0, w, h);
+    }
     ldata->closedLeft  = item->isSingleBeginType();
     ldata->closedRight = item->isSingleEndType();
 

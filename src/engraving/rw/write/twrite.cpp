@@ -1050,6 +1050,7 @@ void TWrite::write(const BoxLine* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperty(item, xml, Pid::BOXLINE_HEIGHT);
+    writeProperty(item, xml, Pid::BOXLINE_CENTER_ON_STAFF);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
 }
