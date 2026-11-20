@@ -283,6 +283,8 @@ private:
 
     muse::Ret navigateToText(const TextNavigateCommand& command);
     muse::Ret navigateToLyrics(const LyricsNavigateCommand& command);
+    muse::Ret addMelisma();
+    muse::Ret addLyricsVerse();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     muse::Ret toggleFontStyle(const EditTextFontStyleCommand& command);
     muse::Ret toggleValign(const EditTextValignCommand& command);

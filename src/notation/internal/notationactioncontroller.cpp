@@ -155,8 +155,8 @@ void NotationActionController::init()
     registerCommand<LyricsNavigateCommand>(&Controller::navigateToLyrics);
 
     // lyrics editing commands
-    registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
-    registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
+    registerCommand<EditLyricsAddMelismaCommand>(&Controller::addMelisma);
+    registerCommand<EditLyricsAddVerseCommand>(&Controller::addLyricsVerse);
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
@@ -2621,6 +2621,36 @@ muse::Ret NotationActionController::navigateToLyrics(const LyricsNavigateCommand
         interaction->navigateToNextSyllable();
         break;
     }
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addMelisma()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->addMelisma();
+    seekSelectedElement();
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addLyricsVerse()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    interaction->addLyricsVerse();
+    seekSelectedElement();
 
     return muse::make_ok();
 }
