@@ -2176,27 +2176,7 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
     QEventLoop loop;
     async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
     templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
-        Instrument newInstrument = Instrument::fromTemplate(&val);
-
-        // If switching back to the part's original instrument, restore its player number
-        if (Part* part = instrumentChange->part()) {
-            const Instrument* baseInstrument = part->instrument();
-            if (baseInstrument && baseInstrument->id() == newInstrument.id()) {
-                InstrumentLabel& newLabel = newInstrument.instrumentLabel();
-                const InstrumentLabel& baseLabel = baseInstrument->instrumentLabel();
-                newLabel.setNumber(baseLabel.number());
-                newLabel.setShowNumberLong(baseLabel.showNumberLong());
-                newLabel.setShowNumberShort(baseLabel.showNumberShort());
-            }
-        }
-
-        instrumentChange->setInit(true);
-        instrumentChange->setupInstrument(&newInstrument);
-
-        if (newInstrument.useDrumset()) {
-            cleanupDrumsetChanges(instrumentChange);
-        }
-
+        setupInstrumentChange(instrumentChange, val);
         result = true;
         loop.quit();
     }).onReject(this, [&loop, &result](int, const std::string&) {
@@ -2208,6 +2188,30 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
 
     return result;
 #endif
+}
+
+void NotationInteraction::setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument)
+{
+    Instrument newInstrument = Instrument::fromTemplate(&instrument);
+
+    // If switching back to the part's original instrument, restore its player number
+    if (Part* part = instrumentChange->part()) {
+        const Instrument* baseInstrument = part->instrument();
+        if (baseInstrument && baseInstrument->id() == newInstrument.id()) {
+            InstrumentLabel& newLabel = newInstrument.instrumentLabel();
+            const InstrumentLabel& baseLabel = baseInstrument->instrumentLabel();
+            newLabel.setNumber(baseLabel.number());
+            newLabel.setShowNumberLong(baseLabel.showNumberLong());
+            newLabel.setShowNumberShort(baseLabel.showNumberShort());
+        }
+    }
+
+    instrumentChange->setInit(true);
+    instrumentChange->setupInstrument(&newInstrument);
+
+    if (newInstrument.useDrumset()) {
+        cleanupDrumsetChanges(instrumentChange);
+    }
 }
 
 void NotationInteraction::cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const
@@ -6256,10 +6260,22 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
+    if (type == TextStyleType::INSTRUMENT_CHANGE) {
+        addInstrumentChangeToItem(item);
+        return;
+    }
+
     doAddText(type, item);
 }
 
-void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addInstrumentChangeToItem(EngravingItem* item)
+{
+    selectInstrumentScenario()->selectInstrument().onResolve(this, [this, item](const InstrumentTemplate& instrument) {
+        doAddText(TextStyleType::INSTRUMENT_CHANGE, item, &instrument);
+    });
+}
+
+void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item, const InstrumentTemplate* instrument)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
@@ -6274,10 +6290,12 @@ void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
     }
 
     if (text->isInstrumentChange()) {
-        if (!selectInstrument(toInstrumentChange(text))) {
+        IF_ASSERT_FAILED(instrument) {
             rollback();
             return;
         }
+
+        setupInstrumentChange(toInstrumentChange(text), *instrument);
     }
 
     if (text->hasVoiceAssignmentProperties()) {

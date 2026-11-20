@@ -422,7 +422,8 @@ private:
 
     void addTextToTopFrame(TextStyleType type);
     void addTextToItem(TextStyleType type, EngravingItem* item);
-    void doAddText(TextStyleType type, EngravingItem* item = nullptr);
+    void doAddText(TextStyleType type, EngravingItem* item = nullptr, const InstrumentTemplate* instrument = nullptr);
+    void addInstrumentChangeToItem(EngravingItem* item);
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
@@ -474,6 +475,7 @@ private:
     void doFinishAddFretboardDiagram();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
+    void setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
