@@ -36,6 +36,7 @@
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/editmeasurerepeat.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/edittuplet.h"
 #include "engraving/editing/noteinput.h"
@@ -2635,6 +2636,62 @@ TEST_F(Engraving_TupletTests, pendingTupletTakenUpByNoteBeyondScore)
     EXPECT_FALSE(is.pendingTuplet());
 
     delete score;
+}
+
+TEST_F(Engraving_TupletTests, pendingTupletMeasureRepeat)
+{
+    for (NoteEntryMethod method : { NoteEntryMethod::BY_DURATION, NoteEntryMethod::RHYTHM }) {
+        MasterScore* score = pendingTupletScore(method);
+        ASSERT_TRUE(score);
+        InputState& is = score->inputState();
+
+        // 1-measure repeats in measures 2 and 3
+        Measure* m2 = measureAt(score, 1);
+        Measure* m3 = measureAt(score, 2);
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Pending tuplet tests"), [&](Transaction& tx) {
+            EditMeasureRepeat::addMeasureRepeat(tx, score, m2, 1, 0);
+            EditMeasureRepeat::addMeasureRepeat(tx, score, m3, 1, 0);
+        });
+        ASSERT_TRUE(m2->isMeasureRepeatGroup(0));
+        ASSERT_TRUE(m3->isMeasureRepeatGroup(0));
+
+        // a triplet that fills the measure removes the repeat first, as a plain note does
+        is.setSegment(m2->first(SegmentType::ChordRest));
+        setPendingTriplet(score, true);
+        pressDuration(score, DurationType::V_HALF);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_FALSE(m2->isMeasureRepeatGroup(0));
+        EXPECT_EQ(rhythm(m2), "3:2[2 r2 r2]");
+
+        // undo brings back the repeat and the waiting tuplet
+        score->undoRedo(true, nullptr);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_TRUE(m2->isMeasureRepeatGroup(0));
+        EXPECT_TRUE(is.pendingTupletHere());
+
+        // a shorter one too
+        pressDuration(score, DurationType::V_EIGHTH);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_FALSE(m2->isMeasureRepeatGroup(0));
+        EXPECT_EQ(rhythm(m2), "3:2[8 r8 r8] r4 r2");
+
+        // one that doesn't fit the measure leaves the repeat and keeps waiting
+        is.setSegment(m3->first(SegmentType::ChordRest));
+        setPendingTriplet(score, true);
+        pressDuration(score, DurationType::V_WHOLE);
+        EXPECT_EQ(MScore::_error, MsError::NO_SPACE_FOR_TUPLET);
+        EXPECT_TRUE(m3->isMeasureRepeatGroup(0));
+        EXPECT_TRUE(is.pendingTupletHere());
+
+        // a click takes it up the same way
+        is.setDuration(DurationType::V_EIGHTH);
+        clickNote(score, m3->tick(), 1);
+        EXPECT_TRUE(score->sanityCheck());
+        EXPECT_FALSE(m3->isMeasureRepeatGroup(0));
+        EXPECT_EQ(rhythm(m3), "3:2[8 r8 r8] r4 r2");
+
+        delete score;
+    }
 }
 
 // staff 0 as a guitar TAB staff, in Rhythm input

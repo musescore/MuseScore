@@ -844,6 +844,14 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
         return actualTicks(shape->baseLen.fraction() * shape->ratio.denominator(), nullptr, timeStretch) <= measureLen;
     }
 
+    // addPendingTuplet removes a measure repeat first, leaving an empty measure
+    const Measure* measure = is.segment()->measure();
+    const staff_idx_t staffIdx = track2staff(is.track());
+    if (measure->isMeasureRepeatGroup(staffIdx)) {
+        const Fraction timeStretch = score->staff(staffIdx)->timeStretch(measure->tick());
+        return actualTicks(shape->baseLen.fraction() * shape->ratio.denominator(), nullptr, timeStretch) <= measure->endTick() - is.tick();
+    }
+
     // at a chord or rest, in an empty voice, or in a longer chord or rest that addPendingTuplet shortens
     return score->canAddTuplet(is.segment(), is.track(), shape->ratio, shape->baseLen);
 }
@@ -898,6 +906,12 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
     if (is.beyondScore()) {
         score->appendMeasures(1);
         is.moveToNextInputPos();
+    }
+    // like addPitch: remove a measure repeat
+    Measure* measure = is.segment()->measure();
+    const staff_idx_t staffIdx = track2staff(is.track());
+    if (measure->isMeasureRepeatGroup(staffIdx)) {
+        score->deleteItem(measure->measureRepeatElement(staffIdx));
     }
     score->expandVoice();
     // like addPitch: shorten a longer chord or rest that starts earlier
