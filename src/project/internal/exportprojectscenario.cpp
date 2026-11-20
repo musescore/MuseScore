@@ -84,8 +84,8 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
     return writer->supportedUnitTypes();
 }
 
-RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultDirPath) const
+Promise<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                               INotationWriter::UnitType unitType, muse::io::path_t defaultDirPath) const
 {
     INotationProjectPtr project = context()->project();
 
@@ -129,12 +129,7 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
                       .appendingSuffix(exportType.suffixes.front().toStdString());
     }
 
-    RetVal<muse::io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFileSync(muse::trc("project/export", "Export"), defaultPath,
-                                                         exportType.filter(), isCreatingOnlyOneFile);
-    exportPath.ret = !exportPath.val.empty();
-
-    return exportPath;
+    return interactive()->selectSavingFile(muse::trc("project/export", "Export"), defaultPath, exportType.filter(), isCreatingOnlyOneFile);
 }
 
 Promise<Ret> ExportProjectScenario::exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,

@@ -58,9 +58,9 @@ public:
 
     std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
-    muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                                 INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                                                 muse::io::path_t defaultDirPath = "") const override;
+    muse::async::Promise<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                                                         INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                                         muse::io::path_t defaultDirPath = "") const override;
 
     muse::async::Promise<muse::Ret> exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,

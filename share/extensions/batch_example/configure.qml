@@ -26,14 +26,18 @@ Rectangle {
         FlatButton {
             text: "Select input dir: " + root.inputDir
             onClicked: {
-                root.inputDir = api.converter.selectDir("Input")
+                api.converter.selectDir("Input").then(function(dir) {
+                    root.inputDir = dir
+                })
             }
         }
 
         FlatButton {
             text: "Select output dir: " + root.outputDir
             onClicked: {
-                root.outputDir = api.converter.selectDir("Output")
+                api.converter.selectDir("Output").then(function(dir) {
+                    root.outputDir = dir
+                })
             }
         }
 

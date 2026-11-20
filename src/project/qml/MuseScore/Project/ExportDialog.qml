@@ -39,6 +39,10 @@ StyledDialogView {
 
     ExportDialogModel {
         id: exportModel
+
+        onExportStarted: {
+            root.hide()
+        }
     }
 
     onNavigationActivateRequested: {
@@ -156,9 +160,7 @@ StyledDialogView {
                         accentButton: true
 
                         onClicked: {
-                            if (exportModel.exportScores()) {
-                                root.hide();
-                            }
+                            exportModel.exportScores()
                         }
                     }
 

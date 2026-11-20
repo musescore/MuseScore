@@ -32,7 +32,7 @@ class ExportProjectScenarioMock : public IExportProjectScenario
 public:
     MOCK_METHOD(std::vector<INotationWriter::UnitType>, supportedUnitTypes, (const ExportType& exportType), (const, override));
 
-    MOCK_METHOD(muse::RetVal<muse::io::path_t>, askExportPath,
+    MOCK_METHOD(muse::async::Promise<muse::io::path_t>, askExportPath,
                 (const notation::INotationPtrList& notations, const ExportType& exportType, INotationWriter::UnitType unitType,
                  muse::io::path_t defaultPath), (const, override));
 

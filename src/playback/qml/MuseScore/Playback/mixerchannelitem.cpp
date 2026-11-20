@@ -774,7 +774,6 @@ void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const rcomman
             // make and send close
             rcommand::CommandQuery closeCommand = item->editorCommand();
             closeCommand.addParam("operation", Val("close"));
-            closeCommand.addParam("sync", Val(true));
             commandDispatcher()->dispatch(closeCommand);
         }
         // set new action
@@ -789,7 +788,6 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
     // make and send close
     rcommand::CommandQuery closeCommand = item->editorCommand();
     closeCommand.addParam("operation", Val("close"));
-    closeCommand.addParam("sync", Val(true));
     commandDispatcher()->dispatch(closeCommand);
 
     item->setEditorCommand({});

@@ -377,7 +377,7 @@ void ConvertFileToScoreModel::load(const QStringList& paths, int type)
     setConvertType(type);
 }
 
-QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPaths)
+std::vector<std::string> ConvertFileToScoreModel::filePickerFilters(const QStringList& existingPaths) const
 {
     const ConvertConfig& config = convertFileToScoreScenario()->config();
 
@@ -391,26 +391,37 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
         patterns << "*." + ext.toLower();
     }
 
-    const std::vector<std::string> filters {
+    return {
         muse::trc("project", "All supported files") + " (" + patterns.join(' ').toStdString() + ")",
         muse::trc("project", "All") + " (*)"
     };
+}
 
-    io::paths_t files;
+void ConvertFileToScoreModel::selectAndValidateFiles()
+{
+    const std::string title = muse::trc("ui", "Choose file");
+    const io::path_t dir = configuration()->defaultConvertFilePath();
+    const std::vector<std::string> filters = filePickerFilters(m_fileListModel->paths());
+
     if (canSelectMultipleFiles()) {
-        files = interactive()->selectOpeningFilesSync(muse::trc("ui", "Choose file"),
-                                                      configuration()->defaultConvertFilePath(), filters);
-    } else {
-        io::path_t file = interactive()->selectOpeningFileSync(muse::trc("ui", "Choose file"),
-                                                               configuration()->defaultConvertFilePath(), filters);
-        if (!file.empty()) {
-            files.push_back(file);
-        }
+        interactive()->selectOpeningFiles(title, dir, filters).onResolve(this, [this](const io::paths_t& files) {
+            onFilesSelected(files);
+        });
+        return;
     }
 
-    if (!files.empty()) {
-        configuration()->setLastOpenedConvertFilePath(io::dirpath(files.back()));
+    interactive()->selectOpeningFile(title, dir, filters).onResolve(this, [this](const io::path_t& file) {
+        onFilesSelected({ file });
+    });
+}
+
+void ConvertFileToScoreModel::onFilesSelected(const io::paths_t& files)
+{
+    if (files.empty()) {
+        return;
     }
+
+    configuration()->setLastOpenedConvertFilePath(io::dirpath(files.back()));
 
     QStringList paths;
     paths.reserve(files.size());
@@ -418,17 +429,9 @@ QStringList ConvertFileToScoreModel::selectFiles(const QStringList& existingPath
         paths << file.toQString();
     }
 
-    return paths;
-}
-
-bool ConvertFileToScoreModel::selectAndValidateFiles()
-{
-    QStringList files = selectFiles(m_fileListModel->paths());
-    if (files.isEmpty()) {
-        return false;
+    if (validateAndAddFiles(paths)) {
+        emit selectedFilesAdded();
     }
-
-    return validateAndAddFiles(files);
 }
 
 bool ConvertFileToScoreModel::validateAndAddFiles(const QStringList& pathsOrUrls)

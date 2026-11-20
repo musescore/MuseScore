@@ -81,6 +81,10 @@ StyledDialogView {
             root.currentPageIndex = 0
             convertModel.clearSelection()
         }
+
+        onSelectedFilesAdded: {
+            root.currentPageIndex = 1
+        }
     }
 
     Component.onCompleted: {
@@ -177,11 +181,7 @@ StyledDialogView {
 
             onCancelRequested: root.reject()
 
-            onSelectFilesRequested: {
-                if (convertModel.selectAndValidateFiles()) {
-                    root.currentPageIndex = 1
-                }
-            }
+            onSelectFilesRequested: convertModel.selectAndValidateFiles()
 
             onFilesDropped: function(urls) {
                 if (convertModel.validateAndAddFiles(urls)) {

@@ -78,6 +78,7 @@ private:
 
     bool isDrumsetFileTooOld(const muse::io::path_t& fname) const;
     void loadDrumset(const muse::io::path_t& fname);
+    void saveDrumset(const muse::io::path_t& fname);
 
     void apply();
     void cancel();

@@ -43,7 +43,7 @@ public:
     explicit ConverterApi(muse::api::IApiEngine* e);
 
     // work with FS
-    Q_INVOKABLE QString selectDir(const QString& title, const QString& dir = QString()) const;
+    Q_INVOKABLE QJSValue selectDir(const QString& title, const QString& dir = QString());
     Q_INVOKABLE QStringList scanDir(const QString& dir, const QStringList& filters = QStringList()) const;
     Q_INVOKABLE QString basename(const QString& filePath) const;
 

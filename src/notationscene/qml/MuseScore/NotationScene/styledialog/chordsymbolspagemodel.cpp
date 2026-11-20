@@ -122,12 +122,14 @@ void ChordSymbolsPageModel::selectChordDescriptionFile()
     muse::io::path_t dir = configuration()->userStylesPath();
     std::vector<std::string> filter = { muse::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
 
-    muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter);
-    if (path.empty()) {
-        return;
-    }
+    interactive()->selectOpeningFile(muse::trc("notation", "Load style"), dir, filter)
+    .onResolve(this, [this](const muse::io::path_t& path) {
+        if (path.empty()) {
+            return;
+        }
 
-    chordDescriptionFile()->modifyValue(path.toQString());
+        chordDescriptionFile()->modifyValue(path.toQString());
+    });
 }
 
 StyleItem* ChordSymbolsPageModel::extensionMag() const { return styleItem(StyleId::chordExtensionMag); }
