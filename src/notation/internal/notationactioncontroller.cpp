@@ -186,6 +186,7 @@ void NotationActionController::init()
     registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
     registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
+    registerCommand(ADD_BOXLINE_COMMAND, &Interaction::addBoxLineToSelection);
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
 

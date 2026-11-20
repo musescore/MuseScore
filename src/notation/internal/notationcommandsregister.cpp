@@ -783,6 +783,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        ADD_BOXLINE_COMMAND,
+        TranslatableString("action", "Staff-attached box"),
+        TranslatableString("action", "Add staff-attached box"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         ADD_IMAGE_COMMAND,
         TranslatableString("action", "Image"),
         TranslatableString("action", "Add image"),

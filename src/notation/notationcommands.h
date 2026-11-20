@@ -2520,6 +2520,7 @@ inline static const muse::rcommand::Command ADD_HAIRPIN_REVERSE_COMMAND("command
 inline static const muse::rcommand::Command INCREASE_DYNAMIC_COMMAND("command://notation/increase-dynamic");
 inline static const muse::rcommand::Command DECREASE_DYNAMIC_COMMAND("command://notation/decrease-dynamic");
 inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");
+inline static const muse::rcommand::Command ADD_BOXLINE_COMMAND("command://notation/add-boxline");
 
 inline static const muse::rcommand::Command ADD_IMAGE_COMMAND("command://notation/add-image");
 

@@ -226,6 +226,7 @@ public:
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
+    void addBoxLineToSelection() override;
     void putRestToSelection() override;
     void putRest(Duration duration) override;
     void addBracketsToSelection(BracketsType type) override;
