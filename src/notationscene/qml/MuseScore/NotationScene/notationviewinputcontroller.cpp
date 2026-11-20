@@ -828,6 +828,8 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
 
 void NotationViewInputController::mousePress_considerSelect(const ClickContext& ctx)
 {
+    m_selectOnLeftClickRelease.reset();
+
     if (!ctx.hitElement) {
         return;
     }
@@ -848,22 +850,31 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         }
     }
 
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+
     SelectType selectType = SelectType::SINGLE;
     if (ctx.event->modifiers() & Qt::ShiftModifier) {
         selectType = SelectType::RANGE;
+
+        // Shift+pressing an item that is already part of a list selection may be the start of
+        // an axis-locked drag of the whole selection, so only change the selection if the mouse
+        // is released without dragging
+        if (ctx.event->button() == Qt::LeftButton && ctx.hitElement->selected()
+            && !selection->isRange() && selection->elements().size() > 1) {
+            m_selectOnLeftClickRelease = selectType;
+            return;
+        }
     } else if (ctx.event->modifiers() & Qt::ControlModifier) {
         selectType = SelectType::ADD;
     } else {
-        const INotationSelectionPtr selection = viewInteraction()->selection();
-
         if (selection->isRange()
             && (selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)
                 || selection->range()->containsPoint(ctx.logicClickPos))) {
-            m_shouldSelectOnLeftClickRelease = true;
+            m_selectOnLeftClickRelease = SelectType::SINGLE;
             return;
         } else if (ctx.hitElement->selected()) {
             if (selection->elements().size() > 1) {
-                m_shouldSelectOnLeftClickRelease = true;
+                m_selectOnLeftClickRelease = SelectType::SINGLE;
             }
             return;
         }
@@ -1123,20 +1134,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
                 startDragElements(type, selectedElement->offset());
             }
 
-            DragMode mode = DragMode::BothXY;
-            if (keyState & Qt::ShiftModifier) {
-                mode = DragMode::OnlyY;
-            } else if (keyState & Qt::ControlModifier) {
-                mode = DragMode::OnlyX;
-            }
-
-            const std::vector<int> oldPitches = pitchesBeingDragged();
-            viewInteraction()->drag(m_mouseDownInfo.logicalBeginPoint, logicPos, mode);
-
-            if (!oldPitches.empty() && oldPitches != pitchesBeingDragged()) {
-                playbackController()->playElements(m_notesBeingDragged);
-            }
-
+            dragElements(logicPos, keyState & Qt::ShiftModifier);
             return;
         } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
             if (!viewInteraction()->isDragStarted()) {
@@ -1155,6 +1153,37 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
         m_isCanvasDragged = true;
     }
+}
+
+void NotationViewInputController::dragElements(const PointF& logicPos, bool lockToAxis)
+{
+    m_mouseDownInfo.lastElementDragLogicalPoint = logicPos;
+
+    DragMode mode = DragMode::BothXY;
+    if (lockToAxis) {
+        // Lock to whichever axis the mouse is closest to, relative to where the drag started
+        const PointF dragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
+        mode = std::abs(dragDelta.x()) >= std::abs(dragDelta.y()) ? DragMode::OnlyX : DragMode::OnlyY;
+    }
+
+    const std::vector<int> oldPitches = pitchesBeingDragged();
+    viewInteraction()->drag(m_mouseDownInfo.logicalBeginPoint, logicPos, mode);
+
+    if (!oldPitches.empty() && oldPitches != pitchesBeingDragged()) {
+        playbackController()->playElements(m_notesBeingDragged);
+    }
+}
+
+void NotationViewInputController::updateElementDragOnShiftChange(bool shiftPressed)
+{
+    // Snap to / release from the axis immediately, without waiting for the mouse to move
+    if (m_mouseDownInfo.dragAction == MouseDownInfo::Nothing
+        || !m_mouseDownInfo.lastElementDragLogicalPoint.has_value()
+        || !viewInteraction()->isDragStarted()) {
+        return;
+    }
+
+    dragElements(m_mouseDownInfo.lastElementDragLogicalPoint.value(), shiftPressed);
 }
 
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
@@ -1277,14 +1306,15 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    if (m_shouldSelectOnLeftClickRelease) {
-        m_shouldSelectOnLeftClickRelease = false;
+    if (m_selectOnLeftClickRelease.has_value()) {
+        const SelectType selectType = m_selectOnLeftClickRelease.value();
+        m_selectOnLeftClickRelease.reset();
         engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : muse::nidx;
 
         INotationInteractionPtr interaction = viewInteraction();
-        interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
+        interaction->select({ ctx.element }, selectType, staffIndex);
 
-        if (ctx.element->needStartEditingAfterSelecting()) {
+        if (interaction->selection()->element() == ctx.element && ctx.element->needStartEditingAfterSelecting()) {
             viewInteraction()->startEditElement(ctx.element);
             return;
         }
@@ -1465,6 +1495,10 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
     auto key = event->key();
 
+    if (key == Qt::Key_Shift) {
+        updateElementDragOnShiftChange(/*shiftPressed*/ true);
+    }
+
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         commandDispatcher()->dispatch(SCREEN_EDIT_TEXT_COMMAND);
         event->accept();
@@ -1495,6 +1529,8 @@ void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
     if (event->key() != Qt::Key_Shift) {
         return;
     }
+
+    updateElementDragOnShiftChange(/*shiftPressed*/ false);
 
     viewInteraction()->editElement(event);
     updateShadowNotePopupVisibility(/*forceHide*/ true);
