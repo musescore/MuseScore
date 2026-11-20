@@ -271,6 +271,17 @@ struct ArticulationTypeContract {
     } };
 };
 
+struct OttavaTypeContract {
+    static constexpr EnumTable<OttavaType, 6> table { {
+        { "8va", OttavaType::OTTAVA_8VA, "8va alta" },
+        { "8vb", OttavaType::OTTAVA_8VB, "8va bassa" },
+        { "15ma", OttavaType::OTTAVA_15MA, "15ma alta" },
+        { "15mb", OttavaType::OTTAVA_15MB, "15ma bassa" },
+        { "22ma", OttavaType::OTTAVA_22MA, "22ma alta" },
+        { "22mb", OttavaType::OTTAVA_22MB, "22ma bassa" },
+    } };
+};
+
 struct PastingTypeContract {
     static constexpr EnumTable<PastingType, 4> table { {
         { "default", PastingType::Default, "default" },
@@ -380,6 +391,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);

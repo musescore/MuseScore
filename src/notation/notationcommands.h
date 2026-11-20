@@ -2555,8 +2555,34 @@ inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notati
 
 inline static const muse::rcommand::Command ADD_FRETBOARD_DIAGRAM_COMMAND("command://notation/add-fretboard-diagram");
 
-inline static const muse::rcommand::Command ADD_OTTAVA_8VA_COMMAND("command://notation/add-ottava-8va");
-inline static const muse::rcommand::Command ADD_OTTAVA_8VB_COMMAND("command://notation/add-ottava-8vb");
+struct AddOttavaCommand {
+    cprop_decl id = Command("command://notation/add-ottava");
+    cprop_decl title = MnemonicString("action", "Add ottava");
+    cprop_decl description = TranslatableString("action", "Add ottava");
+    cprop_decl availabilities = Availability::API;
+
+    OttavaType type = OttavaType::OTTAVA_8VA;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddOttavaCommand::type, "Ottava type" },
+    };
+};
+
+struct AddOttava8vaCommand {
+    cprop_decl id = Command("command://notation/add-ottava/8va");
+    cprop_decl title = MnemonicString("action", "Ottava 8va &alta");
+    cprop_decl description = TranslatableString("action", "Add ottava 8va alta");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOttavaCommand(OttavaType::OTTAVA_8VA);
+};
+
+struct AddOttava8vbCommand {
+    cprop_decl id = Command("command://notation/add-ottava/8vb");
+    cprop_decl title = MnemonicString("action", "Ottava 8va &bassa");
+    cprop_decl description = TranslatableString("action", "Add ottava 8va bassa");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddOttavaCommand(OttavaType::OTTAVA_8VB);
+};
 
 inline static const muse::rcommand::Command ADD_DYNAMIC_COMMAND("command://notation/add-dynamic");
 inline static const muse::rcommand::Command ADD_HAIRPIN_COMMAND("command://notation/add-hairpin");

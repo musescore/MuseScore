@@ -703,20 +703,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ADD_OTTAVA_8VA_COMMAND,
-        TranslatableString("action", "Ottava 8va &alta"),
-        TranslatableString("action", "Add ottava 8va alta"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_OTTAVA_8VB_COMMAND,
-        TranslatableString("action", "Ottava 8va &bassa"),
-        TranslatableString("action", "Add ottava 8va bassa"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddOttavaCommand>(),
+    makeCommandInfo<AddOttava8vaCommand>(),
+    makeCommandInfo<AddOttava8vbCommand>(),
     CommandInfo{
         ADD_DYNAMIC_COMMAND,
         TranslatableString("action", "&Dynamic"),
