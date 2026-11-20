@@ -41,13 +41,17 @@ using namespace mu::engraving;
 using namespace muse::accessibility;
 
 NotationAccessibility::NotationAccessibility(const Notation* notation)
-    : m_getScore(notation)
+    : m_getScore(notation), m_notation(notation)
 {
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateAccessibilityInfo();
     });
 
     notation->notationChanged().onReceive(this, [this](const muse::RectF&) {
+        updateAccessibilityInfo();
+    });
+
+    notation->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
         updateAccessibilityInfo();
     });
 }
@@ -123,6 +127,14 @@ void NotationAccessibility::updateAccessibilityInfo()
         newAccessibilityInfo = rangeAccessibilityInfo();
     } else if (selection()->isList()) {
         newAccessibilityInfo = muse::qtrc("notation", "List selection");
+    }
+
+    // first, so that it stays visible in a narrow status bar
+    const INotationInteractionPtr interaction = m_notation->interaction();
+    const INotationNoteInputPtr noteInput = interaction ? interaction->noteInput() : nullptr;
+    const QString pendingTuplet = noteInput ? noteInput->pendingTupletInfo().toQString() : QString();
+    if (!pendingTuplet.isEmpty()) {
+        newAccessibilityInfo = newAccessibilityInfo.isEmpty() ? pendingTuplet : pendingTuplet + "; " + newAccessibilityInfo;
     }
 
     // Simplify whitespace and remove newlines

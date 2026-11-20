@@ -96,6 +96,8 @@ qt_add_qml_module(notationscene_qml
         paintedengravingitem.h
         partlistmodel.cpp
         partlistmodel.h
+        pendingtupletmarker.cpp
+        pendingtupletmarker.h
         percussionpanel/percussionpanelmodel.cpp
         percussionpanel/percussionpanelmodel.h
         percussionpanel/percussionpanelpadlistmodel.cpp

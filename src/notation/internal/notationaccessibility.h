@@ -57,6 +57,7 @@ private:
     QString singleElementAccessibilityInfo() const;
 
     const IGetScore* m_getScore = nullptr;
+    const Notation* m_notation = nullptr;
     muse::ValCh<std::string> m_accessibilityInfo;
 };
 }
