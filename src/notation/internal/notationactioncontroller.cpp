@@ -63,7 +63,6 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 static constexpr qreal STRETCH_STEP = 0.1;
-static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
@@ -153,11 +152,9 @@ void NotationActionController::init()
     registerCommand<EditTextFontStyleCommand>(&Controller::toggleFontStyle);
     registerCommand<EditTextValignCommand>(&Controller::toggleValign);
     registerCommand<TextNavigateCommand>(&Controller::navigateToText);
+    registerCommand<LyricsNavigateCommand>(&Controller::navigateToLyrics);
 
     // lyrics editing commands
-    registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
-    registerCommand(EDITLYRIC_PREV_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Up);
-    registerCommand(EDITLYRIC_NEXT_SYLLABLE_COMMAND, &Interaction::navigateToNextSyllable);
     registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
     registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
 
@@ -2596,6 +2593,34 @@ muse::Ret NotationActionController::navigateToText(const TextNavigateCommand& co
     const MoveDirection direction = static_cast<MoveDirection>(command.direction);
 
     navigateToTextElement(direction, nearNoteOrRest, moveOnly);
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::navigateToLyrics(const LyricsNavigateCommand& command)
+{
+    TRACEFUNC;
+
+    if (!isLyricsEditing()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    switch (command.action) {
+    case LyricsNavigateAction::NextVerse:
+        interaction->navigateToLyricsVerse(MoveDirection::Down);
+        break;
+    case LyricsNavigateAction::PrevVerse:
+        interaction->navigateToLyricsVerse(MoveDirection::Up);
+        break;
+    case LyricsNavigateAction::NextSyllable:
+        interaction->navigateToNextSyllable();
+        break;
+    }
 
     return muse::make_ok();
 }

@@ -149,6 +149,15 @@ enum class TextMoveDirection : unsigned char
     Next = static_cast<unsigned char>(MoveDirection::Right),
 };
 
+//! NOTE Lyrics-specific navigation, separate from `TextNavigateCommand`.
+//! Verse moves vertically between lyric verses; syllable advances with a hyphen.
+enum class LyricsNavigateAction : unsigned char
+{
+    NextVerse = 0,
+    PrevVerse,
+    NextSyllable
+};
+
 enum class SelectionTarget : unsigned char
 {
     Undefined = 0,

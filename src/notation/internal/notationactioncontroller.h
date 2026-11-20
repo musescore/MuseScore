@@ -282,6 +282,7 @@ private:
     bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
 
     muse::Ret navigateToText(const TextNavigateCommand& command);
+    muse::Ret navigateToLyrics(const LyricsNavigateCommand& command);
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     muse::Ret toggleFontStyle(const EditTextFontStyleCommand& command);
     muse::Ret toggleValign(const EditTextValignCommand& command);

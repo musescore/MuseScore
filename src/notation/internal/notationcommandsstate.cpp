@@ -107,9 +107,9 @@ static const std::vector<Command> TEXT_EDITING_COMMANDS = {
 };
 
 static const std::vector<Command> LYRICS_EDITING_COMMANDS = {
-    EDITLYRIC_NEXT_VERSE_COMMAND,
-    EDITLYRIC_PREV_VERSE_COMMAND,
-    EDITLYRIC_NEXT_SYLLABLE_COMMAND,
+    LyricsNavigateNextVerseCommand::id,
+    LyricsNavigatePrevVerseCommand::id,
+    LyricsNavigateNextSyllableCommand::id,
     EDITLYRIC_ADD_MELISMA_COMMAND,
     EDITLYRIC_ADD_VERSE_COMMAND
 };

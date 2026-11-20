@@ -493,27 +493,10 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<TextNavigateNextBeatCommand>(),
     makeCommandInfo<TextNavigatePrevBeatCommand>(),
 
-    CommandInfo{
-        EDITLYRIC_NEXT_VERSE_COMMAND,
-        TranslatableString("action", "Next lyric verse"),
-        TranslatableString("action", "Move text/go to next lyric verse"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_PREV_VERSE_COMMAND,
-        TranslatableString("action", "Previous lyric verse"),
-        TranslatableString("action", "Move text/go to previous lyric verse"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_NEXT_SYLLABLE_COMMAND,
-        TranslatableString("action", "Next syllable"),
-        TranslatableString("action", "Lyrics: enter hyphen"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<LyricsNavigateCommand>(),
+    makeCommandInfo<LyricsNavigateNextVerseCommand>(),
+    makeCommandInfo<LyricsNavigatePrevVerseCommand>(),
+    makeCommandInfo<LyricsNavigateNextSyllableCommand>(),
     CommandInfo{
         EDITLYRIC_ADD_MELISMA_COMMAND,
         TranslatableString("action", "Add extension line"),
