@@ -82,9 +82,10 @@ void MuseSamplerCheckStatusScenario::showLoadingFailedNotification()
     muse::IInteractive::ButtonData openBtn(int(muse::IInteractive::Button::CustomButton) + 2,
                                            muse::trc("musesounds", "Open MuseSounds Manager"), true /*accent*/);
 
-    std::string msg = muse::trc("musesounds", "To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. "
-                                              "Update if needed and restart your machine.\n\n"
-                                              "If the issue persists, follow the steps at the troubleshooting link below.");
+    std::string msg = muse::trc("musesounds",
+                                "To load MuseSounds, open MuseSounds Manager and check that you’re running the latest version. "
+                                "Update if needed and restart your machine.\n\n"
+                                "If the issue persists, follow the steps at the troubleshooting link below.");
 #else
     muse::IInteractive::ButtonData openBtn(int(muse::IInteractive::Button::CustomButton) + 2,
                                            muse::trc("musesounds", "Open MuseHub"), true /*accent*/);
@@ -125,8 +126,9 @@ void MuseSamplerCheckStatusScenario::showCriticalUpdateNotification()
     muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
                                              muse::trc("musesounds", "Quit & launch MuseSounds Manager"), true /*accent*/);
 
-    std::string msg = muse::trc("musesounds", "To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. "
-                                              "Your MuseSounds libraries won’t work until the update is complete.");
+    std::string msg = muse::trc("musesounds",
+                                "To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. "
+                                "Your MuseSounds libraries won’t work until the update is complete.");
 #else
     muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
                                              muse::trc("musesounds", "Quit & launch MuseHub"), true /*accent*/);
@@ -177,52 +179,20 @@ void MuseSamplerCheckStatusScenario::showNewVersionNotification()
 void MuseSamplerCheckStatusScenario::openMuseHub(bool quit)
 {
 #ifdef Q_OS_LINUX
-    if (process()->startDetached("muse-sounds-manager",
-                                 { "--show-sampler-update", "--show-hidden-statuses" })) {
-        if (quit) {
-            dispatcher()->dispatch("quit");
-        }
-    } else {
-        openMuseHubWebsite(quit);
+    if (!process()->startDetached("muse-sounds-manager",
+                                  { "--show-sampler-update", "--show-hidden-statuses" })) {
+        interactive()->openUrl(globalConfiguration()->museScoreUrl());
     }
-#else
-    const muse::UriQuery MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
-
-#ifdef Q_OS_MACOS
-    if (!interactive()->canOpenAppSync(MUSEHUB_URI)) {
-        openMuseHubWebsite(quit);
-        return;
-    }
-#endif
-
-    auto promise = interactive()->openApp(MUSEHUB_URI);
-
-    promise.onResolve(this, [this, quit](const muse::Ret& ret) {
-        if (!ret) {
-            openMuseHubWebsite(quit);
-        } else if (quit) {
-            dispatcher()->dispatch("quit");
-        }
-    });
-
-    promise.onReject(this, [this, quit](int, const std::string&) {
-        openMuseHubWebsite(quit);
-    });
-#endif
-}
-
-void MuseSamplerCheckStatusScenario::openMuseHubWebsite(bool quit)
-{
-#ifdef Q_OS_LINUX
-    interactive()->openUrl(globalConfiguration()->museScoreUrl());
-#else
-    interactive()->openUrl(globalConfiguration()->museHubWebUrl()
-                           + "?utm_medium=Referral&utm_source=mss"
-                             "&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink"
-                             "&utm_content=musesampler_update");
-#endif
 
     if (quit) {
         dispatcher()->dispatch("quit");
     }
+#else
+    museHubLauncher()->open(MuseHubPage::MuseSamplerUpdate, "musesampler_update")
+    .onResolve(this, [this, quit](const muse::Ret&) {
+        if (quit) {
+            dispatcher()->dispatch("quit");
+        }
+    });
+#endif
 }

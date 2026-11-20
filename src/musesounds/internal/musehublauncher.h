@@ -39,11 +39,14 @@ public:
     MuseHubLauncher(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    void open(MuseHubPage page, const std::string& utmContent = std::string()) override;
-    void openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> open(MuseHubPage page, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
 
 private:
-    void tryOpenMuseHub(const MuseHubUrls& urls);
-    void openMuseHubApp(const muse::UriQuery& museHubUri, const std::string& webUrl);
+    using Resolve = muse::async::Promise<muse::Ret>::Resolve;
+
+    muse::async::Promise<muse::Ret> tryOpenMuseHub(const MuseHubUrls& urls);
+    void openMuseHubApp(const muse::UriQuery& museHubUri, const std::string& webUrl, const Resolve& resolve);
+    void openWebUrl(const std::string& webUrl, const Resolve& resolve);
 };
 }

@@ -27,7 +27,7 @@ namespace mu::musesounds {
 class MuseHubLauncherStub : public IMuseHubLauncher
 {
 public:
-    void open(MuseHubPage page, const std::string& utmContent = std::string()) override;
-    void openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> open(MuseHubPage page, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
 };
 }

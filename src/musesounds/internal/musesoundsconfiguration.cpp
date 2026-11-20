@@ -137,6 +137,9 @@ MuseHubUrls MuseSoundsConfiguration::museHubUrls(MuseHubPage page, const std::st
         return { "musehub://product/store?id=" + codeStr + "&" + museHubAppParams(utmContent, codeStr),
                  baseUrl + "muse-sounds/" + codeStr + "?" + museHubParams(utmContent, codeStr) };
     }
+    case MuseHubPage::MuseSamplerUpdate:
+        return { "musehub://requestUpdateCheck?" + museHubAppParams(utmContent),
+                 baseUrl + "?" + museHubParams(utmContent) };
     }
 
     return { "musehub://", baseUrl };

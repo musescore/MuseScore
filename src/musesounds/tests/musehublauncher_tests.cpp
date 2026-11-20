@@ -21,6 +21,9 @@
  */
 #include <gmock/gmock.h>
 
+#include <optional>
+
+#include "async/asyncable.h"
 #include "async/processevents.h"
 #include "modularity/ioc.h"
 
@@ -56,7 +59,7 @@ async::Promise<T> rejectedPromise(int code, const std::string& msg)
 }
 
 namespace mu::musesounds {
-class MuseSounds_MuseHubLauncherTest : public ::testing::Test
+class MuseSounds_MuseHubLauncherTest : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
     void SetUp() override
@@ -68,6 +71,20 @@ protected:
 
         m_launcher->configuration.set(m_configuration);
         m_launcher->interactive.set(m_interactive);
+    }
+
+    std::optional<Ret> waitForResult(async::Promise<Ret> promise)
+    {
+        std::optional<Ret> result;
+        promise.onResolve(this, [&result](const Ret& ret) {
+            result = ret;
+        });
+
+        muse::async::processMessages(); // launcher
+        muse::async::processMessages(); // canOpenApp
+        muse::async::processMessages(); // openApp
+
+        return result;
     }
 
     std::shared_ptr<MuseHubLauncher> m_launcher;
@@ -101,9 +118,11 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
     EXPECT_CALL(*m_interactive, openUrl(Matcher<const QUrl&>(_))).Times(0);
 
     // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::MuseSoundsPro, "place");
-    muse::async::processMessages();
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSoundsPro, "place"));
+
+    // [THEN] The promise is resolved successfully
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
 }
 
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppCanNotBeOpened_OpensWebUrl)
@@ -126,8 +145,11 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppCanNotBeOpened_OpensWebUrl)
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::MuseSounds, "place");
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSounds, "place"));
+
+    // [THEN] The promise is resolved with the web URL result
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
 }
 
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_CanOpenAppRejected_OpensWebUrl)
@@ -150,8 +172,11 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_CanOpenAppRejected_OpensWebUrl)
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::MuseSounds, "place");
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSounds, "place"));
+
+    // [THEN] The promise is resolved with the web URL result
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
 }
 
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
@@ -177,9 +202,11 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::Plugins, "place");
-    muse::async::processMessages();
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::Plugins, "place"));
+
+    // [THEN] The promise is resolved with the web URL result
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
 }
 
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
@@ -205,9 +232,35 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
     .WillOnce(Return(make_ok()));
 
     // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::MuseSounds, "place");
-    muse::async::processMessages();
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSounds, "place"));
+
+    // [THEN] The promise is resolved with the web URL result
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_WebUrlFailed_ResolvesWithError)
+{
+    // [GIVEN] The configuration returns the URLs for the page
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    .WillByDefault(Return(m_urls));
+
+    // [GIVEN] No app can open the MuseHub link
+    ON_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillByDefault(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ret(Ret::Code::UnknownError));
+    }));
+
+    // [GIVEN] Opening the web URL fails
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ret(Ret::Code::InternalError)));
+
+    // [WHEN] Opening the page
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSounds, "place"));
+
+    // [THEN] The promise is resolved with the web URL error
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result->code(), int(Ret::Code::InternalError));
 }
 
 TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_PassesCodeToConfiguration)
@@ -229,7 +282,9 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_PassesCodeToConfiguratio
     }));
 
     // [WHEN] Opening the sound library
-    m_launcher->openSoundLibrary(String(u"library-code"), "place");
-    muse::async::processMessages();
-    muse::async::processMessages();
+    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(String(u"library-code"), "place"));
+
+    // [THEN] The promise is resolved successfully
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
 }
