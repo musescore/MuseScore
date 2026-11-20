@@ -31,10 +31,19 @@ using namespace mu::converter::api;
 ConverterApi::ConverterApi(muse::api::IApiEngine* e)
     : muse::api::ApiObject(e) {}
 
-QString ConverterApi::selectDir(const QString& title, const QString& dir) const
+QJSValue ConverterApi::selectDir(const QString& title, const QString& dir)
 {
-    io::path_t path = interactive()->selectDirectory(title.toStdString(), dir);
-    return path.toQString();
+    muse::api::JsPromise promise = engine()->newPromise();
+
+    interactive()->selectDirectory(title.toStdString(), dir)
+    .onResolve(this, [resolve = promise.resolve](const io::path_t& path) {
+        resolve.call({ QJSValue(path.toQString()) });
+    })
+    .onReject(this, [resolve = promise.resolve](int, const std::string&) {
+        resolve.call({ QJSValue(QString()) });
+    });
+
+    return promise.promise;
 }
 
 QStringList ConverterApi::scanDir(const QString& dir, const QStringList& filters) const
