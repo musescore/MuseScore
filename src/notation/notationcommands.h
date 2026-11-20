@@ -2535,7 +2535,12 @@ struct EditLyricsAddVerseCommand {
     cprop_decl availabilities = Availability::All;
 };
 
-inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
+struct ExtendToNextNoteCommand {
+    cprop_decl id = Command("command://notation/extend-to-next-note");
+    cprop_decl title = MnemonicString("action", "Extend to next note");
+    cprop_decl description = TranslatableString("action", "Extend to next note");
+    cprop_decl availabilities = Availability::All;
+};
 
 struct ToggleArticulationCommand {
     cprop_decl id = Command("command://notation/toggle-articulation");

@@ -158,7 +158,7 @@ void NotationActionController::init()
     registerCommand<EditLyricsAddMelismaCommand>(&Controller::addMelisma);
     registerCommand<EditLyricsAddVerseCommand>(&Controller::addLyricsVerse);
 
-    registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
+    registerCommand<ExtendToNextNoteCommand>(&Controller::extendToNextNote);
 
     registerCommand<ToggleArticulationCommand>(&Controller::toggleArticulation);
 
@@ -778,6 +778,19 @@ muse::Ret NotationActionController::flipSelection()
     }
 
     interaction->flipSelection();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::extendToNextNote()
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->extendToNextNote();
+    seekSelectedElement();
+
     return muse::make_ok();
 }
 
