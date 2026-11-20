@@ -25,10 +25,12 @@
 #include "engraving/api/v1/apistructs.h"
 #include "engraving/api/v1/cursor.h"
 
+#include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
@@ -410,6 +412,79 @@ TEST(Engraving_ApiCursorTests, addTupletInsideLongerChord)
     EXPECT_FALSE(half->tuplet());
     EXPECT_EQ(half->ticks(), Fraction(1, 2));
     EXPECT_FALSE(chordRestAt(score, Fraction(1, 8), 1));
+
+    delete score;
+}
+
+static void addNotes(Score* score, apiv1::Cursor& cursor, const std::vector<int>& pitches)
+{
+    score->startCmd(TranslatableString::untranslatable("Engraving API cursor tests"));
+    for (int pitch : pitches) {
+        cursor.addNote(pitch);
+    }
+    score->endCmd();
+}
+
+static int pitchAt(Score* score, const Fraction& tick)
+{
+    ChordRest* cr = chordRestAt(score, tick);
+    return cr && cr->isChord() ? toChord(cr)->upNote()->pitch() : -1;
+}
+
+// four quarters in the last measure, C D E F: the cursor stays on the F, with nowhere left to go
+static void fillLastMeasure(Score* score, apiv1::Cursor& cursor)
+{
+    cursor.rewindToTick(score->lastMeasure()->tick().ticks());
+    cursor.setDuration(1, 4);
+    addNotes(score, cursor, { 60, 62, 64, 65 });
+}
+
+// going back to the third beat of the filled last measure: G and A replace E and F, and no measure is added
+TEST(Engraving_ApiCursorTests, addNoteAfterFillingLastMeasure)
+{
+    MasterScore* score = ScoreRW::readScore(CURSOR_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    const size_t measures = score->nmeasures();
+    const Fraction start = score->lastMeasure()->tick();
+
+    apiv1::Cursor cursor(score);
+    fillLastMeasure(score, cursor);
+    cursor.rewindToTick(start.ticks());
+    cursor.next();
+    cursor.next();
+    addNotes(score, cursor, { 67, 69 });
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    EXPECT_EQ(score->nmeasures(), measures);
+    EXPECT_EQ(pitchAt(score, start), 60);
+    EXPECT_EQ(pitchAt(score, start + Fraction(1, 4)), 62);
+    EXPECT_EQ(pitchAt(score, start + Fraction(2, 4)), 67);
+    EXPECT_EQ(pitchAt(score, start + Fraction(3, 4)), 69);
+
+    delete score;
+}
+
+// a triplet on the F of the filled last measure: the notes fill the triplet, and no measure is added
+TEST(Engraving_ApiCursorTests, addTupletAfterFillingLastMeasure)
+{
+    MasterScore* score = ScoreRW::readScore(CURSOR_DATA_DIR + u"empty.mscx");
+    ASSERT_TRUE(score);
+    const size_t measures = score->nmeasures();
+    const Fraction tupletTick = score->lastMeasure()->tick() + Fraction(3, 4);
+
+    apiv1::Cursor cursor(score);
+    fillLastMeasure(score, cursor);
+    addTuplet(score, cursor, Fraction(3, 2), Fraction(1, 4));
+    addNotes(score, cursor, { 67, 69, 71 });
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    EXPECT_EQ(score->nmeasures(), measures);
+    ASSERT_NO_FATAL_FAILURE(expectTuplet(score, tupletTick, Fraction(3, 2), Fraction(1, 4)));
+    EXPECT_EQ(pitchAt(score, tupletTick), 67);
+    EXPECT_EQ(pitchAt(score, tupletTick + Fraction(1, 12)), 69);
+    EXPECT_EQ(pitchAt(score, tupletTick + Fraction(2, 12)), 71);
 
     delete score;
 }
