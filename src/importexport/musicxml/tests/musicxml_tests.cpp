@@ -21,10 +21,14 @@
  */
 
 #include <gtest/gtest.h>
+#include <memory>
 
 #include "engraving/engravingerrors.h"
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/jump.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 
@@ -1106,6 +1110,27 @@ TEST_F(MusicXml_Tests, numberedLyrics) {
 TEST_F(MusicXml_Tests, numerals) {
     musicXmlIoTest("testNumerals");
 }
+TEST_F(MusicXml_Tests, octaveShiftPartTime)
+{
+    std::unique_ptr<MasterScore> score(readScore(XML_IO_DATA_DIR + u"testOctaveShiftPartTime.xml"));
+    ASSERT_TRUE(score);
+    ASSERT_TRUE(score->firstMeasure());
+    Measure* measure = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(measure);
+
+    // Part 1 makes the preceding score measure an eighth longer than part 2.
+    // The sixth note must still be shifted; the last two must be unshifted.
+    const int expectedPitches[] = { 60, 62, 64, 65, 67, 69, 83, 84 };
+    Fraction tick = measure->tick();
+    for (int pitch : expectedPitches) {
+        const Chord* chord = measure->findChord(tick, VOICES);
+        ASSERT_TRUE(chord);
+        ASSERT_EQ(chord->notes().size(), 1);
+        EXPECT_EQ(chord->notes().front()->pitch(), pitch);
+        tick += Fraction(1, 8);
+    }
+}
+
 TEST_F(MusicXml_Tests, octaveShift) {
     musicXmlIoTest("testOctaveShift");
 }

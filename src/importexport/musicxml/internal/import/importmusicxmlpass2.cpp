@@ -658,6 +658,26 @@ static void setPercussionInstrument(MusicXmlInstrument& mxmlInstr, const String&
 }
 
 //---------------------------------------------------------
+//   partTime
+//---------------------------------------------------------
+
+// Pass 1 stores octave shifts in cumulative part time, not score time.
+static Fraction partTime(const MusicXmlParserPass1& pass1, Score* score, const String& partId,
+                         const Measure* measure, const Fraction& tick)
+{
+    const MusicXmlPart part = pass1.getMusicXmlPart(partId);
+    Fraction time(0, 1);
+    size_t i = 0;
+    for (Measure* m = score->firstMeasure(); m && i < part.nMeasures(); m = m->nextMeasure(), ++i) {
+        if (m == measure) {
+            return time + (tick - m->tick());
+        }
+        time += part.measureDuration(i);
+    }
+    return tick;
+}
+
+//---------------------------------------------------------
 //   setPartInstruments
 //---------------------------------------------------------
 
@@ -7355,7 +7375,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
         }
         note = Factory::createNote(c);
         const staff_idx_t ottavaStaff = (msTrack - m_pass1.trackForPart(partId)) / VOICES;
-        const int octaveShift = m_pass1.octaveShift(partId, ottavaStaff, noteStartTime);
+        const Fraction partTick = partTime(m_pass1, m_score, partId, measure, noteStartTime);
+        const int octaveShift = m_pass1.octaveShift(partId, ottavaStaff, partTick);
         const Staff* st = c->staff();
         if (isSingleDrumset && mnp.unpitched() && instrumentId.empty()) {
             xmlSetDrumsetPitch(note, c, st, mnp.displayStep(), mnp.displayOctave(), headGroup, stemDir, instrument);
