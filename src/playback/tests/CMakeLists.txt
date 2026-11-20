@@ -45,5 +45,21 @@ set(MODULE_TEST_LINK
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(SetupGTest)
+if (MUE_BUILD_PLAYBACK_QML)
+    list(APPEND MODULE_TEST_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/practiceemphasispanelmodel_tests.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/../qml/MuseScore/Playback/practiceemphasispanelmodel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/../qml/MuseScore/Playback/practiceemphasispanelmodel.h
+        ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+        ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    )
+    list(APPEND MODULE_TEST_INCLUDE
+        ${CMAKE_CURRENT_LIST_DIR}/../qml/MuseScore/Playback
+        ${PROJECT_SOURCE_DIR}/src/engraving/tests
+    )
+    list(APPEND MODULE_TEST_LINK Qt::Quick)
+    set(MODULE_TEST_DATA_ROOT ${PROJECT_SOURCE_DIR}/src/engraving/tests)
+endif()
 
+include(SetupGTest)
