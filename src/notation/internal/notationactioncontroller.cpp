@@ -174,8 +174,7 @@ void NotationActionController::init()
 
     registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
 
-    registerCommand(ADD_OTTAVA_8VA_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
-    registerCommand(ADD_OTTAVA_8VB_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
+    registerCommand<AddOttavaCommand>(&Controller::addOttava);
 
     registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
     registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
@@ -2268,6 +2267,21 @@ muse::Ret NotationActionController::addOrnament(const AddOrnamentCommand& comman
     }
 
     interaction->toggleOrnament(command.type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addOttava(const AddOttavaCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (interaction->selection()->isNone()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->addOttavaToSelection(command.type);
     return muse::make_ok();
 }
 

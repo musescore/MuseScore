@@ -187,6 +187,7 @@ private:
     muse::Ret addText(const AddTextCommand& command);
     muse::Ret setBeamMode(const SetBeamCommand& command);
     muse::Ret addOrnament(const AddOrnamentCommand& command);
+    muse::Ret addOttava(const AddOttavaCommand& command);
     muse::Ret flipSelection();
 
     // Tab
