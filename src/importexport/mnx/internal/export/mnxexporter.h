@@ -75,6 +75,7 @@ public:
     { return m_staffToPartStaff; }
 
     // utility functions
+    void createLyrics(mnx::sequence::Event& event, const engraving::ChordRest* cr, std::set<std::string>& lyricLineIds);
     engraving::EID getOrAssignEID(engraving::EngravingObject* item);
     std::optional<mnx::sequence::Event> mnxEventFromCR(const engraving::ChordRest* cr);
     size_t mnxMeasureIndexFromMeasure(const engraving::Measure* measure) const;

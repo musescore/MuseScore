@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.75</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>C_C</eid>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="piano">
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          </InstrumentLabel>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <eid>F_F</eid>
+      <Staff>
+        <eid>G_G</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          <lines>1</lines>
+          <clef>0</clef>
+          </StaffType>
+        </Staff>
+      <Instrument id="drumset">
+        <InstrumentLabel>
+          <longName>Snare Drum</longName>
+          </InstrumentLabel>
+        <trackName>Snare Drum</trackName>
+        <instrumentId>drum.group.set</instrumentId>
+        <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Acoustic Snare</name>
+          <stem>1</stem>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>H_H</eid>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>I_I</eid>
+            </Clef>
+          <KeySig>
+            <eid>J_J</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>K_K</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <eid>N_N</eid>
+            </Clef>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>O_O</eid>
+        <StaffTypeChange>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            <clef>0</clef>
+            </StaffType>
+          <eid>P_P</eid>
+          </StaffTypeChange>
+        <voice>
+          <Chord>
+            <eid>Q_Q</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>R_R</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <eid>S_S</eid>
+            </Clef>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>T_T</eid>
+        <StaffTypeChange>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <eid>U_U</eid>
+          </StaffTypeChange>
+        <voice>
+          <Chord>
+            <eid>V_V</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>W_W</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>X_X</eid>
+        <voice>
+          <Chord>
+            <eid>Y_Y</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>Z_Z</eid>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            <eid>a_a</eid>
+            <visible>0</visible>
+            </Clef>
+          <Chord>
+            <eid>b_b</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>c_c</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>d_d</eid>
+            </Clef>
+          <KeySig>
+            <eid>e_e</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>f_f</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>g_g</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>h_h</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <StaffTypeChange>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            <lines>1</lines>
+            </StaffType>
+          <eid>i_i</eid>
+          </StaffTypeChange>
+        <voice>
+          <Chord>
+            <eid>j_j</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>k_k</eid>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>l_l</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>m_m</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <StaffTypeChange>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <eid>n_n</eid>
+          </StaffTypeChange>
+        <voice>
+          <Chord>
+            <eid>o_o</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>p_p</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>q_q</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>r_r</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>s_s</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>t_t</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>u_u</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>v_v</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>w_w</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>x_x</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>y_y</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>z_z</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
