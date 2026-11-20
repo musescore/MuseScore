@@ -60,7 +60,12 @@ void GeneralSettingsModel::createProperties()
         setPropertyValue(m_elementsForIsSmallProperty, Pid::SMALL, newValue);
     });
 
-    m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);
+    m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setPropertyValue(elementsForIsAutoPlaceProperty(), Pid::AUTOPLACE, newValue);
+    }, nullptr, [this](const mu::engraving::Pid pid) {
+        resetPropertyValue(elementsForIsAutoPlaceProperty(), pid);
+        loadProperties();
+    });
     m_isPlayable = buildPropertyItem(Pid::PLAY);
 }
 
@@ -135,9 +140,7 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
         loadPropertyItem(m_isVisible, m_elementsForIsVisibleProperty);
     }
 
-    if (muse::contains(propertyIdSet, Pid::AUTOPLACE)) {
-        loadPropertyItem(m_isAutoPlaceAllowed, m_elementsForIsAutoPlaceProperty);
-    }
+    loadPropertyItem(m_isAutoPlaceAllowed, elementsForIsAutoPlaceProperty());
 
     if (muse::contains(propertyIdSet, Pid::PLAY)) {
         bool isMaster = isMasterNotation();
@@ -180,6 +183,17 @@ void GeneralSettingsModel::onVisibleChanged(bool visible)
 PropertyItem* GeneralSettingsModel::isVisible() const
 {
     return m_isVisible;
+}
+
+QList<EngravingItem*> GeneralSettingsModel::elementsForIsAutoPlaceProperty() const
+{
+    QList<EngravingItem*> elements;
+    for (EngravingItem* element : m_elementsForIsAutoPlaceProperty) {
+        if (element->autoplaceApplies()) {
+            elements.push_back(element);
+        }
+    }
+    return elements;
 }
 
 PropertyItem* GeneralSettingsModel::isAutoPlaceAllowed() const

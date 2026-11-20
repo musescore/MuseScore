@@ -74,6 +74,9 @@ private:
 
     void updateAreGeneralPropertiesAvailable();
 
+    // Elements autoplace applies to, both by type and by their current configuration
+    QList<engraving::EngravingItem*> elementsForIsAutoPlaceProperty() const;
+
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;
     PropertyItem* m_isPlayable = nullptr;
