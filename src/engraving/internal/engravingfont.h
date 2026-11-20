@@ -67,6 +67,8 @@ public:
     std::unordered_map<Sid, PropertyValue> engravingDefaults() const override;
     double textEnclosureThickness();
 
+    bool hasOversizedNoteheadsSupport() const override;
+
     char32_t symCode(SymId id) const override;
     SymId fromCode(char32_t code) const override;
     String toString(SymId id) const override;

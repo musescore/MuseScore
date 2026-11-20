@@ -123,7 +123,7 @@ RectF LoopMarker::resolveMarkerRectByTick(engraving::Fraction tick) const
     const double _spatium = score->style().spatium();
     const double mag = _spatium / score->style().defaultSpatium();
 
-    const double width = (_spatium * 2.0 + score->engravingFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
+    const double width = (_spatium * 2.0 + score->engravingFont()->width(score->resolveSym(mu::engraving::SymId::noteheadBlack), mag)) / 3;
 
     if (m_type == LoopBoundaryType::LoopIn) {
         x = x - _spatium + width / 1.5;

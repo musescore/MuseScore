@@ -366,6 +366,16 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
     }
 }
 
+void EngravingCompat::migrateOversizedNoteheads(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        if (score->engravingFont() && score->engravingFont()->hasOversizedNoteheadsSupport()) {
+            score->style().set(Sid::oversizedNoteheads, true);
+            score->setLayoutAll();
+        }
+    }
+}
+
 static void doMigrateOffset500(EngravingItem* item)
 {
     if (item->offset().isNull()
@@ -427,6 +437,7 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
     }
 
     if (mscVersion < 500) {
+        migrateOversizedNoteheads(score);
         migrateOffset500(score);
         AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(score);
         AlignmentMigration500::migrateHopoLetterAlignment(score);
