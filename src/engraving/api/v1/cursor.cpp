@@ -31,16 +31,17 @@
 #include "engraving/dom/rest.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/repeatlist.h"
-#include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempotimeline.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
-#include "engraving/dom/system.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/textlinebase.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 
+#include "engraving/editing/editspanner.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -268,9 +269,68 @@ bool Cursor::nextMeasure()
 }
 
 //---------------------------------------------------------
+//   isCursorAddableLine
+///   Lines anchored to segments or measures. Note-anchored lines are
+///   added through Note.add(), and lyrics lines belong to their lyrics.
+//---------------------------------------------------------
+
+static bool isCursorAddableLine(const mu::engraving::EngravingItem* e)
+{
+    using Anchor = mu::engraving::Spanner::Anchor;
+
+    if (!e->isSLine() || e->isLyricsLine() || e->isPartialLyricsLine()) {
+        return false;
+    }
+
+    const Anchor anchor = mu::engraving::toSpanner(e)->anchor();
+    return anchor == Anchor::SEGMENT || anchor == Anchor::MEASURE;
+}
+
+//---------------------------------------------------------
+//   addLine
+///   Adds a line starting at the cursor position. By default
+///   it ends at the end of the current chord/rest (or of the
+///   measure if there is no chord/rest in the cursor's track).
+///   A length set beforehand in spannerTicks is kept.
+//---------------------------------------------------------
+
+void Cursor::addLine(mu::engraving::Spanner* spanner)
+{
+    mu::engraving::Segment* startSegment = segment();
+    const mu::engraving::Fraction presetTicks = spanner->ticks();
+
+    // lines are not children of the segment, so Segment::add() would reject them
+    spanner->setOwnershipParent(nullptr);
+    spanner->styleChanged();
+
+    mu::engraving::Segment* endSegment = startSegment; // in EditSpanner::addSpanner, same segment means until end of measure
+    mu::engraving::EngravingItem* cur = currentElement();
+    if (cur && cur->isChordRest()) {
+        using mu::engraving::SegmentType;
+        endSegment = mu::engraving::toChordRest(cur)->nextSegmentAfterCR(
+            SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
+    }
+
+    const bool systemLine = mu::engraving::isSystemTextLine(spanner);
+    const staff_idx_t staffIdx = systemLine ? 0 : mu::engraving::track2staff(static_cast<track_idx_t>(this->track()));
+
+    mu::engraving::Transaction& tx = m_score->transactionManager()->currentOrDummyTransaction();
+    mu::engraving::EditSpanner::addSpanner(tx, m_score, spanner, staffIdx, startSegment, endSegment);
+
+    if (presetTicks > mu::engraving::Fraction(0, 1) && presetTicks != spanner->ticks()) {
+        spanner->undoChangeProperty(mu::engraving::Pid::SPANNER_TICKS, presetTicks);
+    }
+}
+
+//---------------------------------------------------------
 //   add
 ///   Adds the given element to a score at this cursor's
 ///   position.
+///   Lines anchored to segments (e.g. hairpins, text lines,
+///   ottavas, pedals, boxes) start at the cursor position and,
+///   unless their spannerTicks was set before adding, end at
+///   the end of the current chord/rest. Their length can be
+///   changed afterwards via spannerTicks.
 //---------------------------------------------------------
 
 void Cursor::add(EngravingItem* wrapped)
@@ -297,6 +357,10 @@ void Cursor::add(EngravingItem* wrapped)
 
     if (s->isChordRest()) {
         s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
+        return;
+    }
+    if (isCursorAddableLine(s)) {
+        addLine(mu::engraving::toSpanner(s));
         return;
     }
     switch (s->type()) {

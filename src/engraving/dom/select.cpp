@@ -1194,6 +1194,7 @@ muse::ByteArray Selection::symbolListMimeData() const
     Fraction firstTick   = Fraction(0x7FFFFFFF, 1);
     Segment* seg         = 0;
     std::multimap<int64_t, MapData> map;
+    std::unordered_set<const EngravingItem*> added;
 
     // scan selection element list, inserting relevant elements in a tick-sorted map
     for (EngravingItem* e : m_el) {
@@ -1256,6 +1257,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::TRILL_SEGMENT:
         case ElementType::LET_RING_SEGMENT:
         case ElementType::VIBRATO_SEGMENT:
+        case ElementType::BOXLINE_SEGMENT:
         case ElementType::PALM_MUTE_SEGMENT:
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::RASGUEADO_SEGMENT:
@@ -1272,6 +1274,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::TRILL:
         case ElementType::LET_RING:
         case ElementType::VIBRATO:
+        case ElementType::BOXLINE:
         case ElementType::PALM_MUTE:
         case ElementType::WHAMMY_BAR:
         case ElementType::RASGUEADO:
@@ -1284,6 +1287,11 @@ muse::ByteArray Selection::symbolListMimeData() const
         default:
             // Elements of other types are ignored. To allow copying them,
             // add support for them here and in `Score::pasteSymbols`.
+            continue;
+        }
+        // Several segments of the same spanner (e.g. after "Select similar") map to the
+        // same spanner: write it only once, or pasting creates overlapping copies.
+        if (!added.insert(e).second) {
             continue;
         }
         track_idx_t track = e->track();

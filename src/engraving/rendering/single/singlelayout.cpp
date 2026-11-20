@@ -42,6 +42,7 @@
 #include "dom/bagpembell.h"
 #include "dom/barline.h"
 #include "dom/bend.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 #include "dom/capo.h"
@@ -140,6 +141,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::BAR_LINE:     layout(toBarLine(item), ctx);
         break;
     case ElementType::BEND:         layout(toBend(item), ctx);
+        break;
+    case ElementType::BOXLINE:      layout(toBoxLine(item), ctx);
         break;
     case ElementType::BRACKET:      layout(toBracket(item), ctx);
         break;
@@ -277,6 +280,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
 void SingleLayout::layoutLineSegment(LineSegment* item, const Context& ctx)
 {
     switch (item->type()) {
+    case ElementType::BOXLINE_SEGMENT:   layout(toBoxLineSegment(item), ctx);
+        break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layout(toGradualTempoChangeSegment(item), ctx);
         break;
     case ElementType::HAIRPIN_SEGMENT:   layout(toHairpinSegment(item), ctx);
@@ -748,6 +753,32 @@ void SingleLayout::layout(Bend* item, const Context&)
     bb.adjust(-lw, -lw, lw, lw);
     ldata->setBbox(bb);
     ldata->setPos(0.0, 0.0);
+}
+
+void SingleLayout::layout(BoxLine* item, const Context& ctx)
+{
+    layoutLine(static_cast<SLine*>(item), ctx);
+}
+
+void SingleLayout::layout(BoxLineSegment* item, const Context&)
+{
+    BoxLineSegment::LayoutData* ldata = item->mutldata();
+    if (item->spanner()->placeBelow()) {
+        ldata->setPosY(0.0);
+    }
+
+    const BoxLine* box = item->boxLine();
+    const double w = item->pos2().x();
+    const double h = item->absoluteFromSpatium(box->boxHeight());
+
+    ldata->rect = box->placeAbove() ? RectF(0.0, -h, w, h) : RectF(0.0, 0.0, w, h);
+    ldata->closedLeft = item->isSingleBeginType();
+    ldata->closedRight = item->isSingleEndType();
+
+    const double lw2 = 0.5 * item->absoluteFromSpatium(box->lineWidth());
+    ldata->setShape(Shape(ldata->rect.padded(lw2), item));
+
+    item->setOffset(PointF());
 }
 
 void SingleLayout::layout(Bracket* item, const Context& ctx)

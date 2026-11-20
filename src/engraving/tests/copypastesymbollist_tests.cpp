@@ -27,8 +27,11 @@
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/factory.h"
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/spanner.h"
 
 #include "engraving/editing/paste.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -206,4 +209,73 @@ void Engraving_CopyPasteSymbolListTests::copypastedifferentvoice(const char16_t*
 TEST_F(Engraving_CopyPasteSymbolListTests, copypasteRange1)
 {
     copypastedifferentvoice(u"range-01", ElementType::ARTICULATION);
+}
+
+//---------------------------------------------------------
+//    copying several segments of the same spanner must
+//    write (and therefore paste) the spanner only once
+//---------------------------------------------------------
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteSpannerAcrossSystemBreak)
+{
+    MasterScore* score = ScoreRW::readScore(CPSYMBOLLIST_DATA_DIR + u"copypastesymbollist-articulation.mscx");
+    ASSERT_TRUE(score);
+
+    // Hairpin over measures 1-3, with a line break after measure 1
+    Hairpin* hairpin = Factory::createHairpin(score->dummy());
+    hairpin->setTrack(0);
+    hairpin->setTrack2(0);
+    hairpin->setTick(Fraction(0, 1));
+    hairpin->setTicks(Fraction(3, 1));
+    score->addSpanner(hairpin);
+
+    Measure* first = score->firstMeasure();
+    LayoutBreak* lineBreak = Factory::createLayoutBreak(first);
+    lineBreak->setLayoutBreakType(LayoutBreakType::LINE);
+    lineBreak->setTrack(0);
+    score->undoAddElement(lineBreak);
+    score->doLayout();
+
+    ASSERT_GE(hairpin->spannerSegments().size(), 2u);
+
+    // Select both segments (as "Select similar" does)
+    score->select(hairpin->spannerSegments().at(0), SelectType::SINGLE);
+    score->select(hairpin->spannerSegments().at(1), SelectType::ADD);
+    ASSERT_EQ(score->selection().elements().size(), 2u);
+
+    const String mimeType = score->selection().mimeType();
+    ASSERT_EQ(mimeType, String::fromAscii(mimeSymbolListFormat));
+    const muse::ByteArray data = score->selection().mimeData();
+
+    const String xml = String::fromUtf8(data);
+    size_t count = 0;
+    for (size_t pos = xml.indexOf(u"<HairPin"); pos != muse::nidx; pos = xml.indexOf(u"<HairPin", pos + 1)) {
+        ++count;
+    }
+    EXPECT_EQ(count, 1u);
+
+    // Paste at measure 5: exactly one new hairpin
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setData(mimeType, data.toQByteArray());
+
+    Measure* m = first;
+    for (int i = 0; i < 4; ++i) {
+        m = m->nextMeasure();
+    }
+    score->select(m->first()->element(0));
+
+    score->startCmd(TranslatableString::untranslatable("Copy/paste symbol tests"));
+    QMimeDataAdapter ma(mimeData);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    score->endCmd();
+
+    size_t hairpins = 0;
+    for (const auto& [tick, sp] : score->spanner()) {
+        if (sp->isHairpin()) {
+            ++hairpins;
+        }
+    }
+    EXPECT_EQ(hairpins, 2u);
+
+    delete mimeData;
+    delete score;
 }

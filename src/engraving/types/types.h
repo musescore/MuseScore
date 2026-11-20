@@ -152,6 +152,8 @@ enum class ElementType : unsigned char {
     GRADUAL_TEMPO_CHANGE_SEGMENT,
     VIBRATO,
     VIBRATO_SEGMENT,
+    BOXLINE,
+    BOXLINE_SEGMENT,
     PALM_MUTE,
     PALM_MUTE_SEGMENT,
     WHAMMY_BAR,
@@ -259,6 +261,8 @@ constexpr bool autoplaceAppliesToType(ElementType type)
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::VIBRATO:
     case ElementType::VIBRATO_SEGMENT:
+    case ElementType::BOXLINE:
+    case ElementType::BOXLINE_SEGMENT:
     case ElementType::PALM_MUTE:
     case ElementType::PALM_MUTE_SEGMENT:
     case ElementType::WHAMMY_BAR:

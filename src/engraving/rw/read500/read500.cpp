@@ -1023,6 +1023,7 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                        || tag == "Trill"
                        || tag == "LetRing"
                        || tag == "Vibrato"
+                       || tag == "BoxLine"
                        || tag == "PalmMute"
                        || tag == "WhammyBar"
                        || tag == "Rasgueado"

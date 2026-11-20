@@ -57,6 +57,7 @@ class HBox;
 class VBox;
 class FBox;
 class TBox;
+class BoxLine;
 class Bracket;
 class BracketItem;
 class Breath;
@@ -222,6 +223,7 @@ public:
     static void read(VBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(FBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(TBox* b, XmlReader& xml, ReadContext& ctx);
+    static void read(BoxLine* b, XmlReader& xml, ReadContext& ctx);
     static void read(Bracket* b, XmlReader& xml, ReadContext& ctx);
     static void read(Breath* b, XmlReader& xml, ReadContext& ctx);
 

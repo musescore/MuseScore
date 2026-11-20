@@ -398,7 +398,8 @@ MenuItemList NoteInputBarModel::makeLinesItems()
         makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
         makeMenuItem(ADD_OTTAVA_8VA_COMMAND),
         makeMenuItem(ADD_OTTAVA_8VB_COMMAND),
-        makeMenuItem(ADD_NOTELINE_COMMAND)
+        makeMenuItem(ADD_NOTELINE_COMMAND),
+        makeMenuItem(ADD_BOXLINE_COMMAND)
     };
 
     return items;

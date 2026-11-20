@@ -41,6 +41,8 @@ class VBox;
 class FBox;
 class TBox;
 
+class BoxLineSegment;
+
 class Bracket;
 class Breath;
 
@@ -210,6 +212,7 @@ private:
     static void draw(const VBox* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const FBox* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const TBox* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const BoxLineSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Bracket* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Breath* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
