@@ -36,6 +36,8 @@ public:
     static bool updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
     static void updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx);
 
+    static void updateEndOfSystemClefs(System* system, LayoutContext& ctx);
+
     static void relayoutMeasuresOnTrackMapChanged(System* system, LayoutContext& ctx);
 
 private:
@@ -46,6 +48,7 @@ private:
         bool trackMapChanged = false;
         Fraction sTick = Fraction(0, 1);
         Fraction eTick = Fraction(0, 1);
+        Fraction systemStartTick = Fraction(0, 1);
         std::vector<Segment*> allSegments;
         std::span<Segment* const> allSegmentsInRange() const;   // Subset of segments in update range for computing track mappings
         std::vector<Segment*> crSegments;
@@ -85,8 +88,7 @@ private:
                                  std::unordered_set<Note*>& localUnisonNotes);
 
     static bool checkSegmentForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool checkClefKeyTimeSigForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
-    static bool segHasLocalKeySig(const Segment* segment, const SharedPart* sharedPart);
+    static bool checkClefKeyTimeSigForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, const StaveSharingContext& ctx);
     static bool checkSegmentAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkItemsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack,
                                        const std::function<bool(const EngravingItem*, const EngravingItem*)>& isEqual);
@@ -105,7 +107,11 @@ private:
                                                                                                  const EngravingItem*)>& isEqual);
 
     static void makeSharedNotation(StaveSharingContext& ctx);
-    static void makeSharedClefKeyTimeSigs(StaveSharingContext& ctx);
+    static void syncSharedClefKeyTimeSigs(StaveSharingContext& ctx);
+    static std::vector<std::pair<Fraction, Fraction> > mappingRanges(const StaveSharingContext& ctx);
+    static void removeStaleClefKeyTimeSigs(StaveSharingContext& ctx);
+    static void updateStaffClefKeyMaps(StaveSharingContext& ctx);
+    static void makeAllClefKeyTimeSigs(StaveSharingContext& ctx);
     static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedBreaths(StaveSharingContext& ctx);
     static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
