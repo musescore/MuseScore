@@ -64,12 +64,15 @@ Column {
     property string makeIntoShortcut: ""
     property string makeIntoNavigationName: ""
 
-    property bool isMakeIntoAvailable: false
+    required property bool isLockEnabled
+    required property bool isMoveNextPrevEnabled
+    required property bool isMakeIntoEnabled
 
     property var controller
 
     FlatButton {
         id: toggleLockButton
+        enabled: root.isLockEnabled
         width: parent.width
 
         navigation.panel: root.navigationPanel
@@ -107,6 +110,8 @@ Column {
             spacing: 4
 
             FlatButton {
+                enabled: root.isMoveNextPrevEnabled
+
                 width: (moveButtons.width - moveButtons.spacing) / 2
 
                 navigation.panel: root.navigationPanel
@@ -124,7 +129,8 @@ Column {
             }
 
             FlatButton {
-                id: moveNextButton
+                enabled: root.isMoveNextPrevEnabled
+
                 width: (moveButtons.width - moveButtons.spacing) / 2
 
                 navigation.panel: root.navigationPanel
@@ -145,7 +151,7 @@ Column {
 
     FlatButton {
         id: makeIntoButton
-        enabled: root.isMakeIntoAvailable
+        enabled: root.isMakeIntoEnabled
         width: parent.width
 
         navigation.panel: root.navigationPanel

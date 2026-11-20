@@ -8584,7 +8584,7 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
             while (m->isMeasureRepeatGroup(staffIdx) && m->prevMeasure()) { // keep going back until out of measure repeat groups
                 mr = m->measureRepeatElement(staffIdx);
                 IF_ASSERT_FAILED(mr) {
-                    LOGE() << "Could not find MeasureRepeat on measure: " << m->index() << ", staff: " << staffIdx;
+                    LOGE() << "Could not find MeasureRepeat on measure: " << m->measureIndex() << ", staff: " << staffIdx;
                     break;
                 }
 

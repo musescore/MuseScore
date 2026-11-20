@@ -1740,6 +1740,10 @@ void Score::deleteItem(EngravingItem* el)
 
 void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preserveTies)
 {
+    IF_ASSERT_FAILED(mbStart && mbEnd && mbStart->tick() <= mbEnd->tick()) {
+        return;
+    }
+
     select(0, SelectType::SINGLE, 0);
 
     if (mbEnd->isMeasure()) {

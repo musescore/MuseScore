@@ -389,6 +389,8 @@ public:
     void triggerLayout() const override;
     void triggerLayout(staff_idx_t staffIdx) const;
 
+    int measureIndex() const; //! NOTE: does not include all MeasureBase types (see MeasureBase::measureBaseIndex)
+
     void checkHeader();
     void checkTrailer();
     void checkEndOfMeasureChange();

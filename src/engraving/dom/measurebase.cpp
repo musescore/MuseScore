@@ -712,10 +712,10 @@ MeasureBase* MeasureBase::prevMM() const
 }
 
 //---------------------------------------------------------
-//   index
+//   measureBaseIndex
 //---------------------------------------------------------
 
-int MeasureBase::index() const
+int MeasureBase::measureBaseIndex() const
 {
     int idx = 0;
     MeasureBase* m = score()->first();
@@ -729,32 +729,6 @@ int MeasureBase::index() const
         }
         m = m->next();
         ++idx;
-    }
-    return -1;
-}
-
-//---------------------------------------------------------
-//   measureIndex
-//    returns index of measure counting only Measures but
-//    skipping other MeasureBase descendants
-//---------------------------------------------------------
-
-int MeasureBase::measureIndex() const
-{
-    int idx = 0;
-    MeasureBase* m = score()->firstMeasure();
-    Measure* mmRestFirst = nullptr;
-    if (isMeasure() && toMeasure(this)->isMMRest()) {
-        mmRestFirst = toMeasure(this)->mmRestFirst();
-    }
-    while (m) {
-        if (m == this || m == mmRestFirst) {
-            return idx;
-        }
-        m = m->next();
-        if (m && m->isMeasure()) {
-            ++idx;
-        }
     }
     return -1;
 }

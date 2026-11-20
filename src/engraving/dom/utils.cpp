@@ -123,7 +123,7 @@ MeasureBase* Score::tick2measureBase(const Fraction& tick) const
     if (tick == Fraction(-1, 1)) {   // special number
         return m_measures.last();
     }
-    if (tick <= Fraction(0, 1)) {
+    if (tick < Fraction(0, 1)) {
         return m_measures.first();
     }
 

@@ -100,6 +100,11 @@ public:
     bool isNoteOrRestSelected() const override;
     bool isHairpinSelected() const override;
     bool isMoveSelectionAvailable(MoveSelectionType type) const override;
+    bool isSystemSelected() const override;
+    bool isMeasureSelected() const override;
+    bool hasMeasureBasesInSelection() const override;
+    bool isVBoxBaseSelected() const override;
+    bool isMakeIntoSystemAvailable() const override;
 
     bool isToggleLayoutBreakAvailable() const override;
 

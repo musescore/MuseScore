@@ -887,8 +887,11 @@ void Selection::updateSelectedElements()
     const Fraction rangeStart = tickStart();
     const Fraction rangeEnd = tickEnd();
 
+    //! NOTE: A box-only range has no duration, so it shouldn't contain any spanners (even ones that span across it)...
+    const bool isBoxOnlyRange = m_startBox && m_endBox && rangeStart == rangeEnd;
+
     //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChordRest...
-    for (auto i = m_score->spanner().begin(); i != m_score->spanner().end(); ++i) {
+    for (auto i = m_score->spanner().begin(); !isBoxOnlyRange && i != m_score->spanner().end(); ++i) {
         Spanner* sp = (*i).second;
         // ignore spanners belonging to other tracks
         if (sp->track() < startTrack || sp->track() >= endTrack) {

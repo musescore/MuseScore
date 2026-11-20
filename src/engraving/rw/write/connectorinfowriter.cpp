@@ -79,7 +79,7 @@ void ConnectorInfoWriter::write()
 //   SpannerWriter::fillSpannerPosition
 //---------------------------------------------------------
 
-void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const Fraction& tick, bool clipboardmode)
+void SpannerWriter::fillSpannerPosition(Location& l, const Measure* m, const Fraction& tick, bool clipboardmode)
 {
     if (clipboardmode) {
         l.setMeasure(0);
