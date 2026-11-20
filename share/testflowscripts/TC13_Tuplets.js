@@ -137,13 +137,14 @@ function allRhythms(score)
     return result
 }
 
-//! NOTE Everything the end checks compare: the content lines of the score and its parts, and the rhythms
+//! NOTE Everything the end checks compare: the content lines and rhythms of the score and its parts
 function snapshotAll()
 {
     var result = { score: ScoreContent.contentLines(engraving.curScore), rhythms: allRhythms(), parts: [] }
     var parts = Parts.list()
     for (var i = 0; i < parts.length; ++i) {
-        result.parts.push({ title: parts[i].title, lines: ScoreContent.contentLines(parts[i].score) })
+        result.parts.push({ title: parts[i].title, lines: ScoreContent.contentLines(parts[i].score),
+                            rhythms: allRhythms(parts[i].score) })
     }
     return result
 }
@@ -157,6 +158,8 @@ function expectSameSnapshot(expected, actual, what)
     }
     for (var i = 0; i < expected.parts.length; ++i) {
         ScoreContent.expectSameLines(expected.parts[i].lines, actual.parts[i].lines, what + ", part " + expected.parts[i].title)
+        ScoreContent.expectSameLines(expected.parts[i].rhythms, actual.parts[i].rhythms,
+                                     what + ", part " + expected.parts[i].title + " rhythms")
     }
 }
 
