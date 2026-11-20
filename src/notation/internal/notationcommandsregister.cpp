@@ -848,13 +848,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<EditTextSubScriptCommand>(),
     makeCommandInfo<EditTextSuperScriptCommand>(),
 
-    CommandInfo{
-        EXTEND_TO_NEXT_NOTE_COMMAND,
-        TranslatableString("action", "Extend to next note"),
-        TranslatableString("action", "Extend to next note"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ExtendToNextNoteCommand>(),
     CommandInfo{
         REMOVE_SELECTED_RANGE_COMMAND,
         TranslatableString("action", "Remove selected ran&ge"),
