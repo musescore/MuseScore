@@ -76,10 +76,18 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
-    PlacementSection {
-        propertyItem: root.model ? root.model.placement : null
+    FlatRadioButtonGroupPropertyView {
+        titleText: qsTrc("propertiespanel", "Position")
+        propertyItem: root.model ? root.model.position : null
 
+        navigationName: "Position"
         navigationPanel: root.navigationPanel
         navigationRowStart: lineStyleSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("propertiespanel", "Above"), value: BoxLineSettingsModel.Above },
+            { text: qsTrc("propertiespanel", "Center"), value: BoxLineSettingsModel.Center },
+            { text: qsTrc("propertiespanel", "Below"), value: BoxLineSettingsModel.Below }
+        ]
     }
 }

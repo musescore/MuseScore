@@ -31,6 +31,7 @@
 #include "engraving/dom/mcursor.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editboxline.h"
 #include "engraving/editing/editdata.h"
@@ -82,6 +83,8 @@ TEST_F(Engraving_BoxLineModelTests, defaults)
     EXPECT_TRUE(m_box->placeAbove());
     EXPECT_EQ(m_box->propertyDefault(Pid::PLACEMENT).value<PlacementV>(), PlacementV::ABOVE);
     EXPECT_FALSE(m_box->diagonal());
+    EXPECT_FALSE(m_box->centerOnStaff());
+    EXPECT_FALSE(m_box->propertyDefault(Pid::BOXLINE_CENTER_ON_STAFF).toBool());
 }
 
 TEST_F(Engraving_BoxLineModelTests, heightIsClamped)
@@ -102,17 +105,20 @@ TEST_F(Engraving_BoxLineModelTests, cannotBeMadeDiagonal)
     EXPECT_FALSE(m_box->diagonal());
 }
 
-TEST_F(Engraving_BoxLineModelTests, cloneCopiesHeight)
+TEST_F(Engraving_BoxLineModelTests, cloneCopiesProperties)
 {
     m_box->setBoxHeight(4.5_sp);
+    m_box->setCenterOnStaff(true);
     BoxLine* copy = m_box->clone();
     EXPECT_EQ(copy->boxHeight(), 4.5_sp);
+    EXPECT_TRUE(copy->centerOnStaff());
     delete copy;
 }
 
 TEST_F(Engraving_BoxLineModelTests, writeReadRoundTrip)
 {
     m_box->setBoxHeight(3.25_sp);
+    m_box->setCenterOnStaff(true);
     m_box->setPlacement(PlacementV::BELOW);
     m_box->setLineStyle(LineType::DASHED);
     m_box->setDashLineLen(3.0);
@@ -125,6 +131,7 @@ TEST_F(Engraving_BoxLineModelTests, writeReadRoundTrip)
     EXPECT_EQ(copy->lineStyle(), LineType::DASHED);
     EXPECT_DOUBLE_EQ(copy->dashLineLen(), 3.0);
     EXPECT_DOUBLE_EQ(copy->dashGapLen(), 1.5);
+    EXPECT_TRUE(copy->centerOnStaff());
     delete copy;
 }
 
@@ -157,6 +164,14 @@ protected:
     }
 
     // Box over `measures` measures starting at the first one
+    BoxLine* addCenteredBox(int measures)
+    {
+        BoxLine* box = addBox(measures);
+        box->setCenterOnStaff(true);
+        m_score->doLayout();
+        return box;
+    }
+
     BoxLine* addBox(int measures, PlacementV placement = PlacementV::ABOVE)
     {
         BoxLine* box = Factory::createBoxLine(m_score->dummy());
@@ -211,16 +226,19 @@ TEST_F(Engraving_BoxLineTests, segmentDelegatesHeightToBox)
     EXPECT_EQ(front(box)->getProperty(Pid::BOXLINE_HEIGHT).value<Spatium>(), 3.0_sp);
 }
 
-TEST_F(Engraving_BoxLineTests, pluginApiHeightProperty)
+TEST_F(Engraving_BoxLineTests, engravingApiProperties)
 {
     BoxLine* box = addBox(2);
     apiv1::EngravingItem* apiBox = apiv1::wrap(box, apiv1::Ownership::SCORE);
     EXPECT_DOUBLE_EQ(apiBox->property("boxLineHeight").toDouble(), 2.0);
+    EXPECT_FALSE(apiBox->property("boxLineCenterOnStaff").toBool());
 
     m_score->startCmd(TranslatableString::untranslatable("Box line tests"));
     EXPECT_TRUE(apiBox->setProperty("boxLineHeight", 4.5));
+    EXPECT_TRUE(apiBox->setProperty("boxLineCenterOnStaff", true));
     m_score->endCmd();
     EXPECT_EQ(box->boxHeight(), 4.5_sp);
+    EXPECT_TRUE(box->centerOnStaff());
 }
 
 TEST_F(Engraving_BoxLineTests, heightGripChangesOnlyHeight)
@@ -286,6 +304,40 @@ TEST_F(Engraving_BoxLineTests, startEndGripsResizeOnlyHorizontally)
         m_score->removeSpanner(box);
         delete box;
     }
+}
+
+TEST_F(Engraving_BoxLineTests, centeredBoxDoesNotAutoplace)
+{
+    BoxLine* box = addCenteredBox(2);
+    BoxLineSegment* seg = front(box);
+
+    // [THEN] Autoplace doesn't apply, even if the AUTOPLACE property is kept untouched
+    EXPECT_FALSE(seg->autoplace());
+    EXPECT_FALSE(box->autoplace());
+    EXPECT_TRUE(seg->getProperty(Pid::AUTOPLACE).toBool());
+
+    // [WHEN] It goes back to being placed above the staff
+    box->setCenterOnStaff(false);
+    m_score->doLayout();
+
+    // [THEN] Autoplace applies again
+    EXPECT_TRUE(front(box)->autoplace());
+    EXPECT_TRUE(box->autoplace());
+}
+
+TEST_F(Engraving_BoxLineTests, centeredBoxHeightGripGrowsBothWays)
+{
+    BoxLine* box = addCenteredBox(2);
+    const PointF heightGrip = gripPos(front(box), BoxLineSegment::HEIGHT);
+    const PointF startGrip = gripPos(front(box), Grip::START);
+
+    // [WHEN] Dragging the height grip 1sp up
+    drag(front(box), BoxLineSegment::HEIGHT, PointF(0.0, -m_sp));
+
+    // [THEN] The box grows 1sp in each direction, so the grip follows the mouse
+    EXPECT_EQ(box->boxHeight(), 4.0_sp);
+    expectNear(gripPos(front(box), BoxLineSegment::HEIGHT), heightGrip + PointF(0.0, -m_sp));
+    expectNear(gripPos(front(box), Grip::START), startGrip + PointF(0.0, m_sp));
 }
 
 //---------------------------------------------------------
