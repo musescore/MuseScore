@@ -150,7 +150,9 @@ function contentLines(score, onlyStaff)
         if (single && sp.staffIdx !== onlyStaff) {
             continue
         }
-        spanners.push("spanner: " + sp.name + " staff " + (single ? 0 : sp.staffIdx)
+        //! NOTE For hairpins the type tells crescendo from diminuendo
+        var type = sp.type === engraving.Element.HAIRPIN ? " type " + sp.hairpinType : ""
+        spanners.push("spanner: " + sp.name + type + " staff " + (single ? 0 : sp.staffIdx)
                       + " from @" + ticksOf(sp.startElement) + " to @" + ticksOf(sp.endElement))
     }
     spanners.sort()
@@ -163,29 +165,50 @@ function contentLines(score, onlyStaff)
 //! on the multi-measure rest instead of the real measure, so both are read; each item is listed once.
 function annotationsOf(score)
 {
-    var result = []
-    var seen = {}
-    var add = function(seg) {
-        var anns = seg.annotations
-        for (var i = 0; i < anns.length; ++i) {
-            var key = anns[i].name + "|" + anns[i].staffIdx + "|" + seg.tick + "|" + textOf(anns[i])
-            if (!seen[key]) {
-                seen[key] = true
-                result.push({ ann: anns[i], tick: seg.tick })
+    var keyOf = function(ann, tick) {
+        return ann.name + "|" + ann.staffIdx + "|" + tick + "|" + textOf(ann)
+    }
+
+    //! NOTE Collects the annotations of one traversal, grouped by content
+    var collect = function(firstMeasure, nextMeasure) {
+        var groups = {}
+        for (var m = firstMeasure; m; m = m[nextMeasure]) {
+            for (var seg = m.firstSegment; seg; seg = seg.nextInMeasure) {
+                var anns = seg.annotations
+                for (var i = 0; i < anns.length; ++i) {
+                    var key = keyOf(anns[i], seg.tick)
+                    if (!groups[key]) {
+                        groups[key] = []
+                    }
+                    groups[key].push({ ann: anns[i], tick: seg.tick, key: key })
+                }
             }
         }
+        return groups
     }
-    for (var m = score.firstMeasure; m; m = m.nextMeasure) {
-        for (var seg = m.firstSegment; seg; seg = seg.nextInMeasure) {
-            add(seg)
+
+    //! NOTE Duplicates within one traversal are kept (two equal texts are two lines).
+    //! The same item seen by both traversals is listed once: per content, the larger of the two counts.
+    var real = collect(score.firstMeasure, "nextMeasure")
+    var mm = collect(score.firstMeasureMM, "nextMeasureMM")
+    var result = []
+    var key
+    for (key in real) {
+        var fromMM = mm[key] ? mm[key].length : 0
+        result = result.concat(real[key].length >= fromMM ? real[key] : mm[key])
+    }
+    for (key in mm) {
+        if (!real[key]) {
+            result = result.concat(mm[key])
         }
     }
-    for (var mm = score.firstMeasureMM; mm; mm = mm.nextMeasureMM) {
-        for (var mseg = mm.firstSegment; mseg; mseg = mseg.nextInMeasure) {
-            add(mseg)
+
+    result.sort(function(a, b) {
+        if (a.tick !== b.tick) {
+            return a.tick - b.tick
         }
-    }
-    result.sort(function(a, b) { return a.tick - b.tick })
+        return a.key < b.key ? -1 : (a.key > b.key ? 1 : 0)
+    })
     return result
 }
 

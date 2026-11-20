@@ -268,7 +268,7 @@ var testCase = {
             api.dispatcher.dispatch(ADD_HAIRPIN_COMMAND)
             api.testflow.seeChanges()
             endTextEdit()
-            ScoreContent.expectLine(ScoreContent.contentLines(engraving.curScore), "spanner: HairPin staff 0 from @2400", "add hairpin")
+            ScoreContent.expectLine(ScoreContent.contentLines(engraving.curScore), "spanner: HairPin type 0 staff 0 from @2400", "add hairpin (crescendo)")
         }},
         {name: "Add a dynamic (f) on the first note", func: function() {
             selectFluteNote(0)
