@@ -26,17 +26,52 @@
 
 #include "score.h"
 #include "measure.h"
+#include "page.h"
 #include "system.h"
 #include "staff.h"
+#include "../editing/editdata.h"
+#include "../editing/mscoreview.h"
+#include "../editing/transaction/undoablecommand.h"
 
 using namespace mu::engraving;
+
+namespace {
+//! Moves a staff-type marker while retaining the initial staff type for undo.
+class MoveStaffTypeChange : public UndoableCommand
+{
+public:
+    MoveStaffTypeChange(StaffTypeChange* item, Measure* target)
+        : m_item(item), m_target(target) {}
+
+    UNDO_NAME("MoveStaffTypeChange")
+    UNDO_CHANGED_OBJECTS({ m_item, m_target })
+
+private:
+    void flip() override
+    {
+        Measure* source = m_item->measure();
+        Staff* staff = m_item->staff();
+        source->remove(m_item);
+        if (m_target->tick().isZero()) {
+            m_item->setInitialStaffType(*staff->staffType(Fraction(0, 1)));
+        }
+        m_item->setOwnershipParent(m_target);
+        m_target->add(m_item);
+        m_target = source;
+        m_item->triggerLayout();
+    }
+
+    StaffTypeChange* m_item;
+    Measure* m_target;
+};
+}
 
 //---------------------------------------------------------
 //   StaffTypeChange
 //---------------------------------------------------------
 
 StaffTypeChange::StaffTypeChange(DummyParentOr<MeasureBase> parent)
-    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent)
+    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::MOVABLE)
 {
     m_lw = spatium() * 0.3;
 }
@@ -45,6 +80,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
     : EngravingItem(lb)
 {
     m_lw = lb.m_lw;
+    m_initialStaffType = lb.m_initialStaffType;
     m_ownsStaffType = lb.m_ownsStaffType;
     if (lb.m_ownsStaffType && lb.m_staffType) {
         m_staffType = new StaffType(*lb.m_staffType);
@@ -68,6 +104,59 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
 
     m_staffType = st;
     m_ownsStaffType = owned && (st != nullptr);
+}
+
+//! Keeps the original offset so dragging changes the measure, not the marker's layout.
+void StaffTypeChange::startDrag(EditData& ed)
+{
+    m_dragTarget = nullptr;
+    m_dragOffset = offset();
+    EngravingItem::startDrag(ed);
+}
+
+//! Previews attachment to the original measure or an unoccupied measure on the same staff.
+RectF StaffTypeChange::drag(EditData& ed)
+{
+    const RectF dirty = EngravingItem::drag(ed);
+    MeasureBase* mb = score()->searchMeasureBase(ed.pos, /*scanMeasuresOnly*/ true);
+    Measure* target = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
+    m_dragTarget = measure() && target && (target == measure() || target->canAddStaffTypeChange(staffIdx())) ? target : nullptr;
+    return dirty;
+}
+
+//! Connects the dragged marker to the start of its prospective destination measure.
+std::vector<LineF> StaffTypeChange::dragAnchorLines() const
+{
+    if (!m_dragTarget || !m_dragTarget->system()) {
+        return {};
+    }
+    const PointF anchor = m_dragTarget->staffPageBoundingRect(staffIdx()).topLeft()
+                          + m_dragTarget->system()->page()->pos();
+    return { LineF(anchor, canvasPos()) };
+}
+
+//! Commits the move, including linked parts, as part of the current drag transaction.
+void StaffTypeChange::endDrag(EditData& ed)
+{
+    setOffset(m_dragOffset);
+    EngravingItem::endDrag(ed);
+    Measure* target = m_dragTarget;
+    m_dragTarget = nullptr;
+    if (!target || target == measure()) {
+        return;
+    }
+    std::vector<std::pair<StaffTypeChange*, Measure*> > moves;
+    for (EngravingObject* linked : linkList()) {
+        StaffTypeChange* item = toStaffTypeChange(linked);
+        Measure* destination = item->score()->tick2measure(target->tick());
+        if (!destination || !destination->canAddStaffTypeChange(item->staffIdx())) {
+            return;
+        }
+        moves.emplace_back(item, destination);
+    }
+    for (const auto& [item, destination] : moves) {
+        item->score()->undo(new MoveStaffTypeChange(item, destination));
+    }
 }
 
 //---------------------------------------------------------
