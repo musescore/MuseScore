@@ -1879,6 +1879,20 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->setDrawGrid(true);
 
     auto pedal = makeElement<Pedal>(paletteScore());
+    pedal->setEndHookType(HookType::HOOK_45);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and angled end hook)"));
+
+    pedal = makeElement<Pedal>(paletteScore());
+    pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
+    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
+    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
+
+    pedal = makeElement<Pedal>(paletteScore());
     pedal->setLineVisible(false);
     pedal->setEndHookType(HookType::ROSETTE);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
@@ -1887,11 +1901,12 @@ PalettePtr PaletteCreator::newKeyboardPalette()
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(paletteScore());
-    pedal->setEndHookType(HookType::HOOK_90);
+    pedal->setBeginHookType(HookType::HOOK_45);
+    pedal->setEndHookType(HookType::HOOK_45);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
-    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
+    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
 
     pedal = makeElement<Pedal>(paletteScore());
     pedal->setBeginHookType(HookType::HOOK_90);
@@ -1911,19 +1926,49 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 
     pedal = makeElement<Pedal>(paletteScore());
     pedal->setBeginHookType(HookType::HOOK_45);
-    pedal->setEndHookType(HookType::HOOK_45);
-    pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
-    pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
-    pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
-    sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (both hooks angled)"));
-
-    pedal = makeElement<Pedal>(paletteScore());
-    pedal->setBeginHookType(HookType::HOOK_45);
     pedal->setEndHookType(HookType::HOOK_90);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (angled start hook)"));
+
+    constexpr double pedalTextSymbolSize = 15.3;
+    constexpr double pedalTextPreviewScale = 0.85;
+    auto appendPedalTextLine = [&](const String& text, const QString& name) {
+        auto line = makeElement<TextLine>(paletteScore());
+        line->setLen(12 * paletteScore()->style().spatium());
+        line->setBeginText(text);
+        line->setBeginTextPlace(TextPlace::LEFT);
+        line->setEndHookType(HookType::HOOK_90);
+        line->setPlacement(PlacementV::BELOW);
+        line->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (text.contains(u"<sym>")) {
+            line->setBeginTextMusicSymbolsSize(pedalTextSymbolSize);
+            line->setPropertyFlags(Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE, PropertyFlags::UNSTYLED);
+        }
+        sp->appendElement(line, name, pedalTextPreviewScale);
+    };
+
+    auto appendPedalText = [&](const String& text, const QString& name) {
+        auto marking = makeElement<StaffText>(paletteScore());
+        marking->setXmlText(text);
+        marking->setPlacement(PlacementV::BELOW);
+        marking->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        if (text.contains(u"<sym>")) {
+            marking->setSymbolSize(pedalTextSymbolSize);
+            marking->setPropertyFlags(Pid::MUSIC_SYMBOL_SIZE, PropertyFlags::UNSTYLED);
+        }
+        sp->appendElement(marking, name, pedalTextPreviewScale);
+    };
+
+    appendPedalTextLine(u"una corda", QT_TRANSLATE_NOOP("palette", "una corda"));
+    appendPedalText(u"tre corde", QT_TRANSLATE_NOOP("palette", "tre corde"));
+    appendPedalTextLine(u"Sost. <sym>keyboardPedalPed</sym>", QT_TRANSLATE_NOOP("palette", "Sost. Ped."));
+    appendPedalText(u"<sym>keyboardPedalPed</sym> ad lib.", QT_TRANSLATE_NOOP("palette", "Ped. ad lib."));
+    appendPedalText(u"senza <sym>keyboardPedalPed</sym>", QT_TRANSLATE_NOOP("palette", "senza Ped."));
+    appendPedalText(u"poco <sym>keyboardPedalPed</sym>", QT_TRANSLATE_NOOP("palette", "poco Ped."));
+    appendPedalText(u"molto <sym>keyboardPedalPed</sym>", QT_TRANSLATE_NOOP("palette", "molto Ped."));
+    appendPedalText(u"sempre con <sym>keyboardPedalPed</sym>", QT_TRANSLATE_NOOP("palette", "sempre con Ped."));
 
     std::array<QString, 3> names = { QT_TRANSLATE_NOOP("palette", "Chord bracket"),
                                      QT_TRANSLATE_NOOP("palette", "Chord bracket (play with left hand)"),
