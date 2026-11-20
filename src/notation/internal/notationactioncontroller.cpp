@@ -163,10 +163,7 @@ void NotationActionController::init()
 
     registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
 
-    registerCommand(TOGGLE_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
-    registerCommand(TOGGLE_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
-    registerCommand(TOGGLE_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
-    registerCommand(TOGGLE_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
+    registerCommand<ToggleArticulationCommand>(&Controller::toggleArticulation);
 
     registerCommand<FlipCommand>(&Controller::flipSelection);
     registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
@@ -1399,23 +1396,25 @@ muse::Ret NotationActionController::toggleAccidental(const ToggleAccidentalComma
     return muse::make_ok();
 }
 
-void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
+muse::Ret NotationActionController::toggleArticulation(const ToggleArticulationCommand& command)
 {
     TRACEFUNC;
 
     INotationInteractionPtr interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
     if (!noteInput) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
+
+    const SymbolId articulationSymbolId = static_cast<SymbolId>(command.type);
 
     if (interaction->selection()->isNone()) {
         if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
-            return;
+            return muse::make_ret(muse::Ret::Code::NotAllowed);
         }
 
         startNoteInput();
@@ -1426,6 +1425,8 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     } else {
         interaction->toggleArticulationForSelection(articulationSymbolId);
     }
+
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)

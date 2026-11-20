@@ -262,6 +262,15 @@ struct OrnamentTypeContract {
     } };
 };
 
+struct ArticulationTypeContract {
+    static constexpr EnumTable<ArticulationType, 4> table { {
+        { "marcato", ArticulationType::MARCATO, "marcato" },
+        { "sforzato", ArticulationType::SFORZATO, "accent" },
+        { "tenuto", ArticulationType::TENUTO, "tenuto" },
+        { "staccato", ArticulationType::STACCATO, "staccato" },
+    } };
+};
+
 struct PastingTypeContract {
     static constexpr EnumTable<PastingType, 4> table { {
         { "default", PastingType::Default, "default" },
@@ -370,6 +379,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);

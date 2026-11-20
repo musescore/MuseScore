@@ -436,34 +436,11 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ToggleTieCommand>(),
     makeCommandInfo<AddSlurCommand>(),
     makeCommandInfo<ToggleLaissezVibrerCommand>(),
-    CommandInfo{
-        TOGGLE_MARCATO_COMMAND,
-        TranslatableString("action", "Marcato"),
-        TranslatableString("action", "Add articulation: marcato"),
-        InputSchema(),
-        Decoration(IconCode::Code::MARCATO)
-    },
-    CommandInfo{
-        TOGGLE_SFORZATO_COMMAND,
-        TranslatableString("action", "Accent"),
-        TranslatableString("action", "Add articulation: accent"),
-        InputSchema(),
-        Decoration(IconCode::Code::ACCENT)
-    },
-    CommandInfo{
-        TOGGLE_TENUTO_COMMAND,
-        TranslatableString("action", "Tenuto"),
-        TranslatableString("action", "Add articulation: tenuto"),
-        InputSchema(),
-        Decoration(IconCode::Code::TENUTO)
-    },
-    CommandInfo{
-        TOGGLE_STACCATO_COMMAND,
-        TranslatableString("action", "Staccato"),
-        TranslatableString("action", "Add articulation: staccato"),
-        InputSchema(),
-        Decoration(IconCode::Code::STACCATO)
-    },
+    makeCommandInfo<ToggleArticulationCommand>(),
+    makeCommandInfo<ToggleMarcatoCommand>(),
+    makeCommandInfo<ToggleSforzatoCommand>(),
+    makeCommandInfo<ToggleTenutoCommand>(),
+    makeCommandInfo<ToggleStaccatoCommand>(),
 
     CommandInfo{
         VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND,
