@@ -2274,6 +2274,41 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         return false;
     }
 
+    if (score->selection().isNone()) {
+        return false;
+    }
+
+    if (element->isInstrumentChange()) {
+        applyInstrumentChangePaletteElement(element, modifiers);
+        return true;
+    }
+
+    return doApplyPaletteElement(element, modifiers);
+}
+
+void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+{
+    //! NOTE The instrument is chosen before the edit, so that the edit doesn't wait for the user.
+    //! The palette element is copied, as it may be gone by then
+    std::shared_ptr<EngravingItem> copy(element->clone());
+
+    selectInstrumentScenario()->selectInstrument().onResolve(this, [this, copy, modifiers](const InstrumentTemplate& instrument) {
+        m_chosenInstrument = instrument;
+        DEFER {
+            m_chosenInstrument.reset();
+        };
+
+        doApplyPaletteElement(copy.get(), modifiers);
+    });
+}
+
+bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+{
+    mu::engraving::Score* score = this->score();
+    if (!score) {
+        return false;
+    }
+
     const mu::engraving::Selection sel = score->selection();   // make a copy of selection state before applying the operation.
     if (sel.isNone()) {
         return false;
@@ -2786,10 +2821,12 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         EngravingItem* el = target->drop(tx, *dropData);
 
         if (el && el->isInstrumentChange()) {
-            if (!selectInstrument(toInstrumentChange(el))) {
+            IF_ASSERT_FAILED(m_chosenInstrument) {
                 rollback();
                 return;
             }
+
+            setupInstrumentChange(toInstrumentChange(el), *m_chosenInstrument);
         }
 
         if (el && el->hasVoiceAssignmentProperties()) {

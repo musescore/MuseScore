@@ -26,6 +26,8 @@
 
 #include "engraving/tests/utils/scorerw.h"
 
+#include "engraving/dom/dummyparent.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
@@ -188,4 +190,58 @@ TEST_F(Notation_NotationInteractionTests, AddInstrumentChange_NotationClosedBefo
     async::processMessages();
 
     //! [THEN] The answer is ignored (checked by ASan)
+}
+
+TEST_F(Notation_NotationInteractionTests, ApplyInstrumentChangeFromPalette_UserChoosesAnInstrument_AppliesItInOneUndoStep)
+{
+    //! [GIVEN] A chord is selected, and the user is asked for the instrument
+    selectFirstChordRest();
+    EXPECT_CALL(*m_selectInstrumentScenario, selectInstrument(_)).WillOnce(Return(pendingAnswer()));
+
+    //! [WHEN] Applying an instrument change from the palette, which is gone before the answer
+    {
+        std::unique_ptr<InstrumentChange> paletteElement(Factory::createInstrumentChange(score()->dummy()));
+        EXPECT_TRUE(m_notation->interaction()->applyPaletteElement(paletteElement.get()));
+    }
+    async::processMessages();
+
+    //! [THEN] Nothing is changed until the user answers
+    EXPECT_EQ(findInstrumentChange(), nullptr);
+    EXPECT_FALSE(m_notation->undoStack()->canUndo());
+
+    //! [WHEN] The user chooses an instrument
+    const InstrumentTemplate* flute = searchTemplate(u"flute");
+    ASSERT_TRUE(flute);
+    (void)m_resolve(*flute);
+    async::processMessages();
+
+    //! [THEN] The instrument change to that instrument is added
+    InstrumentChange* instrumentChange = findInstrumentChange();
+    ASSERT_TRUE(instrumentChange);
+    EXPECT_TRUE(instrumentChange->init());
+    EXPECT_EQ(instrumentChange->instrument()->id(), flute->id);
+
+    //! [THEN] It is undone in one step
+    m_notation->undoStack()->undo(nullptr);
+    EXPECT_EQ(findInstrumentChange(), nullptr);
+    EXPECT_FALSE(m_notation->undoStack()->canUndo());
+}
+
+TEST_F(Notation_NotationInteractionTests, ApplyInstrumentChangeFromPalette_UserCancels_AppliesNothing)
+{
+    //! [GIVEN] A chord is selected, and the user is asked for the instrument
+    selectFirstChordRest();
+    EXPECT_CALL(*m_selectInstrumentScenario, selectInstrument(_)).WillOnce(Return(pendingAnswer()));
+
+    std::unique_ptr<InstrumentChange> paletteElement(Factory::createInstrumentChange(score()->dummy()));
+    m_notation->interaction()->applyPaletteElement(paletteElement.get());
+    async::processMessages();
+
+    //! [WHEN] The user cancels
+    (void)m_reject(int(Ret::Code::Cancel), "");
+    async::processMessages();
+
+    //! [THEN] Nothing is applied, and there is nothing to undo
+    EXPECT_EQ(findInstrumentChange(), nullptr);
+    EXPECT_FALSE(m_notation->undoStack()->canUndo());
 }

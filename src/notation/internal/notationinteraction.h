@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <QTimer>
@@ -476,6 +477,8 @@ private:
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
     void setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument);
+    void applyInstrumentChangePaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
+    bool doApplyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
@@ -596,6 +599,9 @@ private:
     mu::engraving::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
+
+    //! NOTE The instrument of the instrument change being applied, chosen before the edit
+    std::optional<InstrumentTemplate> m_chosenInstrument;
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
