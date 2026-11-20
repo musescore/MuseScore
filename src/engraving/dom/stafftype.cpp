@@ -434,7 +434,7 @@ void StaffType::setScore(Score* score)
 
 void StaffType::setDurationMetrics()
 {
-    if (!m_score) {
+    if (!m_score || !m_genDurations) {
         return;
     }
 
@@ -456,6 +456,12 @@ void StaffType::setDurationMetrics()
     m_durationYOffset        -= (bb.height() + bb.y()) / 100.0;
     m_durationBoxH           = bb.height() / 100.0;
     m_durationBoxY           = m_durationGridYOffset - bb.height() / 100.0;
+}
+
+void StaffType::setGenDurations(bool val)
+{
+    m_genDurations = val;
+    setDurationMetrics();
 }
 
 void StaffType::setFretMetrics()
