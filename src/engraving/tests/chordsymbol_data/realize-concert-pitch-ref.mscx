@@ -5,6 +5,7 @@
     <Division>480</Division>
     <Style>
       <minMeasureWidth>12</minMeasureWidth>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>

@@ -84,6 +84,8 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
 
     ScoreLoad sl;
 
+    masterScore->style().set(Sid::tempoAlignToGraceNotes, false);
+
     if (mscReader.isContainer()) {
         // Read style
         {

@@ -346,6 +346,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
 void MStyle::applyCompatStyleVals(int mscVersion)
 {
     if (mscVersion < 500) {
+        set(Sid::tempoAlignToGraceNotes, false);
         set(Sid::windsNameByGroup, false);
         set(Sid::vocalsNameByGroup, false);
         set(Sid::maskSlurs, false);
@@ -759,7 +760,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         if (idx == Sid::spatium) {         // special handling for spatium
             continue;
         }
-        if (optimize && isDefault(idx)) {
+        if (optimize && isDefault(idx) && idx != Sid::tempoAlignToGraceNotes) {
             continue;
         }
         P_TYPE type = st.valueType();

@@ -8,6 +8,7 @@
       <vocalsNameByGroup>0</vocalsNameByGroup>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -575,6 +576,7 @@
       <name>Flute</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -886,6 +888,7 @@
       <name>Oboe</name>
       <Division>480</Division>
       <Style>
+        <tempoAlignToGraceNotes>1</tempoAlignToGraceNotes>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>

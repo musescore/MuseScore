@@ -12,6 +12,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
       <user1Name>Style1</user1Name>
       <user1FontFace>FreeSans</user1FontFace>
       <user1FontSize>24</user1FontSize>
@@ -411,6 +412,7 @@
         <pageOddBottomMargin>0.787403</pageOddBottomMargin>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <user1Name>Style1</user1Name>
         <user1FontFace>FreeSans</user1FontFace>
         <user1FontSize>24</user1FontSize>
@@ -642,6 +644,7 @@
         <pageOddBottomMargin>0.787403</pageOddBottomMargin>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <user1Name>Style1</user1Name>
         <user1FontFace>FreeSans</user1FontFace>
         <user1FontSize>24</user1FontSize>
@@ -872,6 +875,7 @@
         <pageOddBottomMargin>0.787403</pageOddBottomMargin>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <tempoAlignToGraceNotes>0</tempoAlignToGraceNotes>
         <user1Name>Style1</user1Name>
         <user1FontFace>FreeSans</user1FontFace>
         <user1FontSize>24</user1FontSize>
