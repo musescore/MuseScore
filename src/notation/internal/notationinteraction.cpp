@@ -56,6 +56,7 @@
 #include "engraving/dom/anchors.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
+#include "engraving/dom/boxline.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
@@ -101,6 +102,7 @@
 #include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editboxline.h"
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editspanner.h"
@@ -5517,6 +5519,24 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
 
     if (!noteInput()->isNoteInputMode() && hairpins.size() == 1) {
         mu::engraving::LineSegment* segment = hairpins.front()->frontSegment();
+        select({ segment });
+        startEditGrip(segment, mu::engraving::Grip::END);
+    }
+}
+
+void NotationInteraction::addBoxLineToSelection()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    std::vector<mu::engraving::BoxLine*> boxLines;
+    transaction(TranslatableString("undoableAction", "Add box"), [&](Transaction& tx) {
+        boxLines = EditBoxLine::addBoxLines(tx, score());
+    });
+
+    if (!noteInput()->isNoteInputMode() && boxLines.size() == 1 && !boxLines.front()->segmentsEmpty()) {
+        mu::engraving::LineSegment* segment = boxLines.front()->frontSegment();
         select({ segment });
         startEditGrip(segment, mu::engraving::Grip::END);
     }

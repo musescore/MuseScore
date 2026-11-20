@@ -114,6 +114,8 @@ target_sources(engraving PRIVATE
     editing/editautomationpoints.h
     editing/editbeam.cpp
     editing/editbeam.h
+    editing/editboxline.cpp
+    editing/editboxline.h
     editing/editstaffbrackets.cpp
     editing/editstaffbrackets.h
     editing/editcapo.cpp

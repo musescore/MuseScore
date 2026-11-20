@@ -2747,6 +2747,13 @@ struct AddNoteLineCommand {
     cprop_decl availabilities = Availability::All;
 };
 
+struct AddBoxLineCommand {
+    cprop_decl id = Command("command://notation/add-boxline");
+    cprop_decl title = MnemonicString("action", "&Segment-anchored box");
+    cprop_decl description = TranslatableString("action", "Add segment-anchored box");
+    cprop_decl availabilities = Availability::All;
+};
+
 struct AddImageCommand {
     cprop_decl id = Command("command://notation/add-image");
     cprop_decl title = MnemonicString("action", "Image");

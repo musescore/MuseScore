@@ -229,6 +229,7 @@ private:
 
     muse::Ret addDynamic();
     muse::Ret addNoteLine();
+    muse::Ret addBoxLine();
     muse::Ret addImage();
     muse::Ret addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);

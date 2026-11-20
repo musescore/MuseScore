@@ -725,7 +725,8 @@ MenuItemList AppMenuModel::makeLinesItems()
         makeMenuItem(AddHairpinDiminuendoCommand::id),
         makeMenuItem(AddOttava8vaCommand::id),
         makeMenuItem(AddOttava8vbCommand::id),
-        makeMenuItem(AddNoteLineCommand::id)
+        makeMenuItem(AddNoteLineCommand::id),
+        makeMenuItem(AddBoxLineCommand::id)
     };
 
     return items;

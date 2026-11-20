@@ -32,9 +32,10 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/system.h"
+#include "engraving/editing/editboxline.h"
 #include "engraving/editing/editdata.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
-#include "engraving/rendering/single/singlerenderer.h"
 
 #include "utils/scorerw.h"
 
@@ -285,4 +286,142 @@ TEST_F(Engraving_BoxLineTests, startEndGripsResizeOnlyHorizontally)
         m_score->removeSpanner(box);
         delete box;
     }
+}
+
+//---------------------------------------------------------
+//   EditBoxLine tests: adding boxes to the selection
+//---------------------------------------------------------
+
+class Engraving_EditBoxLineTests : public ::testing::Test
+{
+protected:
+    void SetUp() override
+    {
+        // Two staves with four whole-note measures each
+        MCursor c;
+        c.setTimeSig(Fraction(4, 4));
+        c.createScore(nullptr, u"test");
+        c.addPart(u"voice");
+        c.addPart(u"voice");
+        for (int track : { 0, 4 }) {
+            c.move(track, Fraction(0, 1));
+            if (track == 0) {
+                c.addTimeSig(Fraction(4, 4));
+            }
+            for (int i = 0; i < 4; ++i) {
+                c.addChord(60, TDuration(DurationType::V_WHOLE));
+            }
+        }
+        m_score = c.score();
+        m_score->doLayout();
+    }
+
+    void TearDown() override
+    {
+        delete m_score;
+    }
+
+    Measure* measure(int idx) const
+    {
+        Measure* m = m_score->firstMeasure();
+        for (int i = 0; i < idx; ++i) {
+            m = m->nextMeasure();
+        }
+        return m;
+    }
+
+    Chord* chord(int measureIdx, track_idx_t track) const
+    {
+        Measure* m = measure(measureIdx);
+        return m->findChord(m->tick(), track);
+    }
+
+    std::vector<BoxLine*> addBoxLines()
+    {
+        m_score->startCmd(TranslatableString::untranslatable("Edit box line tests"));
+        std::vector<BoxLine*> boxes = EditBoxLine::addBoxLines(m_score->transactionManager()->currentOrDummyTransaction(), m_score);
+        m_score->endCmd();
+        return boxes;
+    }
+
+    size_t boxCount() const
+    {
+        size_t count = 0;
+        for (const auto& pair : m_score->spanner()) {
+            if (pair.second->isBoxLine()) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
+    MasterScore* m_score = nullptr;
+};
+
+TEST_F(Engraving_EditBoxLineTests, singleChordSelection)
+{
+    m_score->select(chord(3, 0), SelectType::SINGLE);
+
+    std::vector<BoxLine*> boxes = addBoxLines();
+
+    ASSERT_EQ(boxes.size(), 1);
+    EXPECT_EQ(boxes.front()->track(), 0);
+    EXPECT_EQ(boxes.front()->tick(), Fraction(3, 1));
+    EXPECT_EQ(boxes.front()->tick2(), Fraction(4, 1));
+}
+
+TEST_F(Engraving_EditBoxLineTests, listSelectionSpansSelectedChords)
+{
+    // [GIVEN] The chords of measures 2 and 3 of the second staff are selected
+    m_score->select(chord(1, 4), SelectType::SINGLE);
+    m_score->select(chord(2, 4), SelectType::ADD);
+
+    // [WHEN] Adding a box
+    std::vector<BoxLine*> boxes = addBoxLines();
+
+    // [THEN] One box covers both chords, on the second staff
+    ASSERT_EQ(boxes.size(), 1);
+    BoxLine* box = boxes.front();
+    EXPECT_EQ(box->track(), 4);
+    EXPECT_EQ(box->tick(), Fraction(1, 1));
+    EXPECT_EQ(box->tick2(), Fraction(3, 1));
+    EXPECT_EQ(boxCount(), 1);
+}
+
+TEST_F(Engraving_EditBoxLineTests, rangeSelectionAddsOneBoxPerStaff)
+{
+    // [GIVEN] Measures 1-2 of both staves are range-selected
+    m_score->selection().setRangeTicks(Fraction(0, 1), Fraction(2, 1), 0, 2);
+    m_score->selection().updateSelectedElements();
+
+    // [WHEN] Adding a box
+    std::vector<BoxLine*> boxes = addBoxLines();
+
+    // [THEN] Each staff gets a box covering the range
+    ASSERT_EQ(boxes.size(), 2);
+    for (size_t i = 0; i < boxes.size(); ++i) {
+        EXPECT_EQ(boxes[i]->track(), i * VOICES);
+        EXPECT_EQ(boxes[i]->tick(), Fraction(0, 1));
+        EXPECT_EQ(boxes[i]->tick2(), Fraction(2, 1));
+    }
+    EXPECT_EQ(boxCount(), 2);
+}
+
+TEST_F(Engraving_EditBoxLineTests, nothingAddedWithoutChordRest)
+{
+    // [GIVEN] A selection without chords or rests (a time signature)
+    m_score->select(measure(0)->findSegment(SegmentType::TimeSig, Fraction(0, 1))->element(0), SelectType::SINGLE);
+
+    EXPECT_TRUE(addBoxLines().empty());
+    EXPECT_EQ(boxCount(), 0);
+}
+
+TEST_F(Engraving_EditBoxLineTests, addIsUndoable)
+{
+    m_score->select(chord(0, 0), SelectType::SINGLE);
+    ASSERT_EQ(addBoxLines().size(), 1);
+    ASSERT_EQ(boxCount(), 1);
+
+    m_score->undoStack()->undo(nullptr);
+    EXPECT_EQ(boxCount(), 0);
 }

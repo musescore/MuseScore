@@ -159,6 +159,7 @@ public:
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));
     MOCK_METHOD(void, addHairpinOnGripDrag, (engraving::EditData&, bool), (override));
     MOCK_METHOD(void, addHairpinsToSelection, (HairpinType), (override));
+    MOCK_METHOD(void, addBoxLineToSelection, (), (override));
     MOCK_METHOD(void, putRestToSelection, (), (override));
     MOCK_METHOD(void, putRest, (Duration), (override));
     MOCK_METHOD(void, addBracketsToSelection, (BracketsType), (override));

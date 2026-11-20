@@ -175,6 +175,8 @@ void NotationActionController::init()
     registerCommand<AddDynamicCommand>(&Controller::addDynamic);
     registerCommand<AddNoteLineCommand>(&Controller::addNoteLine);
 
+    registerCommand<AddBoxLineCommand>(&Controller::addBoxLine);
+
     registerCommand<AddImageCommand>(&Controller::addImage);
 
     registerCommand<ToggleBowCommand>(&Controller::toggleBow);
@@ -2130,6 +2132,19 @@ muse::Ret NotationActionController::addNoteLine()
     }
 
     interaction->addAnchoredLineToSelectedNotes();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addBoxLine()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->addBoxLineToSelection();
     return muse::make_ok();
 }
 
