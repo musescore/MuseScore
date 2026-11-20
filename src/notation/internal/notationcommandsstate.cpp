@@ -50,7 +50,7 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     CopyPasteSwapCommand::id,
     DeleteCommand::id,
     FlipCommand::id,
-    FLIP_HORIZONTALLY_COMMAND,
+    FlipHorizontallyCommand::id,
     SelectNextSegmentCommand::id,
     SelectPrevSegmentCommand::id,
     SelectUpNoteInChordCommand::id,

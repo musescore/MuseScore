@@ -189,6 +189,7 @@ private:
     muse::Ret addOrnament(const AddOrnamentCommand& command);
     muse::Ret addOttava(const AddOttavaCommand& command);
     muse::Ret flipSelection();
+    muse::Ret flipSelectionHorizontally();
     muse::Ret extendToNextNote();
 
     // Tab

@@ -458,13 +458,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     makeCommandInfo<FlipCommand>(),
-    CommandInfo{
-        FLIP_HORIZONTALLY_COMMAND,
-        TranslatableString("action", "Flip horizontally"),
-        TranslatableString("action", "Flip horizontally"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<FlipHorizontallyCommand>(),
 
     CommandInfo{
         ADD_DRUM_NOTE_COMMAND,
