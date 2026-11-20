@@ -102,6 +102,7 @@
 #include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editdynamic.h"
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editspanner.h"
@@ -5761,37 +5762,11 @@ void NotationInteraction::increaseDecreaseSelectedDynamicsValues(int delta)
         return;
     }
 
-    const auto inRange = [](DynamicType type) {
-        return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
-    };
-
-    std::map<Dynamic*, /*newType*/ DynamicType> dynamicsMap;
-
-    // Collect valid dynamics before trying anything (avoid unnecessary calls to startEdit etc)...
-    for (EngravingItem* item : selection()->elements()) {
-        if (!item->isDynamic()) {
-            continue;
-        }
-        Dynamic* dynamic = toDynamic(item);
-        DynamicType newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) + delta);
-        if (inRange(newType)) {
-            dynamicsMap.emplace(dynamic, newType);
-        }
-    }
-
-    if (dynamicsMap.empty()) {
-        return;
-    }
-
     transaction(delta > 0 // positive: increase dynamics, negative: decrease dynamics
                 ? TranslatableString("undoableAction", "Increase dynamics")
                 : TranslatableString("undoableAction", "Decrease dynamics"),
                 [&](Transaction& tx) {
-        for (const auto& [dynamic, newType] : dynamicsMap) {
-            dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
-            dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
-            EditHairpin::autoFlipHairpinsType(tx, dynamic);
-        }
+        EditDynamic::increaseDecreaseSelectedDynamicsValues(tx, score(), delta);
     });
 
     notifyAboutNotationChanged();
