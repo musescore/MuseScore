@@ -68,6 +68,7 @@ public:
 
     void setDynamicType(DynamicType val) { m_dynamicType = val; }
     void setDynamicType(const String&);
+    void undoChangeDynamicType(DynamicType);
 
     DynamicType dynamicType() const { return m_dynamicType; }
     int subtype() const override { return static_cast<int>(m_dynamicType); }

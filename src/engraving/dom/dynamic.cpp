@@ -240,6 +240,19 @@ void Dynamic::setDynamicType(const String& tag)
     setXmlText(dynamicInfo.second);
 }
 
+void Dynamic::undoChangeDynamicType(DynamicType type)
+{
+    const String oldDynamicText = dynamicText(dynamicType());
+    const String newDynamicText = dynamicText(type);
+    const String text = xmlText();
+    const size_t pos = oldDynamicText.isEmpty() ? muse::nidx : text.indexOf(oldDynamicText);
+    const String newText = pos != muse::nidx
+                           ? text.left(pos) + newDynamicText + text.mid(pos + oldDynamicText.size())
+                           : newDynamicText;
+    undoChangeProperty(Pid::TEXT, newText);
+    undoChangeProperty(Pid::DYNAMIC_TYPE, type);
+}
+
 std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
 {
     std::string utf8Tag = tag.toStdString();

@@ -26,6 +26,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/masterscore.h"
@@ -94,6 +96,56 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
+}
+
+TEST_F(Engraving_TextBaseTests, changeDynamicTypePreservesAttachedText)
+{
+    struct TestCase {
+        String originalText;
+        DynamicType newType;
+        String expectedText;
+    };
+    const TestCase cases[] = {
+        { u"<sym>dynamicMezzo</sym><sym>dynamicPiano</sym> sub.", DynamicType::F,
+          u"<sym>dynamicForte</sym> sub." },
+        { u"<i>poco </i><sym>dynamicMezzo</sym><sym>dynamicPiano</sym> sub.", DynamicType::FF,
+          u"<i>poco </i><sym>dynamicForte</sym><sym>dynamicForte</sym> sub." },
+        { u"<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>", DynamicType::P, u"<sym>dynamicPiano</sym>" },
+        { u"dolce", DynamicType::F, u"<sym>dynamicForte</sym>" },
+        { u"<sym>dynamicMezzo</sym><sym>dynamicPiano</sym> sub.", DynamicType::MP,
+          u"<sym>dynamicMezzo</sym><sym>dynamicPiano</sym> sub." },
+        { u"<sym>dynamicMezzo</sym><sym>dynamicPiano</sym> then <sym>dynamicMezzo</sym><sym>dynamicPiano</sym>",
+          DynamicType::F, u"<sym>dynamicForte</sym> then <sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
+    };
+
+    for (const TestCase& testCase : cases) {
+        SCOPED_TRACE(testCase.originalText.toStdString());
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"test.mscx"));
+        Dynamic* dynamic = addDynamic(score.get());
+        dynamic->setDynamicType(testCase.originalText);
+        const DynamicType originalType = dynamic->dynamicType();
+        const size_t undoIndex = score->undoStack()->currentIndex();
+
+        score->startCmd(TranslatableString::untranslatable("Change dynamic type (test)"));
+        dynamic->undoChangeDynamicType(testCase.newType);
+        score->endCmd();
+        EXPECT_EQ(dynamic->xmlText(), testCase.expectedText);
+        EXPECT_EQ(dynamic->dynamicType(), testCase.newType);
+
+        if (testCase.originalText == testCase.expectedText && originalType == testCase.newType) {
+            EXPECT_EQ(score->undoStack()->currentIndex(), undoIndex);
+            continue;
+        }
+
+        EditData ed;
+        score->undoStack()->undo(&ed);
+        EXPECT_EQ(dynamic->xmlText(), testCase.originalText);
+        EXPECT_EQ(dynamic->dynamicType(), originalType);
+
+        score->undoStack()->redo();
+        EXPECT_EQ(dynamic->xmlText(), testCase.expectedText);
+        EXPECT_EQ(dynamic->dynamicType(), testCase.newType);
+    }
 }
 
 TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)

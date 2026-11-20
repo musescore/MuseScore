@@ -4900,7 +4900,7 @@ seguidas de guiones</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To key</source>
+        <source>To Key</source>
         <translation>Al tono</translation>
     </message>
     <message>

@@ -236,15 +236,8 @@ void TextBase::endEdit(EditData& ed)
         // change property to set text to actual value again - this also changes text of linked elements
         undoChangeProperty(Pid::TEXT, actualXmlText);
 
-        // For dynamics, parse the dynamic type from the text and update DYNAMIC_TYPE property
         if (isDynamic()) {
-            Dynamic* dynamic = toDynamic(this);
-            String xmlText = dynamic->xmlText();
-            std::pair<DynamicType, String> dynamicInfo = dynamic->parseDynamicText(xmlText);
-            if (dynamicInfo.first != DynamicType::OTHER || !dynamicInfo.second.isEmpty()) {
-                // Set DYNAMIC_TYPE with the parsed DynamicType enum (not the string)
-                undoChangeProperty(Pid::DYNAMIC_TYPE, dynamicInfo.first);
-            }
+            undoChangeProperty(Pid::DYNAMIC_TYPE, actualXmlText);
         }
 
         renderer()->layoutText1(this);

@@ -163,8 +163,7 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
     }
 
     beginCommand(TranslatableString("undoableAction", "Add dynamic"));
-    m_item->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(DYN_POPUP_PAGES[page][index].dynType));
-    m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
+    toDynamic(m_item)->undoChangeDynamicType(DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
 
     INotationInteractionPtr interaction = currentNotation()->interaction();

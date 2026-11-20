@@ -4898,7 +4898,7 @@ asla sola hizalama</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To key</source>
+        <source>To Key</source>
         <translation>Anahtara Göre</translation>
     </message>
     <message>

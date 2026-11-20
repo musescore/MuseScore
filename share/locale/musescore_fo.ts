@@ -4899,7 +4899,7 @@ um aftaná strok</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To key</source>
+        <source>To Key</source>
         <translation>Til lykil</translation>
     </message>
     <message>
