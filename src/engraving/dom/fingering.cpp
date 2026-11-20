@@ -80,10 +80,10 @@ ElementType Fingering::layoutType() const
 }
 
 //---------------------------------------------------------
-//   calculatePlacement
+//   calculateDefaultPlacement
 //---------------------------------------------------------
 
-PlacementV Fingering::calculatePlacement() const
+PlacementV Fingering::calculateDefaultPlacement() const
 {
     Note* n = note();
     if (!n) {
@@ -148,7 +148,7 @@ engraving::PropertyValue Fingering::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return calculatePlacement();
+        return calculateDefaultPlacement();
     case Pid::TEXT_STYLE:
         return TextStyleType::FINGERING;
     default:

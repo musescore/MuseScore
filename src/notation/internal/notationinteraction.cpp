@@ -6194,7 +6194,7 @@ bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIt
     return true;
 }
 
-void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";
@@ -6207,17 +6207,17 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
-    doAddText(type, item);
+    doAddText(type, item, placement);
 }
 
-void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
     }
 
     startEdit(TranslatableString("undoableAction", "Add text"));
-    mu::engraving::TextBase* text = score()->addText(type, item);
+    mu::engraving::TextBase* text = score()->addText(type, item, placement);
 
     if (!text) {
         rollback();
@@ -7183,7 +7183,31 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
     showItem(fbNew);
 }
 
-// is item a TextBase with the same type and style as origText?
+static bool isMultiVoiceChord(const Chord* chord)
+{
+    const Measure* measure = chord ? chord->measure() : nullptr;
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+    return measure->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
+}
+
+static bool shouldPreservePlacement(const TextBase* text)
+{
+    IF_ASSERT_FAILED(text) {
+        return false;
+    }
+    // for these types - the near text must have the same placement as the item we're navigating from
+    static const std::unordered_set<mu::engraving::TextStyleType> PRESERVE_PLACEMENT_TYPES {
+        TextStyleType::STICKING,
+        TextStyleType::FINGERING,
+        TextStyleType::RH_GUITAR_FINGERING,
+        TextStyleType::STRING_NUMBER,
+    };
+    return muse::contains(PRESERVE_PLACEMENT_TYPES, text->textStyleType());
+}
+
+// is item a TextBase with the same type, style, and placement as origText?
 static bool isMatchingText(const EngravingItem* item, const TextBase* origText)
 {
     IF_ASSERT_FAILED(item && origText) {
@@ -7192,7 +7216,38 @@ static bool isMatchingText(const EngravingItem* item, const TextBase* origText)
     if (item->type() != origText->type()) {
         return false;
     }
-    return mu::engraving::toTextBase(item)->textStyleType() == origText->textStyleType();
+    const TextBase* itemText = mu::engraving::toTextBase(item);
+    const bool matchingStyle = itemText->textStyleType() == origText->textStyleType();
+    const bool matchingPlacement = itemText->placement() == origText->placement();
+    return matchingStyle && (matchingPlacement || !shouldPreservePlacement(origText));
+}
+
+// Return whether text at note can have the same above/below placement as origText. For multi-voice
+// fingerings, the chord's automatic side must match, or the note must already have matching text...
+static bool canMatchPlacement(const Note* note, const TextBase* origText)
+{
+    IF_ASSERT_FAILED(note && origText) {
+        return false;
+    }
+
+    const Chord* chord = note->chord();
+    if (!shouldPreservePlacement(origText) || !origText->isFingering() || !isMultiVoiceChord(chord)) {
+        return true;
+    }
+
+    // only visit notes whose fingering is drawn on the same side as origText
+    const PlacementV chordPlacement = chord->up() ? PlacementV::ABOVE : PlacementV::BELOW;
+    if (chordPlacement == origText->placement()) {
+        return true;
+    }
+
+    for (const EngravingItem* item : note->el()) {
+        if (isMatchingText(item, origText)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 static std::vector<Note*> notesInTextNavigationOrder(Chord* chord, bool back)
@@ -7219,6 +7274,17 @@ static std::vector<Note*> notesInTextNavigationOrder(Chord* chord, bool back)
     return result;
 }
 
+static Note* findNoteInChord(Chord* chord, const TextBase* origText, bool back)
+{
+    for (Note* candidate : notesInTextNavigationOrder(chord, back)) {
+        if (canMatchPlacement(candidate, origText)) {
+            return candidate;
+        }
+    }
+
+    return nullptr;
+}
+
 // go to next/prev note in same chord, or go to next/prev chord, which may be in another voice
 static Note* findNearNote(Note* origNote, const TextBase* origText, bool back)
 {
@@ -7231,7 +7297,7 @@ static Note* findNearNote(Note* origNote, const TextBase* origText, bool back)
             afterOrigNote = true;
             continue;
         }
-        if (afterOrigNote) {
+        if (afterOrigNote && canMatchPlacement(candidate, origText)) {
             return candidate;
         }
     }
@@ -7250,8 +7316,11 @@ static Note* findNearNote(Note* origNote, const TextBase* origText, bool back)
     // next, try going to prev/next chord in another voice
     for (int track = static_cast<int>(origText->track()) + inc; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
         EngravingItem* e = segment->element(track);
-        if (e && e->isChord()) {
-            return notesInTextNavigationOrder(toChord(e), back).front();
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        if (Note* note = findNoteInChord(toChord(e), origText, back)) {
+            return note;
         }
     }
 
@@ -7261,8 +7330,11 @@ static Note* findNearNote(Note* origNote, const TextBase* origText, bool back)
     while (seg) {
         for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
             EngravingItem* e = seg->element(track);
-            if (e && e->isChord()) {
-                return notesInTextNavigationOrder(toChord(e), back).front();
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            if (Note* note = findNoteInChord(toChord(e), origText, back)) {
+                return note;
             }
         }
 
@@ -7350,6 +7422,14 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 
     TextBase* existingText = findMatchingText(target, ot);
 
+    //! NOTE: see Fingering::calculateDefaultPlacement...
+    const bool voiceDependentPlacement = ot->isFingering() && target->isNote() && isMultiVoiceChord(toNote(target)->chord());
+
+    std::optional<PlacementV> newPlacement;
+    if (shouldPreservePlacement(ot) && !voiceDependentPlacement) {
+        newPlacement = ot->placement();
+    }
+
     // ot may be deleted when editing ends, so read what we need first
     const ElementType type = ot->type();
     const mu::engraving::TextStyleType textStyleType = ot->textStyleType();
@@ -7364,7 +7444,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         // add new text if no existing element to edit
         // TODO: for tempo text, would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
-            addTextToItem(textStyleType, target);
+            addTextToItem(textStyleType, target, newPlacement);
         }
     }
 }

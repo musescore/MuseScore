@@ -417,8 +417,8 @@ private:
     bool canAddTextToItem(TextStyleType type, const EngravingItem* item) const;
 
     void addTextToTopFrame(TextStyleType type);
-    void addTextToItem(TextStyleType type, EngravingItem* item);
-    void doAddText(TextStyleType type, EngravingItem* item = nullptr);
+    void addTextToItem(TextStyleType type, EngravingItem* item, std::optional<PlacementV> placement = std::nullopt);
+    void doAddText(TextStyleType type, EngravingItem* item = nullptr, std::optional<PlacementV> placement = std::nullopt);
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;

@@ -767,7 +767,22 @@ static Segment* annotationSegment(const ChordRest* chordRest)
     return chordRest->segment();
 }
 
-TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
+static void applyInitialPlacement(const TextBase* text, std::optional<PlacementV> placement)
+{
+    if (!placement.has_value()) {
+        return;
+    }
+    for (EngravingObject* linked : text->linkList()) {
+        if (linked != text && linked->score() == text->score()) {
+            continue;
+        }
+        if (linked->propertyDefault(Pid::PLACEMENT).value<PlacementV>() != placement.value()) {
+            linked->score()->undo(new ChangeProperty(linked, Pid::PLACEMENT, placement.value(), PropertyFlags::UNSTYLED));
+        }
+    }
+}
+
+TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, std::optional<PlacementV> placement)
 {
     TextBase* textBox = nullptr;
 
@@ -870,6 +885,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         textBox = Factory::createSticking(annotationSegment(chordRest));
         textBox->setTrack(chordRest->track());
         undoAddElement(textBox);
+        applyInitialPlacement(textBox, placement);
         break;
     }
     case TextStyleType::FINGERING:
@@ -890,6 +906,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         textBox = Factory::createFingering(toNote(destinationElement), type);
         textBox->setTrack(destinationElement->track());
         undoAddElement(textBox);
+        applyInitialPlacement(textBox, placement);
         break;
     }
     case TextStyleType::HARMONY_A:
