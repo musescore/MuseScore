@@ -31,40 +31,73 @@
 #include "../internal/braille.h"
 
 using namespace mu::engraving;
+using namespace mu::braille;
 
 static const String BRAILLE_DIR(u"data/");
 
 class Braille_Tests : public ::testing::Test
 {
 public:
-    void brailleSaveTest(const char* file);
+    void brailleSaveTest(const char* file, const BrailleOptions& options = {});
 };
 
-static bool saveBraille(MasterScore* score, const String& saveName)
+// Reference file suffix: empty for default options, otherwise one part per non-default option
+static String optionsSuffix(const BrailleOptions& options)
+{
+    String suffix;
+
+    switch (options.intervalDirection) {
+    case BrailleIntervalDirection::Up:
+        suffix += u"_intervalUp";
+        break;
+    case BrailleIntervalDirection::Down:
+        suffix += u"_intervalDown";
+        break;
+    default:
+        break;
+    }
+
+    switch (options.voiceOrder) {
+    case BrailleVoiceOrder::Up:
+        suffix += u"_voiceUp";
+        break;
+    case BrailleVoiceOrder::Down:
+        suffix += u"_voiceDown";
+        break;
+    default:
+        break;
+    }
+
+    return suffix;
+}
+
+static bool saveBraille(MasterScore* score, const String& saveName, const BrailleOptions& options)
 {
     QFile file(saveName);
     if (!file.open(QIODevice::WriteOnly)) {
         return false;
     }
 
-    bool res = Braille(score).write(file);
+    bool res = Braille(score, options).write(file);
     file.close();
     return res;
 }
 
-static bool saveCompareBrailleScore(MasterScore* score, const String& saveName, const String& compareWithLocalPath)
+static bool saveCompareBrailleScore(MasterScore* score, const String& saveName, const String& compareWithLocalPath,
+                                    const BrailleOptions& options)
 {
-    EXPECT_TRUE(saveBraille(score, saveName));
+    EXPECT_TRUE(saveBraille(score, saveName, options));
     return ScoreComp::compareFiles(saveName,  ScoreRW::rootPath() + u"/" + compareWithLocalPath);
 }
 
-void Braille_Tests::brailleSaveTest(const char* file)
+void Braille_Tests::brailleSaveTest(const char* file, const BrailleOptions& options)
 {
     String fileName = String::fromUtf8(file);
+    String suffix = optionsSuffix(options);
     MasterScore* score = ScoreRW::readScore(BRAILLE_DIR + fileName + u".mscx", false);
     EXPECT_TRUE(score);
     score->doLayout();
-    EXPECT_TRUE(saveCompareBrailleScore(score, fileName + ".brf", BRAILLE_DIR + fileName + "_ref.brf"));
+    EXPECT_TRUE(saveCompareBrailleScore(score, fileName + suffix + ".brf", BRAILLE_DIR + fileName + suffix + "_ref.brf", options));
     delete score;
 }
 
@@ -128,8 +161,20 @@ TEST_F(Braille_Tests, chords2) {
 TEST_F(Braille_Tests, chords3) {
     brailleSaveTest("testChords_Example_9.2.1_MBC2015");
 }
+TEST_F(Braille_Tests, chords3_Up) {
+    brailleSaveTest("testChords_Example_9.2.1_MBC2015", { .intervalDirection = BrailleIntervalDirection::Up });
+}
+TEST_F(Braille_Tests, chords3_Down) {
+    brailleSaveTest("testChords_Example_9.2.1_MBC2015", { .intervalDirection = BrailleIntervalDirection::Down });
+}
 TEST_F(Braille_Tests, chords4) {
     brailleSaveTest("testChords_Example_9.2.2_MBC2015");
+}
+TEST_F(Braille_Tests, chords4_Up) {
+    brailleSaveTest("testChords_Example_9.2.2_MBC2015", { .intervalDirection = BrailleIntervalDirection::Up });
+}
+TEST_F(Braille_Tests, chords4_Down) {
+    brailleSaveTest("testChords_Example_9.2.2_MBC2015", { .intervalDirection = BrailleIntervalDirection::Down });
 }
 TEST_F(Braille_Tests, ties1) {
     brailleSaveTest("testTie");
