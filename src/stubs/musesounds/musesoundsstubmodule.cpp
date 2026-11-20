@@ -29,6 +29,8 @@
 #include "musesamplercheckstatusscenariostub.h"
 #include "musesamplercheckstatusservicestub.h"
 
+#include "musehublauncherstub.h"
+
 using namespace mu::musesounds;
 using namespace muse::modularity;
 
@@ -43,4 +45,5 @@ void MuseSoundsModule::registerExports()
     ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), new MuseSoundsCheckUpdateServiceStub());
     ioc()->registerExport<IMuseSamplerCheckStatusScenario>(moduleName(), new MuseSamplerCheckStatusScenarioStub());
     ioc()->registerExport<IMuseSamplerCheckStatusService>(moduleName(), new MuseSamplerCheckStatusServiceStub());
+    ioc()->registerExport<IMuseHubLauncher>(moduleName(), std::make_shared<MuseHubLauncherStub>());
 }

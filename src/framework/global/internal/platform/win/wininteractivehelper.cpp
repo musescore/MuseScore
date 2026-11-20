@@ -33,6 +33,15 @@ using namespace muse::async;
 using namespace winrt;
 using namespace Windows::System;
 
+async::Promise<Ret> WinInteractiveHelper::canOpenApp(const UriQuery& uri)
+{
+    const Windows::Foundation::Uri wUri(winrt::to_hstring(uri.toString()));
+
+    return toPromise<Ret>(Launcher::QueryUriSupportAsync(wUri, LaunchQuerySupportType::Uri), [](LaunchQuerySupportStatus status) {
+        return Ret(status == LaunchQuerySupportStatus::Available);
+    });
+}
+
 async::Promise<Ret> WinInteractiveHelper::openApp(const UriQuery& uri)
 {
     const Windows::Foundation::Uri wUri(winrt::to_hstring(uri.toString()));

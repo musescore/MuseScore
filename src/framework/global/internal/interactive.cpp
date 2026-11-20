@@ -544,14 +544,28 @@ Ret Interactive::isAppExists(const std::string& appIdentifier) const
 #endif
 }
 
-Ret Interactive::canOpenApp(const UriQuery& uri) const
+Ret Interactive::canOpenAppSync(const UriQuery& uri) const
 {
 #ifdef Q_OS_MACOS
-    return MacOSInteractiveHelper::canOpenApp(uri);
+    return MacOSInteractiveHelper::canOpenAppSync(uri);
 #else
     NOT_IMPLEMENTED;
     UNUSED(uri);
     return false;
+#endif
+}
+
+async::Promise<Ret> Interactive::canOpenApp(const UriQuery& uri) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::canOpenApp(uri);
+#elif defined(Q_OS_WIN)
+    return WinInteractiveHelper::canOpenApp(uri);
+#else
+    UNUSED(uri);
+    return async::make_promise<Ret>([](auto resolve, auto) {
+        return resolve(make_ret(Ret::Code::NotImplemented));
+    });
 #endif
 }
 

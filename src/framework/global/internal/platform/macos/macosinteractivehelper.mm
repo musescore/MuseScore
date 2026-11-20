@@ -49,7 +49,7 @@ Ret MacOSInteractiveHelper::isAppExists(const std::string& appIdentifier)
     return appURL != nil;
 }
 
-Ret MacOSInteractiveHelper::canOpenApp(const UriQuery& uri)
+Ret MacOSInteractiveHelper::canOpenAppSync(const UriQuery& uri)
 {
     NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
     if (nsUrlString == nil) {
@@ -63,6 +63,13 @@ Ret MacOSInteractiveHelper::canOpenApp(const UriQuery& uri)
 
     NSURL* appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:nsUrl];
     return appURL != nil;
+}
+
+async::Promise<Ret> MacOSInteractiveHelper::canOpenApp(const UriQuery& uri)
+{
+    return async::make_promise<Ret>([uri](auto resolve, auto) {
+        return resolve(canOpenAppSync(uri));
+    });
 }
 
 async::Promise<Ret> MacOSInteractiveHelper::openApp(const UriQuery& uri)

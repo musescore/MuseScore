@@ -130,10 +130,7 @@ void InputResourceItem::requestAvailableResources()
 void InputResourceItem::handleMenuItem(const QString& menuItemId)
 {
     if (menuItemId == GET_MORE_SOUNDS_ID) {
-        const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
-        const QString urlParams("muse-sounds?utm_medium=Referral&utm_source=mss"
-                                "&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=mixer_sounds");
-        interactive()->openUrl(url + urlParams);
+        museHubLauncher()->open(musesounds::MuseHubPage::MuseSounds, "mixer_sounds");
         return;
     }
 
