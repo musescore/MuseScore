@@ -14,7 +14,7 @@ _{1}_ which element is tested
 
 * _empty string_ =  no parts created 
 * `parts` == parts created
-* _actions for elements_ == (add, uadd, uradd, del, udel, urdel) for elements
+* _actions for elements_ == (add, del) for elements; after undo and redo, the tests compare with the score they saved before and after the action
 * _actions for all_ == ()
 
 

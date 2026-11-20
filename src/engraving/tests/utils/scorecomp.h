@@ -33,7 +33,7 @@ class ScoreComp
     static inline muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
-    static bool saveCompareScore(Score*, const String& saveName, const String& compareWithLocalPath);
+    static bool saveCompareScore(Score*, const String& saveName, const String& compareWith, bool compareWithSavedFile = false);
     static bool saveCompareMimeData(muse::ByteArray mimeData, const String& saveName, const String& compareWithLocalPath);
     static bool compareFiles(const String& fullPath1, const String& fullPath2);
 };

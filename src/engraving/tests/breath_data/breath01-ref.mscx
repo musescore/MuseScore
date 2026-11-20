@@ -148,81 +148,13 @@
             </Chord>
           <Breath>
             <symbol>breathMarkComma</symbol>
-            <eid>K_K</eid>
+            <eid>a_a</eid>
             </Breath>
           <Chord>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <eid>N_N</eid>
-            </Breath>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>O_O</eid>
-        <voice>
-          <Chord>
-            <eid>P_P</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>Q_Q</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <eid>R_R</eid>
-            </Breath>
-          <Chord>
-            <eid>S_S</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>T_T</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <eid>U_U</eid>
-            </Breath>
-          </voice>
-        </Measure>
-      </Staff>
-    <Staff id="2">
-      <Measure>
-        <voice>
-          <TimeSig>
-            <eid>V_V</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <eid>W_W</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>X_X</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <eid>Y_Y</eid>
-            </Breath>
-          <Chord>
-            <eid>Z_Z</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>a_a</eid>
+              <eid>L_L</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -234,13 +166,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Chord>
-            <eid>c_c</eid>
-            <dots>1</dots>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>O_O</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>c_c</eid>
+            </Breath>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>d_d</eid>
+            </Breath>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <eid>R_R</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>S_S</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>T_T</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -250,10 +219,41 @@
             <eid>e_e</eid>
             </Breath>
           <Chord>
+            <eid>U_U</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>V_V</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
             <eid>f_f</eid>
+            </Breath>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>W_W</eid>
+            <dots>1</dots>
+            <durationType>half</durationType>
+            <Note>
+              <eid>X_X</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>g_g</eid>
+            </Breath>
+          <Chord>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>Z_Z</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>

@@ -36,17 +36,17 @@ static const String IMPLODEEXP_DATA_DIR("implode_explode_data/");
 class Engraving_ImplodeExplodeTests : public ::testing::Test
 {
 public:
-    void testUndoExplode(String fileName);
+    void testUndoExplode(String fileName, bool undoRestoresScore = true);
     void testUndoImplode(String fileName);
 };
 
-void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
+void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName, bool undoRestoresScore)
 {
     String readFile(IMPLODEEXP_DATA_DIR + fileName + ".mscx");
+    String beforeFile(fileName + "-before.mscx");
     String writeFile1(fileName + "01-test.mscx");
     String reference1(IMPLODEEXP_DATA_DIR + fileName + "01-ref.mscx");
     String writeFile2(fileName + "02-test.mscx");
-    String reference2(IMPLODEEXP_DATA_DIR + fileName + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     ASSERT_TRUE(score);
@@ -56,6 +56,8 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
     score->startCmd(TranslatableString::untranslatable("Implode/explode select all"));
     score->cmdSelectAll();
     score->endCmd();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
@@ -66,7 +68,13 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    if (undoRestoresScore) {
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
+    } else {
+        // undo doesn't restore this score exactly yet
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, IMPLODEEXP_DATA_DIR + fileName + "02-ref.mscx"));
+    }
 
     delete score;
 }
@@ -74,10 +82,10 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
 void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
 {
     String readFile(IMPLODEEXP_DATA_DIR + filename + ".mscx");
+    String beforeFile(filename + "-before.mscx");
     String writeFile1(filename + "01-test.mscx");
     String reference1(IMPLODEEXP_DATA_DIR + filename + "01-ref.mscx");
     String writeFile2(filename + "02-test.mscx");
-    String reference2(IMPLODEEXP_DATA_DIR + filename + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     ASSERT_TRUE(score);
@@ -88,6 +96,8 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
     score->cmdSelectAll();
     score->endCmd();
 
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
+
     // do
     score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
     ImplodeExplode::implode(score);
@@ -97,7 +107,8 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -124,7 +135,7 @@ TEST_F(Engraving_ImplodeExplodeTests, implodeScore)
 
 TEST_F(Engraving_ImplodeExplodeTests, explodeDynamics)
 {
-    testUndoExplode(u"explodeDynamics");
+    testUndoExplode(u"explodeDynamics", /*undoRestoresScore*/ false);
 }
 
 TEST_F(Engraving_ImplodeExplodeTests, implodeDynamics)

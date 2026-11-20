@@ -178,10 +178,12 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
 TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
 {
     const String initFile(HARPDIAGRAM_DATA_DIR + u"textdiagram02.mscx");
+    const String beforeFile(u"textdiagram-test02-before.mscx");
     const String writeFile(u"textdiagram-test02.mscx");
 
     MasterScore* score = ScoreRW::readScore(initFile);
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
     Measure* m2 = score->firstMeasure()->nextMeasure();
     Segment* s2 = m2->first(SegmentType::ChordRest);
     ASSERT_TRUE(s2);
@@ -217,7 +219,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     // Test undo
     score->undoRedo(true, &dd);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, initFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, beforeFile, /*compareWithSavedFile*/ true));
 }
 
 TEST_F(Engraving_HarpDiagramTests, testmap)

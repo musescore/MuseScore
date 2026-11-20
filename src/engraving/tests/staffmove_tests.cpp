@@ -51,6 +51,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     MasterScore* score = ScoreRW::readScore(STAFF_MOVE_DIR + u"hiddenStaff.mscx");
     // Get chord
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"hiddenStaff-before.mscx"));
     Measure* m = score->firstMeasure();
     ASSERT_TRUE(m);
     Segment* s = m->first(SegmentType::ChordRest);
@@ -87,13 +88,14 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     score->endCmd();
 
     // Compare
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"hiddenStaff2.mscx", STAFF_MOVE_DIR + u"hiddenStaff.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"hiddenStaff2.mscx", u"hiddenStaff-before.mscx", /*compareWithSavedFile*/ true));
 }
 
 TEST_F(Engraving_StaffMoveTests, linkedStaff)
 {
     MasterScore* score = ScoreRW::readScore(STAFF_MOVE_DIR + u"linkedStaff.mscx");
     ASSERT_TRUE(score);
+    EXPECT_TRUE(ScoreRW::saveScore(score, u"linkedStaff-before.mscx"));
     Measure* m = score->firstMeasure();
     ASSERT_TRUE(m);
     Segment* s = m->first(SegmentType::ChordRest);
@@ -118,6 +120,6 @@ TEST_F(Engraving_StaffMoveTests, linkedStaff)
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     EditCrossStaff::moveUp(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff3.mscx", STAFF_MOVE_DIR + u"linkedStaff.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff3.mscx", u"linkedStaff-before.mscx", /*compareWithSavedFile*/ true));
     delete score;
 }

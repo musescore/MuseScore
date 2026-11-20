@@ -46,16 +46,18 @@ public:
 TEST_F(Engraving_ToolsTests, undoSlashFill)
 {
     String readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
+    String beforeFile("undoSlashFill-before.mscx");
     String writeFile1("undoSlashFill01-test.mscx");
     String reference1(TOOLS_DATA_DIR + "undoSlashFill01-ref.mscx");
     String writeFile2("undoSlashFill02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoSlashFill02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
 
     // select
     Segment* s = score->firstMeasure()->findSegment(SegmentType::ChordRest, Fraction(2, 4));
     score->selection().setRange(s, score->lastSegment(), 0, 2);
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
@@ -66,7 +68,8 @@ TEST_F(Engraving_ToolsTests, undoSlashFill)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -104,13 +107,15 @@ TEST_F(Engraving_ToolsTests, undoSlashRhythm)
 TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
+    String beforeFile("undoResequenceAlpha-before.mscx");
     String writeFile1("undoResequenceAlpha01-test.mscx");
     String reference1(TOOLS_DATA_DIR + "undoResequenceAlpha01-ref.mscx");
     String writeFile2("undoResequenceAlpha02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoResequenceAlpha02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
@@ -121,7 +126,8 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -129,13 +135,15 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
 TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
+    String beforeFile("undoResequenceNumeric-before.mscx");
     String writeFile1("undoResequenceNumeric01-test.mscx");
     String reference1(TOOLS_DATA_DIR + "undoResequenceNumeric01-ref.mscx");
     String writeFile2("undoResequenceNumeric02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoResequenceNumeric02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
@@ -146,7 +154,8 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -154,13 +163,15 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
 TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
+    String beforeFile("undoResequenceMeasure-before.mscx");
     String writeFile1("undoResequenceMeasure01-test.mscx");
     String reference1(TOOLS_DATA_DIR + "undoResequenceMeasure01-ref.mscx");
     String writeFile2("undoResequenceMeasure02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoResequenceMeasure02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
@@ -171,7 +182,8 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
@@ -179,13 +191,15 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
 TEST_F(Engraving_ToolsTests, undoResequencePart)
 {
     String readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
+    String beforeFile("undoResequencePart-before.mscx");
     String writeFile1("undoResequencePart01-test.mscx");
     String reference1(TOOLS_DATA_DIR + "undoResequencePart01-ref.mscx");
     String writeFile2("undoResequencePart02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoResequencePart02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
+
+    EXPECT_TRUE(ScoreRW::saveScore(score, beforeFile));
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
@@ -196,7 +210,8 @@ TEST_F(Engraving_ToolsTests, undoResequencePart)
     // undo
     EditData ed;
     score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, beforeFile, /*compareWithSavedFile*/ true));
 
     delete score;
 }
