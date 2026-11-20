@@ -34,6 +34,7 @@
 #include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/note.h"
+#include "dom/page.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/stemslash.h"
@@ -292,6 +293,10 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
 
         double leadingSpace = curSeg->extraLeadingSpace().toAbsolute(ctx.spatium);
         placedSegments.back().xPosInSystemCoords += leadingSpace;
+        Page* page = toPage(ctx.system->parent());
+        if (page) {
+            placedSegments.back().xPosInSystemCoords = std::max(placedSegments.back().xPosInSystemCoords, -page->lm());
+        }
 
         if (curSeg->isChordRestType()) {
             bool isFirstCROfSystem = curSeg->rtick().isZero() && curSeg->measure()->isFirstInSystem();
