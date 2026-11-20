@@ -98,6 +98,14 @@ Rectangle {
             width: 200
             navigation.panel: navPanel
             navigation.row: 0
+            text: "[cpp] selectMultipleDirectories"
+            onClicked: testModel.selectMultipleDirectories()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 0
             text: "[cpp] showProgress"
             onClicked: testModel.showProgress()
         }
