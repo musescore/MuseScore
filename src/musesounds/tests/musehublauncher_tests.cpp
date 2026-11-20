@@ -36,17 +36,19 @@ using namespace muse;
 namespace {
 //! NOTE: keep the body queued, don't run it eagerly
 //! otherwise resolve() can fire before onResolve is attached
-async::Promise<Ret> resolvedPromise(const Ret& ret)
+template<typename T>
+async::Promise<T> resolvedPromise(const T& val)
 {
-    return async::make_promise<Ret>([ret](auto resolve, auto reject) {
+    return async::make_promise<T>([val](auto resolve, auto reject) {
         (void)reject;
-        return resolve(ret);
+        return resolve(val);
     });
 }
 
-async::Promise<Ret> rejectedPromise(int code, const std::string& msg)
+template<typename T>
+async::Promise<T> rejectedPromise(int code, const std::string& msg)
 {
-    return async::make_promise<Ret>([code, msg](auto resolve, auto reject) {
+    return async::make_promise<T>([code, msg](auto resolve, auto reject) {
         (void)resolve;
         return reject(code, msg);
     });
@@ -82,9 +84,17 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
     EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSoundsPro, "place", String()))
     .WillOnce(Return(m_urls));
 
+    // [GIVEN] MuseHub can be opened
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
+
     // [THEN] MuseHub is opened
     EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
-    .WillOnce(Return(resolvedPromise(make_ok())));
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
 
     // [THEN] The web URL isn't opened
     EXPECT_CALL(*m_interactive, openUrl(Matcher<const std::string&>(_))).Times(0);
@@ -93,36 +103,23 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
     // [WHEN] Opening the page
     m_launcher->open(MuseHubPage::MuseSoundsPro, "place");
     muse::async::processMessages();
-}
-
-TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
-{
-    // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", String()))
-    .WillByDefault(Return(m_urls));
-
-    // [GIVEN] MuseHub can't be opened
-    EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
-    .WillOnce(Return(resolvedPromise(make_ret(Ret::Code::UnknownError))));
-
-    // [THEN] The web URL is opened instead
-    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
-    .WillOnce(Return(make_ok()));
-
-    // [WHEN] Opening the page
-    m_launcher->open(MuseHubPage::Plugins, "place");
     muse::async::processMessages();
 }
 
-TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppCanNotBeOpened_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
     ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
     .WillByDefault(Return(m_urls));
 
-    // [GIVEN] Opening MuseHub is rejected
-    EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
-    .WillOnce(Return(rejectedPromise(int(Ret::Code::UnknownError), "error")));
+    // [GIVEN] No app can open the MuseHub link
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ret(Ret::Code::UnknownError));
+    }));
+
+    // [THEN] MuseHub isn't opened
+    EXPECT_CALL(*m_interactive, openApp(_)).Times(0);
 
     // [THEN] The web URL is opened instead
     EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
@@ -133,17 +130,106 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
     muse::async::processMessages();
 }
 
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_CanOpenAppRejected_OpensWebUrl)
+{
+    // [GIVEN] The configuration returns the URLs for the page
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    .WillByDefault(Return(m_urls));
+
+    // [GIVEN] Checking whether MuseHub can be opened is rejected
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return rejectedPromise<Ret>(int(Ret::Code::InternalError), "error");
+    }));
+
+    // [THEN] MuseHub isn't opened
+    EXPECT_CALL(*m_interactive, openApp(_)).Times(0);
+
+    // [THEN] The web URL is opened instead
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Opening the page
+    m_launcher->open(MuseHubPage::MuseSounds, "place");
+    muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
+{
+    // [GIVEN] The configuration returns the URLs for the page
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", String()))
+    .WillByDefault(Return(m_urls));
+
+    // [GIVEN] MuseHub can be opened
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
+
+    // [GIVEN] Opening MuseHub fails
+    EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ret(Ret::Code::UnknownError));
+    }));
+
+    // [THEN] The web URL is opened instead
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Opening the page
+    m_launcher->open(MuseHubPage::Plugins, "place");
+    muse::async::processMessages();
+    muse::async::processMessages();
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
+{
+    // [GIVEN] The configuration returns the URLs for the page
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    .WillByDefault(Return(m_urls));
+
+    // [GIVEN] MuseHub can be opened
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
+
+    // [GIVEN] Opening MuseHub is rejected
+    EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return rejectedPromise<Ret>(int(Ret::Code::UnknownError), "error");
+    }));
+
+    // [THEN] The web URL is opened instead
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Opening the page
+    m_launcher->open(MuseHubPage::MuseSounds, "place");
+    muse::async::processMessages();
+    muse::async::processMessages();
+}
+
 TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_PassesCodeToConfiguration)
 {
     // [GIVEN] The configuration returns the URLs for the sound library
     EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", String(u"library-code")))
     .WillOnce(Return(m_urls));
 
+    // [GIVEN] MuseHub can be opened
+    EXPECT_CALL(*m_interactive, canOpenApp(UriQuery(m_urls.museHubUri)))
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
+
     // [THEN] MuseHub is opened on the sound library page
     EXPECT_CALL(*m_interactive, openApp(UriQuery(m_urls.museHubUri)))
-    .WillOnce(Return(resolvedPromise(make_ok())));
+    .WillOnce(InvokeWithoutArgs([]() {
+        return resolvedPromise(make_ok());
+    }));
 
     // [WHEN] Opening the sound library
     m_launcher->openSoundLibrary(String(u"library-code"), "place");
+    muse::async::processMessages();
     muse::async::processMessages();
 }

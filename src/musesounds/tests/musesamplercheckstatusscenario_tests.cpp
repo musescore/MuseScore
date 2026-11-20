@@ -241,7 +241,7 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInit
     EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", _))
     .WillOnce(Return(true));
 #else
-    ON_CALL(*m_interactive, canOpenApp(_)).WillByDefault(Return(make_ok()));
+    ON_CALL(*m_interactive, canOpenAppSync(_)).WillByDefault(Return(make_ok()));
     EXPECT_CALL(*m_interactive, openApp(_))
     .WillOnce(Invoke([](auto&&...) {
         return resolvedPromise<Ret>(make_ok());

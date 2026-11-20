@@ -354,7 +354,12 @@ Ret WebInteractive::isAppExists(const std::string& appIdentifier) const
     return m_origin->isAppExists(appIdentifier);
 }
 
-Ret WebInteractive::canOpenApp(const UriQuery& uri) const
+Ret WebInteractive::canOpenAppSync(const UriQuery& uri) const
+{
+    return m_origin->canOpenAppSync(uri);
+}
+
+async::Promise<Ret> WebInteractive::canOpenApp(const UriQuery& uri) const
 {
     return m_origin->canOpenApp(uri);
 }

@@ -31,6 +31,7 @@ class UriQuery;
 class WinInteractiveHelper
 {
 public:
+    static async::Promise<Ret> canOpenApp(const UriQuery& uri);
     static async::Promise<Ret> openApp(const UriQuery& uri);
 };
 }

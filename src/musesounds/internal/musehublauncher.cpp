@@ -28,28 +28,49 @@ using namespace muse;
 
 void MuseHubLauncher::open(MuseHubPage page, const std::string& utmContent)
 {
-    doOpen(configuration()->museHubUrls(page, utmContent));
+    tryOpenMuseHub(configuration()->museHubUrls(page, utmContent));
 }
 
 void MuseHubLauncher::openSoundLibrary(const String& code, const std::string& utmContent)
 {
-    doOpen(configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code));
+    tryOpenMuseHub(configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code));
 }
 
-void MuseHubLauncher::doOpen(const MuseHubUrls& urls)
+void MuseHubLauncher::tryOpenMuseHub(const MuseHubUrls& urls)
 {
     LOGI() << "Opening MuseHub: " << urls.museHubUri;
 
-    async::Promise<Ret> promise = interactive()->openApp(UriQuery(urls.museHubUri));
+    const UriQuery museHubUri(urls.museHubUri);
+    async::Promise<Ret> canOpenPromise = interactive()->canOpenApp(museHubUri);
 
-    promise.onResolve(this, [this, webUrl = urls.webUrl](const Ret& ret) {
+    canOpenPromise.onResolve(this, [this, museHubUri, webUrl = urls.webUrl](const Ret& ret) {
+        if (!ret) {
+            LOGW() << "MuseHub can't be opened, opening web URL instead: " << ret.toString();
+            interactive()->openUrl(webUrl);
+            return;
+        }
+
+        openMuseHubApp(museHubUri, webUrl);
+    });
+
+    canOpenPromise.onReject(this, [this, webUrl = urls.webUrl](int, const std::string& err) {
+        LOGW() << "MuseHub can't be opened, opening web URL instead: " << err;
+        interactive()->openUrl(webUrl);
+    });
+}
+
+void MuseHubLauncher::openMuseHubApp(const UriQuery& museHubUri, const std::string& webUrl)
+{
+    async::Promise<Ret> promise = interactive()->openApp(museHubUri);
+
+    promise.onResolve(this, [this, webUrl](const Ret& ret) {
         if (!ret) {
             LOGW() << "Failed to open MuseHub, opening web URL instead: " << ret.toString();
             interactive()->openUrl(webUrl);
         }
     });
 
-    promise.onReject(this, [this, webUrl = urls.webUrl](int, const std::string& err) {
+    promise.onReject(this, [this, webUrl](int, const std::string& err) {
         LOGW() << "Failed to open MuseHub, opening web URL instead: " << err;
         interactive()->openUrl(webUrl);
     });

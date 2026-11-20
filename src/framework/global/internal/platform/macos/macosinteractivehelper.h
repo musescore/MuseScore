@@ -36,7 +36,8 @@ public:
     static bool revealInFinder(const io::path_t& filePath);
 
     static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const UriQuery& uri);
+    static Ret canOpenAppSync(const UriQuery& uri);
+    static async::Promise<Ret> canOpenApp(const UriQuery& uri);
     static async::Promise<Ret> openApp(const UriQuery& uri);
 };
 }
