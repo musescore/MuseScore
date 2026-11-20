@@ -1466,8 +1466,8 @@ muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
         options.selectedDurationAs = configuration()->tupletCommandsSelectedDurationAs();
     }
 
-    // e.g. a triplet of the selected duration
-    if (options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
+    // the tuplet commands, e.g. a triplet of the selected duration; a custom ratio stays as it is
+    if (options.autoBaseLen && options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION) {
         const int numerator = options.ratio.numerator();
         options.ratio.setDenominator(Tuplet::conventionalTupletDenominator(numerator));
     }
