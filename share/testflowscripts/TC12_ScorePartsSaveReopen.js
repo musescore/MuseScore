@@ -278,16 +278,15 @@ var testCase = {
             ScoreContent.expectLine(ScoreContent.contentLines(engraving.curScore), "staff 0: Dynamic @0", "add dynamic")
         }},
         {name: "Add lyrics on the first 3 notes", func: function() {
-            selectFluteNote(0)
-            startTextEdit(ADD_LYRICS_COMMAND)
-            api.keyboard.text("la")
-            api.keyboard.key(" ")
-            api.testflow.sleep(100)
-            api.keyboard.text("li")
-            api.keyboard.key(" ")
-            api.testflow.sleep(100)
-            api.keyboard.text("lo")
-            endTextEdit()
+            //! NOTE Each syllable is added on its own note. Typing a space to move to the next note
+            //! isn't reliable on CI: the space can arrive after the next syllable is typed
+            var syllables = [{tick: 0, text: "la"}, {tick: 480, text: "li"}, {tick: 960, text: "lo"}]
+            for (var i = 0; i < syllables.length; ++i) {
+                selectFluteNote(syllables[i].tick)
+                startTextEdit(ADD_LYRICS_COMMAND)
+                api.keyboard.text(syllables[i].text)
+                endTextEdit()
+            }
             var lines = ScoreContent.contentLines(engraving.curScore)
             ScoreContent.expectLine(lines, "lyrics la", "add lyrics (la)")
             ScoreContent.expectLine(lines, "lyrics li", "add lyrics (li)")
