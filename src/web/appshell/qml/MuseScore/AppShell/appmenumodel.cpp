@@ -129,12 +129,12 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem(TOGGLE_MASTER_PALETTE_COMMAND),
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Show"), {
-            makeMenuItem(SHOW_INVISIBLE_COMMAND),
-            makeMenuItem(SHOW_UNPRINTABLE_COMMAND),
-            makeMenuItem(SHOW_FRAMES_COMMAND),
-            makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
-            makeMenuItem(SHOW_IRREGULAR_COMMAND),
-            makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+            makeMenuItem(ShowInvisibleCommand::id),
+            makeMenuItem(ShowUnprintableCommand::id),
+            makeMenuItem(ShowFramesCommand::id),
+            makeMenuItem(ShowPageBordersCommand::id),
+            makeMenuItem(ShowIrregularCommand::id),
+            makeMenuItem(ShowSoundFlagsCommand::id),
         }, "menu-show")
     };
 
@@ -309,8 +309,8 @@ MenuItemList AppMenuModel::makeLinesItems()
         makeMenuItem(ADD_SLUR_COMMAND),
         makeMenuItem(ADD_HAIRPIN_COMMAND),
         makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
-        makeMenuItem(ADD_OTTAVA_8VA_COMMAND),
-        makeMenuItem(ADD_OTTAVA_8VB_COMMAND),
+        makeMenuItem(AddOttava8vaCommand::id),
+        makeMenuItem(AddOttava8vbCommand::id),
         makeMenuItem(ADD_NOTELINE_COMMAND)
     };
 
@@ -365,8 +365,8 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem(RESET_SHAPES_AND_POSITIONS_COMMAND),
         makeMenuItem(RESET_TO_DEFAULT_LAYOUT_COMMAND),
         makeSeparator(),
-        makeMenuItem(LOAD_STYLE_COMMAND),
-        makeMenuItem(SAVE_STYLE_COMMAND)
+        makeMenuItem(LoadStyleCommand::id),
+        makeMenuItem(SaveStyleCommand::id)
     };
 
     return makeMenu(TranslatableString("appshell/menu/format", "F&ormat"), formatItems, "menu-format");

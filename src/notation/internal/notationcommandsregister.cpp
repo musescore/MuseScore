@@ -436,34 +436,11 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ToggleTieCommand>(),
     makeCommandInfo<AddSlurCommand>(),
     makeCommandInfo<ToggleLaissezVibrerCommand>(),
-    CommandInfo{
-        TOGGLE_MARCATO_COMMAND,
-        TranslatableString("action", "Marcato"),
-        TranslatableString("action", "Add articulation: marcato"),
-        InputSchema(),
-        Decoration(IconCode::Code::MARCATO)
-    },
-    CommandInfo{
-        TOGGLE_SFORZATO_COMMAND,
-        TranslatableString("action", "Accent"),
-        TranslatableString("action", "Add articulation: accent"),
-        InputSchema(),
-        Decoration(IconCode::Code::ACCENT)
-    },
-    CommandInfo{
-        TOGGLE_TENUTO_COMMAND,
-        TranslatableString("action", "Tenuto"),
-        TranslatableString("action", "Add articulation: tenuto"),
-        InputSchema(),
-        Decoration(IconCode::Code::TENUTO)
-    },
-    CommandInfo{
-        TOGGLE_STACCATO_COMMAND,
-        TranslatableString("action", "Staccato"),
-        TranslatableString("action", "Add articulation: staccato"),
-        InputSchema(),
-        Decoration(IconCode::Code::STACCATO)
-    },
+    makeCommandInfo<ToggleArticulationCommand>(),
+    makeCommandInfo<ToggleMarcatoCommand>(),
+    makeCommandInfo<ToggleSforzatoCommand>(),
+    makeCommandInfo<ToggleTenutoCommand>(),
+    makeCommandInfo<ToggleStaccatoCommand>(),
 
     CommandInfo{
         VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND,
@@ -481,13 +458,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     makeCommandInfo<FlipCommand>(),
-    CommandInfo{
-        FLIP_HORIZONTALLY_COMMAND,
-        TranslatableString("action", "Flip horizontally"),
-        TranslatableString("action", "Flip horizontally"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<FlipHorizontallyCommand>(),
 
     CommandInfo{
         ADD_DRUM_NOTE_COMMAND,
@@ -500,13 +471,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ENTER_REST_COMMAND,
-        TranslatableString("action", "Rest"),
-        TranslatableString("action", "Enter rest"),
-        InputSchema(),
-        Decoration(IconCode::Code::REST)
-    },
+    makeCommandInfo<EnterRestCommand>(),
 
     // text navigation commands
     makeCommandInfo<TextNavigateCommand>(),
@@ -516,41 +481,12 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<TextNavigateNextBeatCommand>(),
     makeCommandInfo<TextNavigatePrevBeatCommand>(),
 
-    CommandInfo{
-        EDITLYRIC_NEXT_VERSE_COMMAND,
-        TranslatableString("action", "Next lyric verse"),
-        TranslatableString("action", "Move text/go to next lyric verse"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_PREV_VERSE_COMMAND,
-        TranslatableString("action", "Previous lyric verse"),
-        TranslatableString("action", "Move text/go to previous lyric verse"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_NEXT_SYLLABLE_COMMAND,
-        TranslatableString("action", "Next syllable"),
-        TranslatableString("action", "Lyrics: enter hyphen"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_ADD_MELISMA_COMMAND,
-        TranslatableString("action", "Add extension line"),
-        TranslatableString("action", "Lyrics: enter extension line"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_ADD_VERSE_COMMAND,
-        TranslatableString("action", "Add lyrics verse"),
-        TranslatableString("action", "Add lyrics verse"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<LyricsNavigateCommand>(),
+    makeCommandInfo<LyricsNavigateNextVerseCommand>(),
+    makeCommandInfo<LyricsNavigatePrevVerseCommand>(),
+    makeCommandInfo<LyricsNavigateNextSyllableCommand>(),
+    makeCommandInfo<EditLyricsAddMelismaCommand>(),
+    makeCommandInfo<EditLyricsAddVerseCommand>(),
 
     // properties commands
     CommandInfo{
@@ -702,20 +638,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<OpenRealizeChordSymbolsCommand>(),
 
     // style commands
-    CommandInfo{
-        LOAD_STYLE_COMMAND,
-        TranslatableString("action", "&Load style…"),
-        TranslatableString("action", "Load style"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SAVE_STYLE_COMMAND,
-        TranslatableString("action", "S&ave style…"),
-        TranslatableString("action", "Save style"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<LoadStyleCommand>(),
+    makeCommandInfo<SaveStyleCommand>(),
 
     // fretboard diagram commands
     CommandInfo{
@@ -726,20 +650,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ADD_OTTAVA_8VA_COMMAND,
-        TranslatableString("action", "Ottava 8va &alta"),
-        TranslatableString("action", "Add ottava 8va alta"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_OTTAVA_8VB_COMMAND,
-        TranslatableString("action", "Ottava 8va &bassa"),
-        TranslatableString("action", "Add ottava 8va bassa"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddOttavaCommand>(),
+    makeCommandInfo<AddOttava8vaCommand>(),
+    makeCommandInfo<AddOttava8vbCommand>(),
     CommandInfo{
         ADD_DYNAMIC_COMMAND,
         TranslatableString("action", "&Dynamic"),
@@ -859,48 +772,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // show commands
-    CommandInfo{
-        SHOW_INVISIBLE_COMMAND,
-        TranslatableString("action", "Show &invisible"),
-        TranslatableString("action", "Show/hide invisible elements"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_UNPRINTABLE_COMMAND,
-        TranslatableString("action", "Show f&ormatting"),
-        TranslatableString("action", "Show/hide formatting"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_FRAMES_COMMAND,
-        TranslatableString("action", "Show &frames"),
-        TranslatableString("action", "Show/hide frames"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_PAGEBORDERS_COMMAND,
-        TranslatableString("action", "Show page &margins"),
-        TranslatableString("action", "Show/hide page margins"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_SOUNDFLAGS_COMMAND,
-        TranslatableString("action", "Show sound flags"), // todo &
-        TranslatableString("action", "Show/hide sound flags"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_IRREGULAR_COMMAND,
-        TranslatableString("action", "Mark i&rregular measures"),
-        TranslatableString("action", "Mark irregular measures"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
+    makeCommandInfo<ToggleScoreConfigCommand>(),
+    makeCommandInfo<ShowInvisibleCommand>(),
+    makeCommandInfo<ShowUnprintableCommand>(),
+    makeCommandInfo<ShowFramesCommand>(),
+    makeCommandInfo<ShowPageBordersCommand>(),
+    makeCommandInfo<ShowSoundFlagsCommand>(),
+    makeCommandInfo<ShowIrregularCommand>(),
     CommandInfo{
         TOGGLE_CONCERT_PITCH_COMMAND,
         TranslatableString("action", "Concert pitch"),
@@ -958,13 +836,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<EditTextSubScriptCommand>(),
     makeCommandInfo<EditTextSuperScriptCommand>(),
 
-    CommandInfo{
-        EXTEND_TO_NEXT_NOTE_COMMAND,
-        TranslatableString("action", "Extend to next note"),
-        TranslatableString("action", "Extend to next note"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ExtendToNextNoteCommand>(),
     CommandInfo{
         REMOVE_SELECTED_RANGE_COMMAND,
         TranslatableString("action", "Remove selected ran&ge"),
@@ -1228,13 +1100,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::NOTE_1024TH)
     },
-    CommandInfo {
-        ENTER_REST_TAB_COMMAND,
-        X_TAB.arg(TranslatableString("action", "Rest")),
-        X_TAB.arg(TranslatableString("action", "Enter rest")),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<EnterRestTabCommand>(),
 
     CommandInfo {
         ADD_STANDARD_BEND_COMMAND,

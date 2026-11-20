@@ -262,6 +262,37 @@ struct OrnamentTypeContract {
     } };
 };
 
+struct ArticulationTypeContract {
+    static constexpr EnumTable<ArticulationType, 4> table { {
+        { "marcato", ArticulationType::MARCATO, "marcato" },
+        { "sforzato", ArticulationType::SFORZATO, "accent" },
+        { "tenuto", ArticulationType::TENUTO, "tenuto" },
+        { "staccato", ArticulationType::STACCATO, "staccato" },
+    } };
+};
+
+struct OttavaTypeContract {
+    static constexpr EnumTable<OttavaType, 6> table { {
+        { "8va", OttavaType::OTTAVA_8VA, "8va alta" },
+        { "8vb", OttavaType::OTTAVA_8VB, "8va bassa" },
+        { "15ma", OttavaType::OTTAVA_15MA, "15ma alta" },
+        { "15mb", OttavaType::OTTAVA_15MB, "15ma bassa" },
+        { "22ma", OttavaType::OTTAVA_22MA, "22ma alta" },
+        { "22mb", OttavaType::OTTAVA_22MB, "22ma bassa" },
+    } };
+};
+
+struct ScoreConfigTypeContract {
+    static constexpr EnumTable<ScoreConfigType, 6> table { {
+        { "invisible", ScoreConfigType::ShowInvisibleElements, "invisible elements" },
+        { "unprintable", ScoreConfigType::ShowUnprintableElements, "formatting" },
+        { "frames", ScoreConfigType::ShowFrames, "frames" },
+        { "pageborders", ScoreConfigType::ShowPageMargins, "page margins" },
+        { "soundflags", ScoreConfigType::ShowSoundFlags, "sound flags" },
+        { "irregular", ScoreConfigType::MarkIrregularMeasures, "irregular measures" },
+    } };
+};
+
 struct PastingTypeContract {
     static constexpr EnumTable<PastingType, 4> table { {
         { "default", PastingType::Default, "default" },
@@ -292,6 +323,14 @@ struct TextNavigationModeContract {
         { "element", TextNavigationMode::Element, "element" },
         { "word", TextNavigationMode::Word, "word" },
         { "beat", TextNavigationMode::Beat, "beat" },
+    } };
+};
+
+struct LyricsNavigateActionContract {
+    static constexpr EnumTable<LyricsNavigateAction, 3> table { {
+        { "next-verse", LyricsNavigateAction::NextVerse, "next lyric verse" },
+        { "prev-verse", LyricsNavigateAction::PrevVerse, "previous lyric verse" },
+        { "next-syllable", LyricsNavigateAction::NextSyllable, "next syllable" },
     } };
 };
 
@@ -370,6 +409,9 @@ DECLARE_ENUM_CONTRACT(mu::notation::GraceNoteTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ScoreConfigTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);
@@ -377,4 +419,5 @@ DECLARE_ENUM_CONTRACT(mu::notation::ClefTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::SnapDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextMoveDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TextNavigationModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::LyricsNavigateActionContract);
 }

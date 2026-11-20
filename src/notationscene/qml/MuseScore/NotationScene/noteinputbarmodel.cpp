@@ -136,10 +136,10 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
             { AddSlurCommand::id, true },
             { ToggleLaissezVibrerCommand::id, false },
             { ToolConfig::____________, true },
-            { TOGGLE_MARCATO_COMMAND, true },
-            { TOGGLE_SFORZATO_COMMAND, true },
-            { TOGGLE_TENUTO_COMMAND, true },
-            { TOGGLE_STACCATO_COMMAND, true },
+            { ToggleMarcatoCommand::id, true },
+            { ToggleSforzatoCommand::id, true },
+            { ToggleTenutoCommand::id, true },
+            { ToggleStaccatoCommand::id, true },
             { ToolConfig::____________, true },
             { CROSS_STAFF_BEAMING_SUBITEMS, true }, // service
             { TUPLET_SUBITEMS, true },              // service
@@ -396,8 +396,8 @@ MenuItemList NoteInputBarModel::makeLinesItems()
         makeMenuItem(AddSlurCommand::id),
         makeMenuItem(ADD_HAIRPIN_COMMAND),
         makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
-        makeMenuItem(ADD_OTTAVA_8VA_COMMAND),
-        makeMenuItem(ADD_OTTAVA_8VB_COMMAND),
+        makeMenuItem(AddOttava8vaCommand::id),
+        makeMenuItem(AddOttava8vbCommand::id),
         makeMenuItem(ADD_NOTELINE_COMMAND)
     };
 

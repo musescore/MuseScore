@@ -50,7 +50,7 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     CopyPasteSwapCommand::id,
     DeleteCommand::id,
     FlipCommand::id,
-    FLIP_HORIZONTALLY_COMMAND,
+    FlipHorizontallyCommand::id,
     SelectNextSegmentCommand::id,
     SelectPrevSegmentCommand::id,
     SelectUpNoteInChordCommand::id,
@@ -107,11 +107,11 @@ static const std::vector<Command> TEXT_EDITING_COMMANDS = {
 };
 
 static const std::vector<Command> LYRICS_EDITING_COMMANDS = {
-    EDITLYRIC_NEXT_VERSE_COMMAND,
-    EDITLYRIC_PREV_VERSE_COMMAND,
-    EDITLYRIC_NEXT_SYLLABLE_COMMAND,
-    EDITLYRIC_ADD_MELISMA_COMMAND,
-    EDITLYRIC_ADD_VERSE_COMMAND
+    LyricsNavigateNextVerseCommand::id,
+    LyricsNavigatePrevVerseCommand::id,
+    LyricsNavigateNextSyllableCommand::id,
+    EditLyricsAddMelismaCommand::id,
+    EditLyricsAddVerseCommand::id
 };
 
 static const std::vector<Command> NOT_TEXT_EDITING_COMMANDS = {
@@ -180,10 +180,10 @@ static const std::vector<Command> ADD_COMMANDS = {
 };
 
 static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
-    { TOGGLE_MARCATO_COMMAND, SymId::articMarcatoAbove },
-    { TOGGLE_SFORZATO_COMMAND, SymId::articAccentAbove },
-    { TOGGLE_TENUTO_COMMAND, SymId::articTenutoAbove },
-    { TOGGLE_STACCATO_COMMAND, SymId::articStaccatoAbove }
+    { ToggleMarcatoCommand::id, SymId::articMarcatoAbove },
+    { ToggleSforzatoCommand::id, SymId::articAccentAbove },
+    { ToggleTenutoCommand::id, SymId::articTenutoAbove },
+    { ToggleStaccatoCommand::id, SymId::articStaccatoAbove }
 };
 
 static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
@@ -202,7 +202,7 @@ static const std::vector<Command> NOTE_COMMANDS = {
     AddNoteG_ToNextChordCommand::id,
     AddNoteA_ToNextChordCommand::id,
     AddNoteB_ToNextChordCommand::id,
-    ENTER_REST_COMMAND,
+    EnterRestCommand::id,
     AddNoteC_ToCurrentChordCommand::id,
     AddNoteD_ToCurrentChordCommand::id,
     AddNoteE_ToCurrentChordCommand::id,
@@ -258,12 +258,12 @@ static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
 };
 
 static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
-    { SHOW_INVISIBLE_COMMAND, ScoreConfigType::ShowInvisibleElements },
-    { SHOW_UNPRINTABLE_COMMAND, ScoreConfigType::ShowUnprintableElements },
-    { SHOW_FRAMES_COMMAND, ScoreConfigType::ShowFrames },
-    { SHOW_PAGEBORDERS_COMMAND, ScoreConfigType::ShowPageMargins },
-    { SHOW_SOUNDFLAGS_COMMAND, ScoreConfigType::ShowSoundFlags },
-    { SHOW_IRREGULAR_COMMAND, ScoreConfigType::MarkIrregularMeasures }
+    { ShowInvisibleCommand::id, ScoreConfigType::ShowInvisibleElements },
+    { ShowUnprintableCommand::id, ScoreConfigType::ShowUnprintableElements },
+    { ShowFramesCommand::id, ScoreConfigType::ShowFrames },
+    { ShowPageBordersCommand::id, ScoreConfigType::ShowPageMargins },
+    { ShowSoundFlagsCommand::id, ScoreConfigType::ShowSoundFlags },
+    { ShowIrregularCommand::id, ScoreConfigType::MarkIrregularMeasures }
 };
 
 static const std::vector<Command> STYLE_COMMANDS = {
@@ -282,7 +282,7 @@ static const std::vector<Command> TAB_COMMANDS = {
     SET_DURATION_256TH_TAB_COMMAND,
     SET_DURATION_512TH_TAB_COMMAND,
     SET_DURATION_1024TH_TAB_COMMAND,
-    ENTER_REST_TAB_COMMAND,
+    EnterRestTabCommand::id,
     AddFret0Command::id,
     AddFret1Command::id,
     AddFret2Command::id,

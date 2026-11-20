@@ -102,6 +102,16 @@ using TupletBracketType = mu::engraving::TupletBracketType;
 using TupletSelectedDuration = mu::engraving::TupletSelectedDuration;
 using OrnamentType = mu::engraving::OrnamentType;
 
+//! NOTE Values mirror SymId so the command argument casts to a symbol id.
+//! Named separately from muse::mpe::ArticulationType, which models playback.
+enum class ArticulationType {
+    UNDEFINED = (int)mu::engraving::SymId::noSym,
+    MARCATO = (int)mu::engraving::SymId::articMarcatoAbove,
+    SFORZATO = (int)mu::engraving::SymId::articAccentAbove,
+    TENUTO = (int)mu::engraving::SymId::articTenutoAbove,
+    STACCATO = (int)mu::engraving::SymId::articStaccatoAbove,
+};
+
 enum class DragMode : unsigned char
 {
     BothXY = 0,
@@ -137,6 +147,15 @@ enum class TextMoveDirection : unsigned char
 {
     Prev = static_cast<unsigned char>(MoveDirection::Left),
     Next = static_cast<unsigned char>(MoveDirection::Right),
+};
+
+//! NOTE Lyrics-specific navigation, separate from `TextNavigateCommand`.
+//! Verse moves vertically between lyric verses; syllable advances with a hyphen.
+enum class LyricsNavigateAction : unsigned char
+{
+    NextVerse = 0,
+    PrevVerse,
+    NextSyllable
 };
 
 enum class SelectionTarget : unsigned char
