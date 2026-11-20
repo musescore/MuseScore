@@ -2093,6 +2093,13 @@ struct FlipCommand {
     cprop_decl decoration = muse::rcommand::Decoration(muse::ui::IconCode::Code::NOTE_FLIP);
 };
 
+struct FlipHorizontallyCommand {
+    cprop_decl id = Command("command://notation/flip-horizontally");
+    cprop_decl title = MnemonicString("action", "Flip horizontally");
+    cprop_decl description = TranslatableString("action", "Flip horizontally");
+    cprop_decl availabilities = Availability::All;
+};
+
 struct AddFretCommand {
     cprop_decl id = Command("command://notation/add-fret");
     cprop_decl title = MnemonicString("action", "Add fret");
@@ -2597,7 +2604,6 @@ inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAN
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 
 //inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
-inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
 
 //inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
 inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://notation/add-drum-note"); // with params

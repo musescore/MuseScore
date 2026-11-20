@@ -163,7 +163,7 @@ void NotationActionController::init()
     registerCommand<ToggleArticulationCommand>(&Controller::toggleArticulation);
 
     registerCommand<FlipCommand>(&Controller::flipSelection);
-    registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
+    registerCommand<FlipHorizontallyCommand>(&Controller::flipSelectionHorizontally);
 
     registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
 
@@ -778,6 +778,19 @@ muse::Ret NotationActionController::flipSelection()
     }
 
     interaction->flipSelection();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::flipSelectionHorizontally()
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->flipSelectionHorizontally();
+    seekSelectedElement();
+
     return muse::make_ok();
 }
 
