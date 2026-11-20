@@ -49,6 +49,8 @@ install(FILES
       steps/Commands.js
       steps/ScoreState.js
       steps/UndoRedo.js
+      steps/ScoreContent.js
+      steps/Parts.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts/steps
       )
 
