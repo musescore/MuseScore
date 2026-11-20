@@ -43,6 +43,7 @@ public:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
+    Q_PROPERTY(SortMode sortMode READ sortMode WRITE setSortMode NOTIFY sortModeChanged)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);
@@ -51,6 +52,18 @@ public:
     Q_INVOKABLE void removeRecentScore(const QString& scorePath);
 
     QList<int> nonScoreItemIndices() const override;
+
+    enum SortMode {
+        SortByTimeModified,
+        SortByName
+    };
+    Q_ENUM(SortMode)
+
+    SortMode sortMode() const;
+    void setSortMode(SortMode mode);
+
+signals:
+    void sortModeChanged();
 
 private:
     void reloadRecentScores();
@@ -62,5 +75,7 @@ private:
 
     QVariantMap makeItem(const RecentFile& file) const;
     int findRow(const muse::io::path_t& path) const;
+
+    SortMode m_sortMode = SortByTimeModified;
 };
 }
