@@ -5783,17 +5783,18 @@ void NotationInteraction::increaseDecreaseSelectedDynamicsValues(int delta)
         return;
     }
 
-    startEdit(delta > 0 // positive: increase dynamics, negative: decrease dynamics
-              ? TranslatableString("undoableAction", "Increase dynamics")
-              : TranslatableString("undoableAction", "Decrease dynamics"));
+    transaction(delta > 0 // positive: increase dynamics, negative: decrease dynamics
+                ? TranslatableString("undoableAction", "Increase dynamics")
+                : TranslatableString("undoableAction", "Decrease dynamics"),
+                [&](Transaction& tx) {
+        for (const auto& [dynamic, newType] : dynamicsMap) {
+            dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
+            dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
+            EditHairpin::autoFlipHairpinsType(tx, dynamic);
+        }
+    });
 
-    for (const auto& [dynamic, newType] : dynamicsMap) {
-        dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
-        dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
-        doAutoFlipHairpinsType(dynamic);
-    }
-
-    apply();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::autoFlipHairpinsType(Dynamic* dynamic)
@@ -5801,38 +5802,12 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* dynamic)
     if (!dynamic || dynamic->dynamicType() == DynamicType::OTHER || dynamic->dynamicType() >= DynamicType::FP) {
         return;
     }
-    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
-    doAutoFlipHairpinsType(dynamic);
-    apply();
-}
 
-void NotationInteraction::doAutoFlipHairpinsType(Dynamic* dynamic)
-{
-    dynamic->findAdjacentHairpins();
-    if (Hairpin* leftHp = dynamic->leftHairpin()) {
-        const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
-        if (startDyn
-            && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
-            && !leftHp->isLineType()) {
-            if (int(startDyn->dynamicType()) > int(dynamic->dynamicType())) {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
-            } else {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
-            }
-        }
-    }
-    if (Hairpin* rightHp = dynamic->rightHairpin()) {
-        const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
-        if (endDyn
-            && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
-            && !rightHp->isLineType()) {
-            if (int(endDyn->dynamicType()) > int(dynamic->dynamicType())) {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
-            } else {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
-            }
-        }
-    }
+    transaction(TranslatableString("undoableAction", "Change hairpin type"), [&](Transaction& tx) {
+        EditHairpin::autoFlipHairpinsType(tx, dynamic);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::toggleDynamicPopup()

@@ -48,5 +48,6 @@ public:
     static void addHairpinToDynamic(Transaction& tx, Score* score, Hairpin* hairpin, Dynamic* dynamic);
     static Hairpin* addHairpinToDynamicOnGripDrag(Transaction& tx, Score* score, Dynamic* dynamic, bool isLeftGrip,
                                                   const muse::PointF& pos);
+    static void autoFlipHairpinsType(Transaction& tx, Dynamic* dynamic);
 };
 }
