@@ -30,7 +30,6 @@
 #include <QApplication> // for QApplication::cursorFlashTime()
 #include <QClipboard>
 #include <QDrag>
-#include <QEventLoop>
 #include <QGuiApplication>
 #include <QKeyEvent>
 #include <QKeySequence>
@@ -1846,7 +1845,7 @@ Ret NotationInteraction::canDropSingle(const PointF& pos)
     return make_ok();
 }
 
-bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -2002,6 +2001,27 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     return accepted;
 }
 
+bool NotationInteraction::isDroppingInstrumentChange() const
+{
+    if (!m_dropData.elementDropData.has_value()) {
+        return false;
+    }
+
+    const EngravingItem* dropElement = m_dropData.elementDropData->ed.dropElement;
+    return dropElement && dropElement->isInstrumentChange();
+}
+
+bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers,
+                                     const std::optional<InstrumentTemplate>& instrument)
+{
+    m_chosenInstrument = instrument;
+    DEFER {
+        m_chosenInstrument.reset();
+    };
+
+    return doDropSingle(pos, modifiers);
+}
+
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
 bool NotationInteraction::doDropStandard(engraving::Transaction& tx)
 {
@@ -2024,10 +2044,12 @@ bool NotationInteraction::doDropStandard(engraving::Transaction& tx)
     EngravingItem* dropElement = el->drop(tx, edd.ed);
 
     if (dropElement && dropElement->isInstrumentChange()) {
-        if (!selectInstrument(toInstrumentChange(dropElement))) {
+        IF_ASSERT_FAILED(m_chosenInstrument) {
             rollback();
             return true; // Really?
         }
+
+        setupInstrumentChange(toInstrumentChange(dropElement), *m_chosenInstrument);
     }
 
     score()->addRefresh(el->canvasBoundingRect());
@@ -2159,55 +2181,28 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     return succeeded;
 }
 
-bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* instrumentChange)
+void NotationInteraction::setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument)
 {
-    if (!instrumentChange) {
-        return false;
+    Instrument newInstrument = Instrument::fromTemplate(&instrument);
+
+    // If switching back to the part's original instrument, restore its player number
+    if (Part* part = instrumentChange->part()) {
+        const Instrument* baseInstrument = part->instrument();
+        if (baseInstrument && baseInstrument->id() == newInstrument.id()) {
+            InstrumentLabel& newLabel = newInstrument.instrumentLabel();
+            const InstrumentLabel& baseLabel = baseInstrument->instrumentLabel();
+            newLabel.setNumber(baseLabel.number());
+            newLabel.setShowNumberLong(baseLabel.showNumberLong());
+            newLabel.setShowNumberShort(baseLabel.showNumberShort());
+        }
     }
 
-#ifdef MUE_CONFIGURATION_IS_APPWEB
-    interactive()->info("", muse::trc("notation", "Sorry, instrument change on the web is not supported at this time."));
-    return false;
-#else
+    instrumentChange->setInit(true);
+    instrumentChange->setupInstrument(&newInstrument);
 
-    //! HACK To remake the asynchronous mode, a lot of refactoring is needed,
-    //! so for now this is a hack
-    bool result = false;
-    QEventLoop loop;
-    async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
-    templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
-        Instrument newInstrument = Instrument::fromTemplate(&val);
-
-        // If switching back to the part's original instrument, restore its player number
-        if (Part* part = instrumentChange->part()) {
-            const Instrument* baseInstrument = part->instrument();
-            if (baseInstrument && baseInstrument->id() == newInstrument.id()) {
-                InstrumentLabel& newLabel = newInstrument.instrumentLabel();
-                const InstrumentLabel& baseLabel = baseInstrument->instrumentLabel();
-                newLabel.setNumber(baseLabel.number());
-                newLabel.setShowNumberLong(baseLabel.showNumberLong());
-                newLabel.setShowNumberShort(baseLabel.showNumberShort());
-            }
-        }
-
-        instrumentChange->setInit(true);
-        instrumentChange->setupInstrument(&newInstrument);
-
-        if (newInstrument.useDrumset()) {
-            cleanupDrumsetChanges(instrumentChange);
-        }
-
-        result = true;
-        loop.quit();
-    }).onReject(this, [&loop, &result](int, const std::string&) {
-        result = false;
-        loop.quit();
-    });
-
-    loop.exec();
-
-    return result;
-#endif
+    if (newInstrument.useDrumset()) {
+        cleanupDrumsetChanges(instrumentChange);
+    }
 }
 
 void NotationInteraction::cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const
@@ -2265,6 +2260,41 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         return false;
     }
 
+    mu::engraving::Score* score = this->score();
+    if (!score) {
+        return false;
+    }
+
+    if (score->selection().isNone()) {
+        return false;
+    }
+
+    if (element->isInstrumentChange()) {
+        applyInstrumentChangePaletteElement(element, modifiers);
+        return true;
+    }
+
+    return doApplyPaletteElement(element, modifiers);
+}
+
+void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+{
+    //! NOTE The instrument is chosen before the edit, so that the edit doesn't wait for the user.
+    //! The palette element is copied, as it may be gone by then
+    std::shared_ptr<EngravingItem> copy(element->clone());
+
+    selectInstrumentScenario()->selectInstrument().onResolve(this, [this, copy, modifiers](const InstrumentTemplate& instrument) {
+        m_chosenInstrument = instrument;
+        DEFER {
+            m_chosenInstrument.reset();
+        };
+
+        doApplyPaletteElement(copy.get(), modifiers);
+    });
+}
+
+bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+{
     mu::engraving::Score* score = this->score();
     if (!score) {
         return false;
@@ -2782,10 +2812,12 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         EngravingItem* el = target->drop(tx, *dropData);
 
         if (el && el->isInstrumentChange()) {
-            if (!selectInstrument(toInstrumentChange(el))) {
+            IF_ASSERT_FAILED(m_chosenInstrument) {
                 rollback();
                 return;
             }
+
+            setupInstrumentChange(toInstrumentChange(el), *m_chosenInstrument);
         }
 
         if (el && el->hasVoiceAssignmentProperties()) {
@@ -6256,10 +6288,22 @@ void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
         return;
     }
 
+    if (type == TextStyleType::INSTRUMENT_CHANGE) {
+        addInstrumentChangeToItem(item);
+        return;
+    }
+
     doAddText(type, item);
 }
 
-void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
+void NotationInteraction::addInstrumentChangeToItem(EngravingItem* item)
+{
+    selectInstrumentScenario()->selectInstrument().onResolve(this, [this, item](const InstrumentTemplate& instrument) {
+        doAddText(TextStyleType::INSTRUMENT_CHANGE, item, &instrument);
+    });
+}
+
+void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item, const InstrumentTemplate* instrument)
 {
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->endNoteInput();
@@ -6274,10 +6318,12 @@ void NotationInteraction::doAddText(TextStyleType type, EngravingItem* item)
     }
 
     if (text->isInstrumentChange()) {
-        if (!selectInstrument(toInstrumentChange(text))) {
+        IF_ASSERT_FAILED(instrument) {
             rollback();
             return;
         }
+
+        setupInstrumentChange(toInstrumentChange(text), *instrument);
     }
 
     if (text->hasVoiceAssignmentProperties()) {

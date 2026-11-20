@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <QTimer>
@@ -146,7 +147,9 @@ public:
     bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) override;
 
     muse::Ret canDropSingle(const muse::PointF& pos) override;
-    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool isDroppingInstrumentChange() const override;
+    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers,
+                    const std::optional<InstrumentTemplate>& instrument = std::nullopt) override;
 
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
@@ -393,6 +396,7 @@ private:
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
                                     Qt::KeyboardModifiers modifiers = {});
 
+    bool doDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
     bool doDropStandard(mu::engraving::Transaction& tx);
     bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);
 
@@ -422,7 +426,8 @@ private:
 
     void addTextToTopFrame(TextStyleType type);
     void addTextToItem(TextStyleType type, EngravingItem* item);
-    void doAddText(TextStyleType type, EngravingItem* item = nullptr);
+    void doAddText(TextStyleType type, EngravingItem* item = nullptr, const InstrumentTemplate* instrument = nullptr);
+    void addInstrumentChangeToItem(EngravingItem* item);
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
@@ -473,7 +478,9 @@ private:
 
     void doFinishAddFretboardDiagram();
 
-    bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
+    void setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument);
+    void applyInstrumentChangePaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
+    bool doApplyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
@@ -594,6 +601,9 @@ private:
     mu::engraving::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
+
+    //! NOTE The instrument of the instrument change being applied or dropped, chosen before the edit
+    std::optional<InstrumentTemplate> m_chosenInstrument;
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;

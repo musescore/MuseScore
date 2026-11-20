@@ -28,6 +28,7 @@
 
 #include "inotation_fwd.h"
 #include "notationtypes.h"
+#include "types/instrumentstypes.h"
 #include "types/noteinputtypes.h"
 
 class QKeyEvent;
@@ -129,7 +130,9 @@ public:
     virtual bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) = 0;
 
     virtual muse::Ret canDropSingle(const muse::PointF& pos) = 0;
-    virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual bool isDroppingInstrumentChange() const = 0;
+    virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers,
+                            const std::optional<InstrumentTemplate>& instrument = std::nullopt) = 0;
 
     virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
