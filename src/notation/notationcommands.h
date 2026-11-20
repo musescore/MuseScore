@@ -801,8 +801,26 @@ struct ToggleDot4Command {
 struct ToggleRestCommand {
     cprop_decl id = Command("command://notation/toggle-rest");
     cprop_decl title = MnemonicString("action", "Rest");
-    cprop_decl description = TranslatableString("action", "Toggle rest");
+    cprop_decl description = TranslatableString("action",
+                                                "Toggle rest mode for the next note; outside note input, replace selected notes with rests");
     cprop_decl decoration = Decoration(muse::ui::IconCode::Code::REST);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct EnterRestCommand {
+    cprop_decl id = Command("command://notation/enter-rest");
+    cprop_decl title = MnemonicString("action", "Enter rest");
+    cprop_decl description = TranslatableString("action",
+                                                "Enter a rest of the current duration and advance; in duration and rhythm input, toggle rest mode");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::REST);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct EnterRestTabCommand {
+    cprop_decl id = Command("command://notation/enter-rest-tab");
+    cprop_decl title = MnemonicString("action", "Enter rest (TAB)");
+    cprop_decl description = TranslatableString("action",
+                                                "Enter a rest of the current duration and advance (TAB); in duration and rhythm input, toggle rest mode");
     cprop_decl availabilities = Availability::All;
 };
 
@@ -2608,8 +2626,6 @@ inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAN
 //inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
 inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://notation/add-drum-note"); // with params
 
-inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notation/enter-rest");
-
 // add commands
 
 inline static const muse::rcommand::Command ADD_FRETBOARD_DIAGRAM_COMMAND("command://notation/add-fretboard-diagram");
@@ -3022,8 +3038,6 @@ inline static const muse::rcommand::Command SET_DURATION_128TH_TAB_COMMAND("comm
 inline static const muse::rcommand::Command SET_DURATION_256TH_TAB_COMMAND("command://notation/set-duration-256th-tab");
 inline static const muse::rcommand::Command SET_DURATION_512TH_TAB_COMMAND("command://notation/set-duration-512th-tab");
 inline static const muse::rcommand::Command SET_DURATION_1024TH_TAB_COMMAND("command://notation/set-duration-1024th-tab");
-
-inline static const muse::rcommand::Command ENTER_REST_TAB_COMMAND("command://notation/enter-rest-tab");
 
 inline static const muse::rcommand::Command ADD_STANDARD_BEND_COMMAND("command://notation/add-standard-bend");
 inline static const muse::rcommand::Command ADD_PRE_BEND_COMMAND("command://notation/add-pre-bend");

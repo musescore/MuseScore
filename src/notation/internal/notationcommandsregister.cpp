@@ -471,13 +471,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ENTER_REST_COMMAND,
-        TranslatableString("action", "Rest"),
-        TranslatableString("action", "Enter rest"),
-        InputSchema(),
-        Decoration(IconCode::Code::REST)
-    },
+    makeCommandInfo<EnterRestCommand>(),
 
     // text navigation commands
     makeCommandInfo<TextNavigateCommand>(),
@@ -1106,13 +1100,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::NOTE_1024TH)
     },
-    CommandInfo {
-        ENTER_REST_TAB_COMMAND,
-        X_TAB.arg(TranslatableString("action", "Rest")),
-        X_TAB.arg(TranslatableString("action", "Enter rest")),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<EnterRestTabCommand>(),
 
     CommandInfo {
         ADD_STANDARD_BEND_COMMAND,

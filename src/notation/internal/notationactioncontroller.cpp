@@ -167,7 +167,7 @@ void NotationActionController::init()
 
     registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
 
-    registerCommand(ENTER_REST_COMMAND, &Interaction::putRestToSelection);
+    registerCommand<EnterRestCommand>(&Controller::putRestToSelection);
 
     registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
 
@@ -349,7 +349,7 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerCommand(ENTER_REST_TAB_COMMAND, &Interaction::putRestToSelection);
+    registerCommand<EnterRestTabCommand>(&Controller::putRestToSelection);
 
     registerCommand(ADD_STANDARD_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::BEND); });
     registerCommand(ADD_PRE_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
@@ -943,6 +943,19 @@ muse::Ret NotationActionController::toggleRest()
         || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
         seekSelectedElement();
     }
+
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::putRestToSelection()
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->putRestToSelection();
+    seekSelectedElement();
 
     return muse::make_ok();
 }
