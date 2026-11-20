@@ -36,6 +36,9 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/playback/practiceemphasisdata.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/mscore.h"
@@ -1225,6 +1228,16 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     }
 
     if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
+        // A press that turns into a drag keeps the part membership. A click toggles it.
+        EngravingItem* clicked = hitElementContext().element;
+        if (!readonly() && !interaction->isDragStarted() && !m_isCanvasDragged && clicked && clicked->isNote()
+            && !noteInput->isNoteInputMode() && !playbackController()->isPlaying()) {
+            Note* note = toNote(clicked);
+            MasterScore* master = note->score() ? note->score()->masterScore() : nullptr;
+            if (master && master->practiceEmphasis().document().emphasisMode) {
+                master->practiceEmphasis().editNote(note);
+            }
+        }
         handleLeftClickRelease(event->pos());
     }
 

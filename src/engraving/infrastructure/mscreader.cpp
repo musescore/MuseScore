@@ -252,6 +252,15 @@ muse::ByteArray MscReader::readAutomationJsonFile() const
     return fileData(u"automation.json");
 }
 
+muse::ByteArray MscReader::readPracticeEmphasisJsonFile() const
+{
+    if (!fileExists(u"practice-emphasis.json")) {
+        return ByteArray();
+    }
+
+    return fileData(u"practice-emphasis.json");
+}
+
 // =======================================================================
 // Readers
 // =======================================================================

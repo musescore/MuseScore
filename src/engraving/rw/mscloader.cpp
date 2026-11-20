@@ -36,6 +36,7 @@
 
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/internal/automationrw.h"
+#include "engraving/playback/practiceemphasisdata.h"
 
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"
@@ -216,6 +217,14 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
         AutomationDataPtr automationData = std::make_shared<AutomationData>();
         AutomationRW::read(*automationData, ba);
         masterScore->setAutomationData(automationData);
+    }
+
+    // Read practice emphasis. Missing file means the written balance.
+    {
+        ByteArray ba = mscReader.readPracticeEmphasisJsonFile();
+        if (!ba.empty()) {
+            masterScore->practiceEmphasis().fromJson(ba);
+        }
     }
 
     return ret;

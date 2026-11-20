@@ -22,6 +22,8 @@
 
 #include "playbackmodel.h"
 
+#include "practiceemphasis.h"
+
 #include "dom/fret.h"
 #include "dom/harmony.h"
 #include "dom/instrument.h"
@@ -479,8 +481,11 @@ void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t
             continue;
         }
 
+        muse::mpe::DynamicAutomationLayers dynamics = m_playbackCtx->dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+        PracticeEmphasis::applyToDynamics(m_score, dynamics);
+
         const PartData data {
-            m_playbackCtx->dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack),
+            dynamics,
             m_playbackCtx->soundPresets(trackRange.startTrack, trackRange.endTrack),
             m_playbackCtx->textArticulations(trackRange.startTrack, trackRange.endTrack),
             m_playbackCtx->syllables(trackRange.startTrack, trackRange.endTrack)
