@@ -2489,10 +2489,54 @@ inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command
 
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
 
-inline static const muse::rcommand::Command TOGGLE_MARCATO_COMMAND("command://notation/toggle-marcato");
-inline static const muse::rcommand::Command TOGGLE_SFORZATO_COMMAND("command://notation/toggle-sforzato");
-inline static const muse::rcommand::Command TOGGLE_TENUTO_COMMAND("command://notation/toggle-tenuto");
-inline static const muse::rcommand::Command TOGGLE_STACCATO_COMMAND("command://notation/toggle-staccato");
+struct ToggleArticulationCommand {
+    cprop_decl id = Command("command://notation/toggle-articulation");
+    cprop_decl title = MnemonicString("action", "Toggle articulation");
+    cprop_decl description = TranslatableString("action", "Toggle articulation");
+    cprop_decl availabilities = Availability::API;
+
+    ArticulationType type = ArticulationType::UNDEFINED;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &ToggleArticulationCommand::type, "Articulation type" },
+    };
+};
+
+struct ToggleMarcatoCommand {
+    cprop_decl id = Command("command://notation/toggle-articulation/marcato");
+    cprop_decl title = MnemonicString("action", "Marcato");
+    cprop_decl description = TranslatableString("action", "Add articulation: marcato");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::MARCATO);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleArticulationCommand(ArticulationType::MARCATO);
+};
+
+struct ToggleSforzatoCommand {
+    cprop_decl id = Command("command://notation/toggle-articulation/sforzato");
+    cprop_decl title = MnemonicString("action", "Accent");
+    cprop_decl description = TranslatableString("action", "Add articulation: accent");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::ACCENT);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleArticulationCommand(ArticulationType::SFORZATO);
+};
+
+struct ToggleTenutoCommand {
+    cprop_decl id = Command("command://notation/toggle-articulation/tenuto");
+    cprop_decl title = MnemonicString("action", "Tenuto");
+    cprop_decl description = TranslatableString("action", "Add articulation: tenuto");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::TENUTO);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleArticulationCommand(ArticulationType::TENUTO);
+};
+
+struct ToggleStaccatoCommand {
+    cprop_decl id = Command("command://notation/toggle-articulation/staccato");
+    cprop_decl title = MnemonicString("action", "Staccato");
+    cprop_decl description = TranslatableString("action", "Add articulation: staccato");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::STACCATO);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleArticulationCommand(ArticulationType::STACCATO);
+};
 
 // voice commands
 

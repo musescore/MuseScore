@@ -102,6 +102,16 @@ using TupletBracketType = mu::engraving::TupletBracketType;
 using TupletSelectedDuration = mu::engraving::TupletSelectedDuration;
 using OrnamentType = mu::engraving::OrnamentType;
 
+//! NOTE Values mirror SymId so the command argument casts to a symbol id.
+//! Named separately from muse::mpe::ArticulationType, which models playback.
+enum class ArticulationType {
+    UNDEFINED = (int)mu::engraving::SymId::noSym,
+    MARCATO = (int)mu::engraving::SymId::articMarcatoAbove,
+    SFORZATO = (int)mu::engraving::SymId::articAccentAbove,
+    TENUTO = (int)mu::engraving::SymId::articTenutoAbove,
+    STACCATO = (int)mu::engraving::SymId::articStaccatoAbove,
+};
+
 enum class DragMode : unsigned char
 {
     BothXY = 0,

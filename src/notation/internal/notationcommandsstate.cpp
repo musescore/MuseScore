@@ -180,10 +180,10 @@ static const std::vector<Command> ADD_COMMANDS = {
 };
 
 static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
-    { TOGGLE_MARCATO_COMMAND, SymId::articMarcatoAbove },
-    { TOGGLE_SFORZATO_COMMAND, SymId::articAccentAbove },
-    { TOGGLE_TENUTO_COMMAND, SymId::articTenutoAbove },
-    { TOGGLE_STACCATO_COMMAND, SymId::articStaccatoAbove }
+    { ToggleMarcatoCommand::id, SymId::articMarcatoAbove },
+    { ToggleSforzatoCommand::id, SymId::articAccentAbove },
+    { ToggleTenutoCommand::id, SymId::articTenutoAbove },
+    { ToggleStaccatoCommand::id, SymId::articStaccatoAbove }
 };
 
 static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {

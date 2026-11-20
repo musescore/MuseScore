@@ -197,7 +197,7 @@ private:
 
     muse::Ret realtimeAdvance();
 
-    void toggleArticulation(SymbolId articulationSymbolId);
+    muse::Ret toggleArticulation(const ToggleArticulationCommand& command);
 
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
