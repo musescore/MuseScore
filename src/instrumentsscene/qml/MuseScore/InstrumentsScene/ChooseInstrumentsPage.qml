@@ -35,6 +35,7 @@ Rectangle {
     required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     property bool canSelectMultipleInstruments: true
+    property bool markNewInstruments: false
     property string currentInstrumentId: ""
     property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
@@ -205,6 +206,7 @@ Rectangle {
             Layout.fillHeight: true
 
             instrumentsOnScoreModel: root.instrumentsOnScoreModel
+            markNewInstruments: root.markNewInstruments
         }
 
         SeparatorLine {
