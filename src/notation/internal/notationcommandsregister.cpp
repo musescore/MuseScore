@@ -497,20 +497,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<LyricsNavigateNextVerseCommand>(),
     makeCommandInfo<LyricsNavigatePrevVerseCommand>(),
     makeCommandInfo<LyricsNavigateNextSyllableCommand>(),
-    CommandInfo{
-        EDITLYRIC_ADD_MELISMA_COMMAND,
-        TranslatableString("action", "Add extension line"),
-        TranslatableString("action", "Lyrics: enter extension line"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDITLYRIC_ADD_VERSE_COMMAND,
-        TranslatableString("action", "Add lyrics verse"),
-        TranslatableString("action", "Add lyrics verse"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<EditLyricsAddMelismaCommand>(),
+    makeCommandInfo<EditLyricsAddVerseCommand>(),
 
     // properties commands
     CommandInfo{

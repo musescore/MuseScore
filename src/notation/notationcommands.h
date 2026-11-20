@@ -2520,8 +2520,20 @@ struct LyricsNavigateNextSyllableCommand {
 };
 
 // lyrics editing commands
-inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
-inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
+
+struct EditLyricsAddMelismaCommand {
+    cprop_decl id = Command("command://notation/editlyrics-add-melisma");
+    cprop_decl title = MnemonicString("action", "Add extension line");
+    cprop_decl description = TranslatableString("action", "Lyrics: enter extension line");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct EditLyricsAddVerseCommand {
+    cprop_decl id = Command("command://notation/editlyrics-add-verse");
+    cprop_decl title = MnemonicString("action", "Add lyrics verse");
+    cprop_decl description = TranslatableString("action", "Add lyrics verse");
+    cprop_decl availabilities = Availability::All;
+};
 
 inline static const muse::rcommand::Command EXTEND_TO_NEXT_NOTE_COMMAND("command://notation/extend-to-next-note");
 
