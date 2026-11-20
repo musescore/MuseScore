@@ -1102,15 +1102,20 @@ void NotationAutomationController::processPendingChanges()
     updatePolylinesGeometry();
 }
 
-void NotationAutomationController::rebuildAllPolylines()
+void NotationAutomationController::deleteAllPolylines()
 {
     m_currentlyEditedPolyline = nullptr;
 
-    // TODO: More efficient if we don't clear/recreate the polylines every time...
     for (const auto& [key, data] : m_polylinesDataMap) {
         delete data.polyline;
     }
     m_polylinesDataMap.clear();
+}
+
+void NotationAutomationController::rebuildAllPolylines()
+{
+    // TODO: More efficient if we don't clear/recreate the polylines every time...
+    deleteAllPolylines();
 
     if (!score()) {
         // Happens on close...
