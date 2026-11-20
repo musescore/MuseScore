@@ -32,6 +32,7 @@ Item {
     id: root
 
     property var model
+    property string searchText: ""
 
     property alias navigationPanel: view.navigationPanel
 
@@ -40,6 +41,20 @@ Item {
 
         readonly property int sideMargin: 36
         property string currentItemNavigationName: ""
+    }
+
+    SortFilterProxyModel {
+        id: filteredPartsModel
+
+        sourceModel: root.model
+
+        filters: [
+            FilterValue {
+                roleName: "title"
+                roleValue: root.searchText
+                compareType: CompareType.Contains
+            }
+        ]
     }
 
     Column {
@@ -73,7 +88,7 @@ Item {
 
         spacing: 0
 
-        model: root.model
+        model: filteredPartsModel
 
         interactive: height < contentHeight
 
@@ -101,6 +116,10 @@ Item {
             target: root.model
 
             function onPartAdded(index) {
+                if (root.searchText.length > 0) {
+                    return
+                }
+
                 view.positionViewAtIndex(index, ListView.Contain)
                 view.currentIndex = index
                 Qt.callLater(function() {
@@ -117,6 +136,7 @@ Item {
             required property bool isInited
             required property bool isCustom
             required property int index
+            required property int partIndex
 
             sideMargin: prv.sideMargin
 
@@ -135,29 +155,35 @@ Item {
             }
 
             onPartClicked: {
-                root.model.selectPart(index)
+                root.model.selectPart(partIndex)
                 view.currentIndex = index
             }
 
             onResetPartRequested: {
-                root.model.resetPart(index)
+                root.model.resetPart(partIndex)
             }
 
             onRemovePartRequested: {
-                root.model.removePart(index)
+                root.model.removePart(partIndex)
             }
 
             onTitleEdited: function(newTitle) {
-                incorrectTitleWarning = root.model.validatePartTitle(index, newTitle)
+                incorrectTitleWarning = root.model.validatePartTitle(partIndex, newTitle)
             }
 
             onTitleEditingFinished: function(newTitle) {
-                root.model.setPartTitle(index, newTitle)
+                root.model.setPartTitle(partIndex, newTitle)
             }
 
             onCopyPartRequested: {
-                root.model.copyPart(index)
+                root.model.copyPart(partIndex)
             }
         }
+    }
+
+    StyledTextLabel {
+        anchors.centerIn: view
+        visible: view.count === 0
+        text: qsTrc("global", "No results found")
     }
 }
