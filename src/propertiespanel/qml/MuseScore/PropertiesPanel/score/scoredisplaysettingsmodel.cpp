@@ -110,7 +110,7 @@ void ScoreDisplaySettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
         return;
     }
 
-    commandDispatcher()->dispatch(SHOW_INVISIBLE_COMMAND);
+    commandDispatcher()->dispatch(ShowInvisibleCommand::id);
     updateShouldShowInvisible(shouldShowInvisible);
 }
 
@@ -120,7 +120,7 @@ void ScoreDisplaySettingsModel::setShouldShowFormatting(bool shouldShowFormattin
         return;
     }
 
-    commandDispatcher()->dispatch(SHOW_UNPRINTABLE_COMMAND);
+    commandDispatcher()->dispatch(ShowUnprintableCommand::id);
     updateShouldShowFormatting(shouldShowFormatting);
 }
 
@@ -130,7 +130,7 @@ void ScoreDisplaySettingsModel::setShouldShowFrames(bool shouldShowFrames)
         return;
     }
 
-    commandDispatcher()->dispatch(SHOW_FRAMES_COMMAND);
+    commandDispatcher()->dispatch(ShowFramesCommand::id);
     updateShouldShowFrames(shouldShowFrames);
 }
 
@@ -140,7 +140,7 @@ void ScoreDisplaySettingsModel::setShouldShowPageMargins(bool shouldShowPageMarg
         return;
     }
 
-    commandDispatcher()->dispatch(SHOW_PAGEBORDERS_COMMAND);
+    commandDispatcher()->dispatch(ShowPageBordersCommand::id);
     updateShouldShowPageMargins(shouldShowPageMargins);
 }
 
@@ -150,7 +150,7 @@ void ScoreDisplaySettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlag
         return;
     }
 
-    commandDispatcher()->dispatch(SHOW_SOUNDFLAGS_COMMAND);
+    commandDispatcher()->dispatch(ShowSoundFlagsCommand::id);
     updateShouldShowSoundFlags(shouldShowSoundFlags);
 }
 

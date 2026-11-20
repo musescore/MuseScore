@@ -2841,12 +2841,73 @@ inline static const muse::rcommand::Command RESET_TO_DEFAULT_LAYOUT_COMMAND("com
 inline static const muse::rcommand::Command FREEZE_CURRENT_PLACEMENT_COMMAND("command://notation/freeze-current-placement");
 
 // show commands
-inline static const muse::rcommand::Command SHOW_INVISIBLE_COMMAND("command://notation/show-invisible");
-inline static const muse::rcommand::Command SHOW_UNPRINTABLE_COMMAND("command://notation/show-unprintable");
-inline static const muse::rcommand::Command SHOW_FRAMES_COMMAND("command://notation/show-frames");
-inline static const muse::rcommand::Command SHOW_PAGEBORDERS_COMMAND("command://notation/show-pageborders");
-inline static const muse::rcommand::Command SHOW_SOUNDFLAGS_COMMAND("command://notation/show-soundflags");
-inline static const muse::rcommand::Command SHOW_IRREGULAR_COMMAND("command://notation/show-irregular");
+
+struct ToggleScoreConfigCommand {
+    cprop_decl id = Command("command://notation/show");
+    cprop_decl title = MnemonicString("action", "Show");
+    cprop_decl description = TranslatableString("action", "Toggle score display option");
+    cprop_decl availabilities = Availability::API;
+
+    ScoreConfigType type = ScoreConfigType::ShowInvisibleElements;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &ToggleScoreConfigCommand::type, "Score display option" },
+    };
+};
+
+struct ShowInvisibleCommand {
+    cprop_decl id = Command("command://notation/show/invisible");
+    cprop_decl title = MnemonicString("action", "Show &invisible");
+    cprop_decl description = TranslatableString("action", "Show/hide invisible elements");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::ShowInvisibleElements);
+};
+
+struct ShowUnprintableCommand {
+    cprop_decl id = Command("command://notation/show/unprintable");
+    cprop_decl title = MnemonicString("action", "Show f&ormatting");
+    cprop_decl description = TranslatableString("action", "Show/hide formatting");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::ShowUnprintableElements);
+};
+
+struct ShowFramesCommand {
+    cprop_decl id = Command("command://notation/show/frames");
+    cprop_decl title = MnemonicString("action", "Show &frames");
+    cprop_decl description = TranslatableString("action", "Show/hide frames");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::ShowFrames);
+};
+
+struct ShowPageBordersCommand {
+    cprop_decl id = Command("command://notation/show/pageborders");
+    cprop_decl title = MnemonicString("action", "Show page &margins");
+    cprop_decl description = TranslatableString("action", "Show/hide page margins");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::ShowPageMargins);
+};
+
+struct ShowSoundFlagsCommand {
+    cprop_decl id = Command("command://notation/show/soundflags");
+    cprop_decl title = MnemonicString("action", "Show sound flags"); // todo &
+    cprop_decl description = TranslatableString("action", "Show/hide sound flags");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::ShowSoundFlags);
+};
+
+struct ShowIrregularCommand {
+    cprop_decl id = Command("command://notation/show/irregular");
+    cprop_decl title = MnemonicString("action", "Mark i&rregular measures");
+    cprop_decl description = TranslatableString("action", "Mark irregular measures");
+    cprop_decl decoration = Decoration(Checkable::Yes);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleScoreConfigCommand(ScoreConfigType::MarkIrregularMeasures);
+};
 
 // staff commands
 inline static const muse::rcommand::Command STAFF_EXPLODE_COMMAND("command://notation/staff-explode");

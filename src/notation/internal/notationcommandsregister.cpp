@@ -813,48 +813,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
 
     // show commands
-    CommandInfo{
-        SHOW_INVISIBLE_COMMAND,
-        TranslatableString("action", "Show &invisible"),
-        TranslatableString("action", "Show/hide invisible elements"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_UNPRINTABLE_COMMAND,
-        TranslatableString("action", "Show f&ormatting"),
-        TranslatableString("action", "Show/hide formatting"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_FRAMES_COMMAND,
-        TranslatableString("action", "Show &frames"),
-        TranslatableString("action", "Show/hide frames"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_PAGEBORDERS_COMMAND,
-        TranslatableString("action", "Show page &margins"),
-        TranslatableString("action", "Show/hide page margins"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_SOUNDFLAGS_COMMAND,
-        TranslatableString("action", "Show sound flags"), // todo &
-        TranslatableString("action", "Show/hide sound flags"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
-    CommandInfo{
-        SHOW_IRREGULAR_COMMAND,
-        TranslatableString("action", "Mark i&rregular measures"),
-        TranslatableString("action", "Mark irregular measures"),
-        InputSchema(),
-        Decoration(rcommand::Checkable::Yes)
-    },
+    makeCommandInfo<ToggleScoreConfigCommand>(),
+    makeCommandInfo<ShowInvisibleCommand>(),
+    makeCommandInfo<ShowUnprintableCommand>(),
+    makeCommandInfo<ShowFramesCommand>(),
+    makeCommandInfo<ShowPageBordersCommand>(),
+    makeCommandInfo<ShowSoundFlagsCommand>(),
+    makeCommandInfo<ShowIrregularCommand>(),
     CommandInfo{
         TOGGLE_CONCERT_PITCH_COMMAND,
         TranslatableString("action", "Concert pitch"),

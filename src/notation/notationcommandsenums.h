@@ -282,6 +282,17 @@ struct OttavaTypeContract {
     } };
 };
 
+struct ScoreConfigTypeContract {
+    static constexpr EnumTable<ScoreConfigType, 6> table { {
+        { "invisible", ScoreConfigType::ShowInvisibleElements, "invisible elements" },
+        { "unprintable", ScoreConfigType::ShowUnprintableElements, "formatting" },
+        { "frames", ScoreConfigType::ShowFrames, "frames" },
+        { "pageborders", ScoreConfigType::ShowPageMargins, "page margins" },
+        { "soundflags", ScoreConfigType::ShowSoundFlags, "sound flags" },
+        { "irregular", ScoreConfigType::MarkIrregularMeasures, "irregular measures" },
+    } };
+};
+
 struct PastingTypeContract {
     static constexpr EnumTable<PastingType, 4> table { {
         { "default", PastingType::Default, "default" },
@@ -392,6 +403,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::ScoreConfigTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
 DECLARE_ENUM_CONTRACT(mu::notation::VerticalAlignmentContract);
