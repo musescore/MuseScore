@@ -1526,7 +1526,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::STAFF_BARLINE_SPAN: {
         setBarLineSpan(v.toBool());
-        // update non-generated barlines
+        // update barlines that inherit this staff default
         track_idx_t track = idx() * VOICES;
         std::vector<EngravingItem*> blList;
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
@@ -1542,8 +1542,8 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
             }
         }
         for (EngravingItem* e : blList) {
-            if (e && e->isBarLine() && !e->generated()) {
-                toBarLine(e)->setSpanStaff(barLineSpan());
+            if (e && e->isBarLine()) {
+                toBarLine(e)->setSpanStaffDefault(barLineSpan());
             }
         }
     }
