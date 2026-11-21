@@ -846,6 +846,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
             d->setDynamicType(e.readText());
+        } else if (readProperty(d, tag, e, ctx, Pid::REPEAT_DYNAMIC_LEVELS)) {
         } else if (tag == "velocity") {
             d->setVelocity(e.readInt());
         } else if (tag == "veloChange") {
