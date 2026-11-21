@@ -1328,6 +1328,7 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
+    writeProperty(item, xml, Pid::REPEAT_DYNAMIC_LEVELS);
     writeProperty(item, xml, Pid::VELOCITY);
     writeProperty(item, xml, Pid::AVOID_BARLINES);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
