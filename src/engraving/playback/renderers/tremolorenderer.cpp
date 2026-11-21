@@ -27,6 +27,7 @@
 #include "dom/tremolotwochord.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "playback/practiceemphasis.h"
 #include "playback/utils/expressionutils.h"
 #include "playback/utils/repeatutils.h"
 
@@ -250,6 +251,7 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
         noteCtx.dynamicLevel = ctx.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
+        PracticeEmphasis::applyToNote(note, noteCtx);
 
         const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, ctx, tremoloCache);
         muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);

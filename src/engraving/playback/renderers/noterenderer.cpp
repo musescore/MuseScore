@@ -34,6 +34,7 @@
 #include "playback/metaparsers/chordarticulationsparser.h"
 #include "playback/metaparsers/notearticulationsparser.h"
 
+#include "playback/practiceemphasis.h"
 #include "playback/utils/repeatutils.h"
 
 using namespace mu::engraving;
@@ -319,6 +320,7 @@ NominalNoteCtx NoteRenderer::buildNominalNoteCtx(const Note* note, const Renderi
 {
     NominalNoteCtx noteCtx(note, ctx);
     NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
+    PracticeEmphasis::applyToNote(note, noteCtx);
 
     return noteCtx;
 }

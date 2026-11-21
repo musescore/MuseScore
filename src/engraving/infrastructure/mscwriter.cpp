@@ -203,6 +203,11 @@ void MscWriter::writeAutomationJsonFile(const muse::ByteArray& data)
     addFileData(u"automation.json", data);
 }
 
+void MscWriter::writePracticeEmphasisJsonFile(const muse::ByteArray& data)
+{
+    addFileData(u"practice-emphasis.json", data);
+}
+
 void MscWriter::writeMeta()
 {
     if (m_meta.isWritten) {

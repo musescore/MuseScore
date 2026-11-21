@@ -34,6 +34,7 @@
         {"command": "command://app/dock/toggle-instruments",  "sequences": ["F7"], "autorepeat": false},
         {"command": "command://app/dock/toggle-palettes",  "sequences": ["F9"], "autorepeat": false},
         {"command": "command://app/dock/toggle-mixer",  "sequences": ["F10"], "autorepeat": false},
+        {"command": "command://app/dock/toggle-practice-emphasis",  "sequences": ["Alt+F10"], "autorepeat": false},
         {"command": "command://app/dock/toggle-braille",  "sequences": ["Alt+F11"], "autorepeat": false},
         {"command": "command://app/dock/toggle-timeline",  "sequences": ["F12"], "autorepeat": false},
         {"command": "command://app/dock/toggle-piano-keyboard",  "sequences": ["P"], "autorepeat": false},

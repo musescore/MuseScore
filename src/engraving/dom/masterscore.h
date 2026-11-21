@@ -54,6 +54,7 @@ class Revisions;
 class TempoTimeline;
 class TimeSigMap;
 class UndoStack;
+class PracticeEmphasisData;
 class ScoreAutomationController;
 
 class MidiMapping
@@ -108,6 +109,9 @@ public:
     AutomationDataConstPtr automationData() const override;
     void setAutomationData(AutomationDataPtr data);
     void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true) override;
+
+    PracticeEmphasisData& practiceEmphasis();
+    const PracticeEmphasisData& practiceEmphasis() const;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -230,6 +234,7 @@ private:
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
     ScoreAutomationController* m_automationController = nullptr;
+    std::unique_ptr<PracticeEmphasisData> m_practiceEmphasis;
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;

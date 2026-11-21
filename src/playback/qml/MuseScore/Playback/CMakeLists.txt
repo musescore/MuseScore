@@ -47,6 +47,8 @@ qt_add_qml_module(playback_qml
         playbackloadingmodel.h
         playbacktoolbarmodel.cpp
         playbacktoolbarmodel.h
+        practiceemphasispanelmodel.cpp
+        practiceemphasispanelmodel.h
         soundflagsettingsmodel.cpp
         soundflagsettingsmodel.h
         soundprofilesmodel.cpp
@@ -68,6 +70,7 @@ qt_add_qml_module(playback_qml
         internal/MixerTitleSection.qml
         internal/MixerVolumeSection.qml
         internal/PlaybackSpeedPopup.qml
+        internal/PracticeEmphasisContent.qml
         internal/PlaybackSpeedSlider.qml
         internal/PlaybackToolBarActions.qml
         internal/SoundFlag/MuseSoundsParams.qml
@@ -75,6 +78,7 @@ qt_add_qml_module(playback_qml
         internal/VolumePressureMeter.qml
         internal/VolumeSlider.qml
         MixerPanel.qml
+        PracticeEmphasisPanel.qml
         NotationRegionsBeingProcessedView.qml
         OnlineSoundsStatusView.qml
         PlaybackLoadingInfo.qml

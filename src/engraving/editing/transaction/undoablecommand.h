@@ -157,6 +157,9 @@ enum class CommandType : signed char {
     // Automation
     EditAutomationPoints,
 
+    // Practice emphasis
+    ChangePracticeEmphasis,
+
     // Other
     InsertTime,
     ChangeScoreOrder,

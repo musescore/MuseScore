@@ -38,6 +38,7 @@
 #include "engravingproject.h"
 
 #include "automation/internal/scoreautomationcontroller.h"
+#include "playback/practiceemphasisdata.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -71,6 +72,7 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     m_undoStack   = new UndoStack();
     m_sigmap      = new TimeSigMap();
     m_automationController = new ScoreAutomationController();
+    m_practiceEmphasis = std::make_unique<PracticeEmphasisData>();
     m_expandedRepeatList  = new RepeatList(this);
     m_nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
@@ -144,6 +146,16 @@ AutomationDataConstPtr MasterScore::automationData() const
 void MasterScore::setAutomationData(AutomationDataPtr data)
 {
     m_automationController->setAutomationData(std::move(data));
+}
+
+PracticeEmphasisData& MasterScore::practiceEmphasis()
+{
+    return *m_practiceEmphasis;
+}
+
+const PracticeEmphasisData& MasterScore::practiceEmphasis() const
+{
+    return *m_practiceEmphasis;
 }
 
 void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable)

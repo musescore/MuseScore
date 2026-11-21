@@ -28,6 +28,7 @@
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/playback/practiceemphasisdata.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
@@ -119,6 +120,13 @@ void NotationPlayback::init()
     score()->loopBoundaryTickChanged().onReceive(this, [this](LoopBoundaryType, unsigned) {
         updateLoopBoundaries();
     });
+
+    if (MasterScore* master = score()->masterScore()) {
+        master->practiceEmphasis().changed().onReceive(this, [this]() {
+            reload();
+            m_notationChanged.send(muse::RectF());
+        }, muse::async::Asyncable::Mode::SetReplace);
+    }
 }
 
 void NotationPlayback::reload()
