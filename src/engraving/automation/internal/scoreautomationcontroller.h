@@ -103,6 +103,7 @@ private:
     };
 
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
+    using DynamicPlaybackCounts = std::map<std::pair<const Dynamic*, utick_t>, int>;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
     struct UpdateContext {
@@ -110,6 +111,7 @@ private:
         AutomationCurveMap curves;
         utick_t clearFromUTick = 0;
         DynamicPriorities dynamicPriorities;
+        DynamicPlaybackCounts dynamicPlaybackCounts;
         MeasureRepeats measureRepeats;
         std::optional<BeatsPerSecond> tempoPrimo;
         PausesMap pauses;
@@ -153,12 +155,13 @@ private:
 
     void update(const UpdateRequest& request, const AutomationCurveMap& curves);
     void fullRebuild(AutomationCurveMap& curves, bool includeTempo = true, bool includeDynamics = true);
+    static DynamicPlaybackCounts collectDynamicPlaybackCounts(const RepeatList& repeatList);
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick, bool includeTempo,
                                      bool includeDynamics, AutomationCurveMap& destCurves);
 
-    static void addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx);
-    static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx);
+    static void addSegmentPoints(const Segment* segment, int tickOffset, int playbackCount, const StaffRange& range, UpdateContext& ctx);
+    static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, int playbackCount, const StaffRange& range, UpdateContext& ctx);
     static void addDynamicPoints(const DynamicInfo& info, const AutomationCurveKey& key, UpdateContext& ctx);
 
     static void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, const StaffRange& range,

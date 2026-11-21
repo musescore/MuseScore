@@ -129,6 +129,7 @@ Dynamic::Dynamic(const Dynamic& d)
     : TextBase(d)
 {
     m_dynamicType = d.m_dynamicType;
+    m_repeatPlaybackLevels = d.m_repeatPlaybackLevels;
     m_velocity    = d.m_velocity;
     m_changeInVelocity = d.m_changeInVelocity;
     m_velChangeSpeed = d.m_velChangeSpeed;
@@ -225,6 +226,31 @@ bool Dynamic::isVelocityChangeAvailable() const
 }
 
 //---------------------------------------------------------
+//   setXmlText
+//---------------------------------------------------------
+
+void Dynamic::setXmlText(const String& text)
+{
+    const auto dynamicInfo = parseDynamicText(text);
+    if (dynamicInfo.first != DynamicType::OTHER) {
+        setDynamicType(dynamicInfo.first);
+        TextBase::setXmlText(dynamicInfo.second);
+
+        const auto repeatLevels = parseRepeatPlaybackLevels(text, DYN_LIST);
+        if (repeatLevels && repeatLevels->size() > 1) {
+            m_repeatPlaybackLevels.levels = *repeatLevels;
+        } else {
+            m_repeatPlaybackLevels.levels.clear();
+        }
+        return;
+    }
+
+    TextBase::setXmlText(text);
+    m_dynamicType = DynamicType::OTHER;
+    m_repeatPlaybackLevels.levels.clear();
+}
+
+//---------------------------------------------------------
 //   setDynamicType
 //---------------------------------------------------------
 
@@ -238,10 +264,142 @@ void Dynamic::setDynamicType(const String& tag)
 
     setDynamicType(dynamicInfo.first);
     setXmlText(dynamicInfo.second);
+
+    const auto repeatLevels = parseRepeatPlaybackLevels(tag, DYN_LIST);
+    if (repeatLevels && repeatLevels->size() > 1) {
+        m_repeatPlaybackLevels.levels = *repeatLevels;
+    } else {
+        m_repeatPlaybackLevels.levels.clear();
+    }
+}
+
+DynamicType Dynamic::dynamicTypeForPlayback(int playbackCount) const
+{
+    // Return a dynamic type based on playback count if true, DynamicType::OTHER if false
+    return hasRepeatPlaybackLevels() ? m_repeatPlaybackLevels.levelForPass(playbackCount) : dynamicType();
+}
+
+std::string trimString(const std::string& value)
+{
+    const auto begin = value.find_first_not_of(" \n\r\t");
+    if (begin == std::string::npos) {
+        return {};
+    }
+
+    const auto end = value.find_last_not_of(" \n\r\t");
+    return value.substr(begin, end - begin + 1);
+}
+
+std::optional<std::vector<DynamicType>> Dynamic::parseRepeatPlaybackLevels(const String& levels, const std::vector<Dyn>& dynamicList) const
+{
+    if (levels.empty()) {
+        return std::nullopt;
+    }
+
+    const std::string encoded = levels.toStdString();
+    std::string _levels;
+
+    // Append dynamic levels and <sym> elements from DYN_LIST
+    for (size_t pos = 0; pos < encoded.size();) {
+        if (encoded.compare(pos, 5, "<sym>") == 0) {
+            const size_t end = encoded.find("</sym>", pos + 5);
+            if (end == std::string::npos) {
+                return std::nullopt;
+            }
+            _levels.append(encoded, pos, end + 6 - pos);
+            pos = end + 6;
+        } else if (encoded[pos] == '<') {
+            const size_t end = encoded.find('>', pos + 1);
+            if (end == std::string::npos) {
+                return std::nullopt;
+            }
+            pos = end + 1;
+        } else {
+            _levels += encoded[pos++];
+        }
+    }
+
+    std::vector<DynamicType> parsed;
+    std::string token;
+    const auto appendToken = [&parsed, &dynamicList](const std::string& value) {
+        const std::string trimmed = trimString(value);
+        if (trimmed.empty()) {
+            return false;
+        }
+
+        DynamicType type = TConv::dynamicType(AsciiStringView(trimmed));
+        if (type == DynamicType::OTHER) {
+            for (const Dyn& dynamic : dynamicList) {
+                if (dynamic.text && dynamic.text == trimmed) {
+                    type = dynamic.type;
+                    break;
+                }
+            }
+            if (type == DynamicType::OTHER) {
+                return false;
+            }
+        }
+
+        parsed.push_back(type);
+        return true;
+    };
+
+    for (const char ch : _levels) {
+        if (ch == '-') {
+            if (!appendToken(token)) {
+                return std::nullopt;
+            }
+            token.clear();
+            continue;
+        }
+
+        token += ch;
+    }
+
+    if (!appendToken(token)) {
+        return std::nullopt;
+    }
+
+    return parsed;
+}
+
+void Dynamic::setRepeatPlaybackLevels(const String& levels)
+{
+    const auto parsed = parseRepeatPlaybackLevels(levels, DYN_LIST);
+    if (!parsed) {
+        m_repeatPlaybackLevels.levels.clear();
+        return;
+    }
+
+    m_repeatPlaybackLevels.levels = *parsed;
+}
+
+String Dynamic::repeatPlaybackLevelsAsString() const
+{
+    std::string encoded;
+    for (DynamicType type : m_repeatPlaybackLevels.levels) {
+        if (!encoded.empty()) {
+            encoded += '-';
+        }
+        encoded += TConv::toXml(type).ascii();
+    }
+    return String::fromStdString(encoded);
 }
 
 std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
 {
+    const auto repeatLevels = parseRepeatPlaybackLevels(tag, DYN_LIST);
+    if (repeatLevels && repeatLevels->size() > 1) {
+        String xmlText;
+        for (size_t i = 0; i < repeatLevels->size(); ++i) {
+            if (i > 0) {
+                xmlText += String(u"<b>-</b>");
+            }
+            xmlText += String::fromUtf8(DYN_LIST[int((*repeatLevels)[i])].text);
+        }
+        return { (*repeatLevels)[0], xmlText };
+    }
+
     std::string utf8Tag = tag.toStdString();
     const std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
     auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
@@ -448,6 +606,8 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
         return m_dynamicType;
+    case Pid::REPEAT_DYNAMIC_LEVELS:
+        return repeatPlaybackLevelsAsString();
     case Pid::VELOCITY:
         return velocity();
     case Pid::VELO_CHANGE:
@@ -484,6 +644,9 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
             break;
         }
         setDynamicType(v.value<String>());
+        break;
+    case Pid::REPEAT_DYNAMIC_LEVELS:
+        setRepeatPlaybackLevels(v.value<String>());
         break;
     case Pid::VELOCITY:
         m_velocity = v.toInt();
@@ -527,6 +690,8 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::DYNAMICS;
+    case Pid::REPEAT_DYNAMIC_LEVELS:
+        return String();
     case Pid::VELOCITY:
         return -1;
     case Pid::VELO_CHANGE:

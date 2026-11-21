@@ -340,6 +340,32 @@ void ScoreAutomationController::fullRebuild(AutomationCurveMap& curves, bool inc
     update(request, curves);
 }
 
+ScoreAutomationController::DynamicPlaybackCounts ScoreAutomationController::collectDynamicPlaybackCounts(const RepeatList& repeatList)
+{
+    DynamicPlaybackCounts playbackCounts;
+    std::map<const Dynamic*, int> visitCounts;
+
+    for (const RepeatSegment* playbackSegment : repeatList) {
+        const int tickOffset = playbackSegment->utick - playbackSegment->tick;
+        for (const Measure* measure : playbackSegment->measureList()) {
+            for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment;
+                 segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
+                for (const EngravingItem* annotation : segment->annotations()) {
+                    if (!annotation || !annotation->isDynamic()) {
+                        continue;
+                    }
+
+                    const Dynamic* dynamic = toDynamic(annotation);
+                    const utick_t playbackTick = dynamic->tick().ticks() + tickOffset;
+                    playbackCounts[{ dynamic, playbackTick }] = ++visitCounts[dynamic];
+                }
+            }
+        }
+    }
+
+    return playbackCounts;
+}
+
 void ScoreAutomationController::ensureInitialized(Score* score)
 {
     if (m_score) {
@@ -426,7 +452,7 @@ void ScoreAutomationController::update(const ScoreChanges& changes)
         // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
         // so the old points on staves outside the new assignment must also be cleared
         const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
-        if (!voiceAssignmentChanged) {
+        if (!relevance.dynamics && !voiceAssignmentChanged) {
             request.staffIdxFrom = changes.staffIdxFrom;
             request.staffIdxTo = changes.staffIdxTo;
         }
@@ -501,6 +527,10 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
     ctx.request = request;
     ctx.tempoMultiplier = m_tempoTimeline.tempoMultiplier();
 
+    if (request.includeDynamics) {
+        ctx.dynamicPlaybackCounts = collectDynamicPlaybackCounts(repeatList);
+    }
+
     // The first utick the rebuild will regenerate; everything before it is kept as is
     ctx.clearFromUTick = std::max(firstSeg->utick, request.tickFrom + (firstSeg->utick - firstSeg->tick));
 
@@ -568,7 +598,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
                     continue;
                 }
 
-                addSegmentPoints(segment, tickOffset, range, ctx);
+                addSegmentPoints(segment, tickOffset, seg->playbackCount, range, ctx);
             }
         }
     }
@@ -694,7 +724,7 @@ void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& c
     }
 }
 
-void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range,
+void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, int playbackCount, const StaffRange& range,
                                                  UpdateContext& ctx)
 {
     TRACEFUNC;
@@ -709,7 +739,16 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
 
         if (annotation->isDynamic()) {
             if (ctx.request.includeDynamics && range.contains(annotation->staffIdx())) {
-                addDynamicPoints(toDynamic(annotation), tickOffset, range, ctx);
+                // Count also visits to the same dynamic, not just repeat passes,
+                // to add dynamic points from jumps such as D.C. al Fine.
+                const Dynamic* dynamic = toDynamic(annotation);
+                int _playbackCount = playbackCount;
+                const utick_t dynamicTick = dynamic->tick().ticks() + tickOffset;
+                const auto visitIt = ctx.dynamicPlaybackCounts.find({ dynamic, dynamicTick });
+                if (visitIt != ctx.dynamicPlaybackCounts.end()) {
+                    _playbackCount = std::max(_playbackCount, visitIt->second);
+                }
+                addDynamicPoints(dynamic, tickOffset, _playbackCount, range, ctx);
             }
         } else if (ctx.request.includeTempo && annotation->isFermata() && toFermata(annotation)->play()) {
             const Fermata* f = toFermata(annotation);
@@ -727,7 +766,8 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
     }
 }
 
-void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx)
+void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, int playbackCount, const StaffRange& range,
+                                                 UpdateContext& ctx)
 {
     TRACEFUNC;
 
@@ -735,7 +775,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         return;
     }
 
-    const DynamicType dynamicType = dynamic->dynamicType();
+    const DynamicType dynamicType = dynamic->dynamicTypeForPlayback(playbackCount);
     const utick_t tick = dynamic->tick().ticks() + tickOffset;
 
     DynamicInfo info;

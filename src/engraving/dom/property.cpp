@@ -200,6 +200,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VELO_CHANGE_METHOD,                  P_TYPE::CHANGE_METHOD,             PropertyGroup::APPEARANCE, true,  "veloChangeMethod",                QT_TRANSLATE_NOOP("engraving/propertyName", "velocity change method") }, // left as a compatibility property - we need to be able to read it correctly
     { Pid::VELO_CHANGE_SPEED,                   P_TYPE::DYNAMIC_SPEED,             PropertyGroup::APPEARANCE, true,  "veloChangeSpeed",                 QT_TRANSLATE_NOOP("engraving/propertyName", "velocity change speed") },
     { Pid::DYNAMIC_TYPE,                        P_TYPE::DYNAMIC_TYPE,              PropertyGroup::APPEARANCE, true,  "subtype",                         QT_TRANSLATE_NOOP("engraving/propertyName", "dynamic type") },
+    { Pid::REPEAT_DYNAMIC_LEVELS,               P_TYPE::STRING,                    PropertyGroup::NONE,       false, "repeatPlaybackLevels",            QT_TRANSLATE_NOOP("engraving/propertyName", "repeat dynamic levels") },
 
     { Pid::SINGLE_NOTE_DYNAMICS,                P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "singleNoteDynamics",              QT_TRANSLATE_NOOP("engraving/propertyName", "single note dynamics") },
     { Pid::CHANGE_METHOD,                       P_TYPE::CHANGE_METHOD,             PropertyGroup::APPEARANCE, true,  "changeMethod",                    QT_TRANSLATE_NOOP("engraving/propertyName", "change method") }, // the new, more general version of VELO_CHANGE_METHOD
