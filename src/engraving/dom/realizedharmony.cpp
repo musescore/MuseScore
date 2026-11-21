@@ -397,6 +397,13 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
         omit |= 1 << 3;
     }
 
+    // When the third is major, the natural 11th is only a semitone above it.
+    // Jazz 11th voicings omit that third; preserve minor thirds and modifiers.
+    const bool hasMajorThird = quality != "minor" && quality != "diminished" && quality != "half-diminished";
+    if (ext == 11 && !literal && hasMajorThird && !(omit & (1 << 11))) {
+        omit |= 1 << 3;
+    }
+
     //handle chord quality
     if (quality == "minor") {
         if (!(omit & (1 << 3))) {
@@ -442,7 +449,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
         [[fallthrough]];
     case 11:
         if (!(omit & (1 << 11))) {
-            if (quality == "minor") {
+            if (quality == "minor" || (ext == 11 && !literal && hasMajorThird)) {
                 ret.insert({ 5 + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, 11, 0) });                 //maj11
             } else if (literal) {
                 ret.insert({ 5 + RANK_MULT * RANK_OMIT, tpcInterval(rootTpc, 11, 0) });                 //maj11
