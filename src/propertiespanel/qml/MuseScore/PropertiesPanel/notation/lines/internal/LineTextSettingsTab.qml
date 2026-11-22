@@ -68,12 +68,52 @@ FocusableItem {
         SeparatorLine { anchors.margins: -12 }
 
         TextSection {
+            id: middleTextSection
+            titleText: qsTrc("propertiespanel", "Middle text")
+            propertyItem: root.model ? root.model.middleText : null
+            navigationPanel: root.navigationPanel
+            navigationRowStart: beginningTextOffsetSection.navigationRowEnd + 1
+        }
+
+        OffsetSection {
+            id: middleTextOffsetSection
+            titleText: qsTrc("propertiespanel", "Offset")
+            propertyItem: root.model ? root.model.middleTextOffset : null
+            measurementUnits: root.model?.measurementUnits ?? CommonTypes.UNITS_UNKNOWN
+            navigationPanel: root.navigationPanel
+            navigationRowStart: middleTextSection.navigationRowEnd + 1
+        }
+
+        CheckBoxPropertyView {
+            id: middleTextCutThroughSection
+            titleText: qsTrc("propertiespanel", "Cut through lines")
+            propertyItem: root.model ? root.model.middleTextCutThrough : null
+            navigationPanel: root.navigationPanel
+            navigationRowStart: middleTextOffsetSection.navigationRowEnd + 1
+        }
+
+        SpinBoxPropertyView {
+            id: middleTextMinLineLengthSection
+            titleText: qsTrc("propertiespanel", "Minimum line length")
+            propertyItem: root.model ? root.model.middleTextMinLineLength : null
+            step: 0.1
+            minValue: 0.0
+            maxValue: 100.0
+            decimals: 2
+            navigationName: "MiddleTextMinLineLength"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: middleTextCutThroughSection.navigationRowEnd + 1
+        }
+
+        SeparatorLine { anchors.margins: -12 }
+
+        TextSection {
             id: continuousTextSection
             titleText: qsTrc("propertiespanel", "Text when continuing to a new system")
             propertyItem: root.model ? root.model.continuousText : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: beginningTextOffsetSection.navigationRowEnd + 1
+            navigationRowStart: middleTextMinLineLengthSection.navigationRowEnd + 1
         }
 
         OffsetSection {

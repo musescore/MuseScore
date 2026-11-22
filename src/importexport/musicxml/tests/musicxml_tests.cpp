@@ -22,11 +22,17 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "engraving/engravingerrors.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/text.h"
+#include "engraving/dom/textlinebase.h"
 
 #include "settings.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -37,6 +43,9 @@
 #include "engraving/tests/utils/scorecomp.h"
 
 #include "io/fileinfo.h"
+#include "io/buffer.h"
+#include "io/file.h"
+#include "serialization/xmlstreamreader.h"
 
 //! NOTE Different platforms have different font metrics, which is why some tests fail
 #ifdef Q_OS_LINUX
@@ -364,6 +373,86 @@ void MusicXml_Tests::musicXmlImportTestRef(const char* file)
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", XML_IO_DATA_DIR + fileName + u"_ref.mscx"));
     delete score;
+}
+
+TEST_F(MusicXml_Tests, middleText)
+{
+    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
+    std::unique_ptr<MasterScore> score(readScore(XML_IO_DATA_DIR + u"testMiddleText.mscx"));
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->spanner().size(), 1u);
+    TextLineBase* line = toTextLineBase(score->spanner().begin()->second);
+    line->setMiddleText(u"<b>Middle &amp; text</b>");
+    line->setMiddleTextOffset(PointF(1.25, -0.75));
+    score->doLayout();
+
+    for (bool lineVisible : { false, true }) {
+        for (bool exportLayout : { false, true }) {
+            SCOPED_TRACE(lineVisible);
+            SCOPED_TRACE(exportLayout);
+            line->setLineVisible(lineVisible);
+            score->doLayout();
+            ASSERT_EQ(line->spannerSegments().size(), 2u);
+            std::vector<const TextLineBaseSegment*> labels;
+            for (const SpannerSegment* segment : line->spannerSegments()) {
+                labels.push_back(toTextLineBaseSegment(segment));
+            }
+            setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
+            auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
+            ASSERT_TRUE(saveXml(score.get(), &buffer));
+            if (exportLayout) {
+                EXPECT_TRUE(io::File::writeFile(String(u"testMiddleText.xml"), buffer.data()));
+            }
+            XmlStreamReader xml(buffer.data());
+            const Measure* measure = nullptr;
+            const TextLineBaseSegment* label = nullptr;
+            size_t labelCount = 0;
+            size_t bracketCount = 0;
+            while (!xml.atEnd()) {
+                xml.readNext();
+                if (xml.isStartElement() && xml.name() == "measure") {
+                    measure = measure ? measure->nextMeasure() : score->firstMeasure();
+                } else if (xml.isStartElement() && xml.name() == "direction") {
+                    label = nullptr;
+                } else if (xml.isEndElement() && xml.name() == "direction") {
+                    label = nullptr;
+                } else if (xml.isStartElement() && xml.name() == "words" && xml.asciiAttribute("halign") == "center") {
+                    ASSERT_TRUE(measure);
+                    EXPECT_EQ(xml.attribute("valign"), u"middle");
+                    EXPECT_EQ(xml.hasAttribute("default-x"), exportLayout);
+                    const double x = xml.doubleAttribute("default-x");
+                    const double y = xml.doubleAttribute("default-y");
+                    const String weight = xml.attribute("font-weight");
+                    const String value = xml.readText();
+                    for (const TextLineBaseSegment* candidate : labels) {
+                        if (candidate->middleText()->plainText() == value && candidate->system() == measure->system()) {
+                            label = candidate;
+                            break;
+                        }
+                    }
+                    ASSERT_TRUE(label) << value.toStdString();
+                    ++labelCount;
+                    if (value == u"Middle & text") {
+                        EXPECT_EQ(weight, u"bold");
+                    }
+                    if (exportLayout) {
+                        const Text* text = label->middleText();
+                        const PointF center = text->canvasPos() + text->ldata()->bbox().center();
+                        const double spatium = score->style().spatium();
+                        EXPECT_NEAR(x, 10 * (center.x() - measure->canvasPos().x()) / spatium, 0.01);
+                        EXPECT_NEAR(y, -10 * (center.y() - label->system()->staffCanvasYpage(label->staffIdx())) / spatium, 0.01);
+                    }
+                } else if (xml.isStartElement() && xml.name() == "staff" && label) {
+                    EXPECT_EQ(xml.readInt(), static_cast<int>(label->staffIdx() + 1));
+                } else if (xml.isStartElement() && xml.name() == "bracket") {
+                    ++bracketCount;
+                }
+            }
+            EXPECT_FALSE(xml.isError());
+            EXPECT_EQ(labelCount, labels.size());
+            EXPECT_EQ(bracketCount, lineVisible ? 2u : 0u); // Currently we don't export line cutouts.
+        }
+    }
 }
 
 TEST_F(MusicXml_Tests, accidentals1) {

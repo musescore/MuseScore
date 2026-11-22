@@ -2188,6 +2188,9 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 {
     TextLineBaseSegment::LayoutData* ldata = item->mutldata();
     ldata->npoints = 0;
+    ldata->setMask(Shape());
+    ldata->hideBegin = false;
+    ldata->hideEnd = false;
     const TextLineBase* tl = item->textLineBase();
     const double spatium = tl->spatium();
     const bool isSingleOrBegin = item->isSingleBeginType();
@@ -2245,6 +2248,19 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     item->text()->setColor(tl->lineColor());
     layout(item->text(), ctx);
 
+    Text* middleText = item->middleText();
+    middleText->setXmlText(tl->middleText());
+    middleText->setFamily(tl->beginFontFamily());
+    middleText->setSize(tl->beginFontSize() * (tl->textSizeSpatiumDependent() ? 1.0 : item->defaultSpatium() / item->spatium()));
+    middleText->setSymbolScale(tl->beginTextMusicalSymbolsScale());
+    middleText->setSymbolSize(tl->beginTextMusicSymbolsSize());
+    middleText->setFontStyle(tl->beginFontStyle());
+    middleText->setOffset(tl->middleTextOffset() * item->mag());
+    middleText->setPlacement(PlacementV::ABOVE);
+    middleText->setTrack(item->track());
+    middleText->setColor(tl->lineColor());
+    layout(middleText, ctx);
+
     if (isSingleOrEnd) {
         item->endText()->setXmlText(tl->endText());
         item->endText()->setFamily(tl->endFontFamily());
@@ -2272,7 +2288,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     PointF pp2(item->pos2());
 
     // line with no text or hooks - just use the basic rectangle for line
-    if (item->text()->empty() && item->endText()->empty()
+    if (item->text()->empty() && item->middleText()->empty() && item->endText()->empty()
         && (!isSingleOrBegin || tl->beginHookType() == HookType::NONE)
         && (!isSingleOrEnd || tl->endHookType() == HookType::NONE)) {
         ldata->npoints = 2;
@@ -2376,11 +2392,17 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         if (beginArrow) {
             const bool filled = tl->beginHookType() == HookType::ARROW_FILLED;
             ldata->beginArrow = createArrow(true, filled, pp1, pp2, tl);
-            shape.add(ldata->beginArrow.boundingRect(), item);
         }
         if (endArrow) {
             const bool filled = tl->endHookType() == HookType::ARROW_FILLED;
             ldata->endArrow = createArrow(false, filled, pp1, pp2, tl);
+        }
+
+        item->layoutMiddleText(pp1, pp2, shape);
+        if (beginArrow && !ldata->hideBegin) {
+            shape.add(ldata->beginArrow.boundingRect(), item);
+        }
+        if (endArrow && !ldata->hideEnd) {
             shape.add(ldata->endArrow.boundingRect(), item);
         }
 
@@ -2401,8 +2423,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             return false;
         };
 
-        const bool beginHook = isSingleOrBegin && hasHook(tl->beginHookType());
-        const bool endHook = isSingleOrEnd && hasHook(tl->endHookType());
+        const bool beginHook = !ldata->hideBegin && isSingleOrBegin && hasHook(tl->beginHookType());
+        const bool endHook = !ldata->hideEnd && isSingleOrEnd && hasHook(tl->endHookType());
 
         if (beginHook) {
             // We use the term "endpoint" for the point that does not touch the main line.
@@ -2454,6 +2476,11 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         }
 
         ldata->lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
+        if (ldata->hideBegin && ldata->hideEnd) {
+            ldata->npoints = 0;
+        }
+    } else {
+        item->layoutMiddleText(pp1, pp2, shape);
     }
 
     // Calculate shape of line

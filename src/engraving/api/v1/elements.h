@@ -918,6 +918,16 @@ class EngravingItem : public apiv1::ScoreElement
 
     /// For text-line-based elements, the text to begin the line.
     API_PROPERTY(beginText,               BEGIN_TEXT)
+    /// For text-line-based elements, text centered in each visible line segment.
+    API_PROPERTY(middleText,              MIDDLE_TEXT)
+    /// Whether the line is disconnected around middleText.
+    API_PROPERTY(middleTextCutThrough,    MIDDLE_TEXT_CUT_THROUGH)
+    /// Offset of the middle text from midpoint of the line.
+    API_PROPERTY_T(QPointF, middleTextOffset, MIDDLE_TEXT_OFFSET)
+    /// Minimum visible stroke length on each side of the middle-text cutout, in staff spaces.
+    /// That side of the line becomes invisible with the hook, if its length is shorter than this.
+    /// Default value copied from tuplets.
+    API_PROPERTY(middleTextMinLineLength, MIDDLE_TEXT_MIN_LINE_LENGTH)
     /// For text-line-based elements, the alignment of the beginning text.
     API_PROPERTY(beginTextAlign,          BEGIN_TEXT_ALIGN)
     /// For text-line-based elements, the position of the beginning text.

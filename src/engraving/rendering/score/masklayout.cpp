@@ -270,9 +270,13 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
         }
         TextLineBaseSegment* textLineBaseSegment = static_cast<TextLineBaseSegment*>(spannerSegment);
         Text* beginText = textLineBaseSegment->text();
+        Text* middleText = textLineBaseSegment->middleText();
         Text* endText = textLineBaseSegment->endText();
         if (beginText && !beginText->empty()) {
             allText.push_back(beginText);
+        }
+        if (middleText && !middleText->empty()) {
+            allText.push_back(middleText);
         }
         if (endText && !endText->empty()) {
             allText.push_back(endText);

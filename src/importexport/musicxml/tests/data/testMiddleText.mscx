@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <Score>
+    <Style>
+      <defaultsVersion>500</defaultsVersion>
+      <pageWidth>8.5</pageWidth>
+      <pageHeight>11</pageHeight>
+      <pagePrintableWidth>7.3189</pagePrintableWidth>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <spatium>1.75</spatium>
+    </Style>
+    <Division>480</Division>
+    <Part id="1">
+      <Staff>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <Instrument id="flute">
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+        </InstrumentLabel>
+        <trackName>Flute</trackName>
+        <instrumentId>wind.flutes.flute</instrumentId>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+        </LayoutBreak>
+        <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+          </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </voice>
+      </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+    </Staff>
+    <SpannerMap>
+      <TextLine>
+        <middleText>M</middleText>
+        <beginHookType>1</beginHookType>
+        <endHookType>1</endHookType>
+        <beginText>B</beginText>
+        <continueText>C</continueText>
+        <endText>E</endText>
+        <track2>0</track2>
+        <startTick>0/1</startTick>
+        <ticks>8/4</ticks>
+        <track>0</track>
+        <Segment>
+          <subtype>1</subtype>
+          <offset x="0" y="0"/>
+          <off2 x="0" y="0"/>
+          <track>0</track>
+        </Segment>
+        <Segment>
+          <subtype>3</subtype>
+          <offset x="0" y="0"/>
+          <off2 x="0.300027" y="0"/>
+          <track>0</track>
+        </Segment>
+      </TextLine>
+    </SpannerMap>
+  </Score>
+</museScore>

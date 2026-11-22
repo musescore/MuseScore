@@ -369,7 +369,7 @@ static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem
         if (!tlb) {
             continue;
         }
-        if (!tlb->beginText().empty() || !tlb->continueText().empty() || !tlb->endText().empty()) {
+        if (!tlb->beginText().empty() || !tlb->middleText().empty() || !tlb->continueText().empty() || !tlb->endText().empty()) {
             return true;
         }
     }

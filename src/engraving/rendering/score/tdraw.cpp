@@ -1836,6 +1836,13 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         painter->translate(-item->text()->pos());
     }
 
+    if (!item->middleText()->empty()) {
+        painter->translate(item->middleText()->pos());
+        item->middleText()->setVisible(tl->visible());
+        draw(item->middleText(), painter, opt);
+        painter->translate(-item->middleText()->pos());
+    }
+
     if (!item->endText()->empty()) {
         painter->translate(item->endText()->pos());
         item->endText()->setVisible(tl->visible());
@@ -1848,6 +1855,12 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
             && !tl->lineVisible())) {
         return;
     }
+
+    painter->save();
+    DEFER {
+        painter->restore();
+    };
+    setMask(item, painter);
 
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor(), opt);
@@ -1883,7 +1896,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     int start = 0, end = ldata->npoints;
 
     // Draw begin hook, if it needs to be drawn separately
-    if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+    if (!ldata->hideBegin && item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
         if (tl->beginHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
@@ -1916,7 +1929,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     }
 
     // Draw end hook, if it needs to be drawn separately
-    if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
+    if (!ldata->hideEnd && item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
         if (tl->endHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);

@@ -355,6 +355,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SYSTEM_FLAG,                         P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "systemFlag",                      QT_TRANSLATE_NOOP("engraving/propertyName", "system flag") },
 
     { Pid::BEGIN_TEXT,                          P_TYPE::STRING,                    PropertyGroup::APPEARANCE, true,  "beginText",                       QT_TRANSLATE_NOOP("engraving/propertyName", "begin text") },
+    { Pid::MIDDLE_TEXT,                         P_TYPE::STRING,                    PropertyGroup::APPEARANCE, true,  "middleText",                      QT_TRANSLATE_NOOP("engraving/propertyName", "middle text") },
+    { Pid::MIDDLE_TEXT_OFFSET,                  P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "middleTextOffset",                QT_TRANSLATE_NOOP("engraving/propertyName", "middle text offset") },
+    { Pid::MIDDLE_TEXT_CUT_THROUGH,             P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "middleTextCutThrough",            QT_TRANSLATE_NOOP("engraving/propertyName", "middle text cut through lines") },
+    { Pid::MIDDLE_TEXT_MIN_LINE_LENGTH,         P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, true,  "middleTextMinLineLength",         QT_TRANSLATE_NOOP("engraving/propertyName", "middle text minimum line length") },
     { Pid::BEGIN_TEXT_ALIGN,                    P_TYPE::ALIGN,                     PropertyGroup::APPEARANCE, false, "beginTextAlign",                  QT_TRANSLATE_NOOP("engraving/propertyName", "begin text align") },
     { Pid::BEGIN_TEXT_POSITION,                 P_TYPE::ALIGN_H,                   PropertyGroup::APPEARANCE, false, "beginTextPosition",               QT_TRANSLATE_NOOP("engraving/propertyName", "begin text position") },
     { Pid::BEGIN_TEXT_PLACE,                    P_TYPE::TEXT_PLACE,                PropertyGroup::APPEARANCE, false, "beginTextPlace",                  QT_TRANSLATE_NOOP("engraving/propertyName", "begin text place") },

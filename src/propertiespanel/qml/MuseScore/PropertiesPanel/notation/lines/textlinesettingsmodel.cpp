@@ -87,6 +87,11 @@ void TextLineSettingsModel::createProperties()
     m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT, applyPropertyValueAndUpdateAvailability);
     m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
 
+    m_middleText = buildPropertyItem(Pid::MIDDLE_TEXT, applyPropertyValueAndUpdateAvailability);
+    m_middleTextOffset = buildPointFPropertyItem(Pid::MIDDLE_TEXT_OFFSET);
+    m_middleTextCutThrough = buildPropertyItem(Pid::MIDDLE_TEXT_CUT_THROUGH, applyPropertyValueAndUpdateAvailability);
+    m_middleTextMinLineLength = buildPropertyItem(Pid::MIDDLE_TEXT_MIN_LINE_LENGTH);
+
     m_continuousText = buildPropertyItem(Pid::CONTINUE_TEXT, applyPropertyValueAndUpdateAvailability);
     m_continuousTextOffset = buildPointFPropertyItem(Pid::CONTINUE_TEXT_OFFSET);
 
@@ -121,6 +126,10 @@ void TextLineSettingsModel::loadProperties()
         Pid::PLACEMENT,
         Pid::BEGIN_TEXT,
         Pid::BEGIN_TEXT_OFFSET,
+        Pid::MIDDLE_TEXT,
+        Pid::MIDDLE_TEXT_OFFSET,
+        Pid::MIDDLE_TEXT_CUT_THROUGH,
+        Pid::MIDDLE_TEXT_MIN_LINE_LENGTH,
         Pid::CONTINUE_TEXT,
         Pid::CONTINUE_TEXT_OFFSET,
         Pid::END_TEXT,
@@ -243,6 +252,26 @@ PropertyItem* TextLineSettingsModel::beginningText() const
 PropertyItem* TextLineSettingsModel::beginningTextOffset() const
 {
     return m_beginningTextOffset;
+}
+
+PropertyItem* TextLineSettingsModel::middleText() const
+{
+    return m_middleText;
+}
+
+PropertyItem* TextLineSettingsModel::middleTextOffset() const
+{
+    return m_middleTextOffset;
+}
+
+PropertyItem* TextLineSettingsModel::middleTextCutThrough() const
+{
+    return m_middleTextCutThrough;
+}
+
+PropertyItem* TextLineSettingsModel::middleTextMinLineLength() const
+{
+    return m_middleTextMinLineLength;
 }
 
 PropertyItem* TextLineSettingsModel::continuousText() const
@@ -379,13 +408,17 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
 
     bool hasBeginText = !m_beginningText->value().toString().isEmpty();
+    bool hasMiddleText = !m_middleText->value().toString().isEmpty();
     bool hasContinueText = !m_continuousText->value().toString().isEmpty();
     bool hasEndText = !m_endText->value().toString().isEmpty();
 
     m_beginningTextOffset->setIsEnabled(hasBeginText);
+    m_middleTextOffset->setIsEnabled(hasMiddleText);
+    m_middleTextCutThrough->setIsEnabled(hasMiddleText && isLineAvailable);
+    m_middleTextMinLineLength->setIsEnabled(hasMiddleText && isLineAvailable && m_middleTextCutThrough->value().toBool());
     m_continuousTextOffset->setIsEnabled(hasContinueText);
     m_endTextOffset->setIsEnabled(hasEndText);
-    m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable && (hasBeginText || hasContinueText || hasEndText));
+    m_gapBetweenTextAndLine->setIsEnabled(isLineAvailable && (hasBeginText || hasMiddleText || hasContinueText || hasEndText));
 }
 
 void TextLineSettingsModel::updateStartAndEndHookTypes()
@@ -522,6 +555,22 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
     if (muse::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
         loadPropertyItem(m_beginningTextOffset);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::MIDDLE_TEXT)) {
+        loadPropertyItem(m_middleText);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::MIDDLE_TEXT_OFFSET)) {
+        loadPropertyItem(m_middleTextOffset);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::MIDDLE_TEXT_CUT_THROUGH)) {
+        loadPropertyItem(m_middleTextCutThrough);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::MIDDLE_TEXT_MIN_LINE_LENGTH)) {
+        loadPropertyItem(m_middleTextMinLineLength, formatDoubleFunc);
     }
 
     if (muse::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
