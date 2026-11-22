@@ -92,6 +92,30 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::G8_VB_C, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbCClef,    StaffGroup::STANDARD },
 };
 
+int ClefInfo::octaveOffset(ClefType type)
+{
+    switch (type) {
+    case ClefType::G15_MB:
+    case ClefType::F15_MB:
+        return -2;
+    case ClefType::G8_VB:
+    case ClefType::G8_VB_O:
+    case ClefType::G8_VB_C:
+    case ClefType::C4_8VB:
+    case ClefType::F8_VB:
+        return -1;
+    case ClefType::G8_VA:
+    case ClefType::F_8VA:
+        return 1;
+    case ClefType::G15_MA:
+    case ClefType::F_15MA:
+        return 2;
+    default:
+        // G8_VB_P displays an 8 but has the same pitch mapping as G.
+        return 0;
+    }
+}
+
 //---------------------------------------------------------
 //   Clef
 //---------------------------------------------------------

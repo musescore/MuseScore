@@ -25,11 +25,13 @@
 #include "types/translatablestring.h"
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/clef.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/jianpuoctavedot.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 
 #include "utils/scorerw.h"
 
@@ -104,6 +106,37 @@ class Engraving_JianpuOctaveDotTests : public ::testing::Test
 {
 };
 
+TEST_F(Engraving_JianpuOctaveDotTests, ledgerLineOctaveDependsOnClef)
+{
+    MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
+    ASSERT_TRUE(score);
+    Note* note = findJianpuNoteInChord(score);
+    ASSERT_TRUE(note);
+    Staff* staff = score->staff(note->staffIdx());
+
+    struct TestCase {
+        ClefType clef;
+        int pitch;
+    };
+    for (const TestCase& test : { TestCase{ ClefType::G, 60 }, TestCase{ ClefType::G8_VB, 48 },
+                                  TestCase{ ClefType::G8_VA, 72 }, TestCase{ ClefType::G8_VB_P, 60 } }) {
+        SCOPED_TRACE(test.pitch);
+        staff->setDefaultClefType(ClefTypeList(test.clef));
+        ASSERT_EQ(staff->clef(note->tick()), test.clef);
+
+        note->setPitch(test.pitch);
+        score->doLayout();
+        EXPECT_TRUE(note->jianpuOctaveDots().empty());
+
+        note->setPitch(test.pitch + 12);
+        score->doLayout();
+        ASSERT_EQ(note->jianpuOctaveDots().size(), 1);
+        EXPECT_TRUE(note->jianpuOctaveDots().front()->ldata()->above);
+    }
+
+    delete score;
+}
+
 TEST_F(Engraving_JianpuOctaveDotTests, layoutDataStoresGeometry)
 {
     MasterScore* score = ScoreRW::readScore(JIANPU_OCTAVE_DOTS_DATA_DIR + u"jianpuBeam.mscx");
@@ -135,10 +168,9 @@ TEST_F(Engraving_JianpuOctaveDotTests, jianpuUndoRedoRemoveNoteKeepsOctaveDotsOw
     Note* original = findJianpuNoteInChord(score);
     ASSERT_TRUE(original);
 
+    original->setPitch(72); // C5 has a dot with the default treble clef.
+    score->doLayout();
     const NoteLocator locator { original->chord()->tick(), original->track(), original->pitch() };
-
-    // Force octave dots to be allocated
-    original->setJianpuOctaveDotCount(1);
     expectJianpuOctaveDotsOwnedByNote(original);
 
     Chord* chord = original->chord();
@@ -197,10 +229,9 @@ TEST_F(Engraving_JianpuOctaveDotTests, jianpuSaveReloadKeepsOctaveDotsOwnership)
     Note* beforeSave = findJianpuNoteInChord(score);
     ASSERT_TRUE(beforeSave);
 
+    beforeSave->setPitch(72); // The dot must also be generated when the score is reloaded.
+    score->doLayout();
     const NoteLocator locator { beforeSave->chord()->tick(), beforeSave->track(), beforeSave->pitch() };
-
-    // Force octave dots to be allocated
-    beforeSave->setJianpuOctaveDotCount(1);
     expectJianpuOctaveDotsOwnedByNote(beforeSave);
 
     ASSERT_TRUE(ScoreRW::saveScore(score, tempFile));

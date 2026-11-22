@@ -4902,7 +4902,8 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
 
                 if (tpc != Tpc::TPC_INVALID) {
                     String accName, stepName;
-                    KeySigEvent ks = staff->keySigEvent(item->tick());
+                    const Fraction tick = pos.segment->tick();
+                    KeySigEvent ks = staff->keySigEvent(tick);
                     KeyMode mode;
                     int tonicTpc;
                     jianpuKeyMapping(ks, mode, tonicTpc);
@@ -4910,9 +4911,10 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
                     item->setJianpuDigit(stepName);
                     item->setJianpuAccidental(jianpuAccidentalMark(accName));
 
-                    Interval transpose = item->part()->instrument(item->tick())->transpose();
-                    int epitch = nval.pitch - transpose.chromatic;
-                    dots = -pitch2JianpuOctave(epitch, tpc, tonicTpc, mode);
+                    const Interval transpose = item->part()->instrument(tick)->transpose();
+                    const int epitch = nval.pitch - (concertPitch ? 0 : transpose.chromatic);
+                    const int referenceOctaveOffset = ClefInfo::octaveOffset(staff->clef(tick));
+                    dots = -pitch2JianpuOctave(epitch, tpc, tonicTpc, mode, referenceOctaveOffset);
                 }
             }
         }

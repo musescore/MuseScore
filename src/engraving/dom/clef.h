@@ -72,6 +72,7 @@ struct ClefInfo
 
     static int line(ClefType t) { return clefTable[int(t)].m_line; }
     static int pitchOffset(ClefType t) { return clefTable[int(t)].m_pitchOffset; }
+    static int octaveOffset(ClefType type);
     static SymId symId(ClefType t) { return clefTable[int(t)].m_symId; }
     static const signed char* lines(ClefType t) { return clefTable[int(t)].m_lines; }
     static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)].m_staffGroup; }
