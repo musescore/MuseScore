@@ -22,6 +22,8 @@
 
 #include "playbackeventsrenderer.h"
 
+#include <algorithm>
+
 #include "log.h"
 
 #include "dom/chord.h"
@@ -271,7 +273,8 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
 
 void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTick, const muse::mpe::timestamp_t actualTimestamp,
                                            const muse::mpe::ArticulationsProfilePtr profile,
-                                           muse::mpe::PlaybackEventsMap& result, muse::mpe::duration_t& countInDuration) const
+                                           muse::mpe::PlaybackEventsMap& result, muse::mpe::duration_t& countInDuration,
+                                           int measureCount) const
 {
     const Measure* measure = score->tick2measure(Fraction::fromTicks(startTick));
     if (!measure) {
@@ -289,7 +292,8 @@ void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTi
     duration_t stepDuration = durationFromTempoAndTicks(bps.val, step);
 
     // Add extra clicks if...
-    int endTick = ticksPerMeasure + (startTick - measureStartTick); // ... not starting playback at beginning of measure
+    // ... not starting playback at beginning of measure
+    int endTick = ticksPerMeasure * std::max(measureCount, 1) + (startTick - measureStartTick);
     int remainingTicks = 0;
 
     if (measure->isAnacrusis()) { // ... measure is incomplete (anacrusis)

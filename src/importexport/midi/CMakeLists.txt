@@ -31,8 +31,11 @@ target_sources(iex_midi PRIVATE
     midimodule.cpp
     midimodule.h
     imidiconfiguration.h
+    imidirecordingimporter.h
     internal/midiconfiguration.cpp
     internal/midiconfiguration.h
+    internal/midirecordingimporter.cpp
+    internal/midirecordingimporter.h
     internal/notationmidireader.cpp
     internal/notationmidireader.h
     internal/notationmidiwriter.cpp

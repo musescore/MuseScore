@@ -26,6 +26,7 @@
 
 #include "rcommand/commandtypes.h"
 #include "audio/common/audiotypes.h"
+#include "engraving/types/constants.h"
 
 #include "../playbackcommands.h"
 
@@ -57,6 +58,24 @@ void PlaybackCommandsController::init()
     registerCommand(COUNTIN_TOGGLE_COMMAND, &IPlaybackController::toggleCountIn);
     registerCommand(OPEN_PLAYBACK_SETUP_COMMAND, [this]() { return showPlaybackSetup(); });
     registerCommand(RELOAD_PLAYBACK_CACHE_COMMAND, &IPlaybackController::reloadPlaybackCache);
+
+    registerCommand(MIDI_RECORD_TOGGLE_COMMAND, &IPlaybackController::toggleMidiRecording);
+    registerCommand(MIDI_RECORD_REQUANTIZE_COMMAND, &IPlaybackController::requantizeLastMidiRecording);
+
+    using mu::engraving::Constants;
+    registerCommand(MIDI_RECORD_QUANTIZATION_4_COMMAND, [this]() { return setMidiRecordingMinQuantization(Constants::DIVISION); });
+    registerCommand(MIDI_RECORD_QUANTIZATION_8_COMMAND, [this]() { return setMidiRecordingMinQuantization(Constants::DIVISION / 2); });
+    registerCommand(MIDI_RECORD_QUANTIZATION_16_COMMAND, [this]() { return setMidiRecordingMinQuantization(Constants::DIVISION / 4); });
+    registerCommand(MIDI_RECORD_QUANTIZATION_32_COMMAND, [this]() { return setMidiRecordingMinQuantization(Constants::DIVISION / 8); });
+    registerCommand(MIDI_RECORD_TUPLETS_TOGGLE_COMMAND, [this]() { return toggleMidiRecordingTuplets(); });
+    registerCommand(MIDI_RECORD_LEGATO_TOGGLE_COMMAND, [this]() { return toggleMidiRecordingLegato(); });
+    registerCommand(MIDI_RECORD_COUNTIN_0_COMMAND, [this]() { return setMidiRecordingCountInMeasures(0); });
+    registerCommand(MIDI_RECORD_COUNTIN_1_COMMAND, [this]() { return setMidiRecordingCountInMeasures(1); });
+    registerCommand(MIDI_RECORD_COUNTIN_2_COMMAND, [this]() { return setMidiRecordingCountInMeasures(2); });
+    registerCommand(MIDI_RECORD_ONE_STAFF_COMMAND, [this]() { return setMidiRecordingTwoStaves(false); });
+    registerCommand(MIDI_RECORD_TWO_STAVES_COMMAND, [this]() { return setMidiRecordingTwoStaves(true); });
+    registerCommand(MIDI_RECORD_SPLIT_POINT_COMMAND, [this]() { return openMidiRecordingSplitPointDialog(); });
+    registerCommand(MIDI_RECORD_LATENCY_COMMAND, [this]() { return openMidiRecordingLatencySettings(); });
 
     registerCommand(TOGGLE_MIXER_SECTION_COMMAND, [this](const rcommand::Params& params) { return toggleMixerSection(params); });
     registerCommand(TOGGLE_AUX_SEND_COMMAND, [this](const rcommand::Params& params) { return toggleAuxSend(params); });
@@ -108,6 +127,59 @@ muse::Ret PlaybackCommandsController::toggleAuxChannel(const muse::rcommand::Par
     aux_channel_idx_t auxChannelIndex = static_cast<aux_channel_idx_t>(params.at("auxchannel-index").toInt());
     bool visible = configuration()->isAuxChannelVisible(auxChannelIndex);
     configuration()->setAuxChannelVisible(auxChannelIndex, !visible);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::setMidiRecordingMinQuantization(int ticks)
+{
+    notationConfiguration()->setMidiRecordingMinQuantizationTicks(ticks);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::setMidiRecordingCountInMeasures(int measures)
+{
+    notationConfiguration()->setMidiRecordingCountInMeasures(measures);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::toggleMidiRecordingTuplets()
+{
+    notationConfiguration()->setMidiRecordingSearchTuplets(!notationConfiguration()->midiRecordingSearchTuplets());
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::toggleMidiRecordingLegato()
+{
+    notationConfiguration()->setMidiRecordingLegato(!notationConfiguration()->midiRecordingLegato());
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::setMidiRecordingTwoStaves(bool twoStaves)
+{
+    notationConfiguration()->setMidiRecordingTwoStaves(twoStaves);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::openMidiRecordingSplitPointDialog()
+{
+    if (playbackController()->isMidiRecording()) {
+        return make_ret(Ret::Code::NotSupported);
+    }
+
+    interactive()->open("musescore://playback/midirecordingsplitpoint");
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::openMidiRecordingLatencySettings()
+{
+    if (playbackController()->isMidiRecording() || playbackController()->isPlaying()) {
+        playbackController()->stop();
+    }
+
+    //! NOTE The latency compensation is in Preferences > Note input > MIDI devices > Recording with metronome
+    UriQuery preferencesUri("muse://preferences");
+    preferencesUri.addParam("currentPageId", Val("note-input"));
+    interactive()->open(preferencesUri);
     return make_ok();
 }
 

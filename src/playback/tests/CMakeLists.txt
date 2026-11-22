@@ -27,6 +27,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playermock.h
     ${CMAKE_CURRENT_LIST_DIR}/playbackcontrollertests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midirecordingtiming_tests.cpp
 
     # NOTE The playback module uses this utility, but it lives in notationscene,
     # and linking the whole notationscene would drag the UI stack into the tests

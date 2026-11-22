@@ -49,6 +49,22 @@ inline static const muse::rcommand::Command CLEAR_ONLINESOUNDS_CACHE_COMMAND("co
 inline static const muse::rcommand::Command PROCESS_ONLINESOUNDS_COMMAND("command://playback/process-onlinesounds");
 inline static const muse::rcommand::Command RELOAD_PLAYBACK_CACHE_COMMAND("command://playback/reload-playback-cache");
 
+inline static const muse::rcommand::Command MIDI_RECORD_TOGGLE_COMMAND("command://playback/midi-record-toggle");
+inline static const muse::rcommand::Command MIDI_RECORD_REQUANTIZE_COMMAND("command://playback/midi-record-requantize");
+inline static const muse::rcommand::Command MIDI_RECORD_QUANTIZATION_4_COMMAND("command://playback/midi-record-quantization-4");
+inline static const muse::rcommand::Command MIDI_RECORD_QUANTIZATION_8_COMMAND("command://playback/midi-record-quantization-8");
+inline static const muse::rcommand::Command MIDI_RECORD_QUANTIZATION_16_COMMAND("command://playback/midi-record-quantization-16");
+inline static const muse::rcommand::Command MIDI_RECORD_QUANTIZATION_32_COMMAND("command://playback/midi-record-quantization-32");
+inline static const muse::rcommand::Command MIDI_RECORD_TUPLETS_TOGGLE_COMMAND("command://playback/midi-record-tuplets-toggle");
+inline static const muse::rcommand::Command MIDI_RECORD_LEGATO_TOGGLE_COMMAND("command://playback/midi-record-legato-toggle");
+inline static const muse::rcommand::Command MIDI_RECORD_COUNTIN_0_COMMAND("command://playback/midi-record-countin-0");
+inline static const muse::rcommand::Command MIDI_RECORD_COUNTIN_1_COMMAND("command://playback/midi-record-countin-1");
+inline static const muse::rcommand::Command MIDI_RECORD_COUNTIN_2_COMMAND("command://playback/midi-record-countin-2");
+inline static const muse::rcommand::Command MIDI_RECORD_ONE_STAFF_COMMAND("command://playback/midi-record-one-staff");
+inline static const muse::rcommand::Command MIDI_RECORD_TWO_STAVES_COMMAND("command://playback/midi-record-two-staves");
+inline static const muse::rcommand::Command MIDI_RECORD_SPLIT_POINT_COMMAND("command://playback/midi-record-split-point");
+inline static const muse::rcommand::Command MIDI_RECORD_LATENCY_COMMAND("command://playback/midi-record-latency");
+
 inline static const muse::rcommand::Command TOGGLE_MIXER_SECTION_COMMAND("command://playback/toggle-mixer-section"); // with params
 inline static const muse::rcommand::Command TOGGLE_AUX_SEND_COMMAND("command://playback/toggle-aux-send");
 inline static const muse::rcommand::Command TOGGLE_AUX_CHANNEL_COMMAND("command://playback/toggle-aux-channel");

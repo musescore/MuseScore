@@ -25,6 +25,8 @@
 #include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 
+#include "engraving/types/constants.h"
+
 #include "../playbackcommands.h"
 
 using namespace muse;
@@ -33,6 +35,35 @@ using namespace mu::playback;
 using namespace mu::notation;
 
 static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
+
+static const std::vector<Command> MIDI_RECORD_SETTINGS_COMMANDS {
+    MIDI_RECORD_QUANTIZATION_4_COMMAND,
+    MIDI_RECORD_QUANTIZATION_8_COMMAND,
+    MIDI_RECORD_QUANTIZATION_16_COMMAND,
+    MIDI_RECORD_QUANTIZATION_32_COMMAND,
+    MIDI_RECORD_TUPLETS_TOGGLE_COMMAND,
+    MIDI_RECORD_LEGATO_TOGGLE_COMMAND,
+    MIDI_RECORD_COUNTIN_0_COMMAND,
+    MIDI_RECORD_COUNTIN_1_COMMAND,
+    MIDI_RECORD_COUNTIN_2_COMMAND,
+    MIDI_RECORD_ONE_STAFF_COMMAND,
+    MIDI_RECORD_TWO_STAVES_COMMAND,
+};
+
+//! <command, minimum quantization in ticks>
+static const std::map<Command, int> MIDI_RECORD_QUANTIZATION_TICKS {
+    { MIDI_RECORD_QUANTIZATION_4_COMMAND, mu::engraving::Constants::DIVISION },
+    { MIDI_RECORD_QUANTIZATION_8_COMMAND, mu::engraving::Constants::DIVISION / 2 },
+    { MIDI_RECORD_QUANTIZATION_16_COMMAND, mu::engraving::Constants::DIVISION / 4 },
+    { MIDI_RECORD_QUANTIZATION_32_COMMAND, mu::engraving::Constants::DIVISION / 8 },
+};
+
+//! <command, count-in measures>
+static const std::map<Command, int> MIDI_RECORD_COUNTIN_MEASURES {
+    { MIDI_RECORD_COUNTIN_0_COMMAND, 0 },
+    { MIDI_RECORD_COUNTIN_1_COMMAND, 1 },
+    { MIDI_RECORD_COUNTIN_2_COMMAND, 2 },
+};
 
 std::string PlaybackCommandsState::moduleName() const
 {
@@ -115,6 +146,18 @@ void PlaybackCommandsState::init()
         updateCommandStates({ HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND });
     });
 
+    playbackController()->isMidiRecordingChanged().onNotify(this, [this]() {
+        updateCommandStates();
+    });
+
+    playbackController()->lastMidiRecordingChanged().onNotify(this, [this]() {
+        updateCommandStates({ MIDI_RECORD_REQUANTIZE_COMMAND });
+    });
+
+    notationConfiguration()->midiRecordingSettingsChanged().onNotify(this, [this]() {
+        updateCommandStates(MIDI_RECORD_SETTINGS_COMMANDS);
+    });
+
     m_moduleRegister = commandsRegister()->moduleRegister(moduleName());
     IF_ASSERT_FAILED(m_moduleRegister) {
         return;
@@ -135,6 +178,9 @@ void PlaybackCommandsState::deinit()
     playbackController()->loopEnabledChanged().disconnect(this);
     playbackController()->onlineSoundsChanged().disconnect(this);
     playbackConfiguration()->playNotesWhenEditingChanged().disconnect(this);
+    playbackController()->isMidiRecordingChanged().disconnect(this);
+    playbackController()->lastMidiRecordingChanged().disconnect(this);
+    notationConfiguration()->midiRecordingSettingsChanged().disconnect(this);
     notationConfiguration()->isMetronomeEnabledChanged().disconnect(this);
     notationConfiguration()->isMidiInputEnabledChanged().disconnect(this);
     notationConfiguration()->midiUseWrittenPitch().ch.disconnect(this);
@@ -169,6 +215,26 @@ CommandState PlaybackCommandsState::commandState(const Command& command) const
 
     if (!playbackController()->isPlayAllowed()) {
         return CommandState(false, false);
+    }
+
+    if (command == MIDI_RECORD_TOGGLE_COMMAND) {
+        return CommandState(true, playbackController()->isMidiRecording());
+    } else if (command == MIDI_RECORD_REQUANTIZE_COMMAND) {
+        return CommandState(playbackController()->canRequantizeLastMidiRecording(), false);
+    } else if (command == MIDI_RECORD_SPLIT_POINT_COMMAND) {
+        return CommandState(!playbackController()->isMidiRecording(), false);
+    } else if (command == MIDI_RECORD_TUPLETS_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->midiRecordingSearchTuplets());
+    } else if (command == MIDI_RECORD_LEGATO_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->midiRecordingLegato());
+    } else if (command == MIDI_RECORD_ONE_STAFF_COMMAND) {
+        return CommandState(true, !notationConfiguration()->midiRecordingTwoStaves());
+    } else if (command == MIDI_RECORD_TWO_STAVES_COMMAND) {
+        return CommandState(true, notationConfiguration()->midiRecordingTwoStaves());
+    } else if (auto it = MIDI_RECORD_QUANTIZATION_TICKS.find(command); it != MIDI_RECORD_QUANTIZATION_TICKS.end()) {
+        return CommandState(true, notationConfiguration()->midiRecordingMinQuantizationTicks() == it->second);
+    } else if (auto it = MIDI_RECORD_COUNTIN_MEASURES.find(command); it != MIDI_RECORD_COUNTIN_MEASURES.end()) {
+        return CommandState(true, notationConfiguration()->midiRecordingCountInMeasures() == it->second);
     }
 
     if (command == PLAY_COMMAND) {

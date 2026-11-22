@@ -36,6 +36,7 @@
 #include "audio/main/iplayer.h"
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "tours/itoursservice.h"
 #include "interactive/iinteractive.h"
 
@@ -47,10 +48,12 @@
 
 namespace mu::playback {
 class OnlineSoundsController;
+class MidiRecordingController;
 class PlaybackController : public IPlaybackController, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
@@ -158,6 +161,17 @@ public:
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
 
+    const MidiRecordingPreviewNoteList& midiRecordingPreviewNotes() const override;
+    muse::async::Notification midiRecordingPreviewNotesChanged() const override;
+
+    bool isMidiRecording() const override;
+    muse::async::Notification isMidiRecordingChanged() const override;
+    muse::Ret toggleMidiRecording() override;
+
+    bool canRequantizeLastMidiRecording() const override;
+    muse::async::Notification lastMidiRecordingChanged() const override;
+    muse::Ret requantizeLastMidiRecording() override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -205,6 +219,14 @@ private:
     engraving::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
     void addLoopBoundaryToTick(LoopBoundaryType type, int tick);
+
+    void startMidiRecording();
+    void onMidiRecordingPlaybackStatusChanged();
+    void cancelMidiRecording();
+    void forceMetronomeForMidiRecording();
+    void restoreMetronomeAfterMidiRecording();
+    void playMidiRecordingNote(int pitch, int velocity);
+
     void updateLoop();
 
     void enableLoop();
@@ -298,6 +320,12 @@ private:
 
     DrumsetLoader m_drumsetLoader;
     std::unique_ptr<OnlineSoundsController> m_onlineSoundsController;
+
+    std::unique_ptr<MidiRecordingController> m_midiRecordingController;
+    bool m_midiRecordingPlaybackStarted = false;
+    std::map<int, engraving::Note*> m_midiRecordingSoundingNotes; // <pitch, note>
+    muse::async::Notification m_lastMidiRecordingChanged;
+    muse::async::Notification m_isMidiRecordingChanged;
 
     bool m_measureInputLag = false;
 };

@@ -36,6 +36,9 @@ target_sources(playback PRIVATE
     internal/playbackcontroller.h
     internal/onlinesoundscontroller.cpp
     internal/onlinesoundscontroller.h
+    internal/midirecordingcontroller.cpp
+    internal/midirecordingcontroller.h
+    internal/midirecordingtiming.h
     internal/playbackcommandsregister.cpp
     internal/playbackcommandsregister.h
     internal/playbackcommandsstate.cpp

@@ -65,6 +65,14 @@ public:
 
     muse::Ret reloadPlaybackCache() override;
 
+    bool isMidiRecording() const override;
+    muse::async::Notification isMidiRecordingChanged() const override;
+    muse::Ret toggleMidiRecording() override;
+
+    bool canRequantizeLastMidiRecording() const override;
+    muse::async::Notification lastMidiRecordingChanged() const override;
+    muse::Ret requantizeLastMidiRecording() override;
+
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 
@@ -116,5 +124,8 @@ public:
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
+
+    const MidiRecordingPreviewNoteList& midiRecordingPreviewNotes() const override;
+    muse::async::Notification midiRecordingPreviewNotesChanged() const override;
 };
 }

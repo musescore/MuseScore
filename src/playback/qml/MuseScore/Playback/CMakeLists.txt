@@ -34,6 +34,8 @@ qt_add_qml_module(playback_qml
         mixerchannelitem.h
         mixerpanelcontextmenumodel.cpp
         mixerpanelcontextmenumodel.h
+        midirecordingsplitpointmodel.cpp
+        midirecordingsplitpointmodel.h
         mixerpanelmodel.cpp
         mixerpanelmodel.h
         msbasicpresetscategories.h
@@ -74,6 +76,7 @@ qt_add_qml_module(playback_qml
         internal/SoundFlag/ParamsGridView.qml
         internal/VolumePressureMeter.qml
         internal/VolumeSlider.qml
+        MidiRecordingSplitPointDialog.qml
         MixerPanel.qml
         NotationRegionsBeingProcessedView.qml
         OnlineSoundsStatusView.qml

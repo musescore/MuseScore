@@ -71,8 +71,9 @@ Item {
             required property MenuItem item
             required property int index
 
-            width: 30
-            height: width
+            //! NOTE The dropdown of the recording settings is narrower, attached to the Record button
+            width: (Boolean(item) && item.id === "midi-record-menu") ? 16 : 30
+            height: 30
 
             icon: Boolean(item) ? item.icon : IconCode.NONE
 
@@ -81,6 +82,7 @@ Item {
             toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
             iconFont: ui.theme.toolbarIconsFont
+            iconColor: (Boolean(item) && item.id === "command://playback/midi-record-toggle") ? "#E5352B" : ui.theme.fontPrimaryColor
 
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             transparent: !accentButton

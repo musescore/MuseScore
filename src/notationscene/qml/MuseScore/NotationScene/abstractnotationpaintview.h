@@ -44,6 +44,7 @@
 #include "notationruler.h"
 #include "playbackcursor.h"
 #include "loopmarker.h"
+#include "midirecordingpreview.h"
 #include "continuouspanel.h"
 #include "abstractelementpopupmodel.h"
 

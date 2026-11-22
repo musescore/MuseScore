@@ -653,6 +653,80 @@ muse::async::Channel<int> NotationConfigurationStub::delayBetweenNotesInRealTime
     return ch;
 }
 
+int NotationConfigurationStub::midiRecordingLatencyCompensationMilliseconds() const
+{
+    return 0;
+}
+
+void NotationConfigurationStub::setMidiRecordingLatencyCompensationMilliseconds(int)
+{
+}
+
+muse::async::Channel<int> NotationConfigurationStub::midiRecordingLatencyCompensationMillisecondsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
+int NotationConfigurationStub::midiRecordingMinQuantizationTicks() const
+{
+    return 120;
+}
+
+void NotationConfigurationStub::setMidiRecordingMinQuantizationTicks(int)
+{
+}
+
+bool NotationConfigurationStub::midiRecordingSearchTuplets() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setMidiRecordingSearchTuplets(bool)
+{
+}
+
+bool NotationConfigurationStub::midiRecordingLegato() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setMidiRecordingLegato(bool)
+{
+}
+
+int NotationConfigurationStub::midiRecordingCountInMeasures() const
+{
+    return 1;
+}
+
+void NotationConfigurationStub::setMidiRecordingCountInMeasures(int)
+{
+}
+
+bool NotationConfigurationStub::midiRecordingTwoStaves() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setMidiRecordingTwoStaves(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::midiRecordingSettingsChanged() const
+{
+    return {};
+}
+
+int NotationConfigurationStub::midiRecordingSplitPitch() const
+{
+    return 60;
+}
+
+void NotationConfigurationStub::setMidiRecordingSplitPitch(int)
+{
+}
+
 bool NotationConfigurationStub::useMidiVelocityAndDurationDuringNoteInput() const
 {
     return false;

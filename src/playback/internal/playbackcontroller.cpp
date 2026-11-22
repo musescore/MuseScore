@@ -31,14 +31,20 @@
 #include "audio/common/audioutils.h"
 #include "audio/devtools/inputlag.h"
 
+#include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/noteinput.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
 #include "notation/inotationautomation.h"
+#include "notation/inotationelements.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationparts.h"
@@ -48,6 +54,7 @@
 
 #include "../playbacktypes.h"
 #include "onlinesoundscontroller.h"
+#include "midirecordingcontroller.h"
 
 using namespace muse;
 using namespace muse::async;
@@ -89,7 +96,8 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
 }
 
 PlaybackController::PlaybackController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_onlineSoundsController(std::make_unique<OnlineSoundsController>(iocCtx))
+    : muse::Contextable(iocCtx), m_onlineSoundsController(std::make_unique<OnlineSoundsController>(iocCtx)),
+    m_midiRecordingController(std::make_unique<MidiRecordingController>(iocCtx))
 {
 }
 
@@ -99,6 +107,14 @@ void PlaybackController::init()
 {
     m_onlineSoundsController->regActions();
 
+    m_midiRecordingController->init();
+    m_midiRecordingController->setPlayNoteCallback([this](int pitch, int velocity) {
+        playMidiRecordingNote(pitch, velocity);
+    });
+    m_midiRecordingController->lastRecordingChanged().onNotify(this, [this]() {
+        m_lastMidiRecordingChanged.notify();
+    });
+
     projectSession()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
 
@@ -106,6 +122,8 @@ void PlaybackController::init()
     });
 
     projectSession()->projectChanged().onNotify(this, [this]() {
+        m_midiRecordingController->clearLastRecording();
+
         if (m_isPlaybackInited) {
             resetPlayback();
         }
@@ -406,6 +424,17 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
         return;
     }
 
+    if (isMidiRecording()) {
+        //! NOTE During a MIDI recording the keys are played by playMidiRecordingNote, with the instrument of the recorded staff
+        if (isMidi) {
+            return;
+        }
+    } else if (isPlaying()) {
+        //! NOTE The audio engine plays these events also during playback (see AbstractEventSequencer::movePlaybackForward),
+        //! but this was not the case before: keep the previous behaviour outside of MIDI recording
+        return;
+    }
+
     if (m_measureInputLag) {
         START_INPUT_LAG_TIMER;
     }
@@ -470,6 +499,10 @@ void PlaybackController::playMetronome(int tick)
 
 void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEventList& list, staff_idx_t staffIdx, int tick)
 {
+    if (isPlaying() && !isMidiRecording()) {
+        return; // see playElements
+    }
+
     notationPlayback()->triggerControllers(list, staffIdx, tick);
 }
 
@@ -618,6 +651,7 @@ uint64_t PlaybackController::notationPlaybackKey() const
 
 void PlaybackController::onNotationChanged()
 {
+    cancelMidiRecording();
     setNotation(projectSession()->currentNotation());
 }
 
@@ -806,7 +840,7 @@ void PlaybackController::doPlay()
         return;
     }
 
-    if (isLoopEnabled()) {
+    if (isLoopEnabled() && !isMidiRecording()) {
         secs_t startSecs = playbackStartSecs();
         seek(startSecs);
     }
@@ -821,7 +855,17 @@ void PlaybackController::doPlay()
         }
 
         secs_t delay = 0.;
-        if (notationConfiguration()->isCountInEnabled()) {
+        if (isMidiRecording()) {
+            //! NOTE The count-in of the MIDI recording has its own setting (0, 1 or 2 measures)
+            const int countInMeasures = notationConfiguration()->midiRecordingCountInMeasures();
+            if (countInMeasures > 0) {
+                notationPlayback()->triggerCountIn(m_currentTick, delay, countInMeasures);
+            }
+
+            const auto countInDuration = std::chrono::duration_cast<MidiRecordingController::Clock::duration>(
+                std::chrono::duration<double>(static_cast<double>(delay)));
+            m_midiRecordingController->setMusicStartTime(MidiRecordingController::Clock::now() + countInDuration);
+        } else if (notationConfiguration()->isCountInEnabled()) {
             notationPlayback()->triggerCountIn(m_currentTick, delay);
         }
 
@@ -1000,6 +1044,289 @@ muse::Ret PlaybackController::toggleCountIn()
 
     setTrackActivity(notationPlayback()->metronomeTrackId(), metronomeEnabled || !countInEnabled);
 
+    return make_ok();
+}
+
+bool PlaybackController::isMidiRecording() const
+{
+    return m_midiRecordingController && m_midiRecordingController->isRecording();
+}
+
+muse::async::Notification PlaybackController::isMidiRecordingChanged() const
+{
+    return m_isMidiRecordingChanged;
+}
+
+muse::Ret PlaybackController::toggleMidiRecording()
+{
+    if (isMidiRecording()) {
+        if (!m_midiRecordingPlaybackStarted) {
+            //! NOTE The playback has not started yet (e.g. still preparing, or it could not start):
+            //! nothing was recorded, so the recording is cancelled instead of waiting for the end of a playback
+            //! that may never come
+            cancelMidiRecording();
+            doStop();
+            return make_ok();
+        }
+
+        // The recorded notes are written when the playback stops (see onMidiRecordingPlaybackStatusChanged)
+        doStop();
+        return make_ok();
+    }
+
+    startMidiRecording();
+    return make_ok();
+}
+
+void PlaybackController::startMidiRecording()
+{
+    if (!isPlayAllowed() || !currentPlayer() || !m_notation) {
+        LOGW() << "playback not allowed";
+        return;
+    }
+
+    if (!notationConfiguration()->isMidiInputEnabled()) {
+        interactive()->info(muse::trc("playback", "MIDI input is disabled"),
+                            muse::trc("playback", "Enable MIDI input in the playback settings to record from a MIDI keyboard."));
+        return;
+    }
+
+    if (isLoopEnabled()) {
+        interactive()->info(muse::trc("playback", "Loop playback is enabled"),
+                            muse::trc("playback", "Disable loop playback to record from a MIDI keyboard."));
+        return;
+    }
+
+    // The recording starts at the beginning of the selected measure, on the selected staff
+    staff_idx_t staffIdx = muse::nidx;
+    Fraction selectionTick;
+
+    if (selection()->isRange()) {
+        staffIdx = selectionRange()->startStaffIndex();
+        selectionTick = selectionRange()->startTick();
+    } else if (const EngravingItem* element = selection()->element()) {
+        staffIdx = element->staffIdx();
+        selectionTick = element->tick();
+    }
+
+    const Score* score = m_notation->elements()->msScore();
+    const Measure* measure = (score && staffIdx != muse::nidx) ? score->tick2measure(selectionTick) : nullptr;
+    const Staff* staff = measure ? score->staff(staffIdx) : nullptr;
+
+    if (!measure || !staff) {
+        interactive()->info(muse::trc("playback", "No measure selected"),
+                            muse::trc("playback", "Select the measure where the recording should start, then press Record."));
+        return;
+    }
+
+    if (staff->isDrumStaff(measure->tick())) {
+        interactive()->info(muse::trc("playback", "Percussion staff selected"),
+                            muse::trc("playback", "MIDI recording on percussion staves is not supported yet."));
+        return;
+    }
+
+    // Two staves: the lower notes go to the staff below, which must belong to the same instrument
+    staff_idx_t lowerStaffIdx = muse::nidx;
+    if (notationConfiguration()->midiRecordingTwoStaves()) {
+        const Staff* lowerStaff = staffIdx + 1 < score->nstaves() ? score->staff(staffIdx + 1) : nullptr;
+        if (!lowerStaff || lowerStaff->part() != staff->part() || !lowerStaff->isPitchedStaff(measure->tick())) {
+            interactive()->info(muse::trc("playback", "No staff below for the split"),
+                                muse::trc("playback", "Recording on two staves needs a staff of the same instrument below the selected one "
+                                                      "(e.g. the left hand of a piano). Select the upper staff, "
+                                                      "or choose “One staff” in the Recording menu."));
+            return;
+        }
+
+        lowerStaffIdx = staffIdx + 1;
+    }
+
+    const RetVal<tick_t> startPlayedTick = notationPlayback()->playPositionTickByRawTick(measure->tick().ticks());
+    if (!startPlayedTick.ret) {
+        return;
+    }
+
+    if (isPlaying() || isPaused()) {
+        doStop();
+    }
+
+    // Avoid that the notes played on the keyboard start note input on the selection:
+    // during the recording, the keyboard only plays the sounds
+    INotationInteractionPtr notationInteraction = interaction();
+    if (notationInteraction->noteInput()->isNoteInputMode()) {
+        notationInteraction->noteInput()->endNoteInput();
+    }
+    notationInteraction->clearSelection();
+
+    MidiRecordingController::Session session;
+    session.notation = m_notation;
+    session.notationPlayback = notationPlayback();
+    session.staffIdx = staffIdx;
+    session.startTick = measure->tick();
+    session.startPlayedTick = startPlayedTick.val;
+    session.startSecs = playedTickToSecs(startPlayedTick.val);
+    session.lowerStaffIdx = lowerStaffIdx;
+    session.splitPitch = notationConfiguration()->midiRecordingSplitPitch();
+
+    const secs_t estimatedLatency = MidiRecordingController::estimateOutputLatency(audioConfiguration()->driverBufferSize(),
+                                                                                    audioConfiguration()->sampleRate());
+    const secs_t userCompensation = secs_t(notationConfiguration()->midiRecordingLatencyCompensationMilliseconds() / 1000.0);
+    session.outputLatency = estimatedLatency + userCompensation;
+
+    LOGI() << "MIDI recording: estimated output latency " << static_cast<double>(estimatedLatency) * 1000.0
+           << " ms, user compensation " << static_cast<double>(userCompensation) * 1000.0 << " ms";
+
+    seek(session.startSecs);
+    m_currentTick = measure->tick().ticks(); // used by the count-in
+
+    m_midiRecordingPlaybackStarted = false;
+    m_midiRecordingController->start(session);
+    forceMetronomeForMidiRecording();
+    m_isMidiRecordingChanged.notify();
+
+    const Ret ret = play();
+    if (!ret) {
+        LOGE() << "MIDI recording: unable to start the playback: " << ret.toString();
+        cancelMidiRecording();
+    }
+}
+
+void PlaybackController::onMidiRecordingPlaybackStatusChanged()
+{
+    if (!isMidiRecording()) {
+        return;
+    }
+
+    if (isPlaying()) {
+        m_midiRecordingPlaybackStarted = true;
+        return;
+    }
+
+    if (!m_midiRecordingPlaybackStarted) {
+        return; // e.g. the playback that was stopped before starting the recording
+    }
+
+    // The playback was stopped or paused (Stop, Space, Record, end of the score): end of the recording
+    m_midiRecordingPlaybackStarted = false;
+    restoreMetronomeAfterMidiRecording();
+
+    if (isPaused()) {
+        doStop();
+    }
+
+    m_midiRecordingController->finishAndWrite();
+    m_isMidiRecordingChanged.notify();
+}
+
+void PlaybackController::cancelMidiRecording()
+{
+    if (!isMidiRecording()) {
+        return;
+    }
+
+    m_midiRecordingController->cancel();
+    m_midiRecordingPlaybackStarted = false;
+    restoreMetronomeAfterMidiRecording();
+    m_isMidiRecordingChanged.notify();
+}
+
+void PlaybackController::forceMetronomeForMidiRecording()
+{
+    //! NOTE Only the audio track is unmuted: the metronome setting of the user is not changed
+    setTrackActivity(notationPlayback()->metronomeTrackId(), true);
+}
+
+void PlaybackController::restoreMetronomeAfterMidiRecording()
+{
+    if (!notationPlayback()) {
+        return;
+    }
+
+    const bool active = notationConfiguration()->isMetronomeEnabled() || notationConfiguration()->isCountInEnabled();
+    setTrackActivity(notationPlayback()->metronomeTrackId(), active);
+}
+
+void PlaybackController::playMidiRecordingNote(int pitch, int velocity)
+{
+    const bool noteOn = velocity > 0;
+
+    auto it = m_midiRecordingSoundingNotes.find(pitch);
+    if (it != m_midiRecordingSoundingNotes.end()) {
+        Note* note = it->second;
+        Chord* chord = note->chord();
+        m_midiRecordingSoundingNotes.erase(it);
+
+        if (notationPlayback()) {
+            note->setUserVelocity(0);
+            notationPlayback()->triggerEventsForItems({ note }, 0 /*note off*/, false /*flushSound*/);
+        }
+
+        delete note;
+        delete chord;
+    }
+
+    if (!noteOn || !notationPlayback()) {
+        return;
+    }
+
+    const MidiRecordingController::Session& session = m_midiRecordingController->session();
+    Score* score = session.notation ? session.notation->elements()->msScore() : nullptr;
+    const Measure* measure = score ? score->tick2measure(session.startTick) : nullptr;
+    Segment* segment = measure ? measure->first(SegmentType::ChordRest) : nullptr;
+    if (!segment) {
+        return;
+    }
+
+    // A temporary note on the recorded staff, so that it is played with the instrument of that staff
+    const staff_idx_t staffIdx = session.staffForPitch(pitch);
+    const track_idx_t track = staffIdx * VOICES;
+
+    Chord* chord = Factory::createChord(segment);
+    chord->setTrack(track);
+
+    Note* note = Factory::createNote(chord);
+    note->setTrack(track);
+    note->setNval(NoteInput::noteVal(score, pitch, staffIdx, false /*MIDI pitches are sounding pitches*/));
+    note->setUserVelocity(velocity);
+
+    notationPlayback()->triggerEventsForItems({ note }, muse::mpe::INFINITE_DURATION, false /*flushSound*/);
+
+    m_midiRecordingSoundingNotes[pitch] = note;
+}
+
+const MidiRecordingPreviewNoteList& PlaybackController::midiRecordingPreviewNotes() const
+{
+    return m_midiRecordingController->previewNotes();
+}
+
+muse::async::Notification PlaybackController::midiRecordingPreviewNotesChanged() const
+{
+    return m_midiRecordingController->previewNotesChanged();
+}
+
+bool PlaybackController::canRequantizeLastMidiRecording() const
+{
+    return !isMidiRecording() && m_midiRecordingController->hasLastRecording(m_notation);
+}
+
+muse::async::Notification PlaybackController::lastMidiRecordingChanged() const
+{
+    return m_lastMidiRecordingChanged;
+}
+
+muse::Ret PlaybackController::requantizeLastMidiRecording()
+{
+    if (!canRequantizeLastMidiRecording()) {
+        interactive()->info(muse::trc("playback", "No MIDI recording to re-quantize"),
+                            muse::trc("playback", "Record from a MIDI keyboard first: the last recording of this score can then be "
+                                                  "written again with the current recording settings."));
+        return make_ret(Ret::Code::NotSupported);
+    }
+
+    if (isPlaying() || isPaused()) {
+        doStop();
+    }
+
+    m_midiRecordingController->requantizeLastRecording();
     return make_ok();
 }
 
@@ -1855,6 +2182,10 @@ void PlaybackController::setupPlayer()
 
         m_currentTick = notationPlayback()->secToTick(pos);
 
+        if (isMidiRecording()) {
+            m_midiRecordingController->onPlaybackPositionChanged(pos);
+        }
+
         updateCurrentTempo();
 
         secs_t endSecs = totalPlayTime();
@@ -1865,6 +2196,7 @@ void PlaybackController::setupPlayer()
 
     currentPlayer()->playbackStatusChanged().onReceive(this, [this](PlaybackStatus) {
         onPlaybackStatusChanged();
+        onMidiRecordingPlaybackStatusChanged();
     });
 
     currentPlayer()->setDuration(notationPlayback()->totalPlayTime());

@@ -35,5 +35,8 @@ public:
 
     MOCK_METHOD(muse::audio::secs_t, playbackPosition, (), (const, override));
     MOCK_METHOD(muse::async::Channel<muse::audio::secs_t>, playbackPositionChanged, (), (const, override));
+
+    MOCK_METHOD(const MidiRecordingPreviewNoteList&, midiRecordingPreviewNotes, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, midiRecordingPreviewNotesChanged, (), (const, override));
 };
 }

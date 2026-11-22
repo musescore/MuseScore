@@ -77,6 +77,7 @@ PreferencesPage {
             startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+            recordingLatencyCompensation: noteInputModel.midiRecordingLatencyCompensationMilliseconds
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -95,6 +96,10 @@ PreferencesPage {
 
             onDelayBetweenNotesChangeRequested: function(delay) {
                 noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = delay
+            }
+
+            onRecordingLatencyCompensationChangeRequested: function(latency) {
+                noteInputModel.midiRecordingLatencyCompensationMilliseconds = latency
             }
         }
 

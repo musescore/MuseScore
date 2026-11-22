@@ -200,6 +200,25 @@ public:
     MOCK_METHOD(void, setDelayBetweenNotesInRealTimeModeMilliseconds, (int), (override));
     MOCK_METHOD((muse::async::Channel<int>), delayBetweenNotesInRealTimeModeMillisecondsChanged, (), (const, override));
 
+    MOCK_METHOD(int, midiRecordingLatencyCompensationMilliseconds, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingLatencyCompensationMilliseconds, (int), (override));
+    MOCK_METHOD((muse::async::Channel<int>), midiRecordingLatencyCompensationMillisecondsChanged, (), (const, override));
+
+    MOCK_METHOD(int, midiRecordingMinQuantizationTicks, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingMinQuantizationTicks, (int), (override));
+    MOCK_METHOD(bool, midiRecordingSearchTuplets, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingSearchTuplets, (bool), (override));
+    MOCK_METHOD(bool, midiRecordingLegato, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingLegato, (bool), (override));
+    MOCK_METHOD(int, midiRecordingCountInMeasures, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingCountInMeasures, (int), (override));
+
+    MOCK_METHOD(bool, midiRecordingTwoStaves, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingTwoStaves, (bool), (override));
+    MOCK_METHOD(int, midiRecordingSplitPitch, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, midiRecordingSettingsChanged, (), (const, override));
+    MOCK_METHOD(void, setMidiRecordingSplitPitch, (int), (override));
+
     MOCK_METHOD(bool, useMidiVelocityAndDurationDuringNoteInput, (), (const, override));
     MOCK_METHOD(void, setUseMidiVelocityAndDurationDuringNoteInput, (bool), (override));
     MOCK_METHOD(muse::async::Channel<bool>, useMidiVelocityAndDurationDuringNoteInputChanged, (), (const, override));

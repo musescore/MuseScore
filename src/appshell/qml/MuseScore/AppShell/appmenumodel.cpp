@@ -96,6 +96,7 @@ void AppMenuModel::load()
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
+        makeRecordingMenu(),
         makeExtensionsMenu()
     };
 
@@ -399,6 +400,44 @@ MenuItem* AppMenuModel::makeToolsMenu()
     };
 
     return makeMenu(TranslatableString("appshell/menu/tools", "&Tools"), toolsItems, "menu-tools");
+}
+
+MenuItem* AppMenuModel::makeRecordingMenu()
+{
+    MenuItemList quantizationItems {
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_4_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_8_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_16_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_32_COMMAND),
+    };
+
+    MenuItemList countInItems {
+        makeMenuItem(MIDI_RECORD_COUNTIN_0_COMMAND),
+        makeMenuItem(MIDI_RECORD_COUNTIN_1_COMMAND),
+        makeMenuItem(MIDI_RECORD_COUNTIN_2_COMMAND),
+    };
+
+    MenuItemList stavesItems {
+        makeMenuItem(MIDI_RECORD_ONE_STAFF_COMMAND),
+        makeMenuItem(MIDI_RECORD_TWO_STAVES_COMMAND),
+    };
+
+    MenuItemList recordingItems {
+        makeMenuItem(MIDI_RECORD_TOGGLE_COMMAND),
+        makeMenuItem(MIDI_RECORD_REQUANTIZE_COMMAND),
+        makeSeparator(),
+        makeMenu(TranslatableString("appshell/menu/recording", "Minimum &quantization"), quantizationItems, "menu-recording-quantization"),
+        makeMenuItem(MIDI_RECORD_TUPLETS_TOGGLE_COMMAND),
+        makeMenuItem(MIDI_RECORD_LEGATO_TOGGLE_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/recording", "&Count-in"), countInItems, "menu-recording-count-in"),
+        makeSeparator(),
+        makeMenu(TranslatableString("appshell/menu/recording", "&Staves"), stavesItems, "menu-recording-staves"),
+        makeMenuItem(MIDI_RECORD_SPLIT_POINT_COMMAND),
+        makeSeparator(),
+        makeMenuItem(MIDI_RECORD_LATENCY_COMMAND),
+    };
+
+    return makeMenu(TranslatableString("appshell/menu/recording", "&Recording"), recordingItems, "menu-recording");
 }
 
 muse::uicomponents::MenuItemList AppMenuModel::makeExtensionsSubitems()

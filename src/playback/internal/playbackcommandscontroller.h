@@ -36,11 +36,13 @@
 #include "interactive/iinteractive.h"
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::playback {
 class PlaybackCommandsController : public IPlaybackCommandsController, public muse::Contextable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
@@ -59,6 +61,14 @@ private:
     muse::Ret toggleMixerSection(const muse::rcommand::Params& params);
     muse::Ret toggleAuxSend(const muse::rcommand::Params& params);
     muse::Ret toggleAuxChannel(const muse::rcommand::Params& params);
+
+    muse::Ret setMidiRecordingMinQuantization(int ticks);
+    muse::Ret setMidiRecordingCountInMeasures(int measures);
+    muse::Ret toggleMidiRecordingTuplets();
+    muse::Ret toggleMidiRecordingLegato();
+    muse::Ret setMidiRecordingTwoStaves(bool twoStaves);
+    muse::Ret openMidiRecordingSplitPointDialog();
+    muse::Ret openMidiRecordingLatencySettings();
 
     void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret()>&);
     void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret(const muse::rcommand::Params&)>&);

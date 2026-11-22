@@ -22,6 +22,7 @@
 #include "notationconfiguration.h"
 
 #include "engraving/dom/mscore.h"
+#include "engraving/types/constants.h"
 
 #include "io/path.h"
 #include "settings.h"
@@ -98,6 +99,13 @@ static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/c
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
+static const Settings::Key MIDI_RECORDING_LATENCY_COMPENSATION(module_name, "io/midi/recordingLatencyCompensation");
+static const Settings::Key MIDI_RECORDING_MIN_QUANTIZATION(module_name, "io/midi/recordingMinQuantization");
+static const Settings::Key MIDI_RECORDING_SEARCH_TUPLETS(module_name, "io/midi/recordingSearchTuplets");
+static const Settings::Key MIDI_RECORDING_LEGATO(module_name, "io/midi/recordingLegato");
+static const Settings::Key MIDI_RECORDING_COUNT_IN_MEASURES(module_name, "io/midi/recordingCountInMeasures");
+static const Settings::Key MIDI_RECORDING_TWO_STAVES(module_name, "io/midi/recordingTwoStaves");
+static const Settings::Key MIDI_RECORDING_SPLIT_PITCH(module_name, "io/midi/recordingSplitPitch");
 static const Settings::Key USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT(module_name,
                                                                             "io/midi/useMidiVelocityAndDurationDuringNoteInput");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
@@ -345,6 +353,23 @@ void NotationConfiguration::init()
     settings()->valueChanged(REALTIME_DELAY).onReceive(this, [this](const Val& val) {
         m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
     });
+    settings()->setDefaultValue(MIDI_RECORDING_LATENCY_COMPENSATION, Val(0));
+    settings()->setDefaultValue(MIDI_RECORDING_MIN_QUANTIZATION, Val(mu::engraving::Constants::DIVISION / 4));
+    settings()->setDefaultValue(MIDI_RECORDING_SEARCH_TUPLETS, Val(false));
+    settings()->setDefaultValue(MIDI_RECORDING_LEGATO, Val(true));
+    settings()->setDefaultValue(MIDI_RECORDING_COUNT_IN_MEASURES, Val(1));
+    settings()->setDefaultValue(MIDI_RECORDING_TWO_STAVES, Val(false));
+    settings()->setDefaultValue(MIDI_RECORDING_SPLIT_PITCH, Val(60));
+    settings()->valueChanged(MIDI_RECORDING_LATENCY_COMPENSATION).onReceive(this, [this](const Val& val) {
+        m_midiRecordingLatencyCompensationMillisecondsChanged.send(val.toInt());
+        m_midiRecordingSettingsChanged.notify();
+    });
+    for (const Settings::Key& key : { MIDI_RECORDING_MIN_QUANTIZATION, MIDI_RECORDING_SEARCH_TUPLETS, MIDI_RECORDING_LEGATO,
+                                      MIDI_RECORDING_COUNT_IN_MEASURES, MIDI_RECORDING_TWO_STAVES, MIDI_RECORDING_SPLIT_PITCH }) {
+        settings()->valueChanged(key).onReceive(this, [this](const Val&) {
+            m_midiRecordingSettingsChanged.notify();
+        });
+    }
 
     settings()->setDefaultValue(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(true));
     settings()->valueChanged(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).onReceive(this, [this](const Val& val) {
@@ -1073,6 +1098,86 @@ void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int d
 async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
 {
     return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+}
+
+int NotationConfiguration::midiRecordingLatencyCompensationMilliseconds() const
+{
+    return settings()->value(MIDI_RECORDING_LATENCY_COMPENSATION).toInt();
+}
+
+void NotationConfiguration::setMidiRecordingLatencyCompensationMilliseconds(int latencyMs)
+{
+    settings()->setSharedValue(MIDI_RECORDING_LATENCY_COMPENSATION, Val(latencyMs));
+}
+
+async::Channel<int> NotationConfiguration::midiRecordingLatencyCompensationMillisecondsChanged() const
+{
+    return m_midiRecordingLatencyCompensationMillisecondsChanged;
+}
+
+int NotationConfiguration::midiRecordingMinQuantizationTicks() const
+{
+    return settings()->value(MIDI_RECORDING_MIN_QUANTIZATION).toInt();
+}
+
+void NotationConfiguration::setMidiRecordingMinQuantizationTicks(int value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_MIN_QUANTIZATION, Val(value));
+}
+
+bool NotationConfiguration::midiRecordingSearchTuplets() const
+{
+    return settings()->value(MIDI_RECORDING_SEARCH_TUPLETS).toBool();
+}
+
+void NotationConfiguration::setMidiRecordingSearchTuplets(bool value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_SEARCH_TUPLETS, Val(value));
+}
+
+bool NotationConfiguration::midiRecordingLegato() const
+{
+    return settings()->value(MIDI_RECORDING_LEGATO).toBool();
+}
+
+void NotationConfiguration::setMidiRecordingLegato(bool value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_LEGATO, Val(value));
+}
+
+int NotationConfiguration::midiRecordingCountInMeasures() const
+{
+    return settings()->value(MIDI_RECORDING_COUNT_IN_MEASURES).toInt();
+}
+
+void NotationConfiguration::setMidiRecordingCountInMeasures(int value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_COUNT_IN_MEASURES, Val(value));
+}
+
+bool NotationConfiguration::midiRecordingTwoStaves() const
+{
+    return settings()->value(MIDI_RECORDING_TWO_STAVES).toBool();
+}
+
+void NotationConfiguration::setMidiRecordingTwoStaves(bool value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_TWO_STAVES, Val(value));
+}
+
+int NotationConfiguration::midiRecordingSplitPitch() const
+{
+    return settings()->value(MIDI_RECORDING_SPLIT_PITCH).toInt();
+}
+
+void NotationConfiguration::setMidiRecordingSplitPitch(int value)
+{
+    settings()->setSharedValue(MIDI_RECORDING_SPLIT_PITCH, Val(value));
+}
+
+muse::async::Notification NotationConfiguration::midiRecordingSettingsChanged() const
+{
+    return m_midiRecordingSettingsChanged;
 }
 
 bool NotationConfiguration::useMidiVelocityAndDurationDuringNoteInput() const

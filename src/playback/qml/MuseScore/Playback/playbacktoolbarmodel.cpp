@@ -40,6 +40,7 @@ using namespace muse::uicomponents;
 using namespace muse::audio;
 
 static const QString PLAY_TOGGLE_ID("play-toggle");
+static const QString MIDI_RECORD_MENU_ID("midi-record-menu");
 
 static const ToolConfig& defaultPlaybackToolConfig()
 {
@@ -48,6 +49,7 @@ static const ToolConfig& defaultPlaybackToolConfig()
         config.items = {
             { REWIND_COMMAND, true },
             { "play-toggle", true }, // virtual code
+            { MIDI_RECORD_TOGGLE_COMMAND, true },
             { LOOP_TOGGLE_COMMAND, true },
             { LOOP_IN_COMMAND, true },
             { LOOP_OUT_COMMAND, true },
@@ -127,6 +129,11 @@ void PlaybackToolBarModel::updateActions()
                 settingsItems << makeMenuItem(command);
             } else {
                 result << makeMenuItem(command);
+
+                //! NOTE The small dropdown next to the Record button, with the recording settings
+                if (command == MIDI_RECORD_TOGGLE_COMMAND) {
+                    result << makeMidiRecordingMenu();
+                }
             }
         }
     }
@@ -147,6 +154,45 @@ MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
 
     MenuItem* menu = makeMenu(muse::TranslatableString("playback", "MIDI input pitch"), items);
     menu->setIcon(ui::IconCode::Code::MUSIC_NOTES);
+    return menu;
+}
+
+MenuItem* PlaybackToolBarModel::makeMidiRecordingMenu()
+{
+    MenuItemList quantizationItems {
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_4_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_8_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_16_COMMAND),
+        makeMenuItem(MIDI_RECORD_QUANTIZATION_32_COMMAND),
+    };
+
+    MenuItemList countInItems {
+        makeMenuItem(MIDI_RECORD_COUNTIN_0_COMMAND),
+        makeMenuItem(MIDI_RECORD_COUNTIN_1_COMMAND),
+        makeMenuItem(MIDI_RECORD_COUNTIN_2_COMMAND),
+    };
+
+    MenuItemList stavesItems {
+        makeMenuItem(MIDI_RECORD_ONE_STAFF_COMMAND),
+        makeMenuItem(MIDI_RECORD_TWO_STAVES_COMMAND),
+    };
+
+    MenuItemList items {
+        makeMenuItem(MIDI_RECORD_REQUANTIZE_COMMAND),
+        makeSeparator(),
+        makeMenu(TranslatableString("playback", "Minimum quantization"), quantizationItems),
+        makeMenuItem(MIDI_RECORD_TUPLETS_TOGGLE_COMMAND),
+        makeMenuItem(MIDI_RECORD_LEGATO_TOGGLE_COMMAND),
+        makeMenu(TranslatableString("playback", "Count-in"), countInItems),
+        makeSeparator(),
+        makeMenu(TranslatableString("playback", "Staves"), stavesItems),
+        makeMenuItem(MIDI_RECORD_SPLIT_POINT_COMMAND),
+        makeSeparator(),
+        makeMenuItem(MIDI_RECORD_LATENCY_COMMAND),
+    };
+
+    MenuItem* menu = makeMenu(TranslatableString("playback", "MIDI recording settings"), items, MIDI_RECORD_MENU_ID);
+    menu->setIcon(ui::IconCode::Code::SMALL_ARROW_DOWN);
     return menu;
 }
 

@@ -314,3 +314,44 @@ muse::Progress PlaybackControllerStub::onlineSoundsProcessingProgress() const
 {
     return {};
 }
+
+const MidiRecordingPreviewNoteList& PlaybackControllerStub::midiRecordingPreviewNotes() const
+{
+    static const MidiRecordingPreviewNoteList notes;
+    return notes;
+}
+
+muse::async::Notification PlaybackControllerStub::midiRecordingPreviewNotesChanged() const
+{
+    return {};
+}
+
+bool PlaybackControllerStub::isMidiRecording() const
+{
+    return false;
+}
+
+muse::async::Notification PlaybackControllerStub::isMidiRecordingChanged() const
+{
+    return {};
+}
+
+muse::Ret PlaybackControllerStub::toggleMidiRecording()
+{
+    return muse::make_ret(muse::Ret::Code::NotSupported);
+}
+
+bool PlaybackControllerStub::canRequantizeLastMidiRecording() const
+{
+    return false;
+}
+
+muse::async::Notification PlaybackControllerStub::lastMidiRecordingChanged() const
+{
+    return {};
+}
+
+muse::Ret PlaybackControllerStub::requantizeLastMidiRecording()
+{
+    return muse::make_ret(muse::Ret::Code::NotSupported);
+}

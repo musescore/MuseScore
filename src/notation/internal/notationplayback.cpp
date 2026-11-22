@@ -198,10 +198,10 @@ void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
     m_playbackModel.triggerMetronome(tick);
 }
 
-void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration)
+void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration, int measureCount)
 {
     muse::mpe::duration_t durationInMicrosecs = 0;
-    m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
+    m_playbackModel.triggerCountIn(tick, durationInMicrosecs, measureCount);
     countInDuration = muse::usecs_to_secs(durationInMicrosecs);
 }
 

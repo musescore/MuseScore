@@ -68,6 +68,14 @@ public:
 
     MOCK_METHOD(muse::Ret, reloadPlaybackCache, (), (override));
 
+    MOCK_METHOD(bool, isMidiRecording, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, isMidiRecordingChanged, (), (const, override));
+    MOCK_METHOD(muse::Ret, toggleMidiRecording, (), (override));
+
+    MOCK_METHOD(bool, canRequantizeLastMidiRecording, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, lastMidiRecordingChanged, (), (const, override));
+    MOCK_METHOD(muse::Ret, requantizeLastMidiRecording, (), (override));
+
     MOCK_METHOD(const InstrumentTrackIdMap&, instrumentTrackIdMap, (), (const, override));
 
     MOCK_METHOD(const AuxTrackIdMap&, auxTrackIdMap, (), (const, override));
@@ -121,6 +129,9 @@ public:
     MOCK_METHOD((const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>&), onlineSounds, (), (const, override));
     MOCK_METHOD(muse::async::Notification, onlineSoundsChanged, (), (const, override));
     MOCK_METHOD(muse::Progress, onlineSoundsProcessingProgress, (), (const, override));
+
+    MOCK_METHOD(const MidiRecordingPreviewNoteList&, midiRecordingPreviewNotes, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, midiRecordingPreviewNotesChanged, (), (const, override));
 };
 }
 

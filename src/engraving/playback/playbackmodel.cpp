@@ -381,7 +381,7 @@ void PlaybackModel::triggerMetronome(int tick)
     trackPlaybackData->second.offStream.send(result, true /*flushOffstream*/);
 }
 
-void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDuration)
+void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDuration, int measureCount)
 {
     auto trackPlaybackData = m_playbackDataMap.find(METRONOME_TRACK_ID);
     if (trackPlaybackData == m_playbackDataMap.cend()) {
@@ -391,7 +391,7 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDurat
     const ArticulationsProfilePtr profile = defaultActiculationProfile(METRONOME_TRACK_ID);
 
     PlaybackEventsMap result;
-    m_renderer.renderCountIn(m_score, tick, 0, profile, result, countInDuration);
+    m_renderer.renderCountIn(m_score, tick, 0, profile, result, countInDuration, measureCount);
     trackPlaybackData->second.offStream.send(result, true /*flushOffstream*/);
 }
 

@@ -36,11 +36,13 @@ BaseSection {
     property alias startNoteInputWhenPressingKey: startNoteInputWhenPressingKeyBox.checked
     property bool advanceToNextNote: false
     property int delayBetweenNotes: 0
+    property int recordingLatencyCompensation: 0
 
     signal midiInputEnabledChangeRequested(bool enabled)
     signal startNoteInputWhenPressingKeyChangeRequested(bool start)
     signal advanceToNextNoteChangeRequested(bool advance)
     signal delayBetweenNotesChangeRequested(int delay)
+    signal recordingLatencyCompensationChangeRequested(int latency)
 
     ToggleButton {
         id: enableMidiInputToggle
@@ -123,6 +125,54 @@ BaseSection {
                 onValueEdited: function(newValue) {
                     root.delayBetweenNotesChangeRequested(newValue)
                 }
+            }
+        }
+    }
+
+    ExpandableBlank {
+        width: parent.width
+
+        enabled: root.midiInputEnabled
+        title: qsTrc("preferences", "Recording with metronome")
+        isExpanded: false
+
+        contentItemComponent: Column {
+            width: parent.width
+
+            spacing: root.spacing
+
+            IncrementalPropertyControlWithTitle {
+                id: recordingLatencyCompensationControl
+
+                enabled: root.midiInputEnabled
+                title: qsTrc("preferences", "Latency compensation")
+
+                currentValue: root.recordingLatencyCompensation
+                minValue: -500
+                maxValue: 500
+                control.step: 5
+                control.decimals: 0
+
+                columnWidth: root.columnWidth
+                spacing: root.columnSpacing
+
+                measureUnitsSymbol: qsTrc("global", "ms")
+
+                navigation.name: "RecordingLatencyCompensationControl"
+                navigation.panel: root.navigation
+                navigation.row: 4
+
+                onValueEdited: function(newValue) {
+                    root.recordingLatencyCompensationChangeRequested(newValue)
+                }
+            }
+
+            StyledTextLabel {
+                width: parent.width
+
+                text: qsTrc("preferences", "Increase if recorded notes are written later than played; decrease if they are written earlier.")
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.WordWrap
             }
         }
     }

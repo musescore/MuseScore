@@ -1279,4 +1279,50 @@ muse::Ret importMidi(MasterScore* score, const QString& name)
 
     return muse::make_ok();
 }
+
+//! NOTE Converts an in-memory, single-track MIDI performance (e.g. recorded live against the metronome)
+//! with the same engine used by "Import MIDI". The bar lines are known in advance (they come from the
+//! time signature events in the file), so the heuristics meant for unknown files are switched off.
+Err importRecordedMidi(MasterScore* score, const MidiFile& midiFile, MidiOperations::QuantValue quantValue, bool searchTuplets,
+                       bool simplifyDurations)
+{
+    // Uses its own entry in the shared operations storage, so that the options
+    // of the "Import MIDI" panel are not affected
+    static const QString RECORDING_KEY = QStringLiteral("::midi-recording::");
+
+    auto& opers = midiImportOperations;
+    opers.excludeMidiFile(RECORDING_KEY);
+    opers.addNewMidiFile(RECORDING_KEY);
+    opers.setMidiFileData(RECORDING_KEY, midiFile);
+
+    {
+        MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, RECORDING_KEY);
+
+        MidiOperations::FileData* data = opers.data();
+
+        // Behave as if the user had already confirmed the options: this skips the detection
+        // of human performance (beat tracking), pickup measure and left/right hand split
+        data->processingsOfOpenedFile = 1;
+        data->trackCount = 1;
+
+        MidiOperations::Opers& trackOpers = data->trackOpers;
+        trackOpers.isHumanPerformance.setValue(false);
+        trackOpers.searchPickupMeasure.setValue(false);
+        trackOpers.showTempoText.setValue(false);
+        trackOpers.showChordNames.setValue(false);
+
+        constexpr int TRACK = 0;
+        trackOpers.quantValue.setValue(TRACK, quantValue);
+        trackOpers.searchTuplets.setValue(TRACK, searchTuplets);
+        trackOpers.simplifyDurations.setValue(TRACK, simplifyDurations); // lengthens notes to minimize the rests
+        trackOpers.doStaffSplit.setValue(TRACK, false);
+        trackOpers.changeClef.setValue(TRACK, false);
+
+        convertMidi(score, opers.midiFile(RECORDING_KEY));
+    }
+
+    opers.excludeMidiFile(RECORDING_KEY);
+
+    return Err::NoError;
+}
 }

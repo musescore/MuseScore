@@ -57,7 +57,7 @@ public:
 
     void renderCountIn(const Score* score, const int tick, const muse::mpe::timestamp_t actualTimestamp,
                        const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result,
-                       muse::mpe::duration_t& countInDuration) const;
+                       muse::mpe::duration_t& countInDuration, int measureCount = 1) const;
 
 private:
     void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,

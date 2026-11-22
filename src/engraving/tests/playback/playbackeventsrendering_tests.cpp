@@ -3398,6 +3398,41 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
     delete score;
 }
 
+/**
+ * @brief PlaybackEventsRendererTests_CountInMultipleMeasures
+ * @details The MIDI recording with metronome can have a count-in of 2 measures
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, CountInMultipleMeasures)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "count_in.mscx");
+    ASSERT_TRUE(score);
+
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [GIVEN] A 4/4 measure
+    const Measure* measure_4_4 = score->firstMeasure()->nextMeasure();
+    ASSERT_TRUE(measure_4_4);
+    const int startTick = measure_4_4->tick().ticks();
+
+    // [WHEN] Render a count-in of 1 and 2 measures
+    PlaybackEventsMap oneMeasure;
+    duration_t oneMeasureDuration = 0;
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, oneMeasure, oneMeasureDuration);
+
+    PlaybackEventsMap twoMeasures;
+    duration_t twoMeasuresDuration = 0;
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, twoMeasures, twoMeasuresDuration, 2);
+
+    // [THEN] 4 and 8 quarter note clicks
+    EXPECT_EQ(oneMeasure.size(), 4);
+    EXPECT_EQ(oneMeasureDuration, QUARTER_NOTE_DURATION * 4);
+
+    EXPECT_EQ(twoMeasures.size(), 8);
+    EXPECT_EQ(twoMeasuresDuration, QUARTER_NOTE_DURATION * 8);
+
+    delete score;
+}
+
 TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 {
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "count_in.mscx");

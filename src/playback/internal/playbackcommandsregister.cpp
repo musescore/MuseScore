@@ -192,6 +192,112 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::NONE)
     },
+    CommandInfo{
+        MIDI_RECORD_TOGGLE_COMMAND,
+        TranslatableString("playback", "Record MIDI"),
+        TranslatableString("playback", "Record from MIDI keyboard with metronome, starting from the selected measure"),
+        InputSchema(),
+        Decoration(IconCode::Code::RECORD_FILL, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_REQUANTIZE_COMMAND,
+        TranslatableString("playback", "Re-quantize last recording"),
+        TranslatableString("playback", "Write the last MIDI recording again with the current recording settings"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE)
+    },
+    CommandInfo{
+        MIDI_RECORD_QUANTIZATION_4_COMMAND,
+        TranslatableString("playback", "Quarter note"),
+        TranslatableString("playback", "MIDI recording: minimum quantization quarter note"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_QUANTIZATION_8_COMMAND,
+        TranslatableString("playback", "Eighth note"),
+        TranslatableString("playback", "MIDI recording: minimum quantization eighth note"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_QUANTIZATION_16_COMMAND,
+        TranslatableString("playback", "16th note"),
+        TranslatableString("playback", "MIDI recording: minimum quantization 16th note"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_QUANTIZATION_32_COMMAND,
+        TranslatableString("playback", "32nd note"),
+        TranslatableString("playback", "MIDI recording: minimum quantization 32nd note"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_TUPLETS_TOGGLE_COMMAND,
+        TranslatableString("playback", "Detect tuplets"),
+        TranslatableString("playback", "MIDI recording: detect tuplets"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_LEGATO_TOGGLE_COMMAND,
+        TranslatableString("playback", "Legato durations"),
+        TranslatableString("playback", "MIDI recording: lengthen notes up to the next one "
+                                       "when the gap is shorter than the minimum quantization"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_COUNTIN_0_COMMAND,
+        TranslatableString("playback", "No count-in"),
+        TranslatableString("playback", "MIDI recording: no count-in"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_COUNTIN_1_COMMAND,
+        TranslatableString("playback", "1 measure"),
+        TranslatableString("playback", "MIDI recording: count-in 1 measure"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_COUNTIN_2_COMMAND,
+        TranslatableString("playback", "2 measures"),
+        TranslatableString("playback", "MIDI recording: count-in 2 measures"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_ONE_STAFF_COMMAND,
+        TranslatableString("playback", "One staff"),
+        TranslatableString("playback", "MIDI recording: record on the selected staff"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_TWO_STAVES_COMMAND,
+        TranslatableString("playback", "Two staves (split)"),
+        TranslatableString("playback", "MIDI recording: split the notes between the selected staff and the staff below"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        MIDI_RECORD_SPLIT_POINT_COMMAND,
+        TranslatableString("playback", "Split point…"),
+        TranslatableString("playback", "MIDI recording: choose the split point between the two staves"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE)
+    },
+    CommandInfo{
+        MIDI_RECORD_LATENCY_COMMAND,
+        TranslatableString("playback", "Latency compensation…"),
+        TranslatableString("playback", "Open the latency compensation setting of the MIDI recording"),
+        InputSchema(),
+        Decoration(IconCode::Code::NONE)
+    },
 
     CommandInfo{
         TOGGLE_MIXER_SECTION_COMMAND,

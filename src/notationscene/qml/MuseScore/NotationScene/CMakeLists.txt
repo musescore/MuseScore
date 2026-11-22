@@ -111,6 +111,8 @@ qt_add_qml_module(notationscene_qml
         pianokeyboard/pianokeyboardview.h
         playbackcursor.cpp
         playbackcursor.h
+        midirecordingpreview.cpp
+        midirecordingpreview.h
         searchpopupmodel.cpp
         searchpopupmodel.h
         selectionfilter/abstractselectionfiltermodel.cpp

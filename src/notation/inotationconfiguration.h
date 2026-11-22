@@ -214,6 +214,38 @@ public:
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
     virtual muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const = 0;
 
+    //! Added to the estimated audio output latency when recording from a MIDI keyboard with the metronome
+    virtual int midiRecordingLatencyCompensationMilliseconds() const = 0;
+    virtual void setMidiRecordingLatencyCompensationMilliseconds(int latencyMs) = 0;
+    virtual muse::async::Channel<int> midiRecordingLatencyCompensationMillisecondsChanged() const = 0;
+
+    //! MIDI recording with metronome: shortest duration written (ticks)
+    virtual int midiRecordingMinQuantizationTicks() const = 0;
+    virtual void setMidiRecordingMinQuantizationTicks(int value) = 0;
+
+    //! MIDI recording with metronome: detect tuplets
+    virtual bool midiRecordingSearchTuplets() const = 0;
+    virtual void setMidiRecordingSearchTuplets(bool value) = 0;
+
+    //! MIDI recording with metronome: lengthen notes up to the next one when the gap is shorter than the minimum quantization
+    virtual bool midiRecordingLegato() const = 0;
+    virtual void setMidiRecordingLegato(bool value) = 0;
+
+    //! MIDI recording with metronome: measures of count-in (0, 1 or 2)
+    virtual int midiRecordingCountInMeasures() const = 0;
+    virtual void setMidiRecordingCountInMeasures(int value) = 0;
+
+    //! MIDI recording with metronome: record on two staves, split by midiRecordingSplitPitch
+    virtual bool midiRecordingTwoStaves() const = 0;
+    virtual void setMidiRecordingTwoStaves(bool value) = 0;
+
+    //! MIDI recording with metronome: the lowest pitch of the upper staff (default: middle C)
+    virtual int midiRecordingSplitPitch() const = 0;
+    virtual void setMidiRecordingSplitPitch(int value) = 0;
+
+    //! MIDI recording with metronome: sent when one of the settings above changes
+    virtual muse::async::Notification midiRecordingSettingsChanged() const = 0;
+
     virtual bool useMidiVelocityAndDurationDuringNoteInput() const = 0;
     virtual void setUseMidiVelocityAndDurationDuringNoteInput(bool use) = 0;
     virtual muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const = 0;

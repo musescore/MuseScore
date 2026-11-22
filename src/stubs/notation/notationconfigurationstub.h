@@ -212,6 +212,25 @@ public:
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
     muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
+    int midiRecordingLatencyCompensationMilliseconds() const override;
+    void setMidiRecordingLatencyCompensationMilliseconds(int latencyMs) override;
+    muse::async::Channel<int> midiRecordingLatencyCompensationMillisecondsChanged() const override;
+
+    int midiRecordingMinQuantizationTicks() const override;
+    void setMidiRecordingMinQuantizationTicks(int value) override;
+    bool midiRecordingSearchTuplets() const override;
+    void setMidiRecordingSearchTuplets(bool value) override;
+    bool midiRecordingLegato() const override;
+    void setMidiRecordingLegato(bool value) override;
+    int midiRecordingCountInMeasures() const override;
+    void setMidiRecordingCountInMeasures(int value) override;
+
+    bool midiRecordingTwoStaves() const override;
+    void setMidiRecordingTwoStaves(bool value) override;
+    int midiRecordingSplitPitch() const override;
+    muse::async::Notification midiRecordingSettingsChanged() const override;
+    void setMidiRecordingSplitPitch(int value) override;
+
     bool useMidiVelocityAndDurationDuringNoteInput() const override;
     void setUseMidiVelocityAndDurationDuringNoteInput(bool use) override;
     muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const override;

@@ -43,6 +43,15 @@ class Segment;
 }
 
 namespace mu::playback {
+//! A note shown on the score while recording from a MIDI keyboard (only a preview, not part of the score)
+struct MidiRecordingPreviewNote {
+    engraving::staff_idx_t staffIdx = 0;
+    int pitch = 0; // sounding pitch
+    int tick = 0;  // raw tick, where the note was played (not quantized)
+};
+
+using MidiRecordingPreviewNoteList = std::vector<MidiRecordingPreviewNote>;
+
 //! NOTE We need to get the current state: playing position, status
 //! But direct manage (play, seek..) is bad idea, need send commands (to playback controller)
 //! So, this interface limits the playback controller interface so that it cannot be misused.
@@ -58,6 +67,10 @@ public:
 
     virtual muse::audio::secs_t playbackPosition() const = 0;
     virtual muse::async::Channel<muse::audio::secs_t> playbackPositionChanged() const = 0;
+
+    //! The notes played while recording from a MIDI keyboard, shown on the score as a preview
+    virtual const MidiRecordingPreviewNoteList& midiRecordingPreviewNotes() const = 0;
+    virtual muse::async::Notification midiRecordingPreviewNotesChanged() const = 0;
 };
 
 class IPlaybackController : public IPlaybackState
@@ -97,6 +110,14 @@ public:
     virtual muse::Ret toggleHearPlaybackWhenEditing() = 0;
 
     virtual muse::Ret reloadPlaybackCache() = 0;
+
+    virtual bool isMidiRecording() const = 0;
+    virtual muse::async::Notification isMidiRecordingChanged() const = 0;
+    virtual muse::Ret toggleMidiRecording() = 0;
+
+    virtual bool canRequantizeLastMidiRecording() const = 0;
+    virtual muse::async::Notification lastMidiRecordingChanged() const = 0;
+    virtual muse::Ret requantizeLastMidiRecording() = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;

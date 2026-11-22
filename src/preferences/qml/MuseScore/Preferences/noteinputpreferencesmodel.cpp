@@ -93,6 +93,10 @@ void NoteInputPreferencesModel::load()
         emit delayBetweenNotesInRealTimeModeMillisecondsChanged(value);
     });
 
+    notationConfiguration()->midiRecordingLatencyCompensationMillisecondsChanged().onReceive(this, [this](int value) {
+        emit midiRecordingLatencyCompensationMillisecondsChanged(value);
+    });
+
     notationConfiguration()->notePlayDurationMillisecondsChanged().onReceive(this, [this](int value) {
         emit notePlayDurationMillisecondsChanged(value);
     });
@@ -187,6 +191,11 @@ bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
     return notationConfiguration()->delayBetweenNotesInRealTimeModeMilliseconds();
+}
+
+int NoteInputPreferencesModel::midiRecordingLatencyCompensationMilliseconds() const
+{
+    return notationConfiguration()->midiRecordingLatencyCompensationMilliseconds();
 }
 
 bool NoteInputPreferencesModel::playNotesWhenEditing() const
@@ -314,6 +323,15 @@ void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(i
     }
 
     notationConfiguration()->setDelayBetweenNotesInRealTimeModeMilliseconds(delay);
+}
+
+void NoteInputPreferencesModel::setMidiRecordingLatencyCompensationMilliseconds(int latency)
+{
+    if (latency == midiRecordingLatencyCompensationMilliseconds()) {
+        return;
+    }
+
+    notationConfiguration()->setMidiRecordingLatencyCompensationMilliseconds(latency);
 }
 
 void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
