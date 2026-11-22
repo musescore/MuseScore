@@ -37946,7 +37946,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastItem.qml" line="264"/>
         <source>Dismiss</source>
-        <translation>Avvisa</translation>
+        <translation>Avfärda</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/toast/qml/Muse/Toast/ToastProgressBar.qml" line="69"/>

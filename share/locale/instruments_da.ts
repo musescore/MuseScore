@@ -10835,35 +10835,35 @@
         <source>Ambiguous. Either the acoustic bass guitar or the double bass.</source>
         <comment>acoustic-bass description</comment>
         <extracomment>description for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tvetydig. Enten akustisk basguitar eller kontrabas.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5841"/>
         <source>Hollow-bodied bass guitar, usually fretted. Most have electric pickups to amplify the naturally quiet sound.</source>
         <comment>acoustic-bass-guitar description</comment>
         <extracomment>description for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akustisk basguitar med hul korpus, normalt med bånd. De fleste har elektriske pickups, der forstærker den naturligt svage lyd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5843"/>
         <source>Acoustic Bass Guitar</source>
         <comment>acoustic-bass-guitar trackName</comment>
         <extracomment>trackName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akustisk basguitar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5845"/>
         <source>Acoustic Bass Guitar</source>
         <comment>acoustic-bass-guitar longName</comment>
         <extracomment>longName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akustisk basguitar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5847"/>
         <source>Ac. B. Guit.</source>
         <comment>acoustic-bass-guitar shortName</comment>
         <extracomment>shortName for Acoustic Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ak. B. Guit.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5849"/>
@@ -10884,14 +10884,14 @@
         <source>Orchestral contrabass but played pizzicato (plucked) as is common in jazz music. Fretless.</source>
         <comment>double-bass-plucked description</comment>
         <extracomment>description for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Orkesterkontrabas, men spillet pizzicato (knipset) som det er almindeligt i jazzmusik. Uden bånd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5856"/>
         <source>Double Bass (plucked)</source>
         <comment>double-bass-plucked trackName</comment>
         <extracomment>trackName for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kontrabas (pizzicato)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5858"/>
@@ -10905,7 +10905,7 @@
         <source>D. B.</source>
         <comment>double-bass-plucked shortName</comment>
         <extracomment>shortName for Double Bass (plucked); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>K.B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5862"/>
@@ -11101,7 +11101,7 @@
         <source>Double bass played arco (with a bow) unless a pizzicato marking is present. Lowest string is tuned to E, or to C if an extension is used.</source>
         <comment>contrabass description</comment>
         <extracomment>description for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kontrabas spilles arco (med bue), medmindre der er angivet pizzicato. Den dybeste streng er stemt i E, eller i C, hvis der anvendes en forlænger.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6775"/>

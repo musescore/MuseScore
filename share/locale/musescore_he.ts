@@ -2754,32 +2754,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5876"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;שוליים בתוך קווי התיבה&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5886"/>
         <source>Margin within barlines:</source>
-        <translation type="unfinished"/>
+        <translation>שוליים בתוך קווי התיבה:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5896"/>
         <source>Vertical stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>עובי קו אנכי:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5925"/>
         <source>Reset &apos;Vertical stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;עובי קו אנכי&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5935"/>
         <source>Vertical stroke height:</source>
-        <translation type="unfinished"/>
+        <translation>גובה קו אנכי:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5964"/>
         <source>Reset &apos;Vertical stroke height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;גובה קו אנכי&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6082"/>
@@ -2932,7 +2932,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6568"/>
         <source>Extend bracket to end of duration</source>
-        <translation type="unfinished"/>
+        <translation>הרחב סוגר עד סוף הַמֶּשך</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6578"/>
@@ -3010,7 +3010,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7090"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>מיקומי ברירת מחדל של סימני דינמיקה וסימני קרשנדו/דמינואנדו</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7101"/>
@@ -3029,7 +3029,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7118"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation type="unfinished"/>
+        <translation>קולות 1 ו־3 מעל החמשה, קולות 2 ו־4 מתחת לחמשה</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7141"/>
@@ -3048,12 +3048,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7153"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>מַקֵּם מעל החמשה בכלי שירה</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7160"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>מרכז אוטומטית בחמשה כפולה</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7170"/>
@@ -3103,7 +3103,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10519"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11473"/>
         <source>Reset &apos;Offset below&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;הזחה למטה&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7209"/>
@@ -3113,7 +3113,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7222"/>
         <source>Reset &apos;Avoid barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;הימנע מקווי תיבה&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7235"/>
@@ -3321,7 +3321,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="8730"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="8733"/>
         <source>Note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>קווים מעוגנים לתו</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9433"/>
@@ -3419,17 +3419,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9709"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>תו עזר לטריל</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9715"/>
         <source>Show only for intervals other than seconds</source>
-        <translation type="unfinished"/>
+        <translation>הצג רק עבור מרווחים שאינם שניות</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9722"/>
         <source>Show for all intervals</source>
-        <translation type="unfinished"/>
+        <translation>הצג עבור כל המרווחים</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10330"/>
@@ -3449,12 +3449,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10434"/>
         <source>Reset &apos;Min. space between lyrics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;מרווח מינימלי בין מילים&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10457"/>
         <source>Min. space between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>מרווח מינימלי בין מילים:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10483"/>
@@ -3464,7 +3464,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10506"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>שוליים מינימליים לחמשות אחרות:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10532"/>
@@ -3474,17 +3474,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10554"/>
         <source>Min. margin to current staff:</source>
-        <translation type="unfinished"/>
+        <translation>שוליים מינימליים לחמשה הנוכחית:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10592"/>
         <source>Align verse numbers</source>
-        <translation type="unfinished"/>
+        <translation>יישר מספרי בתים</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10665"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>גובה שורה (% מגודל הטקסט):</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10736"/>
@@ -3494,7 +3494,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10775"/>
         <source>Reset &apos;Avoid barlines&apos;</source>
-        <translation type="unfinished"/>
+        <translation>איפוס &apos;הימנע מקווי תיבה&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10795"/>
@@ -3504,28 +3504,29 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10803"/>
         <source>Min. space between dash and text:</source>
-        <translation type="unfinished"/>
+        <translation>מרווח מינימלי בין קו מפריד לטקסט:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10813"/>
         <source>Limit number of dashes to:</source>
-        <translation type="unfinished"/>
+        <translation>הגבל את מספר המקפים ל־:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10823"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;מרווח מקפים&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10862"/>
         <source>Vertical position (% of 
 text x-height):</source>
-        <translation type="unfinished"/>
+        <translation>מיקום אנכי 
+(% מגובה x של הטקסט):</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10883"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;מיקום אנכי (% מגובה x של הטקסט)&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10934"/>
@@ -3565,12 +3566,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11064"/>
         <source>Max. space between dashes:</source>
-        <translation type="unfinished"/>
+        <translation>מרווח מקסימלי בין קווים מפרידים:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11081"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;מיקום קו מפריד בתחילת הסיסטמה&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11097"/>
@@ -3580,23 +3581,24 @@ text x-height):</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11110"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &apos;השמט קו מפריד כשהמרווח מוגבל&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11120"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>השמט מקף כשהמרווח מוגבל</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11127"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation type="unfinished"/>
+        <translation>הצג מחדש מקף לפני הברה 
+בתו הראשון של השורה</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11135"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>מיקום מקף בתחילת הסיסטמה:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11142"/>

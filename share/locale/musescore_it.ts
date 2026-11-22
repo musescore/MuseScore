@@ -1728,7 +1728,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="757"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sedicesimo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="781"/>
@@ -4737,7 +4737,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sedicesimo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="112"/>
@@ -9702,7 +9702,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Convert file</source>
-        <translation type="unfinished"/>
+        <translation>Converti file</translation>
     </message>
     <message>
         <source>Import P&amp;DF…</source>
@@ -35380,7 +35380,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="69"/>
         <source>Show in Finder</source>
-        <translation type="unfinished"/>
+        <translation>Mostra nel Finder</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="70"/>
@@ -35406,7 +35406,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreItemMenuButton.qml" line="98"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Elimina partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="142"/>
@@ -35604,7 +35604,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/DeleteCloudScoreDialog.qml" line="130"/>
         <source>Delete score</source>
-        <translation type="unfinished"/>
+        <translation>Elimina partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/deletecloudscorescenario.cpp" line="72"/>
@@ -35655,12 +35655,12 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/ConvertButtonBox.qml" line="57"/>
         <source>Convert</source>
-        <translation type="unfinished"/>
+        <translation>Converti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="117"/>
         <source>Drag your file here</source>
-        <translation type="unfinished"/>
+        <translation>Trascina il tuo file qui</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ConvertFileToScore/SelectFilePage.qml" line="125"/>
@@ -35711,7 +35711,7 @@ fallita: %2</translation>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="566"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1153"/>
         <source>Something went wrong</source>
-        <translation type="unfinished"/>
+        <translation>Qualcosa è andato storto</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="435"/>
@@ -35732,7 +35732,7 @@ fallita: %2</translation>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="600"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="611"/>
         <source>This file is too large</source>
-        <translation type="unfinished"/>
+        <translation>Questo file è troppo grande</translation>
     </message>
     <message>
         <source>Make sure you’re importing a suitable PDF, image or MP3 file.</source>
@@ -35766,13 +35766,13 @@ fallita: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="467"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="623"/>
         <source>Maximum file size exceeded</source>
-        <translation type="unfinished"/>
+        <translation>Limite di grandezza superato</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="473"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="573"/>
         <source>This file type is not compatible</source>
-        <translation type="unfinished"/>
+        <translation>Questo file non è compatibile</translation>
     </message>
     <message>
         <source>Make sure you’ve selected a PDF, image or MP3 file.</source>
@@ -35822,7 +35822,7 @@ fallita: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="446"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1088"/>
         <source>This file could not be read</source>
-        <translation type="unfinished"/>
+        <translation>Questo file non può essere letto</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
@@ -35879,18 +35879,18 @@ fallita: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="528"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1220"/>
         <source>Upload limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Limite di caricamento raggiunto</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="529"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1221"/>
         <source>You’ve reached the limit for file conversions. Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Hai raggiunto il limite massimo di conversioni. Riprova più tardi.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="592"/>
         <source>Try another file</source>
-        <translation type="unfinished"/>
+        <translation>Prova un altro file</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="603"/>
@@ -35924,7 +35924,7 @@ fallita: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="505"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="588"/>
         <source>Please select a single PDF file</source>
-        <translation type="unfinished"/>
+        <translation>Seleziona un singolo file PDF</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="506"/>
@@ -35950,11 +35950,11 @@ fallita: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="522"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="644"/>
         <source>Too many images selected</source>
-        <translation type="unfinished"/>
+        <translation>Troppe immagini selezionate</translation>
     </message>
     <message>
         <source>Upload more</source>
-        <translation type="unfinished"/>
+        <translation>Carica altro</translation>
     </message>
     <message>
         <source>Home &gt; Scores</source>
@@ -35978,7 +35978,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ConvertFileProcessingDialog.qml" line="212"/>
         <source>Go to scores</source>
-        <translation type="unfinished"/>
+        <translation>Vai a Partiture</translation>
     </message>
     <message>
         <source>We’ll notify you once the score is ready to open. You can check the status of the score in Home &gt; Scores.</source>

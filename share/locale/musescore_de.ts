@@ -29009,7 +29009,7 @@ Wenn das Problem weiterhin besteht, den Schritten zu den Fehlerbehebungen im Lin
         <location filename="../../src/notationscene/widgets/breaksdialog.cpp" line="43"/>
         <source>Lock layout with %1 measure(s) per system</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation>Layout mit %s Takt(en) pro System sperren</translation>
+        <translation>Layout mit %1 Takt(en) pro System sperren</translation>
     </message>
 </context>
 <context>
