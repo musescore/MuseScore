@@ -9448,7 +9448,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
         <source>Pause playback</source>
-        <translation type="unfinished"/>
+        <translation>Íhald avspæling</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="64"/>
@@ -9699,12 +9699,12 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Convert &amp;file…</source>
-        <translation type="unfinished"/>
+        <translation>Broyt &amp;fílu…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
         <source>Convert file</source>
-        <translation type="unfinished"/>
+        <translation>Broyt fílu</translation>
     </message>
     <message>
         <source>Import P&amp;DF…</source>
@@ -9716,11 +9716,11 @@ um aftaná strok</translation>
     </message>
     <message>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>Tak inn l&amp;jóð til nótablað…</translation>
     </message>
     <message>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>Tak inn ljóð til nótablað</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
@@ -18060,7 +18060,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="502"/>
         <source>show measure numbers</source>
-        <translation type="unfinished"/>
+        <translation>vís taktnummur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="503"/>
@@ -20702,7 +20702,7 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/extensionslistmodel.cpp" line="115"/>
         <source>Not specified</source>
         <extracomment>No version is specified for this plugin.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ikki nágreina</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/extensionslistmodel.cpp" line="131"/>
@@ -30129,12 +30129,12 @@ If the issue persists, follow the steps at the troubleshooting link below.</sour
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="65"/>
         <source>Show measure numbers</source>
-        <translation type="unfinished"/>
+        <translation>Vís taktnummur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="72"/>
         <source>Show initial measure number</source>
-        <translation type="unfinished"/>
+        <translation>Vís fyrsta taktnummar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="82"/>
@@ -30145,12 +30145,12 @@ If the issue persists, follow the steps at the troubleshooting link below.</sour
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="119"/>
         <source>Frequency</source>
-        <translation type="unfinished"/>
+        <translation>Títtleiki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="128"/>
         <source>Start of each system</source>
-        <translation type="unfinished"/>
+        <translation>Við byrjan av øllum skipanum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="137"/>

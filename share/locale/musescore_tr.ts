@@ -4102,7 +4102,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Restore</source>
-        <translation>Eski haline getir</translation>
+        <translation>Eski hâline getir</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
@@ -7590,12 +7590,12 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1386"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Ro&amp;men rakamı analizi</translation>
+        <translation>Ro&amp;ma rakamı analizi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1387"/>
         <source>Add text: Roman numeral analysis</source>
-        <translation>Metin ekle: Romen rakamı analizi</translation>
+        <translation>Metin ekle: Roma rakamı analizi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1392"/>
@@ -13264,7 +13264,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1738"/>
         <source>Roman numeral analysis</source>
-        <translation>Romen rakamı analizi</translation>
+        <translation>Roma rakamı analizi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
@@ -34196,7 +34196,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation>Bunu devre dışı bırakmak hatalara yol açabilir. Aksi hâlde yanlızca içe aktarılamayan dosyalar için deneyin.</translation>
+        <translation>Bunu devre dışı bırakmak hatalara yol açabilir. Aksi hâlde yalnızca içe aktarılamayan dosyalar için deneyin.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
@@ -35834,7 +35834,7 @@ başarısız: %2</translation>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="447"/>
         <location filename="../../src/project/tests/convertfiletoscorescenario_tests.cpp" line="1089"/>
         <source>Make sure the file still exists and that you have permission to open it.</source>
-        <translation>Dosyanın hala mevcut olduğundan ve açma izninizin olduğundan emin olun.</translation>
+        <translation>Dosyanın hâlâ mevcut olduğundan ve açma izninizin olduğundan emin olun.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/convertfiletoscorescenario.cpp" line="474"/>
@@ -37641,7 +37641,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1687"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>Notanızı korumak için tekrar kaydetmeyi deneyin. Bu mesaj hala görünüyorsa, lütfen notanızı yeni bir kopya olarak kaydedin. Ayrıca bu sorun için %1 adresinden yardım alabilirsiniz. &lt;br/&gt;&lt;br/&gt;Hata ayrıntıları (destek isterken lütfen belirtin): %2</translation>
+        <translation>Notanızı korumak için tekrar kaydetmeyi deneyin. Bu mesaj hâlâ görünüyorsa, lütfen notanızı yeni bir kopya olarak kaydedin. Ayrıca bu sorun için %1 adresinden yardım alabilirsiniz. &lt;br/&gt;&lt;br/&gt;Hata ayrıntıları (destek isterken lütfen belirtin): %2</translation>
     </message>
 </context>
 <context>
