@@ -240,7 +240,9 @@ class EngravingItem : public apiv1::ScoreElement
     Q_PROPERTY(QPointF pos READ pos)
 
     /** APIDOC
-     * Position of this element in page coordinates, in spatium units.
+     * Reference position of this element in page coordinates, in spatium units.
+     * For some elements, e.g. slurs, ties, etc., this reference point can lie outside their visible bounds.
+     * To get the visible page bounds, use the `pageBoundingRect` property.
      * @readonly
      * @q_property {Point}
      */
@@ -255,13 +257,23 @@ class EngravingItem : public apiv1::ScoreElement
     Q_PROPERTY(QPointF canvasPos READ canvasPos)
 
     /** APIDOC
-     * Bounding box of this element.
+     * Bounding box of this element relative to its reference position (`pagePos`).
+     * Adding the `pagePos` coordinates to the `bbox` x and y gives the top-left corner of the object in page coordinates.
      *
      * This value is in spatium units for compatibility with other EngravingItem positioning properties.
      * @readonly
      * @q_property {Rect}
      */
     Q_PROPERTY(QRectF bbox READ bbox)
+
+    /** APIDOC
+     * Bounding rectangle of this element in page coordinates, in spatium units.
+     * For a spanner segment, the rectangle encloses only that segment.
+     * @readonly
+     * @q_property {Rect}
+     * @since 5.0
+     */
+    Q_PROPERTY(QRectF pageBoundingRect READ pageBoundingRect)
 
     /** APIDOC
      * Subtype of this element.
@@ -1309,6 +1321,7 @@ class EngravingItem : public apiv1::ScoreElement
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
+    QRectF pageBoundingRect() const;
 
     int subtype() const { return element()->subtype(); }
 

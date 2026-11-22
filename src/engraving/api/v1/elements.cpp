@@ -135,6 +135,11 @@ QRectF EngravingItem::bbox() const
     return scaleRect(element()->ldata()->bbox(), element()->spatium());
 }
 
+QRectF EngravingItem::pageBoundingRect() const
+{
+    return scaleRect(element()->pageBoundingRect(), element()->spatium());
+}
+
 bool EngravingItem::isHeader() const
 {
     return element()->isClef() && toClef(element())->isHeader();
