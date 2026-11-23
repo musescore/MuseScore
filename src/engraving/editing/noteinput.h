@@ -91,6 +91,7 @@ public:
     static muse::Ret putNote(Transaction& tx, Score* score, const Position& pos, bool replace);
     static muse::Ret repitchNote(Transaction& tx, Score* score, const Position& pos, bool replace);
     static muse::Ret insertChordByInsertingTime(Transaction& tx, Score* score, const Position& pos);
+    static Segment* insertTime(Transaction& tx, Score* score, Segment* seg, const Fraction& len);
 
     static void truncateChordRest(Transaction& tx, Score* score, ChordRest* cr, const Fraction& tick, bool fillWithRest);
 

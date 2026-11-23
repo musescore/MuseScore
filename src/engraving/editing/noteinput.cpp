@@ -1385,6 +1385,29 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
         return make_ret(Ret::Code::UnknownError);
     }
 
+    Position p(pos);
+    p.segment = insertTime(tx, score, seg, score->inputState().duration().fraction());
+
+    // Put the note itself.
+    // the inserted time is the input duration: a tuplet waiting here doesn't take up the note
+    InputState& is = score->inputState();
+    const std::optional<PendingTuplet> pendingTuplet = is.pendingTuplet();
+    is.setPendingTuplet(std::nullopt);
+    putNote(tx, score, p, true);
+    is.setPendingTuplet(pendingTuplet);
+
+    return muse::make_ok();
+}
+
+//---------------------------------------------------------
+//   insertTime
+//    Insert `len` at `seg` by lengthening its measure, and
+//    fill the new time with rests. Returns the chord/rest
+//    segment at the start of the new time.
+//---------------------------------------------------------
+
+Segment* NoteInput::insertTime(Transaction& tx, Score* score, Segment* seg, const Fraction& len)
+{
     // remove all two-note tremolos that end on this tick
     for (EngravingItem* e : seg->elist()) {
         if (!e || !e->isChord()) {
@@ -1399,12 +1422,9 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
         }
     }
 
-    const TDuration duration = score->inputState().duration();
-    const Fraction fraction  = duration.fraction();
-    const Fraction len       = fraction;
     Fraction tick            = seg->tick();
     Measure* measure         = seg->measure()->isMMRest() ? seg->measure()->mmRestFirst() : seg->measure();
-    const Fraction targetMeasureLen = measure->ticks() + fraction;
+    const Fraction targetMeasureLen = measure->ticks() + len;
 
     // Shift spanners, enlarge the measure.
     // The approach is similar to that in Measure::adjustToLen() but does
@@ -1463,12 +1483,12 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
             ChordRest* cr = ms->findCR(tick, track);
             if (cr && cr->tick() < tick && cr->endTick() > tick) {
                 if (cr->isRest()) {
-                    const Fraction fillLen = cr->ticks() + fraction;
+                    const Fraction fillLen = cr->ticks() + len;
                     ms->undoRemoveElement(cr);
                     ms->setRest(cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
                 } else if (cr->isChord()) {
                     Chord* chord = toChord(cr);
-                    std::vector<TDuration> durations = toDurationList(chord->ticks() + fraction, /* useDots */ true);
+                    std::vector<TDuration> durations = toDurationList(chord->ticks() + len, /* useDots */ true);
                     Fraction p = chord->tick();
                     ms->undoRemoveElement(chord);
                     Chord* prevChord = nullptr;
@@ -1486,22 +1506,11 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
 
         // III. insert rest(s) to fill the inserted space
         if (!measureIsFull && msMeasure->hasVoice(track)) {
-            ms->setRest(tick, track, fraction, /* useDots */ false, /* tuplet */ nullptr);
+            ms->setRest(tick, track, len, /* useDots */ false, /* tuplet */ nullptr);
         }
     }
 
-    // Put the note itself.
-    Segment* s = measure->undoGetSegment(SegmentType::ChordRest, tick);
-    Position p(pos);
-    p.segment = s;
-    // the inserted time is the input duration: a tuplet waiting here doesn't take up the note
-    InputState& is = score->inputState();
-    const std::optional<PendingTuplet> pendingTuplet = is.pendingTuplet();
-    is.setPendingTuplet(std::nullopt);
-    putNote(tx, score, p, true);
-    is.setPendingTuplet(pendingTuplet);
-
-    return muse::make_ok();
+    return measure->undoGetSegment(SegmentType::ChordRest, tick);
 }
 
 //---------------------------------------------------------
