@@ -63,7 +63,7 @@ enum class NoteEntryMethod : char {
 //    A tuplet waiting at the input position for the next note
 //    or rest. The next duration sizes it in By duration and
 //    Rhythm input; the input duration sizes it when it is
-//    asked for in By note name input.
+//    asked for in By note name and Insert input.
 //---------------------------------------------------------
 
 struct PendingTuplet {
@@ -73,7 +73,7 @@ struct PendingTuplet {
     bool autoBaseLen = false;
     // the duration is the subdivision, rather than the length divided
     bool durationAsSubdivision = false;
-    // By note name: the duration that sized it
+    // By note name and Insert: the duration that sized it
     std::optional<TDuration> duration;
     // given when it starts waiting, see InputState::forgetPendingTuplets()
     int number = 0;
@@ -140,10 +140,10 @@ public:
     void setBeamMode(BeamMode m) { m_beamMode = m; }
 
     bool noteEntryMode() const { return m_noteEntryMode; }
-    void setNoteEntryMode(bool v) { m_noteEntryMode = v; }
+    void setNoteEntryMode(bool v);
 
     NoteEntryMethod noteEntryMethod() const { return m_noteEntryMethod; }
-    void setNoteEntryMethod(NoteEntryMethod m) { m_noteEntryMethod = m; }
+    void setNoteEntryMethod(NoteEntryMethod m);
     bool usingNoteEntryMethod(NoteEntryMethod m) const { return m == noteEntryMethod(); }
 
     AccidentalType accidentalType() const { return m_accidentalType; }
@@ -164,6 +164,8 @@ public:
     void forgetPendingTuplets();
     void restoreFromUndoStack(const InputState& state);
     void keepPendingTupletFrom(const InputState& state);
+    void setInsertedTuplet(const Tuplet* tuplet);
+    bool inInsertedTuplet(const ChordRest* cr) const;
 
     void update(Selection& selection);
     void moveInputPos(EngravingItem* e);
@@ -208,6 +210,8 @@ private:
     bool m_beyondScore = false;
 
     std::optional<PendingTuplet> m_pendingTuplet;
+    // Insert: the start of the tuplet a waiting tuplet inserted
+    std::optional<std::pair<Fraction, track_idx_t> > m_insertedTuplet;
 
     // kept through undo and redo: the last number given to a waiting tuplet, and the last one cancelled
     int m_pendingTupletNumber = 0;

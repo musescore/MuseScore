@@ -108,8 +108,9 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
 
     // a waiting tuplet takes a note tied from the chord before the input position, even if a chord is selected there
     InputState& is = score->inputState();
-    if (score->noteEntryMode() && is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME) && is.pendingTupletHere() && is.segment()
-        && !is.beyondScore()) {
+    const bool insert = is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    const bool tupletWaits = is.pendingTupletHere() && (insert || is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME));
+    if (score->noteEntryMode() && tupletWaits && is.segment() && !is.beyondScore()) {
         const Segment* before = is.segment()->prev1();
         const ChordRest* prev = before ? before->nextChordRest(is.track(), /*backwards*/ true) : nullptr;
         noteList = prev && prev->isChord() ? toChord(prev)->notes() : std::vector<Note*>();

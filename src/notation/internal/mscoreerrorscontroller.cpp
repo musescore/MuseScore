@@ -204,6 +204,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "Cannot create tuplet");
         message = muse::trc("notation", "This ratio cannot be used for a tuplet of this duration.");
         break;
+    case MsError::CANNOT_INSERT_TUPLET_IN_TUPLET:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "A tuplet can’t be inserted inside another tuplet.");
+        break;
     }
 
     m_currentDialogError = err;

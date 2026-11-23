@@ -475,6 +475,10 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
         }
     }
 
+    // capped at the end of an inserted tuplet, in the voice the note goes in, once its chord or rest is there
+    const Fraction inputDuration = is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE) ? insertedTupletDuration(is, is.duration().fraction())
+                                   : is.duration().fraction();
+
     Measure* measure = is.segment()->measure();
     if (measure->isMeasureRepeatGroup(track2staff(track))) {
         MeasureRepeat* mr = measure->measureRepeatElement(track2staff(track));
@@ -489,7 +493,7 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
         Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
         duration = is.duration().fraction() > ticks2measureEnd ? ticks2measureEnd : is.duration().fraction();
     } else {
-        duration = is.duration().fraction();
+        duration = inputDuration;
     }
     Note* note = nullptr;
     Note* lastTiedNote = nullptr;
@@ -732,6 +736,29 @@ std::pair<Note*, Note*> NoteInput::repitchReplaceNote(Transaction&, Score* score
 }
 
 //---------------------------------------------------------
+//   insertedTupletDuration
+//    `duration`, capped at the end of an inserted tuplet so
+//    that nothing after it is overwritten
+//---------------------------------------------------------
+
+Fraction NoteInput::insertedTupletDuration(const InputState& is, const Fraction& duration)
+{
+    // past the end of the score, nothing comes after it
+    const ChordRest* cr = is.cr();
+    if (is.beyondScore() || !is.inInsertedTuplet(cr)) {
+        return duration;
+    }
+
+    const Tuplet* tuplet = cr->tuplet();
+    while (tuplet->tuplet()) {
+        tuplet = tuplet->tuplet();
+    }
+    const Fraction left = (tuplet->tick() + tuplet->actualTicks() - is.tick())
+                          / actualTicks(Fraction(1, 1), cr->tuplet(), cr->staff()->timeStretch(is.tick()));
+    return std::min(duration, left);
+}
+
+//---------------------------------------------------------
 //   where the entry points enter the note
 //    shared with the checks whether they remove a measure repeat
 //---------------------------------------------------------
@@ -828,9 +855,37 @@ static std::optional<PendingTupletShape> pendingTupletShape(const PendingTuplet&
 }
 
 //---------------------------------------------------------
+//   insertSplitsTuplet
+//    Whether inserting time at `segment` would split a tuplet
+//    in any track
+//---------------------------------------------------------
+
+static bool insertSplitsTuplet(const Segment* segment)
+{
+    if (segment->splitsTuplet()) {
+        return true;
+    }
+
+    const MasterScore* ms = segment->score()->masterScore();
+    const Fraction tick = segment->tick();
+    for (track_idx_t track = 0; track < ms->ntracks(); ++track) {
+        const ChordRest* cr = ms->findCR(tick, track);
+        const Tuplet* tuplet = cr ? cr->tuplet() : nullptr;
+        while (tuplet && tuplet->tuplet()) {
+            tuplet = tuplet->tuplet();
+        }
+        if (tuplet && tuplet->tick() < tick && tuplet->tick() + tuplet->actualTicks() > tick) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
 //   pendingTupletFits
 //    Whether the tuplet waiting at the input position fits
-//    there when `duration` sizes it
+//    there when `duration` sizes it. In Insert input, it fits
+//    anywhere but inside another tuplet.
 //---------------------------------------------------------
 
 static bool pendingTupletFits(const Score* score, const TDuration& duration)
@@ -839,6 +894,10 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
     const std::optional<PendingTupletShape> shape = pendingTupletShape(*is.pendingTuplet(), duration);
     if (!shape) {
         return false;
+    }
+
+    if (is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE) && !is.beyondScore()) {
+        return is.segment() && !insertSplitsTuplet(is.segment());
     }
 
     if (is.beyondScore()) {
@@ -885,15 +944,24 @@ bool NoteInput::pendingTupletFitsHere(const Score* score)
 
 //---------------------------------------------------------
 //   setPendingTuplet
-//    In By note name input, make a tuplet wait at the input
-//    position, sized by the input duration, even where it
-//    doesn't fit. Asked for again, it replaces the waiting
-//    one. Sets the error if it can't divide the duration.
+//    In By note name and Insert input, make a tuplet wait at
+//    the input position, sized by the input duration, even
+//    where it doesn't fit. Asked for again, it replaces the
+//    waiting one. Sets the error and returns false if it
+//    can't divide the duration, or in Insert input inside
+//    another tuplet.
 //---------------------------------------------------------
 
 bool NoteInput::setPendingTuplet(Score* score, PendingTuplet pending)
 {
     InputState& is = score->inputState();
+    // no time can be inserted inside another tuplet
+    if (is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE) && !is.beyondScore()
+        && (!is.segment() || insertSplitsTuplet(is.segment()))) {
+        MScore::setError(MsError::CANNOT_INSERT_TUPLET_IN_TUPLET);
+        return false;
+    }
+
     const std::optional<PendingTuplet> old = is.pendingTuplet();
     TDuration duration = is.duration();
     if (is.pendingTupletHere() && old->duration) {
@@ -959,10 +1027,11 @@ std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
 //   addPendingTuplet
 //    Create the tuplet waiting at the input position. In By
 //    duration and Rhythm input, the input duration sizes it
-//    and becomes its note value. If it can't, set the error.
+//    and becomes its note value. With `insertTime`, its time
+//    is inserted first. If it can't, set the error.
 //---------------------------------------------------------
 
-static bool addPendingTuplet(Transaction& tx, Score* score)
+static bool addPendingTuplet(Transaction& tx, Score* score, bool insertTime)
 {
     InputState& is = score->inputState();
     if (!is.pendingTupletHere()) {
@@ -981,10 +1050,17 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
         MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
         return false;
     }
+    // no time can be inserted inside another tuplet, in any voice (Ctrl+Shift+letter in By note name input)
+    if (insertTime && !is.beyondScore() && insertSplitsTuplet(is.segment())) {
+        MScore::setError(MsError::CANNOT_INSERT_TUPLET_IN_TUPLET);
+        return false;
+    }
 
     if (is.beyondScore()) {
         score->appendMeasures(1);
         is.moveToNextInputPos();
+    } else if (insertTime) {
+        is.setSegment(NoteInput::insertTime(tx, score, is.segment(), shape->baseLen.fraction() * shape->ratio.denominator()));
     }
     // like addPitch: remove a measure repeat
     Measure* measure = is.segment()->measure();
@@ -1012,6 +1088,9 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
     // addTuplet can reselect the selection, which moves the input position to its voice
     is.setTrack(tuplet->track());
     is.setPendingTuplet(std::nullopt);
+    if (insertTime) {
+        is.setInsertedTuplet(tuplet);
+    }
     is.setSegment(toChordRest(tuplet->elements().front())->segment());
     if (!pending.duration) {
         is.setDuration(shape->baseLen);
@@ -1022,11 +1101,12 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
 //---------------------------------------------------------
 //   addPendingTupletForNote
 //    A note or rest (`pitch` -1) entered where a tuplet waits
-//    takes it up, in a drum's own voice. False if it can't;
-//    it then keeps waiting.
+//    takes it up, in a drum's own voice. In Insert input, or
+//    with `insertTime`, its time is inserted first. False if
+//    it can't; it then keeps waiting.
 //---------------------------------------------------------
 
-bool NoteInput::addPendingTupletForNote(Transaction& tx, Score* score, int pitch)
+bool NoteInput::addPendingTupletForNote(Transaction& tx, Score* score, int pitch, bool insertTime)
 {
     InputState& is = score->inputState();
     if (!is.pendingTuplet()) {
@@ -1036,7 +1116,7 @@ bool NoteInput::addPendingTupletForNote(Transaction& tx, Score* score, int pitch
     if (ds && ds->isValid(pitch)) {
         is.moveToDrumVoice(ds->voice(pitch));
     }
-    return addPendingTuplet(tx, score);
+    return addPendingTuplet(tx, score, insertTime || is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE));
 }
 
 //---------------------------------------------------------
@@ -1072,7 +1152,7 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const PointF& pos, bool re
     }
 }
 
-Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool replace)
+Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool replace, bool insert)
 {
     InputState& is = score->inputState();
 
@@ -1258,8 +1338,11 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
             nval.pitch = -1;
         }
 
+        const Fraction inputDuration = is.duration().fraction();
+        const Fraction duration = insert || is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE) ? insertedTupletDuration(is, inputDuration)
+                                  : inputDuration;
         Segment* seg = score->setNoteRest(is.segment(), is.track(), nval,
-                                          is.duration().fraction(), stemDirection, forceAccidental, is.articulationIds());
+                                          duration, stemDirection, forceAccidental, is.articulationIds());
         if (!seg) {
             ret = make_ret(Ret::Code::UnknownError);
         }
@@ -1380,21 +1463,51 @@ Ret NoteInput::insertChordByInsertingTime(Transaction& tx, Score* score, const P
     }
 
     Segment* seg = pos.segment;
-    if (seg->splitsTuplet()) {
+    InputState& is = score->inputState();
+    // the voice the note goes in: a drum's own voice, as putNote puts it
+    bool error = false;
+    const NoteVal nval = noteValForPosition(score, pos, is.accidentalType(), error);
+    const Instrument* instrument = score->staff(pos.staffIdx)->part()->instrument(seg->tick());
+    const Drumset* ds = instrument->useDrumset() ? instrument->drumset() : nullptr;
+    const voice_idx_t voice = !error && ds && ds->isValid(nval.pitch) ? ds->voice(nval.pitch) : is.voice();
+    // notes fill the rests of an inserted tuplet
+    const ChordRest* cr = seg->cr(staff2track(pos.staffIdx, voice));
+    if (cr && cr->isRest() && is.inInsertedTuplet(cr)) {
+        return putNote(tx, score, pos, true, /*insert*/ true);
+    }
+
+    // a tuplet waiting here; past the end of the score, where it appends a measure, the last segment isn't split
+    const bool pendingTupletHere = is.pendingTupletHere() && is.pendingTuplet()->duration && seg->tick() == is.tick()
+                                   && pos.staffIdx == is.staffIdx() && pos.beyondScore == is.beyondScore();
+    if (!(pendingTupletHere && pos.beyondScore) && seg->splitsTuplet()) {
         MScore::setError(MsError::CANNOT_INSERT_TUPLET);
         return make_ret(Ret::Code::UnknownError);
     }
 
+    // a waiting tuplet inserts its whole time, and the note goes into it
     Position p(pos);
-    p.segment = insertTime(tx, score, seg, score->inputState().duration().fraction());
+    if (pendingTupletHere) {
+        if (error || !addPendingTupletForNote(tx, score, nval.pitch, /*insertTime*/ true)) {
+            return make_ret(Ret::Code::UnknownError);
+        }
+        p.segment = is.segment();
+        // the tuplet's measure is already there
+        p.beyondScore = false;
+    } else {
+        p.segment = insertTime(tx, score, seg, is.duration().fraction());
+        is.setInsertedTuplet(nullptr);
+    }
 
     // Put the note itself.
-    // the inserted time is the input duration: a tuplet waiting here doesn't take up the note
-    InputState& is = score->inputState();
+    // the inserted time is the input duration: a waiting tuplet doesn't take up the note, and the time inserted before
+    // its music cancels it, like any move away
     const std::optional<PendingTuplet> pendingTuplet = is.pendingTuplet();
     is.setPendingTuplet(std::nullopt);
-    putNote(tx, score, p, true);
-    is.setPendingTuplet(pendingTuplet);
+    putNote(tx, score, p, true, /*insert*/ true);
+    if (pendingTuplet) {
+        is.setPendingTuplet(pendingTuplet);
+        cancelPendingTuplet(score);
+    }
 
     return muse::make_ok();
 }
@@ -1808,7 +1921,7 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
 
             // a tuplet waiting for this duration takes the note or rest; if it can't, nothing is entered
             const bool pendingTupletHere = is.pendingTupletHere();
-            if (is.pendingTuplet() && !addPendingTuplet(tx, score)) {
+            if (is.pendingTuplet() && !addPendingTuplet(tx, score, /*insertTime*/ false)) {
                 is.setDuration(oldDuration);
                 return;
             }
@@ -2060,9 +2173,13 @@ void NoteInput::applyToSelection(Score* score, const TDuration& oldDuration, boo
             if (is.lastSegment() == is.segment()) {
                 is.moveToNextInputPos();
             }
-            // a pending tuplet follows the input position when the previous note changes length
+            // a pending tuplet follows the input position when the previous note changes length; in Insert input,
+            // it is cancelled inside another tuplet
             if (pendingTupletHere) {
                 is.movePendingTupletHere();
+                if (is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE) && !is.beyondScore() && insertSplitsTuplet(is.segment())) {
+                    cancelPendingTuplet(score);
+                }
             }
         }
     }
