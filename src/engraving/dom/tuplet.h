@@ -65,6 +65,9 @@ public:
     void resetNumberProperty();
     static void resetNumberProperty(Text* number);
 
+    static String typeUserName(int numerator);
+    static String numberText(const Fraction& ratio, TupletNumberType numberType, bool useSymbols);
+
     bool isEditable() const override;
     void startDragGrip(EditData&) override;
     void dragGrip(EditData&) override;

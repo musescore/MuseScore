@@ -6117,6 +6117,8 @@ void NotationInteraction::addFret(int fretIndex)
     });
 
     notifyAboutNotationChanged();
+    // e.g. a tuplet waiting here that doesn't fit
+    checkAndShowError();
 }
 
 void NotationInteraction::changeSelectedElementsVoice(voice_idx_t voiceIndex)

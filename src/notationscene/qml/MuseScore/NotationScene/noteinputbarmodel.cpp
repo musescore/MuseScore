@@ -90,6 +90,14 @@ void NoteInputBarModel::init()
         emit isInputAllowedChanged();
     });
 
+    // the tuplet button is highlighted while a tuplet is pending; undo can bring one back
+    commandsController()->noteInputStateChanged().onNotify(this, [this]() {
+        updateTupletItemChecked();
+    });
+    commandsController()->stackChanged().onNotify(this, [this]() {
+        updateTupletItemChecked();
+    });
+
     load();
 }
 
@@ -157,6 +165,7 @@ const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
 void NoteInputBarModel::load()
 {
     MenuItemList items;
+    m_tupletItem = nullptr;
 
     ToolConfig noteInputConfig = uiState()->toolConfig(TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
@@ -178,6 +187,8 @@ void NoteInputBarModel::load()
         } else if (citem.intent == TUPLET_SUBITEMS) {
             MenuItem* item = makeServiceItem(TUPLET_SUBITEMS, QString::number(section));
             item->setSubitems(makeTupletItems());
+            m_tupletItem = item;
+            updateTupletItemChecked();
             items << item;
         } else {
             MenuItem* item = makeCommandItem(rcommand::Command(citem.intent), QString::number(section));
@@ -187,6 +198,13 @@ void NoteInputBarModel::load()
 
     items << makeAddItem(QString::number(++section));
     setItems(items);
+}
+
+void NoteInputBarModel::updateTupletItemChecked()
+{
+    if (m_tupletItem) {
+        m_tupletItem->setChecked(commandsController()->tupletPending());
+    }
 }
 
 bool NoteInputBarModel::isInputAllowed() const

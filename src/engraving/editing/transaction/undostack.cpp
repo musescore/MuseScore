@@ -390,7 +390,7 @@ void UndoableTransaction::undo()
         (*it)->undo();
     }
 
-    m_score->setInputState(m_undoInputState);
+    m_score->inputState().restoreFromUndoStack(m_undoInputState);
     if (m_undoSelectionInfo.isValid()) {
         m_score->deselectAll();
         applySelectionInfo(m_undoSelectionInfo, m_score->selection());
@@ -399,7 +399,10 @@ void UndoableTransaction::undo()
 
 void UndoableTransaction::redo()
 {
-    m_undoInputState = m_score->inputState();
+    InputState undoInputState = m_score->inputState();
+    // a tuplet that waited here after the undo, and was cancelled by another undo, waits again after the next one
+    undoInputState.keepPendingTupletFrom(m_undoInputState);
+    m_undoInputState = undoInputState;
     fillSelectionInfo(m_undoSelectionInfo, m_score->selection());
     m_score->deselectAll();
 
@@ -408,7 +411,7 @@ void UndoableTransaction::redo()
         command->redo();
     }
 
-    m_score->setInputState(m_redoInputState);
+    m_score->inputState().restoreFromUndoStack(m_redoInputState);
     if (m_redoSelectionInfo.isValid()) {
         m_score->deselectAll();
         applySelectionInfo(m_redoSelectionInfo, m_score->selection());

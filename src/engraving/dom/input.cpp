@@ -24,6 +24,7 @@
 
 #include "articulation.h"
 #include "chord.h"
+#include "drumset.h"
 #include "durationtype.h"
 #include "hook.h"
 #include "measure.h"
@@ -135,6 +136,130 @@ void InputState::setDots(int n)
         m_duration = DurationType::V_QUARTER;
     }
     m_duration.setDots(n);
+}
+
+//---------------------------------------------------------
+//   pendingTupletHere
+//    Whether a tuplet waits at the input position: moving
+//    elsewhere cancels it
+//---------------------------------------------------------
+
+bool InputState::pendingTupletHere() const
+{
+    return m_pendingTuplet && m_pendingTuplet->tick == tick() && m_pendingTuplet->track == m_track
+           && m_pendingTuplet->beyondScore == m_beyondScore;
+}
+
+//---------------------------------------------------------
+//   movePendingTupletHere
+//    The pending tuplet waits at the input position
+//---------------------------------------------------------
+
+void InputState::movePendingTupletHere()
+{
+    if (m_pendingTuplet) {
+        m_pendingTuplet->tick = tick();
+        m_pendingTuplet->track = m_track;
+        m_pendingTuplet->beyondScore = m_beyondScore;
+    }
+}
+
+//---------------------------------------------------------
+//   moveToDrumVoice
+//    A drum goes into its own voice. A tuplet waiting at the
+//    input position goes with it, to where the voice change
+//    puts the input position.
+//---------------------------------------------------------
+
+void InputState::moveToDrumVoice(voice_idx_t v)
+{
+    const bool pendingTupletWasHere = pendingTupletHere();
+    setVoice(v);
+    if (pendingTupletWasHere) {
+        movePendingTupletHere();
+    }
+}
+
+//---------------------------------------------------------
+//   otherDrumVoice
+//    The voice of the next note, if it's a drum that goes
+//    into another voice than the input position's
+//---------------------------------------------------------
+
+std::optional<voice_idx_t> InputState::otherDrumVoice() const
+{
+    const Drumset* ds = drumset();
+    if (m_rest || !ds || m_notes.empty()) {
+        return std::nullopt;
+    }
+    const int pitch = m_notes.front().pitch;
+    if (!ds->isValid(pitch)) {
+        return std::nullopt;
+    }
+    const voice_idx_t v = ds->voice(pitch);
+    if (v == voice()) {
+        return std::nullopt;
+    }
+    return v;
+}
+
+//---------------------------------------------------------
+//   setPendingTuplet
+//    A tuplet that starts waiting gets the next number
+//---------------------------------------------------------
+
+void InputState::setPendingTuplet(const std::optional<PendingTuplet>& t)
+{
+    m_pendingTuplet = t;
+    if (m_pendingTuplet && m_pendingTuplet->number == 0) {
+        m_pendingTuplet->number = ++m_pendingTupletNumber;
+    }
+}
+
+//---------------------------------------------------------
+//   forgetPendingTuplets
+//    Escape: the tuplets that waited so far don't come
+//    back with undo
+//---------------------------------------------------------
+
+void InputState::forgetPendingTuplets()
+{
+    m_cancelledPendingTupletNumber = m_pendingTupletNumber;
+}
+
+//---------------------------------------------------------
+//   restoreFromUndoStack
+//    The state saved with an undo step, without a tuplet
+//    cancelled since
+//---------------------------------------------------------
+
+void InputState::restoreFromUndoStack(const InputState& state)
+{
+    const int pendingTupletNumber = m_pendingTupletNumber;
+    const int cancelledPendingTupletNumber = m_cancelledPendingTupletNumber;
+    *this = state;
+    m_pendingTupletNumber = pendingTupletNumber;
+    m_cancelledPendingTupletNumber = cancelledPendingTupletNumber;
+    if (m_pendingTuplet && m_pendingTuplet->number <= m_cancelledPendingTupletNumber) {
+        m_pendingTuplet = std::nullopt;
+    }
+}
+
+//---------------------------------------------------------
+//   keepPendingTupletFrom
+//    The tuplet that waited at the input position in a
+//    state saved with an undo step, if none waits now
+//---------------------------------------------------------
+
+void InputState::keepPendingTupletFrom(const InputState& state)
+{
+    if (m_pendingTuplet || !state.m_pendingTuplet) {
+        return;
+    }
+    m_pendingTuplet = state.m_pendingTuplet;
+    if (!pendingTupletHere()) {
+        m_pendingTuplet = std::nullopt;
+    }
 }
 
 void InputState::setVoice(voice_idx_t v)

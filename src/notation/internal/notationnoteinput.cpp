@@ -70,6 +70,18 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
     return TranslatableString("noteInputMethod", "Unknown note input mode");
 }
 
+static String pendingTupletAnnouncement(const PendingTuplet& pending)
+{
+    //: %1 is a tuplet type, e.g. "Triplet"
+    return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+}
+
+static String cancelledTupletAnnouncement(const PendingTuplet& pending)
+{
+    //: %1 is a tuplet type, e.g. "Triplet"
+    return muse::mtrc("notation", "%1 cancelled").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+}
+
 static bool noteInputMethodAvailable(NoteInputMethod method, const Staff* staff, const Fraction& tick)
 {
     if (method == NoteInputMethod::BY_DURATION) {
@@ -94,7 +106,19 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
                 setupInputNote();
             }
         }
+
+        cancelPendingTupletIfMoved();
     });
+
+    // screen readers hear when undo brings a pending tuplet back
+    m_stateChanged.onNotify(this, [this]() {
+        announcePendingTupletChange();
+    });
+    if (m_undoStack) {
+        m_undoStack->stackChanged().onNotify(this, [this]() {
+            announcePendingTupletChange();
+        });
+    }
 }
 
 bool NotationNoteInput::isNoteInputMode() const
@@ -400,6 +424,9 @@ void NotationNoteInput::endNoteInput(bool resetState)
 
     InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
+    is.setPendingTuplet(std::nullopt);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
 
     if (is.slur()) {
         const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
@@ -450,6 +477,16 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     }
 
     is.setNoteEntryMethod(method);
+    // the tuplets that waited so far don't come back with undo
+    is.forgetPendingTuplets();
+    if (is.pendingTuplet()) {
+        // the input method comes first, as when note input starts
+        const String announcement = nameOfNoteInputMethod(method).translated() + u", "
+                                    + cancelledTupletAnnouncement(*is.pendingTuplet());
+        is.setPendingTuplet(std::nullopt);
+        m_tupletWasPending = false;
+        accessibilityController()->announce(announcement);
+    }
     if (shouldSetupInputNote()) {
         setupInputNote();
     }
@@ -627,7 +664,7 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
         if (const Drumset* drumset = is.drumset()) {
             const int pitch = notes.front().pitch;
             is.setDrumNote(pitch);
-            is.setVoice(drumset->voice(pitch));
+            is.moveToDrumVoice(drumset->voice(pitch));
         }
     }
 
@@ -752,6 +789,7 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
     }
 
     inputState.setVoice(voiceIndex);
+    cancelPendingTupletIfMoved();
     notifyAboutStateChanged();
 }
 
@@ -760,6 +798,7 @@ void NotationNoteInput::setCurrentTrack(track_idx_t trackIndex)
     TRACEFUNC;
 
     score()->inputState().setTrack(trackIndex);
+    cancelPendingTupletIfMoved();
     notifyAboutStateChanged();
 }
 
@@ -807,6 +846,84 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     notifyAboutStateChanged();
 
     m_interaction->checkAndShowError();
+}
+
+bool NotationNoteInput::tupletPending() const
+{
+    return isNoteInputMode() && score()->inputState().pendingTupletHere();
+}
+
+void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
+{
+    NoteInputState& is = score()->inputState();
+
+    // the tuplet waits in the voice the next drum goes into
+    NoteInput::useSelectedNoteForRhythm(score());
+    if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
+        is.setVoice(*drumVoice);
+    }
+
+    PendingTuplet pending;
+    pending.ratio = options.ratio;
+    pending.numberType = options.numberType;
+    pending.bracketType = options.bracketType;
+    pending.autoBaseLen = options.autoBaseLen;
+    pending.durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
+    pending.tick = is.tick();
+    pending.track = is.track();
+    pending.beyondScore = is.beyondScore();
+    is.setPendingTuplet(pending);
+
+    m_tupletWasPending = true;
+    accessibilityController()->announce(pendingTupletAnnouncement(pending));
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::cancelPendingTuplet()
+{
+    NoteInputState& is = score()->inputState();
+    if (!is.pendingTuplet()) {
+        return;
+    }
+
+    const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
+    is.setPendingTuplet(std::nullopt);
+
+    m_tupletWasPending = false;
+    accessibilityController()->announce(announcement);
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::forgetPendingTuplets()
+{
+    score()->inputState().forgetPendingTuplets();
+}
+
+String NotationNoteInput::pendingTupletInfo() const
+{
+    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet()) : String();
+}
+
+// Moving the input position elsewhere cancels a pending tuplet
+void NotationNoteInput::cancelPendingTupletIfMoved()
+{
+    NoteInputState& is = score()->inputState();
+    if (is.pendingTuplet() && !is.pendingTupletHere()) {
+        const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
+        is.setPendingTuplet(std::nullopt);
+        m_tupletWasPending = false;
+        accessibilityController()->announce(announcement);
+        notifyAboutStateChanged();
+    }
+}
+
+void NotationNoteInput::announcePendingTupletChange()
+{
+    const bool pending = tupletPending();
+    if (pending && !m_tupletWasPending) {
+        accessibilityController()->announce(pendingTupletAnnouncement(*score()->inputState().pendingTuplet()));
+    }
+    m_tupletWasPending = pending;
 }
 
 static muse::RectF segmentContentRect(const Segment* segment, track_idx_t track)
