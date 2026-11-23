@@ -476,7 +476,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
 {
     TRACEFUNC;
 
-    if (!m_score) {
+    if (!m_score || m_score->nstaves() == 0) {
         return;
     }
 
@@ -993,6 +993,10 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
 void ScoreAutomationController::collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range,
                                                       MeasureRepeats& result)
 {
+    IF_ASSERT_FAILED(range.from != muse::nidx && range.to != muse::nidx) {
+        return;
+    }
+
     if (!segment->isChordRestType()) {
         return;
     }
