@@ -89,6 +89,8 @@ public:
     muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
+
+    engraving::NotePlaybackInfo notePlaybackInfo(const engraving::Note* note) const override;
     void setTempoMultiplier(double multiplier) override;
 
     void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) override;

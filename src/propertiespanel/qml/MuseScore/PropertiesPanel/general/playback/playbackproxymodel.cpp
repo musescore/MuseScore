@@ -22,6 +22,7 @@
 #include "playbackproxymodel.h"
 
 #include "propertiespanelabstractmodel.h"
+#include "internal/noteplaybackinfomodel.h"
 #include "internal/noteplaybackmodel.h"
 #include "internal/arpeggioplaybackmodel.h"
 #include "internal/fermataplaybackmodel.h"
@@ -35,6 +36,7 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, const muse::modularity::
     : PropertiesPanelAbstractProxyModel(parent, iocCtx, repository)
 {
     QList<PropertiesPanelAbstractModel*> models {
+        new NotePlaybackInfoModel(this, iocCtx, repository),
         new NotePlaybackModel(this, iocCtx, repository),
         new ArpeggioPlaybackModel(this, iocCtx, repository),
         new FermataPlaybackModel(this, iocCtx, repository),

@@ -460,6 +460,15 @@ tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
     return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
 }
 
+NotePlaybackInfo NotationPlayback::notePlaybackInfo(const Note* note) const
+{
+    if (!note || !score()) {
+        return {};
+    }
+
+    return mu::engraving::collectNotePlaybackInfo(note, m_playbackModel.isPlayRepeatsEnabled());
+}
+
 double NotationPlayback::tempoMultiplier() const
 {
     return score() ? score()->tempoTimeline().tempoMultiplier().val : 1.0;

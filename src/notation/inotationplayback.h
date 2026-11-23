@@ -31,6 +31,7 @@
 #include "async/channel.h"
 #include "mpe/events.h"
 #include "engraving/types/types.h"
+#include "engraving/playback/noteplaybackinfo.h"
 
 #include "types/loopboundaries.h"
 #include "types/tempo.h"
@@ -101,6 +102,9 @@ public:
     virtual muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
+
+    //! NOTE: tempo/dynamic (and their sources) playback uses for a note, per repeat pass
+    virtual engraving::NotePlaybackInfo notePlaybackInfo(const engraving::Note* note) const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
 
     virtual void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) = 0;

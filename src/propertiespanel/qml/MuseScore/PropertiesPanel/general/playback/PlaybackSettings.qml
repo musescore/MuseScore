@@ -45,6 +45,7 @@ Column {
         id: repeater
 
         readonly property var fullModel: [
+            PropertiesPanelAbstractModel.TYPE_NOTE_PLAYBACK_INFO,
             PropertiesPanelAbstractModel.TYPE_NOTE,
             PropertiesPanelAbstractModel.TYPE_ARPEGGIO,
             PropertiesPanelAbstractModel.TYPE_FERMATA,
@@ -90,6 +91,7 @@ Column {
                 width: parent.width
                 sourceComponent: {
                     switch (itemColumn.itemModel.modelType) {
+                        case PropertiesPanelAbstractModel.TYPE_NOTE_PLAYBACK_INFO: return noteInfoSection
                         case PropertiesPanelAbstractModel.TYPE_NOTE: return noteSection
                         case PropertiesPanelAbstractModel.TYPE_ARPEGGIO: return arpeggioSection
                         case PropertiesPanelAbstractModel.TYPE_FERMATA: return fermataSection
@@ -97,6 +99,16 @@ Column {
                         case PropertiesPanelAbstractModel.TYPE_GLISSANDO: return glissandoSection
                         case PropertiesPanelAbstractModel.TYPE_GRADUAL_TEMPO_CHANGE: return tempoChangeSection
                         default: return null
+                    }
+                }
+
+                Component {
+                    id: noteInfoSection
+
+                    NotePlaybackInfoBlank {
+                        model: itemColumn.itemModel as NotePlaybackInfoModel
+                        navigation.panel: root.navigationPanel
+                        navigation.row: itemColumn.navigationRowStart
                     }
                 }
 

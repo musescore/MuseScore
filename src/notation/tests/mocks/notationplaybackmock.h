@@ -78,6 +78,7 @@ public:
     MOCK_METHOD(muse::midi::tick_t, beatToRawTick, (int measureIndex, int beatIndex), (const, override));
 
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));
+    MOCK_METHOD(engraving::NotePlaybackInfo, notePlaybackInfo, (const engraving::Note*), (const, override));
     MOCK_METHOD(void, setTempoMultiplier, (double multiplier), (override));
 
     MOCK_METHOD(void, addSoundFlags, (const std::vector<mu::engraving::StaffText*>& staffTextList), (override));
