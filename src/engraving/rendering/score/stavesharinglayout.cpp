@@ -1559,7 +1559,6 @@ void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
             sharedSpanner->setTicks(spanner->ticks());
             sharedSpanner->setStartElement(nullptr);
             sharedSpanner->setEndElement(nullptr);
-            sharedSpanner->reset();
 
             ctx.score->undoAddElement(sharedSpanner);
             ctx.overlappingSpanners.push_back(sharedSpanner);
