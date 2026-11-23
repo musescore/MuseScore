@@ -779,7 +779,7 @@ public:
     MeasureBase* insertBox(MeasureBase* box, MeasureBase* beforeMeasure = nullptr,
                            const InsertMeasureOptions& options = InsertMeasureOptions());
 
-    std::list<Score*> scoreList();
+    std::vector<Score*> scoreList();
 
     void appendMeasures(int numMeasures);
 

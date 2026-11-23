@@ -3767,10 +3767,11 @@ void Score::cmdSelectSection()
 //    and all part scores (if there are any)
 //---------------------------------------------------------
 
-std::list<Score*> Score::scoreList()
+std::vector<Score*> Score::scoreList()
 {
-    std::list<Score*> scores;
+    std::vector<Score*> scores;
     MasterScore* root = masterScore();
+    scores.reserve(1 + root->excerpts().size());
     scores.push_back(root);
     for (const Excerpt* ex : root->excerpts()) {
         if (ex->excerptScore()) {

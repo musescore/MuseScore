@@ -112,7 +112,6 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
-    m_masterScore->updatePaddingTables();
     for (Score* s : m_masterScore->scoreList()) {
         s->updatePaddingTables();
     }
