@@ -49,6 +49,9 @@ public:
     Note* note();
     BracketItem* bracketItem();
 
+    /// Whether `item` is this dummy or one of its stand-ins (segment, chord, ...).
+    bool isDummyOrStandIn(const EngravingObject* item) const;
+
     EngravingItem* clone() const override;
 
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }

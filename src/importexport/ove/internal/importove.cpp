@@ -2517,7 +2517,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
             MeasureToTick::unitToTick(wedgePtr->stop()->getOffset(), m_ove->getQuarter()));
 
         if (absTick2 > absTick) {
-            Hairpin* hp = Factory::createHairpin(m_score->dummy()->segment());
+            Hairpin* hp = Factory::createHairpin(m_score->dummy());
 
             hp->setHairpinType(OveWedgeType_To_Type(wedgePtr->getWedgeType()));
             // hp->setYoff(wedgePtr->getYOffset());
