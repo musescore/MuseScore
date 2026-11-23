@@ -142,6 +142,42 @@ FocusScope {
                         drawOutsideParent: false
                     }
 
+                    // When the playback cursor overlaps the playback cue, the playback cursor is allowed to take most of the room.
+                    // The playback cue then becomes just a small "flag" at the top and bottom of the full playback cursor bar.
+                    Item {
+                        id: playbackCue
+
+                        property color color: "transparent"
+                        property bool flagged: false
+                        property real flagHeight: 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            visible: !playbackCue.flagged
+                            color: playbackCue.color
+                        }
+
+                        Rectangle {
+                            anchors.top: parent.top
+                            width: parent.width
+                            height: playbackCue.flagHeight
+                            visible: playbackCue.flagged
+                            color: playbackCue.color
+                        }
+
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            width: parent.width
+                            height: playbackCue.flagHeight
+                            visible: playbackCue.flagged
+                            color: playbackCue.color
+                        }
+
+                        Component.onCompleted: {
+                            notationView.setPlaybackCueItem(playbackCue)
+                        }
+                    }
+
                     Rectangle {
                         id: playbackCursor
 

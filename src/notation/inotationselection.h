@@ -24,6 +24,7 @@
 
 #include <vector>
 
+#include "async/notification.h"
 #include "types/bytearray.h"
 #include "types/ret.h"
 
@@ -74,6 +75,7 @@ public:
     virtual INotationSelectionRangePtr range() const = 0;
 
     virtual engraving::EngravingItem* lastElementHit() const = 0;
+    virtual muse::async::Notification lastElementHitChanged() const = 0;
 
     virtual mu::engraving::MeasureBase* startMeasureBase() const = 0;
     virtual mu::engraving::MeasureBase* endMeasureBase() const = 0;
