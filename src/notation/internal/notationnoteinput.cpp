@@ -77,7 +77,14 @@ static String pendingTupletAnnouncement(const PendingTuplet& pending, bool fits)
         return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
     }
 
-    const String type = Tuplet::typeUserName(pending.ratio.numerator());
+    // the innermost tuplet, and the one it is nested in
+    const PendingTuplet& inner = pending.nested.empty() ? pending : pending.nested.back();
+    String type = Tuplet::typeUserName(inner.ratio.numerator());
+    if (!pending.nested.empty()) {
+        const PendingTuplet& outer = pending.nested.size() > 1 ? pending.nested[pending.nested.size() - 2] : pending;
+        //: %1 is a tuplet type, e.g. "Triplet"; %2 is the tuplet it is nested in, in lower case, e.g. "triplet"
+        type = muse::mtrc("notation", "%1 in a %2").arg(type, Tuplet::typeUserName(outer.ratio.numerator()).toLower());
+    }
     if (!fits) {
         //: %1 is a tuplet type, e.g. "Triplet"
         return muse::mtrc("notation", "%1 waiting for a note, doesn’t fit").arg(type);
@@ -906,11 +913,16 @@ void NotationNoteInput::cancelPendingTuplet()
 
     // the innermost level
     const PendingTuplet& pending = *is.pendingTuplet();
-    const String announcement = cancelledTupletAnnouncement(pending.nested.empty() ? pending : pending.nested.back());
+    const bool nested = !pending.nested.empty();
+    const String type = Tuplet::typeUserName((nested ? pending.nested.back() : pending).ratio.numerator());
     NoteInput::cancelPendingTuplet(score());
 
     m_tupletWasPending = is.pendingTuplet().has_value();
-    accessibilityController()->announce(announcement);
+    accessibilityController()->announce(nested
+                                        //: %1 is a tuplet type in lower case, e.g. "triplet"
+                                        ? muse::mtrc("notation", "Nested %1 cancelled").arg(type.toLower())
+                                        //: %1 is a tuplet type, e.g. "Triplet"
+                                        : muse::mtrc("notation", "%1 cancelled").arg(type));
     notifyAboutStateChanged();
 }
 
