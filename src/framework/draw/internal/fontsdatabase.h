@@ -38,8 +38,8 @@ public:
     void insertSubstitution(const String& f1, const String& substituteName) override;
     void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) override;
 
-    int addFont(const FontDataKey& key, const io::path_t& path) override;
-    int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device) override;
+    int addFont(const FontDataKey& key, const io::path_t& path, int faceIndex = 0) override;
+    int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device, int faceIndex = 0) override;
     void removeFont(const FontDataKey& key) override;
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
@@ -54,6 +54,7 @@ private:
         int id = -1;
         FontDataKey key;
         std::shared_ptr<io::IODevice> device;
+        int faceIndex = 0;
 
         bool valid() const { return id > -1; }
     };

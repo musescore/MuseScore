@@ -42,8 +42,8 @@ public:
     virtual void insertSubstitution(const String& f1, const String& substituteName) = 0;
     virtual void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) = 0;
 
-    virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
-    virtual int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device) = 0;
+    virtual int addFont(const FontDataKey& key, const io::path_t& path, int faceIndex = 0) = 0;
+    virtual int addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device, int faceIndex = 0) = 0;
 
     virtual void removeFont(const FontDataKey& key) = 0;
 

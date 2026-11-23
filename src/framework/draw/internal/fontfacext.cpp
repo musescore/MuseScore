@@ -71,6 +71,11 @@ bool FontFaceXT::load(const FaceKey& key, const FontData& fontData, bool isSymbo
         return false;
     }
 
+    if (fontData.faceIndex != 0) {
+        LOGE() << "unsupported face index for FTX: " << key.dataKey.family().id() << ", faceIndex: " << fontData.faceIndex;
+        return false;
+    }
+
     m_fileBuffer = std::make_unique<muse::io::Buffer>(muse::ByteArray(fontData.data));
     m_fileBuffer->open(muse::io::IODevice::ReadOnly);
 

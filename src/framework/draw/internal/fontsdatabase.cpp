@@ -104,12 +104,12 @@ FontDataKey FontsDatabase::defaultFont(Font::Type type) const
     return it->second;
 }
 
-int FontsDatabase::addFont(const FontDataKey& key, const io::path_t& path)
+int FontsDatabase::addFont(const FontDataKey& key, const io::path_t& path, int faceIndex)
 {
-    return addFont(key, std::make_shared<io::File>(path));
+    return addFont(key, std::make_shared<io::File>(path), faceIndex);
 }
 
-int FontsDatabase::addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device)
+int FontsDatabase::addFont(const FontDataKey& key, std::shared_ptr<io::IODevice> device, int faceIndex)
 {
     if (!device) {
         LOGE() << "no device for font: " << key.family().id();
@@ -149,7 +149,7 @@ int FontsDatabase::addFont(const FontDataKey& key, std::shared_ptr<io::IODevice>
         m_fonts.erase(it);
     }
 
-    m_fonts.insert({ key, FontInfo { id, key, std::move(device) } });
+    m_fonts.insert({ key, FontInfo { id, key, std::move(device), faceIndex } });
     m_changed.notify();
 
     return id;
@@ -220,7 +220,7 @@ FontData FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type)
         return FontData();
     }
 
-    return FontData { key, data };
+    return FontData { key, data, info.faceIndex };
 }
 
 async::Notification FontsDatabase::changed() const

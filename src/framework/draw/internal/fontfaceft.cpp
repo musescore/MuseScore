@@ -289,10 +289,15 @@ bool FontFaceFT::load(const FaceKey& key, const FontData& fontData, bool isSymbo
         return false;
     }
 
+    if (fontData.faceIndex < 0) {
+        LOGE() << "negative face index: " << m_key.dataKey.family().id() << ", faceIndex: " << fontData.faceIndex;
+        return false;
+    }
+
     m_data->fontData = fontData.data;
 
     int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.constData(),
-                                  (FT_Long)m_data->fontData.size(), 0, &m_data->face);
+                                  (FT_Long)m_data->fontData.size(), fontData.faceIndex, &m_data->face);
     if (rval) {
         LOGE() << "freetype: cannot create face: " << m_key.dataKey.family().id() << ", rval: " << rval;
         return false;
