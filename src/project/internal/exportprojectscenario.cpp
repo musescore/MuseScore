@@ -259,6 +259,11 @@ void ExportProjectScenario::startExport(const notation::INotationPtrList& notati
     exportNextFiles(state);
 }
 
+muse::async::Channel<muse::io::path_t> ExportProjectScenario::fileExported() const
+{
+    return m_fileExported;
+}
+
 const ExportInfo& ExportProjectScenario::exportInfo() const
 {
     return m_exportInfo;
@@ -421,6 +426,7 @@ void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
 bool ExportProjectScenario::onFileWritten(const ExportStatePtr& state, const Ret& ret) const
 {
     if (ret) {
+        m_fileExported.send(state->files.at(state->currentFileIndex).path);
         state->moveToNextFile();
         return true;
     }

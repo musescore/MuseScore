@@ -95,7 +95,9 @@ MenuItem* AppMenuModel::makeFileMenu()
     MenuItemList fileItems {
         makeMenuItem(PROJECT_OPEN_COMMAND),
         makeSeparator(),
-        makeMenuItem(PROJECT_SAVE_COMMAND)
+        makeMenuItem(PROJECT_SAVE_COMMAND),
+        makeSeparator(),
+        makeMenuItem(PROJECT_EXPORT_COMMAND)
     };
 
     return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");

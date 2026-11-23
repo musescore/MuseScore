@@ -66,6 +66,8 @@ public:
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                                                  bool openDestinationFolderOnExport = false) const override;
 
+    muse::async::Channel<muse::io::path_t> fileExported() const override;
+
     const ExportInfo& exportInfo() const override;
     void setExportInfo(const ExportInfo& exportInfo) override;
 
@@ -127,6 +129,7 @@ private:
     void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
 
     mutable muse::Progress m_exportProgress;
+    mutable muse::async::Channel<muse::io::path_t> m_fileExported;
     ExportInfo m_exportInfo;
 
     mutable std::deque<std::function<void()> > m_pendingExports;
