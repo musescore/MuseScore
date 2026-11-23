@@ -562,7 +562,7 @@ muse::Ret NotationActionController::resetState()
     if (noteInput->isNoteInputMode()) {
         noteInput->forgetPendingTuplets();
 
-        // the first Escape cancels a pending tuplet, the next one ends note input
+        // Escape cancels one level of a pending tuplet, else ends note input
         if (noteInput->tupletPending()) {
             noteInput->cancelPendingTuplet();
             return muse::make_ok();

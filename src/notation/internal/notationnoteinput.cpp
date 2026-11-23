@@ -493,7 +493,7 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
         // the input method comes first, as when note input starts
         const String announcement = nameOfNoteInputMethod(method).translated() + u", "
                                     + cancelledTupletAnnouncement(*is.pendingTuplet());
-        NoteInput::cancelPendingTuplet(score());
+        NoteInput::cancelPendingTuplet(score(), /*allLevels*/ true);
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
     }
@@ -904,10 +904,12 @@ void NotationNoteInput::cancelPendingTuplet()
         return;
     }
 
-    const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
+    // the innermost level
+    const PendingTuplet& pending = *is.pendingTuplet();
+    const String announcement = cancelledTupletAnnouncement(pending.nested.empty() ? pending : pending.nested.back());
     NoteInput::cancelPendingTuplet(score());
 
-    m_tupletWasPending = false;
+    m_tupletWasPending = is.pendingTuplet().has_value();
     accessibilityController()->announce(announcement);
     notifyAboutStateChanged();
 }
@@ -929,7 +931,7 @@ void NotationNoteInput::cancelPendingTupletIfMoved()
     NoteInputState& is = score()->inputState();
     if (is.pendingTuplet() && !is.pendingTupletHere()) {
         const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
-        NoteInput::cancelPendingTuplet(score());
+        NoteInput::cancelPendingTuplet(score(), /*allLevels*/ true);
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
         notifyAboutStateChanged();

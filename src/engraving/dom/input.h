@@ -75,6 +75,8 @@ struct PendingTuplet {
     bool durationAsSubdivision = false;
     // By note name and Insert: the duration that sized it
     std::optional<TDuration> duration;
+    // By note name: the tuplets waiting inside it, outermost first; only their options and duration are used
+    std::vector<PendingTuplet> nested;
     // given when it starts waiting, see InputState::forgetPendingTuplets()
     int number = 0;
 

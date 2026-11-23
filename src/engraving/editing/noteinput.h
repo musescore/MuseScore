@@ -122,7 +122,7 @@ public:
 
     static void setDuration(Transaction& tx, Score* score, DurationType duration);
     static bool setPendingTuplet(Score* score, PendingTuplet pending);
-    static void cancelPendingTuplet(Score* score);
+    static void cancelPendingTuplet(Score* score, bool allLevels = false);
     static bool pendingTupletFitsHere(const Score* score);
     static bool addPendingTupletForNote(Transaction& tx, Score* score, int pitch, bool insertTime = false);
     static std::optional<TupletPreview> tupletPreview(const Score* score);

@@ -46,6 +46,8 @@ using namespace muse::draw;
 static constexpr double DISTANCE_FROM_STAFF = 1.0;
 // in staff spaces: the most the number may fill of the 2 spaces between the staff and the ruler
 static constexpr double MAX_HEIGHT = 1.8;
+// in staff spaces: the distance between nested levels
+static constexpr double LEVEL_DISTANCE = 2.0;
 // in staff spaces: bracket line width, hook length, gap around the number, and gap before the next note
 static constexpr double LINE_WIDTH = 0.1;
 static constexpr double HOOK_LENGTH = 0.75;
@@ -146,8 +148,7 @@ void PendingTupletMarker::paint(Painter* painter, const NoteInputState& state)
     // above the staff, or below it in voices 2 and 4
     const double staffTop = measurePos.y() + sysStaff->y();
     const double staffBottom = staffTop + staff->staffHeight(segment->tick());
-    const double centreY = state.voice() % 2 == 0 ? staffTop - DISTANCE_FROM_STAFF * spatium
-                           : staffBottom + DISTANCE_FROM_STAFF * spatium;
+    const bool above = state.voice() % 2 == 0;
 
     // the colour of the input preview notes
     Color color = configuration()->noteInputPreviewColor();
@@ -158,63 +159,71 @@ void PendingTupletMarker::paint(Painter* painter, const NoteInputState& state)
     if (!tuplet->fits && !tuplet->waiting) {
         color = Color::fromQColor(engravingConfiguration()->criticalColor().toQColor().lighter(135));
     }
-    painter->setPen(color);
-
-    // the number or ratio as set for the tuplet; just the number if the score hides it
-    const TupletPreview::Level& level = tuplet->levels.back();
-    const TupletNumberType numberType = level.numberType == TupletNumberType::NO_TEXT
-                                        ? TupletNumberType::SHOW_NUMBER : level.numberType;
-    const String digits = Tuplet::numberText(level.ratio, numberType, /*useSymbols*/ false);
 
     // the score's tuplet text font
-    Font font(style.styleSt(Sid::tupletFontFace), Font::Type::Text);
+    Font baseFont(style.styleSt(Sid::tupletFontFace), Font::Type::Text);
     const FontStyle fontStyle = style.styleV(Sid::tupletFontStyle).value<FontStyle>();
-    font.setBold(fontStyle & FontStyle::Bold);
-    font.setItalic(fontStyle & FontStyle::Italic);
-    font.setPointSizeF(defaultStyle.styleD(Sid::tupletFontSize) * spatiumScaling);
+    baseFont.setBold(fontStyle & FontStyle::Bold);
+    baseFont.setItalic(fontStyle & FontStyle::Italic);
+    baseFont.setPointSizeF(defaultStyle.styleD(Sid::tupletFontSize) * spatiumScaling);
     const double mag = defaultStyle.styleD(Sid::tupletMusicalSymbolsScale) * spatiumScaling;
 
     // or the music font's tuplet digits, as in the score
     const bool useSymbols = style.styleB(Sid::tupletUseSymbols);
-    const SymIdList symbols = useSymbols ? tupletSymbols(digits) : SymIdList();
     const std::shared_ptr<IEngravingFont> musicFont = score->engravingFont();
 
-    // shrunk if the font is oversized
-    const RectF ink = useSymbols ? musicFont->bbox(symbols, mag) : FontMetrics(font).tightBoundingRect(digits);
-    const double scale = std::min(1.0, MAX_HEIGHT * spatium / ink.height());
-    const double baseline = centreY - ink.center().y() * scale;
-
-    // once sized, a bracket with the number in the middle; in tight spacing, only the number
-    const BracketEnd end = bracketEnd(*tuplet, level.ticks, measure, x, state.beyondScore());
     const double hook = HOOK_LENGTH * spatium;
-    const double xCentre = (x + end.x) * 0.5;
-    const double xGapLeft = xCentre - ink.width() * scale * 0.5 - NUMBER_GAP * spatium;
-    const double xGapRight = xCentre + ink.width() * scale * 0.5 + NUMBER_GAP * spatium;
-    const bool bracket = !tuplet->waiting && xGapLeft - x >= hook * 0.5 && end.x - xGapRight >= hook * 0.5;
-
-    // left-aligned at the input position, or in the middle of the bracket
-    const double numberX = bracket ? xCentre - ink.center().x() * scale : x - (useSymbols ? ink.left() * scale : 0.0);
-    if (useSymbols) {
-        musicFont->draw(symbols, painter, mag * scale, PointF(numberX, baseline));
-    } else {
-        font.setPointSizeF(font.pointSizeF() * scale);
-        painter->setFont(font);
-        painter->drawText(PointF(numberX, baseline), digits);
-    }
-
-    if (!bracket) {
-        return;
-    }
-
-    // the hooks point to the staff
-    const double yHook = state.voice() % 2 == 0 ? centreY + hook : centreY - hook;
     Pen pen(color, LINE_WIDTH * spatium);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::FlatCap);
-    painter->setPen(pen);
-    const PointF left[] = { PointF(x, yHook), PointF(x, centreY), PointF(xGapLeft, centreY) };
-    const PointF right[] = { PointF(xGapRight, centreY), PointF(end.x, centreY), PointF(end.x, yHook) };
-    painter->drawPolyline(left, 3);
-    // open-ended where it runs on
-    painter->drawPolyline(right, end.closed ? 3 : 2);
+
+    // from the innermost tuplet out, each further from the staff
+    for (size_t i = 0; i < tuplet->levels.size(); ++i) {
+        const TupletPreview::Level& level = tuplet->levels.at(tuplet->levels.size() - 1 - i);
+        const double distance = (DISTANCE_FROM_STAFF + LEVEL_DISTANCE * static_cast<double>(i)) * spatium;
+        const double centreY = above ? staffTop - distance : staffBottom + distance;
+
+        // the number or ratio as set for the tuplet; just the number if the score hides it
+        const TupletNumberType numberType = level.numberType == TupletNumberType::NO_TEXT
+                                            ? TupletNumberType::SHOW_NUMBER : level.numberType;
+        const String digits = Tuplet::numberText(level.ratio, numberType, /*useSymbols*/ false);
+        const SymIdList symbols = useSymbols ? tupletSymbols(digits) : SymIdList();
+        Font font = baseFont;
+
+        // shrunk if the font is oversized
+        const RectF ink = useSymbols ? musicFont->bbox(symbols, mag) : FontMetrics(font).tightBoundingRect(digits);
+        const double scale = std::min(1.0, MAX_HEIGHT * spatium / ink.height());
+        const double baseline = centreY - ink.center().y() * scale;
+
+        // once sized, a bracket with the number in the middle; in tight spacing, only the number
+        const BracketEnd end = bracketEnd(*tuplet, level.ticks, measure, x, state.beyondScore());
+        const double xCentre = (x + end.x) * 0.5;
+        const double xGapLeft = xCentre - ink.width() * scale * 0.5 - NUMBER_GAP * spatium;
+        const double xGapRight = xCentre + ink.width() * scale * 0.5 + NUMBER_GAP * spatium;
+        const bool bracket = !tuplet->waiting && xGapLeft - x >= hook * 0.5 && end.x - xGapRight >= hook * 0.5;
+
+        // left-aligned at the input position, or in the middle of the bracket
+        const double numberX = bracket ? xCentre - ink.center().x() * scale : x - (useSymbols ? ink.left() * scale : 0.0);
+        painter->setPen(color);
+        if (useSymbols) {
+            musicFont->draw(symbols, painter, mag * scale, PointF(numberX, baseline));
+        } else {
+            font.setPointSizeF(font.pointSizeF() * scale);
+            painter->setFont(font);
+            painter->drawText(PointF(numberX, baseline), digits);
+        }
+
+        if (!bracket) {
+            continue;
+        }
+
+        // the hooks point to the staff
+        const double yHook = above ? centreY + hook : centreY - hook;
+        painter->setPen(pen);
+        const PointF left[] = { PointF(x, yHook), PointF(x, centreY), PointF(xGapLeft, centreY) };
+        const PointF right[] = { PointF(xGapRight, centreY), PointF(end.x, centreY), PointF(end.x, yHook) };
+        painter->drawPolyline(left, 3);
+        // open-ended where it runs on
+        painter->drawPolyline(right, end.closed ? 3 : 2);
+    }
 }
