@@ -65,6 +65,12 @@ public:
 
     muse::Ret reloadPlaybackCache() override;
 
+    muse::Ret startScrub() override;
+    void stopScrub() override;
+    bool isScrubbing() const override;
+    muse::async::Notification isScrubbingChanged() const override;
+    void scrubAt(const engraving::Fraction& tick) override;
+
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 

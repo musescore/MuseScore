@@ -50,6 +50,12 @@ public:
     MOCK_METHOD(muse::Ret, stop, (), (override));
     MOCK_METHOD(muse::Ret, rewind, (muse::secs_t), (override));
 
+    MOCK_METHOD(muse::Ret, startScrub, (), (override));
+    MOCK_METHOD(void, stopScrub, (), (override));
+    MOCK_METHOD(bool, isScrubbing, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, isScrubbingChanged, (), (const, override));
+    MOCK_METHOD(void, scrubAt, (const engraving::Fraction& tick), (override));
+
     MOCK_METHOD(bool, isLoopEnabled, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, loopEnabledChanged, (), (const, override));
     MOCK_METHOD(muse::Ret, toggleLoopPlayback, (), (override));

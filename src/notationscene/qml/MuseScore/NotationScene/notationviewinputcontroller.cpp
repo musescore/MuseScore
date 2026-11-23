@@ -25,6 +25,9 @@
 #include <set>
 
 #include <QApplication>
+#include <QCursor>
+#include <QPainter>
+#include <QPixmap>
 #include <QMimeData>
 #include <QQuickItem>
 #include <QTimer>
@@ -38,11 +41,13 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/staff.h"
 
 #include "notation/inotation.h"
+#include "ui/view/iconcodes.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -96,7 +101,92 @@ void NotationViewInputController::init()
         projectSession()->currentNotationChanged().onNotify(this, [this]() {
             onNotationChanged();
         });
+
+        playbackController()->isScrubbingChanged().onNotify(this, [this]() {
+            onScrubbingChanged();
+        });
     }
+}
+
+void NotationViewInputController::onScrubbingChanged()
+{
+    QQuickItem* item = m_view->asItem();
+    if (!item) {
+        return;
+    }
+
+    if (!playbackController()->isScrubbing()) {
+        item->setAcceptHoverEvents(m_view->isNoteEnterMode());
+        item->unsetCursor();
+        return;
+    }
+
+    //! NOTE The scrub follows the mouse pointer, also when it does not hover the score
+    item->setAcceptHoverEvents(true);
+    item->setCursor(scrubCursor());
+
+    const QPointF pos = item->mapFromGlobal(QCursor::pos());
+    if (item->contains(pos)) {
+        scrubAtPosition(m_view->toLogical(pos));
+    }
+}
+
+QCursor NotationViewInputController::scrubCursor() const
+{
+    static constexpr int SIZE = 32;
+    static constexpr int ICON_SIZE = 24;
+
+    QPixmap pixmap(SIZE, SIZE);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QFont font(QString::fromStdString(uiConfiguration()->iconsFontFamily()));
+    font.setPixelSize(ICON_SIZE);
+    painter.setFont(font);
+
+    const QString icon = QChar(static_cast<char16_t>(muse::ui::IconCode::Code::AUDIO));
+
+    //! NOTE A white outline keeps the icon visible on the dark parts of the score
+    painter.setPen(Qt::white);
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx != 0 || dy != 0) {
+                painter.drawText(pixmap.rect().translated(dx, dy), Qt::AlignCenter, icon);
+            }
+        }
+    }
+
+    painter.setPen(Qt::black);
+    painter.drawText(pixmap.rect(), Qt::AlignCenter, icon);
+    painter.end();
+
+    return QCursor(pixmap, SIZE / 2, SIZE / 2);
+}
+
+void NotationViewInputController::scrubAtPosition(const PointF& logicalPos)
+{
+    const INotationPtr notation = currentNotation();
+    const mu::engraving::Score* score = notation ? notation->elements()->msScore() : nullptr;
+    if (!score) {
+        return;
+    }
+
+    mu::engraving::staff_idx_t staffIdx = 0;
+    mu::engraving::Measure* measure = score->pos2measure(logicalPos, &staffIdx, nullptr, nullptr, nullptr);
+    if (!measure) {
+        return;
+    }
+
+    //! NOTE The segment is searched on all the staves, so that the changes of every instrument are heard
+    const double x = logicalPos.x() - measure->canvasPos().x();
+    const mu::engraving::Segment* segment = measure->searchSegment(x, mu::engraving::SegmentType::ChordRest, 0, score->ntracks());
+    if (!segment) {
+        return;
+    }
+
+    playbackController()->scrubAt(segment->tick());
 }
 
 void NotationViewInputController::deinit()
@@ -640,6 +730,10 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
 void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 {
+    if (!m_readonly && playbackController()->isScrubbing()) {
+        playbackController()->stopScrub();
+    }
+
     PointF logicPos = m_view->toLogical(event->pos());
     Qt::MouseButton button = event->button();
 
@@ -1400,6 +1494,10 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 {
+    if (!m_readonly && playbackController()->isScrubbing()) {
+        scrubAtPosition(m_view->toLogical(event->position()));
+    }
+
     if (!m_view->isNoteEnterMode()) {
         return;
     }
@@ -1492,6 +1590,11 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 
 void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
 {
+    //! NOTE The scrub lasts while its shortcut is held
+    if (!m_readonly && !event->isAutoRepeat() && playbackController()->isScrubbing()) {
+        playbackController()->stopScrub();
+    }
+
     if (event->key() != Qt::Key_Shift) {
         return;
     }

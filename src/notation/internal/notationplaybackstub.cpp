@@ -84,6 +84,10 @@ void NotationPlaybackStub::triggerEventsForItems(const std::vector<const Engravi
 {
 }
 
+void NotationPlaybackStub::flushOffStreamEvents(const engraving::InstrumentTrackIdSet&)
+{
+}
+
 void NotationPlaybackStub::triggerMetronome(muse::midi::tick_t)
 {
 }

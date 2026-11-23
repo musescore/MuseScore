@@ -153,6 +153,29 @@ muse::Ret PlaybackControllerStub::toggleHearPlaybackWhenEditing()
     return muse::make_ok();
 }
 
+muse::Ret PlaybackControllerStub::startScrub()
+{
+    return muse::make_ret(muse::Ret::Code::NotSupported);
+}
+
+void PlaybackControllerStub::stopScrub()
+{
+}
+
+bool PlaybackControllerStub::isScrubbing() const
+{
+    return false;
+}
+
+muse::async::Notification PlaybackControllerStub::isScrubbingChanged() const
+{
+    return {};
+}
+
+void PlaybackControllerStub::scrubAt(const engraving::Fraction&)
+{
+}
+
 muse::Ret PlaybackControllerStub::reloadPlaybackCache()
 {
     return muse::make_ok();

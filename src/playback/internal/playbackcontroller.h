@@ -104,6 +104,12 @@ public:
 
     muse::Ret reloadPlaybackCache() override;
 
+    muse::Ret startScrub() override;
+    void stopScrub() override;
+    bool isScrubbing() const override;
+    muse::async::Notification isScrubbingChanged() const override;
+    void scrubAt(const engraving::Fraction& tick) override;
+
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 
@@ -294,6 +300,11 @@ private:
     size_t m_loadingTrackCount = 0;
 
     bool m_isExportingAudio = false;
+
+    bool m_isScrubbing = false;
+    engraving::Fraction m_lastScrubTick = engraving::Fraction(-1, 1);
+    engraving::InstrumentTrackIdSet m_scrubSoundingTracks;
+    muse::async::Notification m_isScrubbingChanged;
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;

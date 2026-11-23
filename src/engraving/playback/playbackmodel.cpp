@@ -367,6 +367,16 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     trackPlaybackData.offStream.send(result, flushSound);
 }
 
+void PlaybackModel::flushOffStreamEvents(const InstrumentTrackIdSet& trackIds)
+{
+    for (const InstrumentTrackId& trackId : trackIds) {
+        auto it = m_playbackDataMap.find(trackId);
+        if (it != m_playbackDataMap.end()) {
+            it->second.offStream.send(PlaybackEventsMap(), true /*flushOffstream*/);
+        }
+    }
+}
+
 void PlaybackModel::triggerMetronome(int tick)
 {
     auto trackPlaybackData = m_playbackDataMap.find(METRONOME_TRACK_ID);

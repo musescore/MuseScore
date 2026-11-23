@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <QCursor>
 #include <QtEvents>
 
 #include "notation/inotationviewcontroller.h"
@@ -206,6 +207,10 @@ private:
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
     void updateShadowNotePopupVisibility(bool forceHide = false);
+
+    void onScrubbingChanged();
+    QCursor scrubCursor() const;
+    void scrubAtPosition(const muse::PointF& logicalPos);
 
     float hitWidth() const;
 

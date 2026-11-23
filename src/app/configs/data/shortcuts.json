@@ -353,7 +353,8 @@
       "shortcuts": [
         {"command": "command://playback/play-toggle",  "sequences": ["Space"], "autorepeat": false},
         {"command": "command://playback/play-selection",  "sequences": ["Shift+Space"], "autorepeat": false},
-        {"command": "command://playback/pause-and-select",  "sequences": ["Ctrl+Space"], "autorepeat": false}
+        {"command": "command://playback/pause-and-select",  "sequences": ["Ctrl+Space"], "autorepeat": false},
+        {"command": "command://playback/scrub",  "sequences": [], "autorepeat": false}
       ]
     }
 ]

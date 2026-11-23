@@ -47,6 +47,7 @@ public:
 
     MOCK_METHOD(void, triggerEventsForItems, (const std::vector<const engraving::EngravingItem*>& items, muse::mpe::duration_t duration,
                                               bool flushSound), (override));
+    MOCK_METHOD(void, flushOffStreamEvents, (const engraving::InstrumentTrackIdSet& trackIds), (override));
     MOCK_METHOD(void, triggerMetronome, (muse::midi::tick_t tick), (override));
     MOCK_METHOD(void, triggerCountIn, (muse::midi::tick_t tick, muse::secs_t& countInDuration), (override));
     MOCK_METHOD(void, triggerControllers, (const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick),

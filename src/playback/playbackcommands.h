@@ -30,6 +30,7 @@ inline static const muse::rcommand::Command PLAY_COMMAND("command://playback/pla
 inline static const muse::rcommand::Command PLAY_SELECTION_COMMAND("command://playback/play-selection");
 inline static const muse::rcommand::Command PAUSE_COMMAND("command://playback/pause");
 inline static const muse::rcommand::Command PAUSE_AND_SELECT_COMMAND("command://playback/pause-and-select");
+inline static const muse::rcommand::Command SCRUB_COMMAND("command://playback/scrub");
 inline static const muse::rcommand::Command STOP_COMMAND("command://playback/stop");
 inline static const muse::rcommand::Command REWIND_COMMAND("command://playback/rewind");
 inline static const muse::rcommand::Command LOOP_TOGGLE_COMMAND("command://playback/loop-toggle");

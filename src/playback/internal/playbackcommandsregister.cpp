@@ -66,6 +66,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::PAUSE)
     },
     CommandInfo{
+        SCRUB_COMMAND,
+        TranslatableString("playback", "Scrub"),
+        TranslatableString("playback", "Scrub: while the shortcut is held, hear the score under the mouse pointer"),
+        InputSchema(),
+        Decoration(IconCode::Code::PLAY)
+    },
+    CommandInfo{
         STOP_COMMAND,
         TranslatableString("playback", "Stop"),
         TranslatableString("playback", "Stop playback"),
