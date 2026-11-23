@@ -22,6 +22,7 @@
 
 #include "notationviewinputcontroller.h"
 
+#include <algorithm>
 #include <map>
 #include <set>
 
@@ -130,13 +131,26 @@ void NotationViewInputController::onScrubbingChanged()
     m_scrubShortcutKeys.clear();
     m_scrubShortcutModifiers = {};
 
+    //! NOTE The shortcut that started the scrub is the one whose modifiers are held now
+    //! (if several shortcuts are assigned, the keys of the others are not part of it)
+    std::vector<QKeyCombination> combinations;
     for (const std::string& sequence : commandShortcutsRegister()->shortcut(playback::SCRUB_COMMAND).sequences) {
         const QKeySequence keySequence = QKeySequence::fromString(QString::fromStdString(sequence), QKeySequence::PortableText);
-        if (keySequence.isEmpty()) {
+        if (!keySequence.isEmpty()) {
+            combinations.push_back(keySequence[0]);
+        }
+    }
+
+    const Qt::KeyboardModifiers heldModifiers = QGuiApplication::queryKeyboardModifiers();
+    const bool anyMatches = std::any_of(combinations.cbegin(), combinations.cend(), [heldModifiers](const QKeyCombination& c) {
+        return c.keyboardModifiers() == heldModifiers;
+    });
+
+    for (const QKeyCombination& combination : combinations) {
+        if (anyMatches && combination.keyboardModifiers() != heldModifiers) {
             continue;
         }
 
-        const QKeyCombination combination = keySequence[0];
         m_scrubShortcutKeys.insert(combination.key());
         m_scrubShortcutModifiers |= combination.keyboardModifiers();
     }

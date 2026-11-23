@@ -35,8 +35,11 @@
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
 
@@ -470,7 +473,8 @@ void PlaybackController::playNotes(const NoteValList& notes, staff_idx_t staffId
 
 muse::Ret PlaybackController::startScrub()
 {
-    if (!m_notation || !notationPlayback() || isPlaying()) {
+    //! NOTE While the sounds are loading, some instruments could not receive the notes
+    if (!m_notation || !notationPlayback() || isPlaying() || !isLoaded()) {
         return muse::make_ret(muse::Ret::Code::Cancel);
     }
 
@@ -533,12 +537,34 @@ void PlaybackController::scrubAt(const Fraction& tick)
     std::map<InstrumentTrackId, std::vector<const EngravingItem*> > itemsByTrack;
 
     for (track_idx_t track = 0; track < score->ntracks(); ++track) {
-        const ChordRest* cr = score->findCR(tick, track);
+        const staff_idx_t staffIdx = track2staff(track);
+        const Staff* staff = score->staff(staffIdx);
+
+        //! NOTE As in the playback, the linked staves (e.g. a tablature linked to a standard staff) are skipped
+        if (!staff || !staff->isPrimaryStaff()) {
+            continue;
+        }
+
+        //! NOTE In a measure repeat, the notes are the ones of the repeated measure
+        Fraction actualTick = tick;
+        const Measure* measure = score->tick2measure(tick);
+        for (int depth = 0; measure && measure->measureRepeatCount(staffIdx) > 0 && depth < 4; ++depth) {
+            const MeasureRepeat* measureRepeat = measure->measureRepeatElement(staffIdx);
+            const Measure* referringMeasure = measureRepeat ? measureRepeat->referringMeasure(measure) : nullptr;
+            if (!referringMeasure) {
+                break;
+            }
+
+            actualTick = referringMeasure->tick() + (actualTick - measure->tick());
+            measure = referringMeasure;
+        }
+
+        const ChordRest* cr = score->findCR(actualTick, track);
         if (!cr || !cr->isChord() || cr->track() != track) {
             continue;
         }
 
-        if (cr->tick() > tick || cr->tick() + cr->actualTicks() <= tick) {
+        if (cr->tick() > actualTick || cr->tick() + cr->actualTicks() <= actualTick) {
             continue;
         }
 
