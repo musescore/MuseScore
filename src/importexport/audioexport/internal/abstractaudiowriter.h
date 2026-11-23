@@ -22,6 +22,8 @@
 #ifndef MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 #define MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 
+#include <functional>
+
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "audio/main/iplayback.h"
@@ -49,6 +51,8 @@ public:
     bool supportsUnitType(UnitType unitType) const override;
 
     muse::Ret writeSync(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::async::Promise<muse::Ret> write(notation::INotationPtr notation, muse::io::IODevice& dstDevice,
+                                          const Options& options = Options()) override;
     muse::Ret writeListSync(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
                             const Options& options = Options()) override;
 
@@ -56,20 +60,32 @@ public:
     void abort() override;
 
 protected:
-    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format,
-                             const Options& options = Options());
+    virtual muse::audio::SoundTrackFormat soundTrackFormat() const = 0;
 
 private:
-    void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    using Finished = std::function<void (const muse::Ret&)>;
+
+    void doWriteAsync(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options, const Finished& onFinished);
+    void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format, uint64_t writeId);
+    void finishSaving(const muse::Ret& ret);
+    void finish(const muse::Ret& ret);
+
+    //! NOTE Calls the function now if the condition is met, otherwise when the channel notifies and the condition is met
+    void whenReady(
+        const std::function<bool()>& isReady, const std::function<muse::async::Channel<bool>()>& changed,
+        const std::function<void()>& callback);
 
     UnitType unitTypeFromOptions(const Options& options) const;
 
     muse::modularity::ContextPtr m_iocContext;
     muse::Progress m_progress;
-    bool m_isCompleted = false;
-    muse::Ret m_writeRet;
+    Finished m_onFinished;
 
     notation::INotationPtr m_notationForRestore;
+
+    //! NOTE The id of the current write, the callbacks of a canceled (or replaced) write are ignored
+    uint64_t m_writeId = 0;
+    bool m_isSaving = false;
 };
 }
 

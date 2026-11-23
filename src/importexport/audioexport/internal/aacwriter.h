@@ -31,6 +31,6 @@ public:
     AacWriter(const muse::modularity::ContextPtr& iocCtx)
         : AbstractAudioWriter(iocCtx) {}
 
-    muse::Ret writeSync(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options& options = Options()) override;
+    muse::audio::SoundTrackFormat soundTrackFormat() const override;
 };
 }
