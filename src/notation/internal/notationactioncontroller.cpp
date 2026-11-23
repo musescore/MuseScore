@@ -1532,6 +1532,12 @@ muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
         return muse::make_ok();
     }
 
+    // in By note name input, the tuplet waits for the next note
+    if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_NOTE_NAME)) {
+        noteInput->setPendingTuplet(options);
+        return muse::make_ok();
+    }
+
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {

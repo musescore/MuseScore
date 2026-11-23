@@ -70,10 +70,20 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
     return TranslatableString("noteInputMethod", "Unknown note input mode");
 }
 
-static String pendingTupletAnnouncement(const PendingTuplet& pending)
+static String pendingTupletAnnouncement(const PendingTuplet& pending, bool fits)
 {
+    if (!pending.duration) {
+        //: %1 is a tuplet type, e.g. "Triplet"
+        return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+    }
+
+    const String type = Tuplet::typeUserName(pending.ratio.numerator());
+    if (!fits) {
+        //: %1 is a tuplet type, e.g. "Triplet"
+        return muse::mtrc("notation", "%1 waiting for a note, doesn’t fit").arg(type);
+    }
     //: %1 is a tuplet type, e.g. "Triplet"
-    return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+    return muse::mtrc("notation", "%1 waiting for a note").arg(type);
 }
 
 static String cancelledTupletAnnouncement(const PendingTuplet& pending)
@@ -483,7 +493,7 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
         // the input method comes first, as when note input starts
         const String announcement = nameOfNoteInputMethod(method).translated() + u", "
                                     + cancelledTupletAnnouncement(*is.pendingTuplet());
-        is.setPendingTuplet(std::nullopt);
+        NoteInput::cancelPendingTuplet(score());
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
     }
@@ -857,25 +867,33 @@ void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
 {
     NoteInputState& is = score()->inputState();
 
-    // the tuplet waits in the voice the next drum goes into
-    NoteInput::useSelectedNoteForRhythm(score());
-    if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
-        is.setVoice(*drumVoice);
-    }
-
     PendingTuplet pending;
     pending.ratio = options.ratio;
     pending.numberType = options.numberType;
     pending.bracketType = options.bracketType;
     pending.autoBaseLen = options.autoBaseLen;
     pending.durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
-    pending.tick = is.tick();
-    pending.track = is.track();
-    pending.beyondScore = is.beyondScore();
-    is.setPendingTuplet(pending);
+    if (is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME)) {
+        // sized by the input duration now; the engine sets any error
+        if (!NoteInput::setPendingTuplet(score(), pending)) {
+            m_interaction->checkAndShowError();
+            return;
+        }
+    } else {
+        // the tuplet waits in the voice the next drum goes into
+        NoteInput::useSelectedNoteForRhythm(score());
+        if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
+            is.setVoice(*drumVoice);
+        }
+
+        pending.tick = is.tick();
+        pending.track = is.track();
+        pending.beyondScore = is.beyondScore();
+        is.setPendingTuplet(pending);
+    }
 
     m_tupletWasPending = true;
-    accessibilityController()->announce(pendingTupletAnnouncement(pending));
+    accessibilityController()->announce(pendingTupletAnnouncement(*is.pendingTuplet(), NoteInput::pendingTupletFitsHere(score())));
     notifyAboutStateChanged();
 }
 
@@ -887,7 +905,7 @@ void NotationNoteInput::cancelPendingTuplet()
     }
 
     const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
-    is.setPendingTuplet(std::nullopt);
+    NoteInput::cancelPendingTuplet(score());
 
     m_tupletWasPending = false;
     accessibilityController()->announce(announcement);
@@ -901,7 +919,8 @@ void NotationNoteInput::forgetPendingTuplets()
 
 String NotationNoteInput::pendingTupletInfo() const
 {
-    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet()) : String();
+    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet(),
+                                                       NoteInput::pendingTupletFitsHere(score())) : String();
 }
 
 // Moving the input position elsewhere cancels a pending tuplet
@@ -910,7 +929,7 @@ void NotationNoteInput::cancelPendingTupletIfMoved()
     NoteInputState& is = score()->inputState();
     if (is.pendingTuplet() && !is.pendingTupletHere()) {
         const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
-        is.setPendingTuplet(std::nullopt);
+        NoteInput::cancelPendingTuplet(score());
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
         notifyAboutStateChanged();
@@ -921,7 +940,8 @@ void NotationNoteInput::announcePendingTupletChange()
 {
     const bool pending = tupletPending();
     if (pending && !m_tupletWasPending) {
-        accessibilityController()->announce(pendingTupletAnnouncement(*score()->inputState().pendingTuplet()));
+        accessibilityController()->announce(pendingTupletAnnouncement(*score()->inputState().pendingTuplet(),
+                                                                      NoteInput::pendingTupletFitsHere(score())));
     }
     m_tupletWasPending = pending;
 }

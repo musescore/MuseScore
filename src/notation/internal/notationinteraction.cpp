@@ -5177,6 +5177,8 @@ void NotationInteraction::repeatSelection()
                     NoteInput::addPitch(tx, score(), nval, note != c->notes()[0]);
                 }
             });
+            // e.g. a waiting tuplet that doesn't fit
+            checkAndShowError();
         }
         return;
     }
@@ -5558,6 +5560,8 @@ void NotationInteraction::putRest(Duration duration)
 
     // Calls `startEdit` internally
     score()->cmdEnterRest(duration);
+    // e.g. a waiting tuplet that doesn't fit
+    checkAndShowError();
 
     notifyAboutNotationChanged();
 }
