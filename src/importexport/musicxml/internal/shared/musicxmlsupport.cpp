@@ -177,7 +177,8 @@ String accSymId2MusicXmlString(const SymId id)
         break;
     case SymId::accidentalDoubleSharp:           s = u"double-sharp";
         break;
-    //case SymId::accidentalDoubleSharp:           s = u"sharp-sharp"; break; // see above
+    case SymId::accidentalSharpSharp:           s = u"sharp-sharp";
+        break;
     //case SymId::accidentalDoubleFlat:            s = u"double-flat"; break; // doesn't exist in MusicXML, but see below
     case SymId::accidentalDoubleFlat:            s = u"flat-flat";
         break;
@@ -284,7 +285,7 @@ SymId musicXmlString2accSymId(const String mxmlName, const String smufl)
         { u"natural", SymId::accidentalNatural },
         { u"flat", SymId::accidentalFlat },
         { u"double-sharp", SymId::accidentalDoubleSharp },
-        { u"sharp-sharp", SymId::accidentalDoubleSharp },
+        { u"sharp-sharp", SymId::accidentalSharpSharp },
         //{ u"double-flat", SymId::accidentalDoubleFlat }, // shouldn't harm, but doesn't exist in MusicXML
         { u"flat-flat", SymId::accidentalDoubleFlat },
         { u"natural-sharp", SymId::accidentalNaturalSharp },
@@ -359,7 +360,8 @@ String accidentalType2MusicXmlString(const AccidentalType type)
         break;
     case AccidentalType::SHARP2:             s = u"double-sharp";
         break;
-    //case AccidentalType::SHARP2:             s = u"sharp-sharp"; break; // see above
+    case AccidentalType::SHARP_SHARP:        s = u"sharp-sharp";
+        break;
     //case AccidentalType::FLAT2:              s = u"double-flat"; break; // doesn't exist in MusicXML, but see below
     case AccidentalType::FLAT2:              s = u"flat-flat";
         break;
@@ -517,11 +519,11 @@ AccidentalType musicXmlString2accidentalType(const String mxmlName, const String
         { u"natural", AccidentalType::NATURAL },
         { u"flat", AccidentalType::FLAT },
         { u"double-sharp", AccidentalType::SHARP2 },
-        { u"sharp-sharp", AccidentalType::SHARP2 },
+        { u"sharp-sharp", AccidentalType::SHARP_SHARP },
         //{ u"double-flat", AccidentalType::FLAT2 }, // shouldn't harm, but doesn't exist in MusicXML
         { u"flat-flat", AccidentalType::FLAT2 },
-        { u"natural-sharp", AccidentalType::SHARP },
-        { u"natural-flat", AccidentalType::FLAT },
+        { u"natural-sharp", AccidentalType::NATURAL_SHARP },
+        { u"natural-flat", AccidentalType::NATURAL_FLAT },
 
         { u"quarter-flat", AccidentalType::MIRRORED_FLAT },
         { u"quarter-sharp", AccidentalType::SHARP_SLASH },
