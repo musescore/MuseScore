@@ -44,6 +44,7 @@
 #include "notation/inotationcommandscontroller.h"
 
 #include "playback/iplaybackcontroller.h"
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 #include "global/iglobalconfiguration.h"
 #include "ui/idragcontroller.h"
@@ -107,6 +108,7 @@ public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
@@ -250,9 +252,9 @@ private:
 
     bool m_readonly = false;
 
-    //! NOTE The modifiers held when the scrub started (part of its shortcut), and the keys pressed afterwards (not part of it)
-    Qt::KeyboardModifiers m_scrubModifiers;
-    std::set<int> m_keysPressedWhileScrubbing;
+    //! NOTE The keys and the modifiers of the scrub shortcut
+    std::set<int> m_scrubShortcutKeys;
+    Qt::KeyboardModifiers m_scrubShortcutModifiers;
     QMetaObject::Connection m_scrubFocusConnection;
     QMetaObject::Connection m_scrubAppStateConnection;
     bool m_isCanvasDragged = false;

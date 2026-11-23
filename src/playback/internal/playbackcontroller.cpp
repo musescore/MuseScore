@@ -924,6 +924,9 @@ void PlaybackController::doPlay()
     }
 
     currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+        //! NOTE A scrub may have started while the playback was being prepared
+        stopScrub();
+
         if (!currentPlayer()) {
             return;
         }
@@ -986,6 +989,9 @@ void PlaybackController::doResume()
     }
 
     currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+        //! NOTE A scrub may have started while the playback was being prepared
+        stopScrub();
+
         if (!currentPlayer()) {
             return;
         }
