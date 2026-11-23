@@ -33,6 +33,7 @@
 #include "modularity/ioc.h"
 
 #include "audio/common/audiotypes.h"
+#include "engraving/infrastructure/eid.h"
 #include "engraving/types/types.h"
 #include "interactive/iinteractive.h"
 #include "midi/imidiinport.h"
@@ -131,9 +132,14 @@ private:
         //! they are found again by their identity
         engraving::ID staffId;
         engraving::ID lowerStaffId;
+
+        //! The measures may be inserted or deleted before re-quantizing: the take is written again
+        //! from the measure where it was recorded, found by its identity
+        engraving::EID startMeasureEid = engraving::EID::invalid();
     };
 
-    //! The session of the last recording, with the current indexes of its staves; nullopt if they are no longer valid
+    //! The session of the last recording, with the current indexes of its staves and the current position
+    //! of its start measure; nullopt if they are no longer valid
     std::optional<Session> resolveLastRecordingSession() const;
 
     bool writeNotes(const Session& session, const iex::midi::RecordedMidiNoteList& notes, const iex::midi::MidiRecordingOptions& options,

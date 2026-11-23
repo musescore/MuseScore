@@ -30,7 +30,10 @@
 #include <set>
 
 #include "audio/common/audioutils.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
+#include "engraving/infrastructure/eidregister.h"
 #include "engraving/dom/staff.h"
 #include "engraving/types/constants.h"
 #include "translation.h"
@@ -372,9 +375,17 @@ void MidiRecordingController::finishAndWrite()
     }
 
     // The original performance is kept, to write it again with other settings (see requantizeLastRecording)
-    LastRecording lastRecording { session, notes, writtenTicks, engraving::ID(), engraving::ID() };
+    LastRecording lastRecording { session, notes, writtenTicks, engraving::ID(), engraving::ID(), engraving::EID::invalid() };
 
     const mu::engraving::Score* score = session.notation->elements()->msScore();
+
+    if (const mu::engraving::Measure* startMeasure = score ? score->tick2measure(session.startTick) : nullptr) {
+        engraving::EID eid = startMeasure->eid();
+        if (!eid.isValid()) {
+            eid = startMeasure->assignNewEID();
+        }
+        lastRecording.startMeasureEid = eid;
+    }
     if (const mu::engraving::Staff* staff = score ? score->staff(session.staffIdx) : nullptr) {
         lastRecording.staffId = staff->id();
     }
@@ -413,6 +424,25 @@ std::optional<MidiRecordingController::Session> MidiRecordingController::resolve
     };
 
     Session session = m_lastRecording->session;
+
+    // The start measure, wherever it is now; a deleted measure is kept alive by the undo stack, so it must
+    // also be one of the current measures of the score
+    const mu::engraving::EID& measureEid = m_lastRecording->startMeasureEid;
+    const mu::engraving::EngravingObject* measureObject = measureEid.isValid()
+                                                          ? score->masterScore()->eidRegister()->itemFromEID(measureEid)
+                                                          : nullptr;
+    const mu::engraving::Measure* startMeasure = nullptr;
+    for (const mu::engraving::Measure* m = score->firstMeasure(); m && measureObject; m = m->nextMeasure()) {
+        if (m == measureObject) {
+            startMeasure = m;
+            break;
+        }
+    }
+
+    if (!startMeasure) {
+        return std::nullopt;
+    }
+    session.startTick = startMeasure->tick();
 
     const mu::engraving::Staff* staff = findStaff(m_lastRecording->staffId);
     if (!staff) {

@@ -848,9 +848,11 @@ void PlaybackController::doPlay()
     }
 
     const uint64_t requestId = ++m_playRequestId;
+    const muse::audio::IPlayerPtr preparedPlayer = currentPlayer();
 
-    currentPlayer()->prepareToPlay().onResolve(this, [this, requestId](const Ret& ret) {
-        if (!currentPlayer()) {
+    preparedPlayer->prepareToPlay().onResolve(this, [this, requestId, preparedPlayer](const Ret& ret) {
+        // e.g. the notation changed during the preparation: the new player must not start by itself
+        if (!currentPlayer() || currentPlayer() != preparedPlayer) {
             return;
         }
 
@@ -926,9 +928,11 @@ void PlaybackController::doResume()
     }
 
     const uint64_t requestId = ++m_playRequestId;
+    const muse::audio::IPlayerPtr preparedPlayer = currentPlayer();
 
-    currentPlayer()->prepareToPlay().onResolve(this, [this, requestId](const Ret& ret) {
-        if (!currentPlayer()) {
+    preparedPlayer->prepareToPlay().onResolve(this, [this, requestId, preparedPlayer](const Ret& ret) {
+        // e.g. the notation changed during the preparation: the new player must not start by itself
+        if (!currentPlayer() || currentPlayer() != preparedPlayer) {
             return;
         }
 
