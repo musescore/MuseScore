@@ -58,8 +58,21 @@ struct NoteInputParams {
 
 // the tuplet waiting at the input position
 struct TupletPreview {
-    Fraction ratio;
-    TupletNumberType numberType {};
+    struct Level {
+        Fraction ratio;
+        TupletNumberType numberType {};
+        // in score time
+        Fraction ticks;
+    };
+
+    Fraction tick;
+    // from the outermost to the innermost
+    std::vector<Level> levels;
+    // for the outermost: the time to the barline or the end of the enclosing tuplet
+    Fraction space;
+    bool fits = true;
+    // not sized yet (By duration and Rhythm)
+    bool waiting = false;
 };
 
 class NoteInput
