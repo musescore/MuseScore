@@ -266,7 +266,7 @@ public:
     void  setDurationFontUserY(double val) { m_durationFontUserY = val; }
     void  setFretFontSize(double);
     void  setFretFontUserY(double val) { m_fretFontUserY = val; }
-    void  setGenDurations(bool val) { m_genDurations = val; }
+    void  setGenDurations(bool val);
     void  setLinesThrough(bool val) { m_linesThrough = val; }
     void  setMinimStyle(TablatureMinimStyle val) { m_minimStyle = val; }
     void  setSymbolRepeat(TablatureSymbolRepeat val) { m_symRepeat  = val; }
