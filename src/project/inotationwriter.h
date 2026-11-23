@@ -27,6 +27,7 @@
 #include "global/types/ret.h"
 #include "global/types/val.h"
 #include "global/io/iodevice.h"
+#include "global/async/promise.h"
 #include "global/progress.h"
 #include "notation/inotation_fwd.h"
 
@@ -62,6 +63,16 @@ public:
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
     virtual muse::Ret writeSync(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) = 0;
+
+    virtual muse::async::Promise<muse::Ret> write(notation::INotationPtr notation, muse::io::IODevice& device,
+                                                  const Options& options = Options())
+    {
+        const muse::Ret ret = writeSync(notation, device, options);
+        return muse::async::make_promise<muse::Ret>([ret](auto resolve) {
+            return resolve(ret);
+        });
+    }
+
     virtual muse::Ret writeListSync(const notation::INotationPtrList& notations, muse::io::IODevice& device,
                                     const Options& options = Options()) = 0;
 
