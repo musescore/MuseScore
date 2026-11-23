@@ -22,10 +22,12 @@
 
 #include "notationviewinputcontroller.h"
 
+#include <map>
 #include <set>
 
 #include <QApplication>
 #include <QCursor>
+#include <QGuiApplication>
 #include <QPainter>
 #include <QPixmap>
 #include <QMimeData>
@@ -116,10 +118,30 @@ void NotationViewInputController::onScrubbingChanged()
     }
 
     if (!playbackController()->isScrubbing()) {
+        QObject::disconnect(m_scrubFocusConnection);
+        QObject::disconnect(m_scrubAppStateConnection);
+        m_keysPressedWhileScrubbing.clear();
+
         item->setAcceptHoverEvents(m_view->isNoteEnterMode());
         item->unsetCursor();
         return;
     }
+
+    m_scrubModifiers = QGuiApplication::queryKeyboardModifiers();
+    m_keysPressedWhileScrubbing.clear();
+
+    //! NOTE The release of the shortcut may be missed when the focus moves elsewhere
+    m_scrubFocusConnection = QObject::connect(item, &QQuickItem::activeFocusChanged, item, [this](bool hasFocus) {
+        if (!hasFocus) {
+            playbackController()->stopScrub();
+        }
+    });
+    m_scrubAppStateConnection = QObject::connect(qApp, &QGuiApplication::applicationStateChanged, item,
+                                                 [this](Qt::ApplicationState state) {
+        if (state != Qt::ApplicationActive) {
+            playbackController()->stopScrub();
+        }
+    });
 
     //! NOTE The scrub follows the mouse pointer, also when it does not hover the score
     item->setAcceptHoverEvents(true);
@@ -129,6 +151,30 @@ void NotationViewInputController::onScrubbingChanged()
     if (item->contains(pos)) {
         scrubAtPosition(m_view->toLogical(pos));
     }
+}
+
+bool NotationViewInputController::isScrubShortcutKeyReleased(const QKeyEvent* event)
+{
+    static const std::map<int, Qt::KeyboardModifier> MODIFIER_KEYS {
+        { Qt::Key_Shift, Qt::ShiftModifier },
+        { Qt::Key_Control, Qt::ControlModifier },
+        { Qt::Key_Alt, Qt::AltModifier },
+        { Qt::Key_Meta, Qt::MetaModifier },
+    };
+
+    const int key = event->key();
+
+    //! NOTE A key pressed while scrubbing is not part of the shortcut
+    if (m_keysPressedWhileScrubbing.erase(key) > 0) {
+        return false;
+    }
+
+    auto it = MODIFIER_KEYS.find(key);
+    if (it != MODIFIER_KEYS.end()) {
+        return m_scrubModifiers.testFlag(it->second);
+    }
+
+    return true;
 }
 
 QCursor NotationViewInputController::scrubCursor() const
@@ -1563,6 +1609,10 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
     auto key = event->key();
 
+    if (!m_readonly && !event->isAutoRepeat() && playbackController()->isScrubbing()) {
+        m_keysPressedWhileScrubbing.insert(key);
+    }
+
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         commandDispatcher()->dispatch(SCREEN_EDIT_TEXT_COMMAND);
         event->accept();
@@ -1591,7 +1641,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
 {
     //! NOTE The scrub lasts while its shortcut is held
-    if (!m_readonly && !event->isAutoRepeat() && playbackController()->isScrubbing()) {
+    if (!m_readonly && !event->isAutoRepeat() && playbackController()->isScrubbing() && isScrubShortcutKeyReleased(event)) {
         playbackController()->stopScrub();
     }
 

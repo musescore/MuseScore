@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <set>
+
 #include <QCursor>
 #include <QtEvents>
 
@@ -211,6 +213,7 @@ private:
     void onScrubbingChanged();
     QCursor scrubCursor() const;
     void scrubAtPosition(const muse::PointF& logicalPos);
+    bool isScrubShortcutKeyReleased(const QKeyEvent* event);
 
     float hitWidth() const;
 
@@ -246,6 +249,12 @@ private:
     QList<int> m_possibleZoomPercentages;
 
     bool m_readonly = false;
+
+    //! NOTE The modifiers held when the scrub started (part of its shortcut), and the keys pressed afterwards (not part of it)
+    Qt::KeyboardModifiers m_scrubModifiers;
+    std::set<int> m_keysPressedWhileScrubbing;
+    QMetaObject::Connection m_scrubFocusConnection;
+    QMetaObject::Connection m_scrubAppStateConnection;
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 

@@ -554,8 +554,9 @@ void PlaybackController::scrubAt(const Fraction& tick)
         }
     }
 
-    //! NOTE The notes are held while the pointer stays at the same position
-    static constexpr mpe::duration_t SCRUB_NOTE_DURATION = 10 * 1000 * 1000; // 10 seconds
+    //! NOTE The notes are held while the pointer stays at the same position: they are stopped when the pointer
+    //! moves to another position or when the scrub stops, so their duration is only an upper bound
+    static constexpr mpe::duration_t SCRUB_NOTE_DURATION = mpe::duration_t(60) * 60 * 1000 * 1000; // 1 hour
 
     InstrumentTrackIdSet soundingTracks;
     for (const auto& pair : itemsByTrack) {
@@ -911,6 +912,8 @@ muse::Ret PlaybackController::playFromSelection(bool showErrors)
 
 void PlaybackController::doPlay()
 {
+    stopScrub();
+
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
@@ -976,6 +979,8 @@ void PlaybackController::doStop()
 
 void PlaybackController::doResume()
 {
+    stopScrub();
+
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
