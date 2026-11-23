@@ -1574,20 +1574,17 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             spacer->setGap(Spatium::fromAbsolute(gap, spatium()));
         }
 
-                // --- START OF FIX for Issue #34423 ---
-        // Check if there is an existing spacer in the target slot and remove it via undo
+        // Remove an existing spacer in the target slot to ensure undo works correctly
         Spacer* oldSpacer = nullptr;
         if (spacer->spacerType() == SpacerType::UP) {
-            oldSpacer = vspacerUp(staffIdx); // Using Measure's method
+            oldSpacer = vspacerUp(staffIdx);
         } else {
-            // Both DOWN and FIXED spacers occupy the bottom slot
-            oldSpacer = vspacerDown(staffIdx); // Using Measure's method
+            oldSpacer = vspacerDown(staffIdx);
         }
 
         if (oldSpacer) {
-            score()->undoRemoveElement(oldSpacer); // Registers the removal in the undo stack
+            score()->undoRemoveElement(oldSpacer);
         }
-        // --- END OF FIX ---
 
         score()->undoAddElement(spacer);
         triggerLayout();
