@@ -207,12 +207,52 @@ function clickEye(name)
     api.testflow.sleep(1000)
 }
 
-//! NOTE Clicks the expand button (column 2) of an instrument row, to show its staves
-function expandInstrument(name)
+//! NOTE The [row, column] positions used by more than one control in the Instruments panel
+function duplicatePositions()
+{
+    var seen = {}
+    var dups = []
+    var controls = api.navigation.controls("NavigationLeftPanel", "LayoutPanelTree")
+    for (var i = 0; i < controls.length; ++i) {
+        var key = controls[i].index.row + "," + controls[i].index.column
+        if (seen[key]) {
+            dups.push(key)
+        }
+        seen[key] = true
+    }
+    return dups
+}
+
+//! NOTE The row of a name in the panel, or -1 (without failing)
+function findRow(name)
+{
+    var controls = api.navigation.controls("NavigationLeftPanel", "LayoutPanelTree")
+    for (var i = 0; i < controls.length; ++i) {
+        if (controls[i].name === name) {
+            return controls[i].index.row
+        }
+    }
+    return -1
+}
+
+//! NOTE Clicks the expand button (column 2) of an instrument row, to show its staves.
+//! The rows below are renumbered after that, and until it is done a click by row can land
+//! on the wrong row (e.g. the eye of the next instrument), so wait for it
+function expandInstrument(name, firstStaff, nextInstrument)
 {
     api.navigation.goToControl("NavigationLeftPanel", "LayoutPanelTree", [rowOf(name), 2], 2000)
     api.navigation.trigger()
-    api.testflow.sleep(500)
+    for (var waited = 0; waited < 5000; waited += 100) {
+        var staffRow = findRow(firstStaff)
+        if (staffRow !== -1 && findRow(nextInstrument) > staffRow && duplicatePositions().length === 0) {
+            //! NOTE A little extra time for the buttons to take their new rows
+            api.testflow.sleep(500)
+            return
+        }
+        api.testflow.sleep(100)
+    }
+    api.testflow.fatal("after expanding " + name + ", the Instruments panel rows did not settle (duplicate positions: "
+                       + duplicatePositions().join(" ") + ")")
 }
 
 //! NOTE Adds one chord symbol: type it, then Esc
@@ -265,6 +305,10 @@ function chordLines(score, staff)
 var finalScoreState = ""
 var finalPartState = ""
 var finalScoreLines = []
+var finalPartLines = []
+
+//! NOTE The template's content, to compare with after undo all
+var templateLines = []
 
 var testCase = {
     name: "TC14: Guitar + Tablature with a custom part",
@@ -291,6 +335,7 @@ var testCase = {
             NewScore.done()
             expect(waitForProject(5000), "no score is opened")
             expectEqual(GUITAR + " shown, " + GUITAR + " tab shown", staffList(engraving.curScore), "template staves")
+            templateLines = ScoreContent.contentLines(engraving.curScore)
         }},
         {name: "Add Voice and Piano", func: function() {
             Instruments.openAddInstrumentsDialog()
@@ -321,7 +366,7 @@ var testCase = {
             expectEqual(GUITAR + " shown, " + GUITAR + " tab shown, " + VOICE + " shown", staffList(engraving.curScore), "part staves")
         }},
         {name: "Hide the guitar standard staff in the part", func: function() {
-            expandInstrument("Guitar")
+            expandInstrument("Guitar", GUITAR_STANDARD_STAFF_ROW, "Voice")
             clickEye(GUITAR_STANDARD_STAFF_ROW)
             expectEqual(GUITAR + " HIDDEN, " + GUITAR + " tab shown, " + VOICE + " shown", staffList(engraving.curScore),
                         "part staves after hiding the guitar standard staff")
@@ -339,13 +384,15 @@ var testCase = {
             //! NOTE The part's order doesn't change the score
             expectEqual([PIANO, GUITAR, VOICE].join(","), instrumentOrder(engraving.curScore), "score instruments after reordering the part")
         }},
-        {name: "Move Voice up in the score", func: function() {
-            Instruments.goToInstrument("Voice")
+        {name: "Move Guitar up in the score", func: function() {
+            //! NOTE Guitar stays above Voice in the score, the opposite of the part,
+            //! so the part check below fails if the score order is copied to the part
+            Instruments.goToInstrument("Guitar")
             api.navigation.trigger() // select the instrument
             api.testflow.sleep(500)
             Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Up")
             api.testflow.sleep(500)
-            expectEqual([PIANO, VOICE, GUITAR].join(","), instrumentOrder(engraving.curScore), "score instruments after moving Voice up")
+            expectEqual([GUITAR, PIANO, VOICE].join(","), instrumentOrder(engraving.curScore), "score instruments after moving Guitar up")
             //! NOTE The score's order doesn't change the part
             expectEqual(VOICE + " shown, " + GUITAR + " HIDDEN, " + GUITAR + " tab shown", staffList(thePart()),
                         "part staves after reordering the score")
@@ -436,6 +483,7 @@ var testCase = {
             finalScoreState = stateOf(score)
             finalPartState = stateOf(part)
             finalScoreLines = ScoreContent.contentLines(score)
+            finalPartLines = ScoreContent.contentLines(part)
             log("score before undo all: " + finalScoreState)
             log("part before undo all: " + finalPartState)
         }},
@@ -449,6 +497,7 @@ var testCase = {
             expectEqual("", fretDiagrams(engraving.curScore), "fretboard diagrams after undo all")
             expectEqual(0, keyOf(engraving.curScore), "key after undo all")
             expectEqual("4/4", timeSigOf(engraving.curScore), "time signature after undo all")
+            ScoreContent.expectSameLines(templateLines, ScoreContent.contentLines(engraving.curScore), "score content after undo all")
         }},
         {name: "Redo all", func: function() {
             UndoRedo.redoAll()
@@ -456,6 +505,7 @@ var testCase = {
             expectEqual(finalScoreState, stateOf(engraving.curScore), "score after redo all")
             expectEqual(finalPartState, stateOf(thePart()), "part after redo all")
             ScoreContent.expectSameLines(finalScoreLines, ScoreContent.contentLines(engraving.curScore), "score content after redo all")
+            ScoreContent.expectSameLines(finalPartLines, ScoreContent.contentLines(thePart()), "part content after redo all")
         }}
     ]
 };
