@@ -438,6 +438,15 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
         return addPitchToChord(tx, score, nval, toChord(c), externalInputState);
     }
 
+    // an unmapped drum leaves a waiting tuplet waiting
+    if (is.drumset() && !is.drumset()->isValid(nval.pitch)) {
+        return nullptr;
+    }
+
+    if (!externalInputState && !addPendingTupletForNote(tx, score, nval.pitch)) {
+        return nullptr;
+    }
+
     if (is.beyondScore()) {
         score->appendMeasures(1);
         is.moveToNextInputPos();
@@ -450,10 +459,6 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
     track_idx_t track = is.track();
     if (is.drumset()) {
         const Drumset* ds = is.drumset();
-        if (!ds->isValid(nval.pitch)) {
-            return nullptr;
-        }
-
         nval.headGroup    = ds->noteHead(nval.pitch);
         stemDirection     = ds->stemDirection(nval.pitch);
         track             = ds->voice(nval.pitch) + (is.track() / VOICES) * VOICES;
@@ -857,6 +862,79 @@ static bool pendingTupletFits(const Score* score, const TDuration& duration)
 }
 
 //---------------------------------------------------------
+//   pendingTupletDuration
+//    The duration that sizes the pending tuplet
+//---------------------------------------------------------
+
+static TDuration pendingTupletDuration(const InputState& is)
+{
+    return is.pendingTuplet()->duration.value_or(is.duration());
+}
+
+//---------------------------------------------------------
+//   pendingTupletFitsHere
+//    Whether the tuplet waiting at the input position fits
+//    there
+//---------------------------------------------------------
+
+bool NoteInput::pendingTupletFitsHere(const Score* score)
+{
+    const InputState& is = score->inputState();
+    return is.pendingTupletHere() && pendingTupletFits(score, pendingTupletDuration(is));
+}
+
+//---------------------------------------------------------
+//   setPendingTuplet
+//    In By note name input, make a tuplet wait at the input
+//    position, sized by the input duration, even where it
+//    doesn't fit. Asked for again, it replaces the waiting
+//    one. Sets the error if it can't divide the duration.
+//---------------------------------------------------------
+
+bool NoteInput::setPendingTuplet(Score* score, PendingTuplet pending)
+{
+    InputState& is = score->inputState();
+    const std::optional<PendingTuplet> old = is.pendingTuplet();
+    TDuration duration = is.duration();
+    if (is.pendingTupletHere() && old->duration) {
+        const std::optional<PendingTupletShape> oldShape = pendingTupletShape(*old, *old->duration);
+        if (oldShape && oldShape->baseLen == is.duration()) {
+            duration = *old->duration;
+        }
+    }
+
+    const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, duration);
+    if (!shape) {
+        MScore::setError(MsError::TUPLET_RATIO_NOT_POSSIBLE);
+        return false;
+    }
+
+    pending.duration = duration;
+    pending.tick = is.tick();
+    pending.track = is.track();
+    pending.beyondScore = is.beyondScore();
+    is.setPendingTuplet(pending);
+
+    // the first note gets the tuplet's note value
+    is.setDuration(shape->baseLen);
+    return true;
+}
+
+//---------------------------------------------------------
+//   cancelPendingTuplet
+//    Cancel the waiting tuplet and restore the input duration
+//---------------------------------------------------------
+
+void NoteInput::cancelPendingTuplet(Score* score)
+{
+    InputState& is = score->inputState();
+    if (is.pendingTuplet() && is.pendingTuplet()->duration) {
+        is.setDuration(*is.pendingTuplet()->duration);
+    }
+    is.setPendingTuplet(std::nullopt);
+}
+
+//---------------------------------------------------------
 //   tupletPreview
 //    The tuplet waiting at the input position for the
 //    duration that sizes it
@@ -871,17 +949,17 @@ std::optional<TupletPreview> NoteInput::tupletPreview(const Score* score)
 
     const PendingTuplet& pending = *is.pendingTuplet();
     TupletPreview preview;
-    // its ratio as if the input duration sized it, also when that duration can't
-    preview.ratio = pendingTupletRatio(pending, is.duration());
+    // its ratio, also where the duration can't size it
+    preview.ratio = pendingTupletRatio(pending, pendingTupletDuration(is));
     preview.numberType = pending.numberType;
     return preview;
 }
 
 //---------------------------------------------------------
 //   addPendingTuplet
-//    Create the tuplet waiting at the input position, sized
-//    by the input duration, and make its note value the input
-//    duration. If it can't, set the error.
+//    Create the tuplet waiting at the input position. In By
+//    duration and Rhythm input, the input duration sizes it
+//    and becomes its note value. If it can't, set the error.
 //---------------------------------------------------------
 
 static bool addPendingTuplet(Transaction& tx, Score* score)
@@ -893,12 +971,13 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
     }
 
     const PendingTuplet pending = *is.pendingTuplet();
-    const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, is.duration());
+    const TDuration duration = pendingTupletDuration(is);
+    const std::optional<PendingTupletShape> shape = pendingTupletShape(pending, duration);
     if (!shape) {
         MScore::setError(MsError::TUPLET_RATIO_NOT_POSSIBLE);
         return false;
     }
-    if (!pendingTupletFits(score, is.duration())) {
+    if (!pendingTupletFits(score, duration)) {
         MScore::setError(MsError::NO_SPACE_FOR_TUPLET);
         return false;
     }
@@ -934,8 +1013,30 @@ static bool addPendingTuplet(Transaction& tx, Score* score)
     is.setTrack(tuplet->track());
     is.setPendingTuplet(std::nullopt);
     is.setSegment(toChordRest(tuplet->elements().front())->segment());
-    is.setDuration(shape->baseLen);
+    if (!pending.duration) {
+        is.setDuration(shape->baseLen);
+    }
     return true;
+}
+
+//---------------------------------------------------------
+//   addPendingTupletForNote
+//    A note or rest (`pitch` -1) entered where a tuplet waits
+//    takes it up, in a drum's own voice. False if it can't;
+//    it then keeps waiting.
+//---------------------------------------------------------
+
+bool NoteInput::addPendingTupletForNote(Transaction& tx, Score* score, int pitch)
+{
+    InputState& is = score->inputState();
+    if (!is.pendingTuplet()) {
+        return true;
+    }
+    const Drumset* ds = is.drumset();
+    if (ds && ds->isValid(pitch)) {
+        is.moveToDrumVoice(ds->voice(pitch));
+    }
+    return addPendingTuplet(tx, score);
 }
 
 //---------------------------------------------------------
@@ -1003,15 +1104,8 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
         return make_ret(Ret::Code::UnknownError);
     }
 
-    // a note entered where a tuplet waits takes it up, sized by the input duration, in a drum's own voice
-    if (pendingTupletHere) {
-        const Drumset* ds = is.drumset();
-        if (ds && ds->isValid(nval.pitch)) {
-            is.moveToDrumVoice(ds->voice(nval.pitch));
-        }
-        if (!addPendingTuplet(tx, score)) {
-            return make_ret(Ret::Code::UnknownError);
-        }
+    if (pendingTupletHere && !addPendingTupletForNote(tx, score, nval.pitch)) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
     // delete MeasureRepeat if necessary, the user is asked beforehand

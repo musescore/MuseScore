@@ -119,6 +119,7 @@
 #include "inserttime.h"
 #include "mscoreview.h"
 #include "navigation.h"
+#include "noteinput.h"
 #include "splitjoinmeasure.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
@@ -2752,6 +2753,11 @@ void Score::cmdEnterRest(const TDuration& d)
 void Score::enterRest(const TDuration& d, InputState* externalInputState)
 {
     InputState& is = externalInputState ? (*externalInputState) : m_is;
+
+    // a tuplet waiting here takes the rest
+    if (!externalInputState && !NoteInput::addPendingTupletForNote(transactionManager()->currentOrDummyTransaction(), this, -1)) {
+        return;
+    }
 
     if (is.beyondScore()) {
         appendMeasures(1);
