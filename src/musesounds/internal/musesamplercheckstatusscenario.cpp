@@ -178,21 +178,10 @@ void MuseSamplerCheckStatusScenario::showNewVersionNotification()
 
 void MuseSamplerCheckStatusScenario::openMuseHub(bool quit)
 {
-#ifdef Q_OS_LINUX
-    if (!process()->startDetached("muse-sounds-manager",
-                                  { "--show-sampler-update", "--show-hidden-statuses" })) {
-        interactive()->openUrl(globalConfiguration()->museScoreUrl());
-    }
-
-    if (quit) {
-        dispatcher()->dispatch("quit");
-    }
-#else
     museHubLauncher()->open(MuseHubPage::MuseSamplerUpdate, "musesampler_update")
     .onResolve(this, [this, quit](const muse::Ret&) {
         if (quit) {
             dispatcher()->dispatch("quit");
         }
     });
-#endif
 }

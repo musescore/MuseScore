@@ -31,6 +31,7 @@
 
 #include "mocks/musesoundsconfigurationmock.h"
 #include "global/tests/mocks/interactivemock.h"
+#include "global/tests/mocks/processmock.h"
 
 using namespace ::testing;
 using namespace mu::musesounds;
@@ -67,9 +68,11 @@ protected:
         m_launcher = std::make_shared<MuseHubLauncher>(muse::modularity::globalCtx());
 
         m_configuration = std::make_shared<NiceMock<MuseSoundsConfigurationMock> >();
+        m_process = std::make_shared<NiceMock<ProcessMock> >();
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
 
         m_launcher->configuration.set(m_configuration);
+        m_launcher->process.set(m_process);
         m_launcher->interactive.set(m_interactive);
     }
 
@@ -89,12 +92,14 @@ protected:
 
     std::shared_ptr<MuseHubLauncher> m_launcher;
     std::shared_ptr<NiceMock<MuseSoundsConfigurationMock> > m_configuration;
+    std::shared_ptr<NiceMock<ProcessMock> > m_process;
     std::shared_ptr<NiceMock<InteractiveMock> > m_interactive;
 
     const MuseHubUrls m_urls { "test-app://page?utm_content=place", "test://page?utm_content=place" };
 };
 }
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
@@ -263,7 +268,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_WebUrlFailed_ResolvesWithError)
     EXPECT_EQ(result->code(), int(Ret::Code::InternalError));
 }
 
-TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_PassesCodeToConfiguration)
+TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_OpensMuseHub)
 {
     // [GIVEN] The configuration returns the URLs for the sound library
     EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", String(u"library-code")))
@@ -288,3 +293,112 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_PassesCodeToConfiguratio
     ASSERT_TRUE(result.has_value());
     EXPECT_TRUE(result->success());
 }
+
+#else
+
+TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_NoMuseHub_OpensMuseSoundsManager)
+{
+    // [GIVEN] The configuration returns the URLs for the sound library
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", String(u"library-code")))
+    .WillOnce(Return(m_urls));
+
+    // [THEN] MuseSounds Manager is launched
+    EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", std::vector<std::string>()))
+    .WillOnce(Return(true));
+
+    // [THEN] Neither MuseHub nor the web URL is opened
+    EXPECT_CALL(*m_interactive, canOpenApp(_)).Times(0);
+    EXPECT_CALL(*m_interactive, openApp(_)).Times(0);
+    EXPECT_CALL(*m_interactive, openUrl(Matcher<const std::string&>(_))).Times(0);
+
+    // [WHEN] Opening the sound library
+    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(String(u"library-code"), "place"));
+
+    // [THEN] The promise is resolved successfully
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, OpenPlugins_NoMuseHub_OpensWebUrl)
+{
+    // [GIVEN] The configuration returns the URLs for the plugins page
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", String()))
+    .WillOnce(Return(m_urls));
+
+    // [THEN] Neither MuseHub nor MuseSounds Manager is opened
+    EXPECT_CALL(*m_interactive, canOpenApp(_)).Times(0);
+    EXPECT_CALL(*m_interactive, openApp(_)).Times(0);
+    EXPECT_CALL(*m_process, startDetached(_, _)).Times(0);
+
+    // [THEN] The plugins page is opened on the website
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Opening the plugins page
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::Plugins, "place"));
+
+    // [THEN] The promise is resolved successfully
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_NoMuseHub_OpensMuseSoundsManagerWithPageArgs)
+{
+    const std::vector<std::pair<MuseHubPage, std::vector<std::string> > > cases {
+        { MuseHubPage::MuseSounds, {} },
+        { MuseHubPage::FreeMuseSounds, {} },
+        { MuseHubPage::MuseSoundsCore, {} },
+        { MuseHubPage::MuseSoundsPro, {} },
+        { MuseHubPage::MuseSamplerUpdate, { "--show-sampler-update", "--show-hidden-statuses" } },
+    };
+
+    for (const auto& [page, args] : cases) {
+        SCOPED_TRACE(int(page));
+
+        // [GIVEN] The configuration returns the URLs for the page
+        ON_CALL(*m_configuration, museHubUrls(page, "place", String()))
+        .WillByDefault(Return(m_urls));
+
+        // [THEN] MuseSounds Manager is launched with the page arguments
+        EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", args))
+        .WillOnce(Return(true));
+
+        // [THEN] Neither MuseHub nor the web URL is opened
+        EXPECT_CALL(*m_interactive, canOpenApp(_)).Times(0);
+        EXPECT_CALL(*m_interactive, openApp(_)).Times(0);
+        EXPECT_CALL(*m_interactive, openUrl(Matcher<const std::string&>(_))).Times(0);
+
+        // [WHEN] Opening the page
+        const std::optional<Ret> result = waitForResult(m_launcher->open(page, "place"));
+
+        // [THEN] The promise is resolved successfully
+        ASSERT_TRUE(result.has_value());
+        EXPECT_TRUE(result->success());
+
+        Mock::VerifyAndClearExpectations(m_process.get());
+        Mock::VerifyAndClearExpectations(m_interactive.get());
+    }
+}
+
+TEST_F(MuseSounds_MuseHubLauncherTest, Open_NoMuseHub_ManagerFailed_OpensWebUrl)
+{
+    // [GIVEN] The configuration returns the URLs for the page
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSamplerUpdate, "place", String()))
+    .WillByDefault(Return(m_urls));
+
+    // [GIVEN] MuseSounds Manager can't be launched
+    EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", _))
+    .WillOnce(Return(false));
+
+    // [THEN] The web URL of the page is opened instead
+    EXPECT_CALL(*m_interactive, openUrl(m_urls.webUrl))
+    .WillOnce(Return(make_ok()));
+
+    // [WHEN] Opening the page
+    const std::optional<Ret> result = waitForResult(m_launcher->open(MuseHubPage::MuseSamplerUpdate, "place"));
+
+    // [THEN] The promise is resolved with the web URL result
+    ASSERT_TRUE(result.has_value());
+    EXPECT_TRUE(result->success());
+}
+#endif

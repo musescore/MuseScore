@@ -26,14 +26,53 @@
 using namespace mu::musesounds;
 using namespace muse;
 
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
+static std::vector<std::string> museSoundsManagerArgs(MuseHubPage page)
+{
+    switch (page) {
+    case MuseHubPage::MuseSamplerUpdate:
+        return { "--show-sampler-update", "--show-hidden-statuses" };
+    case MuseHubPage::MuseSounds:
+    case MuseHubPage::FreeMuseSounds:
+    case MuseHubPage::MuseSoundsCore:
+    case MuseHubPage::MuseSoundsPro:
+    case MuseHubPage::SoundLibrary:
+        break;
+    case MuseHubPage::Plugins: // not reached: MuseSounds Manager doesn't provide plugins
+        break;
+    }
+
+    return {}; // just open the main window
+}
+
+#endif
+
 async::Promise<Ret> MuseHubLauncher::open(MuseHubPage page, const std::string& utmContent)
 {
-    return tryOpenMuseHub(configuration()->museHubUrls(page, utmContent));
+    const MuseHubUrls urls = configuration()->museHubUrls(page, utmContent);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+    return tryOpenMuseHub(urls);
+#else
+    if (page == MuseHubPage::Plugins) { // MuseSounds Manager doesn't provide plugins
+        return async::make_promise<Ret>([this, webUrl = urls.webUrl](auto resolve, auto) {
+            return resolve(interactive()->openUrl(webUrl));
+        });
+    }
+
+    return tryOpenMuseSoundsManager(museSoundsManagerArgs(page), urls.webUrl);
+#endif
 }
 
 async::Promise<Ret> MuseHubLauncher::openSoundLibrary(const String& code, const std::string& utmContent)
 {
-    return tryOpenMuseHub(configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code));
+    const MuseHubUrls urls = configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+    return tryOpenMuseHub(urls);
+#else
+    return tryOpenMuseSoundsManager(museSoundsManagerArgs(MuseHubPage::SoundLibrary), urls.webUrl);
+#endif
 }
 
 async::Promise<Ret> MuseHubLauncher::tryOpenMuseHub(const MuseHubUrls& urls)
@@ -60,6 +99,20 @@ async::Promise<Ret> MuseHubLauncher::tryOpenMuseHub(const MuseHubUrls& urls)
         });
 
         return async::Promise<Ret>::dummy_result();
+    });
+}
+
+async::Promise<Ret> MuseHubLauncher::tryOpenMuseSoundsManager(const std::vector<std::string>& args, const std::string& webUrl)
+{
+    LOGI() << "Opening MuseSounds Manager";
+
+    return async::make_promise<Ret>([this, args, webUrl](auto resolve, auto) {
+        if (process()->startDetached("muse-sounds-manager", args)) {
+            return resolve(make_ok());
+        }
+
+        LOGW() << "Failed to open MuseSounds Manager, opening web URL instead";
+        return resolve(interactive()->openUrl(webUrl));
     });
 }
 

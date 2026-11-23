@@ -32,8 +32,6 @@
 #include "mocks/musesoundsconfigurationmock.h"
 #include "mocks/musehublaunchermock.h"
 #include "global/tests/mocks/interactivemock.h"
-#include "global/tests/mocks/processmock.h"
-#include "global/tests/mocks/globalconfigurationmock.h"
 #include "actions/tests/mocks/actionsdispatchermock.h"
 #include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
 
@@ -98,8 +96,6 @@ protected:
         m_scenario = std::make_shared<MuseSamplerCheckStatusScenario>(muse::modularity::globalCtx());
 
         m_multiwindowsProvider = std::make_shared<NiceMock<muse::mi::MultiWindowsProviderMock> >();
-        m_globalConfiguration = std::make_shared<NiceMock<GlobalConfigurationMock> >();
-        m_process = std::make_shared<NiceMock<ProcessMock> >();
         m_configuration = std::make_shared<NiceMock<MuseSoundsConfigurationMock> >();
         m_service = std::make_shared<NiceMock<MuseSamplerCheckStatusServiceMock> >();
         m_museHubLauncher = std::make_shared<NiceMock<MuseHubLauncherMock> >();
@@ -107,8 +103,6 @@ protected:
         m_dispatcher = std::make_shared<NiceMock<muse::actions::ActionsDispatcherMock> >();
 
         m_scenario->multiwindowsProvider.set(m_multiwindowsProvider);
-        m_scenario->globalConfiguration.set(m_globalConfiguration);
-        m_scenario->process.set(m_process);
         m_scenario->configuration.set(m_configuration);
         m_scenario->service.set(m_service);
         m_scenario->museHubLauncher.set(m_museHubLauncher);
@@ -157,8 +151,6 @@ protected:
 
     std::shared_ptr<MuseSamplerCheckStatusScenario> m_scenario;
     std::shared_ptr<muse::mi::MultiWindowsProviderMock> m_multiwindowsProvider;
-    std::shared_ptr<GlobalConfigurationMock> m_globalConfiguration;
-    std::shared_ptr<ProcessMock> m_process;
     std::shared_ptr<MuseSoundsConfigurationMock> m_configuration;
     std::shared_ptr<MuseSamplerCheckStatusServiceMock> m_service;
     std::shared_ptr<MuseHubLauncherMock> m_museHubLauncher;
@@ -241,15 +233,10 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_LibInit
     expectLoadingFailedWarning(IInteractive::Result(OPEN_MUSEHUB_BUTTON));
 
     // [THEN] MuseHub is opened
-#ifdef Q_OS_LINUX
-    EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", _))
-    .WillOnce(Return(true));
-#else
     EXPECT_CALL(*m_museHubLauncher, open(MuseHubPage::MuseSamplerUpdate, "musesampler_update"))
     .WillOnce(Invoke([](auto&&...) {
         return resolvedPromise<Ret>(make_ok());
     }));
-#endif
 
     // [THEN] The app keeps running
     EXPECT_CALL(*m_dispatcher, dispatch(Matcher<const actions::ActionCode&>(_))).Times(0);
@@ -466,15 +453,10 @@ TEST_F(MuseSounds_MuseSamplerCheckStatusScenarioTest, CheckAndShowStatus_UpdateA
     }));
 
     // [THEN] MuseHub is opened on the update page
-#ifdef Q_OS_LINUX
-    EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", _))
-    .WillOnce(Return(true));
-#else
     EXPECT_CALL(*m_museHubLauncher, open(MuseHubPage::MuseSamplerUpdate, "musesampler_update"))
     .WillOnce(Invoke([](auto&&...) {
         return resolvedPromise<Ret>(make_ok());
     }));
-#endif
 
     // [THEN] The app quits
     EXPECT_CALL(*m_dispatcher, dispatch(Matcher<const actions::ActionCode&>(actions::ActionCode("quit")))).Times(1);

@@ -21,11 +21,15 @@
  */
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "musesounds/imusehublauncher.h"
 
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "global/iprocess.h"
 #include "musesounds/imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
@@ -33,6 +37,7 @@ class MuseHubLauncher : public IMuseHubLauncher, public muse::Contextable, publi
 {
 public:
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::GlobalInject<muse::IProcess> process;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
@@ -46,6 +51,7 @@ private:
     using Resolve = muse::async::Promise<muse::Ret>::Resolve;
 
     muse::async::Promise<muse::Ret> tryOpenMuseHub(const MuseHubUrls& urls);
+    muse::async::Promise<muse::Ret> tryOpenMuseSoundsManager(const std::vector<std::string>& args, const std::string& webUrl);
     void openMuseHubApp(const muse::UriQuery& museHubUri, const std::string& webUrl, const Resolve& resolve);
     void openWebUrl(const std::string& webUrl, const Resolve& resolve);
 };
