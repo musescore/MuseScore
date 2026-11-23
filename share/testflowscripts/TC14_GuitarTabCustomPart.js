@@ -215,12 +215,6 @@ function expandInstrument(name)
     api.testflow.sleep(500)
 }
 
-function openPartTab()
-{
-    Navigation.triggerControl("NotationView", "NotationViewTabs", "NotationTab1")
-    api.testflow.sleep(500)
-}
-
 //! NOTE Adds one chord symbol: type it, then Esc
 function addChordSymbol(tick, text)
 {
@@ -412,7 +406,7 @@ var testCase = {
             expectEqual("3/4", timeSigOf(thePart()), "time signature in the part")
         }},
         {name: "Delete the first fretboard diagram and add it again", func: function() {
-            //! NOTE The 3/4 change moved the second chord, so read the positions again
+            //! NOTE Read the positions again: the time signature change could move them
             var before = fretDiagrams(engraving.curScore)
             var fd = annotationAt(engraving.curScore, 0, engraving.Element.FRET_DIAGRAM)
             expect(fd, "no fretboard diagram at the start to delete")
