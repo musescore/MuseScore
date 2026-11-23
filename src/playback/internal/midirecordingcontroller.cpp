@@ -27,8 +27,11 @@
 
 #include <algorithm>
 #include <cmath>
+#include <set>
 
 #include "audio/common/audioutils.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/types/constants.h"
 #include "translation.h"
 #include "types/translatablestring.h"
@@ -84,6 +87,11 @@ bool MidiRecordingController::isRecording() const
 const MidiRecordingController::Session& MidiRecordingController::session() const
 {
     return m_session;
+}
+
+bool MidiRecordingController::canWriteRecording() const
+{
+    return midiRecordingImporter() != nullptr;
 }
 
 void MidiRecordingController::start(const Session& session)
@@ -164,28 +172,38 @@ void MidiRecordingController::onMidiEventReceived(const muse::midi::Event& event
     using Opcode = muse::midi::Event::Opcode;
 
     const Opcode opcode = event.opcode();
-    if (opcode == Opcode::NoteOn) {
-        const int velocity = event.velocity7();
-        if (velocity == 0) {
-            onNoteOff(event.note());
-        } else {
-            onNoteOn(event.note(), velocity);
-        }
-    } else if (opcode == Opcode::NoteOff) {
-        onNoteOff(event.note());
+    if (opcode != Opcode::NoteOn && opcode != Opcode::NoteOff) {
+        return;
+    }
+
+    const int channel = static_cast<int>(event.channel());
+    const int velocity = event.velocity7();
+
+    if (opcode == Opcode::NoteOn && velocity > 0) {
+        onNoteOn(channel, event.note(), velocity);
+    } else {
+        onNoteOff(channel, event.note());
     }
 }
 
-void MidiRecordingController::onNoteOn(int pitch, int velocity)
+bool MidiRecordingController::isPitchHeld(int pitch) const
+{
+    return std::any_of(m_heldNotes.cbegin(), m_heldNotes.cend(), [pitch](const auto& pair) {
+        return pair.first.second == pitch;
+    });
+}
+
+void MidiRecordingController::onNoteOn(int channel, int pitch, int velocity)
 {
     const int tick = secsToRelativeTick(currentSecs());
 
-    // The same key pressed again without a release: close the previous note
-    if (m_heldNotes.count(pitch)) {
-        onNoteOff(pitch);
+    // The same key pressed again on the same channel without a release: close the previous note
+    const HeldNoteKey key { channel, pitch };
+    if (m_heldNotes.count(key)) {
+        onNoteOff(channel, pitch);
     }
 
-    m_heldNotes[pitch] = { tick, velocity };
+    m_heldNotes[key] = { tick, velocity };
 
     // Shown on the score immediately, where the note was played (the notes of the count-in are not shown)
     if (tick >= -MAX_ANTICIPATION_TICKS) {
@@ -202,9 +220,9 @@ void MidiRecordingController::onNoteOn(int pitch, int velocity)
     }
 }
 
-void MidiRecordingController::onNoteOff(int pitch)
+void MidiRecordingController::onNoteOff(int channel, int pitch)
 {
-    auto it = m_heldNotes.find(pitch);
+    auto it = m_heldNotes.find(HeldNoteKey { channel, pitch });
     if (it == m_heldNotes.end()) {
         return;
     }
@@ -212,7 +230,8 @@ void MidiRecordingController::onNoteOff(int pitch)
     const HeldNote held = it->second;
     m_heldNotes.erase(it);
 
-    if (m_playNoteCallback) {
+    // The sound is stopped when the last channel holding the key releases it
+    if (m_playNoteCallback && !isPitchHeld(pitch)) {
         m_playNoteCallback(pitch, 0);
     }
 
@@ -237,13 +256,13 @@ RecordedMidiNoteList MidiRecordingController::finish()
         return {};
     }
 
-    std::vector<int> stillHeld;
+    std::vector<HeldNoteKey> stillHeld;
     for (const auto& pair : m_heldNotes) {
         stillHeld.push_back(pair.first);
     }
 
-    for (int pitch : stillHeld) {
-        onNoteOff(pitch);
+    for (const HeldNoteKey& key : stillHeld) {
+        onNoteOff(key.first, key.second);
     }
 
     m_isRecording = false;
@@ -265,8 +284,13 @@ RecordedMidiNoteList MidiRecordingController::finish()
 void MidiRecordingController::cancel()
 {
     if (m_playNoteCallback) {
+        std::set<int> soundingPitches;
         for (const auto& pair : m_heldNotes) {
-            m_playNoteCallback(pair.first, 0);
+            soundingPitches.insert(pair.first.second);
+        }
+
+        for (int pitch : soundingPitches) {
+            m_playNoteCallback(pitch, 0);
         }
     }
 
@@ -348,13 +372,69 @@ void MidiRecordingController::finishAndWrite()
     }
 
     // The original performance is kept, to write it again with other settings (see requantizeLastRecording)
-    m_lastRecording = LastRecording { session, notes, writtenTicks };
+    LastRecording lastRecording { session, notes, writtenTicks, engraving::ID(), engraving::ID() };
+
+    const mu::engraving::Score* score = session.notation->elements()->msScore();
+    if (const mu::engraving::Staff* staff = score ? score->staff(session.staffIdx) : nullptr) {
+        lastRecording.staffId = staff->id();
+    }
+
+    if (const mu::engraving::Staff* lowerStaff = (score && session.isSplit()) ? score->staff(session.lowerStaffIdx) : nullptr) {
+        lastRecording.lowerStaffId = lowerStaff->id();
+    }
+
+    m_lastRecording = std::move(lastRecording);
     m_lastRecordingChanged.notify();
+}
+
+std::optional<MidiRecordingController::Session> MidiRecordingController::resolveLastRecordingSession() const
+{
+    if (!m_lastRecording.has_value() || !m_lastRecording->session.notation) {
+        return std::nullopt;
+    }
+
+    const mu::engraving::Score* score = m_lastRecording->session.notation->elements()->msScore();
+    if (!score) {
+        return std::nullopt;
+    }
+
+    const auto findStaff = [score](const engraving::ID& id) -> const mu::engraving::Staff* {
+        if (!id.isValid()) {
+            return nullptr;
+        }
+
+        for (const mu::engraving::Staff* staff : score->staves()) {
+            if (staff->id() == id) {
+                return staff;
+            }
+        }
+
+        return nullptr;
+    };
+
+    Session session = m_lastRecording->session;
+
+    const mu::engraving::Staff* staff = findStaff(m_lastRecording->staffId);
+    if (!staff) {
+        return std::nullopt;
+    }
+    session.staffIdx = staff->idx();
+
+    if (m_lastRecording->session.isSplit()) {
+        const mu::engraving::Staff* lowerStaff = findStaff(m_lastRecording->lowerStaffId);
+        if (!lowerStaff || lowerStaff->part() != staff->part()) {
+            return std::nullopt;
+        }
+        session.lowerStaffIdx = lowerStaff->idx();
+    }
+
+    return session;
 }
 
 bool MidiRecordingController::hasLastRecording(const INotationPtr& notation) const
 {
-    return m_lastRecording.has_value() && notation && m_lastRecording->session.notation == notation;
+    return m_lastRecording.has_value() && notation && m_lastRecording->session.notation == notation
+           && resolveLastRecordingSession().has_value();
 }
 
 void MidiRecordingController::requantizeLastRecording()
@@ -368,8 +448,15 @@ void MidiRecordingController::requantizeLastRecording()
     // Replace at least what the previous take wrote, in case the new one is shorter
     options.minReplacedTicks = m_lastRecording->writtenTicks;
 
+    // The recorded staves may have been moved, or removed, since the recording
+    const std::optional<Session> session = resolveLastRecordingSession();
+    if (!session.has_value()) {
+        LOGW() << "the staves of the last MIDI recording are no longer available";
+        return;
+    }
+
     int writtenTicks = 0;
-    if (!writeNotes(m_lastRecording->session, m_lastRecording->notes, options,
+    if (!writeNotes(session.value(), m_lastRecording->notes, options,
                     TranslatableString("undoableAction", "Re-quantize MIDI recording"), writtenTicks)) {
         return;
     }

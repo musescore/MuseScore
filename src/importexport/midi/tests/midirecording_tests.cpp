@@ -27,6 +27,9 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
@@ -189,6 +192,86 @@ TEST_F(MidiRecording_Tests, makeMidiFileReproducesBarsAndKey)
     EXPECT_EQ(timeSigCount, 1);
     EXPECT_EQ(keySigCount, 1);
     EXPECT_EQ(noteCount, 4);
+}
+
+TEST_F(MidiRecording_Tests, makeMidiFileRepresentsShortPickupMeasure)
+{
+    std::unique_ptr<MasterScore> score = readTestScore();
+    ASSERT_TRUE(score);
+
+    // A 1/8 pickup under 4/4: 1/8 is not a whole number of quarters
+    score->startCmd(TranslatableString::untranslatable("MIDI recording tests"));
+    score->firstMeasure()->adjustToLen(Fraction(1, 8));
+    score->endCmd();
+
+    ASSERT_EQ(score->firstMeasure()->ticks(), Fraction(1, 8));
+
+    const RecordedMidiNoteList notes = { { 60, 90, 0, QUARTER / 2 }, { 62, 90, QUARTER / 2, QUARTER / 2 + QUARTER } };
+    const MidiFile midiFile = MidiRecordingImporter::makeMidiFile(score.get(), 0, score->firstMeasure()->tick(), notes);
+
+    std::vector<std::pair<int, std::pair<int, int> > > timeSigs;
+    for (const auto& [tick, event] : midiFile.tracks().front().events()) {
+        if (event.type() == ME_META && event.metaType() == META_TIME_SIGNATURE) {
+            timeSigs.push_back({ tick, { event.edata()[0], event.edata()[1] } });
+        }
+    }
+
+    ASSERT_EQ(timeSigs.size(), 2);
+    EXPECT_EQ(timeSigs[0].first, 0);
+    EXPECT_EQ(timeSigs[0].second, std::make_pair(1, 3)); // 1/8
+    EXPECT_EQ(timeSigs[1].first, QUARTER / 2);
+    EXPECT_EQ(timeSigs[1].second, std::make_pair(4, 2)); // 4/4
+}
+
+TEST_F(MidiRecording_Tests, clefChangesAndLyricsArePreserved)
+{
+    std::unique_ptr<MasterScore> score = readTestScore();
+    ASSERT_TRUE(score);
+
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+
+    score->startCmd(TranslatableString::untranslatable("MIDI recording tests"));
+
+    // A lyric on the whole note of measure 2
+    ChordRest* m2Chord = m2->first(SegmentType::ChordRest)->cr(0);
+    ASSERT_TRUE(m2Chord && m2Chord->isChord());
+    Lyrics* lyrics = Factory::createLyrics(m2Chord);
+    lyrics->setTrack(0);
+    lyrics->setOwnershipParent(m2Chord);
+    lyrics->setPlainText(u"la");
+    score->undoAddElement(lyrics);
+
+    // A clef change in the middle of measure 3
+    Segment* clefSegment = m3->undoGetSegmentR(SegmentType::Clef, Fraction(1, 2));
+    Clef* clef = Factory::createClef(clefSegment);
+    clef->setTrack(0);
+    clef->setOwnershipParent(clefSegment);
+    clef->setClefType(ClefType::F);
+    score->undoAddElement(clef);
+
+    score->endCmd();
+
+    MidiRecordingImporter importer;
+
+    score->startCmd(TranslatableString::untranslatable("MIDI recording tests"));
+    const RetVal<int> ret = importer.writeRecordedNotes(score.get(), 0, m2->tick(), humanPerformance(), options16th());
+    score->endCmd();
+    ASSERT_TRUE(ret.ret) << ret.ret.toString();
+
+    // The lyric is on the new first chord of measure 2
+    const ChordRest* newChord = m2->first(SegmentType::ChordRest)->cr(0);
+    ASSERT_TRUE(newChord && newChord->isChord());
+    EXPECT_EQ(toChord(newChord)->notes().front()->pitch(), 60);
+    ASSERT_EQ(newChord->lyrics().size(), 1);
+    EXPECT_EQ(newChord->lyrics().front()->plainText(), u"la");
+
+    // The clef change is still there
+    const Segment* newClefSegment = m3->findSegmentR(SegmentType::Clef, Fraction(1, 2));
+    ASSERT_TRUE(newClefSegment);
+    const EngravingItem* newClef = newClefSegment->element(0);
+    ASSERT_TRUE(newClef && newClef->isClef());
+    EXPECT_EQ(toClef(newClef)->clefType(), ClefType::F);
 }
 
 TEST_F(MidiRecording_Tests, writesQuantizedNotesFromStartMeasure)

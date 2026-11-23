@@ -33,6 +33,7 @@
 #include "modularity/ioc.h"
 
 #include "audio/common/audiotypes.h"
+#include "engraving/types/types.h"
 #include "interactive/iinteractive.h"
 #include "midi/imidiinport.h"
 #include "notation/inotation.h"
@@ -89,6 +90,9 @@ public:
     bool isRecording() const;
     const Session& session() const;
 
+    //! The recorded notes can be written into the score (i.e. the MIDI import module is available)
+    bool canWriteRecording() const;
+
     void start(const Session& session);
 
     //! The instant at which the playback reaches the start position (i.e. the end of the count-in)
@@ -122,7 +126,15 @@ private:
         Session session;
         iex::midi::RecordedMidiNoteList notes;
         int writtenTicks = 0;
+
+        //! The staves may be moved (e.g. the instruments reordered) before re-quantizing:
+        //! they are found again by their identity
+        engraving::ID staffId;
+        engraving::ID lowerStaffId;
     };
+
+    //! The session of the last recording, with the current indexes of its staves; nullopt if they are no longer valid
+    std::optional<Session> resolveLastRecordingSession() const;
 
     bool writeNotes(const Session& session, const iex::midi::RecordedMidiNoteList& notes, const iex::midi::MidiRecordingOptions& options,
                     const muse::TranslatableString& actionName, int& writtenTicks);
@@ -133,8 +145,12 @@ private:
     };
 
     void onMidiEventReceived(const muse::midi::Event& event);
-    void onNoteOn(int pitch, int velocity);
-    void onNoteOff(int pitch);
+    //! The same key may be held on several MIDI channels at the same time: the notes are separated by channel
+    using HeldNoteKey = std::pair<int /*channel*/, int /*pitch*/>;
+
+    void onNoteOn(int channel, int pitch, int velocity);
+    void onNoteOff(int channel, int pitch);
+    bool isPitchHeld(int pitch) const;
 
     muse::secs_t currentSecs() const;
     int secsToRelativeTick(muse::secs_t renderedSecs) const;
@@ -147,7 +163,7 @@ private:
     muse::secs_t m_anchorSecs = 0;
     double m_ticksPerSecAtStart = 0.0;
 
-    std::map<int, HeldNote> m_heldNotes;
+    std::map<HeldNoteKey, HeldNote> m_heldNotes;
     iex::midi::RecordedMidiNoteList m_notes;
 
     std::optional<LastRecording> m_lastRecording;

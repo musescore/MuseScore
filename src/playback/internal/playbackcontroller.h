@@ -220,7 +220,7 @@ private:
 
     void addLoopBoundaryToTick(LoopBoundaryType type, int tick);
 
-    void startMidiRecording();
+    void startMidiRecording(bool showErrors = true);
     void onMidiRecordingPlaybackStatusChanged();
     void cancelMidiRecording();
     void forceMetronomeForMidiRecording();
@@ -323,6 +323,10 @@ private:
 
     std::unique_ptr<MidiRecordingController> m_midiRecordingController;
     bool m_midiRecordingPlaybackStarted = false;
+
+    //! Incremented by each play/resume request and by each stop:
+    //! a play request whose preparation completes after a stop (or a newer request) is ignored
+    uint64_t m_playRequestId = 0;
     std::map<int, engraving::Note*> m_midiRecordingSoundingNotes; // <pitch, note>
     muse::async::Notification m_lastMidiRecordingChanged;
     muse::async::Notification m_isMidiRecordingChanged;

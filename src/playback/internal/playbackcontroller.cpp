@@ -739,7 +739,9 @@ muse::Ret PlaybackController::play(bool showErrors)
     interaction()->endEditElement();
     interaction()->noteInput()->endNoteInput();
 
-    if (isPaused()) {
+    //! NOTE A MIDI recording always starts a new playback, with its own count-in: the playback was stopped
+    //! by startMidiRecording, even if the stopped status may not be reported yet
+    if (isPaused() && !isMidiRecording()) {
         notationPlayback()->sendEventsForChangedTracks();
 
         secs_t pos = currentPlayer()->playbackPosition();
@@ -845,8 +847,15 @@ void PlaybackController::doPlay()
         seek(startSecs);
     }
 
-    currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+    const uint64_t requestId = ++m_playRequestId;
+
+    currentPlayer()->prepareToPlay().onResolve(this, [this, requestId](const Ret& ret) {
         if (!currentPlayer()) {
+            return;
+        }
+
+        if (requestId != m_playRequestId) {
+            LOGI() << "the playback was stopped, or requested again, during its preparation";
             return;
         }
 
@@ -906,6 +915,7 @@ void PlaybackController::doStop()
         return;
     }
 
+    ++m_playRequestId; // a pending play request must not start the playback after the stop
     currentPlayer()->stop();
 }
 
@@ -915,8 +925,15 @@ void PlaybackController::doResume()
         return;
     }
 
-    currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+    const uint64_t requestId = ++m_playRequestId;
+
+    currentPlayer()->prepareToPlay().onResolve(this, [this, requestId](const Ret& ret) {
         if (!currentPlayer()) {
+            return;
+        }
+
+        if (requestId != m_playRequestId) {
+            LOGI() << "the playback was stopped, or requested again, during its preparation";
             return;
         }
 
@@ -1030,7 +1047,10 @@ muse::Ret PlaybackController::toggleMetronome()
 
     notationConfiguration()->setIsMetronomeEnabled(!metronomeEnabled);
 
-    setTrackActivity(notationPlayback()->metronomeTrackId(), !metronomeEnabled || countInEnabled);
+    //! NOTE During a MIDI recording the click is always on: the setting is applied when the recording ends
+    if (!isMidiRecording()) {
+        setTrackActivity(notationPlayback()->metronomeTrackId(), !metronomeEnabled || countInEnabled);
+    }
 
     return make_ok();
 }
@@ -1042,7 +1062,9 @@ muse::Ret PlaybackController::toggleCountIn()
 
     notationConfiguration()->setIsCountInEnabled(!countInEnabled);
 
-    setTrackActivity(notationPlayback()->metronomeTrackId(), metronomeEnabled || !countInEnabled);
+    if (!isMidiRecording()) {
+        setTrackActivity(notationPlayback()->metronomeTrackId(), metronomeEnabled || !countInEnabled);
+    }
 
     return make_ok();
 }
@@ -1078,7 +1100,7 @@ muse::Ret PlaybackController::toggleMidiRecording()
     return make_ok();
 }
 
-void PlaybackController::startMidiRecording()
+void PlaybackController::startMidiRecording(bool showErrors)
 {
     if (!isPlayAllowed() || !currentPlayer() || !m_notation) {
         LOGW() << "playback not allowed";
@@ -1088,6 +1110,13 @@ void PlaybackController::startMidiRecording()
     if (!notationConfiguration()->isMidiInputEnabled()) {
         interactive()->info(muse::trc("playback", "MIDI input is disabled"),
                             muse::trc("playback", "Enable MIDI input in the playback settings to record from a MIDI keyboard."));
+        return;
+    }
+
+    if (!m_midiRecordingController->canWriteRecording()) {
+        interactive()->error(muse::trc("playback", "MIDI recording is not available"),
+                             muse::trc("playback", "This build does not include the MIDI import module, "
+                                                   "which is needed to write the recorded notes."));
         return;
     }
 
@@ -1145,6 +1174,13 @@ void PlaybackController::startMidiRecording()
         return;
     }
 
+    //! NOTE If the user accepts to continue while the online sounds are processing, the recording is started
+    //! (not an ordinary playback): the selection is read again at that moment
+    if (showErrors && m_onlineSoundsController->shouldShowOnlineSoundsProcessingError(isPlaying())) {
+        m_onlineSoundsController->showOnlineSoundsProcessingError([this]() { startMidiRecording(false /*showErrors*/); });
+        return;
+    }
+
     if (isPlaying() || isPaused()) {
         doStop();
     }
@@ -1183,7 +1219,7 @@ void PlaybackController::startMidiRecording()
     forceMetronomeForMidiRecording();
     m_isMidiRecordingChanged.notify();
 
-    const Ret ret = play();
+    const Ret ret = play(false /*showErrors: already checked above*/);
     if (!ret) {
         LOGE() << "MIDI recording: unable to start the playback: " << ret.toString();
         cancelMidiRecording();

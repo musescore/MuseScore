@@ -28,6 +28,9 @@
 #include "engraving/editing/paste.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
@@ -242,12 +245,24 @@ MidiFile MidiRecordingImporter::makeMidiFile(const Score* score, staff_idx_t sta
         }
 
         const Fraction nominal = m->timesig();
-        int denominator = nominal.denominator();
-        Fraction actualInDenominatorUnits = (m->ticks() * Fraction(denominator, 1)).reduced();
-
         int numerator = nominal.numerator();
+        int denominator = nominal.denominator();
+
+        // The nominal denominator is kept when it fits the actual length (e.g. 3/4 for a 3/4 pickup under 4/4),
+        // otherwise a smaller unit is used (e.g. 1/8 for a 1/8 pickup under 4/4)
+        static constexpr int MAX_DENOMINATOR = 128;
+        int actualDenominator = denominator;
+        Fraction actualInDenominatorUnits = (m->ticks() * Fraction(actualDenominator, 1)).reduced();
+        while (actualInDenominatorUnits.denominator() != 1 && actualDenominator < MAX_DENOMINATOR) {
+            actualDenominator *= 2;
+            actualInDenominatorUnits = (m->ticks() * Fraction(actualDenominator, 1)).reduced();
+        }
+
         if (actualInDenominatorUnits.denominator() == 1 && actualInDenominatorUnits.numerator() > 0) {
             numerator = actualInDenominatorUnits.numerator();
+            denominator = actualDenominator;
+        } else {
+            LOGW() << "the actual length of the measure at tick " << m->tick().ticks() << " can not be represented";
         }
 
         const int log2Denominator = log2OfPowerOfTwo(denominator);
@@ -292,15 +307,140 @@ static Fraction measureEndAtOrAfter(const Score* score, const Fraction& startTic
     return measure ? measure->endTick() : tick;
 }
 
+namespace {
+//! The elements of the replaced range that are not part of the performance:
+//! they are removed with the notes, and added back on the new content
+struct PreservedStaffElements
+{
+    struct PreservedClef {
+        Measure* measure = nullptr;
+        Fraction rtick;
+        std::unique_ptr<Clef> clef;
+    };
+
+    struct PreservedLyrics {
+        Fraction tick;
+        track_idx_t track = 0;
+        std::unique_ptr<Lyrics> lyrics;
+    };
+
+    std::vector<PreservedClef> clefs;
+    std::vector<PreservedLyrics> lyrics;
+};
+}
+
+static PreservedStaffElements collectPreservedElements(staff_idx_t staffIdx, Segment* start, Segment* end)
+{
+    PreservedStaffElements result;
+
+    const track_idx_t startTrack = staffIdx * VOICES;
+
+    for (Segment* s = start; s && s != end; s = s->next1()) {
+        if (s->isClefType()) {
+            EngravingItem* e = s->element(startTrack);
+            if (e && e->isClef() && !e->generated()) {
+                result.clefs.push_back({ s->measure(), s->rtick(), std::unique_ptr<Clef>(toClef(e)->clone()) });
+            }
+            continue;
+        }
+
+        if (!s->isChordRestType()) {
+            continue;
+        }
+
+        for (track_idx_t track = startTrack; track < startTrack + VOICES; ++track) {
+            const ChordRest* cr = s->cr(track);
+            if (!cr) {
+                continue;
+            }
+
+            for (const Lyrics* lyrics : cr->lyrics()) {
+                result.lyrics.push_back({ s->tick(), track, std::unique_ptr<Lyrics>(lyrics->clone()) });
+            }
+        }
+    }
+
+    return result;
+}
+
+//! The chord sounding at the given position on the staff, preferring the given track
+static Chord* chordAt(Score* score, staff_idx_t staffIdx, track_idx_t preferredTrack, const Fraction& tick)
+{
+    Measure* measure = score->tick2measure(tick);
+    if (!measure) {
+        return nullptr;
+    }
+
+    std::vector<track_idx_t> tracks { preferredTrack };
+    for (track_idx_t track = staffIdx * VOICES; track < (staffIdx + 1) * VOICES; ++track) {
+        if (track != preferredTrack) {
+            tracks.push_back(track);
+        }
+    }
+
+    for (track_idx_t track : tracks) {
+        ChordRest* found = nullptr;
+        for (Segment* s = measure->first(SegmentType::ChordRest); s && s->tick() <= tick; s = s->next(SegmentType::ChordRest)) {
+            if (ChordRest* cr = s->cr(track)) {
+                found = cr;
+            }
+        }
+
+        if (found && found->isChord() && tick < found->tick() + found->actualTicks()) {
+            return toChord(found);
+        }
+    }
+
+    return nullptr;
+}
+
+static void restorePreservedElements(Score* score, staff_idx_t staffIdx, PreservedStaffElements& preserved)
+{
+    const track_idx_t startTrack = staffIdx * VOICES;
+
+    for (PreservedStaffElements::PreservedClef& item : preserved.clefs) {
+        Segment* segment = item.measure->undoGetSegmentR(SegmentType::Clef, item.rtick);
+        if (!segment || segment->element(startTrack)) {
+            continue; // the new content has its own clef here
+        }
+
+        Clef* clef = item.clef.release();
+        clef->setOwnershipParent(segment);
+        clef->setTrack(startTrack);
+        score->undoAddElement(clef);
+    }
+
+    for (PreservedStaffElements::PreservedLyrics& item : preserved.lyrics) {
+        Chord* chord = chordAt(score, staffIdx, item.track, item.tick);
+        if (!chord) {
+            LOGW() << "no chord to keep the lyrics at tick " << item.tick.ticks();
+            continue;
+        }
+
+        if (chord->lyrics(item.lyrics->verse(), item.lyrics->placement())) {
+            continue; // e.g. two syllables on the same new chord: the first one is kept
+        }
+
+        Lyrics* lyrics = item.lyrics.release();
+        lyrics->setOwnershipParent(chord);
+        lyrics->setTrack(chord->track());
+        lyrics->setTicks(Fraction(0, 1)); // the melisma of the previous notes does not apply to the new ones
+        score->undoAddElement(lyrics);
+    }
+}
+
 //! Deletes the notes, rests and ties of the staff in the range (they become rests);
-//! dynamics, lyrics, chord symbols etc. are preserved
-static void clearStaffRange(Score* score, staff_idx_t staffIdx, Measure* startMeasure, const Fraction& endTick)
+//! dynamics, chord symbols etc. are preserved. The clefs and the lyrics, which are removed
+//! with the notes, are returned, to add them back on the new content
+static PreservedStaffElements clearStaffRange(Score* score, staff_idx_t staffIdx, Measure* startMeasure, const Fraction& endTick)
 {
     Segment* start = startMeasure->first(SegmentType::ChordRest);
     Segment* end = score->tick2segment(endTick, true, SegmentType::ChordRest);
     if (!start) {
-        return;
+        return {};
     }
+
+    PreservedStaffElements preserved = collectPreservedElements(staffIdx, start, end);
 
     SelectionFilter notesOnlyFilter;
     notesOnlyFilter.setFiltered(ElementsSelectionFilterTypes::ALL, false);
@@ -308,6 +448,8 @@ static void clearStaffRange(Score* score, staff_idx_t staffIdx, Measure* startMe
 
     const track_idx_t startTrack = staffIdx * VOICES;
     score->deleteRange(start, end, startTrack, startTrack + VOICES, notesOnlyFilter, /*selectionContainsMultiNoteChords*/ false);
+
+    return preserved;
 }
 
 std::pair<RecordedMidiNoteList, RecordedMidiNoteList> MidiRecordingImporter::splitNotes(const RecordedMidiNoteList& notes, int splitPitch)
@@ -437,7 +579,8 @@ RetVal<int> MidiRecordingImporter::writeRecordedNotes(Score* score, staff_idx_t 
         // Nothing played on this staff (e.g. the lower staff of a split recording): only rests
         const Fraction endTick = std::min(measureEndAtOrAfter(score, startTick, startTick + Fraction::fromTicks(options.minReplacedTicks)),
                                           lastMeasure->endTick());
-        clearStaffRange(score, staffIdx, startMeasure, endTick);
+        PreservedStaffElements preserved = clearStaffRange(score, staffIdx, startMeasure, endTick);
+        restorePreservedElements(score, staffIdx, preserved);
 
         result.ret = make_ok();
         result.val = (endTick - startTick).ticks();
@@ -484,7 +627,7 @@ RetVal<int> MidiRecordingImporter::writeRecordedNotes(Score* score, staff_idx_t 
     const Fraction replacedTicks = std::max(convertedTicks, Fraction::fromTicks(options.minReplacedTicks));
 
     const Fraction dstEndTick = std::min(measureEndAtOrAfter(score, startTick, startTick + replacedTicks), lastMeasure->endTick());
-    clearStaffRange(score, staffIdx, startMeasure, dstEndTick);
+    PreservedStaffElements preserved = clearStaffRange(score, staffIdx, startMeasure, dstEndTick);
 
     // The segments may have been replaced by the deletion
     Segment* dstStart = startMeasure->first(SegmentType::ChordRest);
@@ -499,6 +642,8 @@ RetVal<int> MidiRecordingImporter::writeRecordedNotes(Score* score, staff_idx_t 
         result.ret = make_ret(Ret::Code::InternalError, std::string("Unable to write the recorded notes"));
         return result;
     }
+
+    restorePreservedElements(score, staffIdx, preserved);
 
     result.ret = make_ok();
     result.val = (dstEndTick - startTick).ticks();

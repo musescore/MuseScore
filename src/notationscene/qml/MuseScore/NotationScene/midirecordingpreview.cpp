@@ -57,7 +57,9 @@ int MidiRecordingPreview::writtenPitch(const Score* score, staff_idx_t staffIdx,
         return soundingPitch;
     }
 
-    const Instrument* instrument = staff->part()->instrument(tick);
+    // A shared staff may show a transposing instrument of another part (its origin part)
+    const Part* part = staff->originPart(tick);
+    const Instrument* instrument = part ? part->instrument(tick) : nullptr;
     if (!instrument) {
         return soundingPitch;
     }
@@ -126,6 +128,12 @@ void MidiRecordingPreview::paint(Painter* painter, const Score* score, const pla
         const Measure* measure = score->tick2measureMM(tick);
         const System* system = measure ? measure->system() : nullptr;
         if (!system || !system->page() || system->staves().size() <= note.staffIdx) {
+            continue;
+        }
+
+        // e.g. hidden in this system because it is empty
+        const SysStaff* sysStaff = system->staff(note.staffIdx);
+        if (!sysStaff || !sysStaff->show()) {
             continue;
         }
 
