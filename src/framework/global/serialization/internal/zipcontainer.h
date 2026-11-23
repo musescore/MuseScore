@@ -79,6 +79,8 @@ public:
     void setCompressionPolicy(CompressionPolicy policy);
     CompressionPolicy compressionPolicy() const;
 
+    void setWriteEntryTime(bool write);
+
     void addFile(const std::string& fileName, const ByteArray& data);
     void addDirectory(const std::string& dirName);
 

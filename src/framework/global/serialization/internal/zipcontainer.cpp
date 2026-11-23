@@ -392,6 +392,7 @@ struct ZipContainer::Impl {
     ZipContainer::Status status = ZipContainer::NoError;
 
     ZipContainer::CompressionPolicy compressionPolicy = ZipContainer::AlwaysCompress;
+    bool writeEntryTime = true;
 
     enum EntryType {
         Directory, File, Symlink
@@ -579,14 +580,17 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     writeUShort(header.h.version_needed, ZIP_VERSION);
     writeUInt(header.h.uncompressed_size, (uint)contents.size());
 
-    std::time_t t = std::time(0);   // get time now
-    std::tm now;
+    if (writeEntryTime) {
+        std::time_t t = std::time(0);   // get time now
+        std::tm now;
 #ifdef WIN32
-    localtime_s(&now, &t);
+        localtime_s(&now, &t);
 #else
-    localtime_r(&t, &now);
+        localtime_r(&t, &now);
 #endif
-    writeMSDosDate(header.h.last_mod_file, now);
+        writeMSDosDate(header.h.last_mod_file, now);
+    }
+
     ByteArray data = contents;
     if (compression == ZipContainer::AlwaysCompress) {
         writeUShort(header.h.compression_method, CompressionMethodDeflated);
@@ -854,6 +858,11 @@ void ZipContainer::setCompressionPolicy(CompressionPolicy policy)
 ZipContainer::CompressionPolicy ZipContainer::compressionPolicy() const
 {
     return p->compressionPolicy;
+}
+
+void ZipContainer::setWriteEntryTime(bool write)
+{
+    p->writeEntryTime = write;
 }
 
 void ZipContainer::addFile(const std::string& fileName, const ByteArray& data)

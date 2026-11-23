@@ -23,8 +23,10 @@
 
 #include "io/file.h"
 
+#include "global/io/buffer.h"
 #include "global/serialization/zipwriter.h"
 #include "global/serialization/zipreader.h"
+#include "global/serialization/internal/zipcontainer.h"
 
 using namespace muse;
 
@@ -54,4 +56,23 @@ TEST_F(Zip_RW_Tests, Write_And_Read)
     EXPECT_EQ(data2, "Hello World 2!");
 
     reader.close();
+}
+
+TEST_F(Zip_RW_Tests, Write_Without_Entry_Time)
+{
+    //! [GIVEN] A zip file whose entries carry no time
+    io::Buffer buf;
+    ZipWriter writer(&buf);
+    writer.setWriteEntryTime(false);
+
+    //! [WHEN] Writing data to the zip file
+    writer.addFile("file1.txt", "Hello World!");
+
+    writer.close();
+
+    //! [THEN] The entry read back has no date
+    ZipContainer reader(&buf);
+    std::vector<ZipContainer::FileInfo> files = reader.fileInfoList();
+    ASSERT_EQ(files.size(), 1u);
+    EXPECT_EQ(files.front().lastModified.tm_mday, 0);
 }

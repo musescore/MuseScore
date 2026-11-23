@@ -37,6 +37,8 @@ public:
     void close();
     bool hasError() const;
 
+    void setWriteEntryTime(bool write);
+
     void addFile(const std::string& fileName, const ByteArray& data);
 
 private:

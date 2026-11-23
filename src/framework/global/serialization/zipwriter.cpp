@@ -89,6 +89,11 @@ bool ZipWriter::hasError() const
     return m_impl->zip->status() != ZipContainer::NoError;
 }
 
+void ZipWriter::setWriteEntryTime(bool write)
+{
+    m_impl->zip->setWriteEntryTime(write);
+}
+
 void ZipWriter::addFile(const std::string& fileName, const ByteArray& data)
 {
     m_impl->zip->addFile(fileName, data);
