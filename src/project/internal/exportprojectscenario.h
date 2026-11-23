@@ -78,7 +78,9 @@ private:
 
     struct ExportFile {
         muse::io::path_t path;
-        std::function<muse::Ret(muse::io::IODevice&)> exportFunction;
+        notation::INotationPtrList notations; // one notation, or a list of them if it is multi-part
+        bool isMultiPart = false;
+        INotationWriter::Options options;
     };
 
     struct ExportState;
@@ -96,8 +98,8 @@ private:
     muse::io::path_t completeExportPath(const muse::io::path_t& basePath, notation::INotationPtr notation, bool isMain,
                                         bool isExportingOnlyOneScore, int pageIndex = -1) const;
 
-    std::vector<ExportFile> exportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
-                                        INotationWriterPtr writer, INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
+    std::vector<ExportFile> makeExportFiles(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
+                                            INotationWriter::UnitType unitType, bool isCreatingOnlyOneFile) const;
 
     void startNextExportLater() const;
     void startExport(const notation::INotationPtrList& notations, const muse::io::path_t& destinationPath,
@@ -111,7 +113,10 @@ private:
     void askForRetry(const ExportStatePtr& state) const;
     void continueExportLater(const ExportStatePtr& state) const;
 
-    muse::Ret writeFile(const ExportFile& file) const;
+    muse::async::Promise<muse::Ret> writeFile(const INotationWriterPtr& writer, const ExportFile& file) const;
+
+    //! Returns true if the export should go on with the next file
+    bool onFileWritten(const ExportStatePtr& state, const muse::Ret& ret) const;
 
     void showExportProgress(bool isAudioExport) const;
 

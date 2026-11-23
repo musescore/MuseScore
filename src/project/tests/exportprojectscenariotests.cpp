@@ -1186,6 +1186,32 @@ TEST_F(ExportProjectScenarioTests, Progress_SeveralFiles_AddsUpToOne)
     EXPECT_TRUE(finished);
 }
 
+TEST_F(ExportProjectScenarioTests, Progress_CancelledBetweenFiles_DoesNotWriteTheNextFile)
+{
+    //! [GIVEN] A writer that reports its progress, and two files to write
+    ScorePtr violin = makePart("Violin");
+    Progress writerProgress;
+    Progress shownProgress;
+    givenWriterReportsProgress(&writerProgress, &shownProgress);
+
+    //! [GIVEN] The user cancels the progress when the first file is written, and there is nothing to abort
+    ON_CALL(*m_writer, writeSync(_, _, _)).WillByDefault([&shownProgress](notation::INotationPtr, io::IODevice&,
+                                                                          const INotationWriter::Options&) {
+        shownProgress.cancel();
+        return make_ok();
+    });
+
+    //! [THEN] The second file is not written
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(1);
+
+    //! [WHEN] Exporting the score with the part as audio...
+    Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.mp3"));
+
+    //! [THEN] ...is cancelled
+    EXPECT_FALSE(ret);
+    EXPECT_EQ(ret.code(), int(Ret::Code::Cancel));
+}
+
 TEST_F(ExportProjectScenarioTests, Progress_CancelledByTheUser_AbortsTheWriter)
 {
     //! [GIVEN] A writer that reports its progress
