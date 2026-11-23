@@ -1742,10 +1742,10 @@ void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::d
 {
 #ifndef Q_OS_MACOS
     drawTextWorkaround(textFragment, item, painter);
-    return;
-#endif
+#else
     painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
+#endif
 }
 
 void TDraw::drawTextWorkaround(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
