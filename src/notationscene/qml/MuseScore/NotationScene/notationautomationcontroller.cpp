@@ -1051,19 +1051,20 @@ void NotationAutomationController::processPendingChanges()
 
     const bool automationVisible = automation() && automation()->isAutomationModeEnabled();
 
-    if (scoreState.structural) {
-        if (!automationVisible) {
-            // Nothing visible right now; defer the rebuild until automation mode is enabled again
+    if (!automationVisible) {
+        if (scoreState.hasChanges) {
+            // The layout may have deleted the systems our keys point to, so drop the polylines
+            // and defer the rebuild until automation mode is enabled again
+            deleteAllPolylines();
             m_pendingChanges.isFullReset = true;
-            return;
         }
-        rebuildAllPolylines();
-        m_pendingChanges.clear();
+        // Otherwise m_pendingChanges keeps accumulating for next time
         return;
     }
 
-    if (!automationVisible) {
-        // Nothing visible right now; m_pendingChanges keeps accumulating for next time
+    if (scoreState.structural) {
+        rebuildAllPolylines();
+        m_pendingChanges.clear();
         return;
     }
 
@@ -1102,15 +1103,20 @@ void NotationAutomationController::processPendingChanges()
     updatePolylinesGeometry();
 }
 
-void NotationAutomationController::rebuildAllPolylines()
+void NotationAutomationController::deleteAllPolylines()
 {
     m_currentlyEditedPolyline = nullptr;
 
-    // TODO: More efficient if we don't clear/recreate the polylines every time...
     for (const auto& [key, data] : m_polylinesDataMap) {
         delete data.polyline;
     }
     m_polylinesDataMap.clear();
+}
+
+void NotationAutomationController::rebuildAllPolylines()
+{
+    // TODO: More efficient if we don't clear/recreate the polylines every time...
+    deleteAllPolylines();
 
     if (!score()) {
         // Happens on close...
