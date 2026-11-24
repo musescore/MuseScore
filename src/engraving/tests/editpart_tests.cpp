@@ -1461,21 +1461,21 @@ TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DetectsSplitSharedPart)
 
     // [WHEN] The order is unchanged
     // [THEN] The layout is valid
-    EXPECT_TRUE(EditPart::isValidPartsLayout(layout(score->parts())));
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, layout(score->parts())));
 
     // [WHEN] The oboe goes between the flutes
     // [THEN] The layout isn't valid
-    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { oboe, nullptr },
+    EXPECT_FALSE(EditPart::isValidPartsLayout(score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { oboe, nullptr },
                                                   { flute2, sharedPart } }, {} }));
 
     // [WHEN] A flute goes before the shared part
     // [THEN] The layout isn't valid
-    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { flute1, sharedPart }, { sharedPart, nullptr }, { flute2, sharedPart },
+    EXPECT_FALSE(EditPart::isValidPartsLayout(score, { { { flute1, sharedPart }, { sharedPart, nullptr }, { flute2, sharedPart },
                                                   { oboe, nullptr } }, {} }));
 
     // [WHEN] The oboe joins the shared part after the flutes
     // [THEN] The layout is valid
-    EXPECT_TRUE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, { { { sharedPart, nullptr }, { flute1, sharedPart }, { flute2, sharedPart },
                                                  { oboe, sharedPart } }, {} }));
 
     delete score;
@@ -1499,7 +1499,60 @@ TEST_F(Engraving_EditPartTests, IsValidPartsLayout_MultiStaffJoin_ReturnsFalse)
 
     // [WHEN] The piano joins the shared part after the flute
     // [THEN] The layout isn't valid
-    EXPECT_FALSE(EditPart::isValidPartsLayout({ { { sharedPart, nullptr }, { flute, sharedPart }, { piano, sharedPart } }, {} }));
+    EXPECT_FALSE(EditPart::isValidPartsLayout(score, { { { sharedPart, nullptr }, { flute, sharedPart }, { piano, sharedPart } }, {} }));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, IsValidPartsLayout_DuplicatePart_ReturnsFalse)
+{
+    // [GIVEN] Three flutes
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* a = score->parts().at(0);
+    Part* b = score->parts().at(1);
+    Part* c = score->parts().at(2);
+
+    // [WHEN] The first flute is listed twice and the last one is missing
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout(score, layout({ a, b, a })));
+
+    // [WHEN] The flutes are reordered
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, layout({ b, a, c })));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, IsValidPartsLayout_IncompleteLayout_ReturnsFalse)
+{
+    // [GIVEN] A shared part with the first of three flutes
+    MasterScore* score = createMasterScore({ u"flute", u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    Part* a = score->parts().at(0);
+    Part* b = score->parts().at(1);
+    Part* c = score->parts().at(2);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [a, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { a });
+    });
+    ASSERT_TRUE(sharedPart);
+
+    // [WHEN] The last flute joins, but the middle one is missing
+    // [THEN] The layout isn't valid
+    EXPECT_FALSE(EditPart::isValidPartsLayout(score, { { { sharedPart, nullptr }, { a, sharedPart }, { c, sharedPart } }, {} }));
+
+    // [WHEN] The last flute joins, and the middle one is listed after it
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, { { { sharedPart, nullptr }, { a, sharedPart }, { c, sharedPart },
+                                                 { b, nullptr } }, {} }));
+
+    // [WHEN] Only markings move
+    // [THEN] The layout is valid
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, {}));
 
     delete score;
 }
@@ -1636,7 +1689,7 @@ TEST_F(Engraving_EditPartTests, MovePartsToNewSharedPart_MiddleMember_MovesBelow
     EXPECT_EQ(score->parts(), std::vector<Part*>({ sharedPart, flute1, flute3, newSharedPart, flute2 }));
     EXPECT_EQ(sharedPart->originParts(), std::vector<Part*>({ flute1, flute3 }));
     EXPECT_EQ(newSharedPart->originParts(), std::vector<Part*>({ flute2 }));
-    EXPECT_TRUE(EditPart::isValidPartsLayout(layout(score->parts())));
+    EXPECT_TRUE(EditPart::isValidPartsLayout(score, layout(score->parts())));
 
     // [WHEN] Undo once
     undo(score);

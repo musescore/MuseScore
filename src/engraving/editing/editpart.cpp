@@ -612,8 +612,34 @@ static bool changesSharedPart(const EditPart::PartPlacement& placement)
     return !placement.part->isSharedPart() && placement.part->sharedPart() != placement.sharedPart;
 }
 
-bool EditPart::isValidPartsLayout(const PartsLayout& layout)
+static bool listsEachPartOnce(const Score* score, const std::vector<EditPart::PartPlacement>& placements)
 {
+    // an empty list only moves markings
+    if (placements.empty()) {
+        return true;
+    }
+
+    const std::vector<Part*>& scoreParts = score->parts();
+    if (placements.size() != scoreParts.size()) {
+        return false;
+    }
+
+    std::unordered_set<const Part*> seen;
+    for (const EditPart::PartPlacement& placement : placements) {
+        if (!muse::contains(scoreParts, placement.part) || !seen.insert(placement.part).second) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool EditPart::isValidPartsLayout(const Score* score, const PartsLayout& layout)
+{
+    if (!score || !listsEachPartOnce(score, layout.parts)) {
+        return false;
+    }
+
     const SharedPart* openSharedPart = nullptr;
 
     for (const PartPlacement& placement : layout.parts) {

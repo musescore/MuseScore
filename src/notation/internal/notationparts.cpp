@@ -500,7 +500,7 @@ bool NotationParts::setPartsLayout(const PartsLayout& layout)
     TRACEFUNC;
 
     const EditPart::PartsLayout editPartLayout { editPartPlacements(layout.parts), editPartSystemObjectsMoves(layout.systemObjects) };
-    if (!EditPart::isValidPartsLayout(editPartLayout)) {
+    if (!EditPart::isValidPartsLayout(score(), editPartLayout)) {
         return false;
     }
 

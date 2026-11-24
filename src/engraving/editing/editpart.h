@@ -299,7 +299,8 @@ public:
         std::vector<SystemObjectsMove> systemObjects;
     };
 
-    static bool isValidPartsLayout(const PartsLayout& layout);
+    //! A non-empty layout must list each of the score's parts exactly once
+    static bool isValidPartsLayout(const Score* score, const PartsLayout& layout);
     static bool partsLayoutChangesScore(const Score* score, const PartsLayout& layout);
     static void setPartsLayout(Transaction& tx, Score* score, const PartsLayout& layout);
 
