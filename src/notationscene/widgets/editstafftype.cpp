@@ -158,7 +158,14 @@ EditStaffType::EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* p
     connect(zigzagFretNumbers, &QCheckBox::toggled, this, &EditStaffType::tabZigzagToggled);
 
     connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
-    connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(numbersRadio,      &QCheckBox::toggled, this, [this](bool useNumbers) {
+        // Zig-zag layout only makes sense for fret numbers
+        if (!useNumbers) {
+            zigzagFretNumbers->setChecked(false); // restores line distance via tabZigzagToggled
+        }
+        zigzagFretNumbers->setEnabled(useNumbers);
+        updatePreview();
+    });
 
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
@@ -353,6 +360,7 @@ void EditStaffType::setValues()
 
         numbersRadio->setChecked(staffType.useNumbers());
         lettersRadio->setChecked(!staffType.useNumbers());
+        zigzagFretNumbers->setEnabled(staffType.useNumbers());
         onLinesRadio->setChecked(staffType.onLines());
         aboveLinesRadio->setChecked(!staffType.onLines());
         linesThroughRadio->setChecked(staffType.linesThrough());
@@ -573,7 +581,7 @@ void EditStaffType::setFromDlg()
         staffType.setShowRests(showRests->isChecked());
         staffType.setUpsideDown(upsideDown->isChecked());
         staffType.setShowTabFingering(showTabFingering->isChecked());
-        staffType.setZigzagFretNumbers(zigzagFretNumbers->isChecked());
+        staffType.setZigzagFretNumbers(numbersRadio->isChecked() && zigzagFretNumbers->isChecked());
         staffType.setUseNumbers(numbersRadio->isChecked());
         //note values
         staffType.setStemsDown(stemBelowRadio->isChecked());
