@@ -42,7 +42,7 @@ public:
     virtual muse::UriQuery soundsUri() const = 0;
 
     virtual MuseHubUrls museHubUrls(MuseHubPage page, const std::string& utmContent,
-                                    const muse::String& soundCode = muse::String()) const = 0;
+                                    const SoundLibraryInfo& soundLibrary = SoundLibraryInfo()) const = 0;
 
     virtual bool needCheckForMuseSoundsUpdate() const = 0;
 

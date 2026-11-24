@@ -96,6 +96,7 @@ protected:
     std::shared_ptr<NiceMock<InteractiveMock> > m_interactive;
 
     const MuseHubUrls m_urls { "test-app://page?utm_content=place", "test://page?utm_content=place" };
+    const SoundLibraryInfo m_soundLibrary { String(u"library-id"), String(u"library-code") };
 };
 }
 
@@ -103,7 +104,7 @@ protected:
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSoundsPro, "place", String()))
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSoundsPro, "place", SoundLibraryInfo()))
     .WillOnce(Return(m_urls));
 
     // [GIVEN] MuseHub can be opened
@@ -133,7 +134,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppOpened_DoesNotOpenWebUrl)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppCanNotBeOpened_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] No app can open the MuseHub link
@@ -160,7 +161,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppCanNotBeOpened_OpensWebUrl)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_CanOpenAppRejected_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] Checking whether MuseHub can be opened is rejected
@@ -187,7 +188,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_CanOpenAppRejected_OpensWebUrl)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] MuseHub can be opened
@@ -217,7 +218,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppFailed_OpensWebUrl)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] MuseHub can be opened
@@ -247,7 +248,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_AppRejected_OpensWebUrl)
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_WebUrlFailed_ResolvesWithError)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSounds, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] No app can open the MuseHub link
@@ -271,7 +272,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_WebUrlFailed_ResolvesWithError)
 TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_OpensMuseHub)
 {
     // [GIVEN] The configuration returns the URLs for the sound library
-    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", String(u"library-code")))
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", m_soundLibrary))
     .WillOnce(Return(m_urls));
 
     // [GIVEN] MuseHub can be opened
@@ -287,7 +288,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_OpensMuseHub)
     }));
 
     // [WHEN] Opening the sound library
-    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(String(u"library-code"), "place"));
+    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(m_soundLibrary, "place"));
 
     // [THEN] The promise is resolved successfully
     ASSERT_TRUE(result.has_value());
@@ -299,10 +300,10 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_OpensMuseHub)
 TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_NoMuseHub_OpensMuseSoundsManager)
 {
     // [GIVEN] The configuration returns the URLs for the sound library
-    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", String(u"library-code")))
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::SoundLibrary, "place", m_soundLibrary))
     .WillOnce(Return(m_urls));
 
-    // [THEN] MuseSounds Manager is launched
+    // [THEN] MuseSounds Manager is launched without installing anything
     EXPECT_CALL(*m_process, startDetached("muse-sounds-manager", std::vector<std::string>()))
     .WillOnce(Return(true));
 
@@ -312,7 +313,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_NoMuseHub_OpensMuseSound
     EXPECT_CALL(*m_interactive, openUrl(Matcher<const std::string&>(_))).Times(0);
 
     // [WHEN] Opening the sound library
-    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(String(u"library-code"), "place"));
+    const std::optional<Ret> result = waitForResult(m_launcher->openSoundLibrary(m_soundLibrary, "place"));
 
     // [THEN] The promise is resolved successfully
     ASSERT_TRUE(result.has_value());
@@ -322,7 +323,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, OpenSoundLibrary_NoMuseHub_OpensMuseSound
 TEST_F(MuseSounds_MuseHubLauncherTest, OpenPlugins_NoMuseHub_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the plugins page
-    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", String()))
+    EXPECT_CALL(*m_configuration, museHubUrls(MuseHubPage::Plugins, "place", SoundLibraryInfo()))
     .WillOnce(Return(m_urls));
 
     // [THEN] Neither MuseHub nor MuseSounds Manager is opened
@@ -356,7 +357,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_NoMuseHub_OpensMuseSoundsManagerWith
         SCOPED_TRACE(int(page));
 
         // [GIVEN] The configuration returns the URLs for the page
-        ON_CALL(*m_configuration, museHubUrls(page, "place", String()))
+        ON_CALL(*m_configuration, museHubUrls(page, "place", SoundLibraryInfo()))
         .WillByDefault(Return(m_urls));
 
         // [THEN] MuseSounds Manager is launched with the page arguments
@@ -383,7 +384,7 @@ TEST_F(MuseSounds_MuseHubLauncherTest, Open_NoMuseHub_OpensMuseSoundsManagerWith
 TEST_F(MuseSounds_MuseHubLauncherTest, Open_NoMuseHub_ManagerFailed_OpensWebUrl)
 {
     // [GIVEN] The configuration returns the URLs for the page
-    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSamplerUpdate, "place", String()))
+    ON_CALL(*m_configuration, museHubUrls(MuseHubPage::MuseSamplerUpdate, "place", SoundLibraryInfo()))
     .WillByDefault(Return(m_urls));
 
     // [GIVEN] MuseSounds Manager can't be launched

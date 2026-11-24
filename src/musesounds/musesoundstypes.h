@@ -43,6 +43,7 @@ struct MuseHubUrls {
 };
 
 struct SoundLibraryInfo {
+    muse::String id;
     muse::String code;
     muse::String title;
     muse::String subtitle;
@@ -50,7 +51,10 @@ struct SoundLibraryInfo {
 
     bool operator==(const SoundLibraryInfo& o) const
     {
-        return code == o.code && title == o.title && subtitle == o.subtitle
+        return id == o.id
+               && code == o.code
+               && title == o.title
+               && subtitle == o.subtitle
                && thumbnail == o.thumbnail;
     }
 };

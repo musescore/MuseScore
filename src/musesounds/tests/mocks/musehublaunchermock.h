@@ -31,6 +31,6 @@ class MuseHubLauncherMock : public IMuseHubLauncher
 {
 public:
     MOCK_METHOD(muse::async::Promise<muse::Ret>, open, (MuseHubPage, const std::string&), (override));
-    MOCK_METHOD(muse::async::Promise<muse::Ret>, openSoundLibrary, (const muse::String&, const std::string&), (override));
+    MOCK_METHOD(muse::async::Promise<muse::Ret>, openSoundLibrary, (const SoundLibraryInfo&, const std::string&), (override));
 };
 }

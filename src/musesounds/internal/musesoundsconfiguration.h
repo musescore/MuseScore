@@ -41,7 +41,8 @@ public:
 
     muse::UriQuery soundsUri() const override;
 
-    MuseHubUrls museHubUrls(MuseHubPage page, const std::string& utmContent, const muse::String& soundCode = muse::String()) const override;
+    MuseHubUrls museHubUrls(MuseHubPage page, const std::string& utmContent,
+                            const SoundLibraryInfo& soundLibrary = SoundLibraryInfo()) const override;
 
     bool needCheckForMuseSoundsUpdate() const override;
 

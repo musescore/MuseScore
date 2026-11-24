@@ -92,7 +92,18 @@ void MuseSoundsListModel::load()
 
 void MuseSoundsListModel::openSoundLibrary(const QString& code)
 {
-    museHubLauncher()->openSoundLibrary(muse::String::fromQString(code), "home_musesounds");
+    const muse::String libraryCode = muse::String::fromQString(code);
+
+    for (const SoundCatalogueInfo& catalogue : m_soundsCatalogs) {
+        for (const SoundLibraryInfo& soundLibrary : catalogue.soundLibraries) {
+            if (soundLibrary.code == libraryCode) {
+                museHubLauncher()->openSoundLibrary(soundLibrary, "home_musesounds");
+                return;
+            }
+        }
+    }
+
+    LOGE() << "Sound library not found: " << code;
 }
 
 QString MuseSoundsListModel::searchText() const

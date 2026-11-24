@@ -28,6 +28,7 @@ class MuseHubLauncherStub : public IMuseHubLauncher
 {
 public:
     muse::async::Promise<muse::Ret> open(MuseHubPage page, const std::string& utmContent = std::string()) override;
-    muse::async::Promise<muse::Ret> openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> openSoundLibrary(const SoundLibraryInfo& soundLibrary,
+                                                     const std::string& utmContent = std::string()) override;
 };
 }

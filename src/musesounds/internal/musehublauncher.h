@@ -45,7 +45,8 @@ public:
         : muse::Contextable(iocCtx) {}
 
     muse::async::Promise<muse::Ret> open(MuseHubPage page, const std::string& utmContent = std::string()) override;
-    muse::async::Promise<muse::Ret> openSoundLibrary(const muse::String& code, const std::string& utmContent = std::string()) override;
+    muse::async::Promise<muse::Ret> openSoundLibrary(const SoundLibraryInfo& soundLibrary,
+                                                     const std::string& utmContent = std::string()) override;
 
 private:
     using Resolve = muse::async::Promise<muse::Ret>::Resolve;

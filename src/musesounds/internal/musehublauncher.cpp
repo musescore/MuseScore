@@ -32,11 +32,11 @@ static std::vector<std::string> museSoundsManagerArgs(MuseHubPage page)
     switch (page) {
     case MuseHubPage::MuseSamplerUpdate:
         return { "--show-sampler-update", "--show-hidden-statuses" };
+    case MuseHubPage::SoundLibrary:
     case MuseHubPage::MuseSounds:
     case MuseHubPage::FreeMuseSounds:
     case MuseHubPage::MuseSoundsCore:
     case MuseHubPage::MuseSoundsPro:
-    case MuseHubPage::SoundLibrary:
         break;
     case MuseHubPage::Plugins: // not reached: MuseSounds Manager doesn't provide plugins
         break;
@@ -64,9 +64,9 @@ async::Promise<Ret> MuseHubLauncher::open(MuseHubPage page, const std::string& u
 #endif
 }
 
-async::Promise<Ret> MuseHubLauncher::openSoundLibrary(const String& code, const std::string& utmContent)
+async::Promise<Ret> MuseHubLauncher::openSoundLibrary(const SoundLibraryInfo& soundLibrary, const std::string& utmContent)
 {
-    const MuseHubUrls urls = configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, code);
+    const MuseHubUrls urls = configuration()->museHubUrls(MuseHubPage::SoundLibrary, utmContent, soundLibrary);
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     return tryOpenMuseHub(urls);

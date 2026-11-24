@@ -108,7 +108,8 @@ UriQuery MuseSoundsConfiguration::soundsUri() const
            : UriQuery("https://customers-api-dev.musehub.com/graphql/v3");
 }
 
-MuseHubUrls MuseSoundsConfiguration::museHubUrls(MuseHubPage page, const std::string& utmContent, const String& soundCode) const
+MuseHubUrls MuseSoundsConfiguration::museHubUrls(MuseHubPage page, const std::string& utmContent,
+                                                 const SoundLibraryInfo& soundLibrary) const
 {
     const std::string baseUrl = globalConfiguration()->museHubWebUrl();
 
@@ -129,12 +130,14 @@ MuseHubUrls MuseSoundsConfiguration::museHubUrls(MuseHubPage page, const std::st
         return { "musehub://plugins?" + museHubAppParams(utmContent),
                  baseUrl + "plugins?" + museHubParams(utmContent) };
     case MuseHubPage::SoundLibrary: {
-        IF_ASSERT_FAILED(!soundCode.empty()) {
+        IF_ASSERT_FAILED(!soundLibrary.code.empty()) {
             break;
         }
 
-        const std::string codeStr = soundCode.toStdString();
-        return { "musehub://product/store?type=library&id=" + codeStr + "&" + museHubAppParams(utmContent, codeStr),
+        const std::string codeStr = soundLibrary.code.toStdString();
+        const std::string idStr = !soundLibrary.id.empty() ? soundLibrary.id.toStdString() : codeStr;
+
+        return { "musehub://product/store?type=library&id=" + idStr + "&" + museHubAppParams(utmContent, codeStr),
                  baseUrl + "muse-sounds/" + codeStr + "?" + museHubParams(utmContent, codeStr) };
     }
     case MuseHubPage::MuseSamplerUpdate:
