@@ -606,7 +606,10 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         spaceRw = std::max(maxRightExtent, minHalfHeadWidth);
     }
 
-    if (lll < stemX - spaceLw) {
+    if (tab->zigzagFretNumbers() && hasZigzagAdjustments) {
+        // spaceLw is measured leftwards from the stem centre, so the space left of the chord origin is spaceLw - stemX
+        lll = std::max(lll, spaceLw - stemX);
+    } else if (lll < stemX - spaceLw) {
         lll = stemX - spaceLw;
     }
     if (rrr < stemX + spaceRw) {
