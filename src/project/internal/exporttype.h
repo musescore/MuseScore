@@ -66,7 +66,7 @@ struct ExportType
 inline bool isAudioExport(const std::string& suffix)
 {
     static const std::unordered_set<std::string> audioSuffixes {
-        "mp3", "wav", "ogg", "flac",
+        "mp3", "wav", "ogg", "flac", "aac",
     };
 
     return muse::contains(audioSuffixes, suffix);
