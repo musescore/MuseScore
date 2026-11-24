@@ -323,7 +323,7 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                                                        static_cast<int>(page));
 
                 files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                            return writer->write(notation, destinationDevice, options);
+                            return writer->writeSync(notation, destinationDevice, options);
                         } });
             }
         }
@@ -336,13 +336,13 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                                                        notation), isExportingOnlyOneScore);
 
             files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
+                        return writer->writeSync(notation, destinationDevice, options);
                     } });
         }
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
         files.push_back({ destinationPath, [writer, notations, options](IODevice& destinationDevice) {
-                    return writer->writeList(notations, destinationDevice, options);
+                    return writer->writeListSync(notations, destinationDevice, options);
                 } });
     } break;
     }

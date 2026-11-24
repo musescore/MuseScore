@@ -118,11 +118,11 @@ protected:
         ON_CALL(*m_writers, writer(_)).WillByDefault(Return(m_writer));
         ON_CALL(*m_writer, supportsUnitType(_)).WillByDefault(Return(true));
         ON_CALL(*m_writer, progress()).WillByDefault(Return(nullptr));
-        ON_CALL(*m_writer, write(_, _, _))
+        ON_CALL(*m_writer, writeSync(_, _, _))
         .WillByDefault([this](notation::INotationPtr notation, io::IODevice& device, const INotationWriter::Options& options) {
             return writeFile({ notation }, device, options);
         });
-        ON_CALL(*m_writer, writeList(_, _, _))
+        ON_CALL(*m_writer, writeListSync(_, _, _))
         .WillByDefault([this](const notation::INotationPtrList& notations, io::IODevice& device, const INotationWriter::Options& options) {
             return writeFile(notations, device, options);
         });
@@ -322,14 +322,14 @@ protected:
     //! Writing fails with `ret` every time.
     void givenWritingFailsWith(const Ret& ret)
     {
-        ON_CALL(*m_writer, write(_, _, _)).WillByDefault(Return(ret));
+        ON_CALL(*m_writer, writeSync(_, _, _)).WillByDefault(Return(ret));
     }
 
     //! Writing fails with `ret` the first time, and succeeds afterwards.
     void givenWritingFailsOnceWith(const Ret& ret)
     {
         auto failed = std::make_shared<bool>(false);
-        ON_CALL(*m_writer, write(_, _, _))
+        ON_CALL(*m_writer, writeSync(_, _, _))
         .WillByDefault([this, ret, failed](notation::INotationPtr notation, io::IODevice& device, const INotationWriter::Options& options) {
             if (!*failed) {
                 *failed = true;
@@ -343,8 +343,8 @@ protected:
     //! The writing is cancelled (e.g. by the user in the progress dialog), after the file has been created.
     void givenWritingIsCancelledAfterCreatingTheFile()
     {
-        ON_CALL(*m_writer, write(_, _, _)).WillByDefault([this](notation::INotationPtr, io::IODevice& device,
-                                                                const INotationWriter::Options&) {
+        ON_CALL(*m_writer, writeSync(_, _, _)).WillByDefault([this](notation::INotationPtr, io::IODevice& device,
+                                                                    const INotationWriter::Options&) {
             givenFileExists(device.meta("file_path"));
             return make_ret(Ret::Code::Cancel);
         });
@@ -551,7 +551,7 @@ TEST_F(ExportProjectScenarioTests, MultiPart_WritesAllTheScoresToOneFile)
     notation::INotationPtrList notations = { m_main->notation, violin->notation, flute->notation };
 
     //! [THEN] They are written all together, not one by one
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     //! [WHEN] Exporting the score with the parts to one file...
     EXPECT_TRUE(exportScores(notations, path("Export.mxl"), INotationWriter::UnitType::MULTI_PART));
@@ -620,7 +620,7 @@ TEST_F(ExportProjectScenarioTests, ExistingFile_QuestionNotAnsweredYet_WaitsForT
     });
 
     //! [THEN] Nothing is written in the meantime, the files come in the chosen order
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     //! [WHEN] Exporting the score with the part...
     bool resolved = false;
@@ -801,7 +801,7 @@ TEST_F(ExportProjectScenarioTests, WriteFails_Abort_StopsTheWholeExport)
     givenRetryQuestionAnsweredWith(IInteractive::Button::Abort);
 
     //! [THEN] The part is not even tried
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(1);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
     Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
@@ -835,7 +835,7 @@ TEST_F(ExportProjectScenarioTests, RemoveFails_Abort_WritesNothing)
     givenRetryQuestionAnsweredWith(IInteractive::Button::Abort);
 
     //! [THEN] Nothing is written over it
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     //! [WHEN] Exporting...
     Ret ret = exportScores({ m_main->notation }, path("Export.pdf"));
@@ -877,7 +877,7 @@ TEST_F(ExportProjectScenarioTests, FileCannotBeOpened_Abort_WritesNothing)
     givenRetryQuestionAnsweredWith(IInteractive::Button::Abort);
 
     //! [THEN] The writer is not called
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     //! [WHEN] Exporting there...
     Ret ret = exportScores({ m_main->notation }, path("NotExisting/Export.pdf"));
@@ -897,7 +897,7 @@ TEST_F(ExportProjectScenarioTests, WriteCancelled_StopsTheWholeExportWithoutAski
 
     //! [THEN] Nothing is asked, and the part is not even tried
     EXPECT_CALL(*m_interactive, question(_, _, _, _, _, _)).Times(0);
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(1);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(1);
 
     //! [WHEN] Exporting the score with the part...
     Ret ret = exportScores({ m_main->notation, violin->notation }, path("Export.pdf"));
@@ -1159,7 +1159,7 @@ TEST_F(ExportProjectScenarioTests, Progress_SeveralFiles_AddsUpToOne)
 
     //! [GIVEN] The first file is reported half written, and the second one 60 % written
     int64_t current = 50;
-    ON_CALL(*m_writer, write(_, _, _))
+    ON_CALL(*m_writer, writeSync(_, _, _))
     .WillByDefault([&](notation::INotationPtr notation, io::IODevice& device, const INotationWriter::Options& options) {
         if (current == 50) {
             shownProgress.progressChanged().onReceive(this, [&reported](int64_t cur, int64_t total, const std::string&) {
@@ -1194,8 +1194,8 @@ TEST_F(ExportProjectScenarioTests, Progress_CancelledByTheUser_AbortsTheWriter)
     givenWriterReportsProgress(&writerProgress, &shownProgress);
 
     //! [GIVEN] The user cancels the progress while the file is being written
-    ON_CALL(*m_writer, write(_, _, _)).WillByDefault([&shownProgress](notation::INotationPtr, io::IODevice&,
-                                                                      const INotationWriter::Options&) {
+    ON_CALL(*m_writer, writeSync(_, _, _)).WillByDefault([&shownProgress](notation::INotationPtr, io::IODevice&,
+                                                                          const INotationWriter::Options&) {
         shownProgress.cancel();
         return make_ret(Ret::Code::Cancel);
     });

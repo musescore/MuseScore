@@ -28,7 +28,7 @@ using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret AacWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret AacWriter::writeSync(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     const SoundTrackFormat format {
         SoundTrackType::AAC,

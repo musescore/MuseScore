@@ -52,7 +52,7 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret SvgWriter::writeSync(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     TRACEFUNC;
 

@@ -33,8 +33,8 @@ public:
     MOCK_METHOD(std::vector<UnitType>, supportedUnitTypes, (), (const, override));
     MOCK_METHOD(bool, supportsUnitType, (UnitType unitType), (const, override));
 
-    MOCK_METHOD(muse::Ret, write, (notation::INotationPtr notation, muse::io::IODevice& device, const Options& options), (override));
-    MOCK_METHOD(muse::Ret, writeList, (const notation::INotationPtrList& notations, muse::io::IODevice& device, const Options& options),
+    MOCK_METHOD(muse::Ret, writeSync, (notation::INotationPtr notation, muse::io::IODevice& device, const Options& options), (override));
+    MOCK_METHOD(muse::Ret, writeListSync, (const notation::INotationPtrList& notations, muse::io::IODevice& device, const Options& options),
                 (override));
 
     MOCK_METHOD(muse::Progress*, progress, (), (override));

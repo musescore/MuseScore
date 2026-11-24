@@ -28,7 +28,7 @@ using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret WaveWriter::writeSync(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     const SoundTrackFormat format {
         SoundTrackType::WAV,

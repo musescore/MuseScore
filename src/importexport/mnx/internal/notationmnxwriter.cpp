@@ -48,7 +48,7 @@ bool NotationMnxWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret NotationMnxWriter::writeSync(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -80,7 +80,7 @@ Ret NotationMnxWriter::write(notation::INotationPtr notation, io::IODevice& dest
     }
 }
 
-Ret NotationMnxWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
+Ret NotationMnxWriter::writeListSync(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

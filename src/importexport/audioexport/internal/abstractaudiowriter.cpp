@@ -49,7 +49,7 @@ bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::writeSync(INotationPtr, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -64,7 +64,7 @@ Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& optio
     return Ret(Ret::Code::NotSupported);
 }
 
-Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::writeListSync(const INotationPtrList&, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);

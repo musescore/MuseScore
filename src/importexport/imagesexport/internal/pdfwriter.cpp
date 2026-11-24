@@ -43,7 +43,7 @@ std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
     return { UnitType::PER_PART, UnitType::MULTI_PART };
 }
 
-Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret PdfWriter::writeSync(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     UnitType unitType = unitTypeFromOptions(options);
     IF_ASSERT_FAILED(unitType == UnitType::PER_PART) {
@@ -90,7 +90,7 @@ Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     return true;
 }
 
-Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destinationDevice, const Options& options)
+Ret PdfWriter::writeListSync(const INotationPtrList& notations, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
