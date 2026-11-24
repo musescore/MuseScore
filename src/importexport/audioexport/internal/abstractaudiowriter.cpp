@@ -181,12 +181,10 @@ void AbstractAudioWriter::doWriteAsync(INotationPtr notation, io::IODevice& dstD
         SoundTrackFormat actualFormat = soundTrackFormat();
 
         double leadingSilenceSec = muse::value(options, OptionKey::LEADING_SILENCE_SEC, Val(0.0)).toDouble();
-        actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec)
-                                              ? static_cast<msecs_t>(leadingSilenceSec) : msecs_t(0);
+        actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec) ? secs_t(leadingSilenceSec) : secs_t(0.0);
 
         double trailingSilenceSec = muse::value(options, OptionKey::TRAILING_SILENCE_SEC, Val(0.0)).toDouble();
-        actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
-                                               ? static_cast<msecs_t>(trailingSilenceSec) : msecs_t(0);
+        actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec) ? secs_t(trailingSilenceSec) : secs_t(0.0);
 
         const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
         if (!waitForCompletion) {
