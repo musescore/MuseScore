@@ -425,7 +425,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
     double lineDist    = tab->lineDistance().val() * _spatium;
-    double stemX       = StemLayout::tabStemPosX() * _spatium;
+    double stemX       = tab->zigzagFretNumbers() ? StemLayout::tabStemPosX() * _spatium : 0.5 * headWidth;
     int ledgerLines = 0;
     double llY         = 0.0;
 
