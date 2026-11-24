@@ -85,10 +85,19 @@ void Autoplace::doAutoplaceMeasureElement(const EngravingItem* item, EngravingIt
 
 void Autoplace::autoplaceMeasureNumber(const MeasureNumber* item, EngravingItem::LayoutData* ldata)
 {
-    const bool fitInGaps = item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()
-                           == MeasureNumberAvoidance::FIT_IN_GAPS;
-    doAutoplaceMeasureElement(item, ldata, item->placeAbove(), /* add = */ true,
-                              fitInGaps ? CollisionStrategy::FIT_IN_GAPS : CollisionStrategy::MOVE_CLEAR);
+    CollisionStrategy strategy = CollisionStrategy::MOVE_CLEAR;
+    switch (item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()) {
+    case MeasureNumberAvoidance::MOVE_CLEAR:
+        strategy = CollisionStrategy::MOVE_CLEAR;
+        break;
+    case MeasureNumberAvoidance::FIT_IN_GAPS:
+        strategy = CollisionStrategy::FIT_IN_GAPS;
+        break;
+    case MeasureNumberAvoidance::MASK_SPANNERS:
+        strategy = CollisionStrategy::FIT_IN_GAPS_IGNORING_SLURS_AND_TIES;
+        break;
+    }
+    doAutoplaceMeasureElement(item, ldata, item->placeAbove(), /* add = */ true, strategy);
 }
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata)
@@ -109,7 +118,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
 }
 
 double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox,
-                                       bool above, double minHorizontalClearance, double minDistance)
+                                       bool above, double minHorizontalClearance, double minDistance, bool ignoreSlursAndTies)
 {
     const auto innerEdge = [above](const RectF& r) { return above ? -r.bottom() : r.top(); };
     const auto outerEdge = [above](const RectF& r) { return above ? -r.top() : r.bottom(); };
@@ -117,9 +126,16 @@ double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineL
     // Only elements that overlap the item horizontally can collide with it
     std::vector<const ShapeElement*> obstacles;
     for (const ShapeElement& el : skyline.elements()) {
+        const EngravingItem* skylineItem = el.item();
         if (el.height() <= 0.0
-            || (el.item() && Autoplace::itemsShouldIgnoreEachOther(item, el.item()))
             || !mu::engraving::intersects(el.left(), el.right(), bbox.left(), bbox.right(), minHorizontalClearance)) {
+            continue;
+        }
+        if (skylineItem && ignoreSlursAndTies && skylineItem->isSlurTieSegment() && !skylineItem->isTappingHalfSlurSegment()) {
+            // Slurs and ties are masked around the item instead
+            continue;
+        }
+        if (skylineItem && itemsShouldIgnoreEachOther(item, skylineItem)) {
             continue;
         }
         obstacles.push_back(&el);
@@ -150,8 +166,9 @@ double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineL
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
                                      double minSkylineHorizontalClearance, double minDistance, CollisionStrategy strategy)
 {
-    if (strategy == CollisionStrategy::FIT_IN_GAPS) {
-        return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance);
+    if (strategy != CollisionStrategy::MOVE_CLEAR) {
+        return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance,
+                                    strategy == CollisionStrategy::FIT_IN_GAPS_IGNORING_SLURS_AND_TIES);
     }
 
     const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {

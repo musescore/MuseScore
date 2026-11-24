@@ -3604,9 +3604,10 @@ MeasureNumberPlacement TConv::fromXml(const AsciiStringView& tag, MeasureNumberP
     return findTypeByXmlTag<MeasureNumberPlacement>(MEASURE_NUMBER_MODES, tag, def);
 }
 
-const std::array<Item<MeasureNumberAvoidance>, 2> MEASURE_NUMBER_AVOIDANCE = { {
-    { MeasureNumberAvoidance::MOVE_CLEAR,   "move-clear" },
-    { MeasureNumberAvoidance::FIT_IN_GAPS,  "fit-in-gaps" },
+const std::array<Item<MeasureNumberAvoidance>, 3> MEASURE_NUMBER_AVOIDANCE = { {
+    { MeasureNumberAvoidance::MOVE_CLEAR,     "move-clear" },
+    { MeasureNumberAvoidance::FIT_IN_GAPS,    "fit-in-gaps" },
+    { MeasureNumberAvoidance::MASK_SPANNERS,  "mask-spanners" },
 } };
 
 AsciiStringView TConv::toXml(MeasureNumberAvoidance v)

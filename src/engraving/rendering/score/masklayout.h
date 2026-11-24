@@ -26,6 +26,7 @@
 
 namespace mu::engraving {
 class BarLine;
+class EngravingItem;
 class Page;
 class System;
 class StaffLines;
@@ -46,7 +47,11 @@ private:
     static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
     static std::vector<TextBase*> collectAllSystemText(const System* system);
 
-    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment);
+    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment, bool maskOverSignatures, bool maskOverMeasureNumbers);
+    static void collectSignaturesUnderSlurTie(const SlurTieSegment* slurTieSegment, staff_idx_t startStaffIdx, staff_idx_t endStaffIdx,
+                                              std::vector<const EngravingItem*>& items);
+    static void collectMeasureNumbersUnderSlurTie(const SlurTieSegment* slurTieSegment, staff_idx_t startStaffIdx, staff_idx_t endStaffIdx,
+                                                  std::vector<const EngravingItem*>& items);
 
     static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding);
     static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape,
