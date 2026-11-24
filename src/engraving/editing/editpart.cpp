@@ -811,7 +811,7 @@ void EditPart::reorderStaves(Transaction& tx, Score* score, const std::vector<St
         staffMapping[firstStaffIdx + i] = staves[i]->idx();
     }
 
-    tx.push(new SortStaves(score, staffMapping));
+    pushSortStaves(tx, score, staffMapping);
     score->setBracketsAndBarlines();
 }
 
@@ -854,7 +854,7 @@ void EditPart::moveParts(Transaction& tx, Score* score, const std::vector<Part*>
         }
     }
 
-    tx.push(new SortStaves(score, staffMapping));
+    pushSortStaves(tx, score, staffMapping);
     score->setBracketsAndBarlines();
 }
 
@@ -967,7 +967,7 @@ void EditPart::moveStaves(Transaction& tx, Score* score, const std::vector<Staff
         sortedIndexes.push_back(staff->idx());
     }
 
-    tx.push(new SortStaves(score, sortedIndexes));
+    pushSortStaves(tx, score, sortedIndexes);
     score->setBracketsAndBarlines();
 }
 
@@ -1350,7 +1350,7 @@ void EditPart::doReorderParts(Transaction& tx, Score* score, const std::vector<P
             }
         }
 
-        tx.push(new SortStaves(score, staffMapping));
+        pushSortStaves(tx, score, staffMapping);
         score->setBracketsAndBarlines();
     }
 
@@ -1657,6 +1657,25 @@ void EditPart::sortStaves(Transaction& tx, Score* score, const std::vector<Part*
             staffMapping.push_back(muse::indexOf(score->staves(), staff));
         }
     }
+
+    pushSortStaves(tx, score, staffMapping);
+}
+
+void EditPart::pushSortStaves(Transaction& tx, Score* score, const std::vector<staff_idx_t>& staffMapping)
+{
+    std::vector<staff_idx_t> newStaffIdx(score->nstaves(), muse::nidx);
+    for (staff_idx_t i = 0; i < staffMapping.size(); ++i) {
+        newStaffIdx.at(staffMapping[i]) = i;
+    }
+
+    EditStaveSharing::remapUserTrackMaps(tx, score, [&newStaffIdx](track_idx_t track) {
+        const staff_idx_t oldStaffIdx = track2staff(track);
+        if (oldStaffIdx >= newStaffIdx.size()) {
+            return muse::nidx;
+        }
+        const staff_idx_t staffIdx = newStaffIdx[oldStaffIdx];
+        return staffIdx == muse::nidx ? muse::nidx : staff2track(staffIdx, track2voice(track));
+    });
 
     tx.push(new SortStaves(score, staffMapping));
 }

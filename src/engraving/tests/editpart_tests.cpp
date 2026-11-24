@@ -2092,3 +2092,54 @@ TEST_F(Engraving_EditPartTests, ChangeStringData_ChangesFrets)
 
     delete score;
 }
+
+TEST_F(Engraving_EditPartTests, MoveParts_KeepsCustomVoiceMap)
+{
+    // [GIVEN] A shared part with the first of two flutes
+    // Staves: 0 shared part (tracks 0-3), 1 flute 1 (tracks 4-7), 2 flute 2 (tracks 8-11)
+    MasterScore* score = createMasterScore({ u"flute", u"flute" });
+    ASSERT_EQ(score->parts().size(), 2u);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    edit(score, [flute1, &sharedPart](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(sharedPart->staff(0)->idx(), 0);
+    ASSERT_EQ(flute1->staff(0)->idx(), 1);
+
+    // [GIVEN] From measure 2, the first flute (track 4) is put in voice 2 of the shared staff (track 1)
+    Segment* m2Seg = score->crMeasure(1)->first(SegmentType::ChordRest);
+    ASSERT_TRUE(m2Seg);
+    edit(score, [m2Seg, sharedPart](Transaction& tx) {
+        EditStaveSharing::setTrackMapping(tx, m2Seg, sharedPart, 4, 1);
+    });
+
+    auto customVoiceMap = [sharedPart, m2Seg]() {
+        return sharedPart->exactStaveSharingStateAtTick(m2Seg->tick())->userTrackMap().value();
+    };
+    ASSERT_EQ(customVoiceMap().at(4), 1);
+
+    // [WHEN] The second flute moves above the shared part
+    // Staves: 0 flute 2 (tracks 0-3), 1 shared part (tracks 4-7), 2 flute 1 (tracks 8-11)
+    edit(score, [score, flute2, sharedPart](Transaction& tx) {
+        EditPart::moveParts(tx, score, { flute2 }, sharedPart, false);
+    });
+    ASSERT_EQ(sharedPart->staff(0)->idx(), 1);
+    ASSERT_EQ(flute1->staff(0)->idx(), 2);
+
+    // [THEN] The first flute (track 8) is still in voice 2 of the shared staff (track 5)
+    EXPECT_EQ(customVoiceMap().count(4), 0);
+    EXPECT_EQ(customVoiceMap().at(8), 5);
+
+    // [WHEN] It's undone
+    undo(score);
+
+    // [THEN] The first flute (track 4) is back in voice 2 of the shared staff (track 1)
+    EXPECT_EQ(customVoiceMap().at(4), 1);
+
+    delete score;
+}

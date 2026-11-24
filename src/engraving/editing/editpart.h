@@ -364,6 +364,7 @@ private:
     static void updateSoloist(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
     static void sortParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
     static void sortStaves(Transaction& tx, Score* score, const std::vector<Part*>& orderedParts);
+    static void pushSortStaves(Transaction& tx, Score* score, const std::vector<staff_idx_t>& staffMapping);
 
     static void deleteExcerptsOfParts(Transaction& tx, MasterScore* master, const std::vector<Part*>& parts);
     static bool moveSystemObjects(Transaction& tx, Score* score, std::vector<std::pair<staff_idx_t, Staff*> > moves, bool belowBottomStaff);
