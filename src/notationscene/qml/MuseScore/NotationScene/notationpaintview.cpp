@@ -33,6 +33,25 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 {
 }
 
+void NotationPaintView::onNotationSetup()
+{
+    // Clip automation lines to the view bounds
+    m_automationLinesContainer = new QQuickItem(this);
+    m_automationLinesContainer->setClip(true);
+    m_automationLinesContainer->setWidth(width());
+    m_automationLinesContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setHeight(height());
+    });
+
+    m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+
+    AbstractNotationPaintView::onNotationSetup();
+}
+
 void NotationPaintView::onLoadNotation(INotationPtr notation)
 {
     m_isLocalMatrixUpdate = true;
@@ -48,6 +67,8 @@ void NotationPaintView::onLoadNotation(INotationPtr notation)
     });
 
     AbstractNotationPaintView::onLoadNotation(notation);
+
+    m_notationAutomationController->init();
 }
 
 void NotationPaintView::onUnloadNotation(INotationPtr notation)
@@ -67,6 +88,10 @@ void NotationPaintView::initZoomAndPosition()
 
 void NotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
 {
+    if (m_notationAutomationController) {
+        m_notationAutomationController->setViewMatrix(newMatrix);
+    }
+
     AbstractNotationPaintView::onMatrixChanged(oldMatrix, newMatrix, overrideZoomType);
 
     if (!m_isLocalMatrixUpdate && notation()) {

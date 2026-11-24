@@ -25,6 +25,7 @@
 #include <qqmlintegration.h>
 
 #include "abstractnotationpaintview.h"
+#include "notationautomationcontroller.h"
 
 namespace mu::notation {
 class NotationPaintView : public AbstractNotationPaintView
@@ -36,6 +37,8 @@ public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
 
 private:
+    void onNotationSetup() override;
+
     void onLoadNotation(INotationPtr notation) override;
     void onUnloadNotation(INotationPtr notation) override;
 
@@ -45,5 +48,8 @@ private:
                          bool overrideZoomType = true) override;
 
     bool m_isLocalMatrixUpdate = false;
+
+    QQuickItem* m_automationLinesContainer = nullptr;
+    std::unique_ptr<NotationAutomationController> m_notationAutomationController;
 };
 }
