@@ -89,6 +89,34 @@ protected:
     std::shared_ptr<NiceMock<ArticulationProfilesRepositoryMock> > m_repositoryMock = nullptr;
 };
 
+//! Checks that there is exactly one measure event at the start of each played measure
+static void checkMeasureEvents(const PlaybackEventsMap& events, size_t measureCount, duration_t measureDuration,
+                               uint16_t numerator, uint16_t denominator)
+{
+    std::vector<timestamp_t> actualTimestamps;
+
+    for (const auto& [timestamp, list] : events) {
+        for (const PlaybackEvent& event : list) {
+            if (!std::holds_alternative<mpe::MeasureEvent>(event)) {
+                continue;
+            }
+
+            const mpe::MeasureEvent& measureEvent = std::get<mpe::MeasureEvent>(event);
+            EXPECT_EQ(measureEvent.timeSignature.numerator, numerator);
+            EXPECT_EQ(measureEvent.timeSignature.denominator, denominator);
+
+            actualTimestamps.push_back(timestamp);
+        }
+    }
+
+    std::vector<timestamp_t> expectedTimestamps;
+    for (size_t i = 0; i < measureCount; ++i) {
+        expectedTimestamps.push_back(static_cast<timestamp_t>(i) * measureDuration);
+    }
+
+    EXPECT_EQ(actualTimestamps, expectedTimestamps);
+}
+
 /**
  * @brief PlaybackModelTests_SimpleRepeat
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
@@ -686,10 +714,21 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(windsResult.size(), NOTE_COUNT);
 
+    std::vector<timestamp_t> windsMeasureTimestamps;
+
     for (auto pair : windsResult) {
         const mpe::PlaybackEventList& events = pair.second;
 
         for (const PlaybackEvent& event : events) {
+            if (std::holds_alternative<mpe::MeasureEvent>(event)) {
+                // [THEN] 4/4 measure event at the barline
+                const mpe::MeasureEvent& measureEvent = std::get<mpe::MeasureEvent>(event);
+                EXPECT_EQ(measureEvent.timeSignature.numerator, 4);
+                EXPECT_EQ(measureEvent.timeSignature.denominator, 4);
+                windsMeasureTimestamps.push_back(pair.first);
+                continue;
+            }
+
             ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
 
@@ -699,6 +738,9 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
             EXPECT_GT(noteEvent.arrangementCtx().actualDuration, 0);
         }
     }
+
+    // [THEN] One measure event per measure
+    EXPECT_EQ(windsMeasureTimestamps, std::vector<timestamp_t>({ 0, WHOLE_NOTE_DURATION }));
 
     // [WHEN] Request events for Voice
     const PlaybackEventsMap& voiceResult
@@ -707,10 +749,21 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(voiceResult.size(), NOTE_COUNT);
 
+    std::vector<timestamp_t> voiceMeasureTimestamps;
+
     for (auto pair : voiceResult) {
         const mpe::PlaybackEventList& events = pair.second;
 
         for (const PlaybackEvent& event : events) {
+            if (std::holds_alternative<mpe::MeasureEvent>(event)) {
+                // [THEN] 4/4 measure event at the barline
+                const mpe::MeasureEvent& measureEvent = std::get<mpe::MeasureEvent>(event);
+                EXPECT_EQ(measureEvent.timeSignature.numerator, 4);
+                EXPECT_EQ(measureEvent.timeSignature.denominator, 4);
+                voiceMeasureTimestamps.push_back(pair.first);
+                continue;
+            }
+
             ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
 
@@ -720,6 +773,9 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
             EXPECT_GT(noteEvent.arrangementCtx().actualDuration, 0);
         }
     }
+
+    // [THEN] Each part gets its own measure events
+    EXPECT_EQ(voiceMeasureTimestamps, std::vector<timestamp_t>({ 0, WHOLE_NOTE_DURATION }));
 }
 
 /**
@@ -897,6 +953,13 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     size_t expectedEventCount = 24;
     EXPECT_EQ(result.originEvents.size(), expectedEventCount);
 
+    // [THEN] One measure event per played measure (6 measures, repeat unrolled)
+    constexpr size_t PLAYED_MEASURE_COUNT = 6;
+    {
+        SCOPED_TRACE("measure events after load");
+        checkMeasureEvents(result.originEvents, PLAYED_MEASURE_COUNT, WHOLE_NOTE_DURATION, 4, 4);
+    }
+
     // [WHEN] Notify on score change
     size_t receivedEventCount = 0;
     model.setSendEventsOnScoreChange(trackId, true);
@@ -918,6 +981,12 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     // [THEN] Main stream events received
     EXPECT_EQ(receivedEventCount, expectedEventCount);
+
+    // [THEN] The measure events are still there: the 1st barline (outside the changed range) is not duplicated
+    {
+        SCOPED_TRACE("measure events after partial update");
+        checkMeasureEvents(model.resolveTrackPlaybackData(trackId).originEvents, PLAYED_MEASURE_COUNT, WHOLE_NOTE_DURATION, 4, 4);
+    }
 
     // [WHEN] Notify on score change
     receivedEventCount = 0;
@@ -1044,10 +1113,22 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
         }
     };
 
+    // [GIVEN] Expected measure events - 12 measures, 4/4
+    constexpr size_t MEASURE_COUNT = 12;
+    size_t measureCount = 0;
+
     // [THEN] Events match expectations
     size_t index = 0;
     for (const auto& pair : result) {
         for (const auto& event : pair.second) {
+            if (std::holds_alternative<mpe::MeasureEvent>(event)) {
+                const mpe::MeasureEvent& measureEvent = std::get<mpe::MeasureEvent>(event);
+                EXPECT_EQ(measureEvent.timeSignature.numerator, 4);
+                EXPECT_EQ(measureEvent.timeSignature.denominator, 4);
+                ++measureCount;
+                continue;
+            }
+
             SCOPED_TRACE("event " + std::to_string(index) + " at timestamp " + std::to_string(pair.first));
 
             ASSERT_TRUE(index < expectedDurations.size());
@@ -1075,6 +1156,9 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
 
     // [THEN] Number of events matches expectations
     ASSERT_EQ(index, expectedDurations.size());
+
+    // [THEN] One measure event per measure (the barlines are uneven here because of the tempo changes)
+    EXPECT_EQ(measureCount, MEASURE_COUNT);
 }
 
 /**
