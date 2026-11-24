@@ -619,7 +619,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     if (tab->zigzagFretNumbers() && hasZigzagAdjustments) {
         item->setDotPosX(stemX + maxRightExtent);
     } else {
-        item->setDotPosX(headWidth);
+        item->setDotPosX(tab->zigzagFretNumbers() ? std::max(headWidth, stemX + maxRightExtent) : headWidth);
     }
 
     if (item->shouldHaveStem()) {
