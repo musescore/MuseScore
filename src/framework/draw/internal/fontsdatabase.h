@@ -34,6 +34,7 @@ public:
     FontsDatabase() = default;
 
     void setDefaultFont(Font::Type type, const FontDataKey& key) override;
+    FontDataKey defaultFont(Font::Type type) const override;
     void insertSubstitution(const String& f1, const String& substituteName) override;
     void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) override;
 
@@ -57,7 +58,6 @@ private:
         bool valid() const { return id > -1; }
     };
 
-    const FontDataKey& defaultFont(Font::Type type) const;
     const FontInfo& fontInfo(const FontDataKey& key) const;
     void release(const FontInfo& fi);
 

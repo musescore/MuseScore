@@ -89,7 +89,7 @@ void FontsDatabase::removeSubstitutions(const String& familyName, const std::vec
     m_changed.notify();
 }
 
-const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
+FontDataKey FontsDatabase::defaultFont(Font::Type type) const
 {
     auto it = m_defaults.find(type);
     if (it != m_defaults.end()) {

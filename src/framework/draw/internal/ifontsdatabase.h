@@ -38,6 +38,7 @@ public:
     virtual ~IFontsDatabase() = default;
 
     virtual void setDefaultFont(Font::Type type, const FontDataKey& key) = 0;
+    virtual FontDataKey defaultFont(Font::Type type) const = 0;
     virtual void insertSubstitution(const String& f1, const String& substituteName) = 0;
     virtual void removeSubstitutions(const String& f1, const std::vector<String>& substituteNames) = 0;
 
