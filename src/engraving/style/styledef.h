@@ -1324,6 +1324,7 @@ enum class Sid : short {
     measureNumberPosition,
     measureNumberTextStyle,
     measureNumberAlignToBarline,
+    measureNumberAvoidance,
 
     measureNumberAlternateFontFace,
     measureNumberAlternateFontSize,
