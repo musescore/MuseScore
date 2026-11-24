@@ -1407,54 +1407,6 @@ TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_AllLeave_RemovesSharedPart
     delete score;
 }
 
-TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_Join_KeepsCustomVoiceMap)
-{
-    // [GIVEN] A shared part with the first flute
-    // Staves: 0 shared part (tracks 0-3), 1 flute 1 (tracks 4-7), 2 flute 2 (tracks 8-11)
-    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
-    ASSERT_TRUE(score);
-
-    Part* flute1 = score->parts().at(0);
-    Part* flute2 = score->parts().at(1);
-
-    SharedPart* sharedPart = nullptr;
-    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared part"), [&](Transaction& tx) {
-        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
-    });
-    ASSERT_TRUE(sharedPart);
-    ASSERT_EQ(flute1->staff(0)->idx(), 1);
-    score->doLayout();
-
-    // [GIVEN] From measure 2, the first flute (track 4) is put in voice 2 of the shared staff (track 1)
-    Segment* m2Seg = score->crMeasure(1)->first(SegmentType::ChordRest);
-    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Custom voice map"), [&](Transaction& tx) {
-        EditStaveSharing::setTrackMapping(tx, m2Seg, sharedPart, 4, 1);
-    });
-
-    auto customVoiceMap = [&]() {
-        return sharedPart->exactStaveSharingStateAtTick(m2Seg->tick())->userTrackMap().value();
-    };
-    ASSERT_EQ(customVoiceMap().at(4), 1);
-
-    // [WHEN] The second flute joins, so the shared part gets a second staff and the first flute moves to staff 2 (tracks 8-11)
-    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
-        EditStaveSharing::changeSharedParts(tx, score, SharedPartsChange().join({ flute2 }, sharedPart));
-    });
-    ASSERT_EQ(flute1->staff(0)->idx(), 2);
-
-    // [THEN] The custom map follows the first flute: track 8 is still in voice 2 of the first shared staff
-    EXPECT_EQ(customVoiceMap().count(4), 0);
-    EXPECT_EQ(customVoiceMap().at(8), 1);
-
-    // [WHEN] It's undone
-    score->undoRedo(true, nullptr);
-
-    // [THEN] The custom map is back on track 4
-    EXPECT_EQ(customVoiceMap().at(4), 1);
-
-    delete score;
-}
-
 TEST_F(Engraving_StaveSharingTests, RemovePart_AboveSharedPart_KeepsCustomVoiceMap)
 {
     // [GIVEN] A shared part with the second flute
@@ -1555,6 +1507,134 @@ TEST_F(Engraving_StaveSharingTests, InsertStaff_AboveSharedPart_KeepsCustomVoice
 
     // [THEN] The second flute (track 8) is back in voice 2 of the shared staff (track 5)
     EXPECT_EQ(customVoiceMap().at(8), 5);
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_Join_MapsNewMemberInCustomVoiceMap)
+{
+    // [GIVEN] Two flutes playing different notes in measure 2, and a shared part with the first one
+    // Staves: 0 shared part (tracks 0-3), 1 flute 1 (tracks 4-7), 2 flute 2 (tracks 8-11)
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_18.mscx");
+    ASSERT_TRUE(score);
+    score->style().set(Sid::enableStaveSharing, true);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared part"), [&](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    ASSERT_EQ(flute1->staff(0)->idx(), 1);
+    score->doLayout();
+
+    // [GIVEN] A custom voice map from measure 2, a copy of the default one: the first flute (track 4) in voice 1 (track 0)
+    Measure* m2 = score->crMeasure(1);
+    ASSERT_TRUE(m2);
+    Segment* m2Seg = m2->first(SegmentType::ChordRest);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Custom voice map"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m2Seg, sharedPart, false);
+    });
+
+    auto customVoiceMap = [&]() {
+        return sharedPart->exactStaveSharingStateAtTick(m2->tick())->userTrackMap().value();
+    };
+    ASSERT_EQ(customVoiceMap(), (SharedTrackMap { { 4, 0 } })) << dump(customVoiceMap());
+
+    // [WHEN] The second flute joins
+    // Staves: 0-1 shared part (tracks 0-7), 2 flute 1 (tracks 8-11), 3 flute 2 (tracks 12-15)
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
+        EditStaveSharing::changeSharedParts(tx, score, SharedPartsChange().join({ flute2 }, sharedPart));
+    });
+    ASSERT_EQ(flute1->staff(0)->idx(), 2);
+    ASSERT_EQ(flute2->staff(0)->idx(), 3);
+    score->doLayout();
+
+    // [THEN] The first flute (track 8) stays in voice 1 of the first shared staff (track 0),
+    //        and the second flute (track 12) is in voice 1 of its new shared staff (track 4)
+    EXPECT_EQ(customVoiceMap(), (SharedTrackMap { { 8, 0 }, { 12, 4 } })) << dump(customVoiceMap());
+    ASSERT_TRUE(sharedPart->exactStaveSharingStateAtTick(m2->tick())->isUserMapValid());
+
+    // [THEN] Both flutes are drawn on the shared staves in measure 2
+    for (const auto& [originTrack, sharedTrack] : customVoiceMap()) {
+        bool hasNotes = false;
+        for (Segment* seg = m2->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+            const EngravingItem* originItem = seg->element(originTrack);
+            if (!originItem) {
+                continue;
+            }
+            hasNotes = hasNotes || originItem->isChord();
+            const EngravingItem* sharedItem = seg->element(sharedTrack);
+            ASSERT_TRUE(sharedItem && sharedItem->isChordRest())
+                << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+            EXPECT_EQ(sharedItem->type(), originItem->type())
+                << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+            if (originItem->isChord() && sharedItem->isChord()) {
+                const Chord* originChord = toChord(originItem);
+                const Chord* sharedChord = toChord(sharedItem);
+                EXPECT_EQ(sharedChord->notes().size(), originChord->notes().size())
+                    << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString();
+                for (const Note* note : originChord->notes()) {
+                    EXPECT_TRUE(sharedChord->findNote(note->pitch()))
+                        << "Origin track " << originTrack << ", tick " << seg->tick().toString().toStdString()
+                        << ", pitch " << note->pitch();
+                }
+            }
+        }
+        EXPECT_TRUE(hasNotes) << "Origin track " << originTrack;
+    }
+
+    // [WHEN] It's undone
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The custom voice map is as it was
+    EXPECT_EQ(customVoiceMap(), (SharedTrackMap { { 4, 0 } })) << dump(customVoiceMap());
+
+    delete score;
+}
+
+TEST_F(Engraving_StaveSharingTests, ChangeSharedParts_Join_MapsNewMemberInResetVoiceMap)
+{
+    // [GIVEN] A shared part with the first flute
+    // Staves: 0 shared part (tracks 0-3), 1 flute 1 (tracks 4-7), 2 flute 2 (tracks 8-11)
+    MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscx");
+    ASSERT_TRUE(score);
+    score->style().set(Sid::enableStaveSharing, true);
+
+    Part* flute1 = score->parts().at(0);
+    Part* flute2 = score->parts().at(1);
+
+    SharedPart* sharedPart = nullptr;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Create shared part"), [&](Transaction& tx) {
+        sharedPart = EditStaveSharing::createSharedPart(tx, { flute1 });
+    });
+    ASSERT_TRUE(sharedPart);
+    score->doLayout();
+
+    // [GIVEN] A reset from measure 2, storing the first flute (track 4) in voice 1 (track 0)
+    Segment* m2Seg = score->crMeasure(1)->first(SegmentType::ChordRest);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Reset voice map"), [&](Transaction& tx) {
+        EditStaveSharing::addStaveSharingChange(tx, m2Seg, sharedPart, true);
+    });
+
+    auto m2State = [&]() {
+        return sharedPart->exactStaveSharingStateAtTick(m2Seg->tick());
+    };
+    ASSERT_TRUE(m2State() && m2State()->isReset());
+    ASSERT_EQ(m2State()->userTrackMap(), (SharedTrackMap { { 4, 0 } }));
+
+    // [WHEN] The second flute joins
+    // Staves: 0-1 shared part (tracks 0-7), 2 flute 1 (tracks 8-11), 3 flute 2 (tracks 12-15)
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Add to shared part"), [&](Transaction& tx) {
+        EditStaveSharing::changeSharedParts(tx, score, SharedPartsChange().join({ flute2 }, sharedPart));
+    });
+
+    // [THEN] It's still a reset, and the stored map includes the second flute (track 12) on its new shared staff (track 4)
+    ASSERT_TRUE(m2State());
+    EXPECT_TRUE(m2State()->isReset());
+    EXPECT_EQ(m2State()->userTrackMap(), (SharedTrackMap { { 8, 0 }, { 12, 4 } }));
 
     delete score;
 }

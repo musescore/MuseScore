@@ -396,6 +396,22 @@ void EditStaveSharing::connectSharedPart(Transaction& tx, SharedPart* sharedPart
     Score* score = originPart->score();
     tx.push(new ConnectSharedPart(sharedPart, originPart));
     addStaffToSharedPart(sharedPart, originPart, score->keyList(), originPart->staff(0)->staffType());
+
+    const track_idx_t originTrack = originPart->trackRange().startTrack;
+    const track_idx_t sharedTrack = staff2track(sharedPart->staves().back()->idx());
+
+    for (const auto& [tick, state] : sharedPart->staveSharingStatesBetweenTicks(Fraction(0, 1), score->endTick())) {
+        if (!state.isUserModified()) {
+            continue;
+        }
+
+        SharedTrackMap map = state.userTrackMap().value();
+        map[originTrack] = sharedTrack;
+
+        StaveSharingState newState = state;
+        newState.setUserTrackMap(map);
+        undoSetStaveSharingState(tx, sharedPart, tick, newState);
+    }
 }
 
 void EditStaveSharing::disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart)
