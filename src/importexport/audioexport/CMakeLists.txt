@@ -39,3 +39,7 @@ target_sources(iex_audioexport PRIVATE
     internal/aacwriter.cpp
     internal/aacwriter.h
 )
+
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
+    add_subdirectory(tests)
+endif()
