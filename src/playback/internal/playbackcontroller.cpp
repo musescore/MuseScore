@@ -545,13 +545,19 @@ void PlaybackController::scrubAt(const Fraction& tick)
             continue;
         }
 
-        //! NOTE In a measure repeat, the notes are the ones of the repeated measure
+        //! NOTE In a measure repeat, the notes are the ones of the repeated measure. A repeated measure can be
+        //! a measure repeat itself, so the chain is followed until a measure with its own notes. The referring
+        //! measure is always before the repeat, so the chain ends at the latest at the first measure
         Fraction actualTick = tick;
         const Measure* measure = score->tick2measure(tick);
-        for (int depth = 0; measure && measure->measureRepeatCount(staffIdx) > 0 && depth < 4; ++depth) {
+        while (measure && measure->measureRepeatCount(staffIdx) > 0) {
             const MeasureRepeat* measureRepeat = measure->measureRepeatElement(staffIdx);
             const Measure* referringMeasure = measureRepeat ? measureRepeat->referringMeasure(measure) : nullptr;
             if (!referringMeasure) {
+                break;
+            }
+
+            IF_ASSERT_FAILED(referringMeasure->tick() < measure->tick()) {
                 break;
             }
 
