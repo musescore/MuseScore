@@ -22,9 +22,6 @@
 #include "sharedparttreeitem.h"
 
 #include <algorithm>
-#include <limits>
-
-#include <QRegularExpression>
 
 #include "engraving/dom/sharedpart.h"
 
@@ -44,7 +41,6 @@ void SharedPartTreeItem::init(const notation::Part* part)
 {
     PartTreeItem::init(part);
 
-    setTitle(groupTitle());
     updateEnabled();
 
     m_ignoreEnabledChanged = false;
@@ -55,7 +51,7 @@ void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& chang
     updateVisibility();
 
     if (isTitleAffected(changes)) {
-        setTitle(groupTitle());
+        setTitle(part()->partName().simplified());
     }
 
     m_ignoreEnabledChanged = true;
@@ -101,44 +97,4 @@ bool SharedPartTreeItem::isTitleAffected(const mu::engraving::ScoreChanges& chan
     }
 
     return false;
-}
-
-QString SharedPartTreeItem::groupTitle() const
-{
-    static const QRegularExpression trailingNumber(QStringLiteral("^(.*?)\\s*(\\d+)$"));
-
-    const engraving::SharedPart* sharedPart = engraving::toSharedPart(part());
-
-    QString baseName;
-    bool hasMixedBaseNames = false;
-    int firstNumber = std::numeric_limits<int>::max();
-    int lastNumber = std::numeric_limits<int>::min();
-
-    for (const engraving::Part* originPart : sharedPart->originParts()) {
-        const QString name = originPart->partName().toQString().simplified();
-        const QRegularExpressionMatch match = trailingNumber.match(name);
-
-        int number = originPart->instrument()->number();
-        if (number <= 0 && match.hasMatch()) {
-            number = match.captured(2).toInt();
-        }
-
-        const QString originBaseName = match.hasMatch() ? match.captured(1) : name;
-        if (baseName.isEmpty()) {
-            baseName = originBaseName;
-        } else if (originBaseName != baseName) {
-            hasMixedBaseNames = true;
-        }
-
-        if (number > 0) {
-            firstNumber = std::min(firstNumber, number);
-            lastNumber = std::max(lastNumber, number);
-        }
-    }
-
-    if (hasMixedBaseNames || baseName.isEmpty() || firstNumber >= lastNumber) {
-        return sharedPart->partName().toQString().simplified();
-    }
-
-    return baseName + QChar(u' ') + QString::number(firstNumber) + QChar(u'–') + QString::number(lastNumber);
 }

@@ -43,7 +43,6 @@ private:
     void listenEnabledChanged();
     void updateEnabled();
     bool isTitleAffected(const mu::engraving::ScoreChanges& changes) const;
-    QString groupTitle() const;
 
     bool m_ignoreEnabledChanged = true;
 };

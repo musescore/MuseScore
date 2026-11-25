@@ -183,44 +183,6 @@ TEST_F(InstrumentsScene_SharedPartTreeItemTests, Init_StaveSharingOff)
     EXPECT_FALSE(item->isExpandable());
 }
 
-TEST_F(InstrumentsScene_SharedPartTreeItemTests, Title_FromInstrumentNumbers)
-{
-    // [GIVEN] Two horns numbered 2 and 4, with no number in their names
-    SharedPart* sharedPart = addSharedPart({ u"Horn", u"Horn" });
-    sharedPart->originParts().at(0)->instrument()->setNumber(2);
-    sharedPart->originParts().at(1)->instrument()->setNumber(4);
-
-    // [WHEN] The group's row is built
-    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
-
-    // [THEN] The row is named after their numbers
-    EXPECT_EQ(item->title(), QString("Horn 2–4"));
-}
-
-TEST_F(InstrumentsScene_SharedPartTreeItemTests, Title_WithoutNumbers)
-{
-    // [GIVEN] A group of two flutes with no numbers
-    const SharedPart* sharedPart = addSharedPart({ u"Flute", u"Flute" }, u"Flutes");
-
-    // [WHEN] The group's row is built
-    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
-
-    // [THEN] The row shows the group's own name
-    EXPECT_EQ(item->title(), QString("Flutes"));
-}
-
-TEST_F(InstrumentsScene_SharedPartTreeItemTests, Title_MixedInstrumentNames)
-{
-    // [GIVEN] A group of a flute and an oboe
-    const SharedPart* sharedPart = addSharedPart({ u"Flute 1", u"Oboe 2" }, u"Woodwinds");
-
-    // [WHEN] The group's row is built
-    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
-
-    // [THEN] The row shows the group's own name
-    EXPECT_EQ(item->title(), QString("Woodwinds"));
-}
-
 TEST_F(InstrumentsScene_SharedPartTreeItemTests, SetEnabled_CombinesOnScore)
 {
     // [GIVEN] A group that isn't combined

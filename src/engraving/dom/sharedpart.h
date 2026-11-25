@@ -114,6 +114,8 @@ public:
 private:
     Part* mappedOriginPart(track_idx_t sharedTrack, const Fraction& tick) const;
 
+    String instrumentName() const;
+
     void computeIsSameInstruments();
     bool m_isSameInstruments = true;
 
