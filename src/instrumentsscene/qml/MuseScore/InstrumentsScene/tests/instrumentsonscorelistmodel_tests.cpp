@@ -485,10 +485,11 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_SkipsUn
     m_model->load();
 
     // [WHEN] An instrument without a template is added
-    m_model->addInstruments({ "unknown" });
+    const int row = m_model->addInstruments({ "unknown" });
 
-    // [THEN] Nothing is listed
+    // [THEN] Nothing is listed, and no row is returned
     EXPECT_EQ(m_model->rowCount(), 0);
+    EXPECT_EQ(row, -1);
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_InsertsInScoreOrder)
@@ -500,10 +501,11 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_Inserts
     m_model->load();
 
     // [WHEN] Another flute is added
-    m_model->addInstruments({ "flute" });
+    const int row = m_model->addInstruments({ "flute" });
 
-    // [THEN] It goes after the flute, before the violin
+    // [THEN] It goes after the flute, before the violin, and its row is returned
     EXPECT_EQ(rowNames(), QStringList({ "A", "Flute", "B" }));
+    EXPECT_EQ(row, 1);
 }
 
 // ---- setData()

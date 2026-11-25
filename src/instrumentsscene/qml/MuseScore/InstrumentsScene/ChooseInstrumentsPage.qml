@@ -84,9 +84,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            root.instrumentsOnScoreModel.addInstruments(instrumentsModel.selectedInstrumentIdList())
-
-            Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
+            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
         }
     }
 

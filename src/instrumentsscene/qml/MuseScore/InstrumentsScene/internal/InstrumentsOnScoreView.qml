@@ -39,8 +39,17 @@ Item {
     // italics until accepted (off when all instruments are new)
     property bool highlightsNewInstruments: false
 
-    function scrollViewToEnd() {
-        instrumentsView.positionViewAtEnd()
+    function addInstruments(instrumentIdList) {
+        const contentY = instrumentsView.contentY
+        const row = root.instrumentsOnScoreModel.addInstruments(instrumentIdList)
+
+        // The model is reset, which scrolls the list back to the top
+        instrumentsView.contentY = contentY
+        instrumentsView.forceLayout()
+
+        if (row >= 0) {
+            instrumentsView.positionViewAtIndex(row, ListView.Contain)
+        }
     }
 
     QtObject {

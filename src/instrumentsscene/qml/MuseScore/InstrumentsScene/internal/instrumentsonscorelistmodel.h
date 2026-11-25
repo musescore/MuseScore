@@ -71,7 +71,8 @@ public:
     bool isSelectionSoloist() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
+    //! Returns the first added instrument's row, or -1 if none was added
+    Q_INVOKABLE int addInstruments(const QStringList& instrumentIdList);
 
     Q_INVOKABLE void moveSelectedBlocksUp();
     Q_INVOKABLE void moveSelectedBlocksDown();

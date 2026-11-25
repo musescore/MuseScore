@@ -258,11 +258,12 @@ void InstrumentsOnScoreListModel::loadOrders()
     }
 }
 
-void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
+int InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
 {
     TRACEFUNC;
 
     ItemList items = this->items();
+    ItemList added;
 
     for (const QString& id : instrumentIdList) {
         const InstrumentTemplate& templ = repository()->instrumentTemplate(id);
@@ -277,10 +278,20 @@ void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentId
         instrument->description = templ.description.toQString();
 
         insertInstrument(items, instrument);
+        added << instrument;
     }
 
     setItems(items);
     verifyScoreOrder();
+
+    // A later instrument can be inserted above an earlier one
+    int firstRow = -1;
+    for (const QObject* item : added) {
+        const int row = static_cast<int>(items.indexOf(item));
+        firstRow = firstRow < 0 ? row : std::min(firstRow, row);
+    }
+
+    return firstRow;
 }
 
 void InstrumentsOnScoreListModel::moveSelectedBlocksUp()
