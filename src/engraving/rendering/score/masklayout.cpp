@@ -389,11 +389,15 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, bool maskOv
     PointF slurTiePos = slurTieSegment->pagePos();
     Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
 
-    Shape mask;
     const double spatium = slurTieSegment->spatium();
     const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::keysigLeftMargin)].defaultValue.toDouble() / 2;
     const double horizontalCollisionPadding = maskPadding;
     const double verticalCollisionPadding = spatium * 0.1;
+
+    /* Items at the same tick (e.g. a clef, key and time signature change, and the measure number of the bar they start)
+     * are grouped and break the slur/tie only once. Each group gets its own cut, so that a slur/tie spanning several
+     * of them is only broken around each one, not across the whole span between them. */
+    std::map<Fraction, Shape> groups;
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
@@ -412,24 +416,48 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, bool maskOv
         // Framed text is masked up to its frame, as barlines are
         const bool isFramedText = item->isTextBase() && toTextBase(item)->hasFrame();
         filteredItemShape.pad(isFramedText ? 0.0 : maskPadding);
-        mask.add(filteredItemShape.translate(-slurTiePos));
+        filteredItemShape.translate(-slurTiePos);
+
+        groups[item->tick()].add(filteredItemShape);
     }
 
-    if (mask.empty()) {
-        slurTieSegment->mutldata()->setMask(mask);
+    std::vector<RectF> cuts;
+    cuts.reserve(groups.size());
+    for (const auto& [tick, groupShape] : groups) {
+        cuts.push_back(groupShape.bbox());
+    }
+
+    if (cuts.empty()) {
+        slurTieSegment->mutldata()->setMask(Shape());
         return;
     }
 
     slurTieShape.translate(-slurTiePos);
 
-    // Use the mask's bbox to break the slur/tie only once, regardless of the mask elements in between:
-    RectF maskBbox = mask.bbox();
+    /* Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
+     * or not masked at all, so we extend each cut vertically to encompass the slur/tie's full height): */
+    const double maskTop = slurTieShape.top() - maskPadding;
+    const double maskHeight = slurTieShape.bottom() + maskPadding - maskTop;
 
-    // Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
-    // or not masked at all, so we extend the mask vertically to encompass the slur/tie's full height):
-    maskBbox.adjust(0.0, slurTieShape.top() - mask.top() - maskPadding, 0.0, slurTieShape.bottom() - mask.bottom() + maskPadding);
+    // Cuts that overlap, or are too close to leave a visible piece of slur/tie between them, are merged into one
+    const double minFragmentLength = 0.5 * spatium;
+    std::sort(cuts.begin(), cuts.end(), [](const RectF& a, const RectF& b) { return a.left() < b.left(); });
 
-    slurTieSegment->mutldata()->setMask(maskBbox);
+    Shape mask;
+    double cutLeft = cuts.front().left();
+    double cutRight = cuts.front().right();
+    for (size_t i = 1; i < cuts.size(); ++i) {
+        if (cuts[i].left() - cutRight < minFragmentLength) {
+            cutRight = std::max(cutRight, cuts[i].right());
+            continue;
+        }
+        mask.add(RectF(cutLeft, maskTop, cutRight - cutLeft, maskHeight));
+        cutLeft = cuts[i].left();
+        cutRight = cuts[i].right();
+    }
+    mask.add(RectF(cutLeft, maskTop, cutRight - cutLeft, maskHeight));
+
+    slurTieSegment->mutldata()->setMask(mask);
 }
 
 void MaskLayout::collectSignaturesUnderSlurTie(const SlurTieSegment* slurTieSegment, staff_idx_t startStaffIdx, staff_idx_t endStaffIdx,
