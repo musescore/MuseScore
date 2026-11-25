@@ -460,16 +460,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<FlipCommand>(),
     makeCommandInfo<FlipHorizontallyCommand>(),
 
-    CommandInfo{
-        ADD_DRUM_NOTE_COMMAND,
-        TranslatableString("action", "Add drum note"),
-        TranslatableString("action", "Add drum note"),
-        InputSchema({
-            { "pitch", Arg(DataType::Int, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
-            { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
-        }),
-        Decoration()
-    },
+    makeCommandInfo<AddDrumNoteCommand>(),
 
     makeCommandInfo<EnterRestCommand>(),
 

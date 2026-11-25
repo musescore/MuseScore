@@ -544,12 +544,7 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
 
     interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    muse::rcommand::Params params = {
-        { "pitch", muse::Val(pitch) },
-        { "mode", muse::Val(EnumContract<NoteAddingMode>::str_val(addingMode)) }
-    };
-
-    commandDispatcher()->dispatch(ADD_DRUM_NOTE_COMMAND, params);
+    commandDispatcher()->dispatch(AddDrumNoteCommand { pitch, addingMode });
 }
 
 void PercussionPanelModel::playPitch(int pitch)
