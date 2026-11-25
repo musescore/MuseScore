@@ -2744,7 +2744,12 @@ inline static const muse::rcommand::Command ADD_DOWN_BOW_COMMAND("command://nota
 
 // add text commands
 
-inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
+struct AddFiguredBassCommand {
+    cprop_decl id = Command("command://notation/add-figured-bass");
+    cprop_decl title = MnemonicString("action", "Figured &bass");
+    cprop_decl description = TranslatableString("action", "Add text: figured bass");
+    cprop_decl availabilities = Availability::All;
+};
 
 // add brackets commands
 inline static const muse::rcommand::Command ADD_BRACKETS_COMMAND("command://notation/add-brackets");
@@ -2808,7 +2813,13 @@ inline static const muse::rcommand::Command PITCH_UP_DIATONIC_ALTERATIONS_COMMAN
 inline static const muse::rcommand::Command PITCH_DOWN_DIATONIC_ALTERATIONS_COMMAND("command://notation/pitch-down-diatonic-alterations");
 
 // properties commands
-inline static const muse::rcommand::Command TOGGLE_VISIBLE_COMMAND("command://notation/toggle-visible");
+
+struct ToggleVisibleCommand {
+    cprop_decl id = Command("command://notation/toggle-visible");
+    cprop_decl title = MnemonicString("action", "Toggle visibility of elements");
+    cprop_decl description = TranslatableString("action", "Toggle visibility of elements");
+    cprop_decl availabilities = Availability::All;
+};
 
 // snap commands
 
@@ -2874,8 +2885,36 @@ inline static const muse::rcommand::Command MAKE_INTO_PAGE_COMMAND("command://no
 inline static const muse::rcommand::Command TOGGLE_SCORE_LOCK_COMMAND("command://notation/toggle-score-lock");
 
 // layout commands: stretch
-inline static const muse::rcommand::Command STRETCH_DECREASE_COMMAND("command://notation/stretch-decrease");
-inline static const muse::rcommand::Command STRETCH_INCREASE_COMMAND("command://notation/stretch-increase");
+
+struct ChangeStretchCommand {
+    cprop_decl id = Command("command://notation/change-stretch");
+    cprop_decl title = MnemonicString("action", "Change layout stretch");
+    cprop_decl description = TranslatableString("action", "Change layout stretch");
+    cprop_decl availabilities = Availability::API;
+
+    double value = 0.1;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "value", &ChangeStretchCommand::value, "Stretch delta" },
+    };
+};
+
+struct IncreaseStretchCommand {
+    cprop_decl id = Command("command://notation/change-stretch/increase");
+    cprop_decl title = MnemonicString("action", "&Increase layout stretch");
+    cprop_decl description = TranslatableString("action", "Increase layout stretch");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeStretchCommand(0.1);
+};
+
+struct DecreaseStretchCommand {
+    cprop_decl id = Command("command://notation/change-stretch/decrease");
+    cprop_decl title = MnemonicString("action", "&Decrease layout stretch");
+    cprop_decl description = TranslatableString("action", "Decrease layout stretch");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeStretchCommand(-0.1);
+};
+
 inline static const muse::rcommand::Command STRETCH_RESET_COMMAND("command://notation/stretch-reset");
 
 // open properties

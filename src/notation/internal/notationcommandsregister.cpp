@@ -480,13 +480,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<EditLyricsAddVerseCommand>(),
 
     // properties commands
-    CommandInfo{
-        TOGGLE_VISIBLE_COMMAND,
-        TranslatableString("action", "Toggle visibility of elements"),
-        TranslatableString("action", "Toggle visibility of elements"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ToggleVisibleCommand>(),
 
     // snap commands
     makeCommandInfo<ToggleSnapToCommand>(),
@@ -666,29 +660,12 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        ADD_FIGURED_BASS_COMMAND,
-        TranslatableString("action", "Figured &bass"),
-        TranslatableString("action", "Add text: figured bass"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddFiguredBassCommand>(),
 
     // layout commands: stretch
-    CommandInfo{
-        STRETCH_DECREASE_COMMAND,
-        TranslatableString("action", "&Decrease layout stretch"),
-        TranslatableString("action", "Decrease layout stretch"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        STRETCH_INCREASE_COMMAND,
-        TranslatableString("action", "&Increase layout stretch"),
-        TranslatableString("action", "Increase layout stretch"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ChangeStretchCommand>(),
+    makeCommandInfo<IncreaseStretchCommand>(),
+    makeCommandInfo<DecreaseStretchCommand>(),
     CommandInfo{
         STRETCH_RESET_COMMAND,
         TranslatableString("action", "&Reset layout stretch"),
