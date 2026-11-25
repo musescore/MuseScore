@@ -351,8 +351,8 @@ void MStyle::applyCompatStyleVals(int mscVersion)
     if (mscVersion < 500) {
         set(Sid::windsNameByGroup, false);
         set(Sid::vocalsNameByGroup, false);
-        set(Sid::maskSlurs, false);
-        set(Sid::maskTies, false);
+        set(Sid::maskSlursOverSignatures, false);
+        set(Sid::maskTiesOverSignatures, false);
         set(Sid::dashBarWidth, value(Sid::barWidth));
         set(Sid::lyricsStackingOrder, int(LyricsStackingOrder::LYRICS_AFTER_PEDALS));
         set(Sid::bendAlign, Align(AlignH::LEFT, AlignV::TOP));  // pre-5.0 this had no effect but was set incorrectly

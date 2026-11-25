@@ -36,7 +36,7 @@ class SlurAndTieSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * direction READ direction CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * tiePlacement READ tiePlacement CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * minLength READ minLength CONSTANT)
-    Q_PROPERTY(mu::propertiespanel::PropertyItem * maskSlurTie READ maskSlurTie CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * maskSlurTieSignatures READ maskSlurTieSignatures CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * maskSlurTieMeasureNumbers READ maskSlurTieMeasureNumbers CONSTANT)
     Q_PROPERTY(bool isTiePlacementAvailable READ isTiePlacementAvailable NOTIFY isTiePlacementAvailableChanged)
     Q_PROPERTY(bool isMinLengthAvailable READ isMinLengthAvailable NOTIFY isMinLengthAvailableChanged)
@@ -59,7 +59,7 @@ public:
     PropertyItem* direction() const;
     PropertyItem* tiePlacement() const;
     PropertyItem* minLength() const;
-    PropertyItem* maskSlurTie() const;
+    PropertyItem* maskSlurTieSignatures() const;
     PropertyItem* maskSlurTieMeasureNumbers() const;
 
     bool isLaissezVib() const;
@@ -87,7 +87,7 @@ private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_tiePlacement = nullptr;
     PropertyItem* m_minLength = nullptr;
-    PropertyItem* m_maskSlurTie = nullptr;
+    PropertyItem* m_maskSlurTieSignatures = nullptr;
     PropertyItem* m_maskSlurTieMeasureNumbers = nullptr;
 
     bool m_isTiePlacementAvailable = false;
