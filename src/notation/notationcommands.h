@@ -2639,7 +2639,12 @@ inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAN
 
 // add commands
 
-inline static const muse::rcommand::Command ADD_FRETBOARD_DIAGRAM_COMMAND("command://notation/add-fretboard-diagram");
+struct AddFretboardDiagramCommand {
+    cprop_decl id = Command("command://notation/add-fretboard-diagram");
+    cprop_decl title = MnemonicString("action", "Add &fretboard diagram");
+    cprop_decl description = TranslatableString("action", "Add fretboard diagram");
+    cprop_decl availabilities = Availability::All;
+};
 
 struct AddOttavaCommand {
     cprop_decl id = Command("command://notation/add-ottava");
@@ -2701,8 +2706,35 @@ struct AddHairpinDiminuendoCommand {
     cprop_decl redirect = AddHairpinCommand(HairpinType::DIM_HAIRPIN);
 };
 
-inline static const muse::rcommand::Command INCREASE_DYNAMIC_COMMAND("command://notation/increase-dynamic");
-inline static const muse::rcommand::Command DECREASE_DYNAMIC_COMMAND("command://notation/decrease-dynamic");
+struct ChangeDynamicCommand {
+    cprop_decl id = Command("command://notation/change-dynamic");
+    cprop_decl title = MnemonicString("action", "Change dynamics");
+    cprop_decl description = TranslatableString("action", "Change selected dynamics");
+    cprop_decl availabilities = Availability::API;
+
+    int delta = 1;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "delta", &ChangeDynamicCommand::delta, "Delta (+1 increase, -1 decrease)" },
+    };
+};
+
+struct IncreaseDynamicCommand {
+    cprop_decl id = Command("command://notation/change-dynamic/increase");
+    cprop_decl title = MnemonicString("action", "Increase dynamics");
+    cprop_decl description = TranslatableString("action", "Increase selected dynamics");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeDynamicCommand(1);
+};
+
+struct DecreaseDynamicCommand {
+    cprop_decl id = Command("command://notation/change-dynamic/decrease");
+    cprop_decl title = MnemonicString("action", "Decrease dynamics");
+    cprop_decl description = TranslatableString("action", "Decrease selected dynamics");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeDynamicCommand(-1);
+};
+
 inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");
 
 inline static const muse::rcommand::Command ADD_IMAGE_COMMAND("command://notation/add-image");
