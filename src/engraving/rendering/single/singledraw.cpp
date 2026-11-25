@@ -1789,7 +1789,12 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     }
 
     painter->setPen(pen);
-    painter->drawPolyline(&ldata->points[start], end - start);
+    if (ldata->gapIndex < start || ldata->gapIndex + 1 >= end) {
+        painter->drawPolyline(&ldata->points[start], end - start);
+    } else {
+        painter->drawPolyline(&ldata->points[start], ldata->gapIndex - start + 1);
+        painter->drawPolyline(&ldata->points[ldata->gapIndex + 1], end - ldata->gapIndex - 1);
+    }
     painter->restore();
 }
 

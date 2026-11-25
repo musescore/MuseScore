@@ -100,6 +100,8 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
 {
     LayoutData* ldata = mutldata();
     ldata->setMask(Shape());
+    ldata->gapIndex = -1;
+    ldata->splitMiddleLine = false;
     ldata->hideBegin = false;
     ldata->hideEnd = false;
     if (m_middleText->empty()) {
@@ -116,7 +118,12 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
 
     const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
     const RectF mask = textBounds.padded(padding);
-    ldata->setMask(Shape(mask));
+    // For middle text cutting through lines:
+    // We normally use two additional points to creat a break at the center,
+    // but it doesn't work for hairpins, so we use masks.
+    if (twoLines()) {
+        ldata->setMask(Shape(mask));
+    }
 
     // Find the part of the line inside the mask, in unit of fraction of the line.
     const PointF lineVector = end - start;
@@ -148,12 +155,32 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
     ldata->hideBegin = maskEntryFraction == 0.0 || lineLength * maskEntryFraction < hideThreshold;
     ldata->hideEnd = maskExitFraction == 1.0 || lineLength * (1.0 - maskExitFraction) < hideThreshold;
     const PointF origin = start;
+    ldata->middleGapStart = origin + lineVector * maskEntryFraction;
+    ldata->middleGapEnd = origin + lineVector * maskExitFraction;
+    ldata->splitMiddleLine = !twoLines() && !ldata->hideBegin && !ldata->hideEnd;
     if (ldata->hideBegin) {
-        start = origin + lineVector * maskEntryFraction;
+        start = twoLines() ? ldata->middleGapStart : ldata->middleGapEnd;
     }
     if (ldata->hideEnd) {
-        end = origin + lineVector * maskExitFraction;
+        end = twoLines() ? ldata->middleGapEnd : ldata->middleGapStart;
     }
+}
+
+void TextLineBaseSegment::splitMiddleTextLine(int mainLineStart)
+{
+    LayoutData* ldata = mutldata();
+    if (!ldata->splitMiddleLine) {
+        return;
+    }
+
+    const int insert = mainLineStart + 1;
+    for (int i = ldata->npoints - 1; i >= insert; --i) {
+        ldata->points[i + 2] = ldata->points[i];
+    }
+    ldata->points[insert] = ldata->middleGapStart;
+    ldata->points[insert + 1] = ldata->middleGapEnd;
+    ldata->npoints += 2;
+    ldata->gapIndex = insert;
 }
 
 bool TextLineBaseSegment::isMiddleTextCramped() const

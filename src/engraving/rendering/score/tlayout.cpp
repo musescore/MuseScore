@@ -5965,6 +5965,9 @@ Shape TLayout::recalculateTextLineBaseSegmentShape(const TextLineBaseSegment* it
         shape.add(TextLineBaseSegment::boundingBoxOfLine(ldata->points[2], ldata->points[3], lw2, isDottedLine), item);
     } else {
         for (int i = 0; i < ldata->npoints - 1; ++i) {
+            if (i == ldata->gapIndex) {
+                continue;
+            }
             shape.add(TextLineBaseSegment::boundingBoxOfLine(ldata->points[i], ldata->points[i + 1], lw2, isDottedLine), item,
                       !item->textLineBase()->lineVisible());
         }
@@ -6081,6 +6084,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 {
     TextLineBaseSegment::LayoutData* ldata = item->mutldata();
     ldata->npoints = 0;
+    ldata->gapIndex = -1;
     ldata->setMask(Shape());
     ldata->hideBegin = false;
     ldata->hideEnd = false;
@@ -6342,6 +6346,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         }
     }
 
+    const int mainLineStart = ldata->npoints;
     ldata->points[ldata->npoints++] = pp1;
     PointF& pp22 = ldata->points[ldata->npoints++] = pp2; // Keep a reference so that we can modify later
 
@@ -6370,6 +6375,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
 
     ldata->lineLength = sqrt(PointF::dotProduct(pp22 - pp1, pp22 - pp1));
 
+    item->splitMiddleTextLine(mainLineStart);
+
     // Calculate shape of line
     {
         int start = 0;
@@ -6387,6 +6394,9 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         }
 
         for (int i = start; i < end - 1; ++i) {
+            if (i == ldata->gapIndex) {
+                continue;
+            }
             shape.add(TextLineBaseSegment::boundingBoxOfLine(ldata->points[i], ldata->points[i + 1], lineWidth / 2,
                                                              isDottedLine), item, !tl->lineVisible());
         }

@@ -4,6 +4,7 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
 #include "engraving/rendering/iscorerenderer.h"
@@ -50,7 +51,8 @@ TEST_F(Engraving_MiddleTextTests, middleTextAcrossSystems)
         auto textSegment = toTextLineBaseSegment(segment);
         EXPECT_EQ(textSegment->middleText()->xmlText(), u"M");
         const auto ld = textSegment->ldata();
-        EXPECT_FALSE(ld->mask().empty());
+        EXPECT_TRUE(ld->mask().empty());
+        EXPECT_GE(ld->gapIndex, 0);
         // Skip the 90-degree hook tips to get the straight line's endpoints.
         const int lineStartIndex = textSegment->isSingleBeginType() ? 1 : 0;
         const int lineEndIndex = ld->npoints - (textSegment->isSingleEndType() ? 2 : 1);
@@ -100,29 +102,48 @@ TEST_F(Engraving_MiddleTextLayoutTests, middleTextShortSides)
                 EXPECT_EQ(ld->hideBegin, hideBegin);
                 EXPECT_EQ(ld->hideEnd, !hideBegin);
                 ASSERT_GE(ld->npoints, 2);
+                const RectF textBounds = m_segment.middleText()->ldata()->bbox().translated(m_segment.middleText()->pos());
+                const double padding = m_line.absoluteFromSpatium(m_line.gapBetweenTextAndLine());
                 if (hideBegin) {
-                    EXPECT_NEAR(ld->points[0].x(), ld->mask().bbox().left(), 1e-6);
+                    EXPECT_NEAR(ld->points[0].x(), textBounds.right() + padding, 1e-6);
                 } else {
-                    EXPECT_NEAR(ld->points[ld->npoints - 1].x(), ld->mask().bbox().right(), 1e-6);
+                    EXPECT_NEAR(ld->points[ld->npoints - 1].x(), textBounds.left() - padding, 1e-6);
                 }
             }
         }
     }
 }
 
-TEST_F(Engraving_MiddleTextLayoutTests, middleTextMaskPadding)
+TEST_F(Engraving_MiddleTextLayoutTests, middleTextGapPadding)
 {
     for (double width : { 0.25, 2.0 }) {
         m_line.setLineWidth(Spatium(width));
         const auto ld = layout();
         const RectF textBounds = m_segment.middleText()->ldata()->bbox().translated(m_segment.middleText()->pos());
-        const RectF maskBounds = ld->mask().bbox();
         const double padding = m_line.absoluteFromSpatium(m_line.gapBetweenTextAndLine());
-        EXPECT_NEAR(maskBounds.left(), textBounds.left() - padding, 1e-6);
-        EXPECT_NEAR(maskBounds.right(), textBounds.right() + padding, 1e-6);
-        EXPECT_NEAR(maskBounds.top(), textBounds.top() - padding, 1e-6);
-        EXPECT_NEAR(maskBounds.bottom(), textBounds.bottom() + padding, 1e-6);
+        EXPECT_TRUE(ld->mask().empty());
+        ASSERT_GE(ld->gapIndex, 0);
+        EXPECT_NEAR(ld->points[ld->gapIndex].x(), textBounds.left() - padding, 1e-6);
+        EXPECT_NEAR(ld->points[ld->gapIndex + 1].x(), textBounds.right() + padding, 1e-6);
     }
+}
+
+TEST_F(Engraving_MiddleTextTests, middleTextHairpinMask)
+{
+    std::unique_ptr<MasterScore> score(compat::ScoreAccess::createMasterScore(nullptr));
+    Hairpin hairpin(score->dummy());
+    hairpin.setMiddleText(u"M");
+    HairpinSegment segment(&hairpin);
+    segment.setSpannerSegmentType(SpannerSegmentType::SINGLE);
+    segment.setPos2(PointF(20.0 * hairpin.spatium(), 0.0));
+    hairpin.setSpannerSegments({ &segment });
+    rendering::single::SingleRenderer renderer;
+    renderer.layoutItem(&hairpin);
+    hairpin.setSpannerSegments({});
+    EXPECT_TRUE(segment.twoLines());
+    EXPECT_FALSE(segment.ldata()->mask().empty());
+    EXPECT_EQ(segment.ldata()->gapIndex, -1);
+    EXPECT_EQ(segment.ldata()->npoints, 4);
 }
 
 TEST_F(Engraving_MiddleTextLayoutTests, middleTextCutThrough)
@@ -161,7 +182,9 @@ TEST_F(Engraving_MiddleTextLayoutTests, middleTextDiagonalLengths)
         const auto ld = layout();
         EXPECT_FALSE(ld->hideBegin);
         EXPECT_FALSE(ld->hideEnd);
-        EXPECT_EQ(ld->npoints, 2);
+        EXPECT_EQ(ld->npoints, 4);
+        EXPECT_TRUE(ld->mask().empty());
+        EXPECT_EQ(ld->gapIndex, 1);
 
         m_line.setMiddleTextMinLineLength(Spatium(30.0));
         layout();

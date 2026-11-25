@@ -64,12 +64,17 @@ public:
     Text* middleText() const { return m_middleText; }
 
     void layoutMiddleText(PointF& start, PointF& end, Shape& shape);
+    void splitMiddleTextLine(int mainLineStart);
     bool isMiddleTextCramped() const;
     double layoutEndText(Shape& shape);
     void layoutCrampedTexts(Shape& shape);
 
     struct LayoutData : public EngravingItem::LayoutData {
-        std::array<PointF, 6> points;
+        std::array<PointF, 8> points;
+        bool splitMiddleLine = false;
+        int gapIndex = -1; // skip the segment between points[gapIndex] and points[gapIndex + 1].
+        PointF middleGapStart;
+        PointF middleGapEnd;
         PolygonF joinedHairpin = PolygonF();
         PolygonF beginArrow = PolygonF();
         PolygonF endArrow = PolygonF();
