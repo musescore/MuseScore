@@ -3165,6 +3165,13 @@ void Score::cmdTimeDelete()
     } else {
         startSegment = selection().startSegment();
         endSegment   = selection().endSegment();
+
+        // A box-only range has no time to delete...
+        const std::vector<MeasureBase*> measureBases = selection().measureBasesInSelection();
+        const bool containsMeasure = muse::contains_if(measureBases, [](const MeasureBase* mb) { return mb->isMeasure(); });
+        if (!measureBases.empty() && !containsMeasure) {
+            return;
+        }
     }
 
     if (!isMaster() && masterScore()) {
@@ -3240,6 +3247,10 @@ void Score::doTimeDelete(Segment* startSegment, Segment* endSegment)
         mbEnd = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prevMeasure();
     } else {
         mbEnd = lastMeasure();
+    }
+
+    IF_ASSERT_FAILED(mbStart && mbEnd) {
+        return;
     }
 
     Fraction endTick = endSegment ? endSegment->tick() : mbEnd->endTick();
