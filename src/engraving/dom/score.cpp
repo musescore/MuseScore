@@ -2412,16 +2412,13 @@ KeyList Score::keyList() const
             auto currKey = km.begin();
             KeyList kl;
             for (auto key : tmpKeymap) {
-                if (key.first < (*currKey).first) {
-                    continue;
-                }
-                while ((*currKey).first < key.first && currKey != km.end()) {
-                    currKey++;
+                while (currKey != km.end() && currKey->first < key.first) {
+                    ++currKey;
                 }
                 if (currKey == km.end()) {
                     break;
                 }
-                if (key.first == (*currKey).first) {
+                if (key.first == currKey->first) {
                     // there is a matching key sig on this staff
                     ++currKey;
                     kl.insert(key);
