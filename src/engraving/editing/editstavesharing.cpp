@@ -539,7 +539,7 @@ bool EditStaveSharing::canShareStaves(const Part* part)
     }
 
     const StaffGroup group = part->staves().front()->staffType()->group();
-    return group == StaffGroup::STANDARD || group == StaffGroup::JIANPU;
+    return group == StaffGroup::STANDARD;
 }
 
 void EditStaveSharing::disconnectBeforeRemovingPart(Transaction& tx, Part* part)
