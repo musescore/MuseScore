@@ -49,6 +49,7 @@ public:
         NotInGroup = 0,
         GroupHeader,
         GroupMember,
+        GroupLastMember, // the group's last instrument: the group ends below it
     };
     Q_ENUM(SharedGroupRole)
 
@@ -86,6 +87,8 @@ private:
     };
 
     void loadOrders();
+
+    SharedGroupRole sharedGroupRole(int row) const;
 
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);

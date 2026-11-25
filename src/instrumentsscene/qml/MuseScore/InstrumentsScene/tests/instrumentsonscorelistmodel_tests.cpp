@@ -666,7 +666,7 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOn_ListsGr
     EXPECT_EQ(rowData(0, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::NotInGroup);
     EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupHeader);
     EXPECT_EQ(rowData(2, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
-    EXPECT_EQ(rowData(3, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
+    EXPECT_EQ(rowData(3, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupLastMember);
 
     // [THEN] The header and its instruments have the group's id
     const QString groupId = s->id().toQString();
@@ -674,6 +674,34 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOn_ListsGr
     EXPECT_EQ(rowData(1, "sharedGroupId").toString(), groupId);
     EXPECT_EQ(rowData(2, "sharedGroupId").toString(), groupId);
     EXPECT_EQ(rowData(3, "sharedGroupId").toString(), groupId);
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelection_UpdatesGroupRoles)
+{
+    // [GIVEN] Combine is on; B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    std::vector<int> changedRoles;
+    QObject::connect(m_model, &QAbstractItemModel::dataChanged, m_model,
+                     [&changedRoles](const QModelIndex&, const QModelIndex&, const QList<int>& roles) {
+        changedRoles.insert(changedRoles.end(), roles.begin(), roles.end());
+    });
+
+    // [WHEN] C is moved above B
+    m_model->selectRow(2);
+    m_model->moveSelectionUp();
+
+    // [THEN] B is now the group's last instrument
+    EXPECT_EQ(rowNames(), QStringList({ "S", "C", "B" }));
+    EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
+    EXPECT_EQ(rowData(2, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupLastMember);
+
+    // [THEN] The view is told that the rows' group roles changed
+    EXPECT_NE(std::find(changedRoles.begin(), changedRoles.end(), role("sharedGroupRole")), changedRoles.end());
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOff_InstrumentsAreNotInGroups)

@@ -85,10 +85,7 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
     case RoleIsSoloist:
         return instrument->isSoloist;
     case RoleSharedGroupRole:
-        if (!m_showsSharedGroups || !instrument->sharedPartId.isValid()) {
-            return NotInGroup;
-        }
-        return instrument->isSharedGroupHeader ? GroupHeader : GroupMember;
+        return sharedGroupRole(index.row());
     case RoleSharedGroupId:
         return m_showsSharedGroups && instrument->sharedPartId.isValid() ? instrument->sharedPartId.toQString() : QString();
     default:
@@ -332,6 +329,28 @@ void InstrumentsOnScoreListModel::doSetCurrentOrderIndex(int index)
     emit currentOrderChanged();
 }
 
+InstrumentsOnScoreListModel::SharedGroupRole InstrumentsOnScoreListModel::sharedGroupRole(int row) const
+{
+    const ItemList& items = this->items();
+    if (!m_showsSharedGroups || row < 0 || row >= items.size()) {
+        return NotInGroup;
+    }
+
+    auto instrument = static_cast<const InstrumentItem*>(items.at(row));
+    if (!instrument->sharedPartId.isValid()) {
+        return NotInGroup;
+    }
+
+    if (instrument->isSharedGroupHeader) {
+        return GroupHeader;
+    }
+
+    auto next = row + 1 < items.size() ? static_cast<const InstrumentItem*>(items.at(row + 1)) : nullptr;
+    const bool nextIsMember = next && !next->isSharedGroupHeader && next->sharedPartId == instrument->sharedPartId;
+
+    return nextIsMember ? GroupMember : GroupLastMember;
+}
+
 void InstrumentsOnScoreListModel::updateInstrumentsOrder()
 {
     ItemList items = this->items();
@@ -399,6 +418,11 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
 
 void InstrumentsOnScoreListModel::onRowsMoved()
 {
+    //! NOTE A row's group role depends on the row below it, which a move can change
+    if (m_showsSharedGroups && rowCount() > 0) {
+        emit dataChanged(index(0), index(rowCount() - 1), { RoleSharedGroupRole });
+    }
+
     verifyScoreOrder();
 }
 

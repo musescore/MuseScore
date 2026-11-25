@@ -40,6 +40,52 @@ Item {
         instrumentsView.positionViewAtEnd()
     }
 
+    QtObject {
+        id: prv
+
+        // group id -> expanded; collapsed by default
+        property var expandedGroups: ({})
+
+        // Group id -> true while the group's header is selected: the whole group is shown selected
+        property var selectedGroups: ({})
+
+        property string hoveredGroupId: ""
+        property string pressedGroupId: ""
+
+        //! NOTE Cleared only if it's still the same group, as enter / leave can come in either order
+        function setGroupHovered(groupId, hovered) {
+            if (hovered) {
+                prv.hoveredGroupId = groupId
+            } else if (prv.hoveredGroupId === groupId) {
+                prv.hoveredGroupId = ""
+            }
+        }
+
+        function setGroupPressed(groupId, pressed) {
+            if (pressed) {
+                prv.pressedGroupId = groupId
+            } else if (prv.pressedGroupId === groupId) {
+                prv.pressedGroupId = ""
+            }
+        }
+
+        function setGroupExpanded(groupId, expanded) {
+            const groups = Object.assign({}, prv.expandedGroups)
+            groups[groupId] = expanded
+            prv.expandedGroups = groups
+        }
+
+        function setGroupSelected(groupId, selected) {
+            if (Boolean(prv.selectedGroups[groupId]) === selected) {
+                return
+            }
+
+            let groups = Object.assign({}, prv.selectedGroups)
+            groups[groupId] = selected
+            prv.selectedGroups = groups
+        }
+    }
+
     StyledTextLabel {
         id: instrumentsLabel
 
@@ -111,68 +157,38 @@ Item {
 
         accessible.name: instrumentsLabel.text
 
-        delegate: ListItemBlank {
+        delegate: InstrumentsOnScoreDelegate {
             id: item
 
-            required property var model
-            required isSelected
-            required property string name
-            required property string description
-            required property bool isSoloist
-            required property int index
-            
-            navigation.name: name
-            navigation.panel: instrumentsView.navigation
-            navigation.row: 1 + index
-            navigation.column: 0
-            navigation.accessible.name: itemTitleLabel.text
-            navigation.accessible.description: description
-            navigation.accessible.row: index
+            navigationPanel: instrumentsView.navigation
 
-            StyledTextLabel {
-                id: itemTitleLabel
-                anchors.left: parent.left
-                anchors.leftMargin: 12
-                anchors.right: parent.right
-                anchors.rightMargin: 4
-                anchors.verticalCenter: parent.verticalCenter
-
-                horizontalAlignment: Text.AlignLeft
-                text:  item.isSoloist ? qsTrc("instruments", "Soloist:") + " " + item.name : item.name
-                font: ui.theme.bodyBoldFont
-            }
-
-            FlatButton {
-                anchors.right: parent.right
-                anchors.leftMargin: 4
-                anchors.rightMargin: 4
-                anchors.verticalCenter: parent.verticalCenter
-
-                isNarrow: true
-
-                text: item.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-                visible: item.isSelected
-
-                navigation.name: item.name + "MakeSoloist"
-                navigation.panel: instrumentsView.navigation
-                navigation.row: 1 + item.index
-                navigation.column: 1
-
-                onClicked: {
-                    item.model.isSoloist = !item.model.isSoloist
-                }
-            }
+            isGroupExpanded: Boolean(prv.expandedGroups[item.sharedGroupId])
+            isGroupSelected: item.isInGroup && Boolean(prv.selectedGroups[item.sharedGroupId])
+            isGroupHovered: item.isInGroup && prv.hoveredGroupId === item.sharedGroupId
+            isGroupPressed: item.isInGroup && prv.pressedGroupId === item.sharedGroupId
 
             onClicked: {
-                root.instrumentsOnScoreModel.selectRow(index)
-            }
-
-            onDoubleClicked: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.selectRow(item.index)
             }
 
             onRemoveSelectionRequested: {
                 root.instrumentsOnScoreModel.removeSelection()
+            }
+
+            onGroupExpandToggled: {
+                prv.setGroupExpanded(item.sharedGroupId, !item.isGroupExpanded)
+            }
+
+            onGroupHoverChanged: function(hovered) {
+                prv.setGroupHovered(item.sharedGroupId, hovered)
+            }
+
+            onGroupPressChanged: function(pressed) {
+                prv.setGroupPressed(item.sharedGroupId, pressed)
+            }
+
+            onHeaderSelectedChanged: function(selected) {
+                prv.setGroupSelected(item.sharedGroupId, selected)
             }
         }
     }
