@@ -3186,8 +3186,35 @@ struct MirrorNoteheadCommand {
     cprop_decl availabilities = Availability::All;
 };
 
-inline static const muse::rcommand::Command SET_VISIBLE_COMMAND("command://notation/set-visible");
-inline static const muse::rcommand::Command UNSET_VISIBLE_COMMAND("command://notation/unset-visible");
+struct SetVisibleCommand {
+    cprop_decl id = Command("command://notation/set-visible");
+    cprop_decl title = MnemonicString("action", "Set visibility");
+    cprop_decl description = TranslatableString("action", "Set visibility of selected element(s)");
+    cprop_decl availabilities = Availability::API;
+
+    bool visible = true;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "visible", &SetVisibleCommand::visible, "Visible" },
+    };
+};
+
+struct SetVisibleOnCommand {
+    cprop_decl id = Command("command://notation/set-visible/on");
+    cprop_decl title = MnemonicString("action", "Set visible");
+    cprop_decl description = TranslatableString("action", "Make selected element(s) visible");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = SetVisibleCommand(true);
+};
+
+struct SetVisibleOffCommand {
+    cprop_decl id = Command("command://notation/set-visible/off");
+    cprop_decl title = MnemonicString("action", "Set invisible");
+    cprop_decl description = TranslatableString("action", "Make selected element(s) invisible");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = SetVisibleCommand(false);
+};
+
 inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://notation/toggle-autoplace");
 inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command://notation/autoplace-enabled");
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");

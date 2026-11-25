@@ -247,6 +247,7 @@ private:
     muse::Ret regroupRhythms();
     muse::Ret resequenceRehearsalMarks();
     muse::Ret mirrorNotehead();
+    muse::Ret setVisible(const SetVisibleCommand& command);
 
     muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
     muse::Ret openPageSettingsDialog();

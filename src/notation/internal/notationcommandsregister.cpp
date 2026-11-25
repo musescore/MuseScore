@@ -871,20 +871,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddClefViolinCommand>(),
     makeCommandInfo<AddClefBassCommand>(),
 
-    CommandInfo{
-        SET_VISIBLE_COMMAND,
-        TranslatableString("action", "Set visible"),
-        TranslatableString("action", "Make selected element(s) visible"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        UNSET_VISIBLE_COMMAND,
-        TranslatableString("action", "Set invisible"),
-        TranslatableString("action", "Make selected element(s) invisible"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<SetVisibleCommand>(),
+    makeCommandInfo<SetVisibleOnCommand>(),
+    makeCommandInfo<SetVisibleOffCommand>(),
     CommandInfo{
         TOGGLE_AUTOPLACE_COMMAND,
         TranslatableString("action", "Toggle automatic placement for selected elements"),
