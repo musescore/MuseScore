@@ -24,6 +24,9 @@
 
 #include "translation.h"
 
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/stafftype.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -133,6 +136,9 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     TRACEFUNC;
 
     m_selection->setSingleItemSelectionMode(!canSelectMultipleInstruments);
+
+    // while adding, tablature versions are hidden: new instruments get a tablature choice in InstrumentsOnScoreListModel
+    m_hidesTablatureVersions = canSelectMultipleInstruments;
 
     loadGenres();
     loadGroups();
@@ -499,22 +505,22 @@ void InstrumentListModel::updateStateBySearch()
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const
 {
     if (isSearching()) {
-        return instrument.trackName.toQString().contains(m_searchText, Qt::CaseInsensitive);
-    }
-
-    if (instrument.groupId != m_currentGroupId && compareWithCurrentGroup) {
+        if (!instrument.trackName.toQString().contains(m_searchText, Qt::CaseInsensitive)) {
+            return false;
+        }
+    } else if (instrument.groupId != m_currentGroupId && compareWithCurrentGroup) {
+        return false;
+    } else if (m_currentGenreId != ALL_INSTRUMENTS_GENRE_ID && !instrument.containsGenre(m_currentGenreId)) {
         return false;
     }
 
-    if (m_currentGenreId == ALL_INSTRUMENTS_GENRE_ID) {
-        return true;
+    // Only the tablature version that can be chosen instead (see searchTablatureTemplate()) is hidden
+    if (m_hidesTablatureVersions && instrument.staffTypePreset && instrument.staffTypePreset->isTabStaff()) {
+        const InstrumentTemplate* tablatureVersion = mu::engraving::searchTablatureTemplate(instrument.initId);
+        return !tablatureVersion || tablatureVersion->id != instrument.id;
     }
 
-    if (instrument.containsGenre(m_currentGenreId)) {
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 bool InstrumentListModel::isInstrumentIndexValid(int index) const

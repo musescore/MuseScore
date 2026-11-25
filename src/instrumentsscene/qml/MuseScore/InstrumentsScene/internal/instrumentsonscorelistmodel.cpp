@@ -32,6 +32,7 @@
 
 #include "log.h"
 
+#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/sharedpart.h"
 
 #include "notation/imasternotation.h"
@@ -62,6 +63,8 @@ public:
     bool isSoloist = false;
     bool isExistingPart = false;
     bool isSharedGroupHeader = false; // the header of a shared-staves group
+    bool hasTablatureVersion = false; // new instruments only: they can be added as tablature
+    TablatureOption tablatureOption = TablatureOption::Notation;
 };
 }
 
@@ -90,6 +93,8 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
         return m_showsSharedGroups && instrument->sharedPartId.isValid() ? instrument->sharedPartId.toQString() : QString();
     case RoleIsNew:
         return !instrument->isExistingPart;
+    case RoleTablatureOption:
+        return instrument->hasTablatureVersion ? static_cast<int>(instrument->tablatureOption) : -1;
     default:
         break;
     }
@@ -125,6 +130,17 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
         verifyScoreOrder();
         emit soloistStateChanged();
         return true;
+    case RoleTablatureOption: {
+        const int option = value.toInt();
+        if (!instrument->hasTablatureVersion || option < static_cast<int>(TablatureOption::Notation)
+            || option > static_cast<int>(TablatureOption::TablatureAndNotation)) {
+            return false;
+        }
+
+        instrument->tablatureOption = static_cast<TablatureOption>(option);
+        emit dataChanged(index, index, { RoleTablatureOption });
+        return true;
+    }
     case RoleName:
     case RoleDescription:
         break;
@@ -144,6 +160,7 @@ QHash<int, QByteArray> InstrumentsOnScoreListModel::roleNames() const
     roles[RoleSharedGroupRole] = "sharedGroupRole";
     roles[RoleSharedGroupId] = "sharedGroupId";
     roles[RoleIsNew] = "isNew";
+    roles[RoleTablatureOption] = "tablatureOption";
 
     return roles;
 }
@@ -276,6 +293,7 @@ int InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdL
         instrument->id = templ.id;
         instrument->name = formatInstrumentTitle(templ.trackName, templ.trait);
         instrument->description = templ.description.toQString();
+        instrument->hasTablatureVersion = mu::engraving::searchTablatureTemplate(templ.id) != nullptr;
 
         insertInstrument(items, instrument);
         added << instrument;
@@ -417,12 +435,14 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
     QVariantList result;
     result.reserve(items().size() + static_cast<int>(m_sharedParts.size()));
 
-    auto appendPart = [&result](const ID& partId, const QString& instrumentId, bool isExistingPart, bool isSoloist) {
+    auto appendPart = [&result](const ID& partId, const QString& instrumentId, bool isExistingPart, bool isSoloist,
+                                TablatureOption tablatureOption = TablatureOption::Notation) {
         QVariantMap obj;
         obj["partId"] = partId.toQString();
         obj["instrumentId"] = instrumentId;
         obj["isExistingPart"] = isExistingPart;
         obj["isSoloist"] = isSoloist;
+        obj["tablatureOption"] = static_cast<int>(tablatureOption);
 
         result << obj;
     };
@@ -444,7 +464,8 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
             }
         }
 
-        appendPart(instrument->partId, instrument->id, instrument->isExistingPart, instrument->isSoloist);
+        appendPart(instrument->partId, instrument->id, instrument->isExistingPart, instrument->isSoloist,
+                   instrument->tablatureOption);
     }
 
     return result;

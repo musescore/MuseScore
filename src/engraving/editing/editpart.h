@@ -27,6 +27,7 @@
 
 #include "../compat/midi/midipatch.h"
 #include "../dom/drumset.h"
+#include "../dom/instrtemplate.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
 #include "../dom/stringdata.h"
@@ -243,7 +244,6 @@ public:
     UNDO_NAME("SetUserBankController")
 };
 
-class InstrumentTemplate;
 class Staff;
 class StaffType;
 class Transaction;
@@ -255,6 +255,7 @@ public:
         Part* part = nullptr;                                   // existing
         const InstrumentTemplate* instrumentTemplate = nullptr; // new
         bool isSoloist = false;
+        TablatureOption tablatureOption = TablatureOption::Notation; // new instruments that have a tablature version
     };
 
     struct SetPartsResult {
@@ -355,12 +356,14 @@ private:
 
     static void appendStaves(Transaction& tx, Score* score, Part* part, const InstrumentTemplate& templ, const KeyList& keyList);
     static Part* insertPart(Transaction& tx, Score* score, const InstrumentTemplate& templ, size_t index, const KeyList& keyList);
+    static void appendLinkedTablatureStaff(Transaction& tx, Score* score, Part* part, const InstrumentTemplate& tablatureTemplate);
     static void doInsertPart(Transaction& tx, Score* score, Part* part, size_t index);
     static void insertPartCopy(Transaction& tx, Score* score, Part* part, size_t index);
 
     static std::vector<Part*> removeMissingParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
     static std::vector<Part*> insertNewParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries, const KeyList& keyList);
-    static std::vector<int> resolveInstrumentNumbers(const std::vector<PartEntry>& entries);
+    static std::vector<int> resolveInstrumentNumbers(const std::vector<PartEntry>& entries,
+                                                     const std::vector<const InstrumentTemplate*>& insertionTemplates);
     static void updateSoloist(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
     static void sortParts(Transaction& tx, Score* score, const std::vector<PartEntry>& entries);
     static void sortStaves(Transaction& tx, Score* score, const std::vector<Part*>& orderedParts);

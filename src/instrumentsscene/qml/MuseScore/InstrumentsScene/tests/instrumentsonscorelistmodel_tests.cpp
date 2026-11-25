@@ -36,6 +36,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/scoreorder.h"
 #include "engraving/dom/sharedpart.h"
+#include "engraving/dom/stafftype.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentsonscorelistmodel.h"
 
@@ -94,6 +95,9 @@ protected:
             if (id == m_violin.id) {
                 return m_violin;
             }
+            if (id == m_guitar.id) {
+                return m_guitar;
+            }
             return m_noTemplate;
         }));
         ON_CALL(*m_repository, orders()).WillByDefault(ReturnRef(m_orders));
@@ -118,7 +122,8 @@ protected:
         instrumentGroups.erase(std::remove(instrumentGroups.begin(), instrumentGroups.end(), &m_group), instrumentGroups.end());
     }
 
-    //! Flute (woodwinds) and violin (strings), known to the score orders by their families
+    //! Flute (woodwinds) and violin (strings), known to the score orders by their families,
+    //! and a guitar with a tablature version
     void setUpInstrumentTemplates()
     {
         m_woodwinds.id = u"woodwinds";
@@ -136,7 +141,17 @@ protected:
         m_violin.family = &m_strings;
         m_violin.sequenceOrder = 1;
 
-        m_group.instrumentTemplates = { &m_flute, &m_violin };
+        m_guitar.id = u"guitar";
+        m_guitar.trackName = u"Guitar";
+        m_guitar.family = &m_strings;
+        m_guitar.sequenceOrder = 2;
+
+        m_guitarTablature.id = u"guitar-tablature";
+        m_guitarTablature.trackName = u"Guitar (tablature)";
+        m_guitarTablature.initId = m_guitar.id;
+        m_guitarTablature.staffTypePreset = StaffType::preset(StaffTypes::TAB_6COMMON);
+
+        m_group.instrumentTemplates = { &m_flute, &m_violin, &m_guitar, &m_guitarTablature };
         instrumentGroups.push_back(&m_group);
     }
 
@@ -262,6 +277,8 @@ private:
     InstrumentFamily m_strings;
     InstrumentTemplate m_flute;
     InstrumentTemplate m_violin;
+    InstrumentTemplate m_guitar;
+    InstrumentTemplate m_guitarTablature;
     InstrumentTemplate m_noTemplate;
     InstrumentGroup m_group;
 };
@@ -284,6 +301,10 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_ListsInstruments)
     EXPECT_TRUE(rowData(1, "isSoloist").toBool());
     EXPECT_FALSE(rowData(0, "isNew").toBool());
     EXPECT_FALSE(rowData(1, "isNew").toBool());
+
+    // [THEN] They're in the score already: there's no tablature option for them
+    EXPECT_EQ(rowData(0, "tablatureOption").toInt(), -1);
+    EXPECT_EQ(rowData(1, "tablatureOption").toInt(), -1);
 
     // [THEN] They're kept as they are on accepting
     const QVariantMap keptA = keptInstrument(0);
@@ -473,10 +494,27 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_AddsNew
     EXPECT_EQ(rowData(0, "description").toString(), "A violin");
     EXPECT_TRUE(rowData(0, "isNew").toBool());
 
+    // [THEN] It has no tablature version, so no tablature option
+    EXPECT_EQ(rowData(0, "tablatureOption").toInt(), -1);
+
     // [THEN] It's added to the score on accepting
     const QVariantMap kept = keptInstrument(0);
     EXPECT_FALSE(kept.value("isExistingPart").toBool());
     EXPECT_EQ(kept.value("instrumentId").toString(), "violin");
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_WithTablatureVersion_OffersNotation)
+{
+    // [GIVEN] An empty score
+    m_model->load();
+
+    // [WHEN] A guitar, which has a tablature version, is added
+    m_model->addInstruments({ "guitar" });
+
+    // [THEN] It's offered the tablature option, as notation
+    const int notation = static_cast<int>(TablatureOption::Notation);
+    EXPECT_EQ(rowData(0, "tablatureOption").toInt(), notation);
+    EXPECT_EQ(keptInstrument(0).value("tablatureOption").toInt(), notation);
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_SkipsUnknownTemplates)
@@ -529,6 +567,33 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_Soloist_MovesT
     const QVariantMap kept = keptInstrument(0);
     EXPECT_EQ(kept.value("partId").toString(), b->id().toQString());
     EXPECT_TRUE(kept.value("isSoloist").toBool());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_TablatureOption_KeptOnAccepting)
+{
+    // [GIVEN] A guitar was added
+    m_model->load();
+    m_model->addInstruments({ "guitar" });
+
+    // [WHEN] It's set to tablature and notation
+    const int option = static_cast<int>(TablatureOption::TablatureAndNotation);
+    EXPECT_TRUE(m_model->setData(m_model->index(0), option, role("tablatureOption")));
+
+    // [THEN] It's shown, and added to the score so on accepting
+    EXPECT_EQ(rowData(0, "tablatureOption").toInt(), option);
+    EXPECT_EQ(keptInstrument(0).value("tablatureOption").toInt(), option);
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_TablatureOption_WithoutTablatureVersion_ReturnsFalse)
+{
+    // [GIVEN] A violin was added
+    m_model->load();
+    m_model->addInstruments({ "violin" });
+
+    // [WHEN] It's set to tablature
+    // [THEN] Nothing changes: it has no tablature version
+    EXPECT_FALSE(m_model->setData(m_model->index(0), static_cast<int>(TablatureOption::Tablature), role("tablatureOption")));
+    EXPECT_EQ(rowData(0, "tablatureOption").toInt(), -1);
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_OtherRole_ReturnsFalse)

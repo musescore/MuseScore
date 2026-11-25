@@ -1465,6 +1465,21 @@ Part* EditPart::insertPart(Transaction& tx, Score* score, const InstrumentTempla
     return part;
 }
 
+void EditPart::appendLinkedTablatureStaff(Transaction& tx, Score* score, Part* part, const InstrumentTemplate& tablatureTemplate)
+{
+    if (!part->nstaves()) {
+        return;
+    }
+
+    // set before it's appended: its clef comes from them
+    Staff* staff = Factory::createStaff(part);
+    staff->setStaffType(Fraction(0, 1), *tablatureTemplate.staffTypePreset);
+    staff->setDefaultClefType(tablatureTemplate.clefType(0));
+
+    // Inserts the staff (with its clef, keys and braces), links it to the notation staff and copies its contents
+    doAppendLinkedStaff(tx, score, staff, part->staff(0), part);
+}
+
 void EditPart::doInsertPart(Transaction& tx, Score* score, Part* part, size_t index)
 {
     if (Excerpt* excerpt = score->excerpt()) {
@@ -1537,7 +1552,23 @@ std::vector<Part*> EditPart::insertNewParts(Transaction& tx, Score* score, const
         return newParts;
     }
 
-    const std::vector<int> numbers = resolveInstrumentNumbers(entries);
+    // Without a tablature version, the instrument is added as notation
+    std::vector<const InstrumentTemplate*> tablatureTemplates;
+    std::vector<const InstrumentTemplate*> insertionTemplates;
+    tablatureTemplates.reserve(entries.size());
+    insertionTemplates.reserve(entries.size());
+
+    for (const PartEntry& entry : entries) {
+        const InstrumentTemplate* tablatureTemplate = entry.instrumentTemplate && entry.tablatureOption != TablatureOption::Notation
+                                                      ? searchTablatureTemplate(entry.instrumentTemplate->id)
+                                                      : nullptr;
+        const bool tablatureOnly = tablatureTemplate && entry.tablatureOption == TablatureOption::Tablature;
+
+        tablatureTemplates.push_back(tablatureTemplate);
+        insertionTemplates.push_back(tablatureOnly ? tablatureTemplate : entry.instrumentTemplate);
+    }
+
+    const std::vector<int> numbers = resolveInstrumentNumbers(entries, insertionTemplates);
 
     for (size_t i = 0; i < entries.size(); ++i) {
         const PartEntry& entry = entries[i];
@@ -1550,7 +1581,13 @@ std::vector<Part*> EditPart::insertNewParts(Transaction& tx, Score* score, const
             continue;
         }
 
-        Part* part = insertPart(tx, score, *entry.instrumentTemplate, i, keyList);
+        const InstrumentTemplate* tablatureTemplate = tablatureTemplates.at(i);
+        Part* part = insertPart(tx, score, *insertionTemplates.at(i), i, keyList);
+
+        if (tablatureTemplate && entry.tablatureOption == TablatureOption::TablatureAndNotation) {
+            appendLinkedTablatureStaff(tx, score, part, *tablatureTemplate);
+        }
+
         part->setSoloist(entry.isSoloist);
         part->setNumber(std::max(number, 0));
         newParts.push_back(part);
@@ -1559,7 +1596,8 @@ std::vector<Part*> EditPart::insertNewParts(Transaction& tx, Score* score, const
     return newParts;
 }
 
-std::vector<int> EditPart::resolveInstrumentNumbers(const std::vector<PartEntry>& entries)
+std::vector<int> EditPart::resolveInstrumentNumbers(const std::vector<PartEntry>& entries,
+                                                    const std::vector<const InstrumentTemplate*>& insertionTemplates)
 {
     // Kinds with an instrument being added are numbered in their (new) order, unless there's only one. Shared staves
     // and instruments numbered in their name (e.g. "Violins 1") aren't numbered, though the latter still count.
@@ -1570,21 +1608,22 @@ std::vector<int> EditPart::resolveInstrumentNumbers(const std::vector<PartEntry>
     };
 
     std::map<String, Counter> counters;
-    for (const PartEntry& entry : entries) {
-        if (entry.instrumentTemplate) {
-            counters.try_emplace(entry.instrumentTemplate->id);
+    for (const InstrumentTemplate* templ : insertionTemplates) {
+        if (templ) {
+            counters.try_emplace(templ->id);
         }
     }
 
     std::vector<int> numbers;
     numbers.reserve(entries.size());
 
-    for (const PartEntry& entry : entries) {
+    for (size_t i = 0; i < entries.size(); ++i) {
+        const PartEntry& entry = entries.at(i);
         Counter* counter = nullptr; // null: not renumbered
         bool isNumberedInName = false;
 
-        if (entry.instrumentTemplate) {
-            counter = &counters.at(entry.instrumentTemplate->id);
+        if (const InstrumentTemplate* templ = insertionTemplates.at(i)) {
+            counter = &counters.at(templ->id);
         } else if (const Part* part = entry.part; part && !part->isSharedPart()) {
             const Instrument* instrument = part->instrument();
             auto it = counters.find(instrument->id());

@@ -143,5 +143,6 @@ private:
     notation::InstrumentGroupList m_groups;
 
     bool m_instrumentsLoadingAllowed = false;
+    bool m_hidesTablatureVersions = false;
 };
 }

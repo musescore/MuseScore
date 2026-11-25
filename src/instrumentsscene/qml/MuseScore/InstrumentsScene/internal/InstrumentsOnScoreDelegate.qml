@@ -32,6 +32,7 @@ import MuseScore.InstrumentsScene
 ListItemBlank {
     id: root
 
+    required property var model
     required isSelected
     required property string name
     required property string description
@@ -40,6 +41,7 @@ ListItemBlank {
     required property int sharedGroupRole
     required property string sharedGroupId
     required property bool isNew // added in the dialog, not yet in the score
+    required property int tablatureOption // for new instruments that have a tablature version, else -1
 
     required property NavigationPanel navigationPanel
 
@@ -58,6 +60,7 @@ ListItemBlank {
     signal groupExpandToggled()
     signal groupHoverChanged(bool hovered)
     signal groupPressChanged(bool pressed)
+    signal selectRequested()
 
     QtObject {
         id: prv
@@ -197,7 +200,7 @@ ListItemBlank {
             anchors.left: parent.left
             // A group's name follows its expand button; its instruments line up with the name
             anchors.leftMargin: root.isInGroup ? prv.rowHeight + 4 : 12
-            anchors.right: parent.right
+            anchors.right: tablatureDropdown.visible ? tablatureDropdown.left : parent.right
             anchors.rightMargin: 4
             anchors.verticalCenter: parent.verticalCenter
 
@@ -206,6 +209,40 @@ ListItemBlank {
             font: {
                 const font = root.isGroupMember ? ui.theme.bodyFont : ui.theme.bodyBoldFont
                 return root.isNew && root.highlightsNewInstruments ? Qt.font(Object.assign({}, font, { italic: true })) : font
+            }
+        }
+
+        StyledDropdown {
+            id: tablatureDropdown
+
+            anchors.right: parent.right
+            anchors.rightMargin: 4
+            anchors.verticalCenter: parent.verticalCenter
+            width: 112
+            height: 24
+
+            visible: root.tablatureOption >= 0
+
+            navigation.name: root.name + "TablatureOption"
+            navigation.enabled: tablatureDropdown.visible
+            navigation.panel: root.navigationPanel
+            navigation.row: 1 + root.index
+            navigation.column: 1 // shares the expand button's column (headers are never new)
+            navigation.accessible.name: itemTitleLabel.text + " " + qsTrc("instruments", "notation type")
+
+            model: [
+                qsTrc("instruments", "Notation"),
+                qsTrc("instruments", "Tablature"),
+                qsTrc("instruments", "Tab & notation")
+            ]
+            currentIndex: Math.max(root.tablatureOption, 0)
+
+            onActivated: function(index, value) {
+                root.model.tablatureOption = index
+
+                if (!root.isSelected) {
+                    root.selectRequested()
+                }
             }
         }
 

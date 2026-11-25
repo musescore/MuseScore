@@ -35,6 +35,7 @@ static constexpr int MAX_STAVES  = 4;
 
 using Instrument = mu::engraving::Instrument;
 using InstrumentTemplate = mu::engraving::InstrumentTemplate;
+using TablatureOption = mu::engraving::TablatureOption;
 using InstrumentTrait = mu::engraving::Trait;
 using TraitType = mu::engraving::TraitType;
 using ScoreOrder = mu::engraving::ScoreOrder;
@@ -127,6 +128,7 @@ struct PartInstrument
 
     bool isExistingPart = false;
     bool isSoloist = false;
+    TablatureOption tablatureOption = TablatureOption::Notation; // new instruments that have a tablature version
 };
 
 using PartInstrumentList = std::vector<PartInstrument>;

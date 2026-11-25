@@ -69,6 +69,13 @@ public:
     void read(XmlReader&);
 };
 
+//! How a new instrument that has a tablature version (e.g. a guitar) is added
+enum class TablatureOption : signed char {
+    Notation = 0,         // the instrument's own staves
+    Tablature,            // its tablature version instead
+    TablatureAndNotation  // its own staves, and a tablature staff linked to the first of them
+};
+
 //---------------------------------------------------------
 //   InstrumentTemplate
 //---------------------------------------------------------
@@ -87,6 +94,7 @@ public:
     InstrumentLabel instrumentName;
     String musicXmlId;          ///< used in MusicXML 3.0
     String description;         ///< a longer description of the instrument
+    String initId;              ///< the template this one is based on (<init>), e.g. a guitar's, for its tablature version
 
     size_t staffCount = 0;
     int sequenceOrder = 0;
@@ -180,6 +188,8 @@ extern const InstrumentTemplate* combinedTemplateSearch(const Instrument& instru
 extern InstrumentIndex searchTemplateIndexForTrackName(const String& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const String& id);
 extern const InstrumentTemplate* searchTemplate(const String& name);
+//! The tablature version of a template: one based on it (initId) with a tablature staff type
+extern const InstrumentTemplate* searchTablatureTemplate(const String& templateId);
 extern const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
 extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset = false,
                                                                 bool caseSensitive = true);

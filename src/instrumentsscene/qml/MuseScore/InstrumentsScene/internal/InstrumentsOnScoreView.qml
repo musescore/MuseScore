@@ -206,6 +206,10 @@ Item {
                 root.instrumentsOnScoreModel.removeSelectedBlocks()
             }
 
+            onSelectRequested: {
+                root.instrumentsOnScoreModel.selectRow(item.index)
+            }
+
             onGroupExpandToggled: {
                 prv.setGroupExpanded(item.sharedGroupId, !item.isGroupExpanded)
             }

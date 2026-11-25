@@ -103,7 +103,8 @@ private:
         RoleIsSoloist,
         RoleSharedGroupRole,
         RoleSharedGroupId, // the group's shared part id, or empty
-        RoleIsNew // added in the dialog, not yet in the score
+        RoleIsNew, // added in the dialog, not yet in the score
+        RoleTablatureOption // for new instruments that have a tablature version, else -1
     };
 
     struct RowRange {
