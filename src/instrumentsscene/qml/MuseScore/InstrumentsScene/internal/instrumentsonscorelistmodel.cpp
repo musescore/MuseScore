@@ -37,6 +37,7 @@
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "notation/inotationparts.h"
+#include "notation/inotationstyle.h"
 
 using namespace muse;
 using namespace muse::uicomponents;
@@ -55,11 +56,12 @@ public:
 
     QString id; // the instrument (template) id
     ID partId; // existing instruments only
-    ID sharedPartId; // the shared part the instrument is on, if any
+    ID sharedPartId; // the shared part the instrument is on, or (group header) the shared part itself
     QString name;
     QString description; // new instruments only
     bool isSoloist = false;
     bool isExistingPart = false;
+    bool isSharedGroupHeader = false; // the header of a shared-staves group
 };
 }
 
@@ -82,6 +84,13 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
         return instrument->description;
     case RoleIsSoloist:
         return instrument->isSoloist;
+    case RoleSharedGroupRole:
+        if (!m_showsSharedGroups || !instrument->sharedPartId.isValid()) {
+            return NotInGroup;
+        }
+        return instrument->isSharedGroupHeader ? GroupHeader : GroupMember;
+    case RoleSharedGroupId:
+        return m_showsSharedGroups && instrument->sharedPartId.isValid() ? instrument->sharedPartId.toQString() : QString();
     default:
         break;
     }
@@ -98,6 +107,11 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
 
     switch (role) {
     case RoleIsSoloist:
+        // Groups themselves can't be soloists (their instruments can)
+        if (instrument->isSharedGroupHeader) {
+            return false;
+        }
+
         instrument->isSoloist = value.toBool();
         {
             ItemList items = this->items();
@@ -123,6 +137,8 @@ QHash<int, QByteArray> InstrumentsOnScoreListModel::roleNames() const
     roles[RoleName] = "name";
     roles[RoleDescription] = "description";
     roles[RoleIsSoloist] = "isSoloist";
+    roles[RoleSharedGroupRole] = "sharedGroupRole";
+    roles[RoleSharedGroupId] = "sharedGroupId";
 
     return roles;
 }
@@ -151,6 +167,9 @@ void InstrumentsOnScoreListModel::load()
     IMasterNotationPtr master = context()->masterNotation();
     auto parts = master ? master->parts()->partList() : NotifyList<const Part*>();
 
+    INotationPtr notation = master ? master->notation() : nullptr;
+    m_showsSharedGroups = notation && notation->style()->styleValue(StyleId::enableStaveSharing).toBool();
+
     ItemList instruments;
     instruments.reserve(static_cast<int>(parts.size()));
     m_sharedParts.clear();
@@ -158,8 +177,11 @@ void InstrumentsOnScoreListModel::load()
     for (const Part* part : parts) {
         if (part->isSharedPart()) {
             m_sharedParts[part->id()] = part->instrument()->id();
-            continue;
+            if (!m_showsSharedGroups) {
+                continue;
+            }
         }
+
         InstrumentItem* instrument = new InstrumentItem(this);
         instrument->id = part->instrument()->id();
         instrument->partId = part->id();
@@ -167,7 +189,11 @@ void InstrumentsOnScoreListModel::load()
         instrument->name = part->partName();
         instrument->isSoloist = part->soloist();
 
-        if (const mu::engraving::SharedPart* sharedPart = part->sharedPart()) {
+        // A group's header is followed by its instruments, as in the score
+        if (part->isSharedPart()) {
+            instrument->isSharedGroupHeader = true;
+            instrument->sharedPartId = part->id();
+        } else if (const mu::engraving::SharedPart* sharedPart = part->sharedPart()) {
             instrument->sharedPartId = sharedPart->id();
         }
 
@@ -272,6 +298,9 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
 
     for (const QObject* item : items()) {
         auto instrument = static_cast<const InstrumentItem*>(item);
+        if (instrument->isSharedGroupHeader) {
+            continue;
+        }
 
         const ID& sharedPartId = instrument->sharedPartId;
         if (sharedPartId.isValid() && listedSharedParts.insert(sharedPartId).second) {
@@ -387,6 +416,10 @@ bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 
     for (const QObject* item : items()) {
         auto instrument = static_cast<const InstrumentItem*>(item);
+        if (instrument->isSharedGroupHeader) {
+            continue;
+        }
+
         instrumentIndices.push_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist));
     }
 

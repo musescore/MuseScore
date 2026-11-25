@@ -41,6 +41,7 @@
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
 #include "notation/tests/mocks/notationpartsmock.h"
+#include "notation/tests/mocks/notationstylemock.h"
 #include "project/tests/mocks/projectsessionmock.h"
 
 using namespace ::testing;
@@ -61,6 +62,7 @@ protected:
         m_masterNotation = std::make_shared<NiceMock<MasterNotationMock> >();
         m_notation = std::make_shared<NiceMock<NotationMock> >();
         m_parts = std::make_shared<NiceMock<NotationPartsMock> >();
+        m_style = std::make_shared<NiceMock<NotationStyleMock> >();
         m_repository = std::make_shared<NiceMock<InstrumentsRepositoryMock> >();
 
         ON_CALL(*m_session, masterNotation()).WillByDefault(Return(m_masterNotation));
@@ -69,6 +71,11 @@ protected:
         ON_CALL(*m_masterNotation, notation()).WillByDefault(Return(m_notation));
         ON_CALL(*m_masterNotation, parts()).WillByDefault(Return(m_parts));
         ON_CALL(*m_notation, parts()).WillByDefault(Return(m_parts));
+        ON_CALL(*m_notation, style()).WillByDefault(Return(m_style));
+
+        ON_CALL(*m_style, styleValue(_)).WillByDefault(Invoke([this](const StyleId& styleId) -> const PropertyValue& {
+            return m_score->style().styleV(styleId);
+        }));
 
         ON_CALL(*m_parts, partList()).WillByDefault(Invoke([this]() {
             const std::vector<const Part*> list(m_score->parts().begin(), m_score->parts().end());
@@ -158,18 +165,30 @@ protected:
         return part;
     }
 
-    //! The shared part comes before its instruments, as in the score
-    const Part* addSharedPart(const std::vector<const Part*>& parts)
+    //! Its instruments are added after it (addToSharedPart()), as in the score
+    SharedPart* addSharedPart(const String& name, const String& instrumentId = String())
     {
         SharedPart* sharedPart = new SharedPart(m_score);
+        sharedPart->setLongNameAll(name);
+        sharedPart->instrument()->setId(instrumentId);
         m_score->appendPart(sharedPart);
         m_score->appendStaff(Factory::createStaff(sharedPart));
 
-        for (const Part* part : parts) {
-            sharedPart->addOriginPart(m_score->partById(part->id()));
-        }
-
         return sharedPart;
+    }
+
+    const Part* addToSharedPart(SharedPart* sharedPart, const String& name, const String& instrumentId = String())
+    {
+        const Part* part = addPart(name, instrumentId);
+        sharedPart->addOriginPart(m_score->partById(part->id()));
+
+        return part;
+    }
+
+    //! "Combine instruments onto shared staves"
+    void setCombineOnSharedStaves(bool combine)
+    {
+        m_score->style().set(Sid::enableStaveSharing, combine);
     }
 
     int role(const QByteArray& name) const
@@ -221,6 +240,7 @@ private:
     std::shared_ptr<MasterNotationMock> m_masterNotation;
     std::shared_ptr<NotationMock> m_notation;
     std::shared_ptr<NotationPartsMock> m_parts;
+    std::shared_ptr<NotationStyleMock> m_style;
     std::shared_ptr<InstrumentsRepositoryMock> m_repository;
 
     async::ChangedNotifier<const Part*> m_partsNotifier;
@@ -363,11 +383,11 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, CurrentOrder_ReturnsId
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_KeepsSharedPartBeforeItsInstruments)
 {
-    // [GIVEN] A, and B and C on a shared part S (which isn't listed)
+    // [GIVEN] A, and B and C on a shared part S (which isn't listed while Combine is off)
     const Part* a = addPart(u"A");
-    const Part* b = addPart(u"B");
-    const Part* c = addPart(u"C");
-    const Part* s = addSharedPart({ b, c });
+    SharedPart* s = addSharedPart(u"S");
+    const Part* b = addToSharedPart(s, u"B");
+    const Part* c = addToSharedPart(s, u"C");
 
     // [WHEN] The model is loaded
     m_model->load();
@@ -383,9 +403,9 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_SharedPart
 {
     // [GIVEN] A, and B and C on a shared part S
     const Part* a = addPart(u"A");
-    const Part* b = addPart(u"B");
-    const Part* c = addPart(u"C");
-    const Part* s = addSharedPart({ b, c });
+    SharedPart* s = addSharedPart(u"S");
+    const Part* b = addToSharedPart(s, u"B");
+    const Part* c = addToSharedPart(s, u"C");
 
     m_model->load();
 
@@ -402,9 +422,9 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_KeepsShare
 {
     // [GIVEN] A, and B and C on a shared part S
     const Part* a = addPart(u"A");
-    const Part* b = addPart(u"B");
-    const Part* c = addPart(u"C");
-    const Part* s = addSharedPart({ b, c });
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    const Part* c = addToSharedPart(s, u"C");
 
     m_model->load();
 
@@ -624,4 +644,145 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetCurrentOrderIndex_K
 
     // [THEN] They keep their order
     EXPECT_EQ(rowNames(), names);
+}
+
+// ---- Shared-staves groups
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOn_ListsGroupBeforeItsInstruments)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+
+    // [WHEN] The model is loaded
+    m_model->load();
+
+    // [THEN] S is listed as a group header, followed by its instruments
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S", "B", "C" }));
+
+    EXPECT_EQ(rowData(0, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::NotInGroup);
+    EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupHeader);
+    EXPECT_EQ(rowData(2, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
+    EXPECT_EQ(rowData(3, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
+
+    // [THEN] The header and its instruments have the group's id
+    const QString groupId = s->id().toQString();
+    EXPECT_TRUE(rowData(0, "sharedGroupId").toString().isEmpty());
+    EXPECT_EQ(rowData(1, "sharedGroupId").toString(), groupId);
+    EXPECT_EQ(rowData(2, "sharedGroupId").toString(), groupId);
+    EXPECT_EQ(rowData(3, "sharedGroupId").toString(), groupId);
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOff_InstrumentsAreNotInGroups)
+{
+    // [GIVEN] Combine is off; B and C on a shared part S
+    setCombineOnSharedStaves(false);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+
+    // [WHEN] The model is loaded
+    m_model->load();
+
+    // [THEN] B and C aren't shown as a group
+    EXPECT_EQ(rowData(0, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::NotInGroup);
+    EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::NotInGroup);
+    EXPECT_TRUE(rowData(0, "sharedGroupId").toString().isEmpty());
+    EXPECT_TRUE(rowData(1, "sharedGroupId").toString().isEmpty());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_KeepsGroupAsListed)
+{
+    // [GIVEN] Combine is on; B and C on a shared part S, then A
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    const Part* b = addToSharedPart(s, u"B");
+    const Part* c = addToSharedPart(s, u"C");
+    const Part* a = addPart(u"A");
+    m_model->load();
+
+    // [WHEN] A is moved above the group's header
+    m_model->selectRow(3);
+    m_model->moveSelectionUp();
+    m_model->moveSelectionUp();
+    m_model->moveSelectionUp();
+
+    // [THEN] S is kept where its header is listed, as an existing part
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id(), s->id(), b->id(), c->id() }));
+    EXPECT_TRUE(keptInstrument(1).value("isExistingPart").toBool());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_RemovesGroupWithoutInstruments)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    const Part* a = addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] B and C are removed
+    m_model->selectRow(2);
+    m_model->removeSelection();
+    m_model->selectRow(2);
+    m_model->removeSelection();
+
+    // [THEN] S is removed with them, though its header is still listed
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_RemovingGroupHeaderUngroups)
+{
+    // [GIVEN] Combine is on; B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    const Part* b = addToSharedPart(s, u"B");
+    const Part* c = addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] The group's header is removed
+    m_model->selectRow(0);
+    m_model->removeSelection();
+
+    // [THEN] B and C are kept, without S
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ b->id(), c->id() }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_Soloist_GroupHeader_ReturnsFalse)
+{
+    // [GIVEN] Combine is on; B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] The group's header is made a soloist
+    // [THEN] Nothing changes
+    EXPECT_FALSE(m_model->setData(m_model->index(0), true, role("isSoloist")));
+    EXPECT_FALSE(rowData(0, "isSoloist").toBool());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_GroupHeaderDoesNotAffectScoreOrder)
+{
+    // [GIVEN] Combine is on, in orchestral order; two flutes on a shared part whose own instrument is a violin
+    // (which would sort after the flutes)
+    m_scoreOrder = m_orders.at(0);
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S", u"violin");
+    addToSharedPart(s, u"B", u"flute");
+    addToSharedPart(s, u"C", u"flute");
+    m_model->load();
+
+    // [WHEN] A violin is added
+    m_model->addInstruments({ "violin" });
+
+    // [THEN] The instruments are in orchestral order: it isn't customized
+    EXPECT_EQ(m_model->orders(), QStringList({ "Orchestral", "Choral", "Custom" }));
+    EXPECT_EQ(m_model->currentOrderIndex(), 0);
 }

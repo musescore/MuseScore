@@ -44,6 +44,14 @@ public:
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
     muse::ContextInject<project::IProjectSession> context = { this };
 
+    //! Groups are listed only while shared staves are enabled
+    enum SharedGroupRole {
+        NotInGroup = 0,
+        GroupHeader,
+        GroupMember,
+    };
+    Q_ENUM(SharedGroupRole)
+
     InstrumentsOnScoreListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -72,7 +80,9 @@ private:
     enum Roles {
         RoleName = SelectableItemListModel::UserRole + 1,
         RoleDescription,
-        RoleIsSoloist
+        RoleIsSoloist,
+        RoleSharedGroupRole,
+        RoleSharedGroupId // the group's shared part id, or empty
     };
 
     void loadOrders();
@@ -94,6 +104,8 @@ private:
 
     notation::ScoreOrderList m_scoreOrders;
     int m_currentOrderIndex = 0;
+
+    bool m_showsSharedGroups = false;
 
     std::map<muse::ID, QString> m_sharedParts; // part id -> instrument id
 };
