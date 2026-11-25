@@ -114,6 +114,7 @@ private:
         int count() const { return last - first + 1; }
     };
 
+    InstrumentItem* createItem(const mu::engraving::Part* part);
     void loadOrders();
 
     QList<InstrumentItem*> selectedInstruments() const;

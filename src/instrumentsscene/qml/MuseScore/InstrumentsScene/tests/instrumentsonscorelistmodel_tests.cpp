@@ -435,7 +435,7 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_KeepsShare
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id(), s->id(), b->id(), c->id() }));
 }
 
-TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_SharedPartFollowsItsFirstInstrument)
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOff_MovingInstrumentMovesItsGroup)
 {
     // [GIVEN] A, and B and C on a shared part S
     const Part* a = addPart(u"A");
@@ -445,13 +445,15 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_SharedPart
 
     m_model->load();
 
-    // [WHEN] C is moved above A
+    // [WHEN] C is moved up
     m_model->selectRow(2);
     m_model->moveSelectedBlocksUp();
-    m_model->moveSelectedBlocksUp();
 
-    // [THEN] S is kept before C, and listed once
-    EXPECT_EQ(keptPartIds(), std::vector<ID>({ s->id(), c->id(), a->id(), b->id() }));
+    // [THEN] B moves with it, above A
+    EXPECT_EQ(rowNames(), QStringList({ "B", "C", "A" }));
+
+    // [THEN] S is kept before B and C, and listed once
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ s->id(), b->id(), c->id(), a->id() }));
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_KeepsSharedPartWhileAnInstrumentIsLeft)
@@ -1096,6 +1098,76 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOff_Instru
     EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::NotInGroup);
     EXPECT_TRUE(rowData(0, "sharedGroupId").toString().isEmpty());
     EXPECT_TRUE(rowData(1, "sharedGroupId").toString().isEmpty());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_Soloist_CombineOff_StaysInGroup)
+{
+    // [GIVEN] Combine is off, in orchestral order; a flute and a violin on a shared part S
+    m_scoreOrder = m_orders.at(0);
+    setCombineOnSharedStaves(false);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B", u"flute");
+    addToSharedPart(s, u"C", u"violin");
+    m_model->load();
+
+    // [WHEN] The violin is made a soloist
+    EXPECT_TRUE(m_model->setData(m_model->index(1), true, role("isSoloist")));
+
+    // [THEN] It stays with the flute
+    EXPECT_EQ(rowNames(), QStringList({ "B", "C" }));
+    EXPECT_TRUE(rowData(1, "isSoloist").toBool());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_SplitGroup_ListsInstrumentsTogether)
+{
+    // [GIVEN] Combine is on; a shared part S, its instrument C, then A, then its instrument B
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    const Part* c = addToSharedPart(s, u"C");
+    const Part* a = addPart(u"A");
+    const Part* b = addToSharedPart(s, u"B");
+
+    // [WHEN] The model is loaded
+    m_model->load();
+
+    // [THEN] B follows C in S's group, and is kept there on accepting
+    EXPECT_EQ(rowNames(), QStringList({ "S", "C", "B", "A" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ s->id(), c->id(), b->id(), a->id() }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_SplitGroup_CombineOff_ListsInstrumentsTogether)
+{
+    // [GIVEN] Combine is off; a shared part S, its instrument C, then A, then its instrument B
+    setCombineOnSharedStaves(false);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"C");
+    addPart(u"A");
+    addToSharedPart(s, u"B");
+
+    // [WHEN] The model is loaded
+    m_model->load();
+
+    // [THEN] B follows C
+    EXPECT_EQ(rowNames(), QStringList({ "C", "B", "A" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_SplitGroupHeader_RemovesAllInstruments)
+{
+    // [GIVEN] Combine is on; a shared part S, its instrument C, then A, then its instrument B
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"C");
+    const Part* a = addPart(u"A");
+    addToSharedPart(s, u"B");
+    m_model->load();
+
+    // [WHEN] S's header is removed
+    m_model->selectRow(0);
+    m_model->removeSelectedBlocks();
+
+    // [THEN] Both its instruments are removed with it
+    EXPECT_EQ(rowNames(), QStringList({ "A" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_KeepsGroupAsListed)

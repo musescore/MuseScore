@@ -211,34 +211,49 @@ void InstrumentsOnScoreListModel::load()
     m_sharedParts.clear();
 
     for (const Part* part : parts) {
-        if (part->isSharedPart()) {
-            m_sharedParts[part->id()] = part->instrument()->id();
-            if (!m_showsSharedGroups) {
-                continue;
-            }
+        const mu::engraving::SharedPart* sharedPart = part->isSharedPart() ? mu::engraving::toSharedPart(part) : part->sharedPart();
+        if (!sharedPart) {
+            instruments << createItem(part);
+            continue;
         }
 
-        InstrumentItem* instrument = new InstrumentItem(this);
-        instrument->id = part->instrument()->id();
-        instrument->partId = part->id();
-        instrument->isExistingPart = true;
-        instrument->name = part->partName();
-        instrument->isSoloist = part->soloist();
-
-        // A group's header is followed by its instruments, as in the score
-        if (part->isSharedPart()) {
-            instrument->isSharedGroupHeader = true;
-            instrument->sharedPartId = part->id();
-        } else if (const mu::engraving::SharedPart* sharedPart = part->sharedPart()) {
-            instrument->sharedPartId = sharedPart->id();
+        // A group's instruments follow its header, in score order, even if the score has them apart
+        if (!m_sharedParts.try_emplace(sharedPart->id(), sharedPart->instrument()->id()).second) {
+            continue;
         }
 
-        instruments << instrument;
+        if (m_showsSharedGroups) {
+            InstrumentItem* header = createItem(sharedPart);
+            header->isSharedGroupHeader = true;
+            instruments << header;
+        }
+
+        for (const Part* member : sharedPart->originParts()) {
+            instruments << createItem(member);
+        }
     }
 
     setItems(instruments);
 
     loadOrders();
+}
+
+InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::createItem(const Part* part)
+{
+    InstrumentItem* instrument = new InstrumentItem(this);
+    instrument->id = part->instrument()->id();
+    instrument->partId = part->id();
+    instrument->isExistingPart = true;
+    instrument->name = part->partName();
+    instrument->isSoloist = part->soloist();
+
+    if (part->isSharedPart()) {
+        instrument->sharedPartId = part->id();
+    } else if (const mu::engraving::SharedPart* sharedPart = part->sharedPart()) {
+        instrument->sharedPartId = sharedPart->id();
+    }
+
+    return instrument;
 }
 
 void InstrumentsOnScoreListModel::loadOrders()
@@ -550,20 +565,19 @@ InstrumentsOnScoreListModel::SharedGroupRole InstrumentsOnScoreListModel::shared
 
 bool InstrumentsOnScoreListModel::isGroupMember(const InstrumentItem* instrument) const
 {
-    return m_showsSharedGroups && !instrument->isSharedGroupHeader && instrument->sharedPartId.isValid();
+    return !instrument->isSharedGroupHeader && instrument->sharedPartId.isValid();
 }
 
 std::vector<InstrumentsOnScoreListModel::RowRange> InstrumentsOnScoreListModel::blocks(const ItemList& instruments) const
 {
-    // a group's header with its instruments, or a single row
+    // a group's header (sharing on only) with its instruments, or a single row
     std::vector<RowRange> result;
 
     for (int row = 0; row < instruments.size(); ++row) {
         auto instrument = static_cast<const InstrumentItem*>(instruments.at(row));
 
         auto previous = result.empty() ? nullptr : static_cast<const InstrumentItem*>(instruments.at(result.back().first));
-        const bool continuesGroup = previous && previous->isSharedGroupHeader && isGroupMember(instrument)
-                                    && instrument->sharedPartId == previous->sharedPartId;
+        const bool continuesGroup = previous && isGroupMember(instrument) && instrument->sharedPartId == previous->sharedPartId;
 
         if (continuesGroup) {
             result.back().last = row;
@@ -578,7 +592,8 @@ std::vector<InstrumentsOnScoreListModel::RowRange> InstrumentsOnScoreListModel::
 int InstrumentsOnScoreListModel::sortingIndex(const ItemList& instruments, const RowRange& block) const
 {
     // a group is sorted by its first instrument, not its header
-    const int row = block.count() > 1 ? block.first + 1 : block.first;
+    auto first = static_cast<const InstrumentItem*>(instruments.at(block.first));
+    const int row = first->isSharedGroupHeader && block.count() > 1 ? block.first + 1 : block.first;
     auto instrument = static_cast<const InstrumentItem*>(instruments.at(row));
 
     return currentScoreOrder().instrumentSortingIndex(instrument->id, instrument->isSoloist);
@@ -589,16 +604,23 @@ std::optional<InstrumentsOnScoreListModel::RowRange> InstrumentsOnScoreListModel
     const ItemList& items = this->items();
     std::optional<RowRange> result;
 
-    // a group's instruments can't be moved
-    for (int row : selection()->selectedRows()) {
-        if (isGroupMember(static_cast<const InstrumentItem*>(items.at(row)))) {
-            return std::nullopt;
+    // a group's instruments can't be moved, unless the group isn't shown
+    if (m_showsSharedGroups) {
+        for (int row : selection()->selectedRows()) {
+            if (isGroupMember(static_cast<const InstrumentItem*>(items.at(row)))) {
+                return std::nullopt;
+            }
         }
     }
 
-    // A selected header brings its instruments
+    // A selected header, or (group not shown) instrument, brings the whole group
     for (const RowRange& block : blocks(items)) {
-        if (!selection()->isSelected(index(block.first))) {
+        bool isBlockSelected = false;
+        for (int row = block.first; row <= block.last && !isBlockSelected; ++row) {
+            isBlockSelected = selection()->isSelected(index(row));
+        }
+
+        if (!isBlockSelected) {
             continue;
         }
 
