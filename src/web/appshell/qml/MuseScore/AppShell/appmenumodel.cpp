@@ -307,8 +307,8 @@ MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
         makeMenuItem(AddSlurCommand::id),
-        makeMenuItem(ADD_HAIRPIN_COMMAND),
-        makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
+        makeMenuItem(AddHairpinCrescendoCommand::id),
+        makeMenuItem(AddHairpinDiminuendoCommand::id),
         makeMenuItem(AddOttava8vaCommand::id),
         makeMenuItem(AddOttava8vbCommand::id),
         makeMenuItem(ADD_NOTELINE_COMMAND)

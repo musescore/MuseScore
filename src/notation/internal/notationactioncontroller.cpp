@@ -172,10 +172,9 @@ void NotationActionController::init()
     registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
 
     registerCommand<AddOttavaCommand>(&Controller::addOttava);
+    registerCommand<AddHairpinCommand>(&Controller::addHairpin);
 
     registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
-    registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
-    registerCommand(ADD_HAIRPIN_REVERSE_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN);
     registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
     registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
@@ -2338,6 +2337,21 @@ muse::Ret NotationActionController::addOttava(const AddOttavaCommand& command)
     }
 
     interaction->addOttavaToSelection(command.type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addHairpin(const AddHairpinCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (interaction->selection()->isNone()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->addHairpinsToSelection(command.type);
     return muse::make_ok();
 }
 

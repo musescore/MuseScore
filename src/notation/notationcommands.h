@@ -2671,8 +2671,36 @@ struct AddOttava8vbCommand {
 };
 
 inline static const muse::rcommand::Command ADD_DYNAMIC_COMMAND("command://notation/add-dynamic");
-inline static const muse::rcommand::Command ADD_HAIRPIN_COMMAND("command://notation/add-hairpin");
-inline static const muse::rcommand::Command ADD_HAIRPIN_REVERSE_COMMAND("command://notation/add-hairpin-reverse");
+
+struct AddHairpinCommand {
+    cprop_decl id = Command("command://notation/add-hairpin");
+    cprop_decl title = MnemonicString("action", "Add hairpin");
+    cprop_decl description = TranslatableString("action", "Add hairpin");
+    cprop_decl availabilities = Availability::API;
+
+    HairpinType type = HairpinType::CRESC_HAIRPIN;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddHairpinCommand::type, "Hairpin type" },
+    };
+};
+
+struct AddHairpinCrescendoCommand {
+    cprop_decl id = Command("command://notation/add-hairpin/crescendo");
+    cprop_decl title = MnemonicString("action", "&Crescendo");
+    cprop_decl description = TranslatableString("action", "Add hairpin: crescendo");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddHairpinCommand(HairpinType::CRESC_HAIRPIN);
+};
+
+struct AddHairpinDiminuendoCommand {
+    cprop_decl id = Command("command://notation/add-hairpin/diminuendo");
+    cprop_decl title = MnemonicString("action", "&Diminuendo");
+    cprop_decl description = TranslatableString("action", "Add hairpin: diminuendo");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddHairpinCommand(HairpinType::DIM_HAIRPIN);
+};
+
 inline static const muse::rcommand::Command INCREASE_DYNAMIC_COMMAND("command://notation/increase-dynamic");
 inline static const muse::rcommand::Command DECREASE_DYNAMIC_COMMAND("command://notation/decrease-dynamic");
 inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");

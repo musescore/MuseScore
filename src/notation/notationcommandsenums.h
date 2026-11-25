@@ -282,6 +282,15 @@ struct OttavaTypeContract {
     } };
 };
 
+struct HairpinTypeContract {
+    static constexpr EnumTable<HairpinType, 4> table { {
+        { "crescendo", HairpinType::CRESC_HAIRPIN, "crescendo hairpin" },
+        { "diminuendo", HairpinType::DIM_HAIRPIN, "diminuendo hairpin" },
+        { "crescendo-line", HairpinType::CRESC_LINE, "crescendo line" },
+        { "diminuendo-line", HairpinType::DIM_LINE, "diminuendo line" },
+    } };
+};
+
 struct ScoreConfigTypeContract {
     static constexpr EnumTable<ScoreConfigType, 6> table { {
         { "invisible", ScoreConfigType::ShowInvisibleElements, "invisible elements" },
@@ -411,6 +420,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::HairpinTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ScoreConfigTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);

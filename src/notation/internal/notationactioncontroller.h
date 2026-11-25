@@ -190,6 +190,7 @@ private:
     muse::Ret setBeamMode(const SetBeamCommand& command);
     muse::Ret addOrnament(const AddOrnamentCommand& command);
     muse::Ret addOttava(const AddOttavaCommand& command);
+    muse::Ret addHairpin(const AddHairpinCommand& command);
     muse::Ret flipSelection();
     muse::Ret flipSelectionHorizontally();
     muse::Ret extendToNextNote();

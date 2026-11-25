@@ -234,8 +234,8 @@ static const std::vector<Command> TUPLET_COMMANDS = {
 
 static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
     ADD_DYNAMIC_COMMAND,
-    ADD_HAIRPIN_COMMAND,
-    ADD_HAIRPIN_REVERSE_COMMAND
+    AddHairpinCrescendoCommand::id,
+    AddHairpinDiminuendoCommand::id,
 };
 
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
