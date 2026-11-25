@@ -1215,6 +1215,9 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
         if (!item->text()->empty()) {
             r.unite(item->text()->ldata()->bbox());
         }
+        if (!item->middleText()->empty()) {
+            r.unite(item->middleText()->ldata()->bbox().translated(item->middleText()->pos()));
+        }
         if (!item->endText()->empty()) {
             r.unite(item->endText()->ldata()->bbox().translated(x + item->endText()->ldata()->bbox().width(), 0.0));
         }
