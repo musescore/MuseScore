@@ -333,8 +333,19 @@ void NotationActionController::init()
     registerCommand(VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND, &Interaction::changeSelectedElementsVoiceAssignment,
                     VoiceAssignment::ALL_VOICE_IN_STAFF);
 
+    // automation commands
     registerCommand(TOGGLE_AUTOMATION_COMMAND, &Controller::toggleAutomation);
     registerCommandWithParams(SELECT_AUTOMATION_TYPE_COMMAND, &Controller::selectAutomationType);
+    registerCommand(AUTOMATION_NEXT_NODE_COMMAND, [this]() { automationNavigationRequested(MoveDirection::Right); });
+    registerCommand(AUTOMATION_PREV_NODE_COMMAND, [this]() { automationNavigationRequested(MoveDirection::Left); });
+    registerCommand(AUTOMATION_CLOSEST_NODE_ABOVE_COMMAND, [this]() { automationNavigationRequested(MoveDirection::Up); });
+    registerCommand(AUTOMATION_CLOSEST_NODE_BELOW_COMMAND, [this]() { automationNavigationRequested(MoveDirection::Down); });
+    registerCommand(AUTOMATION_CLOSEST_NODE_TOP_COMMAND, [this]() {
+        automationNavigationRequested(MoveDirection::Up, /*toTopBottom*/ true);
+    });
+    registerCommand(AUTOMATION_CLOSEST_NODE_BOTTOM_COMMAND, [this]() {
+        automationNavigationRequested(MoveDirection::Down, /*toTopBottom*/ true);
+    });
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -1624,6 +1635,14 @@ ScoreConfig NotationActionController::scoreConfig() const
 muse::async::Channel<ScoreConfigType> NotationActionController::scoreConfigChanged() const
 {
     return m_scoreConfigChanged;
+}
+
+void NotationActionController::automationNavigationRequested(MoveDirection direction, bool toTopBottom)
+{
+    IF_ASSERT_FAILED(isAutomationModeEnabled()) {
+        return;
+    }
+    automation()->navigateRequested().send(direction, toTopBottom);
 }
 
 muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool quickly)

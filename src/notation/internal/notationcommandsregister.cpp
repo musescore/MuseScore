@@ -1185,6 +1185,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
+    // automation commands
     CommandInfo {
         TOGGLE_AUTOMATION_COMMAND,
         TranslatableString("action", "Automation"),
@@ -1200,6 +1201,48 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "type", Arg(DataType::String, u"Automation type (dynamics, volume, pan)") },
         }),
         Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo {
+        AUTOMATION_NEXT_NODE_COMMAND,
+        TranslatableString("action", "Next node"),
+        TranslatableString("action", "Select next automation node"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        AUTOMATION_PREV_NODE_COMMAND,
+        TranslatableString("action", "Previous node"),
+        TranslatableString("action", "Select previous automation node"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        AUTOMATION_CLOSEST_NODE_ABOVE_COMMAND,
+        TranslatableString("action", "Closest node above"),
+        TranslatableString("action", "Select the closest automation node on a staff above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        AUTOMATION_CLOSEST_NODE_BELOW_COMMAND,
+        TranslatableString("action", "Closest node below"),
+        TranslatableString("action", "Select the closest automation node on a staff below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        AUTOMATION_CLOSEST_NODE_TOP_COMMAND,
+        TranslatableString("action", "Closest node top staff"),
+        TranslatableString("action", "Select the closest automation node on the top staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        AUTOMATION_CLOSEST_NODE_BOTTOM_COMMAND,
+        TranslatableString("action", "Closest node bottom staff"),
+        TranslatableString("action", "Select the closest automation node on the bottom staff"),
+        InputSchema(),
+        Decoration()
     },
 
     // screen commands

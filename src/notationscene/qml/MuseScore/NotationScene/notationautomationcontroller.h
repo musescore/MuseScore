@@ -118,6 +118,8 @@ private:
 
     bool isMuseSamplerDynamics(const mu::engraving::Staff* staff, int tick) const;
 
+    void navigate(MoveDirection direction, bool toTopBottom);
+
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
     INotationPtr currentNotation() const;

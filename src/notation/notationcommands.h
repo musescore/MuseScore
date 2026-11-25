@@ -3025,6 +3025,12 @@ inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://
 inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command://notation/autoplace-enabled");
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
 inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("command://notation/select-automation-type"); // with params
+inline static const muse::rcommand::Command AUTOMATION_NEXT_NODE_COMMAND("command://notation/automation/next-node");
+inline static const muse::rcommand::Command AUTOMATION_PREV_NODE_COMMAND("command://notation/automation/prev-node");
+inline static const muse::rcommand::Command AUTOMATION_CLOSEST_NODE_ABOVE_COMMAND("command://notation/automation/closest-node-above");
+inline static const muse::rcommand::Command AUTOMATION_CLOSEST_NODE_BELOW_COMMAND("command://notation/automation/closest-node-below");
+inline static const muse::rcommand::Command AUTOMATION_CLOSEST_NODE_TOP_COMMAND("command://notation/automation/closest-node-top");
+inline static const muse::rcommand::Command AUTOMATION_CLOSEST_NODE_BOTTOM_COMMAND("command://notation/automation/closest-node-bottom");
 
 // TAB commands
 inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");

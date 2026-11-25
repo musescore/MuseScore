@@ -61,6 +61,8 @@ void AppShortcutsScopes::init()
                          whenNotationFocused(&AppShortcutsScopes::isNoteInputMode) });
     resolver->setScope({ "NOTATION_TEXT_EDITING", TranslatableString("shortcuts", "NOTATION: TEXT EDITING"), 9,
                          whenNotationFocused(&AppShortcutsScopes::isTextEditing) });
+    resolver->setScope({ "NOTATION_AUTOMATION", TranslatableString("shortcuts", "NOTATION: AUTOMATION"), 10,
+                         whenNotationFocused(&AppShortcutsScopes::isAutomationModeEnabled) });
 
     resolver->setScope({ "PROJECT", TranslatableString("shortcuts", "PROJECT") });
     resolver->setScope({ "APP", TranslatableString("shortcuts", "APP") });
@@ -118,4 +120,9 @@ bool AppShortcutsScopes::isRangeSelection() const
 bool AppShortcutsScopes::isTextEditing() const
 {
     return notationCommandsController()->isTextEditing();
+}
+
+bool AppShortcutsScopes::isAutomationModeEnabled() const
+{
+    return notationCommandsController()->isAutomationModeEnabled();
 }

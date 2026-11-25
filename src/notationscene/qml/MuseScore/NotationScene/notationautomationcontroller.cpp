@@ -213,6 +213,10 @@ void NotationAutomationController::init()
         m_currentlyEditedPolyline = nullptr;
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
+    automation()->navigateRequested().onReceive(this, [this](MoveDirection direction, bool toTopBottom) {
+        navigate(direction, toTopBottom);
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
     notationConfiguration()->currentAutomationLaneChanged().onNotify(this, [this]() {
         rebuildAllPolylines();
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -1240,6 +1244,33 @@ bool NotationAutomationController::isMuseSamplerDynamics(const Staff* staff, int
     const InstrumentTrackId trackId { part->id(), part->instrumentId(Fraction::fromTicks(tick)) };
     return muse::audio::isResourceType(settings->trackInputParams(trackId).resourceMeta,
                                        muse::audio::AudioResourceType::MuseSamplerSoundPack);
+}
+
+void NotationAutomationController::navigate(MoveDirection direction, bool toTopBottom)
+{
+    switch (direction) {
+    case MoveDirection::Up:
+        LOGD() << "GOING UP";
+        if (toTopBottom) {
+            LOGD() << "TO TOP";
+        }
+        return;
+    case MoveDirection::Down:
+        LOGD() << "GOING DOWN";
+        if (toTopBottom) {
+            LOGD() << "TO BOTTOM";
+        }
+        return;
+    case MoveDirection::Left:
+        LOGD() << "GOING LEFT";
+        return;
+    case MoveDirection::Right:
+        LOGD() << "GOING RIGHT";
+        return;
+    case MoveDirection::Undefined:
+        LOGD() << "GOING BADLY";
+        return;
+    }
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const

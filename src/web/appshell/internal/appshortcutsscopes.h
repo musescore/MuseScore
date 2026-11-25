@@ -56,5 +56,6 @@ private:
     bool isSingleSelection() const;
     bool isRangeSelection() const;
     bool isTextEditing() const;
+    bool isAutomationModeEnabled() const;
 };
 }

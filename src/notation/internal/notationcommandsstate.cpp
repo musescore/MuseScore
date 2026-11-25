@@ -302,6 +302,15 @@ static const std::vector<Command> TAB_COMMANDS = {
     GOTO_STRING_BELOW_COMMAND
 };
 
+static const std::vector<Command> AUTOMATION_COMMANDS = {
+    AUTOMATION_NEXT_NODE_COMMAND,
+    AUTOMATION_PREV_NODE_COMMAND,
+    AUTOMATION_CLOSEST_NODE_ABOVE_COMMAND,
+    AUTOMATION_CLOSEST_NODE_BELOW_COMMAND,
+    AUTOMATION_CLOSEST_NODE_TOP_COMMAND,
+    AUTOMATION_CLOSEST_NODE_BOTTOM_COMMAND,
+};
+
 static const std::vector<Command> DEBUG_COMMANDS = {
     SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
     COLOR_ELEMENT_SHAPES_COMMAND,
@@ -394,6 +403,7 @@ void NotationCommandsState::init()
 
     controller()->automationModeEnabledChanged().onNotify(this, [this]() {
         updateCommandStates({ TOGGLE_AUTOMATION_COMMAND });
+        updateCommandStates(AUTOMATION_COMMANDS);
     });
 
     controller()->debuggingOptionsChanged().onNotify(this, [this]() {
@@ -551,6 +561,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (command == TOGGLE_AUTOMATION_COMMAND) {
         return CommandState(true, controller()->isAutomationModeEnabled());
+    }
+
+    if (muse::contains(AUTOMATION_COMMANDS, command)) {
+        return CommandState(controller()->isAutomationModeEnabled(), false);
     }
 
     if (muse::contains(DEBUG_COMMANDS, command)) {
