@@ -80,6 +80,7 @@ public:
 
     void addOriginPart(Part* p);
     void removeOriginPart(Part* p);
+    void sortOriginParts();
     const std::vector<Part*>& originParts() const { return m_originParts; }
 
     const Part* originPart(track_idx_t sharedTrack, const Fraction& tick) const override;

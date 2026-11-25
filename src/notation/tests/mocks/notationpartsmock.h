@@ -64,7 +64,7 @@ public:
     MOCK_METHOD(void, removeParts, (const muse::IDList& partsIds), (override));
     MOCK_METHOD(void, removeStaves, (const muse::IDList& stavesIds), (override));
 
-    MOCK_METHOD(void, reorderParts, (const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves), (override));
+    MOCK_METHOD(bool, setPartsLayout, (const PartsLayout& layout), (override));
     MOCK_METHOD(void, reorderStaves, (const muse::IDList& staffIds), (override));
 
     MOCK_METHOD(bool, appendStaff, (Staff * staff, const muse::ID& destinationPartId), (override));
@@ -84,6 +84,9 @@ public:
     MOCK_METHOD(void, removeSystemObjects, (const muse::IDList& stavesIds), (override));
 
     MOCK_METHOD(void, toggleStaveSharing, (bool on), (override));
+    MOCK_METHOD(const SharedPart*, movePartsToNewSharedPart, (const muse::IDList& partIds), (override));
+    MOCK_METHOD(void, movePartsToSharedPart, (const muse::IDList& partIds, const muse::ID& sharedPartId), (override));
+    MOCK_METHOD(void, ungroupSharedPart, (const muse::ID& sharedPartId), (override));
 
     MOCK_METHOD(muse::async::Notification, partsChanged, (), (const, override));
     MOCK_METHOD(muse::async::Notification, scoreOrderChanged, (), (const, override));

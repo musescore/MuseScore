@@ -104,15 +104,18 @@ void NotationUndoStack::undoRedoToIndex(size_t idx, mu::engraving::EditData* edi
     notifyAboutStateChanged();
 }
 
-void NotationUndoStack::transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func)
+muse::Ret NotationUndoStack::transaction(const muse::TranslatableString& actionName,
+                                         std::function<void(mu::engraving::Transaction&)> func)
 {
     IF_ASSERT_FAILED(score()) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
-    transactionManager()->transaction(actionName, func);
+    muse::Ret ret = transactionManager()->transaction(actionName, func);
 
     notifyAboutStateChanged();
+
+    return ret;
 }
 
 void NotationUndoStack::prepareChanges(const muse::TranslatableString& actionName)

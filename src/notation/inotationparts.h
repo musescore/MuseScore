@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "async/notification.h"
 
 #include "types/instrumentstypes.h"
@@ -82,8 +84,31 @@ public:
         }
     };
 
-    //! Puts the parts in the given order and moves the system markings, as one undo step
-    virtual void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) = 0;
+    //! A part and its shared part afterwards
+    struct PartPlacement {
+        muse::ID partId;
+        std::optional<muse::ID> sharedPartId; // nullopt: not in a shared part
+
+        bool operator==(const PartPlacement& other) const
+        {
+            return partId == other.partId && sharedPartId == other.sharedPartId;
+        }
+    };
+
+    //! The parts' new order and shared parts, and where their system markings go
+    struct PartsLayout {
+        std::vector<PartPlacement> parts;
+        std::vector<SystemObjectsMove> systemObjects;
+
+        bool operator==(const PartsLayout& other) const
+        {
+            return parts == other.parts && systemObjects == other.systemObjects;
+        }
+    };
+
+    //! Puts the parts in the given order and shared parts, and moves the system markings, as one undo step
+    //! Returns false if the layout is rejected
+    virtual bool setPartsLayout(const PartsLayout& layout) = 0;
 
     //! Puts the part's staves in the given order, as one undo step
     virtual void reorderStaves(const muse::IDList& staffIds) = 0;
@@ -105,6 +130,9 @@ public:
     virtual void removeSystemObjects(const muse::IDList& stavesIds) = 0;
 
     virtual void toggleStaveSharing(bool on) = 0;
+    virtual const SharedPart* movePartsToNewSharedPart(const muse::IDList& partIds) = 0;
+    virtual void movePartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) = 0;
+    virtual void ungroupSharedPart(const muse::ID& sharedPartId) = 0;
 
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;

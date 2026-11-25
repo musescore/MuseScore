@@ -23,6 +23,7 @@
 #include "transaction.h"
 
 #include "../../dom/masterscore.h"
+#include "../../engravingerrors.h"
 
 #include "undoablecommand.h"
 #include "undostack.h"
@@ -143,16 +144,16 @@ UndoStack* TransactionManager::undoStack() const
     return m_masterScore->undoStack();
 }
 
-void TransactionManager::transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func)
+muse::Ret TransactionManager::transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func)
 {
     IF_ASSERT_FAILED(!m_currentTransaction) {
         LOGW() << "transaction already active";
         func(*m_currentTransaction);
-        return;
+        return muse::make_ok();
     }
     beginTransaction(description);
     func(*m_currentTransaction);
-    endTransaction();
+    return endTransaction();
 }
 
 void TransactionManager::beginTransaction(const muse::TranslatableString& description)
@@ -175,18 +176,18 @@ void TransactionManager::beginTransaction(const muse::TranslatableString& descri
     m_currentTransaction = std::unique_ptr<Transaction>(new Transaction(stack->activeTransaction()));
 }
 
-void TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool keepRolledBackElements)
+muse::Ret TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool keepRolledBackElements)
 {
     UndoStack* stack = undoStack();
 
     if (stack->isLocked()) {
-        return;
+        return muse::make_ok();
     }
 
     if (!stack->hasActiveTransaction()) {
         LOGW() << "no command active";
         m_masterScore->update();
-        return;
+        return muse::make_ok();
     }
 
     if (m_masterScore->readOnly() || (MScore::_error != MsError::MS_NO_ERROR && !MScore::_errorIsWarning)) {
@@ -226,6 +227,8 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool
         m_masterScore->updateAutomation(changes);
         m_masterScore->changesChannel().send(changes);
     }
+
+    return rollback ? make_ret(Err::TransactionRolledBack) : muse::make_ok();
 }
 
 void TransactionManager::reopen()

@@ -47,7 +47,8 @@ enum class Err {
     FileCriticallyCorrupted = 2010,
 
     UserAbort = 2011,
-    IgnoreError = 2012
+    IgnoreError = 2012,
+    TransactionRolledBack = 2013
 };
 
 inline muse::Ret make_ret(Err err, const muse::String& text)
@@ -102,6 +103,7 @@ inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = {})
     case Err::UnknownError:
     case Err::IgnoreError:
     case Err::UserAbort:
+    case Err::TransactionRolledBack:
         break;
     }
 

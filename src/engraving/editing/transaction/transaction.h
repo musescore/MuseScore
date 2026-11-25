@@ -25,6 +25,7 @@
 #include <functional>
 #include <memory>
 
+#include "global/types/ret.h"
 #include "global/types/translatablestring.h"
 
 namespace mu::engraving {
@@ -130,10 +131,10 @@ public:
 
     UndoStack* undoStack() const;
 
-    void transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func);
+    muse::Ret transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func);
 
     void beginTransaction(const muse::TranslatableString& description);
-    void endTransaction(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false);
+    muse::Ret endTransaction(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false);
 
     void reopen();
 

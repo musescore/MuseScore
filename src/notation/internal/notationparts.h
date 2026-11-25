@@ -77,7 +77,7 @@ public:
     void removeParts(const muse::IDList& partsIds) override;
     void removeStaves(const muse::IDList& stavesIds) override;
 
-    void reorderParts(const muse::IDList& partIds, const std::vector<SystemObjectsMove>& systemObjectsMoves) override;
+    bool setPartsLayout(const PartsLayout& layout) override;
     void reorderStaves(const muse::IDList& staffIds) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
@@ -97,6 +97,9 @@ public:
     void removeSystemObjects(const muse::IDList& stavesIds) override;
 
     void toggleStaveSharing(bool on) override;
+    const SharedPart* movePartsToNewSharedPart(const muse::IDList& partIds) override;
+    void movePartsToSharedPart(const muse::IDList& partIds, const muse::ID& sharedPartId) override;
+    void ungroupSharedPart(const muse::ID& sharedPartId) override;
 
     muse::async::Notification partsChanged() const override;
     muse::async::Notification scoreOrderChanged() const override;
@@ -106,7 +109,7 @@ public:
 private:
     mu::engraving::Score* score() const;
 
-    void transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
+    muse::Ret transaction(const muse::TranslatableString& actionName, const std::function<void(engraving::Transaction&)>& func);
 
     void listenUndoStackChanges();
     void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});
@@ -116,6 +119,8 @@ private:
 
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
+
+    std::vector<engraving::EditPart::PartPlacement> editPartPlacements(const std::vector<PartPlacement>& placements) const;
     std::vector<engraving::EditPart::SystemObjectsMove> editPartSystemObjectsMoves(const std::vector<SystemObjectsMove>& moves) const;
 
     void endInteractionWithScore();

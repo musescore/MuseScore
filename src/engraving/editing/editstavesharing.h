@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <functional>
+#include <unordered_map>
 #include <vector>
 
 #include "../dom/sharedpart.h"
@@ -40,11 +42,46 @@ class Transaction;
 using StaveSharingGroup = std::vector<Part*>;
 using StaveSharingGroups = std::vector<StaveSharingGroup>;
 
+class SharedPartsChange
+{
+public:
+    SharedPartsChange& join(const std::vector<Part*>& parts, SharedPart* sharedPart)
+    {
+        for (Part* part : parts) {
+            m_targets[part] = sharedPart;
+        }
+        return *this;
+    }
+
+    SharedPartsChange& leave(const std::vector<Part*>& parts)
+    {
+        for (Part* part : parts) {
+            m_targets[part] = nullptr;
+        }
+        return *this;
+    }
+
+    bool empty() const { return m_targets.empty(); }
+
+    //! nullptr: the part leaves its current shared part
+    const std::unordered_map<Part*, SharedPart*>& targets() const { return m_targets; }
+
+private:
+    std::unordered_map<Part*, SharedPart*> m_targets;
+};
+
 class EditStaveSharing
 {
 public:
     static void toggleStaveSharing(Transaction& tx, Score* score, bool on);
-    static void handleRemovePart(Transaction& tx, Part* part);
+    static void disconnectBeforeRemovingPart(Transaction& tx, Part* part);
+
+    static SharedPart* createSharedPart(Transaction& tx, const std::vector<Part*>& parts);
+    //! Applies the change, then removes the shared parts left empty
+    static void changeSharedParts(Transaction& tx, Score* score, const SharedPartsChange& change);
+    static bool canShareStaves(const Part* part);
+    //! Applies remap to every custom voice map; nidx for an origin track drops that entry, for a shared track resets the map to the default
+    static void remapUserTrackMaps(Transaction& tx, Score* score, const std::function<track_idx_t(track_idx_t)>& remap);
 
     static void addStaveSharingChange(Transaction& tx, Segment* seg, Part* part, bool reset);
     static void addStaveSharingChangeToRange(Transaction& tx, Segment* startSeg, Segment* endSeg, staff_idx_t startStaff,
@@ -59,8 +96,7 @@ public:
     static void restoreStaveSharingStates(Transaction& tx, const StaveSharingStatesByPart& states);
 
 private:
-    static void cmdCreateSharedStaves(Transaction& tx, Score* score);
-    static void cmdRemoveSharedStaves(Score* score);
+    static void createSharedStaves(Transaction& tx, Score* score);
 
     static StaveSharingGroups computeGroups(Score* score);
     static void createSharedParts(Transaction& tx, const StaveSharingGroups& groups, Score* score);
@@ -69,5 +105,6 @@ private:
 
     static void connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
     static void disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
+    static void disconnectFromCurrentSharedPart(Transaction& tx, Part* part);
 };
 }

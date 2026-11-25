@@ -36,6 +36,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/types.h"
 
 #include "engraving/api/v1/score.h"
@@ -282,7 +283,8 @@ TEST_F(Engraving_ApiScoreTests, setPartVisible)
 
     // [WHEN] We hide the part
     score->startCmd(TranslatableString::untranslatable("Set part visible test"));
-    EditPart::setPartVisible(score, part, false);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setPartVisible(tx, score, part, false);
     score->endCmd();
 
     // [THEN] The part should be hidden
@@ -315,7 +317,8 @@ TEST_F(Engraving_ApiScoreTests, setStaffVisible)
 
     // [WHEN] We hide the staff
     score->startCmd(TranslatableString::untranslatable("Set staff visible test"));
-    EditPart::setStaffVisible(score, staff, false);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setStaffVisible(tx, score, staff, false);
     score->endCmd();
 
     // [THEN] The staff should be hidden
@@ -346,7 +349,8 @@ TEST_F(Engraving_ApiScoreTests, setPartSharpFlat)
 
     // [WHEN] We set sharps preference
     score->startCmd(TranslatableString::untranslatable("Set sharp flat test"));
-    EditPart::setPartSharpFlat(score, part, PreferSharpFlat::SHARPS);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setPartSharpFlat(tx, score, part, PreferSharpFlat::SHARPS);
     score->endCmd();
 
     // [THEN] The property should be changed
@@ -382,7 +386,8 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentName)
 
     // [WHEN] We set a new instrument name
     score->startCmd(TranslatableString::untranslatable("Set instrument name test"));
-    EditPart::setInstrumentName(score, part, Fraction(0, 1), u"New Name");
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setInstrumentName(tx, score, part, Fraction(0, 1), u"New Name");
     score->endCmd();
 
     // [THEN] The name should be changed
@@ -418,7 +423,8 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentAbbreviature)
 
     // [WHEN] We set a new abbreviature
     score->startCmd(TranslatableString::untranslatable("Set instrument abbreviature test"));
-    EditPart::setInstrumentAbbreviature(score, part, Fraction(0, 1), u"New.");
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setInstrumentAbbreviature(tx, score, part, Fraction(0, 1), u"New.");
     score->endCmd();
 
     // [THEN] The abbreviature should be changed
@@ -452,7 +458,8 @@ TEST_F(Engraving_ApiScoreTests, setStaffType)
 
     // [WHEN] We change to percussion staff type
     score->startCmd(TranslatableString::untranslatable("Set staff type test"));
-    EditPart::setStaffType(score, staff, StaffTypes::PERC_DEFAULT);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setStaffType(tx, score, staff, StaffTypes::PERC_DEFAULT);
     score->endCmd();
 
     // [THEN] The staff type should be changed
@@ -580,7 +587,8 @@ TEST_F(Engraving_ApiScoreTests, removeParts)
 
     // [WHEN] We remove the first part
     score->startCmd(TranslatableString::untranslatable("Remove parts test"));
-    EditPart::removeParts(score, { part1 });
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::removeParts(tx, score, { part1 });
     score->endCmd();
 
     // [THEN] Only one part should remain
@@ -617,7 +625,8 @@ TEST_F(Engraving_ApiScoreTests, removeStaves)
 
     // [WHEN] We remove the second staff
     score->startCmd(TranslatableString::untranslatable("Remove staves test"));
-    EditPart::removeStaves(score, { staff2 });
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::removeStaves(tx, score, { staff2 });
     score->endCmd();
 
     // [THEN] Only one staff should remain
@@ -661,7 +670,8 @@ TEST_F(Engraving_ApiScoreTests, moveParts)
 
     // [WHEN] We move part3 before part1
     score->startCmd(TranslatableString::untranslatable("Move parts test"));
-    EditPart::moveParts(score, { part3 }, part1, false);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::moveParts(tx, score, { part3 }, part1, false);
     score->endCmd();
 
     // [THEN] The order should be part3, part1, part2
@@ -703,7 +713,8 @@ TEST_F(Engraving_ApiScoreTests, moveStaves)
 
     // [WHEN] We move staff2 before staff1
     score->startCmd(TranslatableString::untranslatable("Move staves test"));
-    EditPart::moveStaves(score, { staff2 }, staff1, false);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::moveStaves(tx, score, { staff2 }, staff1, false);
     score->endCmd();
 
     // [THEN] The order should be staff2, staff1
@@ -1034,7 +1045,8 @@ TEST_F(Engraving_ApiScoreTests, appendStaff)
 
     // [WHEN] We append a new staff
     score->startCmd(TranslatableString::untranslatable("Append staff test"));
-    Staff* newStaff = EditPart::appendStaff(score, part);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    Staff* newStaff = EditPart::appendStaff(tx, score, part);
     score->endCmd();
 
     // [THEN] The part should have 2 staves
@@ -1069,7 +1081,8 @@ TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
 
     // [WHEN] We append a linked staff
     score->startCmd(TranslatableString::untranslatable("Append linked staff test"));
-    Staff* linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    Staff* linkedStaff = EditPart::appendLinkedStaff(tx, score, sourceStaff, part);
     score->endCmd();
 
     // [THEN] The part should have 2 staves
@@ -1164,7 +1177,8 @@ TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
     score->appendStaff(staff);
 
     // [WHEN] We try to set voice visible on the main score
-    bool result = EditPart::setVoiceVisible(score, staff, 0, false);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    bool result = EditPart::setVoiceVisible(tx, score, staff, 0, false);
 
     // [THEN] It should return false (only works on excerpts)
     EXPECT_FALSE(result);
@@ -1233,7 +1247,8 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumset)
     newDs.drum(36).name = u"Kick Drum";
 
     score->startCmd(TranslatableString::untranslatable("Replace drumset test"));
-    EditPart::replaceDrumset(score, part, Fraction(0, 1), newDs);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::replaceDrumset(tx, score, part, Fraction(0, 1), newDs);
     score->endCmd();
 
     // [THEN] The drumset should have the new name
@@ -1325,7 +1340,8 @@ TEST_F(Engraving_ApiScoreTests, insertPart)
 
     // [WHEN] We insert a part at index 0
     score->startCmd(TranslatableString::untranslatable("Insert part test"));
-    EditPart::insertPart(score, violinTempl, 0);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::insertPart(tx, score, violinTempl, 0);
     score->endCmd();
 
     // [THEN] Two parts should exist, the new one at index 0
@@ -1368,7 +1384,8 @@ TEST_F(Engraving_ApiScoreTests, replacePart)
 
     // [WHEN] We replace the part
     score->startCmd(TranslatableString::untranslatable("Replace part test"));
-    EditPart::replacePart(score, part, violinTempl);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::replacePart(tx, score, part, violinTempl);
     score->endCmd();
 
     // [THEN] The part should be replaced with violin
@@ -1480,7 +1497,8 @@ TEST_F(Engraving_ApiScoreTests, setScoreOrder)
 
     // [WHEN] We set the score order
     score->startCmd(TranslatableString::untranslatable("Set score order test"));
-    EditPart::setScoreOrder(score, testOrder);
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    EditPart::setScoreOrder(tx, score, testOrder);
     score->endCmd();
 
     // [THEN] The score order should be changed
