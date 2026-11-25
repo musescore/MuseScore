@@ -22,6 +22,9 @@
 
 #include "instrumentlistmodel.h"
 
+#include <algorithm>
+#include <utility>
+
 #include "translation.h"
 
 #include "engraving/dom/instrtemplate.h"
@@ -43,12 +46,10 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 {
     connect(m_selection, &ItemMultiSelectionModel::selectionChanged, this,
             [this](const QItemSelection& selected, const QItemSelection& deselected) {
-        QModelIndexList changedIndexes;
-        changedIndexes << selected.indexes();
-        changedIndexes << deselected.indexes();
-
-        for (const QModelIndex& index : changedIndexes) {
-            emit dataChanged(index, index, { RoleIsSelected });
+        for (const QItemSelection& changed : { selected, deselected }) {
+            for (const QItemSelectionRange& range : changed) {
+                emit dataChanged(range.topLeft(), range.bottomRight(), { RoleIsSelected });
+            }
         }
 
         emit selectionChanged();
@@ -63,7 +64,7 @@ QVariant InstrumentListModel::data(const QModelIndex& index, int role) const
         return false;
     }
 
-    const CombinedInstrument& instrument = m_instruments[row];
+    const CombinedInstrument& instrument = m_instruments.at(row);
 
     switch (role) {
     case RoleName:
@@ -72,6 +73,8 @@ QVariant InstrumentListModel::data(const QModelIndex& index, int role) const
         return instrument.templates.at(instrument.currentTemplateIndex)->description.toQString();
     case RoleTraits: {
         QStringList traits;
+        traits.reserve(static_cast<int>(instrument.templates.size()));
+
         for (const InstrumentTemplate* templ : instrument.templates) {
             traits << templ->trait.name;
         }
@@ -131,6 +134,74 @@ QHash<int, QByteArray> InstrumentListModel::roleNames() const
     return roles;
 }
 
+QStringList InstrumentListModel::genres() const
+{
+    QStringList result;
+    result.reserve(static_cast<int>(m_genres.size()));
+
+    for (const InstrumentGenre* genre: m_genres) {
+        result << genre->name;
+    }
+
+    return result;
+}
+
+QStringList InstrumentListModel::groups() const
+{
+    QStringList result;
+    result.reserve(static_cast<int>(m_groups.size()));
+
+    for (const InstrumentGroup* group: m_groups) {
+        result << group->name;
+    }
+
+    return result;
+}
+
+int InstrumentListModel::currentGenreIndex() const
+{
+    for (size_t i = 0; i < m_genres.size(); ++i) {
+        if (m_genres.at(i)->id == m_currentGenreId) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
+}
+
+int InstrumentListModel::currentGroupIndex() const
+{
+    for (size_t i = 0; i < m_groups.size(); ++i) {
+        if (m_groups.at(i)->id == m_currentGroupId) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
+}
+
+bool InstrumentListModel::hasSelection() const
+{
+    return m_selection->hasSelection();
+}
+
+QVariant InstrumentListModel::selectedInstrument() const
+{
+    QList<int> selectedRows = m_selection->selectedRows();
+    if (selectedRows.length() != 1) {
+        return QVariant();
+    }
+
+    const CombinedInstrument& instrument = m_instruments.at(selectedRows.at(0));
+    const InstrumentTemplate* templ = instrument.templates.at(instrument.currentTemplateIndex);
+
+    QVariantMap obj;
+    obj["instrumentId"] = templ->id.toQString();
+    obj["description"] = templ->description.toQString();
+
+    return obj;
+}
+
 void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId)
 {
     TRACEFUNC;
@@ -151,26 +222,75 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     }
 }
 
-QStringList InstrumentListModel::genres() const
+void InstrumentListModel::setSearchText(const QString& text)
 {
-    QStringList result;
-
-    for (const InstrumentGenre* genre: m_genres) {
-        result << genre->name;
+    if (m_searchText == text) {
+        return;
     }
 
-    return result;
+    m_searchText = text;
+    updateStateBySearch();
 }
 
-QStringList InstrumentListModel::groups() const
+void InstrumentListModel::selectInstrument(int instrumentIndex)
 {
-    QStringList result;
-
-    for (const InstrumentGroup* group: m_groups) {
-        result << group->name;
+    if (!isInstrumentIndexValid(instrumentIndex)) {
+        return;
     }
 
-    return result;
+    QModelIndex modelIndex = index(instrumentIndex);
+    m_selection->select(modelIndex);
+
+    if (isSearching()) {
+        const CombinedInstrument& instrument = m_instruments.at(instrumentIndex);
+
+        if (m_selection->selection().size() == 1 && !instrument.templates.empty()) {
+            doSetCurrentGroup(instrument.templates.front()->groupId);
+        } else {
+            doSetCurrentGroup(NONE_GROUP_ID);
+        }
+    }
+}
+
+QStringList InstrumentListModel::selectedInstrumentIdList() const
+{
+    const QList<int> rows = m_selection->selectedRows();
+
+    QSet<QString> result;
+    result.reserve(rows.size());
+
+    for (int row : rows) {
+        const CombinedInstrument& instrument = m_instruments.at(row);
+
+        if (instrument.currentTemplateIndex >= instrument.templates.size()) {
+            continue;
+        }
+
+        const InstrumentTemplate* templ = instrument.templates.at(instrument.currentTemplateIndex);
+        if (templ->id.empty()) {
+            continue;
+        }
+
+        result << templ->id.toQString();
+    }
+
+    return QStringList(result.begin(), result.end());
+}
+
+void InstrumentListModel::setCurrentGenreIndex(int index)
+{
+    size_t idx = static_cast<size_t>(index);
+    if (idx < m_genres.size()) {
+        setCurrentGenre(m_genres.at(idx)->id);
+    }
+}
+
+void InstrumentListModel::setCurrentGroupIndex(int index)
+{
+    size_t idx = static_cast<size_t>(index);
+    if (idx < m_groups.size()) {
+        setCurrentGroup(m_groups.at(idx)->id);
+    }
 }
 
 void InstrumentListModel::init(const QString& genreId, const QString& groupId)
@@ -216,15 +336,12 @@ void InstrumentListModel::loadGroups()
     TRACEFUNC;
 
     auto isGroupAccepted = [this](const InstrumentGroup* group) {
-        for (const InstrumentTemplate* templ : group->instrumentTemplates) {
-            constexpr bool compareWithCurrentGroup = false;
+        constexpr bool compareWithCurrentGroup = false;
 
-            if (isInstrumentAccepted(*templ, compareWithCurrentGroup)) {
-                return true;
-            }
-        }
-
-        return false;
+        return std::any_of(group->instrumentTemplates.cbegin(), group->instrumentTemplates.cend(),
+                           [this](const InstrumentTemplate* templ) {
+            return isInstrumentAccepted(*templ, compareWithCurrentGroup);
+        });
     };
 
     InstrumentGroupList acceptedGroups;
@@ -239,17 +356,14 @@ void InstrumentListModel::loadGroups()
         return;
     }
 
-    m_groups = acceptedGroups;
+    m_groups = std::move(acceptedGroups);
     emit groupsChanged();
 
     if (m_currentGroupId != NONE_GROUP_ID) {
-        bool currentGroupInNewGenre = false;
-        for (const InstrumentGroup* group : m_groups) {
-            if (group->id == m_currentGroupId) {
-                currentGroupInNewGenre = true;
-                break;
-            }
-        }
+        const bool currentGroupInNewGenre = std::any_of(m_groups.cbegin(), m_groups.cend(), [this](const InstrumentGroup* group) {
+            return group->id == m_currentGroupId;
+        });
+
         if (!currentGroupInNewGenre && !isSearching()) {
             setCurrentGroupIndex(0);
         }
@@ -285,9 +399,9 @@ void InstrumentListModel::loadInstruments()
     }
 
     QList<CombinedInstrument> instruments;
+    instruments.reserve(templatesByInstrumentName.size());
 
-    for (const InstrumentName& instrumentName : templatesByInstrumentName.keys()) {
-        const InstrumentTemplateList& templates = templatesByInstrumentName[instrumentName];
+    for (auto [instrumentName, templates] : templatesByInstrumentName.asKeyValueRange()) {
         CombinedInstrument instrument;
 
         if (templates.size() == 1) {
@@ -299,10 +413,10 @@ void InstrumentListModel::loadInstruments()
             instrument.name = instrumentName;
         }
 
-        instrument.templates = templates;
+        instrument.templates = std::move(templates);
         instrument.currentTemplateIndex = 0;
 
-        instruments << instrument;
+        instruments << std::move(instrument);
     }
 
     if (m_instruments == instruments) {
@@ -324,12 +438,8 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
     TRACEFUNC;
 
     std::sort(instruments.begin(), instruments.end(), [this](const CombinedInstrument& instrument1, const CombinedInstrument& instrument2) {
-        QString instrumentName1 = instrument1.name.toLower();
-        QString instrumentName2 = instrument2.name.toLower();
-        QString searchText = m_searchText.toLower();
-
-        int searchTextPosition1 = instrumentName1.indexOf(searchText);
-        int searchTextPosition2 = instrumentName2.indexOf(searchText);
+        int searchTextPosition1 = instrument1.name.indexOf(m_searchText, 0, Qt::CaseInsensitive);
+        int searchTextPosition2 = instrument2.name.indexOf(m_searchText, 0, Qt::CaseInsensitive);
 
         if (searchTextPosition1 == searchTextPosition2) {
             size_t ti1 = instrument1.currentTemplateIndex;
@@ -339,124 +449,12 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
                 int instrumentIndex2 = instrument2.templates.at(ti2)->sequenceOrder;
                 return instrumentIndex1 < instrumentIndex2;
             } else {
-                return instrumentName1 < instrumentName2;
+                return QString::compare(instrument1.name, instrument2.name, Qt::CaseInsensitive) < 0;
             }
         }
 
         return searchTextPosition1 < searchTextPosition2;
     });
-}
-
-void InstrumentListModel::setCurrentGenreIndex(int index)
-{
-    size_t idx = static_cast<size_t>(index);
-    if (idx < m_genres.size()) {
-        setCurrentGenre(m_genres.at(idx)->id);
-    }
-}
-
-void InstrumentListModel::setCurrentGroupIndex(int index)
-{
-    size_t idx = static_cast<size_t>(index);
-    if (idx < m_groups.size()) {
-        setCurrentGroup(m_groups.at(idx)->id);
-    }
-}
-
-void InstrumentListModel::selectInstrument(int instrumentIndex)
-{
-    if (!isInstrumentIndexValid(instrumentIndex)) {
-        return;
-    }
-
-    QModelIndex modelIndex = index(instrumentIndex);
-    m_selection->select(modelIndex);
-
-    if (isSearching()) {
-        const CombinedInstrument& instrument = m_instruments[instrumentIndex];
-
-        if (m_selection->selection().size() == 1 && !instrument.templates.empty()) {
-            doSetCurrentGroup(instrument.templates.front()->groupId);
-        } else {
-            doSetCurrentGroup(NONE_GROUP_ID);
-        }
-    }
-}
-
-QStringList InstrumentListModel::selectedInstrumentIdList() const
-{
-    QSet<QString> result;
-
-    for (int row : m_selection->selectedRows()) {
-        const CombinedInstrument& instrument = m_instruments[row];
-
-        if (instrument.currentTemplateIndex >= instrument.templates.size()) {
-            continue;
-        }
-
-        const InstrumentTemplate* templ = instrument.templates.at(instrument.currentTemplateIndex);
-        if (templ->id.empty()) {
-            continue;
-        }
-
-        result << templ->id.toQString();
-    }
-
-    return QStringList(result.begin(), result.end());
-}
-
-void InstrumentListModel::setSearchText(const QString& text)
-{
-    if (m_searchText == text) {
-        return;
-    }
-
-    m_searchText = text;
-    updateStateBySearch();
-}
-
-int InstrumentListModel::currentGenreIndex() const
-{
-    for (size_t i = 0; i < m_genres.size(); ++i) {
-        if (m_genres.at(i)->id == m_currentGenreId) {
-            return static_cast<int>(i);
-        }
-    }
-
-    return -1;
-}
-
-int InstrumentListModel::currentGroupIndex() const
-{
-    for (size_t i = 0; i < m_groups.size(); ++i) {
-        if (m_groups.at(i)->id == m_currentGroupId) {
-            return static_cast<int>(i);
-        }
-    }
-
-    return -1;
-}
-
-bool InstrumentListModel::hasSelection() const
-{
-    return m_selection->hasSelection();
-}
-
-QVariant InstrumentListModel::selectedInstrument() const
-{
-    QList<int> selectedRows = m_selection->selectedRows();
-    if (selectedRows.length() != 1) {
-        return QVariant();
-    }
-
-    const CombinedInstrument& instrument = m_instruments.at(selectedRows.at(0));
-    const InstrumentTemplate* templ = instrument.templates.at(instrument.currentTemplateIndex);
-
-    QVariantMap obj;
-    obj["instrumentId"] = templ->id.toQString();
-    obj["description"] = templ->description.toQString();
-
-    return obj;
 }
 
 bool InstrumentListModel::isSearching() const

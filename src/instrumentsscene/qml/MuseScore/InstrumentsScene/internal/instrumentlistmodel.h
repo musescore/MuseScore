@@ -48,9 +48,9 @@ class InstrumentListModel : public QAbstractListModel, public muse::async::Async
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
 
-public:
     InstrumentListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
