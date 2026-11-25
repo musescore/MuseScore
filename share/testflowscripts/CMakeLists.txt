@@ -34,6 +34,7 @@ install(FILES
       TC11_MeasuresUndoRedo.js
       TC12_ScorePartsSaveReopen.js
       TC13_Tuplets.js
+      TC14_GuitarTabCustomPart.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts
       )
 

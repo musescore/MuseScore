@@ -16,3 +16,4 @@ TC8_EngravingText
 TC11_MeasuresUndoRedo
 TC12_ScorePartsSaveReopen
 TC13_Tuplets
+TC14_GuitarTabCustomPart
