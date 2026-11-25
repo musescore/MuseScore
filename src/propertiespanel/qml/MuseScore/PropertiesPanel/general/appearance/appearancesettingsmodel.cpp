@@ -360,7 +360,7 @@ bool AppearanceSettingsModel::isSnappedToGrid() const
 
 QString AppearanceSettingsModel::freezeCurrentPlacementShortcut() const
 {
-    return shortcutsForCommand(FREEZE_CURRENT_PLACEMENT_COMMAND);
+    return shortcutsForCommand(FreezeCurrentPlacementCommand::id);
 }
 
 void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)

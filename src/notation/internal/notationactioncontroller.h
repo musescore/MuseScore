@@ -239,7 +239,14 @@ private:
     void addFullMeasureRest();
 
     void resetStretch();
-    void resetBeamMode();
+    muse::Ret resetTextStyleOverrides();
+    muse::Ret resetBeams();
+    muse::Ret resetShapesAndPositions();
+    muse::Ret resetToDefaultLayout();
+    muse::Ret freezeCurrentPlacement();
+    muse::Ret regroupRhythms();
+    muse::Ret resequenceRehearsalMarks();
+    muse::Ret mirrorNotehead();
 
     muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
     muse::Ret openPageSettingsDialog();
@@ -258,7 +265,7 @@ private:
     muse::async::Promise<muse::io::path_t> selectStyleFile(bool forLoad);
 
     muse::Ret toggleScoreConfig(const ToggleScoreConfigCommand& command);
-    void toggleConcertPitch();
+    muse::Ret toggleConcertPitch();
 
     void seekAndPlaySelectedElement(bool playChord = true);
     void seekSelectedElement();
