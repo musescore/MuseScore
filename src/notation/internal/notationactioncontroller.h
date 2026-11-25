@@ -212,7 +212,7 @@ private:
     void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
 
-    void repeatSelection();
+    muse::Ret repeatSelection();
     muse::Ret addTie();
     muse::Ret addLaissezVib();
     muse::Ret addSlur();
@@ -232,13 +232,13 @@ private:
 
     muse::Ret changeStretch(const ChangeStretchCommand& command);
 
-    void unrollRepeats();
+    muse::Ret unrollRepeats();
 
     void toggleMmrest();
     void toggleHideEmpty();
     void addFullMeasureRest();
 
-    void resetStretch();
+    muse::Ret resetStretch();
     muse::Ret resetTextStyleOverrides();
     muse::Ret resetBeams();
     muse::Ret resetShapesAndPositions();
@@ -248,6 +248,7 @@ private:
     muse::Ret resequenceRehearsalMarks();
     muse::Ret mirrorNotehead();
     muse::Ret setVisible(const SetVisibleCommand& command);
+    muse::Ret transposeSemitone(const TransposeSemitoneCommand& command);
 
     muse::Ret openEditStyleDialog(const muse::rcommand::Params& params);
     muse::Ret openPageSettingsDialog();

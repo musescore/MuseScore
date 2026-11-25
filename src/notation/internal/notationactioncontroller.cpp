@@ -246,7 +246,7 @@ void NotationActionController::init()
     registerCommand(SPLIT_MEASURE_COMMAND, &Interaction::splitSelectedMeasure);
     registerCommand(JOIN_MEASURES_COMMAND, &Interaction::joinSelectedMeasures);
     registerCommand<ChangeStretchCommand>(&Controller::changeStretch);
-    registerCommand(STRETCH_RESET_COMMAND, &Controller::resetStretch);
+    registerCommand<ResetStretchCommand>(&Controller::resetStretch);
 
     // open properties
     registerCommand<OpenPageSettingsCommand>(&Controller::openPageSettingsDialog);
@@ -311,10 +311,9 @@ void NotationActionController::init()
     // others commands
     registerCommand<RegroupRhythmsCommand>(&Controller::regroupRhythms);
     registerCommand<ResequenceRehearsalMarksCommand>(&Controller::resequenceRehearsalMarks);
-    registerCommand(UNROLL_REPEATS_COMMAND, &Controller::unrollRepeats);
-    registerCommand(REPEAT_SELECTION_COMMAND, &Controller::repeatSelection);
-    registerCommand(TRANSPOSE_UP_COMMAND, &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
-    registerCommand(TRANSPOSE_DOWN_COMMAND, &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
+    registerCommand<UnrollRepeatsCommand>(&Controller::unrollRepeats);
+    registerCommand<RepeatSelectionCommand>(&Controller::repeatSelection);
+    registerCommand<TransposeSemitoneCommand>(&Controller::transposeSemitone);
     registerCommand(TOGGLE_MMREST_COMMAND, &Controller::toggleMmrest);
     registerCommand(TOGGLE_HIDE_EMPTY_COMMAND, &Controller::toggleHideEmpty);
     registerCommand<MirrorNoteheadCommand>(&Controller::mirrorNotehead);
@@ -1835,14 +1834,16 @@ muse::Ret NotationActionController::cutSelection()
     return muse::make_ok();
 }
 
-void NotationActionController::repeatSelection()
+muse::Ret NotationActionController::repeatSelection()
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
+
     interaction->repeatSelection();
     seekAndPlaySelectedElement(true);
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::pasteSelection(const PasteCommand& command)
@@ -2378,10 +2379,11 @@ muse::Ret NotationActionController::changeDynamic(const ChangeDynamicCommand& co
     return muse::make_ok();
 }
 
-void NotationActionController::unrollRepeats()
+muse::Ret NotationActionController::unrollRepeats()
 {
     NOT_IMPLEMENTED;
     // TODO: https://github.com/musescore/MuseScore/issues/9670
+    return muse::make_ret(Ret::Code::NotImplemented);
 }
 
 void NotationActionController::toggleMmrest()
@@ -2431,24 +2433,21 @@ muse::Ret NotationActionController::changeStretch(const ChangeStretchCommand& co
     return muse::make_ok();
 }
 
-void NotationActionController::resetStretch()
+muse::Ret NotationActionController::resetStretch()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     auto selection = currentNotationSelection();
-    if (!selection) {
-        return;
-    }
-
-    if (!selection->isRange()) {
-        return;
+    if (!selection || !selection->isRange()) {
+        return muse::make_ret(Ret::Code::NotAllowed);
     }
 
     interaction->resetStretch();
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::resetTextStyleOverrides()
@@ -2565,6 +2564,20 @@ muse::Ret NotationActionController::setVisible(const SetVisibleCommand& command)
     }
 
     interaction->setSelectionVisible(command.visible);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::transposeSemitone(const TransposeSemitoneCommand& command)
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    const int step = command.direction == TransposeDirection::UP ? 1 : -1;
+    interaction->transposeSemitone(step);
+    seekAndPlaySelectedElement(/*playChord*/ false);
     return muse::make_ok();
 }
 

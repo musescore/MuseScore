@@ -666,13 +666,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ChangeStretchCommand>(),
     makeCommandInfo<IncreaseStretchCommand>(),
     makeCommandInfo<DecreaseStretchCommand>(),
-    CommandInfo{
-        STRETCH_RESET_COMMAND,
-        TranslatableString("action", "&Reset layout stretch"),
-        TranslatableString("action", "Reset layout stretch"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ResetStretchCommand>(),
     makeCommandInfo<ResetTextStyleOverridesCommand>(),
     makeCommandInfo<ResetBeamsCommand>(),
     makeCommandInfo<ResetShapesAndPositionsCommand>(),
@@ -807,20 +801,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
 
     makeCommandInfo<RegroupRhythmsCommand>(),
     makeCommandInfo<ResequenceRehearsalMarksCommand>(),
-    CommandInfo{
-        UNROLL_REPEATS_COMMAND,
-        TranslatableString("action", "U&nroll repeats"),
-        TranslatableString("action", "Unroll repeats"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        REPEAT_SELECTION_COMMAND,
-        TranslatableString("action", "Repeat selection"),
-        TranslatableString("action", "Repeat selection"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<UnrollRepeatsCommand>(),
+    makeCommandInfo<RepeatSelectionCommand>(),
 
     CommandInfo{
         ADD_UP_BOW_COMMAND,
@@ -836,20 +818,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        TRANSPOSE_UP_COMMAND,
-        TranslatableString("action", "Transpose up"),
-        TranslatableString("action", "Transpose up a semitone"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TRANSPOSE_DOWN_COMMAND,
-        TranslatableString("action", "Transpose down"),
-        TranslatableString("action", "Transpose down a semitone"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<TransposeSemitoneCommand>(),
+    makeCommandInfo<TransposeSemitoneUpCommand>(),
+    makeCommandInfo<TransposeSemitoneDownCommand>(),
     CommandInfo{
         TOGGLE_MMREST_COMMAND,
         TranslatableString("action", "Toggle multimeasure rests"),

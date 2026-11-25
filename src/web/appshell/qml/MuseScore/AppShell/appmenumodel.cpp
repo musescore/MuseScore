@@ -357,7 +357,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), {
             makeMenuItem(IncreaseStretchCommand::id),
             makeMenuItem(DecreaseStretchCommand::id),
-            makeMenuItem(STRETCH_RESET_COMMAND)
+            makeMenuItem(ResetStretchCommand::id)
         }, "menu-stretch"),
         makeSeparator(),
         makeMenuItem(ResetTextStyleOverridesCommand::id),
