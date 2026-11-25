@@ -42,7 +42,9 @@ SlursAndTiesPageModel::SlursAndTiesPageModel(QObject* parent)
     StyleId::minLaissezVibLength,
     StyleId::laissezVibUseSmuflSym,
     StyleId::maskSlurs,
-    StyleId::maskTies
+    StyleId::maskTies,
+    StyleId::maskSlursOverMeasureNumbers,
+    StyleId::maskTiesOverMeasureNumbers
 })
 {
 }
@@ -135,4 +137,14 @@ StyleItem* SlursAndTiesPageModel::maskSlurs() const
 StyleItem* SlursAndTiesPageModel::maskTies() const
 {
     return styleItem(StyleId::maskTies);
+}
+
+StyleItem* SlursAndTiesPageModel::maskSlursOverMeasureNumbers() const
+{
+    return styleItem(StyleId::maskSlursOverMeasureNumbers);
+}
+
+StyleItem* SlursAndTiesPageModel::maskTiesOverMeasureNumbers() const
+{
+    return styleItem(StyleId::maskTiesOverMeasureNumbers);
 }

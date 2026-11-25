@@ -2866,6 +2866,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
     writeProperty(item, xml, Pid::SLUR_DIRECTION);
     writeProperty(item, xml, Pid::SLUR_STYLE_TYPE);
     writeProperty(item, xml, Pid::MASK_SLURTIE);
+    writeProperty(item, xml, Pid::MASK_SLURTIE_MEASURE_NUMBERS);
 }
 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)

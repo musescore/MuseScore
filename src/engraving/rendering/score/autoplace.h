@@ -53,7 +53,6 @@ private:
     enum class CollisionStrategy : unsigned char {
         MOVE_CLEAR,  // Move clear of everything in the skyline that overlaps horizontally
         FIT_IN_GAPS, // Move only as far as the nearest gap the item fits into
-        FIT_IN_GAPS_IGNORING_SLURS_AND_TIES, // As FIT_IN_GAPS, but slurs and ties are masked around the item
     };
 
     static void doAutoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add,
@@ -67,6 +66,6 @@ private:
 
     // Returns the smallest move away from the staff that leaves an item in a gap between skyline elements
     static double distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox, bool above,
-                                       double minHorizontalClearance, double minDistance, bool ignoreSlursAndTies);
+                                       double minHorizontalClearance, double minDistance);
 };
 }

@@ -94,9 +94,6 @@ QVariantList MeasureNumbersPageModel::possibleMeasureNumberAvoidanceOptions() co
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/voltas", "Fitting into gaps where possible") },
             { "value", static_cast<int>(MeasureNumberAvoidance::FIT_IN_GAPS) } },
-        QVariantMap{
-            { "text", muse::qtrc("notation/editstyle/voltas", "Masking slurs and ties") },
-            { "value", static_cast<int>(MeasureNumberAvoidance::MASK_SPANNERS) } },
     };
 
     return options;

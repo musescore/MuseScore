@@ -28,6 +28,7 @@
 #include "dom/lyrics.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/slurtie.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
 #include "dom/system.h"
@@ -85,19 +86,10 @@ void Autoplace::doAutoplaceMeasureElement(const EngravingItem* item, EngravingIt
 
 void Autoplace::autoplaceMeasureNumber(const MeasureNumber* item, EngravingItem::LayoutData* ldata)
 {
-    CollisionStrategy strategy = CollisionStrategy::MOVE_CLEAR;
-    switch (item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()) {
-    case MeasureNumberAvoidance::MOVE_CLEAR:
-        strategy = CollisionStrategy::MOVE_CLEAR;
-        break;
-    case MeasureNumberAvoidance::FIT_IN_GAPS:
-        strategy = CollisionStrategy::FIT_IN_GAPS;
-        break;
-    case MeasureNumberAvoidance::MASK_SPANNERS:
-        strategy = CollisionStrategy::FIT_IN_GAPS_IGNORING_SLURS_AND_TIES;
-        break;
-    }
-    doAutoplaceMeasureElement(item, ldata, item->placeAbove(), /* add = */ true, strategy);
+    const bool fitInGaps = item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()
+                           == MeasureNumberAvoidance::FIT_IN_GAPS;
+    doAutoplaceMeasureElement(item, ldata, item->placeAbove(), /* add = */ true,
+                              fitInGaps ? CollisionStrategy::FIT_IN_GAPS : CollisionStrategy::MOVE_CLEAR);
 }
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata)
@@ -118,7 +110,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
 }
 
 double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox,
-                                       bool above, double minHorizontalClearance, double minDistance, bool ignoreSlursAndTies)
+                                       bool above, double minHorizontalClearance, double minDistance)
 {
     const auto innerEdge = [above](const RectF& r) { return above ? -r.bottom() : r.top(); };
     const auto outerEdge = [above](const RectF& r) { return above ? -r.top() : r.bottom(); };
@@ -129,10 +121,6 @@ double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineL
         const EngravingItem* skylineItem = el.item();
         if (el.height() <= 0.0
             || !mu::engraving::intersects(el.left(), el.right(), bbox.left(), bbox.right(), minHorizontalClearance)) {
-            continue;
-        }
-        if (skylineItem && ignoreSlursAndTies && skylineItem->isSlurTieSegment() && !skylineItem->isTappingHalfSlurSegment()) {
-            // Slurs and ties are masked around the item instead
             continue;
         }
         if (skylineItem && itemsShouldIgnoreEachOther(item, skylineItem)) {
@@ -166,9 +154,8 @@ double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineL
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
                                      double minSkylineHorizontalClearance, double minDistance, CollisionStrategy strategy)
 {
-    if (strategy != CollisionStrategy::MOVE_CLEAR) {
-        return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance,
-                                    strategy == CollisionStrategy::FIT_IN_GAPS_IGNORING_SLURS_AND_TIES);
+    if (strategy == CollisionStrategy::FIT_IN_GAPS) {
+        return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance);
     }
 
     const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
@@ -242,6 +229,12 @@ void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::Lay
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
 {
     if (itemToAutoplace == itemInSkyline) {
+        return true;
+    }
+
+    // A slur or tie masked around measure numbers takes precedence over moving them clear, whatever the avoidance setting
+    if (itemToAutoplace->isMeasureNumber() && itemInSkyline->isSlurTieSegment()
+        && toSlurTieSegment(itemInSkyline)->masksOverMeasureNumbers()) {
         return true;
     }
 

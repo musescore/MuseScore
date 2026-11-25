@@ -602,8 +602,7 @@ enum class MeasureNumberPlacement {
 
 enum class MeasureNumberAvoidance : unsigned char {
     MOVE_CLEAR,  // < v5.0
-    FIT_IN_GAPS, // >= v5.0
-    MASK_SPANNERS // only slurs and ties for now
+    FIT_IN_GAPS  // >= v5.0
 };
 
 // P_TYPE::NOTEHEAD_TYPE
