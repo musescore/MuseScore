@@ -38,5 +38,7 @@ public:
     MOCK_METHOD(void, editPoints, (const AutomationCurveKey& key, AutomationPointEdits & edits), (override));
 
     MOCK_METHOD(muse::async::Notification, resetEditStateRequested, (), (const, override));
+
+    MOCK_METHOD((muse::async::Channel<MoveDirection, bool>), navigateRequested, (), (const, override));
 };
 }

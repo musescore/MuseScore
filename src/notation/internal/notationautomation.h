@@ -45,6 +45,8 @@ public:
 
     muse::async::Notification resetEditStateRequested() const override;
 
+    muse::async::Channel<MoveDirection, /*toTopBottom*/ bool> navigateRequested() const override;
+
     //! NOTE: called by MasterNotation whenever the underlying score changes
     void setMasterScore(engraving::MasterScore* masterScore);
 
@@ -53,6 +55,8 @@ private:
     muse::async::Notification m_automationModeEnabledChanged;
 
     muse::async::Notification m_resetEditStateRequested;
+
+    muse::async::Channel<MoveDirection, /*toTopBottom*/ bool> m_navigateRequested;
 
     engraving::MasterScore* m_masterScore = nullptr;
     const INotationUndoStackPtr m_undoStack;

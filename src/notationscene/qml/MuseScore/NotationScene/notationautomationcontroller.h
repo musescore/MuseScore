@@ -25,11 +25,13 @@
 #include <map>
 #include <optional>
 #include <vector>
-#include <QPointF>
 #include <QQuickItem>
 
+#include "accessibility/iaccessibilitycontroller.h"
 #include "project/iprojectsession.h"
 #include "async/asyncable.h"
+#include "global/async/channel.h"
+#include "draw/types/geometry.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuicontextconfiguration.h"
 #include "notation/notationtypes.h"
@@ -38,9 +40,8 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 
-namespace muse::uicomponents {
-class PolylinePlot;
-}
+#include "automation/notationautomationnavigation.h"
+#include "automation/notationautomationtypes.h"
 
 namespace mu::engraving {
 class Staff;
@@ -48,11 +49,10 @@ struct ScoreChanges;
 }
 
 namespace mu::notation {
-struct DynamicsDisplayRange;
-
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
     muse::ContextInject<muse::ui::IUiContextConfiguration> uiContextConfiguration = { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
@@ -65,67 +65,9 @@ public:
     void init();
     void setViewMatrix(const muse::draw::Transform& viewMatrix);
 
+    muse::async::Channel<muse::RectF> showRectRequested() const;
+
 private:
-    // A polyline can be uniquely identified using the system, staff, and startTick...
-    struct PolylineKey {
-        const System* system = nullptr;
-        const staff_idx_t staffIdx = muse::nidx;
-        const int startTick = -1;
-
-        bool isValid() const
-        {
-            return system && !system->measures().empty() && staffIdx != muse::nidx && startTick != -1;
-        }
-
-        bool operator==(const PolylineKey& k) const
-        {
-            IF_ASSERT_FAILED(isValid() && k.isValid()) {
-                return false;
-            }
-            return system == k.system && staffIdx == k.staffIdx && startTick == k.startTick;
-        }
-
-        bool operator<(const PolylineKey& k) const
-        {
-            IF_ASSERT_FAILED(isValid() && k.isValid()) {
-                return false;
-            }
-            if (system != k.system) {
-                // On different systems...
-                return system->first()->index() < k.system->first()->index();
-            }
-            if (staffIdx != k.staffIdx) {
-                // On different staves...
-                return staffIdx < k.staffIdx;
-            }
-            // On same staff...
-            return startTick < k.startTick;
-        }
-    };
-
-    struct PointData {
-        enum class PointType : unsigned char {
-            UNKNOWN,
-            IN,
-            OUT,
-            BOTH
-        };
-        int polylinePointIndex = -1;
-        int tick = -1;
-        QPointF qPointF;
-        PointType pointType = PointType::UNKNOWN;
-        bool isPending = false; // true while the user is adding/dragging the point (before committing to the model)
-    };
-
-    struct PolylineData {
-        muse::uicomponents::PolylinePlot* polyline = nullptr;
-        QVector<PointData> pointsData;
-        //! NOTE: Horizontal boxes can break up the staves of a system, so a polyline covers a "region" - a run
-        //! of measures bounded by horizontal boxes and/or the system itself...
-        const Measure* startMeasure = nullptr;
-        const Measure* endMeasure = nullptr;
-    };
-
     struct TickStaffRange {
         int tickFrom = -1;
         int tickTo = -1;
@@ -139,7 +81,6 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    static int tickFromXInPolyline(const PolylineKey& key, const PolylineData& data, qreal x);
     QVector<PointData> pointsDataInStaffRegion(const mu::engraving::Staff* staff, const muse::RectF& regionRect, int startTick,
                                                int endTick) const;
 
@@ -183,11 +124,16 @@ private:
 
     const mu::engraving::AutomationPoint* automationPointAt(const PolylineKey& key, int tick) const;
 
-    const DynamicsDisplayRange& dynamicsDisplayRange(const mu::engraving::Staff* staff, int tick) const;
-    double automationValueToDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
-                                    muse::real_t value) const;
-    muse::real_t automationValueFromDisplay(mu::engraving::AutomationType type, const mu::engraving::Staff* staff, int tick,
-                                            double displayValue, std::optional<muse::real_t> existingValue = std::nullopt) const;
+    bool isMuseSamplerDynamics(const mu::engraving::Staff* staff, int tick) const;
+
+    void navigate(MoveDirection direction, bool toTopBottom);
+    std::vector<NotationAutomationNavigation::Target> selectedPoints() const;
+    void selectPoint(const NotationAutomationNavigation::Target& target);
+    void clearSelectedPoints(const muse::uicomponents::PolylinePlot* except = nullptr);
+    void showPoint(const NotationAutomationNavigation::Target& target);
+    void announcePoint(const NotationAutomationNavigation::Target& target, bool includeScope);
+    void announce(const QString& announcement);
+    std::optional<muse::real_t> pointValue(const PolylineKey& key, const PointData& pointData) const;
 
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
@@ -196,7 +142,7 @@ private:
 
     QQuickItem* m_linesParent = nullptr;
 
-    std::map<PolylineKey, PolylineData> m_polylinesDataMap;
+    PolylineMap m_polylinesDataMap;
     muse::draw::Transform m_viewMatrix;
 
     mu::engraving::AutomationChanges m_pendingChanges;
@@ -204,5 +150,7 @@ private:
     bool m_updateScheduled = false;
 
     muse::uicomponents::PolylinePlot* m_currentlyEditedPolyline = nullptr;
+
+    muse::async::Channel<muse::RectF> m_showRectRequested;
 };
 }

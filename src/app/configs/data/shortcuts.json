@@ -338,6 +338,17 @@
         ]
     },
     {
+        "scope": "NOTATION_AUTOMATION",
+        "shortcuts": [
+            {"command": "command://notation/automation/next-node",  "sequences": ["Alt+Right"]},
+            {"command": "command://notation/automation/prev-node",  "sequences": ["Alt+Left"]},
+            {"command": "command://notation/automation/closest-node-above",  "sequences": ["Alt+Up"]},
+            {"command": "command://notation/automation/closest-node-below",  "sequences": ["Alt+Down"]},
+            {"command": "command://notation/automation/closest-node-top",  "sequences": ["Ctrl+Alt+Up"]},
+            {"command": "command://notation/automation/closest-node-bottom",  "sequences": ["Ctrl+Alt+Down"]}
+        ]
+    },
+    {
       "scope": "PROJECT",
       "shortcuts": [
         {"command": "command://project/open",  "sequences": ["Ctrl+O"], "autorepeat": false},

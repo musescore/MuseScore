@@ -27,6 +27,8 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::notation {
 using AutomationType = mu::engraving::AutomationType;
 using AutomationCurveKey = mu::engraving::AutomationCurveKey;
@@ -52,6 +54,8 @@ public:
     virtual void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) = 0;
 
     virtual muse::async::Notification resetEditStateRequested() const = 0;
+
+    virtual muse::async::Channel<MoveDirection, /*toTopBottom*/ bool> navigateRequested() const = 0;
 };
 
 using INotationAutomationPtr = std::shared_ptr<INotationAutomation>;

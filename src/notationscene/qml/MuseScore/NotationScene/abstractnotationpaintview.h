@@ -39,7 +39,6 @@
 
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
-#include "notationautomationcontroller.h"
 #include "noteinputcursor.h"
 #include "notationruler.h"
 #include "pendingtupletmarker.h"
@@ -199,6 +198,7 @@ protected:
 
     void moveCanvasToCenter();
     bool moveCanvasToPosition(const muse::PointF& logicPos);
+    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
 
     muse::RectF notationContentRect() const override;
 
@@ -261,7 +261,6 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
     void onNoteInputStateChanged();
@@ -291,8 +290,6 @@ private:
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
-    QQuickItem* m_automationLinesContainer = nullptr;
-    std::unique_ptr<NotationAutomationController> m_notationAutomationController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;

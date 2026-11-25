@@ -76,6 +76,11 @@ muse::async::Notification NotationAutomation::resetEditStateRequested() const
     return m_resetEditStateRequested;
 }
 
+muse::async::Channel<MoveDirection, /*toTopBottom*/ bool> NotationAutomation::navigateRequested() const
+{
+    return m_navigateRequested;
+}
+
 void NotationAutomation::setMasterScore(engraving::MasterScore* masterScore)
 {
     m_masterScore = masterScore;

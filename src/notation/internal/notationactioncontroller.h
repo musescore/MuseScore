@@ -204,6 +204,8 @@ private:
 
     muse::Ret toggleArticulation(const ToggleArticulationCommand& command);
 
+    void automationNavigationRequested(MoveDirection direction, bool toTopBottom = false);
+
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
     void moveInputNotes(bool up, PitchMode mode);
