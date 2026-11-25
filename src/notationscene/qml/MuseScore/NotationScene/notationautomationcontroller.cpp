@@ -206,6 +206,9 @@ void NotationAutomationController::init()
             // TODO: As above - e.g. changes to the end of a polyline in one system should affect the polyline on
             // the next system (probably requires the implementation of "startY" in PolylinePlot)...
             rebuildAllPolylines();
+        } else {
+            // Leave automation mode if we're not currently editing a point...
+            automation()->setAutomationModeEnabled(false);
         }
         m_currentlyEditedPolyline = nullptr;
     }, Asyncable::Mode::SetReplace /* FIXME */);
