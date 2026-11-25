@@ -411,8 +411,8 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_SharedPart
 
     // [WHEN] C is moved above A
     m_model->selectRow(2);
-    m_model->moveSelectionUp();
-    m_model->moveSelectionUp();
+    m_model->moveSelectedBlocksUp();
+    m_model->moveSelectedBlocksUp();
 
     // [THEN] S is kept before C, and listed once
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ s->id(), c->id(), a->id(), b->id() }));
@@ -553,7 +553,7 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelectionDown_Move
 
     // [WHEN] A is moved down
     m_model->selectRow(0);
-    m_model->moveSelectionDown();
+    m_model->moveSelectedBlocksDown();
 
     // [THEN] It's below B
     EXPECT_EQ(rowNames(), QStringList({ "B", "A", "C" }));
@@ -598,14 +598,14 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveOutOfOrder_Customi
 
     // [WHEN] The violin is moved above the flute
     m_model->selectRow(1);
-    m_model->moveSelectionUp();
+    m_model->moveSelectedBlocksUp();
 
     // [THEN] The order becomes customized
     EXPECT_EQ(m_model->orders(), QStringList({ "Orchestral", "Orchestral (Customized)", "Choral", "Custom" }));
     EXPECT_EQ(m_model->currentOrderIndex(), 1);
 
     // [WHEN] It's moved back
-    m_model->moveSelectionDown();
+    m_model->moveSelectedBlocksDown();
 
     // [THEN] The order is orchestral again
     EXPECT_EQ(m_model->orders(), QStringList({ "Orchestral", "Choral", "Custom" }));
@@ -676,32 +676,182 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOn_ListsGr
     EXPECT_EQ(rowData(3, "sharedGroupId").toString(), groupId);
 }
 
-TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelection_UpdatesGroupRoles)
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelectionUp_GroupHeader_MovesWholeGroup)
 {
-    // [GIVEN] Combine is on; B and C on a shared part S
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
     setCombineOnSharedStaves(true);
+    addPart(u"A");
     SharedPart* s = addSharedPart(u"S");
     addToSharedPart(s, u"B");
     addToSharedPart(s, u"C");
     m_model->load();
 
-    std::vector<int> changedRoles;
-    QObject::connect(m_model, &QAbstractItemModel::dataChanged, m_model,
-                     [&changedRoles](const QModelIndex&, const QModelIndex&, const QList<int>& roles) {
-        changedRoles.insert(changedRoles.end(), roles.begin(), roles.end());
-    });
+    // [WHEN] S's header is moved up
+    m_model->selectRow(1);
+    m_model->moveSelectedBlocksUp();
 
-    // [WHEN] C is moved above B
+    // [THEN] The whole group moves above A
+    EXPECT_EQ(rowNames(), QStringList({ "S", "B", "C", "A" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelectionDown_SkipsGroup)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] A is moved down
+    m_model->selectRow(0);
+    m_model->moveSelectedBlocksDown();
+
+    // [THEN] It goes below the whole group, not in among its instruments
+    EXPECT_EQ(rowNames(), QStringList({ "S", "B", "C", "A" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveAvailability_GroupInstrumentCantMove)
+{
+    // [GIVEN] Combine is on; A, B and C on a shared part S, and D
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    addPart(u"D");
+    m_model->load();
+
+    // [WHEN] B is selected
     m_model->selectRow(2);
-    m_model->moveSelectionUp();
 
-    // [THEN] B is now the group's last instrument
-    EXPECT_EQ(rowNames(), QStringList({ "S", "C", "B" }));
-    EXPECT_EQ(rowData(1, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupMember);
-    EXPECT_EQ(rowData(2, "sharedGroupRole").toInt(), InstrumentsOnScoreListModel::GroupLastMember);
+    // [THEN] It can't be moved, but can be removed
+    EXPECT_FALSE(m_model->isMovingUpAvailable());
+    EXPECT_FALSE(m_model->isMovingDownAvailable());
+    EXPECT_TRUE(m_model->isRemovingAvailable());
 
-    // [THEN] The view is told that the rows' group roles changed
-    EXPECT_NE(std::find(changedRoles.begin(), changedRoles.end(), role("sharedGroupRole")), changedRoles.end());
+    // [WHEN] Moving it is asked for anyway
+    m_model->moveSelectedBlocksUp();
+
+    // [THEN] Nothing moves
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S", "B", "C", "D" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveAvailability_SelectionWithGap_CantMove)
+{
+    // [GIVEN] A, B, C, D and E
+    addPart(u"A");
+    addPart(u"B");
+    addPart(u"C");
+    addPart(u"D");
+    addPart(u"E");
+    m_model->load();
+
+    // [WHEN] B and D are selected
+    selectRows({ 1, 3 });
+
+    // [THEN] They can't be moved, but can be removed
+    EXPECT_FALSE(m_model->isMovingUpAvailable());
+    EXPECT_FALSE(m_model->isMovingDownAvailable());
+    EXPECT_TRUE(m_model->isRemovingAvailable());
+
+    // [WHEN] Moving them is asked for anyway
+    m_model->moveSelectedBlocksUp();
+
+    // [THEN] Nothing moves
+    EXPECT_EQ(rowNames(), QStringList({ "A", "B", "C", "D", "E" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelectionUp_InstrumentAndGroupHeader_MovesBoth)
+{
+    // [GIVEN] Combine is on; A, B, and C and D on a shared part S
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    addPart(u"B");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"C");
+    addToSharedPart(s, u"D");
+    m_model->load();
+
+    // [WHEN] B and S's header are selected and moved up
+    selectRows({ 1, 2 });
+    m_model->moveSelectedBlocksUp();
+
+    // [THEN] B and the whole group move above A
+    EXPECT_EQ(rowNames(), QStringList({ "B", "S", "C", "D", "A" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetCurrentOrderIndex_SortsGroupsAsAWhole)
+{
+    // [GIVEN] Combine is on; a violin and a flute on a shared part S, then another flute
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B", u"violin");
+    addToSharedPart(s, u"C", u"flute");
+    addPart(u"A", u"flute");
+    m_model->load();
+
+    // [WHEN] Orchestral order is chosen (woodwinds before strings)
+    m_model->setCurrentOrderIndex(0);
+
+    // [THEN] The group goes by its first instrument, the violin: after the flute, and still together
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S", "B", "C" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_GroupSortedByFirstInstrument_NotCustomized)
+{
+    // [GIVEN] Combine is on, in orchestral order; a flute, then a violin and a flute on a shared part S
+    // (the group goes by its violin, so it's after the flute)
+    m_scoreOrder = m_orders.at(0);
+    setCombineOnSharedStaves(true);
+    addPart(u"A", u"flute");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B", u"violin");
+    addToSharedPart(s, u"C", u"flute");
+    m_model->load();
+
+    // [WHEN] A violin is added
+    m_model->addInstruments({ "violin" });
+
+    // [THEN] The order isn't customized
+    EXPECT_EQ(m_model->orders(), QStringList({ "Orchestral", "Choral", "Custom" }));
+    EXPECT_EQ(m_model->currentOrderIndex(), 0);
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_NotInsideGroup)
+{
+    // [GIVEN] Combine is on, in orchestral order; a flute and a violin on a shared part S
+    m_scoreOrder = m_orders.at(0);
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B", u"flute");
+    addToSharedPart(s, u"C", u"violin");
+    m_model->load();
+
+    // [WHEN] A flute is added (which sorts between the group's flute and violin)
+    m_model->addInstruments({ "flute" });
+
+    // [THEN] It goes after the whole group
+    EXPECT_EQ(rowNames(), QStringList({ "S", "B", "C", "Flute" }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_Soloist_GroupInstrumentStaysInGroup)
+{
+    // [GIVEN] Combine is on, in orchestral order; a flute and a violin on a shared part S
+    m_scoreOrder = m_orders.at(0);
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B", u"flute");
+    addToSharedPart(s, u"C", u"violin");
+    m_model->load();
+
+    // [WHEN] The violin is made a soloist
+    EXPECT_TRUE(m_model->setData(m_model->index(2), true, role("isSoloist")));
+
+    // [THEN] It stays in its group
+    EXPECT_EQ(rowNames(), QStringList({ "S", "B", "C" }));
+    EXPECT_TRUE(rowData(2, "isSoloist").toBool());
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, IsSharedGroupSelected_FollowsHeaderSelection)
@@ -766,9 +916,9 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_
 
     // [WHEN] A is moved above the group's header
     m_model->selectRow(3);
-    m_model->moveSelectionUp();
-    m_model->moveSelectionUp();
-    m_model->moveSelectionUp();
+    m_model->moveSelectedBlocksUp();
+    m_model->moveSelectedBlocksUp();
+    m_model->moveSelectedBlocksUp();
 
     // [THEN] S is kept where its header is listed, as an existing part
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id(), s->id(), b->id(), c->id() }));

@@ -110,7 +110,11 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
         }
 
         instrument->isSoloist = value.toBool();
-        {
+
+        // A group's instruments stay in their group
+        if (isGroupMember(instrument)) {
+            emit dataChanged(index, index, { RoleIsSoloist });
+        } else {
             ItemList items = this->items();
             items.removeAll(instrument);
             insertInstrument(items, instrument);
@@ -261,6 +265,38 @@ void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentId
     verifyScoreOrder();
 }
 
+void InstrumentsOnScoreListModel::moveSelectedBlocksUp()
+{
+    const std::optional<RowRange> moving = movingRows();
+    if (!moving || moving->first == 0) {
+        return;
+    }
+
+    // The block above (an instrument, or a whole group) goes below the moving rows
+    for (const RowRange& block : blocks(items())) {
+        if (block.last == moving->first - 1) {
+            moveBlock(block, moving->last);
+            return;
+        }
+    }
+}
+
+void InstrumentsOnScoreListModel::moveSelectedBlocksDown()
+{
+    const std::optional<RowRange> moving = movingRows();
+    if (!moving || moving->last == rowCount() - 1) {
+        return;
+    }
+
+    // The block below goes above the moving rows
+    for (const RowRange& block : blocks(items())) {
+        if (block.first == moving->last + 1) {
+            moveBlock(block, moving->first);
+            return;
+        }
+    }
+}
+
 QVariant InstrumentsOnScoreListModel::currentOrder() const
 {
     const ScoreOrder& order = currentScoreOrder();
@@ -370,6 +406,83 @@ InstrumentsOnScoreListModel::SharedGroupRole InstrumentsOnScoreListModel::shared
     return nextIsMember ? GroupMember : GroupLastMember;
 }
 
+bool InstrumentsOnScoreListModel::isGroupMember(const InstrumentItem* instrument) const
+{
+    return m_showsSharedGroups && !instrument->isSharedGroupHeader && instrument->sharedPartId.isValid();
+}
+
+std::vector<InstrumentsOnScoreListModel::RowRange> InstrumentsOnScoreListModel::blocks(const ItemList& instruments) const
+{
+    // a group's header with its instruments, or a single row
+    std::vector<RowRange> result;
+
+    for (int row = 0; row < instruments.size(); ++row) {
+        auto instrument = static_cast<const InstrumentItem*>(instruments.at(row));
+
+        auto previous = result.empty() ? nullptr : static_cast<const InstrumentItem*>(instruments.at(result.back().first));
+        const bool continuesGroup = previous && previous->isSharedGroupHeader && isGroupMember(instrument)
+                                    && instrument->sharedPartId == previous->sharedPartId;
+
+        if (continuesGroup) {
+            result.back().last = row;
+        } else {
+            result.push_back({ row, row });
+        }
+    }
+
+    return result;
+}
+
+int InstrumentsOnScoreListModel::sortingIndex(const ItemList& instruments, const RowRange& block) const
+{
+    // a group is sorted by its first instrument, not its header
+    const int row = block.count() > 1 ? block.first + 1 : block.first;
+    auto instrument = static_cast<const InstrumentItem*>(instruments.at(row));
+
+    return currentScoreOrder().instrumentSortingIndex(instrument->id, instrument->isSoloist);
+}
+
+std::optional<InstrumentsOnScoreListModel::RowRange> InstrumentsOnScoreListModel::movingRows() const
+{
+    const ItemList& items = this->items();
+    std::optional<RowRange> result;
+
+    // a group's instruments can't be moved
+    for (int row : selection()->selectedRows()) {
+        if (isGroupMember(static_cast<const InstrumentItem*>(items.at(row)))) {
+            return std::nullopt;
+        }
+    }
+
+    // A selected header brings its instruments
+    for (const RowRange& block : blocks(items)) {
+        if (!selection()->isSelected(index(block.first))) {
+            continue;
+        }
+
+        // an unselected block in between
+        if (result && result->last + 1 != block.first) {
+            return std::nullopt;
+        }
+
+        if (result) {
+            result->last = block.last;
+        } else {
+            result = block;
+        }
+    }
+
+    return result;
+}
+
+void InstrumentsOnScoreListModel::moveBlock(const RowRange& block, int destinationRow)
+{
+    // destinationRow: where the block's first row (moving up) / last row (moving down) ends up
+    // the base's moveRows() is private
+    QAbstractItemModel* model = this;
+    model->moveRows(QModelIndex(), block.first, block.count(), QModelIndex(), destinationRow);
+}
+
 void InstrumentsOnScoreListModel::updateInstrumentsOrder()
 {
     ItemList items = this->items();
@@ -381,15 +494,11 @@ void InstrumentsOnScoreListModel::sortInstruments(ItemList& instruments)
 {
     TRACEFUNC;
 
-    const ScoreOrder& currentOrder = currentScoreOrder();
-
-    //! NOTE The sorting index is worked out once per instrument: it searches all instrument templates
-    std::vector<std::pair<int, InstrumentItem*> > keyed;
-    keyed.reserve(static_cast<size_t>(instruments.size()));
-
-    for (QObject* item : instruments) {
-        auto instrument = static_cast<InstrumentItem*>(item);
-        keyed.emplace_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist), instrument);
+    //! NOTE Groups are sorted as a whole. The sorting index is worked out once per block: it searches all
+    //! instrument templates
+    std::vector<std::pair<int, RowRange> > keyed;
+    for (const RowRange& block : blocks(instruments)) {
+        keyed.emplace_back(sortingIndex(instruments, block), block);
     }
 
     //! NOTE Stable: instruments with the same index (e.g. two of the same instrument) keep their order
@@ -397,25 +506,27 @@ void InstrumentsOnScoreListModel::sortInstruments(ItemList& instruments)
         return a.first < b.first;
     });
 
-    instruments.clear();
+    ItemList sorted;
+    sorted.reserve(instruments.size());
     for (const auto& entry : keyed) {
-        instruments << entry.second;
+        sorted << instruments.mid(entry.second.first, entry.second.count());
     }
+
+    instruments = std::move(sorted);
 }
 
 void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, InstrumentItem* newInstrument)
 {
-    const ScoreOrder& currentOrder = currentScoreOrder();
-    const int newIndex = currentOrder.instrumentSortingIndex(newInstrument->id, newInstrument->isSoloist);
+    const int newIndex = currentScoreOrder().instrumentSortingIndex(newInstrument->id, newInstrument->isSoloist);
 
-    for (int index = 0; index < instruments.size(); ++index) {
-        auto instrument = static_cast<const InstrumentItem*>(instruments.at(index));
-
-        if (currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist) > newIndex) {
-            instruments.insert(index, newInstrument);
+    // Never in among a group's instruments
+    for (const RowRange& block : blocks(instruments)) {
+        if (sortingIndex(instruments, block) > newIndex) {
+            instruments.insert(block.first, newInstrument);
             return;
         }
     }
+
     instruments << newInstrument;
 }
 
@@ -435,13 +546,17 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
     return m_scoreOrders.at(m_currentOrderIndex);
 }
 
+void InstrumentsOnScoreListModel::onUpdateOperationsAvailability()
+{
+    SelectableItemListModel::onUpdateOperationsAvailability();
+
+    const std::optional<RowRange> moving = movingRows();
+    setIsMovingUpAvailable(moving && moving->first > 0);
+    setIsMovingDownAvailable(moving && moving->last < rowCount() - 1);
+}
+
 void InstrumentsOnScoreListModel::onRowsMoved()
 {
-    //! NOTE A row's group role depends on the row below it, which a move can change
-    if (m_showsSharedGroups && rowCount() > 0) {
-        emit dataChanged(index(0), index(rowCount() - 1), { RoleSharedGroupRole });
-    }
-
     verifyScoreOrder();
 }
 
@@ -452,21 +567,17 @@ void InstrumentsOnScoreListModel::onRowsRemoved()
 
 bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 {
-    const ScoreOrder& currentOrder = currentScoreOrder();
+    const ItemList& instruments = items();
+    const std::vector<RowRange> instrumentBlocks = blocks(instruments);
 
-    std::vector<int> instrumentIndices;
-    instrumentIndices.reserve(items().size());
+    std::vector<int> blockIndices;
+    blockIndices.reserve(instrumentBlocks.size());
 
-    for (const QObject* item : items()) {
-        auto instrument = static_cast<const InstrumentItem*>(item);
-        if (instrument->isSharedGroupHeader) {
-            continue;
-        }
-
-        instrumentIndices.push_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist));
+    for (const RowRange& block : instrumentBlocks) {
+        blockIndices.push_back(sortingIndex(instruments, block));
     }
 
-    return currentOrder.isScoreOrder(instrumentIndices);
+    return currentScoreOrder().isScoreOrder(blockIndices);
 }
 
 void InstrumentsOnScoreListModel::verifyScoreOrder()

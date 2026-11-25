@@ -240,7 +240,7 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
                 onClicked: {
-                    root.instrumentsOnScoreModel.moveSelectionUp()
+                    root.instrumentsOnScoreModel.moveSelectedBlocksUp()
                 }
             }
 
@@ -255,7 +255,7 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
                 onClicked: {
-                    root.instrumentsOnScoreModel.moveSelectionDown()
+                    root.instrumentsOnScoreModel.moveSelectedBlocksDown()
                 }
             }
         }

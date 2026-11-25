@@ -23,6 +23,8 @@
 #pragma once
 
 #include <map>
+#include <optional>
+#include <vector>
 
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
@@ -65,6 +67,9 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
 
+    Q_INVOKABLE void moveSelectedBlocksUp();
+    Q_INVOKABLE void moveSelectedBlocksDown();
+
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
 
@@ -88,9 +93,24 @@ private:
         RoleSharedGroupId // the group's shared part id, or empty
     };
 
+    struct RowRange {
+        int first = 0;
+        int last = 0;
+
+        int count() const { return last - first + 1; }
+    };
+
     void loadOrders();
 
     SharedGroupRole sharedGroupRole(int row) const;
+    bool isGroupMember(const InstrumentItem* instrument) const;
+
+    std::vector<RowRange> blocks(const ItemList& instruments) const;
+    int sortingIndex(const ItemList& instruments, const RowRange& block) const;
+
+    std::optional<RowRange> movingRows() const;
+
+    void moveBlock(const RowRange& block, int destinationRow);
 
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
@@ -99,6 +119,7 @@ private:
     InstrumentItem* modelIndexToItem(const QModelIndex& index) const;
     const notation::ScoreOrder& currentScoreOrder() const;
 
+    void onUpdateOperationsAvailability() override;
     void onRowsMoved() override;
     void onRowsRemoved() override;
     void doSetCurrentOrderIndex(int index);
