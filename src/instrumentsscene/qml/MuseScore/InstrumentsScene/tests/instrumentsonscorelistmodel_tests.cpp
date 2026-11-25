@@ -278,10 +278,12 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_ListsInstruments)
     // [WHEN] The model is loaded
     m_model->load();
 
-    // [THEN] Both are listed, in score order, with their soloist state
+    // [THEN] Both are listed, in score order, with their soloist state, as not new
     EXPECT_EQ(rowNames(), QStringList({ "A", "B" }));
     EXPECT_FALSE(rowData(0, "isSoloist").toBool());
     EXPECT_TRUE(rowData(1, "isSoloist").toBool());
+    EXPECT_FALSE(rowData(0, "isNew").toBool());
+    EXPECT_FALSE(rowData(1, "isNew").toBool());
 
     // [THEN] They're kept as they are on accepting
     const QVariantMap keptA = keptInstrument(0);
@@ -466,9 +468,10 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, AddInstruments_AddsNew
     // [WHEN] A violin is added
     m_model->addInstruments({ "violin" });
 
-    // [THEN] It's listed with its template's name and description
+    // [THEN] It's listed with its template's name and description, as new
     EXPECT_EQ(rowNames(), QStringList({ "Violin" }));
     EXPECT_EQ(rowData(0, "description").toString(), "A violin");
+    EXPECT_TRUE(rowData(0, "isNew").toBool());
 
     // [THEN] It's added to the score on accepting
     const QVariantMap kept = keptInstrument(0);

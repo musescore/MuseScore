@@ -36,6 +36,9 @@ Item {
 
     property alias navigation: instrumentsView.navigation
 
+    // italics until accepted (off when all instruments are new)
+    property bool highlightsNewInstruments: false
+
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
     }
@@ -173,6 +176,7 @@ Item {
             id: item
 
             navigationPanel: instrumentsView.navigation
+            highlightsNewInstruments: root.highlightsNewInstruments
 
             isGroupExpanded: Boolean(prv.expandedGroups[item.sharedGroupId])
 

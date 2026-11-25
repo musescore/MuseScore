@@ -39,8 +39,11 @@ ListItemBlank {
     required property int index
     required property int sharedGroupRole
     required property string sharedGroupId
+    required property bool isNew // added in the dialog, not yet in the score
 
     required property NavigationPanel navigationPanel
+
+    property bool highlightsNewInstruments: false
 
     // Shared by all rows of the group, owned by the view
     property bool isGroupExpanded: false
@@ -200,7 +203,10 @@ ListItemBlank {
 
             horizontalAlignment: Text.AlignLeft
             text: root.isSoloist ? qsTrc("instruments", "Soloist:") + " " + root.name : root.name
-            font: root.isGroupMember ? ui.theme.bodyFont : ui.theme.bodyBoldFont
+            font: {
+                const font = root.isGroupMember ? ui.theme.bodyFont : ui.theme.bodyBoldFont
+                return root.isNew && root.highlightsNewInstruments ? Qt.font(Object.assign({}, font, { italic: true })) : font
+            }
         }
 
         // headers hide their background, and with it the focus border

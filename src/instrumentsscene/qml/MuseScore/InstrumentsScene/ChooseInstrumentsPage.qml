@@ -45,6 +45,7 @@ Rectangle {
     property NavigationSection navigationSection: null
 
     property alias navigation: instrumentsView.navigation
+    property alias highlightsNewInstruments: instrumentsOnScoreView.highlightsNewInstruments
 
     signal submitRequested()
 

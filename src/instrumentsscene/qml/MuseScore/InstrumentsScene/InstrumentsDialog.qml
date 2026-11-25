@@ -73,6 +73,7 @@ StyledDialogView {
 
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
             currentInstrumentId: root.currentInstrumentId
+            highlightsNewInstruments: true
 
             navigationSection: root.navigationSection
 

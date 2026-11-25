@@ -101,7 +101,8 @@ private:
         RoleDescription,
         RoleIsSoloist,
         RoleSharedGroupRole,
-        RoleSharedGroupId // the group's shared part id, or empty
+        RoleSharedGroupId, // the group's shared part id, or empty
+        RoleIsNew // added in the dialog, not yet in the score
     };
 
     struct RowRange {

@@ -88,6 +88,8 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
         return sharedGroupRole(index.row());
     case RoleSharedGroupId:
         return m_showsSharedGroups && instrument->sharedPartId.isValid() ? instrument->sharedPartId.toQString() : QString();
+    case RoleIsNew:
+        return !instrument->isExistingPart;
     default:
         break;
     }
@@ -141,6 +143,7 @@ QHash<int, QByteArray> InstrumentsOnScoreListModel::roleNames() const
     roles[RoleIsSoloist] = "isSoloist";
     roles[RoleSharedGroupRole] = "sharedGroupRole";
     roles[RoleSharedGroupId] = "sharedGroupId";
+    roles[RoleIsNew] = "isNew";
 
     return roles;
 }
