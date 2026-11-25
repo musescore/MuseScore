@@ -195,6 +195,7 @@ private:
     muse::Ret flipSelection();
     muse::Ret flipSelectionHorizontally();
     muse::Ret extendToNextNote();
+    muse::Ret toggleVisible();
 
     // Tab
     muse::Ret addFret(const AddFretCommand& command);
@@ -222,14 +223,14 @@ private:
 
     void addDynamic();
     void addImage();
-    void addFiguredBass();
+    muse::Ret addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
     muse::Ret addFretboardDiagram();
 
     muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
     muse::Ret startEditSelectedText(const muse::rcommand::Params& params);
 
-    void addStretch(qreal value);
+    muse::Ret changeStretch(const ChangeStretchCommand& command);
 
     void unrollRepeats();
 

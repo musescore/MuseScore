@@ -296,7 +296,7 @@ MenuItemList AppMenuModel::makeTextItems()
         makeMenuItem(AddRomanNumeralTextCommand::id),
         makeMenuItem(AddNashvilleNumberTextCommand::id),
         makeMenuItem(AddLyricsCommand::id),
-        makeMenuItem(ADD_FIGURED_BASS_COMMAND),
+        makeMenuItem(AddFiguredBassCommand::id),
         makeMenuItem(AddTempoCommand::id)
     };
 
@@ -355,8 +355,8 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeSeparator(),
         makeMenuItem(OpenBreaksCommand::id),
         makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), {
-            makeMenuItem(STRETCH_INCREASE_COMMAND),
-            makeMenuItem(STRETCH_DECREASE_COMMAND),
+            makeMenuItem(IncreaseStretchCommand::id),
+            makeMenuItem(DecreaseStretchCommand::id),
             makeMenuItem(STRETCH_RESET_COMMAND)
         }, "menu-stretch"),
         makeSeparator(),

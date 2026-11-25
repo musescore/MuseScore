@@ -401,7 +401,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
         makeMenuItem(AddRomanNumeralTextCommand::id),
         makeMenuItem(AddNashvilleNumberTextCommand::id),
         makeMenuItem(AddLyricsCommand::id),
-        makeMenuItem(ADD_FIGURED_BASS_COMMAND),
+        makeMenuItem(AddFiguredBassCommand::id),
         makeMenuItem(AddTempoCommand::id)
     };
 

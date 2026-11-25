@@ -62,8 +62,6 @@ using namespace muse::rcommand;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static constexpr qreal STRETCH_STEP = 0.1;
-
 static constexpr bool DONT_PLAY_CHORD = false;
 
 static const muse::Uri NOTATION_REVIEW_PAGE_URI("musescore://notation/review");
@@ -183,7 +181,7 @@ void NotationActionController::init()
     registerCommand(ADD_UP_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
     registerCommand(ADD_DOWN_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
 
-    registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
+    registerCommand<AddFiguredBassCommand>(&Controller::addFiguredBass);
 
     // add brackets commands
     registerCommand(ADD_BRACKETS_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Brackets);
@@ -221,7 +219,7 @@ void NotationActionController::init()
                     PlayMode::PlayNote);
 
     // properties commands
-    registerCommand(TOGGLE_VISIBLE_COMMAND, &Interaction::toggleVisible);
+    registerCommand<ToggleVisibleCommand>(&Controller::toggleVisible);
 
     // snap commands
     registerCommand<ToggleSnapToCommand>(&Controller::toggleSnapTo);
@@ -247,8 +245,7 @@ void NotationActionController::init()
 
     registerCommand(SPLIT_MEASURE_COMMAND, &Interaction::splitSelectedMeasure);
     registerCommand(JOIN_MEASURES_COMMAND, &Interaction::joinSelectedMeasures);
-    registerCommand(STRETCH_DECREASE_COMMAND, [this]() { addStretch(-STRETCH_STEP); });
-    registerCommand(STRETCH_INCREASE_COMMAND, [this]() { addStretch(STRETCH_STEP); });
+    registerCommand<ChangeStretchCommand>(&Controller::changeStretch);
     registerCommand(STRETCH_RESET_COMMAND, &Controller::resetStretch);
 
     // open properties
@@ -791,6 +788,17 @@ muse::Ret NotationActionController::flipSelection()
     }
 
     interaction->flipSelection();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleVisible()
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->toggleVisible();
     return muse::make_ok();
 }
 
@@ -2089,16 +2097,17 @@ void NotationActionController::addImage()
     });
 }
 
-void NotationActionController::addFiguredBass()
+muse::Ret NotationActionController::addFiguredBass()
 {
     TRACEFUNC;
 
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     interaction->addFiguredBass();
+    return muse::make_ok();
 }
 
 void NotationActionController::addGuitarBend(GuitarBendType bendType)
@@ -2406,24 +2415,21 @@ void NotationActionController::addFullMeasureRest()
     interaction->execute(&mu::engraving::Score::cmdFullMeasureRest, TranslatableString("undoableAction", "Enter full measure rest"));
 }
 
-void NotationActionController::addStretch(qreal value)
+muse::Ret NotationActionController::changeStretch(const ChangeStretchCommand& command)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     auto selection = currentNotationSelection();
-    if (!selection) {
-        return;
+    if (!selection || !selection->isRange()) {
+        return muse::make_ret(Ret::Code::NotAllowed);
     }
 
-    if (!selection->isRange()) {
-        return;
-    }
-
-    interaction->addStretch(value);
+    interaction->addStretch(command.value);
+    return muse::make_ok();
 }
 
 void NotationActionController::resetStretch()
