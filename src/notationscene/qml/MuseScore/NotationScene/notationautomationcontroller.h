@@ -25,7 +25,6 @@
 #include <map>
 #include <optional>
 #include <vector>
-#include <QPointF>
 #include <QQuickItem>
 
 #include "project/iprojectsession.h"
@@ -38,9 +37,7 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 
-namespace muse::uicomponents {
-class PolylinePlot;
-}
+#include "automation/notationautomationtypes.h"
 
 namespace mu::engraving {
 class Staff;
@@ -64,66 +61,6 @@ public:
     void setViewMatrix(const muse::draw::Transform& viewMatrix);
 
 private:
-    // A polyline can be uniquely identified using the system, staff, and startTick...
-    struct PolylineKey {
-        const System* system = nullptr;
-        const staff_idx_t staffIdx = muse::nidx;
-        const int startTick = -1;
-
-        bool isValid() const
-        {
-            return system && !system->measures().empty() && staffIdx != muse::nidx && startTick != -1;
-        }
-
-        bool operator==(const PolylineKey& k) const
-        {
-            IF_ASSERT_FAILED(isValid() && k.isValid()) {
-                return false;
-            }
-            return system == k.system && staffIdx == k.staffIdx && startTick == k.startTick;
-        }
-
-        bool operator<(const PolylineKey& k) const
-        {
-            IF_ASSERT_FAILED(isValid() && k.isValid()) {
-                return false;
-            }
-            if (system != k.system) {
-                // On different systems...
-                return system->first()->index() < k.system->first()->index();
-            }
-            if (staffIdx != k.staffIdx) {
-                // On different staves...
-                return staffIdx < k.staffIdx;
-            }
-            // On same staff...
-            return startTick < k.startTick;
-        }
-    };
-
-    struct PointData {
-        enum class PointType : unsigned char {
-            UNKNOWN,
-            IN,
-            OUT,
-            BOTH
-        };
-        int polylinePointIndex = -1;
-        int tick = -1;
-        QPointF qPointF;
-        PointType pointType = PointType::UNKNOWN;
-        bool isPending = false; // true while the user is adding/dragging the point (before committing to the model)
-    };
-
-    struct PolylineData {
-        muse::uicomponents::PolylinePlot* polyline = nullptr;
-        QVector<PointData> pointsData;
-        //! NOTE: Horizontal boxes can break up the staves of a system, so a polyline covers a "region" - a run
-        //! of measures bounded by horizontal boxes and/or the system itself...
-        const Measure* startMeasure = nullptr;
-        const Measure* endMeasure = nullptr;
-    };
-
     struct TickStaffRange {
         int tickFrom = -1;
         int tickTo = -1;
@@ -137,7 +74,6 @@ private:
         std::optional<TickStaffRange> boundary;
     };
 
-    static int tickFromXInPolyline(const PolylineKey& key, const PolylineData& data, qreal x);
     QVector<PointData> pointsDataInStaffRegion(const mu::engraving::Staff* staff, const muse::RectF& regionRect, int startTick,
                                                int endTick) const;
 
