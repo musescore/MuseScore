@@ -665,7 +665,7 @@ void EditStaveSharing::setIsReset(Transaction& tx, StaveSharingChange* staveShar
         return;
     }
 
-    if (!reset && state->userTrackMap()->empty()) {
+    if (!reset && state->userTrackMap() && state->userTrackMap()->empty()) {
         state->setUserTrackMap(state->sharedTrackMap());
         state->setIsReset(false);
         undoSetStaveSharingState(tx, sharedPart, tick, *state);
