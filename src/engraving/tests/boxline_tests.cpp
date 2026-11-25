@@ -25,6 +25,7 @@
 #include "engraving/api/v1/elements.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/boxline.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
@@ -456,6 +457,32 @@ TEST_F(Engraving_EditBoxLineTests, rangeSelectionAddsOneBoxPerStaff)
         EXPECT_EQ(boxes[i]->tick(), Fraction(0, 1));
         EXPECT_EQ(boxes[i]->tick2(), Fraction(2, 1));
     }
+    EXPECT_EQ(boxCount(), 2);
+}
+
+TEST_F(Engraving_EditBoxLineTests, rangeSelectionOverLinkedStavesAddsOneBoxPerStaff)
+{
+    // [GIVEN] The first staff has a linked staff (as with standard + TAB)
+    m_score->startCmd(TranslatableString::untranslatable("Edit box line tests"));
+    Staff* staff = m_score->staff(0);
+    Staff* linkedStaff = Factory::createStaff(staff->part());
+    linkedStaff->setPart(staff->part());
+    m_score->undoInsertStaff(linkedStaff, 1, false);
+    Excerpt::cloneStaff(staff, linkedStaff);
+    m_score->endCmd();
+    ASSERT_EQ(m_score->nstaves(), 3);
+
+    // [GIVEN] Measures 1-2 of the linked pair are range-selected
+    m_score->selection().setRangeTicks(Fraction(0, 1), Fraction(2, 1), 0, 2);
+    m_score->selection().updateSelectedElements();
+
+    // [WHEN] Adding a box
+    std::vector<BoxLine*> boxes = addBoxLines();
+
+    // [THEN] One box is added for the linked pair
+    ASSERT_EQ(boxes.size(), 1);
+    EXPECT_EQ(boxes.front()->tick(), Fraction(0, 1));
+    EXPECT_EQ(boxes.front()->tick2(), Fraction(2, 1));
     EXPECT_EQ(boxCount(), 2);
 }
 

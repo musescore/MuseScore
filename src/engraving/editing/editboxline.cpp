@@ -28,6 +28,7 @@
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/select.h"
+#include "../dom/staff.h"
 
 #include "editspanner.h"
 
@@ -39,7 +40,18 @@ std::vector<BoxLine*> EditBoxLine::addBoxLines(Transaction& tx, Score* score)
     const Selection& selection = score->selection();
 
     if (selection.isRange()) {
+        // Adding a box also adds it to the staff's linked staves, so add one per linked group only
+        std::set<const Staff*> handledStaves;
+
         for (staff_idx_t staffIdx = selection.staffStart(); staffIdx < selection.staffEnd(); ++staffIdx) {
+            const Staff* staff = score->staff(staffIdx);
+            if (muse::contains(handledStaves, staff)) {
+                continue;
+            }
+            for (const Staff* linkedStaff : staff->staffList()) {
+                handledStaves.insert(linkedStaff);
+            }
+
             BoxLine* boxLine = Factory::createBoxLine(score->dummy());
             EditSpanner::addSpanner(tx, score, boxLine, staffIdx, selection.startSegment(), selection.endSegment());
             boxLines.push_back(boxLine);
