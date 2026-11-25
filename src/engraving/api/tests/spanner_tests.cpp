@@ -26,6 +26,11 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/elements.h"
 
+#include "engraving/dom/boxline.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mcursor.h"
+
 #include "engraving/tests/utils/scorerw.h"
 
 using namespace muse;
@@ -71,6 +76,43 @@ TEST(Engraving_ApiSpannerTests, scoreSpanners)
         track_idx_t track = apiItem->spanner()->track();
         EXPECT_LT(track, score->ntracks()) << "Spanner " << i << "'s underlying Spanner should not be garbage";
     }
+
+    delete score;
+}
+
+/// Test Plugin API BoxLine properties
+TEST(Engraving_ApiSpannerTests, boxLineProperties)
+{
+    // A one-staff score with a box over the first two measures
+    MCursor c;
+    c.setTimeSig(Fraction(4, 4));
+    c.createScore(nullptr, u"test");
+    c.addPart(u"voice");
+    c.move(0, Fraction(0, 1));
+    c.addTimeSig(Fraction(4, 4));
+    for (int i = 0; i < 2; ++i) {
+        c.addChord(60, TDuration(DurationType::V_WHOLE));
+    }
+    MasterScore* score = c.score();
+
+    BoxLine* box = Factory::createBoxLine(score->dummy());
+    box->setTrack(0);
+    box->setTrack2(0);
+    box->setTick(Fraction(0, 1));
+    box->setTicks(Fraction(2, 1));
+    score->addSpanner(box);
+    score->doLayout();
+
+    apiv1::EngravingItem* apiBox = apiv1::wrap(box, apiv1::Ownership::SCORE);
+    EXPECT_DOUBLE_EQ(apiBox->property("boxLineHeight").toDouble(), 2.0);
+    EXPECT_FALSE(apiBox->property("boxLineCenterOnStaff").toBool());
+
+    score->startCmd(TranslatableString::untranslatable("API spanner tests"));
+    EXPECT_TRUE(apiBox->setProperty("boxLineHeight", 4.5));
+    EXPECT_TRUE(apiBox->setProperty("boxLineCenterOnStaff", true));
+    score->endCmd();
+    EXPECT_EQ(box->boxHeight(), Spatium(4.5));
+    EXPECT_TRUE(box->centerOnStaff());
 
     delete score;
 }

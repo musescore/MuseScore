@@ -22,7 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/api/v1/elements.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/boxline.h"
 #include "engraving/dom/excerpt.h"
@@ -225,21 +224,6 @@ TEST_F(Engraving_BoxLineTests, segmentDelegatesHeightToBox)
     BoxLine* box = addBox(2);
     box->setBoxHeight(3.0_sp);
     EXPECT_EQ(front(box)->getProperty(Pid::BOXLINE_HEIGHT).value<Spatium>(), 3.0_sp);
-}
-
-TEST_F(Engraving_BoxLineTests, engravingApiProperties)
-{
-    BoxLine* box = addBox(2);
-    apiv1::EngravingItem* apiBox = apiv1::wrap(box, apiv1::Ownership::SCORE);
-    EXPECT_DOUBLE_EQ(apiBox->property("boxLineHeight").toDouble(), 2.0);
-    EXPECT_FALSE(apiBox->property("boxLineCenterOnStaff").toBool());
-
-    m_score->startCmd(TranslatableString::untranslatable("Box line tests"));
-    EXPECT_TRUE(apiBox->setProperty("boxLineHeight", 4.5));
-    EXPECT_TRUE(apiBox->setProperty("boxLineCenterOnStaff", true));
-    m_score->endCmd();
-    EXPECT_EQ(box->boxHeight(), 4.5_sp);
-    EXPECT_TRUE(box->centerOnStaff());
 }
 
 TEST_F(Engraving_BoxLineTests, heightGripChangesOnlyHeight)
