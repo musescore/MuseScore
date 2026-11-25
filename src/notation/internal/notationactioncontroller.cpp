@@ -318,8 +318,7 @@ void NotationActionController::init()
     registerCommand(TOGGLE_MMREST_COMMAND, &Controller::toggleMmrest);
     registerCommand(TOGGLE_HIDE_EMPTY_COMMAND, &Controller::toggleHideEmpty);
     registerCommand<MirrorNoteheadCommand>(&Controller::mirrorNotehead);
-    registerCommand(SET_VISIBLE_COMMAND, &Interaction::setSelectionVisible, true);
-    registerCommand(UNSET_VISIBLE_COMMAND, &Interaction::setSelectionVisible, false);
+    registerCommand<SetVisibleCommand>(&Controller::setVisible);
     registerCommand(TOGGLE_AUTOPLACE_COMMAND, &Interaction::toggleAutoplace, false);
     registerCommand(AUTOPLACE_ENABLED_COMMAND, &Interaction::toggleAutoplace, true);
 
@@ -2554,6 +2553,18 @@ muse::Ret NotationActionController::mirrorNotehead()
     }
 
     interaction->mirrorNotes();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::setVisible(const SetVisibleCommand& command)
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->setSelectionVisible(command.visible);
     return muse::make_ok();
 }
 
