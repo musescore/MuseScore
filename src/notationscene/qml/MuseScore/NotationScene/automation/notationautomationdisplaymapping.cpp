@@ -25,6 +25,7 @@
 #include <algorithm>
 
 #include "global/realfn.h"
+#include "translation.h"
 
 #include "engraving/automation/dynamicvalues.h"
 #include "engraving/automation/tempovalues.h"
@@ -238,4 +239,33 @@ muse::real_t NotationAutomationDisplayMapping::fromDisplay(AutomationType type, 
     }
 
     return muse::real_t(displayValue);
+}
+
+QString NotationAutomationDisplayMapping::valueText(AutomationType type, muse::real_t value)
+{
+    const double v = static_cast<double>(value);
+
+    switch (type) {
+    case AutomationType::Dynamics:
+        return QString("%1%").arg(v * 100.0, 0, 'g', 4);
+    case AutomationType::Volume: {
+        const double db = VOLUME_RANGE_MIN_DB + v * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        return muse::qtrc("notation/automation", "%1 dB").arg(db, 0, 'f', 1);
+    }
+    case AutomationType::Tempo: {
+        const double bpm = mu::engraving::denormalizeTempo(value).toBPM().val;
+        return muse::qtrc("notation/automation", "%1 BPM").arg(bpm, 0, 'g', 4);
+    }
+    case AutomationType::Pan: {
+        const int pan = qRound((v - 0.5) * 200.0);
+        if (pan == 0) {
+            return muse::qtrc("notation/automation", "Center");
+        }
+        return (pan < 0 ? muse::qtrc("notation/automation", "Left %1") : muse::qtrc("notation/automation", "Right %1")).arg(qAbs(pan));
+    }
+    case AutomationType::Unknown:
+        break;
+    }
+
+    return QString::number(v, 'g', 4);
 }

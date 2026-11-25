@@ -24,6 +24,8 @@
 
 #include <optional>
 
+#include <QString>
+
 #include "global/types/number.h"
 #include "engraving/automation/automationtypes.h"
 
@@ -35,5 +37,7 @@ public:
     static double toDisplay(mu::engraving::AutomationType type, bool isMuseSampler, muse::real_t value);
     static muse::real_t fromDisplay(mu::engraving::AutomationType type, bool isMuseSampler, double displayValue,
                                     std::optional<muse::real_t> existingValue = std::nullopt);
+
+    static QString valueText(mu::engraving::AutomationType type, muse::real_t value);
 };
 }
