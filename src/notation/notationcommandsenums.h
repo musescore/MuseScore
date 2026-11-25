@@ -291,6 +291,13 @@ struct HairpinTypeContract {
     } };
 };
 
+struct TransposeDirectionContract {
+    static constexpr EnumTable<TransposeDirection, 2> table { {
+        { "up", TransposeDirection::UP, "transpose up" },
+        { "down", TransposeDirection::DOWN, "transpose down" },
+    } };
+};
+
 struct ScoreConfigTypeContract {
     static constexpr EnumTable<ScoreConfigType, 6> table { {
         { "invisible", ScoreConfigType::ShowInvisibleElements, "invisible elements" },
@@ -421,6 +428,7 @@ DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::HairpinTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::TransposeDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ScoreConfigTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::FontStyleContract);
