@@ -56,7 +56,6 @@ ListItemBlank {
     signal groupExpandToggled()
     signal groupHoverChanged(bool hovered)
     signal groupPressChanged(bool pressed)
-    signal headerSelectedChanged(bool selected)
 
     QtObject {
         id: prv
@@ -93,27 +92,6 @@ ListItemBlank {
     navigation.accessible.name: itemTitleLabel.text
     navigation.accessible.description: root.description
     navigation.accessible.row: root.index
-
-    onIsSelectedChanged: {
-        if (root.isGroupHeader) {
-            root.headerSelectedChanged(root.isSelected)
-        }
-    }
-
-    Component.onCompleted: {
-        if (root.isGroupHeader && root.isSelected) {
-            root.headerSelectedChanged(true)
-        }
-    }
-
-    Component.onDestruction: {
-        if (root.isGroupHeader) {
-            root.headerSelectedChanged(false)
-        }
-        if (root.isInGroup && root.mouseArea.containsMouse) {
-            root.groupHoverChanged(false)
-        }
-    }
 
     onHovered: function(isHovered) {
         if (root.isInGroup) {

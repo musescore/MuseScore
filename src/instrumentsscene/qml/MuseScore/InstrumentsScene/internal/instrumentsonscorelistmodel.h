@@ -68,6 +68,8 @@ public:
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
 
+    Q_INVOKABLE bool isSharedGroupSelected(const QString& sharedGroupId) const;
+
 public slots:
     void setCurrentOrderIndex(int index);
 

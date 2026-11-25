@@ -46,18 +46,16 @@ Item {
         // group id -> expanded; collapsed by default
         property var expandedGroups: ({})
 
-        // Group id -> true while the group's header is selected: the whole group is shown selected
-        property var selectedGroups: ({})
-
-        property string hoveredGroupId: ""
+        // becomes null by itself when the row is destroyed (e.g. scrolled out of view)
+        property InstrumentsOnScoreDelegate hoveredGroupRow: null
         property string pressedGroupId: ""
 
-        //! NOTE Cleared only if it's still the same group, as enter / leave can come in either order
-        function setGroupHovered(groupId, hovered) {
+        function setGroupRowHovered(row, hovered) {
+            // cleared only by its own row: the next row can be entered before the previous one is left
             if (hovered) {
-                prv.hoveredGroupId = groupId
-            } else if (prv.hoveredGroupId === groupId) {
-                prv.hoveredGroupId = ""
+                prv.hoveredGroupRow = row
+            } else if (prv.hoveredGroupRow === row) {
+                prv.hoveredGroupRow = null
             }
         }
 
@@ -73,16 +71,6 @@ Item {
             const groups = Object.assign({}, prv.expandedGroups)
             groups[groupId] = expanded
             prv.expandedGroups = groups
-        }
-
-        function setGroupSelected(groupId, selected) {
-            if (Boolean(prv.selectedGroups[groupId]) === selected) {
-                return
-            }
-
-            let groups = Object.assign({}, prv.selectedGroups)
-            groups[groupId] = selected
-            prv.selectedGroups = groups
         }
     }
 
@@ -163,8 +151,14 @@ Item {
             navigationPanel: instrumentsView.navigation
 
             isGroupExpanded: Boolean(prv.expandedGroups[item.sharedGroupId])
-            isGroupSelected: item.isInGroup && Boolean(prv.selectedGroups[item.sharedGroupId])
-            isGroupHovered: item.isInGroup && prv.hoveredGroupId === item.sharedGroupId
+
+            // from the model: the header's row may not exist; hasSelection re-evaluates it on selection changes
+            isGroupSelected: {
+                root.instrumentsOnScoreModel.hasSelection
+                return item.isInGroup && root.instrumentsOnScoreModel.isSharedGroupSelected(item.sharedGroupId)
+            }
+
+            isGroupHovered: Boolean(prv.hoveredGroupRow) && prv.hoveredGroupRow.sharedGroupId === item.sharedGroupId
             isGroupPressed: item.isInGroup && prv.pressedGroupId === item.sharedGroupId
 
             onClicked: {
@@ -180,15 +174,11 @@ Item {
             }
 
             onGroupHoverChanged: function(hovered) {
-                prv.setGroupHovered(item.sharedGroupId, hovered)
+                prv.setGroupRowHovered(item, hovered)
             }
 
             onGroupPressChanged: function(pressed) {
                 prv.setGroupPressed(item.sharedGroupId, pressed)
-            }
-
-            onHeaderSelectedChanged: function(selected) {
-                prv.setGroupSelected(item.sharedGroupId, selected)
             }
         }
     }

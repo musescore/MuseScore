@@ -312,6 +312,25 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
     return result;
 }
 
+bool InstrumentsOnScoreListModel::isSharedGroupSelected(const QString& sharedGroupId) const
+{
+    if (!m_showsSharedGroups || sharedGroupId.isEmpty()) {
+        return false;
+    }
+
+    const ID groupId(sharedGroupId);
+    const ItemList& items = this->items();
+
+    for (int row = 0; row < items.size(); ++row) {
+        auto instrument = static_cast<const InstrumentItem*>(items.at(row));
+        if (instrument->isSharedGroupHeader && instrument->sharedPartId == groupId) {
+            return selection()->isSelected(index(row));
+        }
+    }
+
+    return false;
+}
+
 void InstrumentsOnScoreListModel::setCurrentOrderIndex(int index)
 {
     if (m_currentOrderIndex == index) {

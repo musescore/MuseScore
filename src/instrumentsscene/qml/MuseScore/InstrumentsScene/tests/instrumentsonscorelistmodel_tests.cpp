@@ -704,6 +704,38 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, MoveSelection_UpdatesG
     EXPECT_NE(std::find(changedRoles.begin(), changedRoles.end(), role("sharedGroupRole")), changedRoles.end());
 }
 
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, IsSharedGroupSelected_FollowsHeaderSelection)
+{
+    // [GIVEN] Combine is on; B and C on a shared part S, and D and E on a shared part T
+    setCombineOnSharedStaves(true);
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    SharedPart* t = addSharedPart(u"T");
+    addToSharedPart(t, u"D");
+    addToSharedPart(t, u"E");
+    m_model->load();
+
+    const QString sId = s->id().toQString();
+    const QString tId = t->id().toQString();
+
+    // [THEN] No group is selected
+    EXPECT_FALSE(m_model->isSharedGroupSelected(sId));
+
+    // [WHEN] S's header is selected
+    m_model->selectRow(0);
+
+    // [THEN] S is selected, T isn't
+    EXPECT_TRUE(m_model->isSharedGroupSelected(sId));
+    EXPECT_FALSE(m_model->isSharedGroupSelected(tId));
+
+    // [WHEN] One of S's instruments is selected instead
+    m_model->selectRow(1);
+
+    // [THEN] S itself isn't
+    EXPECT_FALSE(m_model->isSharedGroupSelected(sId));
+}
+
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Load_CombineOff_InstrumentsAreNotInGroups)
 {
     // [GIVEN] Combine is off; B and C on a shared part S
