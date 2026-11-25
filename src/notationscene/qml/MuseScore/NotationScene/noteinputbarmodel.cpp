@@ -426,7 +426,7 @@ MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
 {
     MenuItemList items {
         makeMenuItem(AddChordTextCommand::id),
-        makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
+        makeMenuItem(AddFretboardDiagramCommand::id),
         makeSeparator(),
         makeMenuItem(InsertFretFrameCommand::id, TranslatableString("notation", "Fretboard diagram legend"))
     };

@@ -97,7 +97,7 @@ PropertyItem* ChordSymbolSettingsModel::durationType() const
 
 void ChordSymbolSettingsModel::addFretboardDiagram()
 {
-    commandDispatcher()->dispatch(ADD_FRETBOARD_DIAGRAM_COMMAND);
+    commandDispatcher()->dispatch(AddFretboardDiagramCommand::id);
 }
 
 bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const

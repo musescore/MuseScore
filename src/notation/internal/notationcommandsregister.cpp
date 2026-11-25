@@ -633,13 +633,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<SaveStyleCommand>(),
 
     // fretboard diagram commands
-    CommandInfo{
-        ADD_FRETBOARD_DIAGRAM_COMMAND,
-        TranslatableString("action", "Add &fretboard diagram"),
-        TranslatableString("action", "Add fretboard diagram"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddFretboardDiagramCommand>(),
 
     makeCommandInfo<AddOttavaCommand>(),
     makeCommandInfo<AddOttava8vaCommand>(),
@@ -654,20 +648,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddHairpinCommand>(),
     makeCommandInfo<AddHairpinCrescendoCommand>(),
     makeCommandInfo<AddHairpinDiminuendoCommand>(),
-    CommandInfo{
-        INCREASE_DYNAMIC_COMMAND,
-        TranslatableString("action", "Increase dynamics"),
-        TranslatableString("action", "Increase selected dynamics"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        DECREASE_DYNAMIC_COMMAND,
-        TranslatableString("action", "Decrease dynamics"),
-        TranslatableString("action", "Decrease selected dynamics"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ChangeDynamicCommand>(),
+    makeCommandInfo<IncreaseDynamicCommand>(),
+    makeCommandInfo<DecreaseDynamicCommand>(),
     CommandInfo{
         ADD_NOTELINE_COMMAND,
         TranslatableString("action", "&Note-anchored line"),

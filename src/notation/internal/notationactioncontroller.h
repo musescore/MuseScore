@@ -191,6 +191,7 @@ private:
     muse::Ret addOrnament(const AddOrnamentCommand& command);
     muse::Ret addOttava(const AddOttavaCommand& command);
     muse::Ret addHairpin(const AddHairpinCommand& command);
+    muse::Ret changeDynamic(const ChangeDynamicCommand& command);
     muse::Ret flipSelection();
     muse::Ret flipSelectionHorizontally();
     muse::Ret extendToNextNote();
@@ -223,7 +224,7 @@ private:
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
-    void addFretboardDiagram();
+    muse::Ret addFretboardDiagram();
 
     muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
     muse::Ret startEditSelectedText(const muse::rcommand::Params& params);

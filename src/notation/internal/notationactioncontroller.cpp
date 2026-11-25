@@ -169,14 +169,13 @@ void NotationActionController::init()
 
     registerCommand<EnterRestCommand>(&Controller::putRestToSelection);
 
-    registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
+    registerCommand<AddFretboardDiagramCommand>(&Controller::addFretboardDiagram);
 
     registerCommand<AddOttavaCommand>(&Controller::addOttava);
     registerCommand<AddHairpinCommand>(&Controller::addHairpin);
+    registerCommand<ChangeDynamicCommand>(&Controller::changeDynamic);
 
     registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
-    registerCommand(INCREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ 1);
-    registerCommand(DECREASE_DYNAMIC_COMMAND, &Interaction::increaseDecreaseSelectedDynamicsValues, /*delta*/ -1);
     registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
@@ -2114,16 +2113,17 @@ void NotationActionController::addGuitarBend(GuitarBendType bendType)
     interaction->addGuitarBend(bendType);
 }
 
-void NotationActionController::addFretboardDiagram()
+muse::Ret NotationActionController::addFretboardDiagram()
 {
     TRACEFUNC;
 
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
     interaction->addFretboardDiagram();
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::openSelectionMoreOptions()
@@ -2352,6 +2352,21 @@ muse::Ret NotationActionController::addHairpin(const AddHairpinCommand& command)
     }
 
     interaction->addHairpinsToSelection(command.type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::changeDynamic(const ChangeDynamicCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(muse::Ret::Code::InternalError);
+    }
+
+    if (interaction->selection()->isNone()) {
+        return muse::make_ret(muse::Ret::Code::NotAllowed);
+    }
+
+    interaction->increaseDecreaseSelectedDynamicsValues(command.delta);
     return muse::make_ok();
 }
 

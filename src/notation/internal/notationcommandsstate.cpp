@@ -72,8 +72,9 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     MIRROR_NOTEHEAD_COMMAND,
     MOVE_UP_COMMAND,
     MOVE_DOWN_COMMAND,
-    INCREASE_DYNAMIC_COMMAND,
-    DECREASE_DYNAMIC_COMMAND
+    ChangeDynamicCommand::id,
+    IncreaseDynamicCommand::id,
+    DecreaseDynamicCommand::id,
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {

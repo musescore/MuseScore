@@ -171,7 +171,7 @@ MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
 {
     MenuItemList items {
         makeMenuItem(AddChordTextCommand::id),
-        makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
+        makeMenuItem(AddFretboardDiagramCommand::id),
         makeSeparator(),
         makeMenuItem(InsertFretFrameCommand::id, TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
     };
