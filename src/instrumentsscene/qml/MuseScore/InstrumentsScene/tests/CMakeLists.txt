@@ -42,6 +42,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/systemobjectslayertreeitem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutpaneltreemodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutpanelcontextmenumodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentsonscorelistmodel_tests.cpp
 )
 
 set(MODULE_TEST_LINK

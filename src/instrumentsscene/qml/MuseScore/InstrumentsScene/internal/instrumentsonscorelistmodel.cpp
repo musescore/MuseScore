@@ -22,9 +22,17 @@
 
 #include "instrumentsonscorelistmodel.h"
 
+#include <algorithm>
+#include <set>
+#include <utility>
+#include <vector>
+
 #include "async/notifylist.h"
+#include "containers.h"
 
 #include "log.h"
+
+#include "engraving/dom/sharedpart.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
@@ -45,13 +53,13 @@ public:
     {
     }
 
-    QString id;
-    ID partId;
+    QString id; // the instrument (template) id
+    ID partId; // existing instruments only
+    ID sharedPartId; // the shared part the instrument is on, if any
     QString name;
-    QString familyId;
+    QString description; // new instruments only
     bool isSoloist = false;
     bool isExistingPart = false;
-    notation::InstrumentTemplate instrumentTemplate;
 };
 }
 
@@ -71,7 +79,7 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
     case RoleName:
         return instrument->name;
     case RoleDescription:
-        return instrument->instrumentTemplate.description.toQString();
+        return instrument->description;
     case RoleIsSoloist:
         return instrument->isSoloist;
     default:
@@ -122,6 +130,7 @@ QHash<int, QByteArray> InstrumentsOnScoreListModel::roleNames() const
 QStringList InstrumentsOnScoreListModel::orders() const
 {
     QStringList result;
+    result.reserve(static_cast<int>(m_scoreOrders.size()));
 
     for (const ScoreOrder& order: m_scoreOrders) {
         result << order.getName().qTranslated();
@@ -143,9 +152,12 @@ void InstrumentsOnScoreListModel::load()
     auto parts = master ? master->parts()->partList() : NotifyList<const Part*>();
 
     ItemList instruments;
+    instruments.reserve(static_cast<int>(parts.size()));
+    m_sharedParts.clear();
 
     for (const Part* part : parts) {
         if (part->isSharedPart()) {
+            m_sharedParts[part->id()] = part->instrument()->id();
             continue;
         }
         InstrumentItem* instrument = new InstrumentItem(this);
@@ -154,8 +166,10 @@ void InstrumentsOnScoreListModel::load()
         instrument->isExistingPart = true;
         instrument->name = part->partName();
         instrument->isSoloist = part->soloist();
-        instrument->familyId = part->familyId();
-        instrument->instrumentTemplate.sequenceOrder = resolveInstrumentSequenceNumber(instrument->id);
+
+        if (const mu::engraving::SharedPart* sharedPart = part->sharedPart()) {
+            instrument->sharedPartId = sharedPart->id();
+        }
 
         instruments << instrument;
     }
@@ -172,12 +186,12 @@ void InstrumentsOnScoreListModel::loadOrders()
     m_scoreOrders = repository()->orders();
 
     const ScoreOrder& custom = customOrder();
-    if (m_scoreOrders.empty() || !muse::contains(m_scoreOrders, custom)) {
+    if (!muse::contains(m_scoreOrders, custom)) {
         m_scoreOrders.push_back(custom);
     }
 
     INotationPtr notation = context()->currentNotation();
-    ScoreOrder currentOrder = notation ? notation->parts()->scoreOrder() : m_scoreOrders[0];
+    ScoreOrder currentOrder = notation ? notation->parts()->scoreOrder() : m_scoreOrders.front();
     bool orderCustomized = currentOrder.customized;
 
     if (!muse::contains(m_scoreOrders, currentOrder)) {
@@ -188,7 +202,7 @@ void InstrumentsOnScoreListModel::loadOrders()
     emit ordersChanged();
 
     for (size_t i = 0; i < m_scoreOrders.size(); ++i) {
-        if (m_scoreOrders[i].id == currentOrder.id) {
+        if (m_scoreOrders.at(i).id == currentOrder.id) {
             doSetCurrentOrderIndex(static_cast<int>(i));
             break;
         }
@@ -197,17 +211,6 @@ void InstrumentsOnScoreListModel::loadOrders()
     if (orderCustomized) {
         doSetCurrentOrderIndex(createCustomizedScoreOrder(currentOrder));
     }
-}
-
-int InstrumentsOnScoreListModel::resolveInstrumentSequenceNumber(const String& instrumentId) const
-{
-    const InstrumentTemplate& templ = repository()->instrumentTemplate(instrumentId);
-    if (templ.isValid()) {
-        return templ.sequenceOrder;
-    }
-
-    const InstrumentTemplateList& allTemplates = repository()->instrumentTemplates();
-    return static_cast<int>(allTemplates.size());
 }
 
 void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
@@ -226,8 +229,7 @@ void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentId
 
         instrument->id = templ.id;
         instrument->name = formatInstrumentTitle(templ.trackName, templ.trait);
-        instrument->familyId = templ.familyId();
-        instrument->instrumentTemplate = templ;
+        instrument->description = templ.description.toQString();
 
         insertInstrument(items, instrument);
     }
@@ -252,20 +254,33 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
     TRACEFUNC;
 
     QVariantList result;
+    result.reserve(items().size() + static_cast<int>(m_sharedParts.size()));
 
-    for (const QObject* item : items()) {
-        auto instrument = dynamic_cast<const InstrumentItem*>(item);
-        if (!instrument) {
-            continue;
-        }
-
+    auto appendPart = [&result](const ID& partId, const QString& instrumentId, bool isExistingPart, bool isSoloist) {
         QVariantMap obj;
-        obj["partId"] = instrument->partId.toQString();
-        obj["isSoloist"] = instrument->isSoloist;
-        obj["isExistingPart"] = instrument->isExistingPart;
-        obj["instrumentId"] = instrument->isExistingPart ? instrument->id : instrument->instrumentTemplate.id.toQString();
+        obj["partId"] = partId.toQString();
+        obj["instrumentId"] = instrumentId;
+        obj["isExistingPart"] = isExistingPart;
+        obj["isSoloist"] = isSoloist;
 
         result << obj;
+    };
+
+    //! NOTE Parts that aren't listed are removed from the score: shared parts are listed before their first
+    //! instrument, so they stay. A shared part none of whose instruments are left is removed
+    std::set<ID> listedSharedParts;
+
+    for (const QObject* item : items()) {
+        auto instrument = static_cast<const InstrumentItem*>(item);
+
+        const ID& sharedPartId = instrument->sharedPartId;
+        if (sharedPartId.isValid() && listedSharedParts.insert(sharedPartId).second) {
+            if (auto it = m_sharedParts.find(sharedPartId); it != m_sharedParts.end()) {
+                appendPart(sharedPartId, it->second, true, false);
+            }
+        }
+
+        appendPart(instrument->partId, instrument->id, instrument->isExistingPart, instrument->isSoloist);
     }
 
     return result;
@@ -301,15 +316,24 @@ void InstrumentsOnScoreListModel::sortInstruments(ItemList& instruments)
 
     const ScoreOrder& currentOrder = currentScoreOrder();
 
-    std::sort(instruments.begin(), instruments.end(), [currentOrder](const QObject* item1, const QObject* item2) {
-        auto instrument1 = dynamic_cast<const InstrumentItem*>(item1);
-        auto instrument2 = dynamic_cast<const InstrumentItem*>(item2);
+    //! NOTE The sorting index is worked out once per instrument: it searches all instrument templates
+    std::vector<std::pair<int, InstrumentItem*> > keyed;
+    keyed.reserve(static_cast<size_t>(instruments.size()));
 
-        int index1 = currentOrder.instrumentSortingIndex(instrument1->id, instrument1->isSoloist);
-        int index2 = currentOrder.instrumentSortingIndex(instrument2->id, instrument2->isSoloist);
+    for (QObject* item : instruments) {
+        auto instrument = static_cast<InstrumentItem*>(item);
+        keyed.emplace_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist), instrument);
+    }
 
-        return index1 < index2;
+    //! NOTE Stable: instruments with the same index (e.g. two of the same instrument) keep their order
+    std::stable_sort(keyed.begin(), keyed.end(), [](const auto& a, const auto& b) {
+        return a.first < b.first;
     });
+
+    instruments.clear();
+    for (const auto& entry : keyed) {
+        instruments << entry.second;
+    }
 }
 
 void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, InstrumentItem* newInstrument)
@@ -318,7 +342,7 @@ void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, Instru
     const int newIndex = currentOrder.instrumentSortingIndex(newInstrument->id, newInstrument->isSoloist);
 
     for (int index = 0; index < instruments.size(); ++index) {
-        auto instrument = dynamic_cast<const InstrumentItem*>(instruments[index]);
+        auto instrument = static_cast<const InstrumentItem*>(instruments.at(index));
 
         if (currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist) > newIndex) {
             instruments.insert(index, newInstrument);
@@ -330,7 +354,8 @@ void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, Instru
 
 InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::modelIndexToItem(const QModelIndex& index) const
 {
-    return dynamic_cast<InstrumentItem*>(item(index));
+    //! NOTE All items are InstrumentItems; item() returns null for an invalid index
+    return static_cast<InstrumentItem*>(item(index));
 }
 
 const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
@@ -340,7 +365,7 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
         return dummy;
     }
 
-    return m_scoreOrders[m_currentOrderIndex];
+    return m_scoreOrders.at(m_currentOrderIndex);
 }
 
 void InstrumentsOnScoreListModel::onRowsMoved()
@@ -355,14 +380,13 @@ void InstrumentsOnScoreListModel::onRowsRemoved()
 
 bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 {
-    const ScoreOrder currentOrder = currentScoreOrder();
+    const ScoreOrder& currentOrder = currentScoreOrder();
 
     std::vector<int> instrumentIndices;
+    instrumentIndices.reserve(items().size());
+
     for (const QObject* item : items()) {
-        auto instrument = dynamic_cast<const InstrumentItem*>(item);
-        if (!instrument) {
-            continue;
-        }
+        auto instrument = static_cast<const InstrumentItem*>(item);
         instrumentIndices.push_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist));
     }
 
@@ -402,7 +426,7 @@ void InstrumentsOnScoreListModel::removeCustomizedScoreOrder(const ScoreOrder& o
     }
 
     for (size_t i = 0; i < m_scoreOrders.size(); ++i) {
-        if (!m_scoreOrders[i].customized && (m_scoreOrders[i].id == order.id)) {
+        if (!m_scoreOrders.at(i).customized && (m_scoreOrders.at(i).id == order.id)) {
             doSetCurrentOrderIndex(static_cast<int>(i));
 
             m_scoreOrders.erase(m_scoreOrders.begin() + i + 1);

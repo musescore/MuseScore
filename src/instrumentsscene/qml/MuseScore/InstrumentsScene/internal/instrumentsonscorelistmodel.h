@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <map>
+
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 #include "modularity/ioc.h"
@@ -38,10 +40,10 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
 
     QML_ELEMENT
 
+public:
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
     muse::ContextInject<project::IProjectSession> context = { this };
 
-public:
     InstrumentsOnScoreListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -75,7 +77,6 @@ private:
 
     void loadOrders();
 
-    int resolveInstrumentSequenceNumber(const muse::String& instrumentId) const;
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
     void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);
@@ -93,5 +94,7 @@ private:
 
     notation::ScoreOrderList m_scoreOrders;
     int m_currentOrderIndex = 0;
+
+    std::map<muse::ID, QString> m_sharedParts; // part id -> instrument id
 };
 }
