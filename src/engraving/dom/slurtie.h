@@ -114,6 +114,9 @@ public:
     int subtype() const override;
     TranslatableString subtypeUserName() const override;
 
+    bool masksOverSignatures() const;
+    bool masksOverMeasureNumbers() const;
+
     void setSlurOffset(Grip i, const PointF& val) { m_ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
@@ -152,6 +155,7 @@ protected:
 //   @P lineType       int  (0 - solid, 1 - dotted, 2 - dashed, 3 - wide dashed)
 //   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
 //   @P maskSlurTie    enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
+//   @P maskSlurTieMeasureNumbers enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner
@@ -182,6 +186,8 @@ public:
 
     AutoOnOff maskSlurTie() const { return m_maskSlurTie; }
     void setMaskSlurTie(AutoOnOff val) { m_maskSlurTie = val; }
+    AutoOnOff maskSlurTieMeasureNumbers() const { return m_maskSlurTieMeasureNumbers; }
+    void setMaskSlurTieMeasureNumbers(AutoOnOff val) { m_maskSlurTieMeasureNumbers = val; }
 
     virtual SlurTieSegment* newSlurTieSegment() = 0;
 
@@ -203,5 +209,6 @@ private:
 
     SlurStyleType m_styleType = SlurStyleType::Undefined;
     AutoOnOff m_maskSlurTie = AutoOnOff::AUTO;
+    AutoOnOff m_maskSlurTieMeasureNumbers = AutoOnOff::AUTO;
 };
 }

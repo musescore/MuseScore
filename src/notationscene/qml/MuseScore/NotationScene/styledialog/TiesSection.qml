@@ -192,6 +192,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.maskTies
             }
+
+            CheckBox {
+                id: maskTiesOverMeasureNumbersCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask ties over measure numbers")
+                checked: root.pageModel.maskTiesOverMeasureNumbers.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskTiesOverMeasureNumbers.value = !maskTiesOverMeasureNumbersCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskTiesOverMeasureNumbers
+            }
         }
 
         ColumnLayout {

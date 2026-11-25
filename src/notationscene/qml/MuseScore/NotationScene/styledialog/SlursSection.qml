@@ -149,6 +149,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.maskSlurs
             }
+
+            CheckBox {
+                id: maskSlursOverMeasureNumbersCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask slurs over measure numbers")
+                checked: root.pageModel.maskSlursOverMeasureNumbers.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskSlursOverMeasureNumbers.value = !maskSlursOverMeasureNumbersCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskSlursOverMeasureNumbers
+            }
         }
 
         ColumnLayout {

@@ -47,10 +47,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
-    bool maskSlurs = ctx.conf().styleB(Sid::maskSlurs);
-    bool maskTies = ctx.conf().styleB(Sid::maskTies);
-    bool maskOverMeasureNumbers = ctx.conf().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()
-                                  == MeasureNumberAvoidance::MASK_SPANNERS;
 
     for (const System* system : page->systems()) {
         std::vector<TextBase*> allSystemText = collectAllSystemText(system);
@@ -91,13 +87,11 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 
             spannerSeg->mutldata()->setMask(Shape());
 
-            AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
-            const bool maskOverSignatures = slurTieMaskOverride == AutoOnOff::ON
-                                            || (slurTieMaskOverride == AutoOnOff::AUTO
-                                                && ((maskSlurs && spannerSeg->isSlurSegment())
-                                                    || (maskTies && spannerSeg->isTieSegment())));
+            SlurTieSegment* slurTieSeg = toSlurTieSegment(spannerSeg);
+            const bool maskOverSignatures = slurTieSeg->masksOverSignatures();
+            const bool maskOverMeasureNumbers = slurTieSeg->masksOverMeasureNumbers();
             if (maskOverSignatures || maskOverMeasureNumbers) {
-                computeSlurTieMasks(toSlurTieSegment(spannerSeg), maskOverSignatures, maskOverMeasureNumbers);
+                computeSlurTieMasks(slurTieSeg, maskOverSignatures, maskOverMeasureNumbers);
             }
         }
     }

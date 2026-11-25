@@ -626,6 +626,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(tieMinDistance,                             0.5_sp),
     styleDef(maskSlurs,                                  true),
     styleDef(maskTies,                                   true),
+    styleDef(maskSlursOverMeasureNumbers,                false),
+    styleDef(maskTiesOverMeasureNumbers,                 false),
     styleDef(laissezVibMinDistance,                      0.5_sp),
     styleDef(headerToLineStartDistance,                  1.0_sp),
     styleDef(lineEndToBarlineDistance,                   0.25_sp),

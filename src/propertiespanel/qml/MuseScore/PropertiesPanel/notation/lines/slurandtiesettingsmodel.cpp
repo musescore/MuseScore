@@ -94,6 +94,11 @@ PropertyItem* SlurAndTieSettingsModel::maskSlurTie() const
     return m_maskSlurTie;
 }
 
+PropertyItem* SlurAndTieSettingsModel::maskSlurTieMeasureNumbers() const
+{
+    return m_maskSlurTieMeasureNumbers;
+}
+
 bool SlurAndTieSettingsModel::isLaissezVib() const
 {
     return m_isLaissezVib;
@@ -133,6 +138,7 @@ void SlurAndTieSettingsModel::createProperties()
     m_tiePlacement = buildPropertyItem(mu::engraving::Pid::TIE_PLACEMENT);
     m_minLength = buildPropertyItem(mu::engraving::Pid::MIN_LENGTH);
     m_maskSlurTie = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE);
+    m_maskSlurTieMeasureNumbers = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE_MEASURE_NUMBERS);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
@@ -145,6 +151,7 @@ void SlurAndTieSettingsModel::loadProperties()
     loadPropertyItem(m_tiePlacement);
     loadPropertyItem(m_minLength);
     loadPropertyItem(m_maskSlurTie);
+    loadPropertyItem(m_maskSlurTieMeasureNumbers);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
