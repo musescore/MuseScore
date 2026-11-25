@@ -27,8 +27,11 @@
 #include <vector>
 #include <QQuickItem>
 
+#include "accessibility/iaccessibilitycontroller.h"
 #include "project/iprojectsession.h"
 #include "async/asyncable.h"
+#include "global/async/channel.h"
+#include "draw/types/geometry.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/iuicontextconfiguration.h"
 #include "notation/notationtypes.h"
@@ -37,6 +40,7 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 
+#include "automation/notationautomationnavigation.h"
 #include "automation/notationautomationtypes.h"
 
 namespace mu::engraving {
@@ -48,6 +52,7 @@ namespace mu::notation {
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
     muse::ContextInject<muse::ui::IUiContextConfiguration> uiContextConfiguration = { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
@@ -59,6 +64,8 @@ public:
 
     void init();
     void setViewMatrix(const muse::draw::Transform& viewMatrix);
+
+    muse::async::Channel<muse::RectF> showRectRequested() const;
 
 private:
     struct TickStaffRange {
@@ -119,6 +126,13 @@ private:
     bool isMuseSamplerDynamics(const mu::engraving::Staff* staff, int tick) const;
 
     void navigate(MoveDirection direction, bool toTopBottom);
+    std::vector<NotationAutomationNavigation::Target> selectedPoints() const;
+    void selectPoint(const NotationAutomationNavigation::Target& target);
+    void clearSelectedPoints(const muse::uicomponents::PolylinePlot* except = nullptr);
+    void showPoint(const NotationAutomationNavigation::Target& target);
+    void announcePoint(const NotationAutomationNavigation::Target& target, bool includeScope);
+    void announce(const QString& announcement);
+    std::optional<muse::real_t> pointValue(const PolylineKey& key, const PointData& pointData) const;
 
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
@@ -135,5 +149,7 @@ private:
     bool m_updateScheduled = false;
 
     muse::uicomponents::PolylinePlot* m_currentlyEditedPolyline = nullptr;
+
+    muse::async::Channel<muse::RectF> m_showRectRequested;
 };
 }

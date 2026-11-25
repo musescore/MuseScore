@@ -198,6 +198,7 @@ protected:
 
     void moveCanvasToCenter();
     bool moveCanvasToPosition(const muse::PointF& logicPos);
+    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
 
     muse::RectF notationContentRect() const override;
 
@@ -260,7 +261,6 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
     void onNoteInputStateChanged();

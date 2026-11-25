@@ -22,7 +22,9 @@
 
 #include "notationautomationcontroller.h"
 
+#include "automation/notationautomationaccessibility.h"
 #include "automation/notationautomationdisplaymapping.h"
+#include "automation/notationautomationnavigation.h"
 #include "automation/notationautomationutils.h"
 
 #include <algorithm>
@@ -191,6 +193,10 @@ void NotationAutomationController::init()
     onCurrentNotationChanged();
 
     automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+        if (!automation()->isAutomationModeEnabled()) {
+            clearSelectedPoints();
+        }
+
         if (automation()->isAutomationModeEnabled() && !m_pendingChanges.isEmpty()) {
             applyAutomationChanges(m_pendingChanges);
             m_pendingChanges.clear();
@@ -463,6 +469,13 @@ void NotationAutomationController::buildAndAddPolylineForStaffRegion(const Syste
             return;
         }
         requestRemovePoint(pointsData.at(pointIdx), key);
+    });
+
+    QObject::connect(polyline, &muse::uicomponents::PolylinePlot::selectedPointsChanged, [this, polyline]() {
+        // Only one polyline holds the selection at a time (e.g. clicking a point deselects the points of the others)
+        if (polyline->hasSelectedPoints()) {
+            clearSelectedPoints(polyline);
+        }
     });
 }
 
@@ -1248,29 +1261,133 @@ bool NotationAutomationController::isMuseSamplerDynamics(const Staff* staff, int
 
 void NotationAutomationController::navigate(MoveDirection direction, bool toTopBottom)
 {
-    switch (direction) {
-    case MoveDirection::Up:
-        LOGD() << "GOING UP";
-        if (toTopBottom) {
-            LOGD() << "TO TOP";
-        }
-        return;
-    case MoveDirection::Down:
-        LOGD() << "GOING DOWN";
-        if (toTopBottom) {
-            LOGD() << "TO BOTTOM";
-        }
-        return;
-    case MoveDirection::Left:
-        LOGD() << "GOING LEFT";
-        return;
-    case MoveDirection::Right:
-        LOGD() << "GOING RIGHT";
-        return;
-    case MoveDirection::Undefined:
-        LOGD() << "GOING BADLY";
+    if (!m_linesParent || !m_linesParent->isVisible() || m_currentlyEditedPolyline) {
         return;
     }
+
+    const std::vector<NotationAutomationNavigation::Target> selection = selectedPoints();
+    const std::optional<NotationAutomationNavigation::Target> target = NotationAutomationNavigation::findTarget(m_polylinesDataMap,
+                                                                                                                selection, direction,
+                                                                                                                toTopBottom);
+    if (!target) {
+        announce(NotationAutomationAccessibility::noTargetDescription(direction, !selection.empty()));
+        return;
+    }
+
+    const staff_idx_t staffIdx = target->key.staffIdx;
+    const bool staffChanged = std::none_of(selection.begin(), selection.end(), [staffIdx](const NotationAutomationNavigation::Target& s) {
+        return s.key.staffIdx == staffIdx;
+    });
+
+    selectPoint(target.value());
+    showPoint(target.value());
+    announcePoint(target.value(), staffChanged);
+}
+
+std::vector<NotationAutomationNavigation::Target> NotationAutomationController::selectedPoints() const
+{
+    std::vector<NotationAutomationNavigation::Target> selected;
+
+    for (const auto& [key, data] : m_polylinesDataMap) {
+        if (!data.polyline || !data.polyline->hasSelectedPoints()) {
+            continue;
+        }
+
+        for (const int pointIdx : data.polyline->selectedPointsIndices()) {
+            if (pointIdx < data.pointsData.size()) {
+                selected.push_back({ key, pointIdx });
+            }
+        }
+    }
+
+    return selected;
+}
+
+void NotationAutomationController::selectPoint(const NotationAutomationNavigation::Target& target)
+{
+    PolylinePlot* polyline = m_polylinesDataMap.at(target.key).polyline;
+    IF_ASSERT_FAILED(polyline) {
+        return;
+    }
+    clearSelectedPoints(polyline);
+    polyline->setSelectedPointsIndices({ target.pointIdx });
+}
+
+void NotationAutomationController::clearSelectedPoints(const PolylinePlot* except)
+{
+    for (const auto& entry : m_polylinesDataMap) {
+        PolylinePlot* polyline = entry.second.polyline;
+        if (polyline && polyline != except) {
+            polyline->clearSelectedPoints();
+        }
+    }
+}
+
+void NotationAutomationController::showPoint(const NotationAutomationNavigation::Target& target)
+{
+    const PolylineKey& key = target.key;
+    const PolylineData& data = m_polylinesDataMap.at(key);
+
+    const muse::RectF regionRect = regionCanvasRect(key.system, key.staffIdx, data.startMeasure, data.endMeasure);
+    IF_ASSERT_FAILED(regionRect.isValid() && target.pointIdx >= 0 && target.pointIdx < data.pointsData.size()) {
+        return;
+    }
+
+    // Points are positioned relative to their region - show a staff-high square around the point
+    const double x = regionRect.x() + data.pointsData.at(target.pointIdx).qPointF.x() * regionRect.width();
+    const double size = regionRect.height();
+    m_showRectRequested.send(muse::RectF(x - size / 2.0, regionRect.y(), size, size));
+}
+
+void NotationAutomationController::announcePoint(const NotationAutomationNavigation::Target& target, bool includeScope)
+{
+    const PolylineKey& key = target.key;
+    const PolylineData& data = m_polylinesDataMap.at(key);
+
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(staff && target.pointIdx >= 0 && target.pointIdx < data.pointsData.size()) {
+        return;
+    }
+
+    const PointData& pointData = data.pointsData.at(target.pointIdx);
+
+    NotationAutomationAccessibility::PointInfo info;
+    info.lane = notationConfiguration()->currentAutomationLane();
+    info.curveKey = currentCurveKey(staff);
+    info.staff = staff;
+    info.tick = pointData.tick;
+    info.pointType = pointData.pointType;
+    info.value = pointValue(key, pointData);
+
+    announce(NotationAutomationAccessibility::pointDescription(info, includeScope));
+}
+
+void NotationAutomationController::announce(const QString& announcement)
+{
+    if (accessibilityController()) {
+        accessibilityController()->announce(announcement);
+    }
+}
+
+std::optional<muse::real_t> NotationAutomationController::pointValue(const PolylineKey& key, const PointData& pointData) const
+{
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    if (!staff || !automationData()) {
+        return std::nullopt;
+    }
+
+    const mu::engraving::AutomationCurve& curve = automationData()->curve(currentCurveKey(staff));
+    const auto it = curve.find(pointData.tick);
+    if (it == curve.end()) {
+        return std::nullopt;
+    }
+
+    return pointData.pointType == PointData::PointType::IN ? mu::engraving::resolveInValue(curve, it) : it->second.value.outValue;
+}
+
+muse::async::Channel<muse::RectF> NotationAutomationController::showRectRequested() const
+{
+    return m_showRectRequested;
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const

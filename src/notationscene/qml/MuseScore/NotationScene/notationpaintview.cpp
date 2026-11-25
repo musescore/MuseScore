@@ -48,6 +48,9 @@ void NotationPaintView::onNotationSetup()
     });
 
     m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+    m_notationAutomationController->showRectRequested().onReceive(this, [this](const muse::RectF& logicRect) {
+        adjustCanvasPosition(logicRect);
+    });
 
     AbstractNotationPaintView::onNotationSetup();
 }
