@@ -30,6 +30,7 @@
 
 #include "engraving/dom/score.h"
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/spanner.h"
 
 #include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
@@ -155,9 +156,24 @@ void AbstractNotationPaintView::load()
         m_lastPlaybackPositionUpdateTimeNs = m_elapsedTimer.nsecsElapsed();
     }, async::Asyncable::Mode::SetReplace);
 
-    playbackState()->isPlayingChanged().onReceive(this, [this](bool) {
+    playbackState()->isPlayingChanged().onReceive(this,
+                                                  [this](bool) {
         onPlayingChanged();
-    }, async::Asyncable::Mode::SetReplace);
+
+        // The playback influence highlight is hidden while playing, so it must be repainted either way:
+        //
+        // If going from playing to not playing, then any influence highlights need to be displayed for the current
+        // note if that setting is turned on.
+        //
+        // If going from not playing to playing, then any influence highlights that were displayed need to be removed
+        // (we don't display influence highlights during playback, ever)
+        const INotationInteractionPtr interaction = notationInteraction();
+
+        if (interaction && !interaction->playbackInfluenceHighlight().empty()) {
+            scheduleRedraw();
+        }
+    }, async::Asyncable::Mode::SetReplace
+                                                  );
 
     scheduleRedraw();
 }
@@ -309,6 +325,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         scheduleRedraw();
     });
 
+    interaction->playbackInfluenceHighlightChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
         onShowItemRequested(request);
     });
@@ -426,6 +446,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->noteInput()->stateChanged().disconnect(this);
     interaction->noteInput()->noteInputStarted().disconnect(this);
     interaction->selectionChanged().disconnect(this);
+    interaction->playbackInfluenceHighlightChanged().disconnect(this);
     interaction->showItemRequested().disconnect(this);
     interaction->textEditingStarted().disconnect(this);
     interaction->textEditingEnded().disconnect(this);
@@ -619,13 +640,64 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
     scheduleRedraw();
 }
 
+//! All of the item is in view, or for part of a spanner, any part of any of the spanner's segments
+static bool isItemInView(const EngravingItem* item, const RectF& viewRect)
+{
+    if (item->isSpannerSegment()) {
+        const mu::engraving::Spanner* spanner = mu::engraving::toSpannerSegment(item)->spanner();
+
+        return std::ranges::any_of(spanner->spannerSegments(), [&viewRect](const mu::engraving::SpannerSegment* segment) {
+            return viewRect.intersects(segment->canvasBoundingRect());
+        });
+    }
+
+    return viewRect.contains(item->canvasBoundingRect());
+}
+
 void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
 {
+    RectF viewRect = viewport();
+
+    if (request.endCentering) {
+        const std::optional<PointF> savedPosition = m_viewPositionBeforeCentering;
+
+        m_viewPositionBeforeCentering.reset();
+
+        // Explicit requests only (e.g. from the Properties panel); never fight the playback cursor
+        if (request.restoreView && savedPosition && !playbackState()->isPlaying()) {
+            moveCanvasToPosition(*savedPosition);
+        }
+
+        return;
+    }
+
     IF_ASSERT_FAILED(request.item) {
         return;
     }
 
-    RectF viewRect = viewport();
+    if (request.center) {
+        // Explicit requests only (e.g. from the Properties panel); never fight the playback cursor
+        if (playbackState()->isPlaying()) {
+            return;
+        }
+
+        // Enough of it shows already to see it in context
+        if (isItemInView(request.item, viewRect)) {
+            return;
+        }
+
+        if (!m_viewPositionBeforeCentering) {
+            m_viewPositionBeforeCentering = viewRect.topLeft();
+        }
+
+        const PointF topLeft(
+            request.showRect.center().x() - viewRect.width() / 2,
+            request.showRect.center().y() - viewRect.height() / 2
+            );
+
+        moveCanvasToPosition(topLeft);
+        return;
+    }
 
     RectF showRect = request.showRect;
     RectF itemBoundingRect = request.item->canvasBoundingRect();
@@ -755,7 +827,17 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
     const bool isAutomation = automationMode();
-    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
+
+    // During playback the selected note may be nowhere near the view, so its influence isn't shown
+    const bool showPlaybackInfluence = !isPrinting && !playbackState()->isPlaying();
+
+    notation()->painting()->paintView(
+        painter,
+        toLogical(rect),
+        isPrinting,
+        isAutomation,
+        showPlaybackInfluence
+        );
 
     const INotationNoteInputPtr noteInput = notationNoteInput();
     if (noteInput->isNoteInputMode() && !publishMode()) {

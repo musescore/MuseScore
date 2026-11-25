@@ -23,7 +23,10 @@
 
 #include <QScreen>
 
+#include <unordered_set>
+
 #include "engraving/dom/score.h"
+#include "engraving/dom/spanner.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
@@ -184,7 +187,40 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
     }
 }
 
-void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPrinting, bool isAutomation)
+namespace notationpainting_detail {
+//! Default for the playback influence highlight (60% opaque mild orange); becomes a preference in Phase 4
+const Color PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR(0xdb, 0x91, 0x37, 0x99);
+
+//! An item is highlighted if it, its spanner, or anything it belongs to (e.g. the chord of a
+//! highlighted grace chord's notes) is in the set. Stops at the segment: nothing above it is ever highlighted.
+bool isPlaybackInfluenceHighlighted(const EngravingItem* item, const std::unordered_set<const EngravingItem*>& highlight)
+{
+    const EngravingObject* current = item;
+
+    while (current && current->isEngravingItem() && !current->isSegment() && !current->isMeasure() && !current->isSystem()) {
+        const EngravingItem* currentItem = static_cast<const EngravingItem*>(current);
+
+        if (highlight.contains(currentItem)) {
+            return true;
+        }
+
+        if (currentItem->isSpannerSegment() && highlight.contains(toSpannerSegment(currentItem)->spanner())) {
+            return true;
+        }
+
+        current = current->parent();
+    }
+
+    return false;
+}
+} // namespace notationpainting_detail
+
+void NotationPainting::paintView(
+    Painter* painter,
+    const RectF& frameRect,
+    bool isPrinting,
+    bool isAutomation,
+    bool showPlaybackInfluence)
 {
     Options opt;
     opt.isSetViewport = false;
@@ -199,8 +235,26 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
             if (item->isDynamic() || item->isHairpinSegment()) {
                 return defaultColor;
             }
+
             defaultColor.setAlpha(defaultColor.alpha() * 0.4f);
             return defaultColor;
+        };
+    }
+
+    const std::unordered_set<const EngravingItem*>& highlight = m_notation->interaction()->playbackInfluenceHighlight();
+
+    if (showPlaybackInfluence && !highlight.empty()) {
+        const auto fallback = opt.overrideItemColor;
+
+        // Only used during doPaint() below, so capturing the set by reference is safe
+        opt.overrideItemColor = [&highlight, fallback](const EngravingItem* item, Color defaultColor) {
+            if (notationpainting_detail::isPlaybackInfluenceHighlighted(item, highlight)) {
+                return notationpainting_detail::PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR;
+            }
+
+            return fallback
+                   ? fallback(item, defaultColor)
+                   : defaultColor;
         };
     }
 

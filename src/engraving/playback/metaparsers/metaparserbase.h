@@ -20,8 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef MU_ENGRAVING_PARSERBASE_H
 #define MU_ENGRAVING_PARSERBASE_H
+
+#include <set>
 
 #include "log.h"
 #include "mpe/mpetypes.h"
@@ -41,7 +44,26 @@ public:
             return;
         }
 
+        if (!context.sourceRecorder) {
+            T::doParse(item, context, result);
+            return;
+        }
+
+        std::set<muse::mpe::ArticulationType> typesBefore;
+
+        for (const auto& pair : result) {
+            typesBefore.insert(pair.first);
+        }
+
         T::doParse(item, context, result);
+
+        // Nested parses (e.g. a tie inside a slur) finish first, so they claim
+        // their types before the enclosing item can
+        for (const auto& pair : result) {
+            if (!typesBefore.contains(pair.first)) {
+                context.sourceRecorder->sources.try_emplace(pair.first, item);
+            }
+        }
     }
 
 protected:
@@ -51,6 +73,6 @@ protected:
                        muse::mpe::ArticulationAppliedData(std::forward<muse::mpe::ArticulationMeta>(meta), 0, muse::mpe::HUNDRED_PERCENT));
     }
 };
-}
+} // namespace mu::engraving
 
 #endif // MU_ENGRAVING_PARSERBASE_H

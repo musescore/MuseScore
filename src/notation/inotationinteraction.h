@@ -23,6 +23,8 @@
 #pragma once
 
 #include <functional>
+#include <unordered_set>
+#include <vector>
 
 #include "async/notification.h"
 
@@ -336,10 +338,27 @@ public:
     struct ShowItemRequest {
         const EngravingItem* item = nullptr;
         muse::RectF showRect;
+        bool center = false;        // scroll so showRect is in the middle of the view, unless the item is already in view
+        bool endCentering = false;  // no item: ends a series of center requests; see endCentering()
+        bool restoreView = false;   // with endCentering: go back to where the view was before the series
     };
 
     virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
+
+    //! Scrolls the view so the item is centered, unless it's already in view: all of it, or for a spanner, any part
+    //! of it (ignores the "automatically pan" setting: this is an explicit request)
+    virtual void centerOnItem(const mu::engraving::EngravingItem* item) = 0;
+
+    //! Ends a series of centerOnItem calls. restoreView: scroll back to exactly where the view was before the
+    //! first of them that moved it (no scrolling if none did); otherwise the view stays where it is.
+    virtual void endCentering(bool restoreView) = 0;
+
+    //! Score items temporarily colored to show what affects the selected note's playback; empty = none.
+    //! Linked copies (in parts or the main score) are colored too.
+    virtual void setPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) = 0;
+    virtual const std::unordered_set<const mu::engraving::EngravingItem*>& playbackInfluenceHighlight() const = 0;
+    virtual muse::async::Notification playbackInfluenceHighlightChanged() const = 0;
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
 

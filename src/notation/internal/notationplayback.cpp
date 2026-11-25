@@ -466,7 +466,22 @@ NotePlaybackInfo NotationPlayback::notePlaybackInfo(const Note* note) const
         return {};
     }
 
-    return mu::engraving::collectNotePlaybackInfo(note, m_playbackModel.isPlayRepeatsEnabled());
+    NotePlaybackInfo info = mu::engraving::collectNotePlaybackInfo(note, m_playbackModel.isPlayRepeatsEnabled());
+
+    if (!info.isValid()) {
+        return info;
+    }
+
+    // Articulations don't change between repeat passes, so the first pass is enough
+    const NotePlaybackPass& firstPass = info.passes.front();
+    const int tickPositionOffset = firstPass.utick - info.note->tick().ticks();
+
+    mu::engraving::addArticulationMarkings(
+        info,
+        m_playbackModel.articulationSources(info.attackNote, tickPositionOffset)
+        );
+
+    return info;
 }
 
 double NotationPlayback::tempoMultiplier() const

@@ -32,10 +32,17 @@
 #include "dom/staff.h"
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
+#include "dom/laissezvib.h"
+#include "dom/tapping.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 
 #include "editing/transaction/undoablecommand.h"
+
+#include "metaparsers/chordarticulationsparser.h"
+#include "metaparsers/notearticulationsparser.h"
+#include "metaparsers/internal/tremolometaparser.h"
+#include "utils/expressionutils.h"
 
 #include "defer.h"
 #include "log.h"
@@ -1187,6 +1194,101 @@ InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& 
 InstrumentTrackId PlaybackModel::idKey(const ID& partId, const String& instrumentId) const
 {
     return { partId, instrumentId };
+}
+
+std::map<ArticulationType, const EngravingItem*> PlaybackModel::articulationSources(const Note* note, int tickPositionOffset) const
+{
+    std::map<ArticulationType, const EngravingItem*> result;
+
+    if (!note || !m_playbackCtx) {
+        return result;
+    }
+
+    // A grace note is performed as part of its main chord
+    const Chord* chord = note->chord();
+
+    if (chord->isGrace() && chord->parent() && chord->parent()->isChord()) {
+        chord = static_cast<const Chord*>(chord->parent());
+    }
+
+    const ArticulationsProfilePtr profile = defaultActiculationProfile(idKey(chord));
+
+    if (!profile) {
+        return result;
+    }
+
+    ArticulationSourceRecorder recorder;
+
+    RenderingContext ctx = buildRenderingCtx(chord, tickPositionOffset, profile, m_playbackCtx);
+    ctx.sourceRecorder = &recorder;
+
+    if (!ctx.isValid()) {
+        return result;
+    }
+
+    ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
+
+    ArticulationMap noteArticulations;
+    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteArticulations);
+
+    // The second chord of a two-chord tremolo is played as part of the first chord's tremolo, so only the first
+    // chord's parse finds it
+    const TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
+
+    const bool isSecondTremoloChord = (tremoloTwo != nullptr)
+                                      && (tremoloTwo->playTremolo())
+                                      && (tremoloTwo->chord1() != nullptr)
+                                      && (tremoloTwo->chord2() == chord);
+
+    if (isSecondTremoloChord) {
+        RenderingContext firstChordCtx = buildRenderingCtx(tremoloTwo->chord1(), tickPositionOffset, profile, m_playbackCtx);
+        firstChordCtx.sourceRecorder = &recorder;
+
+        ArticulationMap tremoloArticulations;
+        TremoloTwoMetaParser::parse(tremoloTwo, firstChordCtx, tremoloArticulations);
+    }
+
+    // Types that no nested item claimed were added by the chord or note parse itself
+    const std::pair<timestamp_t, PlayingTechniqueType> technique = m_playbackCtx->playingTechnique(
+        note->track(),
+        chord->tick().ticks() + tickPositionOffset
+        );
+
+    const ArticulationType techniqueType = articulationFromPlayTechType(technique.second);
+
+    for (const auto& [type, item] : recorder.sources) {
+        // A selected grace note isn't affected by being a grace note: the main note is
+        if (item == note->chord() && item != chord) {
+            continue;
+        }
+
+        if (item == chord) {
+            const bool isTapping = (type == ArticulationType::LeftHandTapping)
+                                   || (type == ArticulationType::RightHandTapping);
+
+            if (type == ArticulationType::Breath) {
+                result.emplace(type, chord->hasBreathMark());
+            } else if (isTapping) {
+                result.emplace(type, chord->tapping());
+            }
+
+            continue;
+        }
+
+        if (item == note && type == techniqueType) {
+            continue; // comes from earlier playing technique text
+        }
+
+        if (item == note && type == ArticulationType::LaissezVibrer) {
+            result.emplace(type, note->laissezVib());
+            continue;
+        }
+
+        // Anything else claimed by the note itself is its notehead, ghost parentheses, or attached symbols
+        result.emplace(type, item);
+    }
+
+    return result;
 }
 
 muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const

@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <optional>
+
 #include <QTimer>
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
@@ -319,6 +321,9 @@ private:
 
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
+
+    //! Where the view was before the first of a series of centering requests moved it (see INotationInteraction::endCentering)
+    std::optional<muse::PointF> m_viewPositionBeforeCentering;
 
     struct PageCache {
         const Page* page = nullptr;

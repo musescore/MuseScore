@@ -22,7 +22,10 @@
 
 #pragma once
 
+#include <map>
 #include <vector>
+
+#include "mpe/mpetypes.h"
 
 #include "engraving/types/bps.h"
 #include "engraving/types/types.h"
@@ -48,10 +51,21 @@ struct NotePlaybackPass {
     BeatsPerSecond multipliedTempo;  // after the playback speed setting
     bool isDefaultTempo = false;     // nothing in the score sets the tempo here
     std::vector<NotePlaybackSource> tempoSources;
+    std::vector<NotePlaybackSource> tempoOrigins;  // what the accel./rit. among tempoSources start from
 
     double dynamicValue = 0.0;      // normalized [0, 1], as used by playback
     bool isDefaultDynamic = false;  // nothing in the score sets the dynamic here
     std::vector<NotePlaybackSource> dynamicSources;
+    std::vector<NotePlaybackSource> dynamicOrigins;  // what the hairpins among dynamicSources start from
+};
+
+//! A score item that changes how playback performs the note (staccato, slur, pedal, trill, tie, fermata, ...)
+struct NotePlaybackMarking {
+    const EngravingItem* item = nullptr;
+
+    // What playback does because of the item; empty for items that change timing
+    // rather than articulation (ties, fermatas)
+    std::vector<muse::mpe::ArticulationType> effects;
 };
 
 struct NotePlaybackInfo {
@@ -62,12 +76,17 @@ struct NotePlaybackInfo {
 
     std::vector<NotePlaybackPass> passes;
 
+    std::vector<NotePlaybackMarking> markings;
+
     bool isValid() const;
 };
 
 //! Reads the score's automation curves and tempo timeline, i.e. the same data playback uses.
 //! expandRepeats must match the "play repeats" setting of the playback model.
 NotePlaybackInfo collectNotePlaybackInfo(const Note* note, bool expandRepeats);
+
+//! Adds the items that PlaybackModel::articulationSources() found, one marking per item
+void addArticulationMarkings(NotePlaybackInfo& info, const std::map<muse::mpe::ArticulationType, const EngravingItem*>& sources);
 
 //! This is the ordinary dynamic (pppppp..ffffff) whose playback level is closest to normalizedValue
 DynamicType nearestOrdinaryDynamic(double normalizedValue);

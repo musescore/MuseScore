@@ -90,6 +90,11 @@ public:
     void triggerCountIn(int tick, muse::mpe::duration_t& countInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
+
+    //! Runs the same articulation parsers playback uses, on the note's chord and on the note itself,
+    //! and returns the score item that produced each articulation type. Playing techniques set by
+    //! earlier text (pizz., mute, ...) are left out; they don't come from an item on this chord.
+    std::map<muse::mpe::ArticulationType, const EngravingItem*> articulationSources(const Note* note, int tickPositionOffset) const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
 
