@@ -121,6 +121,7 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
             setItems(items);
         }
         verifyScoreOrder();
+        emit soloistStateChanged();
         return true;
     case RoleName:
     case RoleDescription:
@@ -159,6 +160,20 @@ QStringList InstrumentsOnScoreListModel::orders() const
 int InstrumentsOnScoreListModel::currentOrderIndex() const
 {
     return m_currentOrderIndex;
+}
+
+bool InstrumentsOnScoreListModel::isSoloistAvailable() const
+{
+    return !selectedInstruments().isEmpty();
+}
+
+bool InstrumentsOnScoreListModel::isSelectionSoloist() const
+{
+    const QList<InstrumentItem*> instruments = selectedInstruments();
+
+    return !instruments.isEmpty() && std::all_of(instruments.cbegin(), instruments.cend(), [](const InstrumentItem* instrument) {
+        return instrument->isSoloist;
+    });
 }
 
 void InstrumentsOnScoreListModel::load()
@@ -320,6 +335,56 @@ void InstrumentsOnScoreListModel::removeSelectedBlocks()
     SelectableItemListModel::removeSelection();
 }
 
+void InstrumentsOnScoreListModel::toggleSoloistForSelection()
+{
+    const QList<InstrumentItem*> instruments = selectedInstruments();
+    if (instruments.isEmpty()) {
+        return;
+    }
+
+    // In a mixed selection, all of them become soloists
+    const bool makeSoloists = !isSelectionSoloist();
+
+    ItemList items = this->items();
+
+    // setItems() clears the selection: it's restored afterwards, so that the selection can be toggled back
+    ItemList selectedItems;
+    for (int row : selection()->selectedRows()) {
+        selectedItems << items.at(row);
+    }
+
+    bool reordered = false;
+    for (InstrumentItem* instrument : instruments) {
+        instrument->isSoloist = makeSoloists;
+
+        // Soloists are sorted separately, but a group's instruments stay in their group
+        if (isGroupMember(instrument)) {
+            const QModelIndex changed = index(static_cast<int>(this->items().indexOf(instrument)));
+            emit dataChanged(changed, changed, { RoleIsSoloist });
+        } else {
+            items.removeAll(instrument);
+            insertInstrument(items, instrument);
+            reordered = true;
+        }
+    }
+
+    if (reordered) {
+        setItems(items);
+
+        QItemSelection restored;
+        for (const QObject* item : selectedItems) {
+            const QModelIndex selected = index(static_cast<int>(items.indexOf(item)));
+            restored.select(selected, selected);
+        }
+        selection()->select(restored, QItemSelectionModel::Select);
+    }
+
+    verifyScoreOrder();
+
+    // Also when only the soloist flags changed, not the selection
+    emit soloistStateChanged();
+}
+
 QVariant InstrumentsOnScoreListModel::currentOrder() const
 {
     const ScoreOrder& order = currentScoreOrder();
@@ -405,6 +470,25 @@ void InstrumentsOnScoreListModel::doSetCurrentOrderIndex(int index)
     m_currentOrderIndex = index;
 
     emit currentOrderChanged();
+}
+
+QList<InstrumentsOnScoreListModel::InstrumentItem*> InstrumentsOnScoreListModel::selectedInstruments() const
+{
+    QList<int> rows = selection()->selectedRows();
+    std::sort(rows.begin(), rows.end());
+
+    // Groups themselves can't be soloists (their instruments can)
+    QList<InstrumentItem*> result;
+    result.reserve(rows.size());
+
+    for (int row : rows) {
+        auto instrument = static_cast<InstrumentItem*>(items().at(row));
+        if (!instrument->isSharedGroupHeader) {
+            result << instrument;
+        }
+    }
+
+    return result;
 }
 
 InstrumentsOnScoreListModel::SharedGroupRole InstrumentsOnScoreListModel::sharedGroupRole(int row) const
@@ -576,6 +660,8 @@ void InstrumentsOnScoreListModel::onUpdateOperationsAvailability()
     const std::optional<RowRange> moving = movingRows();
     setIsMovingUpAvailable(moving && moving->first > 0);
     setIsMovingDownAvailable(moving && moving->last < rowCount() - 1);
+
+    emit soloistStateChanged();
 }
 
 void InstrumentsOnScoreListModel::onRowsMoved()

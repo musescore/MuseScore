@@ -40,6 +40,9 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
 
+    Q_PROPERTY(bool isSoloistAvailable READ isSoloistAvailable NOTIFY soloistStateChanged)
+    Q_PROPERTY(bool isSelectionSoloist READ isSelectionSoloist NOTIFY soloistStateChanged)
+
     QML_ELEMENT
 
 public:
@@ -64,6 +67,9 @@ public:
     QStringList orders() const;
     int currentOrderIndex() const;
 
+    bool isSoloistAvailable() const;
+    bool isSelectionSoloist() const;
+
     Q_INVOKABLE void load();
     Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
 
@@ -71,6 +77,8 @@ public:
     Q_INVOKABLE void moveSelectedBlocksDown();
 
     Q_INVOKABLE void removeSelectedBlocks();
+
+    Q_INVOKABLE void toggleSoloistForSelection();
 
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
@@ -83,6 +91,7 @@ public slots:
 signals:
     void ordersChanged();
     void currentOrderChanged();
+    void soloistStateChanged();
 
 private:
     class InstrumentItem;
@@ -103,6 +112,8 @@ private:
     };
 
     void loadOrders();
+
+    QList<InstrumentItem*> selectedInstruments() const;
 
     SharedGroupRole sharedGroupRole(int row) const;
     bool isGroupMember(const InstrumentItem* instrument) const;

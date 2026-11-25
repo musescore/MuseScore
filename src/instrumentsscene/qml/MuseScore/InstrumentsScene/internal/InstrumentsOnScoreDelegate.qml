@@ -32,7 +32,6 @@ import MuseScore.InstrumentsScene
 ListItemBlank {
     id: root
 
-    required property var model
     required isSelected
     required property string name
     required property string description
@@ -177,7 +176,7 @@ ListItemBlank {
             navigation.enabled: expandButton.visible
             navigation.panel: root.navigationPanel
             navigation.row: 1 + root.index
-            navigation.column: 2
+            navigation.column: 1
             navigation.accessible.name: root.isGroupExpanded
                                         //: Collapse a tree item
                                         ? qsTrc("global", "Collapse")
@@ -195,39 +194,13 @@ ListItemBlank {
             anchors.left: parent.left
             // A group's name follows its expand button; its instruments line up with the name
             anchors.leftMargin: root.isInGroup ? prv.rowHeight + 4 : 12
-            anchors.right: soloistButton.visible ? soloistButton.left : parent.right
+            anchors.right: parent.right
             anchors.rightMargin: 4
             anchors.verticalCenter: parent.verticalCenter
 
             horizontalAlignment: Text.AlignLeft
             text: root.isSoloist ? qsTrc("instruments", "Soloist:") + " " + root.name : root.name
             font: root.isGroupMember ? ui.theme.bodyFont : ui.theme.bodyBoldFont
-        }
-
-        FlatButton {
-            id: soloistButton
-
-            anchors.right: parent.right
-            anchors.leftMargin: 4
-            anchors.rightMargin: 4
-            anchors.verticalCenter: parent.verticalCenter
-
-            isNarrow: true
-
-            text: root.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-
-            // Groups themselves can't be soloists (their instruments can)
-            visible: root.isSelected && !root.isGroupHeader
-
-            navigation.name: root.name + "MakeSoloist"
-            navigation.enabled: soloistButton.visible
-            navigation.panel: root.navigationPanel
-            navigation.row: 1 + root.index
-            navigation.column: 1
-
-            onClicked: {
-                root.model.isSoloist = !root.model.isSoloist
-            }
         }
 
         // headers hide their background, and with it the focus border

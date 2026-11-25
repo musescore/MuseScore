@@ -113,13 +113,37 @@ Item {
             }
         }
 
+        // on while all selected are soloists
+        FlatButton {
+            id: makeSoloistButton
+
+            Layout.preferredWidth: makeSoloistButton.width
+
+            navigation.name: "MakeSoloist"
+            navigation.panel: instrumentsView.navigation
+            navigation.row: 0
+            navigation.column: 1
+            navigation.accessible.name: makeSoloistButton.toolTipTitle
+
+            icon: IconCode.ACCOUNT
+            accentButton: root.instrumentsOnScoreModel.isSelectionSoloist
+            toolTipTitle: root.instrumentsOnScoreModel.isSelectionSoloist ? qsTrc("instruments", "Undo soloist")
+                                                                          : qsTrc("instruments", "Make soloist")
+
+            enabled: root.instrumentsOnScoreModel.isSoloistAvailable
+
+            onClicked: {
+                root.instrumentsOnScoreModel.toggleSoloistForSelection()
+            }
+        }
+
         FlatButton {
             Layout.preferredWidth: width
 
             navigation.name: "Delete"
             navigation.panel: instrumentsView.navigation
             navigation.row: 0
-            navigation.column: 1
+            navigation.column: 2
 
             icon: IconCode.DELETE_TANK
             toolTipTitle: qsTrc("instruments", "Remove selected instruments from score")

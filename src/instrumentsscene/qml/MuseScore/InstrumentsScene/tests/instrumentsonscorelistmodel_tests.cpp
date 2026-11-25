@@ -538,6 +538,117 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_OtherRole_Retu
     EXPECT_EQ(rowNames(), QStringList({ "A" }));
 }
 
+// ---- Make soloist
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, IsSoloistAvailable_FollowsSelection)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [THEN] Nothing can be made a soloist without a selection
+    EXPECT_FALSE(m_model->isSoloistAvailable());
+
+    // [WHEN] A is selected
+    m_model->selectRow(0);
+
+    // [THEN] It can be made a soloist
+    EXPECT_TRUE(m_model->isSoloistAvailable());
+
+    // [WHEN] Only the group's header is selected
+    m_model->selectRow(1);
+
+    // [THEN] Groups themselves can't be soloists
+    EXPECT_FALSE(m_model->isSoloistAvailable());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, IsSelectionSoloist_AllSelectedSoloists)
+{
+    // [GIVEN] A and B as soloists, and C
+    addPart(u"A", String(), /*soloist*/ true);
+    addPart(u"B", String(), /*soloist*/ true);
+    addPart(u"C");
+    m_model->load();
+
+    // [WHEN] A and B are selected
+    selectRows({ 0, 1 });
+
+    // [THEN] The selection is soloist
+    EXPECT_TRUE(m_model->isSelectionSoloist());
+
+    // [WHEN] A and C are selected
+    selectRows({ 0, 2 });
+
+    // [THEN] It isn't
+    EXPECT_FALSE(m_model->isSelectionSoloist());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, ToggleSoloistForSelection_MixedSelection_MakesAllSoloists)
+{
+    // [GIVEN] A flute as a soloist, and two violins B and C, in orchestral order
+    m_scoreOrder = m_orders.at(0);
+    addPart(u"A", u"flute", /*soloist*/ true);
+    addPart(u"B", u"violin");
+    addPart(u"C", u"violin");
+    m_model->load();
+
+    // [WHEN] A and C are selected and toggled
+    selectRows({ 0, 2 });
+    m_model->toggleSoloistForSelection();
+
+    // [THEN] Both are soloists, C moves to the soloists, and both stay selected
+    EXPECT_EQ(rowNames(), QStringList({ "A", "C", "B" }));
+    EXPECT_TRUE(rowData(0, "isSoloist").toBool());
+    EXPECT_TRUE(rowData(1, "isSoloist").toBool());
+    EXPECT_TRUE(m_model->isSelectionSoloist());
+    EXPECT_TRUE(rowData(0, "isSelected").toBool());
+    EXPECT_TRUE(rowData(1, "isSelected").toBool());
+    EXPECT_FALSE(rowData(2, "isSelected").toBool());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, ToggleSoloistForSelection_AllSoloists_UndoesSoloist)
+{
+    // [GIVEN] A flute, and a violin B as a soloist, in orchestral order
+    m_scoreOrder = m_orders.at(0);
+    addPart(u"B", u"violin", /*soloist*/ true);
+    addPart(u"A", u"flute");
+    m_model->load();
+
+    // [WHEN] B is toggled
+    m_model->selectRow(0);
+    m_model->toggleSoloistForSelection();
+
+    // [THEN] It's no longer a soloist, and goes back among the strings, after the flute
+    EXPECT_EQ(rowNames(), QStringList({ "A", "B" }));
+    EXPECT_FALSE(rowData(1, "isSoloist").toBool());
+    EXPECT_FALSE(m_model->isSelectionSoloist());
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, ToggleSoloistForSelection_SkipsGroupHeader)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] The group's header and B are selected and toggled
+    selectRows({ 1, 2 });
+    m_model->toggleSoloistForSelection();
+
+    // [THEN] Only B is made a soloist, and nothing moves
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S", "B", "C" }));
+    EXPECT_FALSE(rowData(1, "isSoloist").toBool());
+    EXPECT_TRUE(rowData(2, "isSoloist").toBool());
+    EXPECT_FALSE(rowData(3, "isSoloist").toBool());
+}
+
 // ---- Removing and moving
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_RemovesInstrument)
