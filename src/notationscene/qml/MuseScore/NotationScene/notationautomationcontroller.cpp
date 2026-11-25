@@ -22,6 +22,8 @@
 
 #include "notationautomationcontroller.h"
 
+#include "automation/notationautomationdisplaymapping.h"
+
 #include <algorithm>
 #include <cmath>
 #include <optional>
@@ -31,8 +33,6 @@
 
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/automation/automationdata.h"
-#include "engraving/automation/dynamicvalues.h"
-#include "engraving/automation/tempovalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
@@ -77,128 +77,6 @@ static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx
         return false;
     }
     return pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size());
-}
-
-namespace mu::notation {
-struct DynamicsDisplayRange {
-    muse::real_t minSounding = 0.0;
-    muse::real_t maxSounding = 0.0;
-    double fadeOutHeight = 0.0;
-};
-}
-
-// Only the levels a sound source plays differently get their own height on the lane
-static const DynamicsDisplayRange MUSE_SAMPLER_DYNAMICS_RANGE {
-    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPPPP),
-    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFF),
-    0.01
-};
-static const DynamicsDisplayRange DEFAULT_DYNAMICS_RANGE {
-    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPP),
-    mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFF)
-};
-
-static double dynamicsValueToDisplay(muse::real_t value, const DynamicsDisplayRange& range)
-{
-    if (value <= range.minSounding) {
-        if (muse::RealIsNull(range.fadeOutHeight)) {
-            return 0.0;
-        }
-        return std::max(muse::real_t(0.0), value / range.minSounding * range.fadeOutHeight);
-    }
-
-    const double t = (value - range.minSounding) / (range.maxSounding - range.minSounding);
-    return std::min(1.0, range.fadeOutHeight + t * (1.0 - range.fadeOutHeight));
-}
-
-static muse::real_t dynamicsValueFromDisplay(double displayValue, const DynamicsDisplayRange& range)
-{
-    if (displayValue <= range.fadeOutHeight) {
-        if (muse::RealIsNull(range.fadeOutHeight)) {
-            return range.minSounding;
-        }
-        return muse::real_t(std::max(0.0, displayValue) / range.fadeOutHeight * range.minSounding);
-    }
-
-    const double t = (displayValue - range.fadeOutHeight) / (1.0 - range.fadeOutHeight);
-    return muse::real_t(range.minSounding + t * (range.maxSounding - range.minSounding));
-}
-
-// Must match muse::audio::VOLUME_DB_MIN/MAX
-static constexpr double VOLUME_RANGE_MIN_DB = -60.0;
-static constexpr double VOLUME_RANGE_MAX_DB = 12.0;
-
-// Mirrors VolumeSlider.qml's fader curve, so dragging a point feels like moving the mixer fader -
-// a plain linear map would put 0dB at 83% up the lane instead of 75%
-static constexpr double VOLUME_LOCAL_CENTER_DB = -24.0;
-static constexpr double VOLUME_LOGICAL_CENTER_DB = -12.0;
-static constexpr double VOLUME_HIGH_ACCURACY_STEP = 1.5;
-static constexpr double VOLUME_LOW_ACCURACY_STEP = 0.75;
-
-// logical (actual) dB -> local (linear-in-display) dB
-static double volumeLogicalDbToLocalDb(double logicalDb)
-{
-    if (logicalDb > VOLUME_LOGICAL_CENTER_DB) {
-        const double diff = VOLUME_RANGE_MAX_DB - logicalDb;
-        return VOLUME_RANGE_MAX_DB - diff * VOLUME_HIGH_ACCURACY_STEP;
-    }
-
-    const double diff = VOLUME_LOGICAL_CENTER_DB - logicalDb;
-    return VOLUME_LOCAL_CENTER_DB - diff * VOLUME_LOW_ACCURACY_STEP;
-}
-
-// local (linear-in-display) dB -> logical (actual) dB
-static double volumeLocalDbToLogicalDb(double localDb)
-{
-    if (localDb > VOLUME_LOCAL_CENTER_DB) {
-        const double diff = VOLUME_RANGE_MAX_DB - localDb;
-        return VOLUME_RANGE_MAX_DB - diff / VOLUME_HIGH_ACCURACY_STEP;
-    }
-
-    const double diff = VOLUME_LOCAL_CENTER_DB - localDb;
-    return VOLUME_LOGICAL_CENTER_DB - diff / VOLUME_LOW_ACCURACY_STEP;
-}
-
-static double volumeValueToDisplay(muse::real_t value)
-{
-    const double logicalDb = VOLUME_RANGE_MIN_DB + static_cast<double>(value) * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-    const double localDb = volumeLogicalDbToLocalDb(logicalDb);
-    const double display = (localDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-    return std::clamp(display, 0.0, 1.0);
-}
-
-// Mirrors the volume fader curve above, anchored on the default tempo instead of 0dB - a plain
-// linear map would put the default tempo (120bpm) at ~12% up the lane instead of the center
-// This is a UI-only display cap - the score model still allows tempos up to Constants::MAX_TEMPO
-static constexpr double TEMPO_RANGE_MAX_BPM = 300.0;
-static const double TEMPO_LOGICAL_CENTER_BPM = mu::engraving::Constants::DEFAULT_TEMPO.toBPM().val;
-static const double TEMPO_LOCAL_CENTER_BPM = TEMPO_RANGE_MAX_BPM / 2.0;
-static const double TEMPO_HIGH_ACCURACY_STEP = (TEMPO_RANGE_MAX_BPM - TEMPO_LOCAL_CENTER_BPM)
-                                               / (TEMPO_RANGE_MAX_BPM - TEMPO_LOGICAL_CENTER_BPM);
-static const double TEMPO_LOW_ACCURACY_STEP = TEMPO_LOCAL_CENTER_BPM / TEMPO_LOGICAL_CENTER_BPM;
-
-// logical (actual) bpm -> local (linear-in-display) bpm
-static double tempoLogicalBpmToLocalBpm(double logicalBpm)
-{
-    if (logicalBpm > TEMPO_LOGICAL_CENTER_BPM) {
-        const double diff = TEMPO_RANGE_MAX_BPM - logicalBpm;
-        return TEMPO_RANGE_MAX_BPM - diff * TEMPO_HIGH_ACCURACY_STEP;
-    }
-
-    const double diff = TEMPO_LOGICAL_CENTER_BPM - logicalBpm;
-    return TEMPO_LOCAL_CENTER_BPM - diff * TEMPO_LOW_ACCURACY_STEP;
-}
-
-// local (linear-in-display) bpm -> logical (actual) bpm
-static double tempoLocalBpmToLogicalBpm(double localBpm)
-{
-    if (localBpm > TEMPO_LOCAL_CENTER_BPM) {
-        const double diff = TEMPO_RANGE_MAX_BPM - localBpm;
-        return TEMPO_RANGE_MAX_BPM - diff / TEMPO_HIGH_ACCURACY_STEP;
-    }
-
-    const double diff = TEMPO_LOCAL_CENTER_BPM - localBpm;
-    return TEMPO_LOGICAL_CENTER_BPM - diff / TEMPO_LOW_ACCURACY_STEP;
 }
 
 static muse::RectF regionCanvasRect(const System* system, staff_idx_t staffIdx, const Measure* startMeasure, const Measure* endMeasure)
@@ -316,25 +194,6 @@ static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
     }
 
     return false;
-}
-
-static qreal defaultValueFor(AutomationType type)
-{
-    switch (type) {
-    case AutomationType::Dynamics:
-    case AutomationType::Tempo:
-        return 0.0;
-    case AutomationType::Volume: {
-        const muse::real_t zeroDb((0.0 - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB));
-        return volumeValueToDisplay(zeroDb);
-    }
-    case AutomationType::Pan:
-        return 0.5;
-    case AutomationType::Unknown:
-        break;
-    }
-
-    return 0.0;
 }
 
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
@@ -693,6 +552,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     // walking from the beginning
     for (auto it = curve.lower_bound(startTick); it != curve.end() && it->first <= endTick; ++it) {
         const int tick = it->first;
+        const bool isMuseSampler = isMuseSamplerDynamics(staff, tick);
 
         const Fraction frac = Fraction::fromTicks(tick);
         const Segment* seg = score()->tick2leftSegmentMM(frac);
@@ -714,13 +574,14 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
         const mu::engraving::AutomationPoint& autoPoint = it->second;
         const mu::engraving::real_t resolvedIn = mu::engraving::resolveInValue(curve, it);
         if (resolvedIn == autoPoint.value.outValue) {
-            const QPointF qpf(pointXInRegion, 1.0 - automationValueToDisplay(type, staff, tick, resolvedIn));
+            const QPointF qpf(pointXInRegion, 1.0 - NotationAutomationDisplayMapping::toDisplay(type, isMuseSampler, resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
         } else {
-            const QPointF qpfIn(pointXInRegion, 1.0 - automationValueToDisplay(type, staff, tick, resolvedIn));
+            const QPointF qpfIn(pointXInRegion, 1.0 - NotationAutomationDisplayMapping::toDisplay(type, isMuseSampler, resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
 
-            const QPointF qpfOut(pointXInRegion, 1.0 - automationValueToDisplay(type, staff, tick, autoPoint.value.outValue));
+            const QPointF qpfOut(pointXInRegion,
+                                 1.0 - NotationAutomationDisplayMapping::toDisplay(type, isMuseSampler, autoPoint.value.outValue));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
         }
     }
@@ -738,7 +599,7 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline, co
     polyline->setDrawBackground(false);
 
     //! NOTE: The polyline resets its baseline to its default value whenever it has no points. Higher value == lower Y...
-    const qreal defaultValue = defaultValueFor(currentAutomationType());
+    const qreal defaultValue = NotationAutomationDisplayMapping::defaultDisplayValue(currentAutomationType());
     polyline->setDefaultValue(1.0 - defaultValue);
     polyline->setBaselineN(defaultValue);
 
@@ -878,8 +739,10 @@ void NotationAutomationController::applyPolylineEdgeValues(PolylinePlot* polylin
     const double right = curveValueBetween(curve, tickAtOrBeforeLast, tickAfterLast, endTick);
 
     // Higher value == lower Y...
-    polyline->setLeftEdgeValue(1.0 - automationValueToDisplay(type, staff, startTick, left));
-    polyline->setRightEdgeValue(1.0 - automationValueToDisplay(type, staff, endTick, right));
+    const bool isMuseSamplerAtStart = isMuseSamplerDynamics(staff, startTick);
+    const bool isMuseSamplerAtEnd = isMuseSamplerDynamics(staff, endTick);
+    polyline->setLeftEdgeValue(1.0 - NotationAutomationDisplayMapping::toDisplay(type, isMuseSamplerAtStart, left));
+    polyline->setRightEdgeValue(1.0 - NotationAutomationDisplayMapping::toDisplay(type, isMuseSamplerAtEnd, right));
 }
 
 QColor NotationAutomationController::inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const
@@ -1248,7 +1111,9 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
     const mu::engraving::real_t referenceValue = pointType == PointData::PointType::IN ? existingInValue : existingPoint.value.outValue;
-    const mu::engraving::real_t newValue = automationValueFromDisplay(currentAutomationType(), staff, newTick, 1.0 - y, referenceValue);
+    const bool isMuseSampler = isMuseSamplerDynamics(staff, newTick);
+    const mu::engraving::real_t newValue = NotationAutomationDisplayMapping::fromDisplay(currentAutomationType(), isMuseSampler, 1.0 - y,
+                                                                                         referenceValue);
 
     // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 
@@ -1337,9 +1202,11 @@ bool NotationAutomationController::requestAddPoint(const PolylineKey& key, qreal
     //! is placed wherever the user dropped it, so its y is used instead...
     const std::optional<muse::real_t> curveValue = useCurveValue ? mu::engraving::evaluateCurveAt(curve, newTick) : std::nullopt;
 
+    const bool isMuseSampler = isMuseSamplerDynamics(staff, newTick);
+
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = curveValue ? *curveValue
-                              : automationValueFromDisplay(currentAutomationType(), staff, newTick, 1.0 - y);
+                              : NotationAutomationDisplayMapping::fromDisplay(currentAutomationType(), isMuseSampler, 1.0 - y);
     newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue,
                                                                                mu::engraving::AutomationPoint::Ease::none() };
     newPoint.generated = false;
@@ -1428,84 +1295,22 @@ const mu::engraving::AutomationPoint* NotationAutomationController::automationPo
     return &it->second;
 }
 
-const DynamicsDisplayRange& NotationAutomationController::dynamicsDisplayRange(const Staff* staff, int tick) const
+bool NotationAutomationController::isMuseSamplerDynamics(const Staff* staff, int tick) const
 {
+    if (currentAutomationType() != AutomationType::Dynamics) {
+        return false;
+    }
+
     const project::INotationProjectPtr notationProject = projectSession()->project();
     const project::IProjectAudioSettingsPtr settings = notationProject ? notationProject->audioSettings() : nullptr;
     const Part* part = staff ? staff->part() : nullptr;
     if (!settings || !part) {
-        return DEFAULT_DYNAMICS_RANGE;
+        return false;
     }
 
     const InstrumentTrackId trackId { part->id(), part->instrumentId(Fraction::fromTicks(tick)) };
-    const bool isMuseSampler = muse::audio::isResourceType(settings->trackInputParams(trackId).resourceMeta,
-                                                           muse::audio::AudioResourceType::MuseSamplerSoundPack);
-
-    return isMuseSampler ? MUSE_SAMPLER_DYNAMICS_RANGE : DEFAULT_DYNAMICS_RANGE;
-}
-
-// Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
-// Volume and Tempo additionally apply a fader curve, other types map 1:1 onto the display range
-double NotationAutomationController::automationValueToDisplay(AutomationType type, const Staff* staff, int tick,
-                                                              muse::real_t value) const
-{
-    if (type == AutomationType::Dynamics) {
-        return dynamicsValueToDisplay(value, dynamicsDisplayRange(staff, tick));
-    }
-
-    if (type == AutomationType::Volume) {
-        return volumeValueToDisplay(value);
-    }
-
-    if (type == AutomationType::Tempo) {
-        const double logicalBpm = mu::engraving::denormalizeTempo(value).toBPM().val;
-        const double localBpm = tempoLogicalBpmToLocalBpm(logicalBpm);
-        const double display = localBpm / TEMPO_RANGE_MAX_BPM;
-        return std::clamp(display, 0.0, 1.0);
-    }
-
-    return std::clamp(static_cast<double>(value), 0.0, 1.0);
-}
-
-// existingValue preserves values beyond the display range when the drag lands back at the same clamped edge
-muse::real_t NotationAutomationController::automationValueFromDisplay(AutomationType type, const Staff* staff, int tick,
-                                                                      double displayValue,
-                                                                      std::optional<muse::real_t> existingValue) const
-{
-    if (type == AutomationType::Dynamics) {
-        const DynamicsDisplayRange& dynamicsRange = dynamicsDisplayRange(staff, tick);
-        if (existingValue) {
-            const double existingDisplay = dynamicsValueToDisplay(*existingValue, dynamicsRange);
-            const bool atTop = muse::RealIsEqualOrMore(displayValue, 1.0) && muse::RealIsEqualOrMore(existingDisplay, 1.0);
-            const bool atBottom = muse::RealIsEqualOrLess(displayValue, 0.0) && muse::RealIsEqualOrLess(existingDisplay, 0.0);
-            if (atTop || atBottom) {
-                return *existingValue;
-            }
-        }
-
-        return dynamicsValueFromDisplay(displayValue, dynamicsRange);
-    }
-
-    if (type == AutomationType::Volume) {
-        const double localDb = VOLUME_RANGE_MIN_DB + displayValue * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        const double logicalDb = volumeLocalDbToLogicalDb(localDb);
-        const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
-        return muse::real_t(normalized);
-    }
-
-    if (type == AutomationType::Tempo) {
-        if (existingValue && muse::RealIsEqualOrMore(displayValue, 1.0)
-            && muse::RealIsEqualOrMore(automationValueToDisplay(type, staff, tick, *existingValue), 1.0)) {
-            return *existingValue;
-        }
-
-        const double localBpm = displayValue * TEMPO_RANGE_MAX_BPM;
-        const double logicalBpm = tempoLocalBpmToLogicalBpm(localBpm);
-        const muse::real_t normalized = mu::engraving::normalizeTempo(mu::engraving::BeatsPerSecond::fromBPM(logicalBpm));
-        return std::clamp(normalized, mu::engraving::MIN_NORMALIZED_TEMPO, mu::engraving::MAX_NORMALIZED_TEMPO);
-    }
-
-    return muse::real_t(displayValue);
+    return muse::audio::isResourceType(settings->trackInputParams(trackId).resourceMeta,
+                                       muse::audio::AudioResourceType::MuseSamplerSoundPack);
 }
 
 AutomationType NotationAutomationController::currentAutomationType() const
