@@ -117,6 +117,20 @@ bool File::doOpen(OpenMode m)
     return true;
 }
 
+ByteArray File::doReadAll()
+{
+    IF_ASSERT_FAILED(isOpenModeReadable()) {
+        return ByteArray();
+    }
+
+    if (pos() != 0) {
+        return IODevice::doReadAll();
+    }
+
+    seek(size());
+    return m_data;
+}
+
 size_t File::dataSize() const
 {
     return m_data.size();
