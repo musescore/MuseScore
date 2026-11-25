@@ -2,8 +2,8 @@
     {
         "scope": "NOTATION",
         "shortcuts": [
-            {"command": "command://notation/add-hairpin",  "sequences": ["Shift+,"]},
-            {"command": "command://notation/add-hairpin-reverse",  "sequences": ["Shift+."]}
+            {"command": "command://notation/add-hairpin/crescendo",  "sequences": ["Shift+,"]},
+            {"command": "command://notation/add-hairpin/diminuendo",  "sequences": ["Shift+."]}
         ]
     },
     {

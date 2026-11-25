@@ -651,20 +651,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        ADD_HAIRPIN_COMMAND,
-        TranslatableString("action", "&Crescendo"),
-        TranslatableString("action", "Add hairpin: crescendo"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_HAIRPIN_REVERSE_COMMAND,
-        TranslatableString("action", "&Diminuendo"),
-        TranslatableString("action", "Add hairpin: diminuendo"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddHairpinCommand>(),
+    makeCommandInfo<AddHairpinCrescendoCommand>(),
+    makeCommandInfo<AddHairpinDiminuendoCommand>(),
     CommandInfo{
         INCREASE_DYNAMIC_COMMAND,
         TranslatableString("action", "Increase dynamics"),

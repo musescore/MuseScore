@@ -34,7 +34,7 @@ const FILE_NAME = "TC12_ScorePartsSaveReopen.mscz"
 
 const ADD_TRIPLET_COMMAND = "command://notation/add-tuplet/triplet"
 const ADD_SLUR_COMMAND = "command://notation/add-slur"
-const ADD_HAIRPIN_COMMAND = "command://notation/add-hairpin"
+const ADD_HAIRPIN_COMMAND = "command://notation/add-hairpin/crescendo"
 const ADD_DYNAMIC_COMMAND = "command://notation/add-dynamic"
 const ADD_LYRICS_COMMAND = "command://notation/add-lyrics"
 const ADD_STAFF_TEXT_COMMAND = "command://notation/add-text/staff"
