@@ -52,6 +52,7 @@ public:
     virtual void init(const notation::Part* masterPart);
 
     const notation::Part* part() const;
+    bool existsInScore() const;
 
     LayoutPanelItemType::SharedGroupRole sharedGroupRole() const;
     PartTreeItem* sharedGroupHeader() const;
@@ -79,6 +80,8 @@ protected:
     void updateVisibility();
 
 private:
+    bool isCombinedOntoSharedStaves(const notation::Part* part) const;
+
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;

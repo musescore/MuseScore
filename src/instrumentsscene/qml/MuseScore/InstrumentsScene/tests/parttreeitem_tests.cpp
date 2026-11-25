@@ -221,6 +221,7 @@ TEST_F(InstrumentsScene_PartTreeItemTests, Init_PartInScore)
     EXPECT_EQ(m_partItem->title(), QString("Flute 1"));
 
     // [THEN] It's visible, enabled and has its settings
+    EXPECT_TRUE(m_partItem->existsInScore());
     EXPECT_TRUE(m_partItem->isVisible());
     EXPECT_TRUE(m_partItem->isEnabled());
     EXPECT_TRUE(m_partItem->settingsAvailable());
@@ -260,12 +261,13 @@ TEST_F(InstrumentsScene_PartTreeItemTests, Init_PartMissingFromPartScore)
     EXPECT_EQ(m_partItem->part(), part);
     EXPECT_EQ(m_partItem->title(), QString("Flute"));
 
-    // [THEN] It's hidden, with no settings, and can't be expanded or removed
+    // [THEN] It's hidden and can't be removed, but can be expanded and has its settings
+    EXPECT_FALSE(m_partItem->existsInScore());
     EXPECT_FALSE(m_partItem->isVisible());
-    EXPECT_FALSE(m_partItem->settingsAvailable());
-    EXPECT_FALSE(m_partItem->settingsEnabled());
-    EXPECT_FALSE(m_partItem->isExpandable());
     EXPECT_FALSE(m_partItem->isRemovable());
+    EXPECT_TRUE(m_partItem->settingsAvailable());
+    EXPECT_TRUE(m_partItem->settingsEnabled());
+    EXPECT_TRUE(m_partItem->isExpandable());
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, MoveChildren_StaffDown)

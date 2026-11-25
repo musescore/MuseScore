@@ -62,6 +62,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool isHideEmptyStavesEnabled READ isHideEmptyStavesEnabled NOTIFY isHideEmptyStavesEnabledChanged FINAL)
     Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY scoreChanged FINAL)
     Q_PROPERTY(QString scoreName READ scoreName NOTIFY scoreChanged FINAL)
+    Q_PROPERTY(bool hasHiddenOtherInstruments READ hasHiddenOtherInstruments NOTIFY hasHiddenOtherInstrumentsChanged FINAL)
 
     QML_ELEMENT
 
@@ -97,8 +98,10 @@ public:
     bool isHideEmptyStavesEnabled() const;
     bool isMasterScore() const;
     QString scoreName() const;
+    bool hasHiddenOtherInstruments() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void showOtherInstruments();
     Q_INVOKABLE void toggleStaveSharing(bool on);
     Q_INVOKABLE void ungroupSharedGroup(const QString& sharedPartId);
     Q_INVOKABLE void toggleHideEmptyStaves(bool on);
@@ -134,6 +137,7 @@ signals:
     void isHideEmptyStavesEnabledChanged(bool enabled);
     void sharedGroupEnabledChanged();
     void scoreChanged();
+    void hasHiddenOtherInstrumentsChanged();
 
 private slots:
     void updateRearrangementAvailability();
@@ -182,6 +186,7 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
+    void setHasHiddenOtherInstruments(bool hasHidden);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
@@ -209,6 +214,9 @@ private:
 
     bool m_isStaveSharingEnabled = false;
     bool m_isHideEmptyStavesEnabled = false;
+
+    bool m_showsOtherInstruments = false;
+    bool m_hasHiddenOtherInstruments = false;
 
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 

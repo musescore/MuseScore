@@ -119,6 +119,7 @@ void LayoutPanelTreeModel::onNotationChanged()
 
     onBeforeChangeNotation();
     m_notation = context()->currentNotation();
+    m_showsOtherInstruments = false;
 
     if (m_notation) {
         load();
@@ -390,6 +391,7 @@ void LayoutPanelTreeModel::clear()
     endResetModel();
 
     updateIsHideEmptyStavesEnabled();
+    setHasHiddenOtherInstruments(false);
 
     emit scoreChanged();
     emit isEmptyChanged();
@@ -434,7 +436,19 @@ void LayoutPanelTreeModel::load()
         systemObjects = collectSystemObjectGroups(systemObjectStaves);
     }
 
+    const bool hidesOtherInstruments = !isMasterScore() && !m_showsOtherInstruments;
+    bool hasHiddenOtherInstruments = false;
+
     for (const Part* part : masterParts) {
+        if (!isMasterScore() && part->isSharedPart()) {
+            continue;
+        }
+
+        if (hidesOtherInstruments && !m_notation->parts()->partExists(part->id())) {
+            hasHiddenOtherInstruments = true;
+            continue;
+        }
+
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
                 if (!staff->hasSystemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
@@ -466,10 +480,17 @@ void LayoutPanelTreeModel::load()
     updateIsStaveSharingEnabled();
     updateIsHideEmptyStavesEnabled();
     updateSharedGroupRoles();
+    setHasHiddenOtherInstruments(hasHiddenOtherInstruments);
 
     emit scoreChanged();
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
+}
+
+void LayoutPanelTreeModel::showOtherInstruments()
+{
+    m_showsOtherInstruments = true;
+    load();
 }
 
 void LayoutPanelTreeModel::toggleStaveSharing(bool on)
@@ -915,6 +936,11 @@ QString LayoutPanelTreeModel::scoreName() const
     return m_notation ? m_notation->name() : QString();
 }
 
+bool LayoutPanelTreeModel::hasHiddenOtherInstruments() const
+{
+    return m_hasHiddenOtherInstruments;
+}
+
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
     muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
@@ -933,6 +959,16 @@ void LayoutPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
 
     m_isRemovingAvailable = isRemovingAvailable;
     emit isRemovingAvailableChanged(m_isRemovingAvailable);
+}
+
+void LayoutPanelTreeModel::setHasHiddenOtherInstruments(bool hasHidden)
+{
+    if (m_hasHiddenOtherInstruments == hasHidden) {
+        return;
+    }
+
+    m_hasHiddenOtherInstruments = hasHidden;
+    emit hasHiddenOtherInstrumentsChanged();
 }
 
 void LayoutPanelTreeModel::updateRearrangementAvailability()
@@ -1240,7 +1276,7 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Par
     }
 
     // Instruments in a shared-staves group can't add staves
-    if (!masterPart->sharedPart()) {
+    if (!masterPart->sharedPart() && partItem->existsInScore()) {
         partItem->appendChild(buildAddStaffControlItem(partItem->id(), partItem));
     }
 

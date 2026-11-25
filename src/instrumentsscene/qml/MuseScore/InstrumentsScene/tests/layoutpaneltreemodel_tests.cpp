@@ -21,6 +21,8 @@
  */
 #include <gmock/gmock.h>
 
+#include <algorithm>
+
 #include <QItemSelectionModel>
 
 #include "async/changednotify.h"
@@ -199,6 +201,28 @@ protected:
     void addExcerpt()
     {
         m_excerpts.push_back(std::make_shared<NiceMock<ExcerptNotationMock> >());
+    }
+
+    //! The panel shows a part score with these instruments, in this order
+    void showPartScore(const std::vector<const Part*>& parts)
+    {
+        auto contains = [parts](const ID& partId) {
+            return std::any_of(parts.begin(), parts.end(), [&partId](const Part* part) {
+                return part->id() == partId;
+            });
+        };
+
+        ON_CALL(*m_notation, isMaster()).WillByDefault(Return(false));
+
+        ON_CALL(*m_parts, partList()).WillByDefault(Invoke([this, parts]() {
+            return async::NotifyList<const Part*>(parts, m_partsNotifier.notify());
+        }));
+
+        ON_CALL(*m_parts, part(_)).WillByDefault(Invoke([this, contains](const ID& partId) -> const Part* {
+            return contains(partId) ? m_score->partById(partId) : nullptr;
+        }));
+
+        ON_CALL(*m_parts, partExists(_)).WillByDefault(Invoke(contains));
     }
 
     //! Same as QML: classBegin() runs init(), which loads the current notation
@@ -489,19 +513,100 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_PartScore)
     const Part* b = addPart(u"B");
     const Part* c = addPart(u"C");
     addSystemObjects(b->staff(0));
-
-    ON_CALL(*m_notation, isMaster()).WillByDefault(Return(false));
-    ON_CALL(*m_parts, partList()).WillByDefault(Invoke([this, a, c]() {
-        return async::NotifyList<const Part*>({ c, a }, m_partsNotifier.notify());
-    }));
+    showPartScore({ c, a });
 
     // [WHEN] The panel is loaded
     createModel();
 
-    // [THEN] The instruments follow the part score's order, B last, and there are no markings rows
-    EXPECT_EQ(rowNames(), "C A B");
+    // [THEN] The instruments follow the part score's order, B is hidden, and there are no markings rows
+    EXPECT_EQ(rowNames(), "C A");
+    EXPECT_TRUE(m_model->hasHiddenOtherInstruments());
     EXPECT_FALSE(m_model->isMasterScore());
     EXPECT_FALSE(m_model->isAddingSystemMarkingsAvailable());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_PartScoreWithoutSharedStaves)
+{
+    // [GIVEN] A part score with A and B; in the main score, B is combined onto shared staves
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    m_score->style().set(Sid::enableStaveSharing, true);
+    showPartScore({ a, b });
+
+    // [WHEN] The panel is loaded
+    createModel();
+
+    // [THEN] There's no group row, and nothing is hidden
+    EXPECT_EQ(rowNames(), "A B");
+    EXPECT_FALSE(m_model->hasHiddenOtherInstruments());
+
+    // [THEN] B isn't shown as combined
+    const PartTreeItem* bItem = qobject_cast<const PartTreeItem*>(item(1));
+    ASSERT_TRUE(bItem);
+    EXPECT_TRUE(bItem->isEnabled());
+    EXPECT_EQ(bItem->sharedGroupRole(), LayoutPanelItemType::NOT_IN_GROUP);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, ShowOtherInstruments)
+{
+    // [GIVEN] A part score with C, then A, and no B
+    const Part* a = addPart(u"A");
+    addPart(u"B");
+    const Part* c = addPart(u"C");
+    showPartScore({ c, a });
+    createModel(); // C A
+
+    std::shared_ptr<int> hiddenChanges = countEmits(&LayoutPanelTreeModel::hasHiddenOtherInstrumentsChanged);
+
+    // [WHEN] The other instruments are shown
+    m_model->showOtherInstruments();
+
+    // [THEN] B is listed last
+    EXPECT_EQ(rowNames(), "C A B");
+    EXPECT_FALSE(m_model->hasHiddenOtherInstruments());
+    EXPECT_EQ(*hiddenChanges, 1);
+
+    // [THEN] B can be expanded and has its settings, but can't be removed or get a staff
+    EXPECT_TRUE(item(2)->isExpandable());
+    EXPECT_TRUE(item(2)->settingsAvailable());
+    EXPECT_FALSE(item(2)->isRemovable());
+    EXPECT_EQ(childTypes(1), (ItemTypes { ItemType::STAFF, ItemType::CONTROL_ADD_STAFF }));
+    EXPECT_EQ(childTypes(2), (ItemTypes { ItemType::STAFF }));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, ShowOtherInstruments_KeptOnReload)
+{
+    // [GIVEN] A part score with A, and no B; B is shown
+    const Part* a = addPart(u"A");
+    addPart(u"B");
+    showPartScore({ a });
+    createModel();
+    m_model->showOtherInstruments(); // A B
+
+    // [WHEN] The part score's instruments change
+    m_partsNotifier.changed();
+
+    // [THEN] B stays listed
+    EXPECT_EQ(rowNames(), "A B");
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, ShowOtherInstruments_ResetOnNotationChanged)
+{
+    // [GIVEN] A part score with A, and no B; B is shown
+    const Part* a = addPart(u"A");
+    addPart(u"B");
+    showPartScore({ a });
+    createModel();
+    m_model->showOtherInstruments(); // A B
+
+    // [WHEN] Another score becomes current
+    m_currentNotationChanged.notify();
+
+    // [THEN] B is hidden again
+    EXPECT_EQ(rowNames(), "A");
+    EXPECT_TRUE(m_model->hasHiddenOtherInstruments());
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnNotationChanged_NoNotation)

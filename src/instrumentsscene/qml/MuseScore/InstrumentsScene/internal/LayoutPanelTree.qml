@@ -39,6 +39,8 @@ Item {
 
     property int sideMargin: 0
 
+    readonly property real contentHeight: layoutPanelTreeView.contentHeight
+
     function expandCollapseAll(expand) {
         let groups = Object.assign({}, prv.expandedGroups)
 

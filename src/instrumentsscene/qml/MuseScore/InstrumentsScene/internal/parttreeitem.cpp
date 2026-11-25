@@ -38,6 +38,9 @@ using namespace muse;
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)
     : AbstractLayoutPanelTreeItem(type, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
+    setSettingsAvailable(true);
+    setSettingsEnabled(true);
+    setIsExpandable(true);
     setIsSelectable(true);
 
     listenVisibilityChanged();
@@ -57,7 +60,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     }
 
     bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+    bool enabled = !isCombinedOntoSharedStaves(part);
 
     setId(part->id());
 
@@ -66,9 +69,6 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     setIsVisible(visible);
     setIsEnabled(enabled);
-    setSettingsAvailable(m_partExists);
-    setSettingsEnabled(m_partExists);
-    setIsExpandable(m_partExists);
     setIsRemovable(m_partExists);
 
     m_part = part;
@@ -78,6 +78,11 @@ void PartTreeItem::init(const notation::Part* masterPart)
 const Part* PartTreeItem::part() const
 {
     return m_part;
+}
+
+bool PartTreeItem::existsInScore() const
+{
+    return m_partExists;
 }
 
 LayoutPanelItemType::SharedGroupRole PartTreeItem::sharedGroupRole() const
@@ -109,7 +114,16 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 
     setTitle(m_part->partName().simplified());
     updateVisibility();
-    setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
+    setIsEnabled(!isCombinedOntoSharedStaves(m_part));
+}
+
+bool PartTreeItem::isCombinedOntoSharedStaves(const Part* part) const
+{
+    if (!notation()->isMaster()) {
+        return false;
+    }
+
+    return part->sharedPart() && part->sharedPart()->enabled();
 }
 
 void PartTreeItem::updateVisibility()
