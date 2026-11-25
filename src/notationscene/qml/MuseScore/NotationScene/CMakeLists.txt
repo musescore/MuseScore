@@ -68,6 +68,8 @@ qt_add_qml_module(notationscene_qml
         loopmarker.h
         automation/notationautomationdisplaymapping.h
         automation/notationautomationdisplaymapping.cpp
+        automation/notationautomationnavigation.h
+        automation/notationautomationnavigation.cpp
         automation/notationautomationtypes.h
         automation/notationautomationutils.h
         automation/notationautomationutils.cpp

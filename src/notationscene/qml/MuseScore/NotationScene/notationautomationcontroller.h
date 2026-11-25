@@ -127,7 +127,7 @@ private:
 
     QQuickItem* m_linesParent = nullptr;
 
-    std::map<PolylineKey, PolylineData> m_polylinesDataMap;
+    PolylineMap m_polylinesDataMap;
     muse::draw::Transform m_viewMatrix;
 
     mu::engraving::AutomationChanges m_pendingChanges;

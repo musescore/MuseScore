@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <map>
+
 #include <QPointF>
 #include <QVector>
 
@@ -106,4 +108,6 @@ struct PolylineData {
                  const Measure* endMeasure)
         : polyline(polyline), pointsData(pointsData), startMeasure(startMeasure), endMeasure(endMeasure) {}
 };
+
+using PolylineMap = std::map<PolylineKey, PolylineData>;
 }
