@@ -228,7 +228,7 @@ PropertyDelegate SlurTieSegment::resolvePropertyDelegate(Pid pid) const
     switch (pid) {
     case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
-    case Pid::MASK_SLURTIE:
+    case Pid::MASK_SLURTIE_SIGNATURES:
     case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         return PropertyDelegate(slurTie());
     default:
@@ -364,7 +364,7 @@ static bool resolveMask(const SlurTieSegment* segment, Pid maskPid, Sid slurSid,
 
 bool SlurTieSegment::masksOverSignatures() const
 {
-    return resolveMask(this, Pid::MASK_SLURTIE, Sid::maskSlurs, Sid::maskTies);
+    return resolveMask(this, Pid::MASK_SLURTIE_SIGNATURES, Sid::maskSlursOverSignatures, Sid::maskTiesOverSignatures);
 }
 
 bool SlurTieSegment::masksOverMeasureNumbers() const
@@ -382,7 +382,7 @@ SlurTie::SlurTie(const ElementType& type, EngravingObject* parent)
     m_slurDirection = DirectionV::AUTO;
     m_up            = true;
     m_styleType     = SlurStyleType::Solid;
-    m_maskSlurTie   = AutoOnOff::AUTO;
+    m_maskSlurTieSignatures = AutoOnOff::AUTO;
     m_maskSlurTieMeasureNumbers = AutoOnOff::AUTO;
 }
 
@@ -392,7 +392,7 @@ SlurTie::SlurTie(const SlurTie& t)
     m_up            = t.m_up;
     m_slurDirection = t.m_slurDirection;
     m_styleType     = t.m_styleType;
-    m_maskSlurTie   = t.m_maskSlurTie;
+    m_maskSlurTieSignatures = t.m_maskSlurTieSignatures;
     m_maskSlurTieMeasureNumbers = t.m_maskSlurTieMeasureNumbers;
 }
 
@@ -424,8 +424,8 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
         return styleType();
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(slurDirection());
-    case Pid::MASK_SLURTIE:
-        return maskSlurTie();
+    case Pid::MASK_SLURTIE_SIGNATURES:
+        return maskSlurTieSignatures();
     case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         return maskSlurTieMeasureNumbers();
     default:
@@ -446,8 +446,8 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SLUR_DIRECTION:
         setSlurDirection(v.value<DirectionV>());
         break;
-    case Pid::MASK_SLURTIE:
-        setMaskSlurTie(v.value<AutoOnOff>());
+    case Pid::MASK_SLURTIE_SIGNATURES:
+        setMaskSlurTieSignatures(v.value<AutoOnOff>());
         break;
     case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         setMaskSlurTieMeasureNumbers(v.value<AutoOnOff>());
@@ -470,7 +470,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
         return SlurStyleType::Solid;
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
-    case Pid::MASK_SLURTIE:
+    case Pid::MASK_SLURTIE_SIGNATURES:
     case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
     default:
@@ -496,7 +496,7 @@ void SlurTie::reset()
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::SLUR_STYLE_TYPE);
-    undoResetProperty(Pid::MASK_SLURTIE);
+    undoResetProperty(Pid::MASK_SLURTIE_SIGNATURES);
     undoResetProperty(Pid::MASK_SLURTIE_MEASURE_NUMBERS);
 }
 

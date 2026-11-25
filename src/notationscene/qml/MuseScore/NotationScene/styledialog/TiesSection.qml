@@ -178,19 +178,19 @@ StyledGroupBox {
             }
 
             CheckBox {
-                id: maskTiesCheckbox
+                id: maskTiesOverSignaturesCheckbox
                 text: qsTrc("notation/editstyle/slursandties", "Mask ties over clefs, key and time signatures")
-                checked: root.pageModel.maskTies.value
+                checked: root.pageModel.maskTiesOverSignatures.value
                 width: parent.width
                 Layout.columnSpan: 2
 
                 onClicked: {
-                    root.pageModel.maskTies.value = !maskTiesCheckbox.checked
+                    root.pageModel.maskTiesOverSignatures.value = !maskTiesOverSignaturesCheckbox.checked
                 }
             }
 
             StyleResetButton {
-                styleItem: root.pageModel.maskTies
+                styleItem: root.pageModel.maskTiesOverSignatures
             }
 
             CheckBox {

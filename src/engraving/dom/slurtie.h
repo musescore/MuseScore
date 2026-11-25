@@ -154,7 +154,7 @@ protected:
 //   @@ SlurTie
 //   @P lineType       int  (0 - solid, 1 - dotted, 2 - dashed, 3 - wide dashed)
 //   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
-//   @P maskSlurTie    enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
+//   @P maskSlurTieSignatures enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
 //   @P maskSlurTieMeasureNumbers enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
 //-------------------------------------------------------------------
 
@@ -184,8 +184,8 @@ public:
     int subtype() const override { return static_cast<int>(m_styleType) + 1; }
     TranslatableString subtypeUserName() const override;
 
-    AutoOnOff maskSlurTie() const { return m_maskSlurTie; }
-    void setMaskSlurTie(AutoOnOff val) { m_maskSlurTie = val; }
+    AutoOnOff maskSlurTieSignatures() const { return m_maskSlurTieSignatures; }
+    void setMaskSlurTieSignatures(AutoOnOff val) { m_maskSlurTieSignatures = val; }
     AutoOnOff maskSlurTieMeasureNumbers() const { return m_maskSlurTieMeasureNumbers; }
     void setMaskSlurTieMeasureNumbers(AutoOnOff val) { m_maskSlurTieMeasureNumbers = val; }
 
@@ -208,7 +208,7 @@ protected:
 private:
 
     SlurStyleType m_styleType = SlurStyleType::Undefined;
-    AutoOnOff m_maskSlurTie = AutoOnOff::AUTO;
+    AutoOnOff m_maskSlurTieSignatures = AutoOnOff::AUTO;
     AutoOnOff m_maskSlurTieMeasureNumbers = AutoOnOff::AUTO;
 };
 }

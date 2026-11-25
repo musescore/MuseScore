@@ -103,7 +103,7 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: maskSection
         titleText: qsTrc("propertiespanel", "Mask over clefs, key and time signatures")
-        propertyItem: root.model ? root.model.maskSlurTie : null
+        propertyItem: root.model ? root.model.maskSlurTieSignatures : null
 
         navigationPanel: root.navigationPanel
         navigationName: "Mask"

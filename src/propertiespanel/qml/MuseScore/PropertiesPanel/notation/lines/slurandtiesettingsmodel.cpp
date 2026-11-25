@@ -89,9 +89,9 @@ PropertyItem* SlurAndTieSettingsModel::minLength() const
     return m_minLength;
 }
 
-PropertyItem* SlurAndTieSettingsModel::maskSlurTie() const
+PropertyItem* SlurAndTieSettingsModel::maskSlurTieSignatures() const
 {
-    return m_maskSlurTie;
+    return m_maskSlurTieSignatures;
 }
 
 PropertyItem* SlurAndTieSettingsModel::maskSlurTieMeasureNumbers() const
@@ -137,7 +137,7 @@ void SlurAndTieSettingsModel::createProperties()
     m_direction = buildPropertyItem(mu::engraving::Pid::SLUR_DIRECTION);
     m_tiePlacement = buildPropertyItem(mu::engraving::Pid::TIE_PLACEMENT);
     m_minLength = buildPropertyItem(mu::engraving::Pid::MIN_LENGTH);
-    m_maskSlurTie = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE);
+    m_maskSlurTieSignatures = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE_SIGNATURES);
     m_maskSlurTieMeasureNumbers = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE_MEASURE_NUMBERS);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
@@ -150,7 +150,7 @@ void SlurAndTieSettingsModel::loadProperties()
     loadPropertyItem(m_direction);
     loadPropertyItem(m_tiePlacement);
     loadPropertyItem(m_minLength);
-    loadPropertyItem(m_maskSlurTie);
+    loadPropertyItem(m_maskSlurTieSignatures);
     loadPropertyItem(m_maskSlurTieMeasureNumbers);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
