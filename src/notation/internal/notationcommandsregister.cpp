@@ -673,43 +673,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        RESET_TEXT_STYLE_OVERRIDES_COMMAND,
-        TranslatableString("action", "Reset &text style overrides"),
-        TranslatableString("action", "Reset all text style overrides to default"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        RESET_BEAMS_COMMAND,
-        TranslatableString("action", "Reset &beams"),
-        TranslatableString("action", "Reset beams to default grouping"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        RESET_SHAPES_AND_POSITIONS_COMMAND,
-        TranslatableString("action", "Reset s&hapes and positions"),
-        TranslatableString("action", "Reset shapes and positions"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        RESET_TO_DEFAULT_LAYOUT_COMMAND,
-        TranslatableString("action", "Reset entire score to &default layout"),
-        TranslatableString("action", "Reset entire score to default layout"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ResetTextStyleOverridesCommand>(),
+    makeCommandInfo<ResetBeamsCommand>(),
+    makeCommandInfo<ResetShapesAndPositionsCommand>(),
+    makeCommandInfo<ResetToDefaultLayoutCommand>(),
 
     // appearance commands
-    CommandInfo{
-        FREEZE_CURRENT_PLACEMENT_COMMAND,
-        TranslatableString("action", "Freeze current placement"),
-        TranslatableString("action", "Turn off auto-place and freeze the selection’s current position"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<FreezeCurrentPlacementCommand>(),
 
     // show commands
     makeCommandInfo<ToggleScoreConfigCommand>(),
@@ -719,13 +689,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ShowPageBordersCommand>(),
     makeCommandInfo<ShowSoundFlagsCommand>(),
     makeCommandInfo<ShowIrregularCommand>(),
-    CommandInfo{
-        TOGGLE_CONCERT_PITCH_COMMAND,
-        TranslatableString("action", "Concert pitch"),
-        TranslatableString("action", "Toggle concert pitch"),
-        InputSchema(),
-        Decoration(IconCode::Code::TUNING_FORK, rcommand::Checkable::Yes)
-    },
+    makeCommandInfo<ToggleConcertPitchCommand>(),
     CommandInfo{
         STAFF_EXPLODE_COMMAND,
         TranslatableString("action", "&Explode"),
@@ -841,20 +805,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    CommandInfo{
-        REGROUP_RHYTHMS_COMMAND,
-        TranslatableString("action", "Regroup &rhythms"),
-        TranslatableString("action", "Regroup rhythms"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        RESEQUENCE_REHEARSAL_MARKS_COMMAND,
-        TranslatableString("action", "Resequence re&hearsal marks"),
-        TranslatableString("action", "Resequence rehearsal marks"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<RegroupRhythmsCommand>(),
+    makeCommandInfo<ResequenceRehearsalMarksCommand>(),
     CommandInfo{
         UNROLL_REPEATS_COMMAND,
         TranslatableString("action", "U&nroll repeats"),
@@ -912,15 +864,8 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        MIRROR_NOTEHEAD_COMMAND,
-        TranslatableString("action", "Mirror notehead"),
-        TranslatableString("action", "Mirror notehead"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<MirrorNoteheadCommand>(),
 
-    // clef commands
     // clef commands
     makeCommandInfo<AddClefCommand>(),
     makeCommandInfo<AddClefViolinCommand>(),

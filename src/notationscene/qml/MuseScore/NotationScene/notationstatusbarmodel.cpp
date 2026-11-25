@@ -97,7 +97,7 @@ void NotationStatusBarModel::init()
 {
     TRACEFUNC;
 
-    m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_COMMAND);
+    m_concertPitchItem = makeMenuItem(ToggleConcertPitchCommand::id);
 #ifdef MUSE_MODULE_WORKSPACE
     m_currentWorkspaceItem = makeMenuItem(WORKSPACES_CONFIGURE_COMMAND);
 #else
@@ -309,7 +309,7 @@ void NotationStatusBarModel::setNotation(const INotationPtr& notation)
 
 void NotationStatusBarModel::toggleConcertPitch()
 {
-    dispatch(TOGGLE_CONCERT_PITCH_COMMAND);
+    dispatch(ToggleConcertPitchCommand::id);
 }
 
 void NotationStatusBarModel::setCurrentViewMode(const QString& modeCode)

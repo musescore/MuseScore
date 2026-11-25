@@ -3014,16 +3014,53 @@ struct SaveStyleCommand {
 };
 
 inline static const muse::rcommand::Command OPEN_EDIT_STYLE_COMMAND("command://notation/open-edit-style");
-inline static const muse::rcommand::Command TOGGLE_CONCERT_PITCH_COMMAND("command://notation/toggle-concert-pitch");
+
+struct ToggleConcertPitchCommand {
+    cprop_decl id = Command("command://notation/toggle-concert-pitch");
+    cprop_decl title = MnemonicString("action", "Concert pitch");
+    cprop_decl description = TranslatableString("action", "Toggle concert pitch");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::TUNING_FORK, Checkable::Yes);
+    cprop_decl availabilities = Availability::All;
+};
 
 // reset commands
-inline static const muse::rcommand::Command RESET_TEXT_STYLE_OVERRIDES_COMMAND("command://notation/reset-text-style-overrides");
-inline static const muse::rcommand::Command RESET_BEAMS_COMMAND("command://notation/reset-beams");
-inline static const muse::rcommand::Command RESET_SHAPES_AND_POSITIONS_COMMAND("command://notation/reset-shapes-and-positions");
-inline static const muse::rcommand::Command RESET_TO_DEFAULT_LAYOUT_COMMAND("command://notation/reset-to-default-layout");
+
+struct ResetTextStyleOverridesCommand {
+    cprop_decl id = Command("command://notation/reset-text-style-overrides");
+    cprop_decl title = MnemonicString("action", "Reset &text style overrides");
+    cprop_decl description = TranslatableString("action", "Reset all text style overrides to default");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ResetBeamsCommand {
+    cprop_decl id = Command("command://notation/reset-beams");
+    cprop_decl title = MnemonicString("action", "Reset &beams");
+    cprop_decl description = TranslatableString("action", "Reset beams to default grouping");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ResetShapesAndPositionsCommand {
+    cprop_decl id = Command("command://notation/reset-shapes-and-positions");
+    cprop_decl title = MnemonicString("action", "Reset s&hapes and positions");
+    cprop_decl description = TranslatableString("action", "Reset shapes and positions");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ResetToDefaultLayoutCommand {
+    cprop_decl id = Command("command://notation/reset-to-default-layout");
+    cprop_decl title = MnemonicString("action", "Reset entire score to &default layout");
+    cprop_decl description = TranslatableString("action", "Reset entire score to default layout");
+    cprop_decl availabilities = Availability::All;
+};
 
 // appearance commands
-inline static const muse::rcommand::Command FREEZE_CURRENT_PLACEMENT_COMMAND("command://notation/freeze-current-placement");
+
+struct FreezeCurrentPlacementCommand {
+    cprop_decl id = Command("command://notation/freeze-current-placement");
+    cprop_decl title = MnemonicString("action", "Freeze current placement");
+    cprop_decl description = TranslatableString("action", "Turn off auto-place and freeze the selection’s current position");
+    cprop_decl availabilities = Availability::All;
+};
 
 // show commands
 
@@ -3120,15 +3157,35 @@ inline static const muse::rcommand::Command SCREEN_EDIT_TEXT_COMMAND("command://
 inline static const muse::rcommand::Command SCREEN_EDIT_ELEMENT_COMMAND("command://notation/screen-edit-element"); // with params
 
 // others commands
-inline static const muse::rcommand::Command REGROUP_RHYTHMS_COMMAND("command://notation/regroup-rhythms");
-inline static const muse::rcommand::Command RESEQUENCE_REHEARSAL_MARKS_COMMAND("command://notation/resequence-rehearsal-marks");
+
+struct RegroupRhythmsCommand {
+    cprop_decl id = Command("command://notation/regroup-rhythms");
+    cprop_decl title = MnemonicString("action", "Regroup &rhythms");
+    cprop_decl description = TranslatableString("action", "Regroup rhythms");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ResequenceRehearsalMarksCommand {
+    cprop_decl id = Command("command://notation/resequence-rehearsal-marks");
+    cprop_decl title = MnemonicString("action", "Resequence re&hearsal marks");
+    cprop_decl description = TranslatableString("action", "Resequence rehearsal marks");
+    cprop_decl availabilities = Availability::All;
+};
+
 inline static const muse::rcommand::Command UNROLL_REPEATS_COMMAND("command://notation/unroll-repeats");
 inline static const muse::rcommand::Command REPEAT_SELECTION_COMMAND("command://notation/repeat-selection");
 inline static const muse::rcommand::Command TRANSPOSE_UP_COMMAND("command://notation/transpose-up");
 inline static const muse::rcommand::Command TRANSPOSE_DOWN_COMMAND("command://notation/transpose-down");
 inline static const muse::rcommand::Command TOGGLE_MMREST_COMMAND("command://notation/toggle-mmrest");
 inline static const muse::rcommand::Command TOGGLE_HIDE_EMPTY_COMMAND("command://notation/toggle-hide-empty");
-inline static const muse::rcommand::Command MIRROR_NOTEHEAD_COMMAND("command://notation/mirror-notehead");
+
+struct MirrorNoteheadCommand {
+    cprop_decl id = Command("command://notation/mirror-notehead");
+    cprop_decl title = MnemonicString("action", "Mirror notehead");
+    cprop_decl description = TranslatableString("action", "Mirror notehead");
+    cprop_decl availabilities = Availability::All;
+};
+
 inline static const muse::rcommand::Command SET_VISIBLE_COMMAND("command://notation/set-visible");
 inline static const muse::rcommand::Command UNSET_VISIBLE_COMMAND("command://notation/unset-visible");
 inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://notation/toggle-autoplace");

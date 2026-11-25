@@ -69,7 +69,7 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     ChangeDurationHalveDottedCommand::id,
     ToggleSnapToPrevCommand::id,
     ToggleSnapToNextCommand::id,
-    MIRROR_NOTEHEAD_COMMAND,
+    MirrorNoteheadCommand::id,
     MOVE_UP_COMMAND,
     MOVE_DOWN_COMMAND,
     ChangeDynamicCommand::id,
@@ -268,7 +268,7 @@ static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
 };
 
 static const std::vector<Command> STYLE_COMMANDS = {
-    TOGGLE_CONCERT_PITCH_COMMAND
+    ToggleConcertPitchCommand::id
 };
 
 static const std::vector<Command> TAB_COMMANDS = {
