@@ -297,6 +297,29 @@ void InstrumentsOnScoreListModel::moveSelectedBlocksDown()
     }
 }
 
+void InstrumentsOnScoreListModel::removeSelectedBlocks()
+{
+    const ItemList& items = this->items();
+
+    // removing a group's header, or all its instruments, removes both
+    for (const RowRange& block : blocks(items)) {
+        if (!static_cast<const InstrumentItem*>(items.at(block.first))->isSharedGroupHeader) {
+            continue;
+        }
+
+        bool allInstrumentsSelected = true;
+        for (int row = block.first + 1; row <= block.last && allInstrumentsSelected; ++row) {
+            allInstrumentsSelected = selection()->isSelected(index(row));
+        }
+
+        if (allInstrumentsSelected || selection()->isSelected(index(block.first))) {
+            selection()->select(QItemSelection(index(block.first), index(block.last)), QItemSelectionModel::Select);
+        }
+    }
+
+    SelectableItemListModel::removeSelection();
+}
+
 QVariant InstrumentsOnScoreListModel::currentOrder() const
 {
     const ScoreOrder& order = currentScoreOrder();

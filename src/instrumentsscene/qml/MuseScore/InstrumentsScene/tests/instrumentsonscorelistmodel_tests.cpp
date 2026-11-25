@@ -23,6 +23,8 @@
 
 #include <algorithm>
 
+#include <QItemSelectionModel>
+
 #include "async/changednotify.h"
 #include "async/notifylist.h"
 
@@ -199,6 +201,17 @@ protected:
     QVariant rowData(int row, const QByteArray& roleName) const
     {
         return m_model->data(m_model->index(row), role(roleName));
+    }
+
+    //! As with Ctrl+click: selectRow() selects one row only
+    void selectRows(const QList<int>& rows)
+    {
+        QItemSelection selection;
+        for (int row : rows) {
+            selection.select(m_model->index(row), m_model->index(row));
+        }
+
+        m_model->findChild<QItemSelectionModel*>()->select(selection, QItemSelectionModel::ClearAndSelect);
     }
 
     QStringList rowNames() const
@@ -430,14 +443,14 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_KeepsShare
 
     // [WHEN] B is removed
     m_model->selectRow(1);
-    m_model->removeSelection();
+    m_model->removeSelectedBlocks();
 
     // [THEN] S is kept with C
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id(), s->id(), c->id() }));
 
     // [WHEN] C is removed too
     m_model->selectRow(1);
-    m_model->removeSelection();
+    m_model->removeSelectedBlocks();
 
     // [THEN] S is removed with its last instrument
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
@@ -536,7 +549,7 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_Remove
 
     // [WHEN] A is removed
     m_model->selectRow(0);
-    m_model->removeSelection();
+    m_model->removeSelectedBlocks();
 
     // [THEN] Only B is listed, and kept on accepting
     EXPECT_EQ(rowNames(), QStringList({ "B" }));
@@ -925,7 +938,7 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_
     EXPECT_TRUE(keptInstrument(1).value("isExistingPart").toBool());
 }
 
-TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_RemovesGroupWithoutInstruments)
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_GroupHeader_RemovesItsInstruments)
 {
     // [GIVEN] Combine is on; A, and B and C on a shared part S
     setCombineOnSharedStaves(true);
@@ -935,32 +948,59 @@ TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_
     addToSharedPart(s, u"C");
     m_model->load();
 
-    // [WHEN] B and C are removed
-    m_model->selectRow(2);
-    m_model->removeSelection();
-    m_model->selectRow(2);
-    m_model->removeSelection();
+    // [WHEN] The group's header is removed
+    m_model->selectRow(1);
+    m_model->removeSelectedBlocks();
 
-    // [THEN] S is removed with them, though its header is still listed
-    EXPECT_EQ(rowNames(), QStringList({ "A", "S" }));
+    // [THEN] B and C are removed with S
+    EXPECT_EQ(rowNames(), QStringList({ "A" }));
     EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
 }
 
-TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, Instruments_CombineOn_RemovingGroupHeaderUngroups)
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_AllGroupInstruments_RemovesGroup)
 {
-    // [GIVEN] Combine is on; B and C on a shared part S
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
     setCombineOnSharedStaves(true);
+    const Part* a = addPart(u"A");
     SharedPart* s = addSharedPart(u"S");
-    const Part* b = addToSharedPart(s, u"B");
+    addToSharedPart(s, u"B");
+    addToSharedPart(s, u"C");
+    m_model->load();
+
+    // [WHEN] B and C are removed together
+    selectRows({ 2, 3 });
+    m_model->removeSelectedBlocks();
+
+    // [THEN] S is removed with them
+    EXPECT_EQ(rowNames(), QStringList({ "A" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
+}
+
+TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, RemoveSelection_LastGroupInstrument_RemovesGroup)
+{
+    // [GIVEN] Combine is on; A, and B and C on a shared part S
+    setCombineOnSharedStaves(true);
+    const Part* a = addPart(u"A");
+    SharedPart* s = addSharedPart(u"S");
+    addToSharedPart(s, u"B");
     const Part* c = addToSharedPart(s, u"C");
     m_model->load();
 
-    // [WHEN] The group's header is removed
-    m_model->selectRow(0);
-    m_model->removeSelection();
+    // [WHEN] B is removed
+    m_model->selectRow(2);
+    m_model->removeSelectedBlocks();
 
-    // [THEN] B and C are kept, without S
-    EXPECT_EQ(keptPartIds(), std::vector<ID>({ b->id(), c->id() }));
+    // [THEN] S is kept with C
+    EXPECT_EQ(rowNames(), QStringList({ "A", "S", "C" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id(), s->id(), c->id() }));
+
+    // [WHEN] C, the group's last instrument, is removed
+    m_model->selectRow(2);
+    m_model->removeSelectedBlocks();
+
+    // [THEN] S is removed with it
+    EXPECT_EQ(rowNames(), QStringList({ "A" }));
+    EXPECT_EQ(keptPartIds(), std::vector<ID>({ a->id() }));
 }
 
 TEST_F(InstrumentsScene_InstrumentsOnScoreListModelTests, SetData_Soloist_GroupHeader_ReturnsFalse)

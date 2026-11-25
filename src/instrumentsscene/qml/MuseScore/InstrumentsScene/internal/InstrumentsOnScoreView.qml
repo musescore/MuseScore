@@ -127,7 +127,7 @@ Item {
             enabled: root.instrumentsOnScoreModel.isRemovingAvailable
 
             onClicked: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelectedBlocks()
             }
         }
     }
@@ -166,7 +166,7 @@ Item {
             }
 
             onRemoveSelectionRequested: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelectedBlocks()
             }
 
             onGroupExpandToggled: {

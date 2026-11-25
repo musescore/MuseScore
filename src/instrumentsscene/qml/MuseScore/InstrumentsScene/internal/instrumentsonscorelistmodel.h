@@ -70,6 +70,8 @@ public:
     Q_INVOKABLE void moveSelectedBlocksUp();
     Q_INVOKABLE void moveSelectedBlocksDown();
 
+    Q_INVOKABLE void removeSelectedBlocks();
+
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
 
