@@ -100,6 +100,7 @@ public:
     Fraction timeStretch(const Fraction&) const;
     TimeSig* timeSig(const Fraction&) const;
     TimeSig* nextTimeSig(const Fraction&) const;
+    const std::map<int, TimeSig*>& timeSigList() const { return m_timesigs; }
     Fraction currentTimeSigTick(const Fraction&) const;
 
     const Groups& group(const Fraction&) const;

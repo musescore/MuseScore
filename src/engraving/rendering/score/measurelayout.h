@@ -66,6 +66,7 @@ public:
     static Segment* addHeaderKeySig(Measure* m, bool isFirstKeysig, const Staff* staff, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
     static void removeSystemHeader(Measure* m);
+    static void removeHeaderKeySigs(Segment* keySigSegment);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
     static void removeSystemTrailer(Measure* m, LayoutContext& ctx);
 
