@@ -165,7 +165,7 @@ void NotationActionController::init()
     registerCommand<FlipCommand>(&Controller::flipSelection);
     registerCommand<FlipHorizontallyCommand>(&Controller::flipSelectionHorizontally);
 
-    registerCommandWithParams(ADD_DRUM_NOTE_COMMAND, &Controller::addDrumNote);
+    registerCommand<AddDrumNoteCommand>(&Controller::addDrumNote);
 
     registerCommand<EnterRestCommand>(&Controller::putRestToSelection);
 
@@ -841,17 +841,14 @@ muse::Ret NotationActionController::addNote(NoteName note, NoteAddingMode mode)
     return muse::make_ok();
 }
 
-muse::Ret NotationActionController::addDrumNote(const muse::rcommand::Params& params)
+muse::Ret NotationActionController::addDrumNote(const AddDrumNoteCommand& command)
 {
     TRACEFUNC;
 
-    int pitch = params.at("pitch").toInt();
-    NoteAddingMode mode = EnumContract<NoteAddingMode>::enum_val(params.at("mode").toString()).value();
-
     NoteInputParams noteInputParams;
-    noteInputParams.drumPitch = pitch;
+    noteInputParams.drumPitch = command.pitch;
 
-    doAddNote(noteInputParams, mode);
+    doAddNote(noteInputParams, command.mode);
 
     return muse::make_ok();
 }

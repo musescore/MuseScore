@@ -173,7 +173,7 @@ private:
 
     muse::Ret addNote(const AddNoteCommand& command);
     muse::Ret addNote(NoteName noteName, NoteAddingMode addingMode);
-    muse::Ret addDrumNote(const muse::rcommand::Params& params);
+    muse::Ret addDrumNote(const AddDrumNoteCommand& command);
     void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
 
     muse::Ret toggleAccidental(const ToggleAccidentalCommand& command);

@@ -1061,6 +1061,22 @@ struct AddNoteB_ToInsertChordCommand {
     cprop_decl redirect = AddNoteCommand(NoteName::B, NoteAddingMode::InsertChord);
 };
 
+// drum note commands
+struct AddDrumNoteCommand {
+    cprop_decl id = Command("command://notation/add-drum-note");
+    cprop_decl title = MnemonicString("action", "Add drum note");
+    cprop_decl description = TranslatableString("action", "Add drum note");
+    cprop_decl availabilities = Availability::API;
+
+    int pitch = 0;
+    NoteAddingMode mode = NoteAddingMode::NextChord;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "pitch", &AddDrumNoteCommand::pitch, "Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", 0, 127 },
+        Field{ "mode", &AddDrumNoteCommand::mode, "Adding mode" },
+    };
+};
+
 // accidental commands
 struct ToggleAccidentalCommand {
     cprop_decl id = Command("command://notation/toggle-accidental");
@@ -2620,11 +2636,6 @@ struct ToggleStaccatoCommand {
 
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
-
-//inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
-
-//inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
-inline static const muse::rcommand::Command ADD_DRUM_NOTE_COMMAND("command://notation/add-drum-note"); // with params
 
 // add commands
 
