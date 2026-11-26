@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+
+#include "global/iinputstate.h"
 #include "../inotationselection.h"
 
 #include "igetscore.h"
@@ -55,6 +58,8 @@ public:
 class NotationSelection : public INotationSelection
 {
 public:
+    muse::GlobalInject<muse::IInputState> inputState;
+
     NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;

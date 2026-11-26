@@ -27,7 +27,6 @@
 #include <memory>
 #include <limits>
 
-#include <QApplication> // for QApplication::cursorFlashTime()
 #include <QClipboard>
 #include <QDrag>
 #include <QGuiApplication>
@@ -156,11 +155,6 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::draw;
 using namespace muse::io;
-
-static muse::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
-{
-    return muse::KeyboardModifier(int(km));
-}
 
 static double nudgeDistance(const EngravingItem* item, bool quickly, double raster)
 {
@@ -1062,7 +1056,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_dragData.reset();
     m_dragData.elements = elems;
     m_dragData.elementOffset = eoffset;
-    m_editData.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_editData.modifiers = inputState()->keyboardModifiers();
 
     for (EngravingItem* e : m_dragData.elements) {
         bool draggable = isDraggable(e);
@@ -1093,7 +1087,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         return;
     }
 
-    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_dragData.ed.modifiers = inputState()->keyboardModifiers();
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
     }
@@ -1164,7 +1158,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.moveDelta = moveDelta;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos = toPos;
-    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_dragData.ed.modifiers = inputState()->keyboardModifiers();
 
     m_dragData.ed.isEditMode = isEditingElement();
 
@@ -4437,7 +4431,7 @@ void NotationInteraction::blinkTextCursor()
 
 void NotationInteraction::startTextCursorBlinkTimer()
 {
-    const int cursorFlashTime = QApplication::cursorFlashTime() / 2;
+    const int cursorFlashTime = uiConfiguration()->cursorFlashTimeMs() / 2;
     if (cursorFlashTime > 0) {
         m_textCursorBlinkTimer.start(cursorFlashTime);
     } else {

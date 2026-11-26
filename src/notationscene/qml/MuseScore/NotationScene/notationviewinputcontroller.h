@@ -44,6 +44,7 @@
 
 #include "playback/iplaybackcontroller.h"
 
+#include "global/iinputstate.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/idragcontroller.h"
 #include "ui/iuiconfiguration.h"
@@ -104,6 +105,7 @@ class NotationViewInputController : public INotationViewController, public muse:
 public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::IInputState> inputState;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };

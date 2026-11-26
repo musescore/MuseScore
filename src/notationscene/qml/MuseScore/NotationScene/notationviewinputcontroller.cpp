@@ -134,7 +134,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (!(QApplication::mouseButtons() & Qt::RightButton)
+        if (!(inputState()->mouseButtons() & muse::MouseButton::RightButton)
             && AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
             m_view->showElementPopup(type);
         }
@@ -1304,7 +1304,7 @@ void NotationViewInputController::mouseDoubleClickEvent(const muse::PointerEvent
     }
 
     // Can't pass `this` as the second argument, because not QObject. But `m_view` works as well.
-    QTimer::singleShot(QApplication::doubleClickInterval(), m_view->asItem(), [this]() {
+    QTimer::singleShot(uiConfiguration()->doubleClickIntervalMs(), m_view->asItem(), [this]() {
         m_tripleClickPending = false;
     });
 

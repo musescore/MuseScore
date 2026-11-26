@@ -27,6 +27,7 @@
 
 #include "mocks/controlledviewmock.h"
 #include "mocks/dragcontrollermock.h"
+#include "global/tests/mocks/inputstatemock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "ui/tests/mocks/uiconfigurationmock.h"
 #include "notation/tests/mocks/notationconfigurationmock.h"
@@ -80,6 +81,9 @@ public:
         m_configuration = std::make_shared<NiceMock<NotationConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
 
+        m_inputState = std::make_shared<NiceMock<muse::InputStateMock> >();
+        m_controller->inputState.set(m_inputState);
+
         m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
@@ -107,6 +111,7 @@ public:
     NotationViewInputController* m_controller = nullptr;
     NiceMock<ControlledViewMock> m_view;
     std::shared_ptr<NotationConfigurationMock> m_configuration;
+    std::shared_ptr<muse::InputStateMock> m_inputState;
     std::shared_ptr<NotationInteractionMock> m_interaction;
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;

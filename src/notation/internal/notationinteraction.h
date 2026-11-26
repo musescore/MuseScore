@@ -28,6 +28,8 @@
 #include <QTimer>
 
 #include "modularity/ioc.h"
+#include "global/iinputstate.h"
+#include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 #include "interactive/iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
@@ -66,6 +68,8 @@ class NotationInteraction : public INotationInteraction, public IInteractionForS
     public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::IInputState> inputState;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };

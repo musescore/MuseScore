@@ -22,8 +22,6 @@
 
 #include "notationmidiinput.h"
 
-#include <QGuiApplication>
-
 #include "containers.h"
 #include "defer.h"
 
@@ -350,7 +348,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
     bool addToChord = !m_activeMidiPitches.empty();
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
-    if (QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) {
+    if (inputState()->queryKeyboardModifiers() & muse::KeyboardModifier::ShiftModifier) {
         EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             addToChord = true;
