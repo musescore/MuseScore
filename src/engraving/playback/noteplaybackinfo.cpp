@@ -39,12 +39,14 @@
 #include "engraving/infrastructure/eidregister.h"
 
 #include "../dom/breath.h"
+#include "../dom/capo.h"
 #include "../dom/chord.h"
 #include "../dom/dynamic.h"
 #include "../dom/fermata.h"
 #include "../dom/hairpin.h"
 #include "../dom/masterscore.h"
 #include "../dom/note.h"
+#include "../dom/ottava.h"
 #include "../dom/repeatlist.h"
 #include "../dom/staff.h"
 #include "../dom/segment.h"
@@ -409,6 +411,75 @@ void addGradualChangeOrigins(
         }
     }
 }
+
+//! The ottava whose pitch shift playback uses for the note (mirrors Staff::updateOttava: the latest-starting one wins)
+const Ottava* playedOttava(const Note* note)
+{
+    const Chord* chord = note->chord();
+    const int tick = chord->tick().ticks();
+
+    if (chord->staff()->pitchOffset(chord->tick()) == 0) {
+        return nullptr;
+    }
+
+    const Ottava* result = nullptr;
+
+    for (const auto& interval : note->score()->spannerMap().findOverlapping(tick, tick)) {
+        const Spanner* spanner = interval.value;
+
+        const bool appliesToNote = (spanner->isOttava())
+                                   && (spanner->playSpanner())
+                                   && (spanner->staffIdx() == note->staffIdx())
+                                   && (spanner->tick().ticks() <= tick)
+                                   && (tick < spanner->tick2().ticks());
+
+        if (appliesToNote && (!result || (spanner->tick() >= result->tick()))) {
+            result = toOttava(spanner);
+        }
+    }
+
+    return result;
+}
+
+//! The capo playback transposes the note by, if any (mirrors Note::ottaveCapoFret)
+const Capo* playedCapo(const Note* note)
+{
+    const Chord* chord = note->chord();
+    const staff_idx_t staffIdx = note->staffIdx();
+
+    // The capo in effect is the last one on the staff at or before the note
+    for (const Segment* segment = chord->segment(); segment; segment = segment->prev1()) {
+        for (const EngravingItem* annotation : segment->annotations()) {
+            if (!annotation->isCapo() || (annotation->staffIdx() != staffIdx)) {
+                continue;
+            }
+
+            const CapoParams& params = toCapo(annotation)->params();
+
+            const bool transposesNote = (params.active)
+                                        && (params.transposeMode == CapoParams::TransposeMode::PLAYBACK_ONLY)
+                                        && (params.fretPosition != 0)
+                                        && (!params.ignoredStrings.contains(static_cast<string_idx_t>(note->string())));
+
+            return transposesNote
+                   ? toCapo(annotation)
+                   : nullptr;
+        }
+    }
+
+    return nullptr;
+}
+
+void addPitchShifts(const Note* note, std::vector<NotePlaybackPitchShift>& shifts)
+{
+    if (const Ottava* ottava = playedOttava(note)) {
+        shifts.push_back({ ottava, ottava->pitchShift() });
+    }
+
+    if (const Capo* capo = playedCapo(note)) {
+        shifts.push_back({ capo, capo->params().fretPosition });
+    }
+}
 } // namespace noteplaybackinfo_detail
 
 using namespace noteplaybackinfo_detail;
@@ -567,6 +638,12 @@ NotePlaybackInfo collectNotePlaybackInfo(const Note* note, bool expandRepeats)
     if (!info.passes.empty()) {
         addTieMarkings(note, info.markings);
         addPauseMarkings(note, info.markings);
+
+        info.isPlayed = note->play();
+        info.soundingPitch = note->ppitch();
+        info.soundingTpc = note->playingTpc();
+
+        addPitchShifts(note, info.pitchShifts);
     }
 
     return info;

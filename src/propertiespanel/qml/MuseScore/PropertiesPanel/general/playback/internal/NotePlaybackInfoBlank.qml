@@ -61,6 +61,9 @@ ExpandableBlank {
         property real basePixelSize: 22 // a staff space of 5.5px
         property real maxInkHeight: lineHeight * 1.3 // tall symbols (e.g. a metronome mark's note) are scaled down
 
+        //! The model names another music font for symbols this one lacks (see addSymbolFallbacks)
+        property string fontFamily: ui.theme.musicalFont.family
+
         readonly property rect baseInk: baseMetrics.tightBoundingRect(text)
         readonly property real inkScale: (baseInk.height > maxInkHeight) ? (maxInkHeight / baseInk.height) : 1
 
@@ -69,7 +72,7 @@ ExpandableBlank {
 
         FontMetrics {
             id: baseMetrics
-            font.family: ui.theme.musicalFont.family
+            font.family: glyph.fontFamily
             font.pixelSize: glyph.basePixelSize
         }
 
@@ -79,12 +82,13 @@ ExpandableBlank {
 
             text: glyph.text
             color: ui.theme.fontPrimaryColor
-            font.family: ui.theme.musicalFont.family
+            font.family: glyph.fontFamily
             font.pixelSize: glyph.basePixelSize * glyph.inkScale
         }
     }
 
-    //! A row's label: { text, isSymbol } parts, e.g. "Moderato ", ♩, " = 114"
+    //! A row's label: { text, isSymbol, emphasis } parts, e.g. "Moderato ", ♩, " = 114". emphasis (text only):
+    //! 1 = bold and bright, -1 = dimmed, e.g. the sung syllable of a lyric's word
     component LabelParts: Flow {
         id: flow
 
@@ -105,14 +109,18 @@ ExpandableBlank {
                     id: symbol
                     visible: part.modelData.isSymbol
                     text: part.modelData.isSymbol ? part.modelData.text : ""
+                    fontFamily: part.modelData.fontFamily || ui.theme.musicalFont.family
                 }
 
                 StyledTextLabel {
                     id: label
                     visible: !part.modelData.isSymbol
                     width: parent.width
+                    readonly property int emphasis: part.modelData.emphasis || 0
+
                     text: part.modelData.isSymbol ? "" : part.modelData.text
-                    opacity: 0.85
+                    font: (emphasis > 0) ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                    opacity: (emphasis > 0) ? 1 : ((emphasis < 0) ? 0.5 : 0.85)
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.Wrap
                 }
@@ -120,7 +128,7 @@ ExpandableBlank {
         }
     }
 
-    //! A listed score item: [prefix] label .... location, with what it does below. Hover: highlight it, scrolling
+    //! A listed score item: [prefix] label .... location, with what it does (or more lines of label parts) below. Hover: highlight it, scrolling
     //! to it only if it's out of view. Click: keep it that way. Double-click: select it. itemIndex < 0: plain text.
     component ItemRow: Item {
         id: row
@@ -181,6 +189,19 @@ ExpandableBlank {
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.Wrap
                 }
+
+                // e.g. the staccato and tenuto that make up a tenuto-staccato, or "(Strings only)"
+                Repeater {
+                    model: row.modelData.lines || []
+
+                    delegate: LabelParts {
+                        required property var modelData
+
+                        width: parent ? parent.width : 0
+                        parts: modelData
+                        opacity: 0.7
+                    }
+                }
             }
 
             StyledTextLabel {
@@ -212,8 +233,10 @@ ExpandableBlank {
 
         property var rows: []
         property var markings: []
+        property real topGap: 3 // keeps the first row clear of the value above it
 
         spacing: 2
+        topPadding: (rows.length + markings.length) > 0 ? topGap : 0
 
         Repeater {
             model: section.rows
@@ -238,15 +261,23 @@ ExpandableBlank {
     contentItemComponent: Column {
         id: content
 
-        //! One label column for Tempo, Dynamic and Other, so their values line up
+        //! One label column for all the sections, so their values line up
         readonly property real labelColumnWidth: Math.max(
+            pitchLabelMetrics.advanceWidth,
             tempoLabelMetrics.advanceWidth,
             dynamicLabelMetrics.advanceWidth,
+            soundLabelMetrics.advanceWidth,
             otherLabelMetrics.advanceWidth
         )
 
         spacing: 12
         width: root.width
+
+        TextMetrics {
+            id: pitchLabelMetrics
+            font: ui.theme.bodyFont
+            text: qsTrc("propertiespanel", "Pitch")
+        }
 
         TextMetrics {
             id: tempoLabelMetrics
@@ -261,9 +292,111 @@ ExpandableBlank {
         }
 
         TextMetrics {
+            id: soundLabelMetrics
+            font: ui.theme.bodyFont
+            text: qsTrc("propertiespanel", "Sound")
+        }
+
+        TextMetrics {
             id: otherLabelMetrics
             font: ui.theme.bodyFont
             text: qsTrc("propertiespanel", "Other")
+        }
+
+        StyledTextLabel {
+            width: parent.width
+            visible: root.model ? !root.model.isPlayed : false
+            text: qsTrc("propertiespanel", "Not played: this note’s “Play” setting is off")
+            font: ui.theme.bodyBoldFont
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
+        }
+
+        // --- Pitch: what playback sounds, and the ottava / capo that move it
+        GridLayout {
+            width: parent.width
+            columns: 2
+            columnSpacing: 8
+            rowSpacing: 2
+
+            StyledTextLabel {
+                Layout.preferredWidth: content.labelColumnWidth
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
+                text: pitchLabelMetrics.text
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            // A button that brings the note back into view, e.g. after a listed item took the view elsewhere
+            Item {
+                id: pitchButton
+
+                readonly property real padding: 6
+                readonly property string tooltipText: qsTrc("propertiespanel", "Show the selected note")
+
+                Layout.fillWidth: true // without a filling item, the grid gives this column's spare width to the labels
+                Layout.alignment: Qt.AlignBaseline
+
+                // The text starts at the left, lined up with the values below it; the button's frame and the area that
+                // takes clicks reach padding past it on both sides
+                implicitWidth: pitchText.implicitWidth
+                implicitHeight: pitchText.implicitHeight + 4
+                baselineOffset: pitchText.y + pitchText.baselineOffset
+
+                Rectangle {
+                    id: pitchFrame
+
+                    x: -pitchButton.padding
+                    width: pitchText.implicitWidth + 2 * pitchButton.padding
+                    height: parent.height
+                    radius: 3
+                    color: ui.theme.buttonColor
+                    opacity: pitchMouseArea.containsPress ? ui.theme.buttonOpacityHit
+                                                          : (pitchMouseArea.containsMouse ? ui.theme.buttonOpacityHover : 0)
+                }
+
+                Rectangle {
+                    anchors.fill: pitchFrame
+                    radius: 3
+                    color: "transparent"
+                    border.width: 1
+                    border.color: ui.theme.strokeColor
+                }
+
+                StyledTextLabel {
+                    id: pitchText
+
+                    y: 2
+                    text: root.model ? root.model.pitch : ""
+                    font: ui.theme.largeBodyBoldFont
+                    horizontalAlignment: Text.AlignLeft
+                }
+
+                MouseArea {
+                    id: pitchMouseArea
+
+                    anchors.fill: pitchFrame
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+
+                    onClicked: root.model.showSelectedNote()
+
+                    onContainsMouseChanged: {
+                        if (containsMouse) {
+                            ui.tooltip.show(pitchButton, pitchButton.tooltipText)
+                        } else {
+                            ui.tooltip.hide(pitchButton)
+                        }
+                    }
+                }
+            }
+
+            Item { width: 1; height: 1; visible: pitchShiftRows.visible }
+            SectionRows {
+                id: pitchShiftRows
+                Layout.fillWidth: true
+                visible: rows.length > 0
+                rows: root.model ? root.model.pitchRows : []
+            }
         }
 
         Repeater {
@@ -396,6 +529,28 @@ ExpandableBlank {
             }
         }
 
+        // --- Sound: what chooses the sound (technique text, Muse Sounds flags, the sung syllable)
+        GridLayout {
+            width: parent.width
+            columns: 2
+            columnSpacing: 8
+            visible: root.model ? root.model.soundRows.length > 0 : false
+
+            StyledTextLabel {
+                Layout.preferredWidth: content.labelColumnWidth
+                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                Layout.topMargin: 2 // level with the first row's text
+                text: soundLabelMetrics.text
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            SectionRows {
+                Layout.fillWidth: true
+                topGap: 0 // nothing above it
+                rows: root.model ? root.model.soundRows : []
+            }
+        }
+
         // --- Other: everything else that shapes how the note plays
         GridLayout {
             width: parent.width
@@ -413,6 +568,7 @@ ExpandableBlank {
 
             SectionRows {
                 Layout.fillWidth: true
+                topGap: 0 // nothing above it
                 rows: root.model ? root.model.otherMarkings : []
             }
         }

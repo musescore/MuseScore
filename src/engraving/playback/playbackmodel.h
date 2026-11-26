@@ -95,6 +95,12 @@ public:
     //! and returns the score item that produced each articulation type. Playing techniques set by
     //! earlier text (pizz., mute, ...) are left out; they don't come from an item on this chord.
     std::map<muse::mpe::ArticulationType, const EngravingItem*> articulationSources(const Note* note, int tickPositionOffset) const;
+
+    //! The score items that choose which sound plays the note: playing technique text, Muse Sounds flags and the
+    //! lyric syllable (on this note, or held from an earlier one through its melisma). Each applies from where it is
+    //! until the next one.
+    PlaybackContextSources soundSources(const Note* note, int tickPositionOffset) const;
+
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
 

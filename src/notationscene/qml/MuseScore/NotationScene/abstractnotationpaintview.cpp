@@ -52,6 +52,11 @@ using namespace muse::draw;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
+//! How the view glides to items the Properties panel centers on (see glideCanvasToPosition)
+static constexpr int GLIDE_DURATION_MS = 400;
+// Eases out of where the view is and lands at full speed: the start is what is jarring, not the stop.
+static constexpr QEasingCurve::Type GLIDE_EASING = QEasingCurve::InCubic;
+
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -60,6 +65,20 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
 
     connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
+
+    m_glide.setDuration(GLIDE_DURATION_MS);
+    m_glide.setEasingCurve(GLIDE_EASING);
+
+    connect(&m_glide, &QVariantAnimation::valueChanged, this, [this](const QVariant& value) {
+        // m_isGlideStep tells onMatrixChanged which view moves come from the glide itself.
+        // Since every view change goes through onMatrixChanged, setting this here allows the glide to happen at all.
+        // This is because onMatrixChanged stops m_glide whenever it's running, as a failsafe to enable outside
+        // canvas movements (due to mouse wheel, zoom, etc.) to override the glide from the note info.
+        m_isGlideStep = true;
+        moveCanvasToPosition(muse::PointF::fromQPointF(value.toPointF()));
+        m_isGlideStep = false;
+    });
+
     connect(this, &QQuickPaintedItem::heightChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
 
     connect(this, &AbstractNotationPaintView::horizontalScrollChanged, [this]() {
@@ -82,6 +101,8 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
 AbstractNotationPaintView::~AbstractNotationPaintView()
 {
+    m_glide.stop();
+
     m_inputController->deinit();
 
     if (m_notation && isMainView()) {
@@ -489,6 +510,11 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
 {
     UNUSED(overrideZoomType);
 
+    // Scrolling, zooming, playback, a new selection...: whatever else moves the view wins over a glide
+    if (!m_isGlideStep && isGliding()) {
+        m_glide.stop();
+    }
+
     Transform oldMatrixInverted = oldMatrix.inverted();
 
     if (m_shadowNoteRect.isValid()) {
@@ -654,10 +680,36 @@ static bool isItemInView(const EngravingItem* item, const RectF& viewRect)
     return viewRect.contains(item->canvasBoundingRect());
 }
 
-void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
+RectF AbstractNotationPaintView::destinationViewport() const
 {
     RectF viewRect = viewport();
 
+    if (!isGliding()) {
+        return viewRect;
+    }
+
+    const QPointF end = m_glide.endValue().toPointF();
+
+    return RectF(end.x(), end.y(), viewRect.width(), viewRect.height());
+}
+
+void AbstractNotationPaintView::glideCanvasToPosition(const PointF& logicPos)
+{
+    m_glide.stop();
+
+    const PointF start = viewportTopLeft();
+
+    if (start == logicPos) {
+        return;
+    }
+
+    m_glide.setStartValue(start.toQPointF());
+    m_glide.setEndValue(logicPos.toQPointF());
+    m_glide.start();
+}
+
+void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
+{
     if (request.endCentering) {
         const std::optional<PointF> savedPosition = m_viewPositionBeforeCentering;
 
@@ -665,11 +717,14 @@ void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::
 
         // Explicit requests only (e.g. from the Properties panel); never fight the playback cursor
         if (request.restoreView && savedPosition && !playbackState()->isPlaying()) {
-            moveCanvasToPosition(*savedPosition);
+            glideCanvasToPosition(*savedPosition);
         }
 
         return;
     }
+
+    // Centering judges by where the view is going, so a request made during a glide doesn't undo it
+    RectF viewRect = request.center ? destinationViewport() : viewport();
 
     IF_ASSERT_FAILED(request.item) {
         return;
@@ -695,7 +750,7 @@ void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::
             request.showRect.center().y() - viewRect.height() / 2
             );
 
-        moveCanvasToPosition(topLeft);
+        glideCanvasToPosition(topLeft);
         return;
     }
 

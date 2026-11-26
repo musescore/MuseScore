@@ -33,6 +33,7 @@
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
 #include "dom/laissezvib.h"
+#include "dom/lyrics.h"
 #include "dom/tapping.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
@@ -1289,6 +1290,34 @@ std::map<ArticulationType, const EngravingItem*> PlaybackModel::articulationSour
     }
 
     return result;
+}
+
+PlaybackContextSources PlaybackModel::soundSources(const Note* note, int tickPositionOffset) const
+{
+    if (!note || !m_playbackCtx) {
+        return {};
+    }
+
+    const Chord* chord = note->chord();
+
+    PlaybackContextSources sources = m_playbackCtx->sources(note->track(), chord->tick().ticks() + tickPositionOffset);
+
+    // A syllable from an earlier note counts only while its melisma lasts
+    if (sources.syllable && !sources.syllableStartsHere) {
+        const Lyrics* lyrics = sources.syllable->isLyrics()
+                               ? toLyrics(sources.syllable)
+                               : nullptr;
+
+        const bool isHeld = lyrics
+                            && lyrics->isMelisma()
+                            && (lyrics->ticks().isZero() || (chord->tick() <= lyrics->endTick()));
+
+        if (!isHeld) {
+            sources.syllable = nullptr;
+        }
+    }
+
+    return sources;
 }
 
 muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const

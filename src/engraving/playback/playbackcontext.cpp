@@ -345,6 +345,10 @@ void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t track
     eraseTickRangeByTrack(m_textArticulationsByTrack);
     eraseTickRangeByTrack(m_syllablesByTrack);
     eraseTickRangeByTrack(m_playTechniquesByTrack);
+    eraseTickRangeByTrack(m_soundPresetSourcesByTrack);
+    eraseTickRangeByTrack(m_textArticulationSourcesByTrack);
+    eraseTickRangeByTrack(m_syllableSourcesByTrack);
+    eraseTickRangeByTrack(m_playTechniqueSourcesByTrack);
     eraseTickRangeByTrack(m_multiVerseLyricsPositionMap);
 
     muse::remove_if(m_currentVerseNumByChordRest, [trackFrom, trackTo, tickFrom, tickTo](const auto& pair) {
@@ -364,6 +368,45 @@ bool PlaybackContext::hasSoundFlags(const track_idx_t trackFrom, const track_idx
     return hasEntryInRange(m_soundPresetsByTrack) || hasEntryInRange(m_textArticulationsByTrack);
 }
 
+PlaybackContextSources PlaybackContext::sources(const track_idx_t trackIdx, const int nominalPositionTick) const
+{
+    const auto find = [trackIdx, nominalPositionTick](const SourcesByTrack& byTrack) -> const SourcesMap::value_type* {
+        const auto trackIt = byTrack.find(trackIdx);
+
+        if (trackIt == byTrack.end()) {
+            return nullptr;
+        }
+
+        const auto it = muse::findLessOrEqual(trackIt->second, nominalPositionTick);
+
+        return (it != trackIt->second.end())
+               ? &(*it)
+               : nullptr;
+    };
+
+    const auto firstItem = [](const SourcesMap::value_type* entry) -> const EngravingItem* {
+        return (entry && !entry->second.empty())
+               ? entry->second.front()
+               : nullptr;
+    };
+
+    PlaybackContextSources result;
+
+    result.playingTechnique = firstItem(find(m_playTechniqueSourcesByTrack));
+    result.textArticulation = firstItem(find(m_textArticulationSourcesByTrack));
+
+    if (const SourcesMap::value_type* presets = find(m_soundPresetSourcesByTrack)) {
+        result.soundPresets = presets->second;
+    }
+
+    if (const SourcesMap::value_type* syllable = find(m_syllableSourcesByTrack)) {
+        result.syllable = firstItem(syllable);
+        result.syllableStartsHere = (syllable->first == nominalPositionTick);
+    }
+
+    return result;
+}
+
 void PlaybackContext::updatePlayTechMap(const Part* part, const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
     if (!annotation->playPlayTechAnnotation()) {
@@ -381,12 +424,15 @@ void PlaybackContext::updatePlayTechMap(const Part* part, const PlayTechAnnotati
     textArticulation.text = mpe::ORDINARY_PLAYING_TECHNIQUE_CODE;
 
     const TrackRange trackRange = part->trackRange();
+
     for (track_idx_t idx = trackRange.startTrack; idx < trackRange.endTrack; ++idx) {
         m_playTechniquesByTrack[idx][segmentPositionTick] = type;
+        m_playTechniqueSourcesByTrack[idx][segmentPositionTick] = { annotation };
 
         if (cancelPlayTechniques) {
             textArticulation.layerIdx = static_cast<layer_idx_t>(idx);
             m_textArticulationsByTrack[idx][segmentPositionTick] = textArticulation;
+            m_textArticulationSourcesByTrack[idx][segmentPositionTick] = { annotation };
         }
     }
 }
@@ -413,6 +459,11 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
     for (const auto& pair : flagsOnSegment) {
         const SoundFlag* flag = pair.second;
 
+        // The flag belongs to a staff text, which is what the score shows
+        const EngravingItem* flagSource = flag->ownershipParentItem()
+                                          ? flag->ownershipParentItem()
+                                          : flag;
+
         for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
             if (!trackAccepted(flag, trackIdx)) {
                 continue;
@@ -434,6 +485,8 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
             if (!presets.empty()) {
                 SoundPresetChangeEventList& target = m_soundPresetsByTrack[trackIdx][segmentPositionTick];
                 target.insert(target.end(), std::make_move_iterator(presets.begin()), std::make_move_iterator(presets.end()));
+
+                m_soundPresetSourcesByTrack[trackIdx][segmentPositionTick].push_back(flagSource);
             }
 
             if (!flag->playingTechnique().empty()) {
@@ -441,12 +494,14 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
                 event.text = flag->playingTechnique();
                 event.layerIdx = static_cast<layer_idx_t>(trackIdx);
                 m_textArticulationsByTrack[trackIdx][segmentPositionTick] = std::move(event);
+                m_textArticulationSourcesByTrack[trackIdx][segmentPositionTick] = { flagSource };
             }
         }
 
         if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
             for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
                 m_playTechniquesByTrack[trackIdx][segmentPositionTick] = PlayingTechniqueType::Natural;
+                m_playTechniqueSourcesByTrack[trackIdx][segmentPositionTick] = { flagSource };
             }
         }
     }
@@ -485,6 +540,7 @@ void PlaybackContext::updateSyllableMap(const TextBase* text, const int segmentP
         track_idx_t trackIdx = staff2track(staffIdx, voiceIdx);
         syllable.layerIdx = static_cast<layer_idx_t>(trackIdx);
         m_syllablesByTrack[trackIdx][segmentPositionTick] = syllable;
+        m_syllableSourcesByTrack[trackIdx][segmentPositionTick] = { text };
     }
 }
 
@@ -642,6 +698,16 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
             copyItemsInRange(m_syllablesByTrack, trackRange.startTrack, trackRange.endTrack, startTick, endTick, newItemsOffsetTick);
             copyItemsInRange(m_playTechniquesByTrack, trackRange.startTrack, trackRange.endTrack, startTick, endTick,
                              newItemsOffsetTick);
+
+            for (SourcesByTrack* sources : {
+                &m_soundPresetSourcesByTrack,
+                &m_textArticulationSourcesByTrack,
+                &m_syllableSourcesByTrack,
+                &m_playTechniqueSourcesByTrack
+            }
+                 ) {
+                copyItemsInRange(*sources, trackRange.startTrack, trackRange.endTrack, startTick, endTick, newItemsOffsetTick);
+            }
 
             currMeasure = currMeasure->nextMeasure();
             if (!currMeasure) {

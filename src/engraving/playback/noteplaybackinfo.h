@@ -68,14 +68,36 @@ struct NotePlaybackMarking {
     std::vector<muse::mpe::ArticulationType> effects;
 };
 
+//! An ottava or capo that changes the pitch playback uses for the note
+struct NotePlaybackPitchShift {
+    const EngravingItem* item = nullptr;
+    int semitones = 0;
+};
+
+//! The score items that choose which sound plays the note; each applies from where it is until the next one
+struct NotePlaybackSound {
+    const EngravingItem* playingTechnique = nullptr;  // technique text ("pizz.", "mute", or "arco" ending one)
+    std::vector<const EngravingItem*> soundFlags;     // staff texts whose Muse Sounds flags apply
+    const EngravingItem* syllable = nullptr;          // the lyric sung on the note (voices only)
+    bool syllableStartsHere = false;                  // false: the note continues an earlier syllable
+};
+
 struct NotePlaybackInfo {
     const Note* note = nullptr;        // the master-score note analysed
     const Note* attackNote = nullptr;  // first note of the (played) tie chain; its tick decides the dynamic
 
     int userVelocity = 0;  // per-note velocity override; 0 = none
 
-    std::vector<NotePlaybackPass> passes;
+    bool isPlayed = true;  // the note's "Play" setting
 
+    int soundingPitch = 0;  // MIDI pitch playback uses: after ottavas, capo and transposition
+    int soundingTpc = 0;
+
+    std::vector<NotePlaybackPitchShift> pitchShifts;
+
+    NotePlaybackSound sound;
+
+    std::vector<NotePlaybackPass> passes;
     std::vector<NotePlaybackMarking> markings;
 
     bool isValid() const;

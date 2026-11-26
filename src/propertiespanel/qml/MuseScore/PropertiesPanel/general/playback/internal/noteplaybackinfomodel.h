@@ -29,6 +29,9 @@
 
 #include "propertiespanelabstractmodel.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 #include "engraving/playback/noteplaybackinfo.h"
 
 namespace mu::propertiespanel {
@@ -39,7 +42,11 @@ class NotePlaybackInfoModel : public PropertiesPanelAbstractModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
+    Q_PROPERTY(bool isPlayed READ isPlayed NOTIFY infoChanged)
+    Q_PROPERTY(QString pitch READ pitch NOTIFY infoChanged)
+    Q_PROPERTY(QVariantList pitchRows READ pitchRows NOTIFY infoChanged)
     Q_PROPERTY(QVariantList passes READ passes NOTIFY infoChanged)
+    Q_PROPERTY(QVariantList soundRows READ soundRows NOTIFY infoChanged)
     Q_PROPERTY(bool isMuted READ isMuted NOTIFY infoChanged)
     Q_PROPERTY(QString muteReason READ muteReason NOTIFY infoChanged)
     Q_PROPERTY(int velocityOverride READ velocityOverride NOTIFY infoChanged)
@@ -52,7 +59,15 @@ public:
     explicit NotePlaybackInfoModel(
         QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
+    //! false: the note's "Play" setting is off, so it's silent
+    bool isPlayed() const { return m_isPlayed; }
+    //! The pitch playback uses, e.g. "E♭5"
+    QString pitch() const { return m_pitch; }
+    //! Ottavas and capos that move the pitch
+    QVariantList pitchRows() const { return m_pitchRows; }
     QVariantList passes() const { return m_passes; }
+    //! Playing technique text, Muse Sounds flags and the sung syllable
+    QVariantList soundRows() const { return m_soundRows; }
     bool isMuted() const { return m_isMuted; }
     QString muteReason() const { return m_muteReason; }
     int velocityOverride() const { return m_velocityOverride; }
@@ -69,8 +84,12 @@ public:
     Q_INVOKABLE void hoverItem(int itemIndex);
     Q_INVOKABLE void unhoverItem(int itemIndex);
 
-    //! Pins the item: it stays centered and highlighted after the mouse leaves, until another item is clicked
+    //! Pins the item: it stays centered and highlighted after the mouse leaves, until another item is clicked.
+    //! Clicking the pinned item again unpins it, and the view goes back to where it was.
     Q_INVOKABLE void clickItem(int itemIndex);
+
+    //! Unpins whatever is pinned and brings the selected note back into view
+    Q_INVOKABLE void showSelectedNote();
 
     //! Selects the item in the score; the panel then describes that item instead of the note
     Q_INVOKABLE void doubleClickItem(int itemIndex);
@@ -98,6 +117,8 @@ signals:
     void focusChanged();
 
 private:
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+
     const mu::engraving::Note* selectedNote() const;
     void reload();
     void updateMuteState(const mu::engraving::Note* note);
@@ -107,6 +128,9 @@ private:
 
     void applyFocus();
     void clearFocus();
+
+    //! Points symbols the UI's music font can't draw to the fallback music font
+    void addSymbolFallbacks();
 
     QVariantList m_passes;
     bool m_isMuted = false;
@@ -118,6 +142,11 @@ private:
     QVariantList m_tempoMarkings;
     QVariantList m_dynamicMarkings;
     QVariantList m_otherMarkings;
+
+    bool m_isPlayed = true;
+    QString m_pitch;
+    QVariantList m_pitchRows;
+    QVariantList m_soundRows;
 
     int m_hoveredIndex = -1;
     int m_pinnedIndex = -1;

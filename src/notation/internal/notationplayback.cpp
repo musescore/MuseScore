@@ -41,6 +41,7 @@
 
 #include "notationerrors.h"
 
+#include "containers.h"
 #include "log.h"
 #include "translation.h"
 
@@ -480,6 +481,27 @@ NotePlaybackInfo NotationPlayback::notePlaybackInfo(const Note* note) const
         info,
         m_playbackModel.articulationSources(info.attackNote, tickPositionOffset)
         );
+
+    const mu::engraving::PlaybackContextSources sound = m_playbackModel.soundSources(info.attackNote, tickPositionOffset);
+
+    info.sound.playingTechnique = sound.playingTechnique;
+    info.sound.syllable = sound.syllable;
+    info.sound.syllableStartsHere = sound.syllableStartsHere;
+
+    // Flags with both a preset and a technique are found twice
+    for (const mu::engraving::EngravingItem* flag : sound.soundPresets) {
+        if (!muse::contains(info.sound.soundFlags, flag)) {
+            info.sound.soundFlags.push_back(flag);
+        }
+    }
+
+    const bool isFlagTechnique = (sound.textArticulation != nullptr)
+                                 && (sound.textArticulation != sound.playingTechnique)
+                                 && !muse::contains(info.sound.soundFlags, sound.textArticulation);
+
+    if (isFlagTechnique) {
+        info.sound.soundFlags.push_back(sound.textArticulation);
+    }
 
     return info;
 }
