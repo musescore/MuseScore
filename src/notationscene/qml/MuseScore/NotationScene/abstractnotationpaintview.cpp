@@ -1521,31 +1521,53 @@ QVariant AbstractNotationPaintView::inputMethodQuery(Qt::InputMethodQuery query)
     return QQuickPaintedItem::inputMethodQuery(query);
 }
 
+static const std::vector<std::string>& dragFormats()
+{
+    static const std::vector<std::string> formats { mu::engraving::mimeSymbolFormat, mu::engraving::mimeStaffListFormat };
+    return formats;
+}
+
 void AbstractNotationPaintView::dragEnterEvent(QDragEnterEvent* event)
 {
     if (isInited()) {
-        m_inputController->dragEnterEvent(event);
+        const QMimeData* mimeData = dragController()->mimeData(event);
+        IF_ASSERT_FAILED(mimeData) {
+            return;
+        }
+
+        DragEvent dragEvent = fromQtDragEvent(event, mimeData, this, dragFormats());
+        m_inputController->dragEnterEvent(dragEvent);
+        applyToQtDragEvent(dragEvent, event);
     }
 }
 
-void AbstractNotationPaintView::dragLeaveEvent(QDragLeaveEvent* event)
+void AbstractNotationPaintView::dragLeaveEvent(QDragLeaveEvent*)
 {
     if (isInited()) {
-        m_inputController->dragLeaveEvent(event);
+        m_inputController->dragLeaveEvent();
     }
 }
 
 void AbstractNotationPaintView::dragMoveEvent(QDragMoveEvent* event)
 {
     if (isInited()) {
-        m_inputController->dragMoveEvent(event);
+        const QMimeData* mimeData = dragController()->mimeData(event);
+        IF_ASSERT_FAILED(mimeData) {
+            return;
+        }
+
+        DragEvent dragEvent = fromQtDragEvent(event, mimeData, this, dragFormats());
+        m_inputController->dragMoveEvent(dragEvent);
+        applyToQtDragEvent(dragEvent, event);
     }
 }
 
 void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 {
     if (isInited()) {
-        m_inputController->dropEvent(event);
+        DragEvent dragEvent = fromQtDragEvent(event, event->mimeData(), this, dragFormats());
+        m_inputController->dropEvent(dragEvent);
+        applyToQtDragEvent(dragEvent, event);
     }
 }
 

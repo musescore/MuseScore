@@ -25,7 +25,6 @@ set(MODULE_TEST_SRC
     ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/controlledviewmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/dragcontrollermock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationviewinputcontroller_tests.cpp

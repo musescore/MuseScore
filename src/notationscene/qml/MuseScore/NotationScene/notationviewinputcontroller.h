@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "types/dragevent.h"
 
 #include "async/asyncable.h"
 
@@ -47,7 +48,6 @@
 
 #include "global/iinputstate.h"
 #include "global/iglobalconfiguration.h"
-#include "ui/idragcontroller.h"
 #include "ui/iuiconfiguration.h"
 #include "rcommand/icommanddispatcher.h"
 
@@ -116,7 +116,6 @@ public:
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
-    muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
@@ -181,10 +180,10 @@ public:
 
     bool ignoreNextMouseContextMenuEvent() const { return m_ignoreNextMouseContextMenuEvent; }
 
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dragLeaveEvent(QDragLeaveEvent* event);
-    void dragMoveEvent(QDragMoveEvent* event);
-    void dropEvent(QDropEvent* event);
+    void dragEnterEvent(muse::DragEvent& event);
+    void dragLeaveEvent();
+    void dragMoveEvent(muse::DragEvent& event);
+    void dropEvent(muse::DragEvent& event);
 
     ElementType selectionType() const;
     muse::PointF selectionElementPos() const;
@@ -266,21 +265,14 @@ private:
         muse::PointF logicalBeginPoint;
     } m_mouseDownInfo;
 
-    struct DragMoveEvent {
-        QPointF position;
-        muse::KeyboardModifiers modifiers;
-        Qt::DropAction dropAction = Qt::DropAction::CopyAction;
-        QObject* source = nullptr;
-    };
-
-    bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
+    bool doDrop(const muse::DragEvent& event);
     bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers);
     void selectInstrumentForPendingDrop();
     void finishPendingDrop(bool drop, const std::optional<InstrumentTemplate>& instrument = std::nullopt);
 
     std::vector<int> pitchesBeingDragged() const;
 
-    DragMoveEvent m_lastDragMoveEvent;
+    muse::DragEvent m_lastDragMoveEvent;
 
     //! NOTE The drop that waits for the user's answer
     struct PendingDrop {

@@ -21,12 +21,9 @@
  */
 #include <gmock/gmock.h>
 
-#include <QMimeData>
-
 #include "async/processevents.h"
 
 #include "mocks/controlledviewmock.h"
-#include "mocks/dragcontrollermock.h"
 #include "global/tests/mocks/inputstatemock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "ui/tests/mocks/uiconfigurationmock.h"
@@ -90,9 +87,6 @@ public:
         m_uiConfiguration = std::make_shared<NiceMock<muse::ui::UiConfigurationMock> >();
         m_controller->uiConfiguration.set(m_uiConfiguration);
 
-        m_dragController = std::make_shared<NiceMock<muse::ui::DragControllerMock> >();
-        m_controller->dragController.set(m_dragController);
-
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button button) {
             return IInteractive::ButtonData(button, "");
@@ -117,7 +111,6 @@ public:
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
     std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
     std::shared_ptr<muse::ui::UiConfigurationMock> m_uiConfiguration;
-    std::shared_ptr<muse::ui::DragControllerMock> m_dragController;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<SelectInstrumentsScenarioMock> m_selectInstrumentScenario;
     playback::IPlaybackController::PlayParams m_playParams;
@@ -127,13 +120,11 @@ public:
     void dragOverAndLeave()
     {
         ON_CALL(*m_uiConfiguration, isSystemDragSupported()).WillByDefault(Return(false));
-        ON_CALL(*m_dragController, mimeData(_)).WillByDefault(Return(&m_dragMimeData));
 
-        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &m_dragMimeData, Qt::LeftButton, Qt::NoModifier);
-        m_controller->dragMoveEvent(&moveEvent);
+        muse::DragEvent moveEvent = make_dragEvent(m_dragMimeData);
+        m_controller->dragMoveEvent(moveEvent);
 
-        QDragLeaveEvent leaveEvent;
-        m_controller->dragLeaveEvent(&leaveEvent);
+        m_controller->dragLeaveEvent();
     }
 
     //! The user's answer to the question, which waits until `answer` is called
@@ -182,7 +173,15 @@ public:
 
     int m_instrumentQuestions = 0;
 
-    QMimeData m_dragMimeData;
+    muse::MimeData m_dragMimeData;
+
+    static muse::DragEvent make_dragEvent(const muse::MimeData& mimeData)
+    {
+        muse::DragEvent ev;
+        ev.position = muse::PointF(100, 100);
+        ev.mimeData = mimeData;
+        return ev;
+    }
 
     struct HitContextConfig
     {
@@ -1113,9 +1112,9 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_AnotherDragIsNot
     EXPECT_CALL(*m_interaction, startDropSingle(_)).Times(0);
 
     //! [WHEN] Another element is dragged into the view...
-    m_dragMimeData.setData(engraving::mimeSymbolFormat, QByteArray("B"));
-    QDragEnterEvent enterEvent(QPoint(100, 100), Qt::CopyAction, &m_dragMimeData, Qt::LeftButton, Qt::NoModifier);
-    m_controller->dragEnterEvent(&enterEvent);
+    m_dragMimeData.setData(engraving::mimeSymbolFormat, muse::ByteArray("B"));
+    muse::DragEvent enterEvent = make_dragEvent(m_dragMimeData);
+    m_controller->dragEnterEvent(enterEvent);
 
     //! [THEN] ...it is ignored
     EXPECT_FALSE(enterEvent.isAccepted());

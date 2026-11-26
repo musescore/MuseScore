@@ -36,6 +36,7 @@
 #include "notation/inotationcontextconfiguration.h"
 #include "notation/types/outgoingdrag.h"
 #include "project/iprojectsession.h"
+#include "ui/idragcontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "playback/iplaybackcontroller.h"
@@ -81,6 +82,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:

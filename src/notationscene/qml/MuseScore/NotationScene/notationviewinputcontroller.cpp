@@ -24,8 +24,6 @@
 
 #include <set>
 
-#include <QApplication>
-#include <QMimeData>
 #include <QQuickItem>
 #include <QTimer>
 #include <QtMath>
@@ -1547,114 +1545,99 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
     return QVariant();
 }
 
-void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
+void NotationViewInputController::dragEnterEvent(muse::DragEvent& event)
 {
     //! NOTE Another drop would replace the one that waits for the user's answer
     if (m_readonly || m_pendingDrop) {
-        event->ignore();
+        event.ignore();
         return;
     }
 
-    const QMimeData* mimeData = dragController()->mimeData(event);
-    IF_ASSERT_FAILED(mimeData) {
-        return;
-    }
+    const muse::MimeData& mimeData = event.mimeData;
 
-    if (mimeData->hasFormat(mimeSymbolFormat)) {
-        event->setDropAction(Qt::CopyAction);
-        if (event->dropAction() != Qt::CopyAction) {
-            event->ignore();
+    if (mimeData.hasFormat(mimeSymbolFormat)) {
+        event.setDropAction(muse::DropAction::Copy);
+        if (event.dropAction != muse::DropAction::Copy) {
+            event.ignore();
             return;
         }
 
-        const muse::ByteArray edata = muse::ByteArray::fromQByteArray(mimeData->data(mimeSymbolFormat));
-        if (viewInteraction()->startDropSingle(edata)) {
-            event->accept();
+        if (viewInteraction()->startDropSingle(mimeData.data(mimeSymbolFormat))) {
+            event.accept();
             return;
         }
 
-        event->ignore();
+        event.ignore();
         return;
     }
 
-    if (mimeData->hasFormat(mimeStaffListFormat)) {
-        bool isInternal = event->source() == m_view->asItem();
-        if (!isInternal || event->modifiers() & Qt::AltModifier) {
-            event->setDropAction(Qt::CopyAction);
-            if (event->dropAction() != Qt::CopyAction) {
-                event->ignore();
+    if (mimeData.hasFormat(mimeStaffListFormat)) {
+        bool isInternal = event.isFromThisView;
+        if (!isInternal || event.modifiers & muse::KeyboardModifier::AltModifier) {
+            event.setDropAction(muse::DropAction::Copy);
+            if (event.dropAction != muse::DropAction::Copy) {
+                event.ignore();
                 return;
             }
         } else {
-            event->setDropAction(Qt::MoveAction);
-            if (event->dropAction() != Qt::MoveAction) {
-                event->ignore();
+            event.setDropAction(muse::DropAction::Move);
+            if (event.dropAction != muse::DropAction::Move) {
+                event.ignore();
                 return;
             }
         }
 
-        const muse::ByteArray edata = muse::ByteArray::fromQByteArray(mimeData->data(mimeStaffListFormat));
-        if (viewInteraction()->startDropRange(edata)) {
-            event->accept();
+        if (viewInteraction()->startDropRange(mimeData.data(mimeStaffListFormat))) {
+            event.accept();
             return;
         }
 
-        event->ignore();
+        event.ignore();
         return;
     }
 
-    for (const QUrl& url : mimeData->urls()) {
-        if (url.isLocalFile() && viewInteraction()->startDropImage(muse::io::path_t(url.toLocalFile()))) {
-            event->accept();
+    for (const muse::io::path_t& path : mimeData.localFiles()) {
+        if (viewInteraction()->startDropImage(path)) {
+            event.accept();
             return;
         }
     }
 
-    event->ignore();
+    event.ignore();
 }
 
-void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
+void NotationViewInputController::dragMoveEvent(muse::DragEvent& event)
 {
-    const QMimeData* mimeData = dragController()->mimeData(event);
-    IF_ASSERT_FAILED(mimeData) {
-        return;
-    }
-
-    PointF pos = m_view->toLogical(PointF::fromQPointF(event->position()));
-    const muse::KeyboardModifiers modifiers = muse::fromQtModifiers(event->modifiers());
+    PointF pos = m_view->toLogical(event.position);
+    const muse::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;
-    if (mimeData->hasFormat(mimeStaffListFormat)) {
-        bool isInternal = event->source() == m_view->asItem();
+    if (event.mimeData.hasFormat(mimeStaffListFormat)) {
+        bool isInternal = event.isFromThisView;
         if (!isInternal || modifiers & muse::KeyboardModifier::AltModifier) {
-            event->setDropAction(Qt::CopyAction);
+            event.setDropAction(muse::DropAction::Copy);
         } else {
-            event->setDropAction(Qt::MoveAction);
+            event.setDropAction(muse::DropAction::Move);
         }
 
         isAccepted = viewInteraction()->updateDropRange(pos);
     } else {
-        event->setDropAction(Qt::CopyAction);
+        event.setDropAction(muse::DropAction::Copy);
 
         isAccepted = viewInteraction()->updateDropSingle(pos, modifiers);
     }
 
-    event->setAccepted(isAccepted);
+    event.setAccepted(isAccepted);
 
     if (!uiConfiguration()->isSystemDragSupported()) {
-        m_lastDragMoveEvent = {
-            event->position(),
-            modifiers,
-            event->dropAction(),
-            event->source()
-        };
+        m_lastDragMoveEvent = event;
     }
 }
 
-void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
+void NotationViewInputController::dragLeaveEvent()
 {
     if (!uiConfiguration()->isSystemDragSupported()) {
-        dropEvent(m_lastDragMoveEvent);
+        doDrop(m_lastDragMoveEvent);
     }
 
     //! NOTE The drop that waits for the user's answer is ended after the answer
@@ -1664,48 +1647,31 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 }
 
-void NotationViewInputController::dropEvent(QDropEvent* event)
+void NotationViewInputController::dropEvent(muse::DragEvent& event)
 {
     if (!uiConfiguration()->isSystemDragSupported()) {
-        event->setAccepted(false);
+        event.setAccepted(false);
         return;
     }
 
-    DragMoveEvent de = {
-        event->position(),
-        muse::fromQtModifiers(event->modifiers()),
-        event->dropAction(),
-        event->source()
-    };
-
-    bool isAccepted = dropEvent(de, event->mimeData());
-    event->setAccepted(isAccepted);
+    event.setAccepted(doDrop(event));
 }
 
-bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QMimeData* mimeData)
+bool NotationViewInputController::doDrop(const muse::DragEvent& event)
 {
     if (m_readonly) {
         return false;
     }
 
-    if (!mimeData) {
-        mimeData = dragController()->mimeData();
-    }
-
-    IF_ASSERT_FAILED(mimeData) {
-        return false;
-    }
-
-    PointF pos = m_view->toLogical(PointF::fromQPointF(event.position));
-    const muse::KeyboardModifiers modifiers = event.modifiers;
+    PointF pos = m_view->toLogical(event.position);
 
     bool isAccepted = false;
-    if (mimeData->hasFormat(mimeStaffListFormat)) {
-        bool isInternal = event.source == m_view->asItem();
-        bool isMove = isInternal && event.dropAction == Qt::MoveAction;
-        isAccepted = viewInteraction()->dropRange(muse::ByteArray::fromQByteArray(mimeData->data(mimeStaffListFormat)), pos, isMove);
+    if (event.mimeData.hasFormat(mimeStaffListFormat)) {
+        bool isInternal = event.isFromThisView;
+        bool isMove = isInternal && event.dropAction == muse::DropAction::Move;
+        isAccepted = viewInteraction()->dropRange(event.mimeData.data(mimeStaffListFormat), pos, isMove);
     } else {
-        isAccepted = dropSingle(pos, modifiers);
+        isAccepted = dropSingle(pos, event.modifiers);
     }
 
     return isAccepted;
