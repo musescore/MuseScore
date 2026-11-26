@@ -41,6 +41,8 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h"
 
+#include "types/qtinputconvert.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -1372,7 +1374,7 @@ void AbstractNotationPaintView::hoverLeaveEvent(QHoverEvent* event)
 bool AbstractNotationPaintView::shortcutOverride(QKeyEvent* event)
 {
     if (isInited()) {
-        return m_inputController->shortcutOverrideEvent(event);
+        return m_inputController->shortcutOverrideEvent(fromQtKeyEvent(event));
     }
 
     return false;
@@ -1381,7 +1383,9 @@ bool AbstractNotationPaintView::shortcutOverride(QKeyEvent* event)
 void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
 {
     if (isInited()) {
-        m_inputController->keyPressEvent(event);
+        KeyEvent keyEvent = fromQtKeyEvent(event);
+        m_inputController->keyPressEvent(keyEvent);
+        event->setAccepted(keyEvent.isAccepted());
     }
 
     if (event->key() == m_lastAcceptedKey) {
@@ -1395,7 +1399,9 @@ void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
 void AbstractNotationPaintView::keyReleaseEvent(QKeyEvent* event)
 {
     if (isInited()) {
-        m_inputController->keyReleaseEvent(event);
+        KeyEvent keyEvent = fromQtKeyEvent(event);
+        m_inputController->keyReleaseEvent(keyEvent);
+        event->setAccepted(keyEvent.isAccepted());
     }
 }
 
@@ -1438,7 +1444,9 @@ bool AbstractNotationPaintView::event(QEvent* event)
 void AbstractNotationPaintView::inputMethodEvent(QInputMethodEvent* event)
 {
     if (isInited()) {
-        m_inputController->inputMethodEvent(event);
+        TextInputEvent textEvent = fromQtInputMethodEvent(event);
+        m_inputController->inputMethodEvent(textEvent);
+        event->setAccepted(textEvent.isAccepted());
     }
 }
 

@@ -157,7 +157,7 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
     MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
-void MoveElementAnchors::moveElementAnchors(EngravingItem* element, muse::KeyboardKey key, muse::KeyboardModifier mod)
+void MoveElementAnchors::moveElementAnchors(EngravingItem* element, muse::KeyboardKey key, muse::KeyboardModifiers mod)
 {
     EngravingObject* owner = element->ownershipParent();
     Segment* segment = owner && owner->isSegment() ? toSegment(owner) : nullptr;

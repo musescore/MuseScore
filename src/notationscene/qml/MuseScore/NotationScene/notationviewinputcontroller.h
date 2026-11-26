@@ -36,6 +36,7 @@
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "types/inputevents.h"
 #include "notation/types/viewmode.h"
 
 #include "notation/inotationcommandscontroller.h"
@@ -164,10 +165,10 @@ public:
     void mouseDoubleClickEvent(QMouseEvent* event);
     void hoverMoveEvent(QHoverEvent* event);
     void hoverLeaveEvent(QHoverEvent* event);
-    bool shortcutOverrideEvent(QKeyEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
-    void inputMethodEvent(QInputMethodEvent* event);
+    bool shortcutOverrideEvent(const muse::KeyEvent& event);
+    void keyPressEvent(muse::KeyEvent& event);
+    void keyReleaseEvent(muse::KeyEvent& event);
+    void inputMethodEvent(muse::TextInputEvent& event);
 
     bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
@@ -234,9 +235,9 @@ private:
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
-    bool isAnchorEditingEvent(QKeyEvent* event) const;
+    bool isAnchorEditingEvent(const muse::KeyEvent& event) const;
 
-    bool tryPercussionShortcut(QKeyEvent* event);
+    bool tryPercussionShortcut(const muse::KeyEvent& event);
 
     IControlledView* m_view = nullptr;
 

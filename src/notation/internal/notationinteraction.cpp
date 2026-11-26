@@ -31,7 +31,6 @@
 #include <QClipboard>
 #include <QDrag>
 #include <QGuiApplication>
-#include <QKeyEvent>
 #include <QKeySequence>
 #include <QMimeData>
 #include <QPainter>
@@ -4208,7 +4207,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
 }
 
 //! NOTE: Copied from TextBase::inputTransition
-void NotationInteraction::editText(QInputMethodEvent* event)
+void NotationInteraction::editText(TextInputEvent& event)
 {
     if (!isTextEditingStarted()) {
         return;
@@ -4229,13 +4228,13 @@ void NotationInteraction::editText(QInputMethodEvent* event)
         }
     }
 
-    if (!event->commitString().isEmpty()) {
+    if (!event.commitString.isEmpty()) {
         score()->startCmd(TranslatableString("undoableAction", "Edit text"));
-        text->insertText(event->commitString());
+        text->insertText(event.commitString);
         score()->endCmd();
         preeditString.clear();
     } else {
-        preeditString = event->preeditString();
+        preeditString = event.preeditString;
 
         if (!preeditString.isEmpty()) {
             cursor->updateCursorFormat();
@@ -4246,11 +4245,11 @@ void NotationInteraction::editText(QInputMethodEvent* event)
         }
     }
 
-    event->accept();
+    event.accept();
     notifyAboutTextEditingChanged();
 }
 
-bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
+bool NotationInteraction::needStartEditGrip(const KeyEvent& event) const
 {
     if (!m_editData.element || !m_editData.element->hasGrips()) {
         return false;
@@ -4260,17 +4259,17 @@ bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
         return false;
     }
 
-    static const std::set<Qt::Key> arrows {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Up,
-        Qt::Key_Down
+    static const std::set<int> arrows {
+        muse::KeyboardKey::Key_Left,
+        muse::KeyboardKey::Key_Right,
+        muse::KeyboardKey::Key_Up,
+        muse::KeyboardKey::Key_Down
     };
 
-    return muse::contains(arrows, static_cast<Qt::Key>(event->key()));
+    return muse::contains(arrows, event.key);
 }
 
-bool NotationInteraction::handleKeyPress(QKeyEvent* event)
+bool NotationInteraction::handleKeyPress(const KeyEvent& event)
 {
     mu::engraving::EngravingItem* editElem = m_editData.element;
     IF_ASSERT_FAILED(editElem) {
@@ -4291,37 +4290,37 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         rollback();
     }
 
-    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+    if (event.modifiers & muse::KeyboardModifier::AltModifier) {
         return false;
     }
 
     MoveDirection direction = MoveDirection::Undefined;
 
-    switch (event->key()) {
-    case Qt::Key_Tab:
+    switch (event.key) {
+    case muse::KeyboardKey::Key_Tab:
         if (!editElem->hasGrips()) {
             return false;
         }
         editElem->nextGrip(m_editData);
         notifyAboutNotationChanged();
         return true;
-    case Qt::Key_Backtab:
+    case muse::KeyboardKey::Key_Backtab:
         if (!editElem->hasGrips()) {
             return false;
         }
         editElem->prevGrip(m_editData);
         notifyAboutNotationChanged();
         return true;
-    case Qt::Key_Left:
+    case muse::KeyboardKey::Key_Left:
         direction = MoveDirection::Left;
         break;
-    case Qt::Key_Right:
+    case muse::KeyboardKey::Key_Right:
         direction = MoveDirection::Right;
         break;
-    case Qt::Key_Up:
+    case muse::KeyboardKey::Key_Up:
         direction = MoveDirection::Up;
         break;
-    case Qt::Key_Down:
+    case muse::KeyboardKey::Key_Down:
         direction = MoveDirection::Down;
         break;
     default:
@@ -4336,9 +4335,9 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
+bool NotationInteraction::doTextEdit(const KeyEvent& event, TextBase* tb)
 {
-    IF_ASSERT_FAILED(event && tb) {
+    IF_ASSERT_FAILED(tb) {
         return false;
     }
 
@@ -4353,8 +4352,8 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     apply();
 
     // Replace newly added straight quotes with curly ones in a separate undo action...
-    const bool isSingleQuoteInput = event->text() == u"\'";
-    const bool isDoubleQuoteInput = event->text() == u"\"";
+    const bool isSingleQuoteInput = event.text == u"\'";
+    const bool isDoubleQuoteInput = event.text == u"\"";
     if (!isSingleQuoteInput && !isDoubleQuoteInput) {
         return true;
     }
@@ -4374,7 +4373,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
 
     cursor->movePosition(TextCursor::MoveOperation::Left);
-    score()->undo(new RemoveText(cursor, event->text()));
+    score()->undo(new RemoveText(cursor, event.text));
 
     //: Single open quotation mark
     const String singleOpenQuote = muse::mtrc("notation", u"‘");
@@ -4714,22 +4713,22 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
     }
 }
 
-bool NotationInteraction::isEditAllowed(QKeyEvent* event)
+bool NotationInteraction::isEditAllowed(const KeyEvent& event)
 {
     if (!m_editData.element) {
         return false;
     }
 
     mu::engraving::EditData editData = m_editData;
-    editData.modifiers = keyboardModifier(event->modifiers());
-    editData.key = event->key();
-    editData.s = event->text();
+    editData.modifiers = event.modifiers;
+    editData.key = event.key;
+    editData.s = event.text;
 
     if (editData.element->isEditAllowed(editData)) {
         return true;
     }
 
-    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+    if (event.modifiers & muse::KeyboardModifier::AltModifier) {
         return false;
     }
 
@@ -4738,20 +4737,20 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
     }
 
     static QSet<int> navigationKeys = {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Up,
-        Qt::Key_Down
+        muse::KeyboardKey::Key_Left,
+        muse::KeyboardKey::Key_Right,
+        muse::KeyboardKey::Key_Up,
+        muse::KeyboardKey::Key_Down
     };
 
     if (editData.element->hasGrips()) {
-        navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
+        navigationKeys += { muse::KeyboardKey::Key_Tab, muse::KeyboardKey::Key_Backtab };
     }
 
-    return navigationKeys.contains(event->key());
+    return navigationKeys.contains(event.key);
 }
 
-void NotationInteraction::editElement(QKeyEvent* event)
+void NotationInteraction::editElement(KeyEvent& event)
 {
 #if 0
     static int index = 0;
@@ -4762,14 +4761,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    m_editData.modifiers = keyboardModifier(event->modifiers());
+    m_editData.modifiers = event.modifiers;
 
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
     }
 
-    m_editData.key = event->key();
-    m_editData.s = event->text();
+    m_editData.key = event.key;
+    m_editData.s = event.text;
 
     // Brackets get deleted during layout with their system, so the best we can do to maintain
     // the bracket selected is to store their indices and use them to find the new ones
@@ -4786,7 +4785,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
             systemIndex = muse::indexOf(score()->systems(), system);
         }
     } else if (m_editData.element->isHarmony()) {
-        if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+        if (isTextEditingStarted() && (event.key == muse::KeyboardKey::Key_Return || event.key == muse::KeyboardKey::Key_Enter)) {
             endEditText();
             return;
         }
@@ -4811,7 +4810,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
             updateGripAnchorLines();
         }
 
-        event->accept();
+        event.accept();
     }
 
     if (isTextEditingStarted()) {
@@ -4847,10 +4846,10 @@ muse::async::Notification NotationInteraction::isEditingElementChanged() const
     return m_isEditingElementChanged;
 }
 
-void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
+void NotationInteraction::updateTimeTickAnchors(const KeyEvent& event)
 {
     EngravingItem* selectedElement = m_selection->element();
-    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
+    if (selectedElement && selectedElement->allowTimeAnchor() && event.type == KeyEvent::Type::Press && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
         updateDragAnchorLines();
         score()->update();
@@ -4862,7 +4861,7 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::moveElementAnchors(QKeyEvent* event)
+void NotationInteraction::moveElementAnchors(const KeyEvent& event)
 {
     EngravingItem* element = selection()->element();
     IF_ASSERT_FAILED(element) {
@@ -4871,7 +4870,7 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
 
     startEdit(TranslatableString("undoableAction", "Move element anchors"));
 
-    MoveElementAnchors::moveElementAnchors(element, muse::KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+    MoveElementAnchors::moveElementAnchors(element, muse::KeyboardKey(event.key), event.modifiers);
 
     apply();
 
@@ -5351,7 +5350,7 @@ void NotationInteraction::deleteSelection()
     if (isTextEditingStarted()) {
         mu::engraving::TextBase* textBase = toTextBase(m_editData.element);
         if (!textBase->deleteSelectedText()) {
-            m_editData.key = Qt::Key_Backspace;
+            m_editData.key = muse::KeyboardKey::Key_Backspace;
             m_editData.modifiers = {};
             if (textBase->edit(m_editData)) {
                 notifyAboutTextEditingChanged();

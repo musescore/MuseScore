@@ -176,7 +176,7 @@ public:
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const muse::PointF& cursorPos = muse::PointF()) override;
-    void editText(QInputMethodEvent* event) override;
+    void editText(muse::TextInputEvent& event) override;
     void endEditText() override;
     void changeTextCursorPosition(const muse::PointF& newCursorPos) override;
     void selectText(mu::engraving::SelectTextType type) override;
@@ -198,13 +198,13 @@ public:
     muse::async::Notification isEditingElementChanged() const override;
     void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
-    bool isEditAllowed(QKeyEvent* event) override;
-    void editElement(QKeyEvent* event) override;
+    bool isEditAllowed(const muse::KeyEvent& event) override;
+    void editElement(muse::KeyEvent& event) override;
     void endEditElement() override;
 
     // Anchors edit
-    void updateTimeTickAnchors(QKeyEvent* event) override;
-    void moveElementAnchors(QKeyEvent* event) override;
+    void updateTimeTickAnchors(const muse::KeyEvent& event) override;
+    void moveElementAnchors(const muse::KeyEvent& event) override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -383,9 +383,9 @@ private:
 
     bool doShowShadowNote(mu::engraving::ShadowNote& note, ShadowNoteParams& params);
 
-    bool needStartEditGrip(QKeyEvent* event) const;
-    bool handleKeyPress(QKeyEvent* event);
-    bool doTextEdit(QKeyEvent* event, TextBase* tb);
+    bool needStartEditGrip(const muse::KeyEvent& event) const;
+    bool handleKeyPress(const muse::KeyEvent& event);
+    bool doTextEdit(const muse::KeyEvent& event, TextBase* tb);
 
     void doEndEditElement();
     void doEndDrag();

@@ -32,9 +32,6 @@
 #include "types/instrumentstypes.h"
 #include "types/noteinputtypes.h"
 
-class QKeyEvent;
-class QInputMethodEvent;
-
 namespace mu::engraving {
 class EngravingItem;
 class ShadowNote;
@@ -160,7 +157,7 @@ public:
     virtual bool isTextEditingStarted() const = 0;
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const muse::PointF& elementPos = muse::PointF()) = 0;
-    virtual void editText(QInputMethodEvent* event) = 0;
+    virtual void editText(muse::TextInputEvent& event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const muse::PointF& newCursorPos) = 0;
     virtual void selectText(mu::engraving::SelectTextType type) = 0;
@@ -181,13 +178,13 @@ public:
     virtual muse::async::Notification isEditingElementChanged() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
-    virtual bool isEditAllowed(QKeyEvent* event) = 0;
-    virtual void editElement(QKeyEvent* event) = 0;
+    virtual bool isEditAllowed(const muse::KeyEvent& event) = 0;
+    virtual void editElement(muse::KeyEvent& event) = 0;
     virtual void endEditElement() = 0;
 
     // Anchors edit
-    virtual void updateTimeTickAnchors(QKeyEvent* event) = 0;
-    virtual void moveElementAnchors(QKeyEvent* event) = 0;
+    virtual void updateTimeTickAnchors(const muse::KeyEvent& event) = 0;
+    virtual void moveElementAnchors(const muse::KeyEvent& event) = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;

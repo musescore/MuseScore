@@ -1008,7 +1008,7 @@ void NotationViewInputController::updateTextCursorPosition()
     }
 }
 
-bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
+bool NotationViewInputController::tryPercussionShortcut(const muse::KeyEvent& event)
 {
     INotationNoteInputPtr noteInput = viewInteraction()->noteInput();
     const mu::engraving::Drumset* drumset = noteInput ? noteInput->state().drumset() : nullptr;
@@ -1016,20 +1016,21 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
         return false;
     }
 
-    const QKeyCombination noModifiers(Qt::Key(event->key()));
+    const QKeyCombination noModifiers(Qt::Key(event.key));
     const int pitchToWrite = drumset->pitchForShortcut(QKeySequence(noModifiers).toString());
     if (pitchToWrite < 0) {
         return false;
     }
 
-    const Qt::KeyboardModifiers mods = event->modifiers();
+    const muse::KeyboardModifiers mods = event.modifiers;
     NoteAddingMode addingMode = NoteAddingMode::NextChord;
 
-    if (mods & Qt::ShiftModifier && (mods & Qt::ControlModifier || mods & Qt::MetaModifier)) {
+    if (mods & muse::KeyboardModifier::ShiftModifier
+        && (mods & muse::KeyboardModifier::ControlModifier || mods & muse::KeyboardModifier::MetaModifier)) {
         addingMode = NoteAddingMode::InsertChord;
-    } else if (mods & Qt::ShiftModifier) {
+    } else if (mods & muse::KeyboardModifier::ShiftModifier) {
         addingMode = NoteAddingMode::CurrentChord;
-    } else if (mods & ~Qt::NoModifier) {
+    } else if (mods & ~muse::KeyboardModifier::NoModifier) {
         // Not a supported modifier combination...
         return false;
     }
@@ -1426,24 +1427,24 @@ void NotationViewInputController::hoverLeaveEvent(QHoverEvent*)
     viewInteraction()->hideShadowNote();
 }
 
-bool NotationViewInputController::isAnchorEditingEvent(QKeyEvent* event) const
+bool NotationViewInputController::isAnchorEditingEvent(const muse::KeyEvent& event) const
 {
-    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
-                                 && event->modifiers() & Qt::ShiftModifier;
+    bool anchorEditingKeyCombo = (event.key == muse::KeyboardKey::Key_Left || event.key == muse::KeyboardKey::Key_Right)
+                                 && event.modifiers & muse::KeyboardModifier::ShiftModifier;
     EngravingItem* selectedItem = viewInteraction()->selection()->element();
     return selectedItem && selectedItem->allowTimeAnchor() && anchorEditingKeyCombo;
 }
 
-bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
+bool NotationViewInputController::shortcutOverrideEvent(const muse::KeyEvent& event)
 {
-    auto key = event->key();
+    auto key = event.key;
 
-    const bool editTextKeysFound = key == Qt::Key_Return || key == Qt::Key_Enter;
+    const bool editTextKeysFound = key == muse::KeyboardKey::Key_Return || key == muse::KeyboardKey::Key_Enter;
     if (editTextKeysFound && startTextEditingAllowed()) {
         return true;
     }
 
-    if (key == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+    if (key == muse::KeyboardKey::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
         return true;
     }
 
@@ -1458,25 +1459,25 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
     return tryPercussionShortcut(event);
 }
 
-void NotationViewInputController::keyPressEvent(QKeyEvent* event)
+void NotationViewInputController::keyPressEvent(muse::KeyEvent& event)
 {
-    auto key = event->key();
+    auto key = event.key;
 
-    if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+    if (startTextEditingAllowed() && (event.key == muse::KeyboardKey::Key_Return || event.key == muse::KeyboardKey::Key_Enter)) {
         commandDispatcher()->dispatch(SCREEN_EDIT_TEXT_COMMAND);
-        event->accept();
-    } else if (event->key() == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        event.accept();
+    } else if (event.key == muse::KeyboardKey::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
         // Cancel "Alt+click to paste range"
         viewInteraction()->endDrop();
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
         m_view->asItem()->setCursor({});
-        event->accept();
+        event.accept();
     } else if (viewInteraction()->isEditingElement()) {
         viewInteraction()->editElement(event);
-        if (key == Qt::Key_Shift) {
+        if (key == muse::KeyboardKey::Key_Shift) {
             viewInteraction()->updateTimeTickAnchors(event);
         }
-    } else if (key == Qt::Key_Shift) {
+    } else if (key == muse::KeyboardKey::Key_Shift) {
         viewInteraction()->updateTimeTickAnchors(event);
         updateShadowNotePopupVisibility();
         return;
@@ -1487,9 +1488,9 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     updateShadowNotePopupVisibility(/*forceHide*/ true);
 }
 
-void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
+void NotationViewInputController::keyReleaseEvent(muse::KeyEvent& event)
 {
-    if (event->key() != Qt::Key_Shift) {
+    if (event.key != muse::KeyboardKey::Key_Shift) {
         return;
     }
 
@@ -1498,7 +1499,7 @@ void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
     viewInteraction()->updateTimeTickAnchors(event);
 }
 
-void NotationViewInputController::inputMethodEvent(QInputMethodEvent* event)
+void NotationViewInputController::inputMethodEvent(muse::TextInputEvent& event)
 {
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->editText(event);
