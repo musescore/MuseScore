@@ -54,6 +54,8 @@ target_sources(notation PRIVATE
     notationcommands.h
     notationcommandsenums.h
     notationtypes.h
+    viewtransform.cpp
+    viewtransform.h
     types/automationlane.h
     types/instrumentstypes.h
     types/loopboundaries.h
