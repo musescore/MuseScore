@@ -54,11 +54,11 @@ bool Sticking::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Key_Left) {
+    if (ed.key == muse::KeyboardKey::Key_Left) {
         return cursor()->column() != 0 || cursor()->hasSelection();
     }
 
-    if (ed.key == Key_Right) {
+    if (ed.key == muse::KeyboardKey::Key_Right) {
         bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
         return !cursorInLastColumn || cursor()->hasSelection();
     }

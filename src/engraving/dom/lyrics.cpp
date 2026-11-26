@@ -263,20 +263,20 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    static const std::set<KeyboardModifiers> navigationModifiers {
-        NoModifier,
-        KeypadModifier,
-        ShiftModifier
+    static const std::set<muse::KeyboardModifiers> navigationModifiers {
+        muse::KeyboardModifier::NoModifier,
+        muse::KeyboardModifier::KeypadModifier,
+        muse::KeyboardModifier::ShiftModifier
     };
 
     if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {
         static const std::set<int> navigationKeys {
-            Key_Underscore,
-            Key_Minus,
-            Key_Enter,
-            Key_Return,
-            Key_Up,
-            Key_Down
+            muse::KeyboardKey::Key_Underscore,
+            muse::KeyboardKey::Key_Minus,
+            muse::KeyboardKey::Key_Enter,
+            muse::KeyboardKey::Key_Return,
+            muse::KeyboardKey::Key_Up,
+            muse::KeyboardKey::Key_Down
         };
 
         if (navigationKeys.find(ed.key) != navigationKeys.end()) {
@@ -284,11 +284,11 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         }
     }
 
-    if (ed.key == Key_Left || ed.key == Key_Backspace) {
+    if (ed.key == muse::KeyboardKey::Key_Left || ed.key == muse::KeyboardKey::Key_Backspace) {
         return cursor()->column() != 0 || cursor()->hasSelection();
     }
 
-    if (ed.key == Key_Right) {
+    if (ed.key == muse::KeyboardKey::Key_Right) {
         bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
         return !cursorInLastColumn || cursor()->hasSelection();
     }

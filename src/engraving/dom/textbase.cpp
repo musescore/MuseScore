@@ -2245,7 +2245,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
 bool TextBase::mousePress(EditData& ed)
 {
-    bool shift = ed.modifiers & ShiftModifier;
+    bool shift = ed.modifiers & muse::KeyboardModifier::ShiftModifier;
     if (!cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
@@ -3115,7 +3115,7 @@ void TextBase::editCut(EditData& ed)
     if (!s.isEmpty()) {
         ted->selectedText = cursor()->selectedText(true);
         ed.curGrip = Grip::START;
-        ed.key     = Key_Delete;
+        ed.key     = muse::KeyboardKey::Key_Delete;
         ed.s       = String();
         edit(ed);
     }
@@ -3137,20 +3137,20 @@ void TextBase::editCopy(EditData& ed)
 
 bool TextBase::nudge(const EditData& ed)
 {
-    bool ctrlMod = ed.modifiers & ControlModifier;
+    bool ctrlMod = ed.modifiers & muse::KeyboardModifier::ControlModifier;
     double step = spatium() * (ctrlMod ? MScore::nudgeStep10 : MScore::nudgeStep);
     PointF addOffset = PointF();
     switch (ed.key) {
-    case Key_Up:
+    case muse::KeyboardKey::Key_Up:
         addOffset = PointF(0.0, -step);
         break;
-    case Key_Down:
+    case muse::KeyboardKey::Key_Down:
         addOffset = PointF(0.0, step);
         break;
-    case Key_Left:
+    case muse::KeyboardKey::Key_Left:
         addOffset = PointF(-step, 0.0);
         break;
-    case Key_Right:
+    case muse::KeyboardKey::Key_Right:
         addOffset = PointF(step, 0.0);
         break;
     default:

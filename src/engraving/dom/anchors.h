@@ -40,7 +40,7 @@ public:
 class MoveElementAnchors
 {
 public:
-    static void moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod);
+    static void moveElementAnchors(EngravingItem* element, muse::KeyboardKey key, muse::KeyboardModifier mod);
     static void moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
     static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
 

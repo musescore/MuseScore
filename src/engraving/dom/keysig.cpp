@@ -91,7 +91,7 @@ EngravingItem* KeySig::drop(Transaction& tx, EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
-    if (data.modifiers & ControlModifier) {
+    if (data.modifiers & muse::KeyboardModifier::ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
             EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);

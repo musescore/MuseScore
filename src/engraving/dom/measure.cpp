@@ -1518,7 +1518,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         KeySigEvent k = toKeySig(e)->keySigEvent();
         delete e;
 
-        if (data.modifiers & ControlModifier) {
+        if (data.modifiers & muse::KeyboardModifier::ControlModifier) {
             // apply only to this stave
             EditKeySig::undoChangeKeySig(tx, score(), staff, tick(), k);
         } else {
@@ -1532,7 +1532,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
     }
 
     case ElementType::TIMESIG: {
-        EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
+        EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & muse::KeyboardModifier::ControlModifier);
         break;
     }
 

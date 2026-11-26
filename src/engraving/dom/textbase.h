@@ -599,9 +599,9 @@ private:
     double m_textAngle = 0.0;
 };
 
-inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
+inline bool isTextNavigationKey(int key, muse::KeyboardModifiers modifiers)
 {
     // space + TextEditingControlModifier = insert nonbreaking space, so that's *not* a navigation key
-    return (key == Key_Space && modifiers != TextEditingControlModifier) || key == Key_Tab;
+    return (key == muse::KeyboardKey::Key_Space && modifiers != TextEditingControlModifier) || key == muse::KeyboardKey::Key_Tab;
 }
 } // namespace mu::engraving

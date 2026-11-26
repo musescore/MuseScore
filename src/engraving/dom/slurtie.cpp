@@ -61,7 +61,7 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 
 bool SlurTieSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Home && !(ed.modifiers & ~KeyboardModifier::KeypadModifier) && ed.hasCurrentGrip()) {
+    if (ed.key == muse::KeyboardKey::Key_Home && !(ed.modifiers & ~muse::KeyboardModifier::KeypadModifier) && ed.hasCurrentGrip()) {
         return true;
     }
 
@@ -79,7 +79,7 @@ bool SlurTieSegment::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Key_Home && !(ed.modifiers & ~KeyboardModifier::KeypadModifier)) {
+    if (ed.key == muse::KeyboardKey::Key_Home && !(ed.modifiers & ~muse::KeyboardModifier::KeypadModifier)) {
         if (ed.hasCurrentGrip()) {
             startDragGrip(ed);
             if (ed.curGrip == Grip::SHOULDER) {

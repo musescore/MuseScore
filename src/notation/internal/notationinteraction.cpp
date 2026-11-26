@@ -158,9 +158,9 @@ using namespace muse;
 using namespace muse::draw;
 using namespace muse::io;
 
-static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
+static muse::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
-    return mu::engraving::KeyboardModifier(int(km));
+    return muse::KeyboardModifier(int(km));
 }
 
 static double nudgeDistance(const EngravingItem* item, bool quickly, double raster)
@@ -3169,7 +3169,7 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
 }
 
 std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const EngravingItem* targetElem,
-                                                           KeyboardModifiers modifiers) const
+                                                           muse::KeyboardModifiers modifiers) const
 {
     const MeasureBase* targetMeasureBase = targetElem->findMeasureBase();
     if (!targetMeasureBase) {
@@ -4017,7 +4017,7 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
     }
 
     const EngravingItem* element = m_editData.element;
-    const bool quickly = m_editData.modifiers & mu::engraving::ControlModifier;
+    const bool quickly = m_editData.modifiers & muse::KeyboardModifier::ControlModifier;
     const double hRaster = gridRaster(element, muse::Orientation::Horizontal);
     const double vRaster = gridRaster(element, muse::Orientation::Vertical);
 
@@ -4496,7 +4496,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     mu::engraving::TextBase* textEl = mu::engraving::toTextBase(m_editData.element);
 
     textEl->mousePress(m_editData);
-    if (m_editData.buttons == mu::engraving::MiddleButton) {
+    if (m_editData.buttons == muse::MouseButton::MiddleButton) {
         QString txt = QGuiApplication::clipboard()->text();
         textEl->paste(txt);
     }
@@ -4870,7 +4870,7 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
 
     startEdit(TranslatableString("undoableAction", "Move element anchors"));
 
-    MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+    MoveElementAnchors::moveElementAnchors(element, muse::KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
 
     apply();
 

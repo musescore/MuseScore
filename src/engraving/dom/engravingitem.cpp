@@ -2337,7 +2337,7 @@ void EngravingItem::startDrag(EditData& ed)
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
     ed.addData(eed);
-    if (ed.modifiers & AltModifier) {
+    if (ed.modifiers & muse::KeyboardModifier::AltModifier) {
         setAutoplace(false);
     }
 }
@@ -2503,7 +2503,7 @@ void EngravingItem::startEdit(EditData& ed)
 
 bool EngravingItem::isEditAllowed(EditData& ed) const
 {
-    return ed.key == Key_Home;
+    return ed.key == muse::KeyboardKey::Key_Home;
 }
 
 //---------------------------------------------------------
@@ -2513,7 +2513,7 @@ bool EngravingItem::isEditAllowed(EditData& ed) const
 
 bool EngravingItem::edit(EditData& ed)
 {
-    if (ed.key == Key_Home) {
+    if (ed.key == muse::KeyboardKey::Key_Home) {
         setOffset(PointF());
         return true;
     }
@@ -2534,7 +2534,7 @@ void EngravingItem::startDragGrip(EditData& ed)
     }
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
-    if (ed.modifiers & AltModifier) {
+    if (ed.modifiers & muse::KeyboardModifier::AltModifier) {
         setAutoplace(false);
     }
 }

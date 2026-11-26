@@ -47,6 +47,6 @@ bool EditData::control(bool textEditing) const
     if (textEditing) {
         return modifiers & TextEditingControlModifier;
     } else {
-        return modifiers & ControlModifier;
+        return modifiers & muse::KeyboardModifier::ControlModifier;
     }
 }

@@ -209,7 +209,7 @@ void LineSegment::startDragGrip(EditData& ed)
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::OFFSET2);
     eed->pushProperty(Pid::AUTOPLACE);
-    if (ed.modifiers & AltModifier) {
+    if (ed.modifiers & muse::KeyboardModifier::AltModifier) {
         setAutoplace(false);
     }
 
@@ -218,7 +218,7 @@ void LineSegment::startDragGrip(EditData& ed)
 
 bool LineSegment::isEditAllowed(EditData& ed) const
 {
-    return ed.modifiers & ShiftModifier;
+    return ed.modifiers & muse::KeyboardModifier::ShiftModifier;
 }
 
 //---------------------------------------------------------
@@ -281,28 +281,28 @@ bool LineSegment::edit(EditData& ed)
         }
 
         switch (ed.key) {
-        case Key_Left:
+        case muse::KeyboardKey::Key_Left:
             if (moveStart) {
                 note1 = prevChordNote(note1);
             } else if (moveEnd) {
                 note2 = prevChordNote(note2);
             }
             break;
-        case Key_Right:
+        case muse::KeyboardKey::Key_Right:
             if (moveStart) {
                 note1 = nextChordNote(note1);
             } else if (moveEnd) {
                 note2 = nextChordNote(note2);
             }
             break;
-        case Key_Up:
+        case muse::KeyboardKey::Key_Up:
             if (moveStart) {
                 note1 = toNote(Navigation::chordNoteAbove(score(), note1));
             } else if (moveEnd) {
                 note2 = toNote(Navigation::chordNoteAbove(score(), note2));
             }
             break;
-        case Key_Down:
+        case muse::KeyboardKey::Key_Down:
             if (moveStart) {
                 note1 = toNote(Navigation::chordNoteBelow(score(), note1));
             } else if (moveEnd) {
@@ -336,7 +336,7 @@ bool LineSegment::edit(EditData& ed)
         Measure* m1 = l->startMeasure();
         Measure* m2 = l->endMeasure();
 
-        if (ed.key == Key_Left) {
+        if (ed.key == muse::KeyboardKey::Key_Left) {
             if (moveStart) {
                 if (m1->prevMeasure()) {
                     m1 = m1->prevMeasure();
@@ -347,7 +347,7 @@ bool LineSegment::edit(EditData& ed)
                     m2 = m;
                 }
             }
-        } else if (ed.key == Key_Right) {
+        } else if (ed.key == muse::KeyboardKey::Key_Right) {
             if (moveStart) {
                 if (m1->nextMeasure()) {
                     m1 = m1->nextMeasure();
@@ -357,13 +357,13 @@ bool LineSegment::edit(EditData& ed)
                     m2 = m2->nextMeasure();
                 }
             }
-        } else if (ed.key == Key_Home) {
+        } else if (ed.key == muse::KeyboardKey::Key_Home) {
             if (moveStart) {
                 m1 = m1->system()->firstMeasure();
             } else if (moveEnd) {
                 m2 = m2->system()->firstMeasure();
             }
-        } else if (ed.key == Key_End) {
+        } else if (ed.key == muse::KeyboardKey::Key_End) {
             if (moveStart) {
                 m1 = m1->system()->lastMeasure();
             } else if (moveEnd) {
@@ -596,7 +596,8 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Key_Left || ed.key == Key_Right || ed.key == Key_Up || ed.key == Key_Down || ed.modifiers & ControlModifier) {
+    if (ed.key == muse::KeyboardKey::Key_Left || ed.key == muse::KeyboardKey::Key_Right || ed.key == muse::KeyboardKey::Key_Up
+        || ed.key == muse::KeyboardKey::Key_Down || ed.modifiers & muse::KeyboardModifier::ControlModifier) {
         return;
     }
 
@@ -832,7 +833,7 @@ double LineSegment::absoluteFromSpatium(const Spatium& sp) const
 
 void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, bool moveEnd, Segment* s1, Segment* s2)
 {
-    bool moveSnapped = !(ed.modifiers & AltModifier);
+    bool moveSnapped = !(ed.modifiers & muse::KeyboardModifier::AltModifier);
     SLine* thisLine = line();
     if (moveStart) {
         Fraction tickDiff = s1->tick() - thisLine->tick();

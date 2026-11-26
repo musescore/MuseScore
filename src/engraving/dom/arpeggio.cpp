@@ -341,11 +341,11 @@ void Arpeggio::startDragGrip(EditData& ed)
 
 bool Arpeggio::isEditAllowed(EditData& ed) const
 {
-    if ((ed.curGrip != Grip::END && ed.curGrip != Grip::START) || !(ed.modifiers & ShiftModifier)) {
+    if ((ed.curGrip != Grip::END && ed.curGrip != Grip::START) || !(ed.modifiers & muse::KeyboardModifier::ShiftModifier)) {
         return false;
     }
 
-    return ed.key == Key_Down || ed.key == Key_Up;
+    return ed.key == muse::KeyboardKey::Key_Down || ed.key == muse::KeyboardKey::Key_Up;
 }
 
 //---------------------------------------------------------
@@ -359,17 +359,17 @@ bool Arpeggio::edit(EditData& ed)
     }
 
     if (ed.curGrip == Grip::START) {
-        if (ed.key == Key_Down) {
+        if (ed.key == muse::KeyboardKey::Key_Down) {
             rebaseStartAnchor(AnchorRebaseDirection::DOWN);
-        } else if (ed.key == Key_Up) {
+        } else if (ed.key == muse::KeyboardKey::Key_Up) {
             rebaseStartAnchor(AnchorRebaseDirection::UP);
         }
     }
 
     if (ed.curGrip == Grip::END) {
-        if (ed.key == Key_Down) {
+        if (ed.key == muse::KeyboardKey::Key_Down) {
             rebaseEndAnchor(AnchorRebaseDirection::DOWN);
-        } else if (ed.key == Key_Up) {
+        } else if (ed.key == muse::KeyboardKey::Key_Up) {
             if (m_span > 1) {
                 rebaseEndAnchor(AnchorRebaseDirection::UP);
             }

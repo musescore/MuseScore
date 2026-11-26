@@ -219,21 +219,21 @@ EngravingItem* Bracket::drop(Transaction&, EditData& data)
 
 bool Bracket::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Up && span() > 1) {
+    if (ed.key == muse::KeyboardKey::Key_Up && span() > 1) {
         return true;
     }
-    if (ed.key == Key_Down && m_lastStaff < system()->staves().size() - 1) {
+    if (ed.key == muse::KeyboardKey::Key_Down && m_lastStaff < system()->staves().size() - 1) {
         return true;
     }
 
-    if (!(ed.modifiers & ShiftModifier)) {
+    if (!(ed.modifiers & muse::KeyboardModifier::ShiftModifier)) {
         return false;
     }
 
-    if (ed.key == Key_Left) {
+    if (ed.key == muse::KeyboardKey::Key_Left) {
         return true;
     }
-    if (ed.key == Key_Right) {
+    if (ed.key == muse::KeyboardKey::Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
         }
@@ -254,20 +254,20 @@ bool Bracket::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Key_Up && span() > 1) {
+    if (ed.key == muse::KeyboardKey::Key_Up && span() > 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
-    if (ed.key == Key_Down && m_lastStaff < system()->staves().size() - 1) {
+    if (ed.key == muse::KeyboardKey::Key_Down && m_lastStaff < system()->staves().size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
     }
 
-    if (ed.key == Key_Left) {
+    if (ed.key == muse::KeyboardKey::Key_Left) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_COLUMN, bracketItem()->column() + 1);
         return true;
     }
-    if (ed.key == Key_Right) {
+    if (ed.key == muse::KeyboardKey::Key_Right) {
         if (bracketItem()->column() == 0) {
             return true;
         }
