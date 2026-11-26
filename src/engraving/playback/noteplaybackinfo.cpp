@@ -1,4 +1,4 @@
-/*0000000000000deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeefffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
  *
@@ -37,6 +37,8 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/dynamicvalues.h"
 #include "engraving/infrastructure/eidregister.h"
+
+#include "playbackmarkings.h"
 
 #include "../dom/breath.h"
 #include "../dom/capo.h"
@@ -681,5 +683,54 @@ void addArticulationMarkings(
 
     // Articulations first: they're what most directly shapes the note
     info.markings.insert(info.markings.begin(), articulationMarkings.begin(), articulationMarkings.end());
+}
+
+std::vector<const EngravingItem*> listedItems(const NotePlaybackInfo& info)
+{
+    std::vector<const EngravingItem*> items;
+
+    const auto add = [&items](const EngravingItem* item) {
+        if (item && std::ranges::find(items, item) == items.end()) {
+            items.push_back(item);
+        }
+    };
+
+    const auto addSources = [&add](const std::vector<NotePlaybackSource>& sources) {
+        for (const NotePlaybackSource& source : sources) {
+            add(source.item);
+        }
+    };
+
+    for (const NotePlaybackPitchShift& shift : info.pitchShifts) {
+        add(shift.item);
+    }
+
+    add(info.sound.playingTechnique);
+
+    for (const EngravingItem* flag : info.sound.soundFlags) {
+        add(flag);
+    }
+
+    add(info.sound.syllable);
+
+    for (const NotePlaybackPass& pass : info.passes) {
+        if (!pass.isDefaultTempo) {
+            addSources(pass.tempoSources);
+            addSources(pass.tempoOrigins);
+        }
+
+        if (!pass.isDefaultDynamic) {
+            addSources(pass.dynamicSources);
+            addSources(pass.dynamicOrigins);
+        }
+    }
+
+    for (const NotePlaybackMarking& marking : info.markings) {
+        if (marking.item && isListedMarking(marking.item)) {
+            add(marking.item);
+        }
+    }
+
+    return items;
 }
 } // namespace mu::engraving

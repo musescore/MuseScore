@@ -188,9 +188,6 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
 }
 
 namespace notationpainting_detail {
-//! Default for the playback influence highlight (60% opaque mild orange); becomes a preference in Phase 4
-const Color PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR(0xdb, 0x91, 0x37, 0x99);
-
 //! An item is highlighted if it, its spanner, or anything it belongs to (e.g. the chord of a
 //! highlighted grace chord's notes) is in the set. Stops at the segment: nothing above it is ever highlighted.
 bool isPlaybackInfluenceHighlighted(const EngravingItem* item, const std::unordered_set<const EngravingItem*>& highlight)
@@ -245,11 +242,12 @@ void NotationPainting::paintView(
 
     if (showPlaybackInfluence && !highlight.empty()) {
         const auto fallback = opt.overrideItemColor;
+        const Color highlightColor = configuration()->playbackInfluenceHighlightColor();
 
         // Only used during doPaint() below, so capturing the set by reference is safe
-        opt.overrideItemColor = [&highlight, fallback](const EngravingItem* item, Color defaultColor) {
+        opt.overrideItemColor = [&highlight, fallback, highlightColor](const EngravingItem* item, Color defaultColor) {
             if (notationpainting_detail::isPlaybackInfluenceHighlighted(item, highlight)) {
-                return notationpainting_detail::PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR;
+                return highlightColor;
             }
 
             return fallback

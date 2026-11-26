@@ -107,6 +107,10 @@ struct NotePlaybackInfo {
 //! expandRepeats must match the "play repeats" setting of the playback model.
 NotePlaybackInfo collectNotePlaybackInfo(const Note* note, bool expandRepeats);
 
+//! Every score item the Info panel lists for the note: what moves its pitch, chooses its sound and sets its tempo and
+//! dynamic, and its listed markings (see isListedMarking). Each item once, in that order.
+std::vector<const EngravingItem*> listedItems(const NotePlaybackInfo& info);
+
 //! Adds the items that PlaybackModel::articulationSources() found, one marking per item
 void addArticulationMarkings(NotePlaybackInfo& info, const std::map<muse::mpe::ArticulationType, const EngravingItem*>& sources);
 

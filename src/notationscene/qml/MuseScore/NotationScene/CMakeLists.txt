@@ -66,6 +66,8 @@ qt_add_qml_module(notationscene_qml
         internal/undoredotoolbarmodel.h
         loopmarker.cpp
         loopmarker.h
+        modifierholdwatcher.cpp
+        modifierholdwatcher.h
         notationautomationcontroller.h
         notationautomationcontroller.cpp
         notationcontextmenumodel.cpp

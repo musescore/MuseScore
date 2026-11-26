@@ -360,6 +360,7 @@ public:
     void endCentering(bool restoreView) override;
 
     void setPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) override;
+    void setHeldPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) override;
     const std::unordered_set<const mu::engraving::EngravingItem*>& playbackInfluenceHighlight() const override
     {
         return m_playbackInfluenceHighlight;
@@ -620,7 +621,11 @@ private:
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
 
-    std::unordered_set<const mu::engraving::EngravingItem*> m_playbackInfluenceHighlight;
+    void updatePlaybackInfluenceHighlight();
+
+    std::unordered_set<const mu::engraving::EngravingItem*> m_focusedPlaybackInfluence; // hovered or pinned in the Info panel
+    std::unordered_set<const mu::engraving::EngravingItem*> m_heldPlaybackInfluence;    // while the highlight keys are held
+    std::unordered_set<const mu::engraving::EngravingItem*> m_playbackInfluenceHighlight; // both
     muse::async::Notification m_playbackInfluenceHighlightChanged;
 
     QTimer m_textCursorBlinkTimer;

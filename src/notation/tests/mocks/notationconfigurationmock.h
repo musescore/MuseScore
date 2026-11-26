@@ -93,6 +93,10 @@ public:
 
     MOCK_METHOD(muse::draw::Color, noteInputPreviewColor, (), (const, override));
 
+    MOCK_METHOD(QColor, playbackInfluenceHighlightColor, (), (const, override));
+    MOCK_METHOD(void, setPlaybackInfluenceHighlightColor, (const QColor&), (override));
+    MOCK_METHOD(muse::async::Notification, playbackInfluenceHighlightColorChanged, (), (const, override));
+
     MOCK_METHOD(bool, useNoteInputCursorInInputByDuration, (), (const, override));
     MOCK_METHOD(void, setUseNoteInputCursorInInputByDuration, (bool), (override));
     MOCK_METHOD(muse::async::Notification, useNoteInputCursorInInputByDurationChanged, (), (const, override));

@@ -55,6 +55,8 @@ static const Settings::Key ONLY_INVERT_IN_DARK_THEME(module_name, "ui/canvas/onl
 
 static const Settings::Key NOTE_INPUT_PREVIEW_COLOR(module_name, "ui/canvas/noteInputPreviewColor");
 
+static const Settings::Key PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR(module_name, "score/playbackInfluence/highlightColor");
+
 static const Settings::Key USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION(module_name,
                                                                       "ui/canvas/useNoteInputCursorInInputByDuration");
 
@@ -207,6 +209,12 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
     settings()->setCanBeManuallyEdited(NOTE_INPUT_PREVIEW_COLOR, true);
     settings()->setDescription(NOTE_INPUT_PREVIEW_COLOR, muse::trc("notation", "Note input preview note color"));
+
+    // 60% opaque mild orange
+    settings()->setDefaultValue(PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR, Val(QColor(0xdb, 0x91, 0x37, 0x99)));
+    settings()->valueChanged(PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR).onReceive(this, [this](const Val&) {
+        m_playbackInfluenceHighlightColorChanged.notify();
+    });
 
     settings()->setDefaultValue(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION, Val(false));
     settings()->valueChanged(USE_NOTE_INPUT_CURSOR_IN_INPUT_BY_DURATION).onReceive(nullptr, [this](const Val&) {
@@ -663,6 +671,21 @@ QColor NotationConfiguration::dropRectColor() const
 muse::draw::Color NotationConfiguration::noteInputPreviewColor() const
 {
     return settings()->value(NOTE_INPUT_PREVIEW_COLOR).toQColor();
+}
+
+QColor NotationConfiguration::playbackInfluenceHighlightColor() const
+{
+    return settings()->value(PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR).toQColor();
+}
+
+void NotationConfiguration::setPlaybackInfluenceHighlightColor(const QColor& color)
+{
+    settings()->setSharedValue(PLAYBACK_INFLUENCE_HIGHLIGHT_COLOR, Val(color));
+}
+
+muse::async::Notification NotationConfiguration::playbackInfluenceHighlightColorChanged() const
+{
+    return m_playbackInfluenceHighlightColorChanged;
 }
 
 bool NotationConfiguration::useNoteInputCursorInInputByDuration() const

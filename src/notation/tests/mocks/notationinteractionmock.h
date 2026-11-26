@@ -284,6 +284,7 @@ public:
     MOCK_METHOD(void, centerOnItem, (const mu::engraving::EngravingItem*), (override));
     MOCK_METHOD(void, endCentering, (bool), (override));
     MOCK_METHOD(void, setPlaybackInfluenceHighlight, (const std::vector<const mu::engraving::EngravingItem*>&), (override));
+    MOCK_METHOD(void, setHeldPlaybackInfluenceHighlight, (const std::vector<const mu::engraving::EngravingItem*>&), (override));
     MOCK_METHOD((const std::unordered_set<const mu::engraving::EngravingItem*>&), playbackInfluenceHighlight, (), (const, override));
     MOCK_METHOD(muse::async::Notification, playbackInfluenceHighlightChanged, (), (const, override));
 

@@ -22,7 +22,14 @@
 
 #include "notationpaintview.h"
 
+#include "notation/imasternotation.h"
+#include "notation/notationcommands.h"
+#include "notation/inotationplayback.h"
+#include "notation/inotationselection.h"
 #include "notation/inotationviewstate.h"
+
+#include "engraving/dom/note.h"
+#include "engraving/playback/noteplaybackinfo.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -31,6 +38,15 @@ using namespace mu::notation;
 NotationPaintView::NotationPaintView(QQuickItem* parent)
     : AbstractNotationPaintView(parent)
 {
+    m_influenceKeys.setModifiers(playbackInfluenceModifiers());
+
+    commandShortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        m_influenceKeys.setModifiers(playbackInfluenceModifiers());
+    });
+
+    connect(&m_influenceKeys, &ModifierHoldWatcher::heldChanged, this, [this](bool) {
+        updateHeldPlaybackInfluence();
+    });
 }
 
 void NotationPaintView::onLoadNotation(INotationPtr notation)
@@ -52,6 +68,11 @@ void NotationPaintView::onLoadNotation(INotationPtr notation)
 
 void NotationPaintView::onUnloadNotation(INotationPtr notation)
 {
+    if (notation == m_heldInfluenceNotation) {
+        m_heldInfluenceNotation->interaction()->setHeldPlaybackInfluenceHighlight({});
+        m_heldInfluenceNotation = nullptr;
+    }
+
     AbstractNotationPaintView::onUnloadNotation(notation);
 
     notation->viewState()->matrixChanged().disconnect(this);
@@ -76,4 +97,48 @@ void NotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transf
             notation()->viewState()->setZoomType(ZoomType::Percentage);
         }
     }
+}
+
+void NotationPaintView::updateHeldPlaybackInfluence()
+{
+    if (m_heldInfluenceNotation) {
+        m_heldInfluenceNotation->interaction()->setHeldPlaybackInfluenceHighlight({});
+        m_heldInfluenceNotation = nullptr;
+    }
+
+    const INotationPtr shown = notation();
+
+    if (!m_influenceKeys.isHeld() || !shown || !isVisible()) {
+        return;
+    }
+
+    const INotationSelectionPtr selection = shown->interaction()->selection();
+
+    if (!selection->isSingle() || !selection->element() || !selection->element()->isNote()) {
+        return;
+    }
+
+    // Playing hides the highlight when painting, so there's no need to check for it here
+    const engraving::Note* note = engraving::toNote(selection->element());
+    const engraving::NotePlaybackInfo info = shown->masterNotation()->playback()->notePlaybackInfo(note);
+
+    if (!info.isValid()) {
+        return;
+    }
+
+    shown->interaction()->setHeldPlaybackInfluenceHighlight(engraving::listedItems(info));
+    m_heldInfluenceNotation = shown;
+}
+
+Qt::KeyboardModifiers NotationPaintView::playbackInfluenceModifiers() const
+{
+    const muse::shortcuts::Shortcut& shortcut = commandShortcutsRegister()->shortcut(HIGHLIGHT_PLAYBACK_INFLUENCES_COMMAND);
+
+    for (const std::string& sequence : shortcut.sequences) {
+        if (const Qt::KeyboardModifiers modifiers = muse::shortcuts::modifiersFromSequence(sequence); modifiers != Qt::NoModifier) {
+            return modifiers;
+        }
+    }
+
+    return Qt::NoModifier;
 }

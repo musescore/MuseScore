@@ -1133,6 +1133,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+    CommandInfo {
+        HIGHLIGHT_PLAYBACK_INFLUENCES_COMMAND,
+        TranslatableString("action", "Highlight playback influences"),
+        TranslatableString("action", "Highlight what affects the selected note (hold)"),
+        InputSchema(),
+        Decoration(),
+        Availability::Shortcut
+    },
 
     // piano keyboard commands
     CommandInfo {

@@ -107,6 +107,10 @@ public:
 
     muse::draw::Color noteInputPreviewColor() const override;
 
+    QColor playbackInfluenceHighlightColor() const override;
+    void setPlaybackInfluenceHighlightColor(const QColor& color) override;
+    muse::async::Notification playbackInfluenceHighlightColorChanged() const override;
+
     bool useNoteInputCursorInInputByDuration() const override;
     void setUseNoteInputCursorInInputByDuration(bool use) override;
     muse::async::Notification useNoteInputCursorInInputByDurationChanged() const override;
@@ -273,6 +277,7 @@ private:
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
     muse::async::Channel<muse::io::path_t> m_userInstrumentsFolderChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
+    muse::async::Notification m_playbackInfluenceHighlightColorChanged;
     muse::async::Channel<bool> m_colorNotesOutsideOfUsablePitchRangeChanged;
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
     muse::async::Channel<int> m_delayBetweenNotesInRealTimeModeMillisecondsChanged;

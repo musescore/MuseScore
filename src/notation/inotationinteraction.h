@@ -356,7 +356,11 @@ public:
 
     //! Score items temporarily colored to show what affects the selected note's playback; empty = none.
     //! Linked copies (in parts or the main score) are colored too.
+    //! setPlaybackInfluenceHighlight: the item hovered or pinned in the Info panel.
+    //! setHeldPlaybackInfluenceHighlight: everything, while the highlight keys are held.
+    //! playbackInfluenceHighlight: both together, i.e. what is colored.
     virtual void setPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) = 0;
+    virtual void setHeldPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) = 0;
     virtual const std::unordered_set<const mu::engraving::EngravingItem*>& playbackInfluenceHighlight() const = 0;
     virtual muse::async::Notification playbackInfluenceHighlightChanged() const = 0;
 

@@ -8027,26 +8027,48 @@ void NotationInteraction::endCentering(bool restoreView)
     m_showItemRequested.send(request);
 }
 
-void NotationInteraction::setPlaybackInfluenceHighlight(const std::vector<const EngravingItem*>& items)
+namespace notationinteraction_detail {
+//! The items and their linked copies: an item may come from the main score while a part is shown (or the other way around)
+std::unordered_set<const EngravingItem*> withLinkedCopies(const std::vector<const EngravingItem*>& items)
 {
-    std::unordered_set<const EngravingItem*> highlight;
+    std::unordered_set<const EngravingItem*> result;
 
     for (const EngravingItem* item : items) {
         if (!item) {
             continue;
         }
 
-        highlight.insert(item);
+        result.insert(item);
 
-        // The item may come from the main score while a part is shown (or the other way around)
         if (item->links()) {
             for (const EngravingObject* linked : *item->links()) {
                 if (linked->isEngravingItem()) {
-                    highlight.insert(static_cast<const EngravingItem*>(linked));
+                    result.insert(static_cast<const EngravingItem*>(linked));
                 }
             }
         }
     }
+
+    return result;
+}
+} // namespace notationinteraction_detail
+
+void NotationInteraction::setPlaybackInfluenceHighlight(const std::vector<const EngravingItem*>& items)
+{
+    m_focusedPlaybackInfluence = notationinteraction_detail::withLinkedCopies(items);
+    updatePlaybackInfluenceHighlight();
+}
+
+void NotationInteraction::setHeldPlaybackInfluenceHighlight(const std::vector<const EngravingItem*>& items)
+{
+    m_heldPlaybackInfluence = notationinteraction_detail::withLinkedCopies(items);
+    updatePlaybackInfluenceHighlight();
+}
+
+void NotationInteraction::updatePlaybackInfluenceHighlight()
+{
+    std::unordered_set<const EngravingItem*> highlight = m_focusedPlaybackInfluence;
+    highlight.insert(m_heldPlaybackInfluence.begin(), m_heldPlaybackInfluence.end());
 
     if (highlight == m_playbackInfluenceHighlight) {
         return;

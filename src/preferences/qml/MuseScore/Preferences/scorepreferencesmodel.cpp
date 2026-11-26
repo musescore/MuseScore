@@ -38,6 +38,10 @@ void ScorePreferencesModel::load()
     notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t&) {
         emit defaultPartStylePathChanged();
     });
+
+    notationConfiguration()->playbackInfluenceHighlightColorChanged().onNotify(this, [this]() {
+        emit playbackInfluenceHighlightColorChanged();
+    });
 }
 
 QString ScorePreferencesModel::defaultStylePath() const
@@ -66,4 +70,18 @@ void ScorePreferencesModel::setDefaultPartStylePath(const QString& path)
     }
 
     notationConfiguration()->setPartStyleFilePath(path.toStdString());
+}
+
+QColor ScorePreferencesModel::playbackInfluenceHighlightColor() const
+{
+    return notationConfiguration()->playbackInfluenceHighlightColor();
+}
+
+void ScorePreferencesModel::setPlaybackInfluenceHighlightColor(const QColor& color)
+{
+    if (playbackInfluenceHighlightColor() == color) {
+        return;
+    }
+
+    notationConfiguration()->setPlaybackInfluenceHighlightColor(color);
 }

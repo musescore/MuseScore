@@ -114,6 +114,7 @@ qt_add_qml_module(preferences_qml
         internal/NoteInput/VoiceAssignmentSection.qml
         internal/OnlineSoundsSection.qml
         internal/PageSection.qml
+        internal/PlaybackInfluenceSection.qml
         internal/PreferencesButtonsPanel.qml
         internal/PreferencesMenu.qml
         internal/ProgramStartSection.qml
