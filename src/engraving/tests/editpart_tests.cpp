@@ -1999,6 +1999,137 @@ TEST_F(Engraving_EditPartTests, SetParts_ExistingParts_ReordersThem)
     delete score;
 }
 
+TEST_F(Engraving_EditPartTests, SetParts_Tablature_AddsTablatureVersion)
+{
+    // [GIVEN] A flute
+    MasterScore* score = createMasterScore({ u"flute" });
+    Part* flute = score->parts().front();
+
+    // [WHEN] A classical guitar is added as tablature
+    edit(score, [score, flute](Transaction& tx) {
+        const std::vector<EditPart::PartEntry> entries {
+            { flute, nullptr, false },
+            { nullptr, searchTemplate(u"guitar-nylon"), false, TablatureOption::Tablature },
+        };
+        EditPart::setParts(tx, score, entries, score->scoreOrder());
+    });
+
+    // [THEN] Its tablature version is added instead: one tablature staff
+    ASSERT_EQ(instrumentIds(score), InstrumentIds({ u"flute", u"guitar-nylon-tablature" }));
+    const Part* guitar = score->parts().at(1);
+    ASSERT_EQ(guitar->nstaves(), 1u);
+    EXPECT_TRUE(guitar->staff(0)->isTabStaff(Fraction(0, 1)));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetParts_TablatureNextToTablature_NumbersBoth)
+{
+    // [GIVEN] An unnumbered classical guitar tablature
+    MasterScore* score = createMasterScore({ u"guitar-nylon-tablature" });
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_EQ(parts.size(), 1u);
+
+    Part* existing = parts.at(0);
+
+    // [WHEN] Another classical guitar is added as tablature
+    edit(score, [score, existing](Transaction& tx) {
+        const std::vector<EditPart::PartEntry> entries {
+            { existing, nullptr, false },
+            { nullptr, searchTemplate(u"guitar-nylon"), false, TablatureOption::Tablature },
+        };
+        EditPart::setParts(tx, score, entries, score->scoreOrder());
+    });
+
+    // [THEN] They're numbered 1 and 2
+    ASSERT_EQ(instrumentIds(score), InstrumentIds({ u"guitar-nylon-tablature", u"guitar-nylon-tablature" }));
+    EXPECT_EQ(parts.at(0), existing);
+    EXPECT_EQ(existing->number(), 1);
+    EXPECT_EQ(parts.at(1)->number(), 2);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetParts_TablatureNextToNotation_NumbersNeither)
+{
+    // [GIVEN] An unnumbered classical guitar
+    MasterScore* score = createMasterScore({ u"guitar-nylon" });
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_EQ(parts.size(), 1u);
+
+    Part* existing = parts.at(0);
+
+    // [WHEN] Another classical guitar is added as tablature
+    edit(score, [score, existing](Transaction& tx) {
+        const std::vector<EditPart::PartEntry> entries {
+            { existing, nullptr, false },
+            { nullptr, searchTemplate(u"guitar-nylon"), false, TablatureOption::Tablature },
+        };
+        EditPart::setParts(tx, score, entries, score->scoreOrder());
+    });
+
+    // [THEN] They're different instruments: neither is numbered
+    ASSERT_EQ(instrumentIds(score), InstrumentIds({ u"guitar-nylon", u"guitar-nylon-tablature" }));
+    EXPECT_EQ(parts.at(0), existing);
+    EXPECT_EQ(existing->number(), 0);
+    EXPECT_EQ(parts.at(1)->number(), 0);
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetParts_TablatureAndNotation_AddsLinkedTablatureStaff)
+{
+    // [GIVEN] A flute
+    MasterScore* score = createMasterScore({ u"flute" });
+    Part* flute = score->parts().front();
+
+    // [WHEN] A classical guitar is added as tablature and notation
+    edit(score, [score, flute](Transaction& tx) {
+        const std::vector<EditPart::PartEntry> entries {
+            { flute, nullptr, false },
+            { nullptr, searchTemplate(u"guitar-nylon"), false, TablatureOption::TablatureAndNotation },
+        };
+        EditPart::setParts(tx, score, entries, score->scoreOrder());
+    });
+
+    // [THEN] It has its notation staff, and a tablature staff linked to it
+    ASSERT_EQ(instrumentIds(score), InstrumentIds({ u"flute", u"guitar-nylon" }));
+    const Part* guitar = score->parts().at(1);
+    ASSERT_EQ(guitar->nstaves(), 2u);
+
+    Staff* notation = guitar->staff(0);
+    Staff* tablature = guitar->staff(1);
+    EXPECT_FALSE(notation->isTabStaff(Fraction(0, 1)));
+    EXPECT_TRUE(tablature->isTabStaff(Fraction(0, 1)));
+    EXPECT_TRUE(tablature->isLinked(notation));
+
+    delete score;
+}
+
+TEST_F(Engraving_EditPartTests, SetParts_TablatureOption_WithoutTablatureVersion_AddsNotation)
+{
+    // [GIVEN] A flute
+    MasterScore* score = createMasterScore({ u"flute" });
+    Part* flute = score->parts().front();
+
+    // [WHEN] A violin, which has no tablature version, is added as tablature and notation
+    edit(score, [score, flute](Transaction& tx) {
+        const std::vector<EditPart::PartEntry> entries {
+            { flute, nullptr, false },
+            { nullptr, searchTemplate(u"violin"), false, TablatureOption::TablatureAndNotation },
+        };
+        EditPart::setParts(tx, score, entries, score->scoreOrder());
+    });
+
+    // [THEN] It's added as notation only
+    ASSERT_EQ(instrumentIds(score), InstrumentIds({ u"flute", u"violin" }));
+    const Part* violin = score->parts().at(1);
+    ASSERT_EQ(violin->nstaves(), 1u);
+    EXPECT_FALSE(violin->staff(0)->isTabStaff(Fraction(0, 1)));
+
+    delete score;
+}
+
 TEST_F(Engraving_EditPartTests, ChangePatch_ChangesChannelProgram)
 {
     // [GIVEN] A flute

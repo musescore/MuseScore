@@ -23,6 +23,8 @@
 #include "score.h"
 #include "staff.h"
 
+#include <algorithm>
+#include <limits>
 #include <sstream>
 #include <utility>
 
@@ -237,33 +239,68 @@ void SharedPart::computeIsSameInstruments()
     m_isSameInstruments = isSameInstrumentsAtTick(Fraction(0, 1));
 }
 
+static std::pair<String, int> splitTrailingNumber(const String& name)
+{
+    // "Trumpet 2" -> { "Trumpet", 2 }; "Flutes" -> { "Flutes", 0 }
+    size_t start = name.size();
+    while (start > 0 && name.at(start - 1).isDigit()) {
+        --start;
+    }
+
+    if (start == name.size()) {
+        return { name, 0 };
+    }
+
+    return { name.left(start).trimmed(), name.mid(start).toInt() };
+}
+
 String SharedPart::partName() const
 {
+    String commonName;
+    bool hasMixedNames = false;
+    int firstNumber = std::numeric_limits<int>::max();
+    int lastNumber = std::numeric_limits<int>::min();
+
+    for (const Part* originPart : originParts()) {
+        const auto [name, nameNumber] = splitTrailingNumber(originPart->partName().simplified());
+
+        // The instrument's number; else one in its name (e.g. "Violins 1" from a template)
+        const int instrumentNumber = originPart->instrument()->number();
+        const int number = instrumentNumber > 0 ? instrumentNumber : nameNumber;
+
+        if (commonName.empty()) {
+            commonName = name;
+        } else if (name != commonName) {
+            hasMixedNames = true;
+        }
+
+        if (number > 0) {
+            firstNumber = std::min(firstNumber, number);
+            lastNumber = std::max(lastNumber, number);
+        }
+    }
+
+    // no numbers, a single number, or different instruments
+    if (hasMixedNames || commonName.empty() || firstNumber >= lastNumber) {
+        return instrumentName();
+    }
+
+    // e.g. "Trumpet 1–3"
+    return commonName + u" " + String::number(firstNumber) + u"–" + String::number(lastNumber);
+}
+
+String SharedPart::instrumentName() const
+{
     const Instrument* i = instrument();
-    String fullName = i->longName();
+    String name = i->longName();
 
     const String& transp = i->transposition();
     if (!transp.empty()) {
         //: For instrument transposition, e.g. Horn in F
-        fullName += u" " + muse::mtrc("engraving", "in") + u" " + transp;
+        name += u" " + muse::mtrc("engraving", "in") + u" " + transp;
     }
 
-    int firstNumber = 10000;
-    int lastNumber = 0;
-
-    for (const Part* originPart : originParts()) {
-        int number = originPart->instrument()->number();
-        firstNumber = std::min(firstNumber, number);
-        lastNumber = std::max(lastNumber, number);
-    }
-
-    if (firstNumber == lastNumber) {
-        return fullName;
-    }
-
-    fullName += u" " + String::number(firstNumber) + u"-" + String::number(lastNumber);
-
-    return fullName;
+    return name;
 }
 
 PropertyValue SharedPart::getProperty(Pid pid) const

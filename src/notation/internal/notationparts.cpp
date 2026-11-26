@@ -879,7 +879,7 @@ std::vector<EditPart::PartEntry> NotationParts::partEntries(const PartInstrument
         if (pi.isExistingPart) {
             entries.push_back({ score()->partById(pi.partId), nullptr, pi.isSoloist });
         } else {
-            entries.push_back({ nullptr, &pi.instrumentTemplate, pi.isSoloist });
+            entries.push_back({ nullptr, &pi.instrumentTemplate, pi.isSoloist, pi.tablatureOption });
         }
     }
 

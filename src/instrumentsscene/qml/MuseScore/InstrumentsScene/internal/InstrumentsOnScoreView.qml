@@ -36,8 +36,54 @@ Item {
 
     property alias navigation: instrumentsView.navigation
 
-    function scrollViewToEnd() {
-        instrumentsView.positionViewAtEnd()
+    // italics until accepted (off when all instruments are new)
+    property bool highlightsNewInstruments: false
+
+    function addInstruments(instrumentIdList) {
+        const contentY = instrumentsView.contentY
+        const row = root.instrumentsOnScoreModel.addInstruments(instrumentIdList)
+
+        // The model is reset, which scrolls the list back to the top
+        instrumentsView.contentY = contentY
+        instrumentsView.forceLayout()
+
+        if (row >= 0) {
+            instrumentsView.positionViewAtIndex(row, ListView.Contain)
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        // group id -> expanded; collapsed by default
+        property var expandedGroups: ({})
+
+        // becomes null by itself when the row is destroyed (e.g. scrolled out of view)
+        property InstrumentsOnScoreDelegate hoveredGroupRow: null
+        property string pressedGroupId: ""
+
+        function setGroupRowHovered(row, hovered) {
+            // cleared only by its own row: the next row can be entered before the previous one is left
+            if (hovered) {
+                prv.hoveredGroupRow = row
+            } else if (prv.hoveredGroupRow === row) {
+                prv.hoveredGroupRow = null
+            }
+        }
+
+        function setGroupPressed(groupId, pressed) {
+            if (pressed) {
+                prv.pressedGroupId = groupId
+            } else if (prv.pressedGroupId === groupId) {
+                prv.pressedGroupId = ""
+            }
+        }
+
+        function setGroupExpanded(groupId, expanded) {
+            const groups = Object.assign({}, prv.expandedGroups)
+            groups[groupId] = expanded
+            prv.expandedGroups = groups
+        }
     }
 
     StyledTextLabel {
@@ -79,13 +125,37 @@ Item {
             }
         }
 
+        // on while all selected are soloists
+        FlatButton {
+            id: makeSoloistButton
+
+            Layout.preferredWidth: makeSoloistButton.width
+
+            navigation.name: "MakeSoloist"
+            navigation.panel: instrumentsView.navigation
+            navigation.row: 0
+            navigation.column: 1
+            navigation.accessible.name: makeSoloistButton.toolTipTitle
+
+            icon: IconCode.ACCOUNT
+            accentButton: root.instrumentsOnScoreModel.isSelectionSoloist
+            toolTipTitle: root.instrumentsOnScoreModel.isSelectionSoloist ? qsTrc("instruments", "Undo soloist")
+                                                                          : qsTrc("instruments", "Make soloist")
+
+            enabled: root.instrumentsOnScoreModel.isSoloistAvailable
+
+            onClicked: {
+                root.instrumentsOnScoreModel.toggleSoloistForSelection()
+            }
+        }
+
         FlatButton {
             Layout.preferredWidth: width
 
             navigation.name: "Delete"
             navigation.panel: instrumentsView.navigation
             navigation.row: 0
-            navigation.column: 1
+            navigation.column: 2
 
             icon: IconCode.DELETE_TANK
             toolTipTitle: qsTrc("instruments", "Remove selected instruments from score")
@@ -93,7 +163,7 @@ Item {
             enabled: root.instrumentsOnScoreModel.isRemovingAvailable
 
             onClicked: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelectedBlocks()
             }
         }
     }
@@ -111,68 +181,45 @@ Item {
 
         accessible.name: instrumentsLabel.text
 
-        delegate: ListItemBlank {
+        delegate: InstrumentsOnScoreDelegate {
             id: item
 
-            required property var model
-            required isSelected
-            required property string name
-            required property string description
-            required property bool isSoloist
-            required property int index
-            
-            navigation.name: name
-            navigation.panel: instrumentsView.navigation
-            navigation.row: 1 + index
-            navigation.column: 0
-            navigation.accessible.name: itemTitleLabel.text
-            navigation.accessible.description: description
-            navigation.accessible.row: index
+            navigationPanel: instrumentsView.navigation
+            highlightsNewInstruments: root.highlightsNewInstruments
 
-            StyledTextLabel {
-                id: itemTitleLabel
-                anchors.left: parent.left
-                anchors.leftMargin: 12
-                anchors.right: parent.right
-                anchors.rightMargin: 4
-                anchors.verticalCenter: parent.verticalCenter
+            isGroupExpanded: Boolean(prv.expandedGroups[item.sharedGroupId])
 
-                horizontalAlignment: Text.AlignLeft
-                text:  item.isSoloist ? qsTrc("instruments", "Soloist:") + " " + item.name : item.name
-                font: ui.theme.bodyBoldFont
+            // from the model: the header's row may not exist; hasSelection re-evaluates it on selection changes
+            isGroupSelected: {
+                root.instrumentsOnScoreModel.hasSelection
+                return item.isInGroup && root.instrumentsOnScoreModel.isSharedGroupSelected(item.sharedGroupId)
             }
 
-            FlatButton {
-                anchors.right: parent.right
-                anchors.leftMargin: 4
-                anchors.rightMargin: 4
-                anchors.verticalCenter: parent.verticalCenter
-
-                isNarrow: true
-
-                text: item.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-                visible: item.isSelected
-
-                navigation.name: item.name + "MakeSoloist"
-                navigation.panel: instrumentsView.navigation
-                navigation.row: 1 + item.index
-                navigation.column: 1
-
-                onClicked: {
-                    item.model.isSoloist = !item.model.isSoloist
-                }
-            }
+            isGroupHovered: Boolean(prv.hoveredGroupRow) && prv.hoveredGroupRow.sharedGroupId === item.sharedGroupId
+            isGroupPressed: item.isInGroup && prv.pressedGroupId === item.sharedGroupId
 
             onClicked: {
-                root.instrumentsOnScoreModel.selectRow(index)
-            }
-
-            onDoubleClicked: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.selectRow(item.index)
             }
 
             onRemoveSelectionRequested: {
-                root.instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelectedBlocks()
+            }
+
+            onSelectRequested: {
+                root.instrumentsOnScoreModel.selectRow(item.index)
+            }
+
+            onGroupExpandToggled: {
+                prv.setGroupExpanded(item.sharedGroupId, !item.isGroupExpanded)
+            }
+
+            onGroupHoverChanged: function(hovered) {
+                prv.setGroupRowHovered(item, hovered)
+            }
+
+            onGroupPressChanged: function(pressed) {
+                prv.setGroupPressed(item.sharedGroupId, pressed)
             }
         }
     }

@@ -45,6 +45,7 @@ Rectangle {
     property NavigationSection navigationSection: null
 
     property alias navigation: instrumentsView.navigation
+    property alias highlightsNewInstruments: instrumentsOnScoreView.highlightsNewInstruments
 
     signal submitRequested()
 
@@ -83,9 +84,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            root.instrumentsOnScoreModel.addInstruments(instrumentsModel.selectedInstrumentIdList())
-
-            Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
+            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
         }
     }
 
@@ -240,7 +239,7 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
                 onClicked: {
-                    root.instrumentsOnScoreModel.moveSelectionUp()
+                    root.instrumentsOnScoreModel.moveSelectedBlocksUp()
                 }
             }
 
@@ -255,7 +254,7 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
                 onClicked: {
-                    root.instrumentsOnScoreModel.moveSelectionDown()
+                    root.instrumentsOnScoreModel.moveSelectedBlocksDown()
                 }
             }
         }

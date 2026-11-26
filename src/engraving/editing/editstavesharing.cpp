@@ -539,7 +539,7 @@ bool EditStaveSharing::canShareStaves(const Part* part)
     }
 
     const StaffGroup group = part->staves().front()->staffType()->group();
-    return group == StaffGroup::STANDARD || group == StaffGroup::JIANPU;
+    return group == StaffGroup::STANDARD;
 }
 
 void EditStaveSharing::disconnectBeforeRemovingPart(Transaction& tx, Part* part)
@@ -665,7 +665,7 @@ void EditStaveSharing::setIsReset(Transaction& tx, StaveSharingChange* staveShar
         return;
     }
 
-    if (!reset && state->userTrackMap()->empty()) {
+    if (!reset && state->userTrackMap() && state->userTrackMap()->empty()) {
         state->setUserTrackMap(state->sharedTrackMap());
         state->setIsReset(false);
         undoSetStaveSharingState(tx, sharedPart, tick, *state);

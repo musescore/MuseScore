@@ -59,6 +59,7 @@ qt_add_qml_module(instrumentsscene_qml
         InstrumentsDialog.qml
         internal/FamilyView.qml
         internal/InstrumentSettingsPopup.qml
+        internal/InstrumentsOnScoreDelegate.qml
         internal/InstrumentsOnScoreView.qml
         internal/InstrumentsView.qml
         internal/LayoutControlPanel.qml

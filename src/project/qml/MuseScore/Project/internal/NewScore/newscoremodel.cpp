@@ -120,6 +120,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
         pi.isExistingPart = objMap["isExistingPart"].toBool();
         pi.isSoloist = objMap["isSoloist"].toBool();
+        pi.tablatureOption = static_cast<TablatureOption>(objMap.value("tablatureOption", 0).toInt()); // missing: Notation
 
         scoreOptions.parts.push_back(pi);
     }

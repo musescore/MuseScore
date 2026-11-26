@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include <map>
+#include <optional>
+#include <vector>
+
 #include "uicomponents/qml/Muse/UiComponents/selectableitemlistmodel.h"
 
 #include "modularity/ioc.h"
@@ -36,12 +40,24 @@ class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemLis
     Q_PROPERTY(QStringList orders READ orders NOTIFY ordersChanged)
     Q_PROPERTY(int currentOrderIndex READ currentOrderIndex WRITE setCurrentOrderIndex NOTIFY currentOrderChanged)
 
+    Q_PROPERTY(bool isSoloistAvailable READ isSoloistAvailable NOTIFY soloistStateChanged)
+    Q_PROPERTY(bool isSelectionSoloist READ isSelectionSoloist NOTIFY soloistStateChanged)
+
     QML_ELEMENT
 
+public:
     muse::GlobalInject<notation::IInstrumentsRepository> repository;
     muse::ContextInject<project::IProjectSession> context = { this };
 
-public:
+    //! Groups are listed only while shared staves are enabled
+    enum SharedGroupRole {
+        NotInGroup = 0,
+        GroupHeader,
+        GroupMember,
+        GroupLastMember, // the group's last instrument: the group ends below it
+    };
+    Q_ENUM(SharedGroupRole)
+
     InstrumentsOnScoreListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -51,11 +67,24 @@ public:
     QStringList orders() const;
     int currentOrderIndex() const;
 
+    bool isSoloistAvailable() const;
+    bool isSelectionSoloist() const;
+
     Q_INVOKABLE void load();
-    Q_INVOKABLE void addInstruments(const QStringList& instrumentIdList);
+    //! Returns the first added instrument's row, or -1 if none was added
+    Q_INVOKABLE int addInstruments(const QStringList& instrumentIdList);
+
+    Q_INVOKABLE void moveSelectedBlocksUp();
+    Q_INVOKABLE void moveSelectedBlocksDown();
+
+    Q_INVOKABLE void removeSelectedBlocks();
+
+    Q_INVOKABLE void toggleSoloistForSelection();
 
     Q_INVOKABLE QVariant currentOrder() const;
     Q_INVOKABLE QVariantList instruments() const;
+
+    Q_INVOKABLE bool isSharedGroupSelected(const QString& sharedGroupId) const;
 
 public slots:
     void setCurrentOrderIndex(int index);
@@ -63,6 +92,7 @@ public slots:
 signals:
     void ordersChanged();
     void currentOrderChanged();
+    void soloistStateChanged();
 
 private:
     class InstrumentItem;
@@ -70,12 +100,35 @@ private:
     enum Roles {
         RoleName = SelectableItemListModel::UserRole + 1,
         RoleDescription,
-        RoleIsSoloist
+        RoleIsSoloist,
+        RoleSharedGroupRole,
+        RoleSharedGroupId, // the group's shared part id, or empty
+        RoleIsNew, // added in the dialog, not yet in the score
+        RoleTablatureOption // for new instruments that have a tablature version, else -1
     };
 
+    struct RowRange {
+        int first = 0;
+        int last = 0;
+
+        int count() const { return last - first + 1; }
+    };
+
+    InstrumentItem* createItem(const mu::engraving::Part* part);
     void loadOrders();
 
-    int resolveInstrumentSequenceNumber(const muse::String& instrumentId) const;
+    QList<InstrumentItem*> selectedInstruments() const;
+
+    SharedGroupRole sharedGroupRole(int row) const;
+    bool isGroupMember(const InstrumentItem* instrument) const;
+
+    std::vector<RowRange> blocks(const ItemList& instruments) const;
+    int sortingIndex(const ItemList& instruments, const RowRange& block) const;
+
+    std::optional<RowRange> movingRows() const;
+
+    void moveBlock(const RowRange& block, int destinationRow);
+
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
     void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);
@@ -83,6 +136,7 @@ private:
     InstrumentItem* modelIndexToItem(const QModelIndex& index) const;
     const notation::ScoreOrder& currentScoreOrder() const;
 
+    void onUpdateOperationsAvailability() override;
     void onRowsMoved() override;
     void onRowsRemoved() override;
     void doSetCurrentOrderIndex(int index);
@@ -93,5 +147,9 @@ private:
 
     notation::ScoreOrderList m_scoreOrders;
     int m_currentOrderIndex = 0;
+
+    bool m_showsSharedGroups = false;
+
+    std::map<muse::ID, QString> m_sharedParts; // part id -> instrument id
 };
 }

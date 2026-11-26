@@ -92,6 +92,7 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
                 pi.partId = ID(map["partId"].toString());
                 pi.isExistingPart = map["isExistingPart"].toBool();
                 pi.isSoloist = map["isSoloist"].toBool();
+                pi.tablatureOption = static_cast<TablatureOption>(map["tablatureOption"].toInt()); // missing: Notation
 
                 const String instrumentId = String::fromStdString(map["instrumentId"].toString());
                 pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);

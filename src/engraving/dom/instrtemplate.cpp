@@ -231,6 +231,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     trackName = t.trackName;
     instrumentName = t.instrumentName;
     description = t.description;
+    initId = t.initId;
     musicXmlId = t.musicXmlId;
     staffCount = t.staffCount;
     extended = t.extended;
@@ -565,6 +566,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 String id_ = id;
                 init(*ttt);
                 id = id_;
+                initId = val; // init() copied the base template's own
             } else {
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
@@ -716,6 +718,24 @@ const InstrumentTemplate* searchTemplate(const String& name)
         }
     }
     return 0;
+}
+
+const InstrumentTemplate* searchTablatureTemplate(const String& templateId)
+{
+    if (templateId.empty()) {
+        return nullptr;
+    }
+
+    // Some templates are based on others without being their tablature version
+    for (const InstrumentGroup* g : instrumentGroups) {
+        for (const InstrumentTemplate* it : g->instrumentTemplates) {
+            if (it->initId == templateId && it->staffTypePreset && it->staffTypePreset->isTabStaff()) {
+                return it;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 // Given an unknown instrument (i.e. one that lacks a valid MuseScore ID),
