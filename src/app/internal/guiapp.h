@@ -5,7 +5,7 @@
 
 #include "ui/internal/guiapplication.h"
 #include "../cmdoptions.h"
-
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "multiwindows/imultiwindowsprovider.h"
@@ -39,6 +39,7 @@ public:
     MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
     void showSplash() override;
+    void closeSplash() override;
 
 private:
 
@@ -56,6 +57,7 @@ private:
     void showContextSplash(const muse::modularity::ContextPtr& ctxId) override;
     QString mainWindowQmlPath(const QString& platform) const override;
     void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
+    void showMainWindowAndCloseSplash(const muse::modularity::ContextPtr& ctxId);
 
     appshell::SplashScreen* m_splashScreen = nullptr;
 };

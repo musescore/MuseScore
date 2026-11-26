@@ -456,7 +456,9 @@ void AppshellCommandsController::revertToFactorySettings()
 
         promise.onResolve(this, [this](const IInteractive::Result& res) {
             if (!res.isButton(IInteractive::Button::Cancel)) {
-                restart();
+                async::Async::call(this, [this]() {
+                    restart();
+                });
             }
         });
     });
