@@ -90,6 +90,7 @@ public:
         Metronome,
         Aux,
         Master,
+        Vca,
     };
     Q_ENUM(Type)
 

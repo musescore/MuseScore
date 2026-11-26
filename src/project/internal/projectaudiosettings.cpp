@@ -241,6 +241,27 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
         m_trackOutputParamsMap.erase(outSearch);
         m_settingsChanged.notify();
     }
+
+    for (VcaGroup& group : m_vcaGroups) {
+        if (muse::remove(group.members, partId)) {
+            m_settingsChanged.notify();
+        }
+    }
+}
+
+const VcaGroupList& ProjectAudioSettings::vcaGroups() const
+{
+    return m_vcaGroups;
+}
+
+void ProjectAudioSettings::setVcaGroups(const VcaGroupList& groups)
+{
+    if (m_vcaGroups == groups) {
+        return;
+    }
+
+    m_vcaGroups = groups;
+    m_settingsChanged.notify();
 }
 
 const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
@@ -305,6 +326,8 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
         m_trackOutputParamsMap.emplace(id, std::move(outParams));
     }
 
+    m_vcaGroups = vcaGroupsFromJson(rootObj.value("vcaGroups").toArray());
+
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
     if (m_activeSoundProfileName.empty()) {
         m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
@@ -333,6 +356,11 @@ Ret ProjectAudioSettings::write(engraving::MscWriter& writer, notation::INotatio
     }
 
     rootObj["tracks"] = tracksArray;
+
+    if (!m_vcaGroups.empty()) {
+        rootObj["vcaGroups"] = vcaGroupsToJson(m_vcaGroups);
+    }
+
     rootObj["activeSoundProfile"] = m_activeSoundProfileName.toQString();
 
     QByteArray json = QJsonDocument(rootObj).toJson();
@@ -611,6 +639,60 @@ QJsonObject ProjectAudioSettings::buildAuxObject(aux_channel_idx_t index, const 
     auto soloMuteSearch = m_auxSoloMuteStatesMap.find(index);
     if (soloMuteSearch != m_auxSoloMuteStatesMap.end()) {
         result.insert("soloMuteState", soloMuteStateToJson(soloMuteSearch->second));
+    }
+
+    return result;
+}
+
+VcaGroupList ProjectAudioSettings::vcaGroupsFromJson(const QJsonArray& array) const
+{
+    VcaGroupList result;
+
+    for (const QJsonValue value : array) {
+        QJsonObject groupObject = value.toObject();
+
+        VcaGroup group;
+        group.name = groupObject.value("name").toString();
+        group.volume = groupObject.value("volumeDb").toVariant().toFloat();
+
+        for (const QJsonValue memberValue : groupObject.value("members").toArray()) {
+            QJsonObject memberObject = memberValue.toObject();
+
+            InstrumentTrackId id = {
+                memberObject.value("partId").toString(),
+                memberObject.value("instrumentId").toString()
+            };
+
+            if (id.isValid()) {
+                group.members.push_back(id);
+            }
+        }
+
+        result.push_back(std::move(group));
+    }
+
+    return result;
+}
+
+QJsonArray ProjectAudioSettings::vcaGroupsToJson(const VcaGroupList& groups) const
+{
+    QJsonArray result;
+
+    for (const VcaGroup& group : groups) {
+        QJsonArray membersArray;
+        for (const InstrumentTrackId& id : group.members) {
+            QJsonObject memberObject;
+            memberObject.insert("partId", id.partId.toQString());
+            memberObject.insert("instrumentId", id.instrumentId.toQString());
+            membersArray.append(memberObject);
+        }
+
+        QJsonObject groupObject;
+        groupObject.insert("name", group.name.toQString());
+        groupObject.insert("volumeDb", group.volume.raw());
+        groupObject.insert("members", membersArray);
+
+        result.append(groupObject);
     }
 
     return result;

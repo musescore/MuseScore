@@ -47,6 +47,9 @@ MixerPanelSection {
 
             anchors.horizontalCenter: parent.horizontalCenter
 
+            // A VCA group has no audio of its own to pan
+            visible: content.channelItem.type !== MixerChannelItem.Vca
+
             spacing: 8
 
             KnobControl {

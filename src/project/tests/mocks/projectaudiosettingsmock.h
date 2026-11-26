@@ -58,6 +58,9 @@ public:
 
     MOCK_METHOD(void, removeTrackParams, (const engraving::InstrumentTrackId& trackId), (override));
 
+    MOCK_METHOD(const VcaGroupList&, vcaGroups, (), (const, override));
+    MOCK_METHOD(void, setVcaGroups, (const VcaGroupList& groups), (override));
+
     MOCK_METHOD(const playback::SoundProfileName&, activeSoundProfile, (), (const, override));
     MOCK_METHOD(void, setActiveSoundProfile, (const playback::SoundProfileName& profileName), (override));
 
