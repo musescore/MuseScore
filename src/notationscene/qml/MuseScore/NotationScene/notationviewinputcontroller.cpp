@@ -31,7 +31,7 @@
 
 #include "abstractelementpopupmodel.h"
 
-#include "types/qtinputconvert.h"
+#include "global/qt/qtinputconvert.h"
 
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/fret.h"

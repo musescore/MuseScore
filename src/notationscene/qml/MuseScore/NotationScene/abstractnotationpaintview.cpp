@@ -47,8 +47,8 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h"
 
-#include "types/qtinputconvert.h"
-#include "types/qtmimedata.h"
+#include "global/qt/qtinputconvert.h"
+#include "global/qt/qtmimedataconvert.h"
 
 #include "log.h"
 

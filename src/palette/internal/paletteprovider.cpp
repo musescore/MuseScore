@@ -29,7 +29,7 @@
 #include <QMimeData>
 #include <QStandardPaths>
 
-#include "types/qtinputconvert.h"
+#include "global/qt/qtinputconvert.h"
 
 #include "engraving/dom/mscore.h"
 

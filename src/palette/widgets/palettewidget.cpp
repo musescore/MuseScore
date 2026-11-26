@@ -22,7 +22,7 @@
 
 #include "palettewidget.h"
 
-#include "types/qtinputconvert.h"
+#include "global/qt/qtinputconvert.h"
 
 #include <cmath>
 
