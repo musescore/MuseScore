@@ -22,6 +22,8 @@
 
 #include "palettewidget.h"
 
+#include "types/qtinputconvert.h"
+
 #include <cmath>
 
 #include <QAccessible>
@@ -486,13 +488,13 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         interactive()->askToContinue(ret).onResolve(this, [this, weakNotation, element, modifiers](bool proceed) {
             mu::notation::INotationPtr notation = weakNotation.lock();
             if (proceed && notation && notation == projectSession()->currentNotation()) {
-                notation->interaction()->applyPaletteElement(element.get(), modifiers);
+                notation->interaction()->applyPaletteElement(element.get(), muse::fromQtModifiers(modifiers));
             }
         });
         return;
     }
 
-    interaction->applyPaletteElement(element.get(), modifiers);
+    interaction->applyPaletteElement(element.get(), muse::fromQtModifiers(modifiers));
     mainWindow()->qWindow()->requestActivate();
 }
 

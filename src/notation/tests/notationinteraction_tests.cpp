@@ -262,7 +262,7 @@ TEST_F(Notation_NotationInteractionTests, DropInstrumentChange_WithTheChosenInst
     //! [WHEN] It is dropped with the chosen instrument
     const InstrumentTemplate* flute = searchTemplate(u"flute");
     ASSERT_TRUE(flute);
-    EXPECT_TRUE(m_notation->interaction()->dropSingle(PointF(), Qt::NoModifier, *flute));
+    EXPECT_TRUE(m_notation->interaction()->dropSingle(PointF(), muse::KeyboardModifier::NoModifier, *flute));
     m_notation->interaction()->endDrop();
 
     //! [THEN] The instrument change to that instrument is added

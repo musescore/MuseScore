@@ -1031,7 +1031,7 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_UserAgrees_Drops
     int drops = 0;
     int endedDrops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>&) {
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>&) {
         EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
         ++drops;
         return true;
@@ -1156,8 +1156,9 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChange_UserChoosesAnInst
     int drops = 0;
     int endedDrops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
-        EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+        EXPECT_EQ(endedDrops,
+                  0) << "the drop is not ended before the element is dropped";
         EXPECT_TRUE(instrument.has_value()) << "an instrument change is dropped with the chosen instrument";
         EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
         ++drops;
@@ -1253,7 +1254,7 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_
 
     int drops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+    .WillByDefault([&drops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
         EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
         ++drops;
         return true;

@@ -261,13 +261,13 @@ private:
 
     struct DragMoveEvent {
         QPointF position;
-        Qt::KeyboardModifiers modifiers;
+        muse::KeyboardModifiers modifiers;
         Qt::DropAction dropAction = Qt::DropAction::CopyAction;
         QObject* source = nullptr;
     };
 
     bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
-    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers);
     void selectInstrumentForPendingDrop();
     void finishPendingDrop(bool drop, const std::optional<InstrumentTemplate>& instrument = std::nullopt);
 
@@ -279,7 +279,7 @@ private:
     struct PendingDrop {
         std::weak_ptr<INotationInteraction> interaction; // the notation may be closed while the user is asked
         muse::PointF pos;
-        Qt::KeyboardModifiers modifiers;
+        muse::KeyboardModifiers modifiers;
     };
     std::optional<PendingDrop> m_pendingDrop;
 

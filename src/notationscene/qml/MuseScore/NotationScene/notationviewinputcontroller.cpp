@@ -35,6 +35,8 @@
 
 #include "abstractelementpopupmodel.h"
 
+#include "types/qtinputconvert.h"
+
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
@@ -1621,12 +1623,12 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     }
 
     PointF pos = m_view->toLogical(event->position());
-    Qt::KeyboardModifiers modifiers = event->modifiers();
+    const muse::KeyboardModifiers modifiers = muse::fromQtModifiers(event->modifiers());
 
     bool isAccepted = false;
     if (mimeData->hasFormat(mimeStaffListFormat)) {
         bool isInternal = event->source() == m_view->asItem();
-        if (!isInternal || modifiers & Qt::AltModifier) {
+        if (!isInternal || modifiers & muse::KeyboardModifier::AltModifier) {
             event->setDropAction(Qt::CopyAction);
         } else {
             event->setDropAction(Qt::MoveAction);
@@ -1644,7 +1646,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     if (!uiConfiguration()->isSystemDragSupported()) {
         m_lastDragMoveEvent = {
             event->position(),
-            event->modifiers(),
+            modifiers,
             event->dropAction(),
             event->source()
         };
@@ -1673,7 +1675,7 @@ void NotationViewInputController::dropEvent(QDropEvent* event)
 
     DragMoveEvent de = {
         event->position(),
-        event->modifiers(),
+        muse::fromQtModifiers(event->modifiers()),
         event->dropAction(),
         event->source()
     };
@@ -1697,7 +1699,7 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
     }
 
     PointF pos = m_view->toLogical(event.position);
-    Qt::KeyboardModifiers modifiers = event.modifiers;
+    const muse::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;
     if (mimeData->hasFormat(mimeStaffListFormat)) {
@@ -1711,7 +1713,7 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
     return isAccepted;
 }
 
-bool NotationViewInputController::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationViewInputController::dropSingle(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     INotationInteractionPtr interaction = viewInteraction();
     const Ret canDrop = interaction->canDropSingle(pos);

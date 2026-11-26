@@ -1491,7 +1491,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::updateDropSingle(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1518,7 +1518,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::STAFFTYPE_CHANGE:
     case ElementType::STRING_TUNINGS:
     case ElementType::VOLTA: {
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
         return prepareDropMeasureBaseAnchorElement(pos);
     }
     case ElementType::PEDAL:
@@ -1530,7 +1530,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::HAIRPIN:
     case ElementType::TEXTLINE:
     case ElementType::WHAMMY_BAR: {
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
         return prepareDropTimeAnchorElement(pos);
     }
     case ElementType::IMAGE:
@@ -1590,7 +1590,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::SYSTEM_LOCK:
         case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
-            edd.ed.modifiers = keyboardModifier(modifiers);
+            edd.ed.modifiers = modifiers;
             return prepareDropMeasureBaseAnchorElement(pos);
         }
         // Other action icons (e.g parenthesis) can be dragged normally
@@ -1845,7 +1845,7 @@ Ret NotationInteraction::canDropSingle(const PointF& pos)
     return make_ok();
 }
 
-bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doDropSingle(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1868,7 +1868,7 @@ bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers 
         edd.ed.pos = pos;
     }
 
-    edd.ed.modifiers = keyboardModifier(modifiers);
+    edd.ed.modifiers = modifiers;
     edd.ed.dropElement->styleChanged();
 
     bool systemStavesOnly = false;
@@ -1882,7 +1882,7 @@ bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers 
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
-        systemStavesOnly = !(edd.ed.modifiers & Qt::ControlModifier);
+        systemStavesOnly = !(edd.ed.modifiers & muse::KeyboardModifier::ControlModifier);
         [[fallthrough]];
     case ElementType::TEXTLINE:
     case ElementType::OTTAVA:
@@ -2011,7 +2011,7 @@ bool NotationInteraction::isDroppingInstrumentChange() const
     return dropElement && dropElement->isInstrumentChange();
 }
 
-bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers,
+bool NotationInteraction::dropSingle(const PointF& pos, muse::KeyboardModifiers modifiers,
                                      const std::optional<InstrumentTemplate>& instrument)
 {
     m_chosenInstrument = instrument;
@@ -2254,7 +2254,7 @@ Ret NotationInteraction::canApplyPaletteElement(EngravingItem* element) const
     return make_ok();
 }
 
-bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     IF_ASSERT_FAILED(element) {
         return false;
@@ -2277,7 +2277,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     return doApplyPaletteElement(element, modifiers);
 }
 
-void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     //! NOTE The instrument is chosen before the edit, so that the edit doesn't wait for the user.
     //! The palette element is copied, as it may be gone by then
@@ -2293,7 +2293,7 @@ void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* ele
     });
 }
 
-bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     mu::engraving::Score* score = this->score();
     if (!score) {
@@ -2327,7 +2327,7 @@ bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::Keyb
 }
 
 void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score,
-                                                    const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
+                                                    const mu::engraving::Selection& sel, muse::KeyboardModifiers modifiers)
 {
     engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
@@ -2366,7 +2366,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
     if (isEntryDrumStaff() && element->isChord()) {
         mu::engraving::InputState& is = score->inputState();
         EngravingItem* e = nullptr;
-        if (!(modifiers & Qt::ShiftModifier)) {
+        if (!(modifiers & muse::KeyboardModifier::ShiftModifier)) {
             // shift+double-click: add note to "chord"
             // use input position rather than selection if possible
             // look for a cr in the voice predefined for the drum in the palette
@@ -2463,12 +2463,13 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
                 startEditElement(frontSegment);
             }
         } else {
-            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
+            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & muse::KeyboardModifier::ControlModifier);
             staff_idx_t targetStaff = firstStaffOnly ? 0 : cr1->staffIdx();
-            EditSpanner::addSpanner(tx, score, spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, targetStaff, startSegment, endSegment,
+                                    modifiers & muse::KeyboardModifier::ControlModifier);
         }
         if (spanner->hasVoiceAssignmentProperties()) {
-            spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & ControlModifier);
+            spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & muse::KeyboardModifier::ControlModifier);
         } else if (spanner->isVoiceSpecific()) {
             spanner->setTrack(cr1->track());
         }
@@ -2514,7 +2515,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
 }
 
 void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score,
-                                                     const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
+                                                     const mu::engraving::Selection& sel, muse::KeyboardModifiers modifiers)
 {
     engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     const ElementType elementType = element->type();
@@ -2550,7 +2551,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             m2 = m2->nextMeasureMM();
         }
         // Clefs always apply to every selected staff, key and time signatures only when added locally
-        const bool applyToEachStaff = element->isClef() || (modifiers & Qt::ControlModifier);
+        const bool applyToEachStaff = element->isClef() || (modifiers & muse::KeyboardModifier::ControlModifier);
         staff_idx_t staffIdx1 = sel.staffStart();
         staff_idx_t staffIdx2 = applyToEachStaff ? sel.staffEnd() : staffIdx1 + 1;
         for (staff_idx_t i = staffIdx1; i < staffIdx2; ++i) {
@@ -2635,16 +2636,16 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     if (element->isSLine() && elementType != ElementType::GLISSANDO) {
         Segment* startSegment = sel.startSegment();
         Segment* endSegment = sel.endSegment();
-        bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
+        bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & muse::KeyboardModifier::ControlModifier);
         staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
         staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
         for (staff_idx_t i = startStaff; i < endStaff; ++i) {
             Spanner* spanner = toSpanner(element->clone());
             spanner->setScore(score);
             spanner->styleChanged();
-            EditSpanner::addSpanner(tx, score, spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, i, startSegment, endSegment, modifiers & muse::KeyboardModifier::ControlModifier);
             if (spanner->hasVoiceAssignmentProperties()) {
-                spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & ControlModifier);
+                spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & muse::KeyboardModifier::ControlModifier);
             }
             selectAndStartEditIfNeeded(spanner);
         }
@@ -2775,7 +2776,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
 
 //! NOTE Copied from Palette applyDrop
 void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target,
-                                                  mu::engraving::EngravingItem* e, Qt::KeyboardModifiers modifiers,
+                                                  mu::engraving::EngravingItem* e, muse::KeyboardModifiers modifiers,
                                                   track_idx_t track)
 {
     if (!target) {
@@ -2789,7 +2790,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         dropData = &m_editData;
     }
 
-    dropData->modifiers = keyboardModifier(modifiers);
+    dropData->modifiers = modifiers;
     dropData->dropElement = e;
     dropData->track = (track == muse::nidx) ? target->track() : track;
     dropData->pos = target->pageBoundingRect().topLeft();
@@ -2823,7 +2824,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         if (el && el->hasVoiceAssignmentProperties()) {
             // If target has voice assignment properties, dropped element takes those and discards the default
             if (!target->hasVoiceAssignmentProperties()) {
-                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & ControlModifier);
+                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & muse::KeyboardModifier::ControlModifier);
             }
         }
 
@@ -3015,7 +3016,7 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
     return nullptr;
 }
 
-bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::prepareDropStandardElement(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
         return false;
@@ -3031,7 +3032,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
     // Update the tree when starting a new drag (ed.pos hasn't been set yet), if the modifier changed, or when crossing a page
     if (edd.ed.pos.isNull() || edd.ed.modifiers != modifiers || page != m_currentDropPage) {
         m_currentDropPage = page;
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
 
         // Where "m" is the number of page elements and "n" is the number of elements accepting a drop...
         // O(log m) operation
@@ -3116,7 +3117,7 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
     case ElementType::KEYSIG:
     case ElementType::TIMESIG: {
         // If ctrl is pressed, break and target a specific staff
-        if (edd.ed.modifiers & Qt::ControlModifier) {
+        if (edd.ed.modifiers & muse::KeyboardModifier::ControlModifier) {
             break;
         }
     }
@@ -3200,7 +3201,7 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
-        if (modifiers & ControlModifier) {
+        if (modifiers & muse::KeyboardModifier::ControlModifier) {
             return { staffRect };
         }
         return { targetMeasureBase->canvasBoundingRect() };

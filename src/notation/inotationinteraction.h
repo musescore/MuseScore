@@ -28,6 +28,7 @@
 
 #include "inotation_fwd.h"
 #include "notationtypes.h"
+#include "types/inputevents.h"
 #include "types/instrumentstypes.h"
 #include "types/noteinputtypes.h"
 
@@ -126,12 +127,12 @@ public:
     virtual bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
                                 size_t numStaves, bool preserveMeasureAlignment) = 0;
     virtual bool startDropImage(const QUrl& url) = 0;
-    virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool updateDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) = 0;
 
     virtual muse::Ret canDropSingle(const muse::PointF& pos) = 0;
     virtual bool isDroppingInstrumentChange() const = 0;
-    virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers,
+    virtual bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers,
                             const std::optional<InstrumentTemplate>& instrument = std::nullopt) = 0;
 
     virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
@@ -141,7 +142,7 @@ public:
     virtual muse::async::Notification dropChanged() const = 0;
 
     virtual muse::Ret canApplyPaletteElement(mu::engraving::EngravingItem* element) const = 0;
-    virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers = {}) = 0;
 
     virtual void undo() = 0;
     virtual void redo() = 0;
