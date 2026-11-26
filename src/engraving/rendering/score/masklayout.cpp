@@ -488,7 +488,7 @@ void MaskLayout::collectMeasureNumbersUnderSlurTie(const SlurTieSegment* slurTie
     const Spanner* spanner = slurTieSegment->spanner();
 
     for (const MeasureBase* mb : slurTieSegment->system()->measures()) {
-        if (!mb->isMeasure() || mb->endTick() < spanner->tick() || mb->tick() > spanner->tick2()) {
+        if (!mb->isMeasure()) {
             continue;
         }
         const Measure* measure = toMeasure(mb);
