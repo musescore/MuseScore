@@ -60,15 +60,6 @@ RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notat
 {
 }
 
-void RootTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
-{
-    for (AbstractLayoutPanelTreeItem* child : childItems()) {
-        child->onScoreChanged(changes);
-    }
-
-    updateSharedGroupRoles();
-}
-
 void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                 int destinationRow, bool updateNotation)
 {
@@ -155,6 +146,48 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
     AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
+void RootTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
+{
+    for (AbstractLayoutPanelTreeItem* child : childItems()) {
+        child->onScoreChanged(changes);
+    }
+
+    updateSharedGroupRoles();
+}
+
+std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int lastRow, int targetRow) const
+{
+    if (targetRow == firstRow) {
+        return std::nullopt;
+    }
+
+    const std::optional<RowRange> lastRowGroup = sharedGroupRange(lastRow);
+    if (lastRowGroup && lastRowGroup->first == lastRow) {
+        lastRow = lastRowGroup->last;
+    }
+
+    const bool up = targetRow < firstRow;
+    int destinationRow = up ? targetRow : std::max(targetRow, lastRow + 1);
+
+    const std::optional<RowRange> group = sharedGroupRange(firstRow);
+    const bool isGroupMember = group && childType(firstRow) == LayoutPanelItemType::PART;
+    if (isGroupMember && (destinationRow <= group->first || destinationRow > group->last)) {
+        return std::nullopt;
+    }
+
+    const std::optional<RowRange> destinationGroup = sharedGroupRange(destinationRow);
+    if (destinationGroup && (!group || group->first != destinationGroup->first)) {
+        destinationRow = up ? destinationGroup->first : destinationGroup->last;
+    }
+
+    const int minRow = childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER ? 1 : 0;
+    if (destinationRow < minRow || destinationRow >= childCount()) {
+        return std::nullopt;
+    }
+
+    return RowMove { firstRow, lastRow - firstRow + 1, destinationRow };
+}
+
 void RootTreeItem::onChildrenChanged()
 {
     updateSharedGroupRoles();
@@ -192,89 +225,36 @@ void RootTreeItem::updateSharedGroupRoles()
     }
 }
 
-PartTreeItem* RootTreeItem::sharedGroupHeaderAt(int row) const
+std::optional<RootTreeItem::RowRange> RootTreeItem::sharedGroupRange(int row) const
 {
     const AbstractLayoutPanelTreeItem* item = childAtRow(row);
     if (!item) {
-        return nullptr;
+        return std::nullopt;
     }
 
-    if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        const PartTreeItem* nextPartItem = nextPartItemAfter(childItems(), row);
-        return isSharedGroupMember(nextPartItem) ? nextPartItem->sharedGroupHeader() : nullptr;
+    // A markings row is in a group only among its instruments
+    const bool isMarkings = item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
+    const PartTreeItem* partItem = isMarkings ? nextPartItemAfter(childItems(), row) : dynamic_cast<const PartTreeItem*>(item);
+    if (!partItem || !partItem->sharedGroupHeader() || (isMarkings && !isSharedGroupMember(partItem))) {
+        return std::nullopt;
     }
 
-    const PartTreeItem* partItem = dynamic_cast<const PartTreeItem*>(item);
-    return partItem ? partItem->sharedGroupHeader() : nullptr;
-}
+    const PartTreeItem* header = partItem->sharedGroupHeader();
+    RowRange range { header->row(), header->row() };
 
-int RootTreeItem::sharedGroupLastRow(const PartTreeItem* header, int fromRow) const
-{
-    int lastRow = fromRow;
-
-    for (int row = fromRow + 1; row < childCount(); ++row) {
-        const AbstractLayoutPanelTreeItem* item = childAtRow(row);
-        if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+    for (int r = range.first + 1; r < childCount(); ++r) {
+        const AbstractLayoutPanelTreeItem* child = childAtRow(r);
+        if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             continue;
         }
 
-        const PartTreeItem* partItem = dynamic_cast<const PartTreeItem*>(item);
-        if (!partItem || partItem->sharedGroupHeader() != header) {
+        const PartTreeItem* member = dynamic_cast<const PartTreeItem*>(child);
+        if (!member || member->sharedGroupHeader() != header) {
             break;
         }
 
-        lastRow = row;
+        range.last = r;
     }
 
-    return lastRow;
-}
-
-std::optional<RootTreeItem::StepMove> RootTreeItem::resolveStepMove(int firstRow, int lastRow, bool up) const
-{
-    const PartTreeItem* lastItem = dynamic_cast<const PartTreeItem*>(childAtRow(lastRow));
-    if (lastItem && lastItem->sharedGroupRole() == LayoutPanelItemType::GROUP_HEADER) {
-        lastRow = sharedGroupLastRow(lastItem, lastRow);
-    }
-
-    if (leavesSharedGroup(firstRow, lastRow, up)) {
-        return std::nullopt;
-    }
-
-    int destinationRow = up ? firstRow - 1 : lastRow + 1;
-
-    const PartTreeItem* destinationHeader = sharedGroupHeaderAt(destinationRow);
-    if (destinationHeader && destinationHeader != sharedGroupHeaderAt(firstRow)) {
-        if (up) {
-            while (destinationRow > 0 && childAtRow(destinationRow) != destinationHeader) {
-                --destinationRow;
-            }
-        } else {
-            destinationRow = sharedGroupLastRow(destinationHeader, destinationRow);
-        }
-    }
-
-    if (up) {
-        const int minRow = childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER ? 1 : 0;
-        if (destinationRow < minRow) {
-            return std::nullopt;
-        }
-    } else if (destinationRow >= childCount()) {
-        return std::nullopt;
-    }
-
-    return StepMove { firstRow, lastRow - firstRow + 1, destinationRow };
-}
-
-bool RootTreeItem::leavesSharedGroup(int firstRow, int lastRow, bool up) const
-{
-    const PartTreeItem* item = dynamic_cast<const PartTreeItem*>(childAtRow(up ? firstRow : lastRow));
-    if (!isSharedGroupMember(item)) {
-        return false;
-    }
-
-    if (up) {
-        return childAtRow(firstRow - 1) == item->sharedGroupHeader();
-    }
-
-    return item->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER && childAtRow(firstRow) != item->sharedGroupHeader();
+    return range;
 }

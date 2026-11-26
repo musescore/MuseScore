@@ -47,21 +47,25 @@ public:
 
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
-    struct StepMove {
+    struct RowMove {
         int sourceRow = 0;
         int count = 0;
         int destinationRow = 0;
     };
 
-    //! nullopt if the rows can't move that way, e.g. out of their group
-    std::optional<StepMove> resolveStepMove(int firstRow, int lastRow, bool up) const;
+    //! Moves the rows onto targetRow; down, at least past their last row. A group header moves with its
+    //! instruments, and other groups are skipped. nullopt if the rows can't move there, e.g. out of their group
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const;
 
 private:
+    struct RowRange {
+        int first = 0;
+        int last = 0;
+    };
+
     void onChildrenChanged() override;
     void updateSharedGroupRoles();
 
-    PartTreeItem* sharedGroupHeaderAt(int row) const;
-    int sharedGroupLastRow(const PartTreeItem* header, int fromRow) const;
-    bool leavesSharedGroup(int firstRow, int lastRow, bool up) const;
+    std::optional<RowRange> sharedGroupRange(int row) const;
 };
 }

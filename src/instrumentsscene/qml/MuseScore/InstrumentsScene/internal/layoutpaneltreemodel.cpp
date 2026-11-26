@@ -613,8 +613,8 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
         return;
     }
 
-    const std::optional<RootTreeItem::StepMove> move = m_rootItem->resolveStepMove(sourceRowFirst.row(),
-                                                                                   selectedIndexList.last().row(), true);
+    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceRowFirst.row(), selectedIndexList.last().row(),
+                                                                              sourceRowFirst.row() - 1);
     if (move) {
         moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
     }
@@ -644,7 +644,8 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
         return;
     }
 
-    const std::optional<RootTreeItem::StepMove> move = m_rootItem->resolveStepMove(sourceRowFirst.row(), sourceRowLast.row(), false);
+    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceRowFirst.row(), sourceRowLast.row(),
+                                                                              sourceRowLast.row() + 1);
     if (move) {
         moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
     }
@@ -749,6 +750,29 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     updateRearrangementAvailability();
 
     return true;
+}
+
+QModelIndex LayoutPanelTreeModel::dragOver(const QModelIndex& sourceIndex, const QModelIndex& targetIndex)
+{
+    AbstractLayoutPanelTreeItem* draggedItem = modelIndexToItem(sourceIndex);
+    const AbstractLayoutPanelTreeItem* targetItem = modelIndexToItem(targetIndex);
+    if (!draggedItem || !targetItem || draggedItem == targetItem
+        || !targetItem->canAcceptDrop(QVariant::fromValue(static_cast<QObject*>(draggedItem)))) {
+        return sourceIndex;
+    }
+
+    if (sourceIndex.parent().isValid()) {
+        const bool moved = moveRows(sourceIndex.parent(), sourceIndex.row(), 1, targetIndex.parent(), targetIndex.row());
+        return moved ? index(targetIndex.row(), 0, targetIndex.parent()) : sourceIndex;
+    }
+
+    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceIndex.row(), sourceIndex.row(), targetIndex.row());
+    if (!move || !moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow)) {
+        return sourceIndex;
+    }
+
+    const int newRow = move->destinationRow > move->sourceRow ? move->destinationRow - move->count + 1 : move->destinationRow;
+    return index(newRow, 0, QModelIndex());
 }
 
 void LayoutPanelTreeModel::startActiveDrag()
@@ -1035,8 +1059,8 @@ void LayoutPanelTreeModel::updateRearrangementAvailability()
     bool isMovingDownAllowed = isRearrangementAvailable;
 
     if (!first.parent().isValid()) {
-        const std::optional<RootTreeItem::StepMove> upMove = m_rootItem->resolveStepMove(first.row(), last.row(), true);
-        const std::optional<RootTreeItem::StepMove> downMove = m_rootItem->resolveStepMove(first.row(), last.row(), false);
+        const std::optional<RootTreeItem::RowMove> upMove = m_rootItem->resolveMove(first.row(), last.row(), first.row() - 1);
+        const std::optional<RootTreeItem::RowMove> downMove = m_rootItem->resolveMove(first.row(), last.row(), last.row() + 1);
         isMovingUpAllowed = isMovingUpAllowed && upMove.has_value();
         isMovingDownAllowed = isMovingDownAllowed && downMove.has_value();
 

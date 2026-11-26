@@ -76,10 +76,14 @@ Item {
 
         readonly property int cardRadius: 3
         readonly property int rowContentHeight: 30
+        readonly property int groupPadding: 4
+        readonly property int groupRadius: 6
 
         property LayoutPanelCard pressedDelegate: null
 
         property AbstractLayoutPanelTreeItem draggedItem: null
+        readonly property PartTreeItem draggedGroupHeader: prv.draggedItem?.type === LayoutPanelItemType.SHARED_PART
+                                                           ? prv.draggedItem as PartTreeItem : null
         property var draggedIndex: null
         property int draggedDepth: 0
         property real dragStartY: 0
@@ -94,10 +98,15 @@ Item {
         property LayoutPanelTreeDelegate hoveredGroupRow: null
         property PartTreeItem pressedGroupHeader: null
 
-        //! NOTE Only combined groups can be collapsed
+        //! NOTE Only combined groups can be collapsed, but a dragged group always is
         function isGroupCollapsed(part) {
             const header = part?.sharedGroupHeader ?? null
-            return Boolean(header) && header.isEnabled && !prv.expandedGroups[header.id]
+            return Boolean(header) && (header === prv.draggedGroupHeader || (header.isEnabled && !prv.expandedGroups[header.id]))
+        }
+
+        //! NOTE Row heights aren't bindings, so the view is relaid out by hand
+        onDraggedGroupHeaderChanged: {
+            Qt.callLater(layoutPanelTreeView.forceLayout)
         }
 
         function setExpanded(delegate, expand) {
@@ -177,12 +186,13 @@ Item {
 
             prv.draggedIndex = delegate.modelIndex
             prv.draggedDepth = delegate.depth
-            prv.dragStartY = delegate.mapToItem(layoutPanelTreeView.contentItem, 0, 0).y
+            const isGroupHeader = delegate.type === LayoutPanelItemType.SHARED_PART
+            prv.dragStartY = delegate.mapToItem(layoutPanelTreeView.contentItem, 0, 0).y - (isGroupHeader ? prv.groupPadding : 0)
             prv.draggedItem = delegate.item
 
             root.model.startActiveDrag()
 
-            if (delegate.isExpanded) {
+            if (!isGroupHeader && delegate.isExpanded) {
                 layoutPanelTreeView.collapse(delegate.row)
             }
         }
@@ -204,14 +214,9 @@ Item {
             prv.draggedIndex = null
         }
 
-        function moveDraggedItem(targetIndex) {
-            const sourceIndex = prv.draggedIndex
-            if (!sourceIndex || sourceIndex.row < 0 || targetIndex.row < 0) {
-                return
-            }
-
-            if (root.model.moveRows(sourceIndex.parent, sourceIndex.row, 1, targetIndex.parent, targetIndex.row)) {
-                prv.draggedIndex = root.model.index(targetIndex.row, 0, targetIndex.parent)
+        function dragOver(targetIndex) {
+            if (prv.draggedIndex) {
+                prv.draggedIndex = root.model.dragOver(prv.draggedIndex, targetIndex)
             }
         }
     }
@@ -302,8 +307,10 @@ Item {
 
             active: Boolean(prv.draggedItem)
 
+            readonly property bool isGroup: Boolean(prv.draggedGroupHeader)
+
             width: layoutPanelTreeView.width
-            height: prv.rowContentHeight
+            height: prv.rowContentHeight + (draggedItemLoader.isGroup ? 2 * prv.groupPadding : 0)
             y: prv.dragStartY + rowDragHandler.centroid.position.y - rowDragHandler.centroid.pressPosition.y
             z: 2 // above the rows
 
@@ -322,7 +329,8 @@ Item {
                 isDragged: true
 
                 sideMargin: root.sideMargin
-                cardRadius: prv.cardRadius
+                contentPadding: draggedItemLoader.isGroup ? prv.groupPadding : 0
+                cardRadius: draggedItemLoader.isGroup ? prv.groupRadius : prv.cardRadius
 
                 navigation.enabled: false
             }
@@ -342,6 +350,8 @@ Item {
             sideMargin: root.sideMargin
             cardRadius: prv.cardRadius
             cardHeight: prv.rowContentHeight
+            groupPadding: prv.groupPadding
+            groupRadius: prv.groupRadius
 
             onGroupHoverChanged: function(hovered) {
                 if (hovered) {
@@ -375,8 +385,8 @@ Item {
                 prv.currentItemNavigationName = name
             }
 
-            onDropRequested: {
-                Qt.callLater(prv.moveDraggedItem, treeDelegate.modelIndex)
+            onDragEntered: {
+                Qt.callLater(prv.dragOver, treeDelegate.modelIndex)
             }
         }
     }

@@ -1303,6 +1303,72 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_NotationChangeDuring
     EXPECT_EQ(*resets, 1);
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_GroupHeader)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addPart(u"C");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B C
+
+    // [WHEN] The group header is dragged onto C
+    m_model->startActiveDrag();
+    const QModelIndex movedIndex = m_model->dragOver(row(2), row(4));
+
+    // [THEN] The group moves below C with its instrument, and the header's new row is returned
+    EXPECT_EQ(rowNames(), "[A:0] A C S B");
+    EXPECT_EQ(movedIndex, row(3));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_NotMoved)
+{
+    // [GIVEN] A, B in a shared-staves group
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B
+
+    // [WHEN] B is dragged onto the group header
+    m_model->startActiveDrag();
+    const QModelIndex movedIndex = m_model->dragOver(row(3), row(2));
+
+    // [THEN] B stays in the group, and its row is returned
+    EXPECT_EQ(rowNames(), "[A:0] A S B");
+    EXPECT_EQ(movedIndex, row(3));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_StaffRow)
+{
+    // [GIVEN] A with three staves, then B in a shared-staves group
+    const Part* a = addPart(u"A", 3);
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B
+
+    // [WHEN] A's first staff is dragged onto its third, which has the group header's row number
+    m_model->startActiveDrag();
+    const QModelIndex movedIndex = m_model->dragOver(childRow(1, 0), childRow(1, 2));
+
+    // [THEN] Only the staff moves, and its new row is returned
+    EXPECT_EQ(rowNames(), "[A:0] A S B");
+    EXPECT_EQ(childItem(1, 2)->id(), a->staff(0)->id());
+    EXPECT_EQ(movedIndex, childRow(1, 2));
+
+    m_model->endActiveDrag();
+
+    // [WHEN] The group header is dragged onto A's second staff, whose row number is A's
+    m_model->startActiveDrag();
+    const QModelIndex notMovedIndex = m_model->dragOver(row(2), childRow(1, 1));
+
+    // [THEN] A staff doesn't take a group, so nothing moves
+    EXPECT_EQ(rowNames(), "[A:0] A S B");
+    EXPECT_EQ(notMovedIndex, row(2));
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SelectRow_MarksItemsSelected)
 {
     // [GIVEN] Two instruments

@@ -124,6 +124,7 @@ public:
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
+    Q_INVOKABLE QModelIndex dragOver(const QModelIndex& sourceIndex, const QModelIndex& targetIndex);
 
 signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);

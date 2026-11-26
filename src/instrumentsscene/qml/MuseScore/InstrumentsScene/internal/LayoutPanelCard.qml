@@ -47,6 +47,7 @@ FocusableControl {
     readonly property bool isExpandable: item && item.isExpandable
 
     property int sideMargin: 0
+    property int contentPadding: 0
     property int cardRadius: 0
 
     readonly property alias isPopupOpened: cardContent.isPopupOpened
@@ -134,8 +135,10 @@ FocusableControl {
         id: cardContent
 
         anchors.fill: parent
-        anchors.leftMargin: root.sideMargin
-        anchors.rightMargin: root.sideMargin
+        anchors.topMargin: root.contentPadding
+        anchors.bottomMargin: root.contentPadding
+        anchors.leftMargin: root.sideMargin + root.contentPadding
+        anchors.rightMargin: root.sideMargin + root.contentPadding
 
         item: root.item
         isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
@@ -243,6 +246,17 @@ FocusableControl {
                 target: root.background
                 color: ui.theme.accentColor
                 opacity: ui.theme.accentOpacityHit
+            }
+        },
+
+        State {
+            name: "DRAGGED_GROUP"
+            when: root.isDragged && root.type === LayoutPanelItemType.SHARED_PART
+
+            PropertyChanges {
+                target: root.background
+                color: ui.blendColors(ui.theme.backgroundPrimaryColor, ui.theme.buttonColor, 0.5)
+                opacity: 1
             }
         },
 

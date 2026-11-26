@@ -400,6 +400,22 @@ TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop)
     EXPECT_FALSE(aItem->canAcceptDrop(dragged(aItem->childAtRow(0))));
     EXPECT_FALSE(aItem->canAcceptDrop(dragged(m_root)));
     EXPECT_FALSE(aItem->canAcceptDrop(QVariant()));
+
+    // [GIVEN] A shared-staves group header
+    PartTreeItem* groupItem = new PartTreeItem(m_masterNotation, m_notation, m_root, LayoutPanelItemType::SHARED_PART);
+    m_root->appendChild(groupItem);
+
+    // [THEN] Instruments and groups can be dropped on each other
+    EXPECT_TRUE(aItem->canAcceptDrop(dragged(groupItem)));
+    EXPECT_TRUE(groupItem->canAcceptDrop(dragged(aItem)));
+
+    // [GIVEN] An instrument in another tree
+    RootTreeItem otherRoot(m_masterNotation, m_notation);
+    PartTreeItem* otherPartItem = new PartTreeItem(m_masterNotation, m_notation, &otherRoot);
+    otherRoot.appendChild(otherPartItem);
+
+    // [THEN] It can't be dropped on the group
+    EXPECT_FALSE(groupItem->canAcceptDrop(dragged(otherPartItem)));
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, InstrumentId)

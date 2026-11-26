@@ -251,6 +251,11 @@ bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
         if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             return true;
         }
+
+        const bool isPartOrGroup = item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART;
+        if (isPartOrGroup && item->parentItem() == parentItem()) {
+            return true;
+        }
     }
 
     return AbstractLayoutPanelTreeItem::canAcceptDrop(obj);
