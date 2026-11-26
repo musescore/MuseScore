@@ -145,6 +145,11 @@ private:
     void clearExpiredTracks();
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                             ChangedTrackIdSet* trackChanges = nullptr);
+    void addMeasureEvent(const Measure* measure, const int tickPositionOffset, const InstrumentTrackIdSet& trackIds,
+                         ChangedTrackIdSet* trackChanges);
+
+    std::vector<const Part*> partsInTrackRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
+
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, const InstrumentTrackIdSet& changedTracks);
 
