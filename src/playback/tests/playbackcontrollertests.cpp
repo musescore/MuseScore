@@ -176,6 +176,7 @@ protected:
         ON_CALL(*m_playback, player()).WillByDefault(Return(audio::IPlayerPtr(m_player)));
 
         ON_CALL(*m_project, audioSettings()).WillByDefault(Return(project::IProjectAudioSettingsPtr(m_audioSettings)));
+        ON_CALL(*m_audioSettings, vcaGroups()).WillByDefault(ReturnRefOfCopy(project::VcaGroupList()));
 
         ON_CALL(*m_notation, masterNotation()).WillByDefault(Return(notation::IMasterNotationPtr(m_masterNotation)));
         ON_CALL(*m_notation, parts()).WillByDefault(Return(notation::INotationPartsPtr(m_notationParts)));
