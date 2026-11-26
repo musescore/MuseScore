@@ -23,12 +23,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <QMimeData>
-
 #include "engraving/dom/chord.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
-#include "engraving/internal/qmimedataadapter.h"
+#include "types/mimedata.h"
 
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
@@ -471,16 +469,15 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(score->selection().canCopy());
     String mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
-    QMimeData* mimeData = new QMimeData;
-    QByteArray ba = score->selection().mimeData().toQByteArray();
-    mimeData->setData(mimeType, ba);
+    muse::MimeData mimeData;
+    const muse::ByteArray ba = score->selection().mimeData();
+    mimeData.setData(mimeType.toStdString(), ba);
 
     // Paste staff 1, m1
     ASSERT_TRUE(m1->first(SegmentType::ChordRest)->element(4));
     score->select(m1->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    QMimeDataAdapter ma(mimeData);
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials01.mscx"),
@@ -490,7 +487,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     ASSERT_TRUE(m3->first(SegmentType::ChordRest)->element(0));
     score->select(m3->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials02.mscx"),
@@ -500,7 +497,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     ASSERT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials03.mscx"),
@@ -510,7 +507,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     ASSERT_TRUE(m4->first(SegmentType::ChordRest)->element(4));
     score->select(m4->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
@@ -670,16 +667,15 @@ TEST_F(Engraving_PartialTieTests, copyPasteRemoveInvalidPartialTies)
     EXPECT_TRUE(score->selection().canCopy());
     String mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
-    QMimeData* mimeData = new QMimeData;
-    QByteArray ba = score->selection().mimeData().toQByteArray();
-    mimeData->setData(mimeType, ba);
+    muse::MimeData mimeData;
+    const muse::ByteArray ba = score->selection().mimeData();
+    mimeData.setData(mimeType.toStdString(), ba);
 
     // Paste at measure 4
     ASSERT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
     score->transactionManager()->transaction(TranslatableString::untranslatable("Partial tie tests"), [&](Transaction& tx) {
-        QMimeDataAdapter ma(mimeData);
-        Paste::paste(tx, score, &ma, 0);
+        Paste::paste(tx, score, mimeData, 0);
     });
     score->doLayout();
 

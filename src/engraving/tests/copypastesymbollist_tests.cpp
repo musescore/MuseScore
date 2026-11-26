@@ -22,9 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include <QMimeData>
-
-#include "engraving/internal/qmimedataadapter.h"
+#include "types/mimedata.h"
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
@@ -60,8 +58,8 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     EXPECT_TRUE(score->selection().canCopy());
     String mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
-    QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
+    muse::MimeData mimeData;
+    mimeData.setData(mimeType.toStdString(), score->selection().mimeData());
 
     // select first chord in 5th measure
     Measure* m = score->firstMeasure();
@@ -71,13 +69,12 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     score->select(m->first()->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste symbol tests"));
-    if (!mimeData->hasFormat(mimeSymbolListFormat)) {
+    if (!mimeData.hasFormat(mimeSymbolListFormat)) {
         LOGD("wrong type mime data");
         return;
     }
 
-    QMimeDataAdapter ma(mimeData);
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
     score->doLayout();
 

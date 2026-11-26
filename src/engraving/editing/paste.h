@@ -27,11 +27,11 @@
 
 namespace muse {
 class ByteArray;
+class MimeData;
 }
 
 namespace mu::engraving {
 class ChordRest;
-class IMimeData;
 class MuseScoreView;
 class Score;
 class Segment;
@@ -41,7 +41,7 @@ class XmlReader;
 class Paste
 {
 public:
-    static bool paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    static bool paste(Transaction& tx, Score* score, const muse::MimeData& ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
 
     static bool pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     static bool pasteStaffList(Transaction& tx, Score* score, muse::ByteArray& data, Fraction scale = Fraction(1, 1));

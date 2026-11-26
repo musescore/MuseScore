@@ -61,10 +61,6 @@
 #include "rangelock.h"
 #include "tuplet.h"
 
-namespace mu::engraving {
-class IMimeData;
-}
-
 namespace mu::engraving::read114 {
 class Read114;
 }

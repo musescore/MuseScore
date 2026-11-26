@@ -49,7 +49,7 @@
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 
 // TODO: Don't include from engraving/internal
-#include "engraving/internal/qmimedataadapter.h"
+#include "types/qtmimedata.h"
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
@@ -5268,8 +5268,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         pasteIntoTextEdit();
     } else {
         const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
-        QMimeDataAdapter ma(mimeData);
-        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), &ma, nullptr, scale);
+        const muse::MimeData ma = muse::fromQtMimeData(mimeData);
+        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), ma, nullptr, scale);
         m_editData.element = nullptr;
     }
 
