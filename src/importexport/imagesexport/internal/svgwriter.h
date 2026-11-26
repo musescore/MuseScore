@@ -36,7 +36,7 @@ class SvgWriter : public AbstractImageWriter
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret writeSync(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
 
 private:
     using BeatsColors = QHash<int /* beatIndex */, QColor>;

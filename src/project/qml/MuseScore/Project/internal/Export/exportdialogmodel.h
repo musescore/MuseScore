@@ -289,6 +289,8 @@ signals:
     void ffmpegDirChanged();
 
 private:
+    void removeUnavailableExportTypes();
+
     void classBegin() override;
     void componentComplete() override {}
     void init();

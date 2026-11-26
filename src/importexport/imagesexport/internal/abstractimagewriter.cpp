@@ -39,7 +39,7 @@ bool AbstractImageWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret AbstractImageWriter::write(INotationPtr, io::IODevice&, const Options& options)
+Ret AbstractImageWriter::writeSync(INotationPtr, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -54,7 +54,7 @@ Ret AbstractImageWriter::write(INotationPtr, io::IODevice&, const Options& optio
     return Ret(Ret::Code::NotSupported);
 }
 
-Ret AbstractImageWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
+Ret AbstractImageWriter::writeListSync(const INotationPtrList&, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);

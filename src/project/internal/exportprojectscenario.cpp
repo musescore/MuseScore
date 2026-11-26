@@ -48,10 +48,18 @@ using namespace mu::project;
 using namespace mu::notation;
 using muse::async::Promise;
 
+static Promise<Ret> resolvedPromise(const Ret& ret)
+{
+    return async::make_promise<Ret>([ret](auto resolve) {
+        return resolve(ret);
+    });
+}
+
 struct ExportProjectScenario::ExportState {
     INotationPtrList notations;
     std::vector<ViewMode> viewModes;
 
+    INotationWriterPtr writer;
     std::vector<ExportFile> files;
     size_t currentFileIndex = 0;
     bool isCurrentFileConfirmed = false; // the user agreed to replace or retry the current file
@@ -61,6 +69,7 @@ struct ExportProjectScenario::ExportState {
     bool openDestinationFolderOnExport = false;
 
     Progress* writerProgress = nullptr;
+    bool isCanceled = false; // the user canceled the export, maybe between the files
     Promise<Ret>::Resolve resolve;
 
     void moveToNextFile()
@@ -221,7 +230,8 @@ void ExportProjectScenario::startExport(const notation::INotationPtrList& notati
     state->viewModes = viewModes(notations);
     setViewModes(notations, ViewMode::PAGE);
 
-    state->files = exportFiles(notations, destinationPath, writer, unitType, isCreatingOnlyOneFile);
+    state->writer = writer;
+    state->files = makeExportFiles(notations, destinationPath, unitType, isCreatingOnlyOneFile);
 
     // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
     // any existing files. If the user cancels, the filepath will be empty, so we would
@@ -237,13 +247,21 @@ void ExportProjectScenario::startExport(const notation::INotationPtrList& notati
             m_exportProgress.progress(state->currentFileIndex * total + current, state->files.size() * total, status);
         }, async::Asyncable::Mode::SetReplace);
 
-        m_exportProgress.canceled().onNotify(this, [writer]() {
+        m_exportProgress.canceled().onNotify(this, [writer, state]() {
+            //! NOTE The writer aborts the file being written, but if there is none (e.g. a question is shown),
+            //! the export has to know about the cancellation itself
+            state->isCanceled = true;
             writer->abort();
         }, muse::async::Asyncable::Mode::SetReplace);
     }
 
     state->resolve = resolve;
     exportNextFiles(state);
+}
+
+muse::async::Channel<muse::io::path_t> ExportProjectScenario::fileExported() const
+{
+    return m_fileExported;
 }
 
 const ExportInfo& ExportProjectScenario::exportInfo() const
@@ -294,11 +312,10 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
     return false;
 }
 
-std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFiles(const INotationPtrList& notations,
-                                                                                  const muse::io::path_t& destinationPath,
-                                                                                  INotationWriterPtr writer,
-                                                                                  INotationWriter::UnitType unitType,
-                                                                                  bool isCreatingOnlyOneFile) const
+std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::makeExportFiles(const INotationPtrList& notations,
+                                                                                      const muse::io::path_t& destinationPath,
+                                                                                      INotationWriter::UnitType unitType,
+                                                                                      bool isCreatingOnlyOneFile) const
 {
     std::vector<ExportFile> files;
 
@@ -322,9 +339,7 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                                   : completeExportPath(destinationPath, notation, isMain, isExportingOnlyOneScore,
                                                                        static_cast<int>(page));
 
-                files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                            return writer->write(notation, destinationDevice, options);
-                        } });
+                files.push_back({ definitivePath, { notation }, false, options });
             }
         }
     } break;
@@ -335,15 +350,11 @@ std::vector<ExportProjectScenario::ExportFile> ExportProjectScenario::exportFile
                                               : completeExportPath(destinationPath, notation, isMainNotation(
                                                                        notation), isExportingOnlyOneScore);
 
-            files.push_back({ definitivePath, [writer, notation, options](IODevice& destinationDevice) {
-                        return writer->write(notation, destinationDevice, options);
-                    } });
+            files.push_back({ definitivePath, { notation }, false, options });
         }
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
-        files.push_back({ destinationPath, [writer, notations, options](IODevice& destinationDevice) {
-                    return writer->writeList(notations, destinationDevice, options);
-                } });
+        files.push_back({ destinationPath, notations, true, options });
     } break;
     }
 
@@ -381,6 +392,11 @@ muse::io::path_t ExportProjectScenario::completeExportPath(const muse::io::path_
 void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
 {
     while (state->currentFileIndex < state->files.size()) {
+        if (state->isCanceled) {
+            finishExport(state, make_ret(Ret::Code::Cancel));
+            return;
+        }
+
         const ExportFile& file = state->files.at(state->currentFileIndex);
 
         if (!state->isCurrentFileConfirmed && fileSystem()->exists(file.path)) {
@@ -395,22 +411,33 @@ void ExportProjectScenario::exportNextFiles(const ExportStatePtr& state) const
             }
         }
 
-        Ret ret = writeFile(file);
-        if (ret) {
-            state->moveToNextFile();
-            continue;
-        }
+        writeFile(state->writer, file).onResolve(this, [this, state](const Ret& ret) {
+            if (onFileWritten(state, ret)) {
+                continueExportLater(state);
+            }
+        });
 
-        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            finishExport(state, ret);
-            return;
-        }
-
-        askForRetry(state);
         return;
     }
 
     finishExport(state, muse::make_ok());
+}
+
+bool ExportProjectScenario::onFileWritten(const ExportStatePtr& state, const Ret& ret) const
+{
+    if (ret) {
+        m_fileExported.send(state->files.at(state->currentFileIndex).path);
+        state->moveToNextFile();
+        return true;
+    }
+
+    if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+        finishExport(state, ret);
+        return false;
+    }
+
+    askForRetry(state);
+    return false;
 }
 
 void ExportProjectScenario::finishExport(const ExportStatePtr& state, const Ret& ret) const
@@ -499,46 +526,52 @@ void ExportProjectScenario::continueExportLater(const ExportStatePtr& state) con
     });
 }
 
-Ret ExportProjectScenario::writeFile(const ExportFile& file) const
+Promise<Ret> ExportProjectScenario::writeFile(const INotationWriterPtr& writer, const ExportFile& file) const
 {
     //! NOTE Most writers stream to the destination device (file on disk).
     //! But there is one atypical case:
     //! Export score to unpacked directory - creates a directory and writes files to it
 
     // Remove previous file because we need to know whether
-    // exportFunction writes at path
+    // the writer writes at path
     Ret ret = fileSystem()->remove(file.path);
     if (!ret) {
-        return ret;
+        return resolvedPromise(ret);
     }
 
-    FileStream outputFile(file.path);
-    outputFile.setMeta("file_path", file.path.toStdString());
-    if (!outputFile.open(IODevice::WriteOnly)) {
-        return make_ret(Ret::Code::UnknownError);
+    //! NOTE The device must exist until the writing is finished
+    auto outputFile = std::make_shared<FileStream>(file.path);
+    outputFile->setMeta("file_path", file.path.toStdString());
+    if (!outputFile->open(IODevice::WriteOnly)) {
+        return resolvedPromise(make_ret(Ret::Code::UnknownError));
     }
 
-    ret = file.exportFunction(outputFile);
-    outputFile.close();
+    //! NOTE The multi-part export is synchronous
+    Promise<Ret> writing = file.isMultiPart
+                           ? resolvedPromise(writer->writeListSync(file.notations, *outputFile, file.options))
+                           : writer->write(file.notations.front(), *outputFile, file.options);
 
-    if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-        const bool isFileMode = fileSystem()->exists(file.path);
-        if (!isFileMode) {
-            return ret;
-        }
+    return async::make_promise<Ret>([this, writing, outputFile, path = file.path](auto resolve) mutable {
+        writing.onResolve(this, [this, outputFile, path, resolve](const Ret& exportRet) {
+            outputFile->close();
 
-        // On Windows, remove() may fail immediately after close()
-        // because the file lock has not been released yet
-        for (int i = 0; i < 10; ++i) {
-            if (fileSystem()->remove(file.path)) {
-                return ret;
+            if (exportRet.code() == static_cast<int>(Ret::Code::Cancel) && fileSystem()->exists(path)) {
+                // On Windows, remove() may fail immediately after close()
+                // because the file lock has not been released yet
+                for (int i = 0; i < 10; ++i) {
+                    if (fileSystem()->remove(path)) {
+                        break;
+                    }
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-    }
+            (void)resolve(exportRet);
+        });
 
-    return ret;
+        return Promise<Ret>::Result::unchecked();
+    }, async::PromiseType::AsyncByBody);
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const

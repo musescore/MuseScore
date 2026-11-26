@@ -34,18 +34,22 @@ using namespace muse;
 using namespace mu::appjs;
 
 #ifdef Q_OS_WASM
-static void callJsWithBytes(const char* fnname, const uint8_t* data, size_t size)
+static void callJsWithBytes(const char* fnname, const uint8_t* data, size_t size, const std::string& name = std::string())
 {
     emscripten::val jsArray = emscripten::val::global("Uint8Array").new_(
         emscripten::typed_memory_view(size, data)
         );
 
-    emscripten::val::module_property(fnname)(jsArray);
+    if (name.empty()) {
+        emscripten::val::module_property(fnname)(jsArray);
+    } else {
+        emscripten::val::module_property(fnname)(jsArray, name);
+    }
 }
 
 #else
 
-static void callJsWithBytes(const char*, const uint8_t*, size_t)
+static void callJsWithBytes(const char*, const uint8_t*, size_t, const std::string& = std::string())
 {
     NOT_SUPPORTED;
 }
@@ -80,6 +84,10 @@ void WebApi::init(const muse::modularity::ContextPtr& ctx)
     projectSession()->projectChanged().onNotify(this, onProjectChanged);
 
     onProjectChanged();
+
+    exportProjectScenario()->fileExported().onReceive(this, [this](const muse::io::path_t& path) {
+        onFileExported(path);
+    });
 }
 
 void WebApi::deinit()
@@ -91,6 +99,10 @@ void WebApi::deinit()
 
     if (projectSession()) {
         projectSession()->projectChanged().disconnect(this);
+    }
+
+    if (exportProjectScenario()) {
+        exportProjectScenario()->fileExported().disconnect(this);
     }
 
     setContext(nullptr);
@@ -161,4 +173,19 @@ void WebApi::onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode)
     }
 
     callJsWithBytes("onProjectSaved", data.constData(), data.size());
+}
+
+void WebApi::onFileExported(const muse::io::path_t& path)
+{
+    ByteArray data;
+    Ret ret = io::File::readFile(path, data);
+    if (!ret) {
+        LOGE() << "failed read exported file, path: " << path << ", err: " << ret.toString();
+        return;
+    }
+
+    callJsWithBytes("onFileExported", data.constData(), data.size(), io::filename(path).toStdString());
+
+    //! NOTE The file is handed to the page, no need to keep it in the virtual file system
+    io::File::remove(path);
 }

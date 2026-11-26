@@ -51,7 +51,7 @@ std::vector<INotationWriter::UnitType> LRCWriter::supportedUnitTypes() const
 
 bool LRCWriter::supportsUnitType(UnitType ut) const { return ut == UnitType::PER_PART; }
 
-muse::Ret LRCWriter::write(notation::INotationPtr notation, muse::io::IODevice& device, const Options&)
+muse::Ret LRCWriter::writeSync(notation::INotationPtr notation, muse::io::IODevice& device, const Options&)
 {
     Score* score = notation->elements()->msScore();
     bool enhancedLrc = configuration()->lrcUseEnhancedFormat();
@@ -71,7 +71,7 @@ bool LRCWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& 
     return File::writeFile(path, outBuf.data());
 }
 
-muse::Ret LRCWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
+muse::Ret LRCWriter::writeListSync(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
 {
     return make_ret(Ret::Code::NotSupported);
 }

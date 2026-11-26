@@ -54,7 +54,7 @@ set(MUSE_QT_SUPPORT OFF)
 set(MUSE_THREADS_SUPPORT OFF)
 set(MUSE_CONFIGURATION_IS_WEB ON)
 set(MUSE_ENABLE_UNIT_TESTS OFF)
-set(MUSE_MODULE_AUDIO_EXPORT OFF)
+set(MUSE_MODULE_AUDIO_EXPORT ON)
 set(MUSE_COMPILE_USE_PCH OFF)
 set(MUSE_MODULE_MULTIWINDOWS OFF)
 
@@ -77,6 +77,14 @@ include(${EXTDEPS_DIR}/buildtools/manifest.cmake)
 require_source_dep(picojson)
 require_source_dep(pugixml)
 require_source_dep(utfcpp)
+
+# Audio export encoders (WAV has no dependencies)
+require_dep(ogg)
+require_dep(flac)
+require_dep(opus)
+require_dep(opusenc)
+require_dep(lame)
+require_dep(fdk-aac)
 
 add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH}/global global)
 

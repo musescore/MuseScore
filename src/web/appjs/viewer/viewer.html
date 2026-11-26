@@ -98,7 +98,15 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
           // api callbacks
           onProjectSaved: function(data) {
             console.log("[html] onProjectSaved len: ", data.length)
-          }   
+          },
+          onFileExported: function(data, name) {
+            console.log("[html] onFileExported name: ", name, ", len: ", data.length)
+            const a = document.createElement('a')
+            a.href = URL.createObjectURL(new Blob([data]))
+            a.download = name
+            a.click()
+            URL.revokeObjectURL(a.href)
+          }
         })
 
         document.addEventListener('click', window.muapi.startAudioProcessing, { once: true });

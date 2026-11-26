@@ -37,8 +37,8 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
-    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeSync(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeListSync(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
 
 private:
     engraving::MscIoMode m_mode;

@@ -28,9 +28,9 @@ using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret AacWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+SoundTrackFormat AacWriter::soundTrackFormat() const
 {
-    const SoundTrackFormat format {
+    return SoundTrackFormat {
         SoundTrackType::AAC,
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
@@ -40,6 +40,4 @@ Ret AacWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         AudioSampleFormat::Undefined,
         configuration()->exportMp3Bitrate()
     };
-
-    return doWriteAndWait(notation, destinationDevice, format, options);
 }

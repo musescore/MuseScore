@@ -28,9 +28,9 @@ using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+SoundTrackFormat WaveWriter::soundTrackFormat() const
 {
-    const SoundTrackFormat format {
+    return SoundTrackFormat {
         SoundTrackType::WAV,
         {
             static_cast<sample_rate_t>(configuration()->exportSampleRate()),
@@ -40,6 +40,4 @@ Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destination
         configuration()->exportWavSampleFormat(),
         0 /* bitRate */
     };
-
-    return doWriteAndWait(notation, destinationDevice, format);
 }

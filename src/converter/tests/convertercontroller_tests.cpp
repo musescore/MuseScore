@@ -168,7 +168,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterWritesToDevice)
     // [GIVEN] Writer that writes the data to the device
     const path_t out = filePath("out.pdf");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([out](INotationPtr, IODevice& device, const Options&) {
         EXPECT_EQ(device.meta("file_path"), out.toStdString());
         return writeToDevice(device, "data");
@@ -187,7 +187,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterWritesToFilePath_Fi
     // [GIVEN] Writer that writes to the "file_path" itself and leaves the device empty
     const path_t out = filePath("out.mp4");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([](INotationPtr, IODevice& device, const Options&) {
         return writeToFilePath(device, "data");
     }));
@@ -205,7 +205,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_OutputFileIsR
     // [GIVEN] Writer that writes part of the data and then fails
     const path_t out = filePath("out.pdf");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([](INotationPtr, IODevice& device, const Options&) {
         writeToDevice(device, "data");
         return make_ret(Ret::Code::UnknownError);
@@ -224,7 +224,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_OutputDirIsCreated)
     // [GIVEN] Output path in a directory that does not exist
     const path_t out = filePath("dir") + "/out.pdf";
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([](INotationPtr, IODevice& device, const Options&) {
         return writeToDevice(device, "data");
     }));
@@ -244,7 +244,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_CreatedOutput
     const path_t out = dir + "/sub/out.pdf";
 
     // [GIVEN] Writer that fails
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Return(make_ret(Ret::Code::UnknownError)));
 
     // [WHEN] Convert the file
@@ -264,7 +264,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_ExistingOutpu
     const path_t out = dir + "/out.pdf";
 
     // [GIVEN] Writer that fails
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Return(make_ret(Ret::Code::UnknownError)));
 
     // [WHEN] Convert the file
@@ -286,7 +286,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_WriterFails_OtherFilesInC
     const path_t otherFile = dir + "/other.txt";
 
     // [GIVEN] Writer that fails, while another file appears in the created directory
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([otherFile](INotationPtr, IODevice&, const Options&) {
         File::writeFile(otherFile, ByteArray("other"));
         return make_ret(Ret::Code::UnknownError);
@@ -311,7 +311,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_OutputFileCannotBeOpened)
     ASSERT_TRUE(Dir::mkpath(out));
 
     // [THEN] The writer is not called
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     // [WHEN] Convert the file
     Ret ret = m_controller->fileConvert("in.mscz", out);
@@ -343,7 +343,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_LoadFails)
     EXPECT_CALL(*m_project, load(path_t("in.mscz"), _, _)).WillOnce(Return(make_ret(Ret::Code::UnknownError)));
 
     // [THEN] Nothing is written
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     // [WHEN] Convert the file
     Ret ret = m_controller->fileConvert("in.mscz", out);
@@ -360,7 +360,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_ProjectIsSetToSessionDuri
         InSequence seq;
 
         EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr(m_project)));
-        EXPECT_CALL(*m_writer, write(_, _, _)).WillOnce(Return(make_ok()));
+        EXPECT_CALL(*m_writer, writeSync(_, _, _)).WillOnce(Return(make_ok()));
         EXPECT_CALL(*m_projectSession, setProject(INotationProjectPtr()));
     }
 
@@ -377,7 +377,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_MsczIsSavedByProject)
 
     // [THEN] The project saves itself, the writer is not used
     EXPECT_CALL(*m_project, save(out, _, _)).WillOnce(Return(make_ok()));
-    EXPECT_CALL(*m_writer, write(_, _, _)).Times(0);
+    EXPECT_CALL(*m_writer, writeSync(_, _, _)).Times(0);
 
     // [WHEN] Convert the file
     Ret ret = m_controller->fileConvert("in.mscz", out);
@@ -392,7 +392,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_PageByPage)
 
     const path_t out = filePath("out.png");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .Times(2)
     .WillRepeatedly(Invoke([out](INotationPtr, IODevice& device, const Options& options) {
         EXPECT_EQ(device.meta("dir_path"), out.toStdString());
@@ -414,7 +414,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_PageTarget)
     // [GIVEN] Target page
     const path_t out = filePath("out.pdf");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([](INotationPtr, IODevice& device, const Options& options) {
         return writeToDevice(device, "page " + std::to_string(optionInt(options, OptionKey::PAGE_NUMBER)));
     }));
@@ -432,7 +432,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_Parts)
     // [GIVEN] Notation with 2 parts and output with the part name placeholder
     setExcerpts({ "A", "B" });
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .Times(2)
     .WillRepeatedly(Invoke([](INotationPtr notation, IODevice& device, const Options& options) {
         EXPECT_EQ(muse::value(options, OptionKey::UNIT_TYPE, Val()).toEnum<INotationWriter::UnitType>(),
@@ -454,7 +454,7 @@ TEST_F(Converter_ConverterControllerTests, FileConvert_Parts_WriterFails)
     // [GIVEN] Notation with 2 parts and writer that fails on the first one
     setExcerpts({ "A", "B" });
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Return(make_ret(Ret::Code::UnknownError)));
 
     // [WHEN] Convert the file
@@ -471,7 +471,7 @@ TEST_F(Converter_ConverterControllerTests, ExportScoreVideo_WriterWritesToFilePa
     // [GIVEN] Writer that writes to the "file_path" itself, like the video writer
     const path_t out = filePath("out.mp4");
 
-    EXPECT_CALL(*m_writer, write(_, _, _))
+    EXPECT_CALL(*m_writer, writeSync(_, _, _))
     .WillOnce(Invoke([](INotationPtr, IODevice& device, const Options& options) {
         EXPECT_FALSE(muse::value(options, OptionKey::WITH_AUDIO, Val(true)).toBool());
         return writeToFilePath(device, "data");

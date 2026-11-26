@@ -28,6 +28,7 @@
 #include "project/iprojectsession.h"
 #include "project/iopenprojectscenario.h"
 #include "project/icloseprojectscenario.h"
+#include "project/iexportprojectscenario.h"
 #include "project/inotationproject.h"
 #include "audio/main/istartaudiocontroller.h"
 #include "audio/main/isoundfontcontroller.h"
@@ -39,6 +40,7 @@ class WebApi : public muse::Contextable, public muse::async::Asyncable
     muse::ContextInject<mu::project::IProjectSession> projectSession = { this };
     muse::ContextInject<mu::project::IOpenProjectScenario> openProjectScenario = { this };
     muse::ContextInject<mu::project::ICloseProjectScenario> closeProjectScenario = { this };
+    muse::ContextInject<mu::project::IExportProjectScenario> exportProjectScenario = { this };
     inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
     inline static muse::GlobalInject<muse::audio::ISoundFontController> soundFontController;
 
@@ -59,6 +61,7 @@ private:
         : muse::Contextable(muse::modularity::ContextPtr()) {}
 
     void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
+    void onFileExported(const muse::io::path_t& path);
 
     project::INotationProjectPtr m_currentProject;
 

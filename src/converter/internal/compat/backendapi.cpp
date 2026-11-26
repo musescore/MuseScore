@@ -320,7 +320,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) }
         };
 
-        Ret writeRet = pngWriter->write(notation, pngDevice, options);
+        Ret writeRet = pngWriter->writeSync(notation, pngDevice, options);
         if (!writeRet) {
             LOGW() << writeRet.toString();
             result = false;
@@ -363,7 +363,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
             { INotationWriter::OptionKey::BEATS_COLORS, Val::fromQVariant(beatsColors) }
         };
 
-        Ret writeRet = svgWriter->write(notation, svgDevice, options);
+        Ret writeRet = svgWriter->writeSync(notation, svgDevice, options);
         if (!writeRet) {
             LOGW() << writeRet.toString();
             result = false;
@@ -497,7 +497,7 @@ RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, cons
     ByteArray data;
     auto device = Buffer::opened(IODevice::ReadWrite, &data);
 
-    Ret writeRet = writer->write(notation, device);
+    Ret writeRet = writer->writeSync(notation, device);
     if (!writeRet) {
         LOGW() << writeRet.toString();
         return writeRet;
@@ -524,7 +524,7 @@ RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, cons
     ByteArray data;
     auto device = Buffer::opened(IODevice::ReadWrite, &data);
 
-    Ret writeRet = writer->writeList(notations, device, options);
+    Ret writeRet = writer->writeListSync(notations, device, options);
     if (!writeRet) {
         LOGW() << writeRet.toString();
         return writeRet;

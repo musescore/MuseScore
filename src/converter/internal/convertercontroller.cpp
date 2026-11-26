@@ -116,7 +116,7 @@ Ret ConverterController::writeNotationToFile(INotationWriterPtr writer, INotatio
         return make_ret(Err::OutFileFailedOpen);
     }
 
-    ret = writer->write(notation, outFile, options);
+    ret = writer->writeSync(notation, outFile, options);
     outFile.close();
 
     if (!ret || outFile.hasError()) {

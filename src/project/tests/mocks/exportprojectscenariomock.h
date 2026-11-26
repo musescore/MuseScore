@@ -40,6 +40,8 @@ public:
                 (notation::INotationPtrList notations, const muse::io::path_t destinationPath, INotationWriter::UnitType unitType,
                  bool openDestinationFolderOnExport), (const, override));
 
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, fileExported, (), (const, override));
+
     MOCK_METHOD(const ExportInfo&, exportInfo, (), (const, override));
     MOCK_METHOD(void, setExportInfo, (const ExportInfo& exportInfo), (override));
 };

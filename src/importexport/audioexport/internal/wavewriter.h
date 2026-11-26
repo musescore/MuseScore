@@ -32,7 +32,7 @@ public:
     WaveWriter(const muse::modularity::ContextPtr& iocCtx)
         : AbstractAudioWriter(iocCtx) {}
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::audio::SoundTrackFormat soundTrackFormat() const override;
 };
 }
 

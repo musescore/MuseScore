@@ -1020,7 +1020,7 @@ Ret NotationProject::exportProject(const muse::io::path_t& path, const std::stri
         return false;
     }
 
-    Ret ret = writer->write(m_masterNotation->notation(), outBuf);
+    Ret ret = writer->writeSync(m_masterNotation->notation(), outBuf);
     if (!ret) {
         return ret;
     }

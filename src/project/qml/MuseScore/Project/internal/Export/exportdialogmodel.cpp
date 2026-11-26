@@ -146,9 +146,42 @@ void ExportDialogModel::classBegin()
     init();
 }
 
+void ExportDialogModel::removeUnavailableExportTypes()
+{
+    //! NOTE The export modules may be not built (e.g. on the web), such types have no writers
+    auto isAvailable = [this](const ExportType& type) {
+        return !type.suffixes.isEmpty() && !exportProjectScenario()->supportedUnitTypes(type).empty();
+    };
+
+    ExportTypeList types;
+    for (ExportType type : std::as_const(m_exportTypeList)) {
+        if (type.hasSubtypes()) {
+            ExportTypeList subtypes;
+            for (const ExportType& subtype : std::as_const(type.subtypes)) {
+                if (isAvailable(subtype)) {
+                    subtypes << subtype;
+                }
+            }
+
+            if (subtypes.isEmpty()) {
+                continue;
+            }
+
+            type.subtypes = subtypes;
+            types << type;
+        } else if (isAvailable(type)) {
+            types << type;
+        }
+    }
+
+    m_exportTypeList = types;
+}
+
 void ExportDialogModel::init()
 {
     TRACEFUNC;
+
+    removeUnavailableExportTypes();
 
     const ExportInfo& info = exportProjectScenario()->exportInfo();
     if (info.id.isEmpty()) {

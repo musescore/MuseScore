@@ -49,9 +49,9 @@ public:
     // Interface implementation
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType) const override;
-    muse::Ret write(notation::INotationPtr, muse::io::IODevice&, const Options&) override;
+    muse::Ret writeSync(notation::INotationPtr, muse::io::IODevice&, const Options&) override;
     void writeMetadata(muse::io::IODevice* device, const engraving::Score* score) const;
-    muse::Ret writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&) override;
+    muse::Ret writeListSync(const notation::INotationPtrList&, muse::io::IODevice&, const Options&) override;
 
     bool writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc);
 

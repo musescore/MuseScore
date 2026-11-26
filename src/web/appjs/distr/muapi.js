@@ -28,6 +28,13 @@ async function createMuApi(config) {
         }
     }
 
+    MuApi.Module.onFileExported = function(data, name) {
+        console.log("[js muapi internal] onFileExported name: ", name, ", len: ", data.length)
+        if (config.onFileExported) {
+            config.onFileExported(data, name)
+        }
+    }
+
     return MuApi
 }
 

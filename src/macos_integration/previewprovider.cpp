@@ -132,7 +132,7 @@ std::vector<uint8_t> PreviewProviderCxx::getPdfPreviewData(const std::string& fi
     buffer.open(muse::io::IODevice::WriteOnly);
 
     mu::iex::imagesexport::PdfWriter pdfWriter;
-    pdfWriter.write(project->masterNotation()->notation(), buffer);
+    pdfWriter.writeSync(project->masterNotation()->notation(), buffer);
 
     muse::ByteArray byteArray = buffer.data();
     std::vector<uint8_t> data = byteArray.vdata();

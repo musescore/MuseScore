@@ -98,7 +98,7 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, const Options& options)
+muse::Ret VideoWriter::writeSync(INotationPtr notation, muse::io::IODevice& device, const Options& options)
 {
     std::string filePath = device.meta("file_path");
     IF_ASSERT_FAILED(!filePath.empty()) {
@@ -275,10 +275,10 @@ void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t
     m_audioFile->setMeta("file_path", audioPath.toStdString());
     m_audioFile->open(muse::io::IODevice::WriteOnly);
 
-    m_audioWriter->write(notation, *m_audioFile, audioOpts);
+    m_audioWriter->writeSync(notation, *m_audioFile, audioOpts);
 }
 
-muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
+muse::Ret VideoWriter::writeListSync(const INotationPtrList&, muse::io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return make_ret(muse::Ret::Code::NotSupported);

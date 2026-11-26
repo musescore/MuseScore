@@ -44,7 +44,7 @@ std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret PngWriter::writeSync(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
