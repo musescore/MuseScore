@@ -30,6 +30,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "engraving/dom/noteval.h"
+#include "engraving/types/fraction.h"
 
 #include "notation/inotation_fwd.h"
 #include "notation/inotationsolomutestate.h"
@@ -79,6 +80,13 @@ public:
     virtual muse::Ret pause(bool select = false) = 0;
     virtual muse::Ret stop() = 0;
     virtual muse::Ret rewind(muse::secs_t secs) = 0;
+
+    //! Scrub: while the shortcut is held, the score under the mouse pointer is played
+    virtual muse::Ret startScrub() = 0;
+    virtual void stopScrub() = 0;
+    virtual bool isScrubbing() const = 0;
+    virtual muse::async::Notification isScrubbingChanged() const = 0;
+    virtual void scrubAt(const engraving::Fraction& tick) = 0;
 
     virtual bool isLoopEnabled() const = 0;
     virtual muse::async::Channel<bool> loopEnabledChanged() const = 0;

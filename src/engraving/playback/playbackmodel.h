@@ -87,6 +87,7 @@ public:
 
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound);
     void triggerMetronome(int tick);
+    void flushOffStreamEvents(const InstrumentTrackIdSet& trackIds);
     void triggerCountIn(int tick, muse::mpe::duration_t& countInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;

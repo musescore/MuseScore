@@ -193,6 +193,11 @@ void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingIt
     m_playbackModel.triggerEventsForItems(items, duration, flushSound);
 }
 
+void NotationPlayback::flushOffStreamEvents(const engraving::InstrumentTrackIdSet& trackIds)
+{
+    m_playbackModel.flushOffStreamEvents(trackIds);
+}
+
 void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
 {
     m_playbackModel.triggerMetronome(tick);

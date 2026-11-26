@@ -41,6 +41,7 @@ void PlaybackCommandsController::init()
     registerCommand(PLAY_SELECTION_COMMAND, &IPlaybackController::playFromSelection, false);
     registerCommand(PAUSE_COMMAND, &IPlaybackController::pause, false);
     registerCommand(PAUSE_AND_SELECT_COMMAND, &IPlaybackController::pause, true);
+    registerCommand(SCRUB_COMMAND, &IPlaybackController::startScrub);
     registerCommand(STOP_COMMAND, &IPlaybackController::stop);
     registerCommand(REWIND_COMMAND, [this](const rcommand::Params& params) { return rewind(params); });
     registerCommand(LOOP_TOGGLE_COMMAND, &IPlaybackController::toggleLoopPlayback);

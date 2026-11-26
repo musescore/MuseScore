@@ -22,9 +22,15 @@
 
 #include "notationviewinputcontroller.h"
 
+#include <algorithm>
+#include <map>
 #include <set>
 
 #include <QApplication>
+#include <QCursor>
+#include <QGuiApplication>
+#include <QPainter>
+#include <QPixmap>
 #include <QMimeData>
 #include <QQuickItem>
 #include <QTimer>
@@ -38,11 +44,13 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/staff.h"
 
 #include "notation/inotation.h"
+#include "ui/view/iconcodes.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -51,6 +59,7 @@
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
 #include "notation/notationcommands.h"
+#include "playback/playbackcommands.h"
 
 using namespace muse::rcommand;
 using namespace mu;
@@ -96,7 +105,159 @@ void NotationViewInputController::init()
         projectSession()->currentNotationChanged().onNotify(this, [this]() {
             onNotationChanged();
         });
+
+        playbackController()->isScrubbingChanged().onNotify(this, [this]() {
+            onScrubbingChanged();
+        });
     }
+}
+
+void NotationViewInputController::onScrubbingChanged()
+{
+    QQuickItem* item = m_view->asItem();
+    if (!item) {
+        return;
+    }
+
+    if (!playbackController()->isScrubbing()) {
+        QObject::disconnect(m_scrubFocusConnection);
+        QObject::disconnect(m_scrubAppStateConnection);
+
+        item->setAcceptHoverEvents(m_view->isNoteEnterMode());
+        item->unsetCursor();
+        return;
+    }
+
+    m_scrubShortcutKeys.clear();
+    m_scrubShortcutModifiers = {};
+
+    //! NOTE The shortcut that started the scrub is the one whose modifiers are held now
+    //! (if several shortcuts are assigned, the keys of the others are not part of it)
+    std::vector<QKeyCombination> combinations;
+    for (const std::string& sequence : commandShortcutsRegister()->shortcut(playback::SCRUB_COMMAND).sequences) {
+        const QKeySequence keySequence = QKeySequence::fromString(QString::fromStdString(sequence), QKeySequence::PortableText);
+        if (!keySequence.isEmpty()) {
+            combinations.push_back(keySequence[0]);
+        }
+    }
+
+    const Qt::KeyboardModifiers heldModifiers = QGuiApplication::queryKeyboardModifiers();
+    const bool anyMatches = std::any_of(combinations.cbegin(), combinations.cend(), [heldModifiers](const QKeyCombination& c) {
+        return c.keyboardModifiers() == heldModifiers;
+    });
+
+    for (const QKeyCombination& combination : combinations) {
+        if (anyMatches && combination.keyboardModifiers() != heldModifiers) {
+            continue;
+        }
+
+        m_scrubShortcutKeys.insert(combination.key());
+        m_scrubShortcutModifiers |= combination.keyboardModifiers();
+    }
+
+    //! NOTE The release of the shortcut may be missed when the focus moves elsewhere
+    m_scrubFocusConnection = QObject::connect(item, &QQuickItem::activeFocusChanged, item, [this](bool hasFocus) {
+        if (!hasFocus) {
+            playbackController()->stopScrub();
+        }
+    });
+    m_scrubAppStateConnection = QObject::connect(qApp, &QGuiApplication::applicationStateChanged, item,
+                                                 [this](Qt::ApplicationState state) {
+        if (state != Qt::ApplicationActive) {
+            playbackController()->stopScrub();
+        }
+    });
+
+    //! NOTE The scrub follows the mouse pointer, also when it does not hover the score
+    item->setAcceptHoverEvents(true);
+    item->setCursor(scrubCursor());
+
+    const QPointF pos = item->mapFromGlobal(QCursor::pos());
+    if (item->contains(pos)) {
+        scrubAtPosition(m_view->toLogical(pos));
+    }
+}
+
+bool NotationViewInputController::isScrubShortcutKeyReleased(const QKeyEvent* event)
+{
+    static const std::map<int, Qt::KeyboardModifier> MODIFIER_KEYS {
+        { Qt::Key_Shift, Qt::ShiftModifier },
+        { Qt::Key_Control, Qt::ControlModifier },
+        { Qt::Key_Alt, Qt::AltModifier },
+        { Qt::Key_Meta, Qt::MetaModifier },
+    };
+
+    //! NOTE Without a known shortcut, the release of any key stops the scrub
+    if (m_scrubShortcutKeys.empty()) {
+        return true;
+    }
+
+    const int key = event->key();
+
+    auto it = MODIFIER_KEYS.find(key);
+    if (it != MODIFIER_KEYS.end()) {
+        return m_scrubShortcutModifiers.testFlag(it->second);
+    }
+
+    return muse::contains(m_scrubShortcutKeys, key);
+}
+
+QCursor NotationViewInputController::scrubCursor() const
+{
+    static constexpr int SIZE = 32;
+    static constexpr int ICON_SIZE = 24;
+
+    QPixmap pixmap(SIZE, SIZE);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QFont font(QString::fromStdString(uiConfiguration()->iconsFontFamily()));
+    font.setPixelSize(ICON_SIZE);
+    painter.setFont(font);
+
+    const QString icon = QChar(static_cast<char16_t>(muse::ui::IconCode::Code::AUDIO));
+
+    //! NOTE A white outline keeps the icon visible on the dark parts of the score
+    painter.setPen(Qt::white);
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx != 0 || dy != 0) {
+                painter.drawText(pixmap.rect().translated(dx, dy), Qt::AlignCenter, icon);
+            }
+        }
+    }
+
+    painter.setPen(Qt::black);
+    painter.drawText(pixmap.rect(), Qt::AlignCenter, icon);
+    painter.end();
+
+    return QCursor(pixmap, SIZE / 2, SIZE / 2);
+}
+
+void NotationViewInputController::scrubAtPosition(const PointF& logicalPos)
+{
+    const INotationPtr notation = currentNotation();
+    const mu::engraving::Score* score = notation ? notation->elements()->msScore() : nullptr;
+    if (!score) {
+        return;
+    }
+
+    mu::engraving::staff_idx_t staffIdx = 0;
+    mu::engraving::Measure* measure = score->pos2measure(logicalPos, &staffIdx, nullptr, nullptr, nullptr);
+    if (!measure) {
+        return;
+    }
+
+    //! NOTE The segment is searched on all the staves, so that the changes of every instrument are heard
+    const double x = logicalPos.x() - measure->canvasPos().x();
+    const mu::engraving::Segment* segment = measure->searchSegment(x, mu::engraving::SegmentType::ChordRest, 0, score->ntracks());
+    if (!segment) {
+        return;
+    }
+
+    playbackController()->scrubAt(segment->tick());
 }
 
 void NotationViewInputController::deinit()
@@ -640,6 +801,10 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
 void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 {
+    if (!m_readonly && playbackController()->isScrubbing()) {
+        playbackController()->stopScrub();
+    }
+
     PointF logicPos = m_view->toLogical(event->pos());
     Qt::MouseButton button = event->button();
 
@@ -1395,6 +1560,10 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 {
+    if (!m_readonly && playbackController()->isScrubbing()) {
+        scrubAtPosition(m_view->toLogical(event->position()));
+    }
+
     if (!m_view->isNoteEnterMode()) {
         return;
     }
@@ -1487,6 +1656,11 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 
 void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
 {
+    //! NOTE The scrub lasts while its shortcut is held
+    if (!m_readonly && !event->isAutoRepeat() && playbackController()->isScrubbing() && isScrubShortcutKeyReleased(event)) {
+        playbackController()->stopScrub();
+    }
+
     if (event->key() != Qt::Key_Shift) {
         return;
     }

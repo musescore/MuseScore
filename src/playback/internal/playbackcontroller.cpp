@@ -31,14 +31,22 @@
 #include "audio/common/audioutils.h"
 #include "audio/devtools/inputlag.h"
 
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurerepeat.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/utils.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
 #include "notation/inotationautomation.h"
+#include "notation/inotationelements.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationparts.h"
@@ -463,6 +471,138 @@ void PlaybackController::playNotes(const NoteValList& notes, staff_idx_t staffId
     DeleteAll(elements);
 }
 
+muse::Ret PlaybackController::startScrub()
+{
+    //! NOTE While the sounds are loading, some instruments could not receive the notes
+    if (!m_notation || !notationPlayback() || isPlaying() || !isLoaded()) {
+        return muse::make_ret(muse::Ret::Code::Cancel);
+    }
+
+    if (m_isScrubbing) {
+        return muse::make_ok();
+    }
+
+    m_isScrubbing = true;
+    m_lastScrubTick = Fraction(-1, 1);
+    m_isScrubbingChanged.notify();
+
+    return muse::make_ok();
+}
+
+void PlaybackController::stopScrub()
+{
+    if (!m_isScrubbing) {
+        return;
+    }
+
+    m_isScrubbing = false;
+    m_lastScrubTick = Fraction(-1, 1);
+
+    if (notationPlayback()) {
+        notationPlayback()->flushOffStreamEvents(m_scrubSoundingTracks);
+    }
+    m_scrubSoundingTracks.clear();
+
+    m_isScrubbingChanged.notify();
+}
+
+bool PlaybackController::isScrubbing() const
+{
+    return m_isScrubbing;
+}
+
+muse::async::Notification PlaybackController::isScrubbingChanged() const
+{
+    return m_isScrubbingChanged;
+}
+
+void PlaybackController::scrubAt(const Fraction& tick)
+{
+    if (!m_isScrubbing || !m_notation || !notationPlayback()) {
+        return;
+    }
+
+    if (tick == m_lastScrubTick) {
+        return;
+    }
+
+    m_lastScrubTick = tick;
+
+    const Score* score = m_notation->elements()->msScore();
+    if (!score) {
+        return;
+    }
+
+    //! NOTE All the notes sounding at the tick, grouped by instrument track (the events are sent per track)
+    std::map<InstrumentTrackId, std::vector<const EngravingItem*> > itemsByTrack;
+
+    for (track_idx_t track = 0; track < score->ntracks(); ++track) {
+        const staff_idx_t staffIdx = track2staff(track);
+        const Staff* staff = score->staff(staffIdx);
+
+        //! NOTE As in the playback, the linked staves (e.g. a tablature linked to a standard staff) are skipped
+        if (!staff || !staff->isPrimaryStaff()) {
+            continue;
+        }
+
+        //! NOTE In a measure repeat, the notes are the ones of the repeated measure. A repeated measure can be
+        //! a measure repeat itself, so the chain is followed until a measure with its own notes. The referring
+        //! measure is always before the repeat, so the chain ends at the latest at the first measure
+        Fraction actualTick = tick;
+        const Measure* measure = score->tick2measure(tick);
+        while (measure && measure->measureRepeatCount(staffIdx) > 0) {
+            const MeasureRepeat* measureRepeat = measure->measureRepeatElement(staffIdx);
+            const Measure* referringMeasure = measureRepeat ? measureRepeat->referringMeasure(measure) : nullptr;
+            if (!referringMeasure) {
+                break;
+            }
+
+            IF_ASSERT_FAILED(referringMeasure->tick() < measure->tick()) {
+                break;
+            }
+
+            actualTick = referringMeasure->tick() + (actualTick - measure->tick());
+            measure = referringMeasure;
+        }
+
+        const ChordRest* cr = score->findCR(actualTick, track);
+        if (!cr || !cr->isChord() || cr->track() != track) {
+            continue;
+        }
+
+        if (cr->tick() > actualTick || cr->tick() + cr->actualTicks() <= actualTick) {
+            continue;
+        }
+
+        const Part* part = cr->part();
+        if (!part) {
+            continue;
+        }
+
+        const InstrumentTrackId trackId { part->id(), part->instrumentId(cr->tick()) };
+        std::vector<const EngravingItem*>& items = itemsByTrack[trackId];
+        for (const Note* note : toChord(cr)->notes()) {
+            items.push_back(note);
+        }
+    }
+
+    //! NOTE The notes are held while the pointer stays at the same position: they are stopped when the pointer
+    //! moves to another position or when the scrub stops, so their duration is only an upper bound
+    static constexpr mpe::duration_t SCRUB_NOTE_DURATION = mpe::duration_t(60) * 60 * 1000 * 1000; // 1 hour
+
+    InstrumentTrackIdSet soundingTracks;
+    for (const auto& pair : itemsByTrack) {
+        //! NOTE The new notes replace the previous ones of the same track
+        notationPlayback()->triggerEventsForItems(pair.second, SCRUB_NOTE_DURATION, true /*flushSound*/);
+        soundingTracks.insert(pair.first);
+        m_scrubSoundingTracks.erase(pair.first);
+    }
+
+    //! NOTE The tracks that are silent at the new position stop
+    notationPlayback()->flushOffStreamEvents(m_scrubSoundingTracks);
+    m_scrubSoundingTracks = std::move(soundingTracks);
+}
+
 void PlaybackController::playMetronome(int tick)
 {
     notationPlayback()->triggerMetronome(tick);
@@ -688,6 +828,8 @@ muse::Ret PlaybackController::togglePlay()
 
 muse::Ret PlaybackController::play(bool showErrors)
 {
+    stopScrub();
+
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return make_ret(Ret::Code::NotSupported);
@@ -802,6 +944,8 @@ muse::Ret PlaybackController::playFromSelection(bool showErrors)
 
 void PlaybackController::doPlay()
 {
+    stopScrub();
+
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
@@ -812,6 +956,9 @@ void PlaybackController::doPlay()
     }
 
     currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+        //! NOTE A scrub may have started while the playback was being prepared
+        stopScrub();
+
         if (!currentPlayer()) {
             return;
         }
@@ -867,11 +1014,16 @@ void PlaybackController::doStop()
 
 void PlaybackController::doResume()
 {
+    stopScrub();
+
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
 
     currentPlayer()->prepareToPlay().onResolve(this, [this](const Ret& ret) {
+        //! NOTE A scrub may have started while the playback was being prepared
+        stopScrub();
+
         if (!currentPlayer()) {
             return;
         }
@@ -2055,6 +2207,8 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     if (m_notation == notation) {
         return;
     }
+
+    stopScrub();
 
     if (m_notation) {
         INotationPartsPtr notationParts = m_notation->parts();

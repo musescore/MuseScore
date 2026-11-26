@@ -21,6 +21,9 @@
  */
 #pragma once
 
+#include <set>
+
+#include <QCursor>
 #include <QtEvents>
 
 #include "notation/inotationviewcontroller.h"
@@ -42,6 +45,7 @@
 #include "notationscene/iselectinstrumentscenario.h"
 
 #include "playback/iplaybackcontroller.h"
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 #include "global/iglobalconfiguration.h"
 #include "ui/idragcontroller.h"
@@ -105,6 +109,7 @@ public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
@@ -209,6 +214,11 @@ private:
 
     void updateShadowNotePopupVisibility(bool forceHide = false);
 
+    void onScrubbingChanged();
+    QCursor scrubCursor() const;
+    void scrubAtPosition(const muse::PointF& logicalPos);
+    bool isScrubShortcutKeyReleased(const QKeyEvent* event);
+
     float hitWidth() const;
 
     struct ClickContext {
@@ -243,6 +253,12 @@ private:
     QList<int> m_possibleZoomPercentages;
 
     bool m_readonly = false;
+
+    //! NOTE The keys and the modifiers of the scrub shortcut
+    std::set<int> m_scrubShortcutKeys;
+    Qt::KeyboardModifiers m_scrubShortcutModifiers;
+    QMetaObject::Connection m_scrubFocusConnection;
+    QMetaObject::Connection m_scrubAppStateConnection;
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 

@@ -665,4 +665,112 @@ TEST_F(PlaybackControllerTests, DropsEnvelopeWhenCurveIsCleared)
     // [WHEN] The point is erased
     automationData->editPoints(TRACK_VOLUME_KEY, erasePoint(TICKS_PER_SEC));
 }
+
+TEST_F(PlaybackControllerTests, DoesNotStartTheScrubWithoutANotation)
+{
+    // [GIVEN] The audio context is inited, but no project is open
+    m_controller->init();
+    resolveAudioContextInit();
+
+    // [WHEN] The scrub is started
+    const Ret ret = m_controller->startScrub();
+
+    // [THEN] It is canceled - there is nothing to hear
+    EXPECT_FALSE(ret);
+    EXPECT_FALSE(m_controller->isScrubbing());
+}
+
+TEST_F(PlaybackControllerTests, StartsTheScrubWhenTheSoundsAreLoaded)
+{
+    // [GIVEN] An opened project whose sounds are loaded
+    setUpProject(std::make_shared<notation::AutomationData>());
+    startPlayback();
+
+    int changedCount = 0;
+    m_controller->isScrubbingChanged().onNotify(this, [&changedCount]() {
+        ++changedCount;
+    });
+
+    // [WHEN] The scrub is started twice (the shortcut auto-repeats while it is held)
+    const Ret ret = m_controller->startScrub();
+    const Ret secondRet = m_controller->startScrub();
+
+    // [THEN] The scrub is on, and the change is notified only once
+    EXPECT_TRUE(ret);
+    EXPECT_TRUE(secondRet);
+    EXPECT_TRUE(m_controller->isScrubbing());
+    EXPECT_EQ(changedCount, 1);
+
+    m_controller->isScrubbingChanged().disconnect(this);
+}
+
+TEST_F(PlaybackControllerTests, DoesNotStartTheScrubWhilePlaying)
+{
+    // [GIVEN] An opened project that is playing
+    setUpProject(std::make_shared<notation::AutomationData>());
+    startPlayback();
+
+    ON_CALL(*m_player, playbackStatus()).WillByDefault(Return(audio::PlaybackStatus::Running));
+
+    // [WHEN] The scrub is started
+    const Ret ret = m_controller->startScrub();
+
+    // [THEN] It is canceled - the playback already sounds the score
+    EXPECT_FALSE(ret);
+    EXPECT_FALSE(m_controller->isScrubbing());
+}
+
+TEST_F(PlaybackControllerTests, StopsTheScrubAndSilencesTheTracks)
+{
+    // [GIVEN] A running scrub
+    setUpProject(std::make_shared<notation::AutomationData>());
+    startPlayback();
+    ASSERT_TRUE(m_controller->startScrub());
+
+    int changedCount = 0;
+    m_controller->isScrubbingChanged().onNotify(this, [&changedCount]() {
+        ++changedCount;
+    });
+
+    // [THEN] The tracks still sounding are stopped
+    EXPECT_CALL(*m_notationPlayback, flushOffStreamEvents(_)).Times(1);
+
+    // [WHEN] The scrub is stopped
+    m_controller->stopScrub();
+
+    // [THEN] The scrub is off, and the change is notified
+    EXPECT_FALSE(m_controller->isScrubbing());
+    EXPECT_EQ(changedCount, 1);
+
+    m_controller->isScrubbingChanged().disconnect(this);
+}
+
+TEST_F(PlaybackControllerTests, StoppingWithoutAScrubDoesNothing)
+{
+    // [GIVEN] An opened project, without a scrub
+    setUpProject(std::make_shared<notation::AutomationData>());
+    startPlayback();
+
+    // [THEN] Nothing is silenced - the off-stream events of the note input are left alone
+    EXPECT_CALL(*m_notationPlayback, flushOffStreamEvents(_)).Times(0);
+
+    // [WHEN] The scrub is stopped (the shortcut is released, or the focus is lost)
+    m_controller->stopScrub();
+
+    EXPECT_FALSE(m_controller->isScrubbing());
+}
+
+TEST_F(PlaybackControllerTests, DoesNotPlayAnythingWhenNotScrubbing)
+{
+    // [GIVEN] An opened project, without a scrub
+    setUpProject(std::make_shared<notation::AutomationData>());
+    startPlayback();
+
+    // [THEN] No note is played
+    EXPECT_CALL(*m_notationPlayback, triggerEventsForItems(_, _, _)).Times(0);
+    EXPECT_CALL(*m_notationPlayback, flushOffStreamEvents(_)).Times(0);
+
+    // [WHEN] The pointer moves over the score
+    m_controller->scrubAt(engraving::Fraction(0, 1));
+}
 }
