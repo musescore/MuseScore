@@ -186,7 +186,8 @@ TEST_F(ProjectAudioSettingsTests, VcaGroups_NotWrittenWhenThereAreNone)
 TEST_F(ProjectAudioSettingsTests, VcaGroups_InvalidMembersAreSkipped)
 {
     //! GIVEN A file with a VCA group member that has no part id
-    const ByteArray json(R"({
+    const ByteArray json(
+        R"({
         "master": {},
         "aux": [],
         "tracks": [],
