@@ -1366,7 +1366,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (!mno->visible()) {
             continue;
         }
-        Autoplace::autoplaceMeasureNumber(mno, mno->mutldata());
+        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
         system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
                                                                                       + mno->staffOffset()), mno);
     }

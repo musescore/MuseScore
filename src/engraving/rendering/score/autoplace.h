@@ -25,10 +25,6 @@
 #include "dom/engravingitem.h"
 #include "dom/spanner.h"
 
-namespace mu::engraving {
-class MeasureNumber;
-}
-
 namespace mu::engraving::rendering::score {
 class Autoplace
 {
@@ -45,7 +41,6 @@ public:
         autoplaceMeasureElement(item, ldata, item->placeAbove(), add);
     }
 
-    static void autoplaceMeasureNumber(const MeasureNumber* item, EngravingItem::LayoutData* ldata);
     static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata);
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 
@@ -55,14 +50,13 @@ private:
         FIT_IN_GAPS, // Move only as far as the nearest gap the item fits into
     };
 
-    static void doAutoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add,
-                                          CollisionStrategy strategy);
+    static CollisionStrategy resolveCollisionStrategy(const EngravingItem* item);
 
     static void doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
-                                   double minSkylineHorizontalClearance, double spatium, CollisionStrategy strategy);
+                                   double minSkylineHorizontalClearance, double spatium);
 
     static double distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
-                                     double minSkylineHorizontalClearance, double minDistance, CollisionStrategy strategy);
+                                     double minSkylineHorizontalClearance, double minDistance);
 
     // Returns the smallest move away from the staff that leaves an item in a gap between skyline elements
     static double distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox, bool above,

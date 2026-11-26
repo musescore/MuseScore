@@ -475,7 +475,7 @@ void MaskLayout::collectSignaturesUnderSlurTie(const SlurTieSegment* slurTieSegm
         }
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx <= endStaffIdx; ++staffIdx) {
             // Key/Time/Clef-type segments never have elements in any voice other than 0
-            if (EngravingItem* item = seg->element(staffIdx * VOICES)) {
+            if (EngravingItem* item = seg->element(staff2track(staffIdx))) {
                 items.push_back(item);
             }
         }

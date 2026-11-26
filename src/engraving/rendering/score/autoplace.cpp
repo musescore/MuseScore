@@ -33,7 +33,6 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "dom/measure.h"
-#include "dom/measurenumber.h"
 #include "dom/tuplet.h"
 
 #include "log.h"
@@ -58,16 +57,10 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
         Sid::skylineMinHorizontalClearance) * item->mag();
 
-    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium, CollisionStrategy::MOVE_CLEAR);
+    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium);
 }
 
 void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
-{
-    doAutoplaceMeasureElement(item, ldata, above, add, CollisionStrategy::MOVE_CLEAR);
-}
-
-void Autoplace::doAutoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add,
-                                          CollisionStrategy strategy)
 {
     const Measure* measure = toMeasure(item->ownershipParent());
     const System* system = measure ? measure->system() : nullptr;
@@ -81,15 +74,7 @@ void Autoplace::doAutoplaceMeasureElement(const EngravingItem* item, EngravingIt
     // const double minSkylineHorizontalClearance = item->isMeasureNumber() ? 0.0 : item->style().styleAbsolute(
     // Sid::skylineMinHorizontalClearance) * item->mag();
     const double minSkylineHorizontalClearance = 0.0;
-    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium, strategy);
-}
-
-void Autoplace::autoplaceMeasureNumber(const MeasureNumber* item, EngravingItem::LayoutData* ldata)
-{
-    const bool fitInGaps = item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>()
-                           == MeasureNumberAvoidance::FIT_IN_GAPS;
-    doAutoplaceMeasureElement(item, ldata, item->placeAbove(), /* add = */ true,
-                              fitInGaps ? CollisionStrategy::FIT_IN_GAPS : CollisionStrategy::MOVE_CLEAR);
+    doAutoplaceElement(item, ldata, system, above, add, minSkylineHorizontalClearance, spatium);
 }
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata)
@@ -105,8 +90,17 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
     const double spatium = item->style().spatium() * mag;
 
     const bool above = item->spanner()->placeAbove();
-    doAutoplaceElement(item, ldata, system, above, /* add = */ false, /* minSkylineHorizontalClearance = */ 0.0, spatium,
-                       CollisionStrategy::MOVE_CLEAR);
+    doAutoplaceElement(item, ldata, system, above, /* add = */ false, /* minSkylineHorizontalClearance = */ 0.0, spatium);
+}
+
+Autoplace::CollisionStrategy Autoplace::resolveCollisionStrategy(const EngravingItem* item)
+{
+    if (item->isMeasureNumber()
+        && item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>() == MeasureNumberAvoidance::FIT_IN_GAPS) {
+        return CollisionStrategy::FIT_IN_GAPS;
+    }
+
+    return CollisionStrategy::MOVE_CLEAR;
 }
 
 double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox,
@@ -152,9 +146,9 @@ double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineL
 }
 
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
-                                     double minSkylineHorizontalClearance, double minDistance, CollisionStrategy strategy)
+                                     double minSkylineHorizontalClearance, double minDistance)
 {
-    if (strategy == CollisionStrategy::FIT_IN_GAPS) {
+    if (resolveCollisionStrategy(item) == CollisionStrategy::FIT_IN_GAPS) {
         return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance);
     }
 
@@ -183,7 +177,7 @@ double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLin
 }
 
 void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
-                                   double minSkylineHorizontalClearance, double spatium, CollisionStrategy strategy)
+                                   double minSkylineHorizontalClearance, double spatium)
 {
     DO_ASSERT(autoplaceAppliesToType(item->type()));
     IF_ASSERT_FAILED(system) {
@@ -216,7 +210,7 @@ void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::Lay
         shape.translate(item->systemPos() - item->offset() + item->staffOffset());
     }
 
-    const double yd = distanceToMoveItem(item, staffSkyline, shape, above, minSkylineHorizontalClearance, minDistance, strategy);
+    const double yd = distanceToMoveItem(item, staffSkyline, shape, above, minSkylineHorizontalClearance, minDistance);
 
     ldata->moveY(yd);
     shape.translateY(yd);
