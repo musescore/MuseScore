@@ -23,6 +23,7 @@
 #include "mixerpanelmodel.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include "async/notifylist.h"
 #include "defer.h"
@@ -568,8 +569,13 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
         playback()->setFxChainParams(trackId, params.fxChain);
     });
 
-    connect(item, &MixerChannelItem::auxSendsParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
+    connect(item, &MixerChannelItem::auxSendsParamsChanged, this,
+            [this, trackId, instrumentTrackId](const AudioOutputParams& params) {
         playback()->setAuxSendsParams(trackId, params.auxSends);
+
+        if (const std::optional<size_t> groupIndex = vcaGroupIndexOf(instrumentTrackId)) {
+            refreshVcaAuxSends(*groupIndex);
+        }
     });
 
     connect(item, &MixerChannelItem::auxSendItemListChanged, this, [this, item]() {
@@ -695,12 +701,31 @@ MixerChannelItem* MixerPanelModel::buildVcaChannelItem(size_t groupIndex, const 
 
     AudioOutputParams outParams;
     outParams.volume = group.volume;
+    outParams.balance = group.balance;
+    outParams.auxSends = vcaAuxSends(group);
     item->loadOutputParams(outParams);
+    item->loadSoloMuteState({ group.muted, group.solo });
 
     m_vcaGroupIndexByItem.insert(item, groupIndex);
 
-    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, item](const AudioOutputParams& params) {
-        onVcaVolumeChangeRequested(item, params.volume.raw());
+    connect(item, &MixerChannelItem::controlParamsChanged, this, [this, item](const AudioOutputParams&) {
+        onVcaControlParamsChanged(item);
+    });
+
+    connect(item, &MixerChannelItem::soloMuteStateChanged, this,
+            [this, item](const notation::INotationSoloMuteState::SoloMuteState& state) {
+        onVcaSoloMuteStateChanged(item, state);
+    });
+
+    connect(item, &MixerChannelItem::auxSendsParamsChanged, this, [this, item](const AudioOutputParams& params) {
+        onVcaAuxSendsChangeRequested(item, params.auxSends);
+    });
+
+    connect(item, &MixerChannelItem::auxSendItemListChanged, this, [this, item]() {
+        const QMap<aux_channel_idx_t, AuxSendItem*>& auxSendItems = item->auxSendItems();
+        for (auto it = auxSendItems.begin(); it != auxSendItems.end(); ++it) {
+            it.value()->setTitle(QString::fromStdString(controller()->auxChannelName(it.key())));
+        }
     });
 
     return item;
@@ -760,7 +785,7 @@ int MixerPanelModel::vcaInsertIndex() const
     return m_mixerChannelList.size();
 }
 
-void MixerPanelModel::onVcaVolumeChangeRequested(MixerChannelItem* vcaItem, float requestedVolume)
+void MixerPanelModel::onVcaControlParamsChanged(MixerChannelItem* vcaItem)
 {
     const std::optional<size_t> groupIndex = vcaGroupIndexOf(vcaItem);
     if (!groupIndex || !audioSettings()) {
@@ -774,6 +799,35 @@ void MixerPanelModel::onVcaVolumeChangeRequested(MixerChannelItem* vcaItem, floa
 
     VcaGroup& group = groups.at(*groupIndex);
 
+    // The mixer works with whole-number pan steps, so the pan offset is shifted in those steps too
+    const float balanceScale = vcaItem->balanceMax() / BALANCE_MAX.raw();
+    const float requestedVolume = vcaItem->outputParams().volume.raw();
+    const int requestedBalance = static_cast<int>(std::lround(vcaItem->outputParams().balance.raw() * balanceScale));
+    const int currentBalance = static_cast<int>(std::lround(group.balance.raw() * balanceScale));
+
+    bool stoppedEarly = false;
+
+    if (!muse::RealIsEqual(requestedVolume, group.volume.raw())) {
+        stoppedEarly |= shiftVcaMembersVolume(group, requestedVolume);
+    }
+
+    if (requestedBalance != currentBalance) {
+        stoppedEarly |= shiftVcaMembersBalance(group, requestedBalance, balanceScale);
+    }
+
+    audioSettings()->setVcaGroups(groups);
+
+    // If a control had to stop early, move the VCA strip back to where the group actually is
+    if (stoppedEarly) {
+        AudioOutputParams outParams = vcaItem->outputParams();
+        outParams.volume = group.volume;
+        outParams.balance = group.balance;
+        vcaItem->loadOutputParams(outParams);
+    }
+}
+
+bool MixerPanelModel::shiftVcaMembersVolume(VcaGroup& group, float requestedVolume) const
+{
     const float minDb = VOLUME_DB_MIN.raw();
     const float maxDb = VOLUME_DB_MAX.raw();
     const float currentVcaVolume = group.volume.raw();
@@ -785,9 +839,8 @@ void MixerPanelModel::onVcaVolumeChangeRequested(MixerChannelItem* vcaItem, floa
     // so that the balance between the members is never lost.
     // Members with volume automation are controlled by their automation curve, so the VCA leaves them alone.
     std::vector<MixerChannelItem*> members;
-    for (const InstrumentTrackId& instrumentTrackId : group.members) {
-        MixerChannelItem* member = findInstrumentChannelItem(instrumentTrackId);
-        if (!member || member->hasVolumeAutomation()) {
+    for (MixerChannelItem* member : vcaMemberItems(group)) {
+        if (member->hasVolumeAutomation()) {
             continue;
         }
 
@@ -803,14 +856,185 @@ void MixerPanelModel::onVcaVolumeChangeRequested(MixerChannelItem* vcaItem, floa
     }
 
     group.volume = currentVcaVolume + delta;
-    audioSettings()->setVcaGroups(groups);
 
-    // If the fader had to stop early, move the VCA strip back to where the group actually is
-    if (!muse::RealIsEqual(group.volume.raw(), requestedVolume)) {
-        AudioOutputParams outParams = vcaItem->outputParams();
-        outParams.volume = group.volume;
-        vcaItem->loadOutputParams(outParams);
+    return !muse::RealIsEqual(group.volume.raw(), requestedVolume);
+}
+
+bool MixerPanelModel::shiftVcaMembersBalance(VcaGroup& group, int requestedBalance, float balanceScale) const
+{
+    const int minBalance = static_cast<int>(std::lround(BALANCE_MIN.raw() * balanceScale));
+    const int maxBalance = static_cast<int>(std::lround(BALANCE_MAX.raw() * balanceScale));
+    const int currentVcaBalance = static_cast<int>(std::lround(group.balance.raw() * balanceScale));
+
+    int delta = std::clamp(requestedBalance - currentVcaBalance,
+                           std::min(0, minBalance - currentVcaBalance), std::max(0, maxBalance - currentVcaBalance));
+
+    // As with volume, stop as soon as any member is panned fully to one side,
+    // and leave members with pan automation alone
+    std::vector<MixerChannelItem*> members;
+    for (MixerChannelItem* member : vcaMemberItems(group)) {
+        if (member->hasBalanceAutomation()) {
+            continue;
+        }
+
+        const int memberBalance = member->balance();
+        delta = std::clamp(delta, std::min(0, minBalance - memberBalance), std::max(0, maxBalance - memberBalance));
+        members.push_back(member);
     }
+
+    if (delta != 0) {
+        for (MixerChannelItem* member : members) {
+            member->setBalance(member->balance() + delta);
+        }
+    }
+
+    const int newVcaBalance = currentVcaBalance + delta;
+    group.balance = static_cast<float>(newVcaBalance) / balanceScale;
+
+    return newVcaBalance != requestedBalance;
+}
+
+void MixerPanelModel::onVcaSoloMuteStateChanged(MixerChannelItem* vcaItem,
+                                                const notation::INotationSoloMuteState::SoloMuteState& state)
+{
+    const std::optional<size_t> groupIndex = vcaGroupIndexOf(vcaItem);
+    if (!groupIndex || !audioSettings()) {
+        return;
+    }
+
+    VcaGroupList groups = audioSettings()->vcaGroups();
+    IF_ASSERT_FAILED(*groupIndex < groups.size()) {
+        return;
+    }
+
+    // The playback controller applies the group's mute and solo to the members
+    groups.at(*groupIndex).muted = state.mute;
+    groups.at(*groupIndex).solo = state.solo;
+    audioSettings()->setVcaGroups(groups);
+}
+
+AuxSendsParams MixerPanelModel::vcaAuxSends(const VcaGroup& group) const
+{
+    // A VCA group keeps no aux send levels of its own: each knob shows the highest send among the members,
+    // and its switch is on while any member's send is on
+    AuxSendsParams result(controller()->auxTrackIdMap().size());
+
+    for (const MixerChannelItem* member : vcaMemberItems(group)) {
+        const AuxSendsParams& memberSends = member->outputParams().auxSends;
+        if (memberSends.size() > result.size()) {
+            result.resize(memberSends.size());
+        }
+
+        for (size_t i = 0; i < memberSends.size(); ++i) {
+            result[i].signalAmount = std::max(result[i].signalAmount, memberSends[i].signalAmount);
+            result[i].active = result[i].active || memberSends[i].active;
+        }
+    }
+
+    return result;
+}
+
+void MixerPanelModel::onVcaAuxSendsChangeRequested(MixerChannelItem* vcaItem, const AuxSendsParams& requested)
+{
+    const std::optional<size_t> groupIndex = vcaGroupIndexOf(vcaItem);
+    if (!groupIndex || !audioSettings()) {
+        return;
+    }
+
+    const VcaGroupList& groups = audioSettings()->vcaGroups();
+    IF_ASSERT_FAILED(*groupIndex < groups.size()) {
+        return;
+    }
+
+    const VcaGroup& group = groups.at(*groupIndex);
+    const AuxSendsParams current = vcaAuxSends(group);
+    const std::vector<MixerChannelItem*> members = vcaMemberItems(group);
+
+    auto memberSendItem = [](const MixerChannelItem* member, aux_channel_idx_t index) -> AuxSendItem* {
+        return member->auxSendItems().value(index, nullptr);
+    };
+
+    const size_t count = std::min(requested.size(), current.size());
+    for (size_t i = 0; i < count; ++i) {
+        const aux_channel_idx_t index = static_cast<aux_channel_idx_t>(i);
+
+        if (requested[i].active != current[i].active) {
+            for (const MixerChannelItem* member : members) {
+                if (AuxSendItem* sendItem = memberSendItem(member, index)) {
+                    sendItem->setIsActive(requested[i].active);
+                }
+            }
+        }
+
+        const int requestedPercentage = static_cast<int>(std::lround(requested[i].signalAmount * 100.f));
+        const int currentPercentage = static_cast<int>(std::lround(current[i].signalAmount * 100.f));
+        if (requestedPercentage == currentPercentage) {
+            continue;
+        }
+
+        // Shift every member's send by the same amount, stopping when any of them reaches 0% or 100%
+        int delta = requestedPercentage - currentPercentage;
+        for (const MixerChannelItem* member : members) {
+            if (const AuxSendItem* sendItem = memberSendItem(member, index)) {
+                const int percentage = sendItem->audioSignalPercentage();
+                delta = std::clamp(delta, std::min(0, -percentage), std::max(0, 100 - percentage));
+            }
+        }
+
+        if (delta == 0) {
+            continue;
+        }
+
+        for (const MixerChannelItem* member : members) {
+            if (AuxSendItem* sendItem = memberSendItem(member, index)) {
+                sendItem->setAudioSignalPercentage(sendItem->audioSignalPercentage() + delta);
+            }
+        }
+    }
+
+    // Show where the members actually are, which differs from the request if a knob had to stop early
+    refreshVcaAuxSends(*groupIndex);
+}
+
+void MixerPanelModel::refreshVcaAuxSends(size_t groupIndex)
+{
+    MixerChannelItem* vcaItem = findVcaChannelItem(groupIndex);
+    if (!vcaItem || !audioSettings()) {
+        return;
+    }
+
+    const VcaGroupList& groups = audioSettings()->vcaGroups();
+    IF_ASSERT_FAILED(groupIndex < groups.size()) {
+        return;
+    }
+
+    AudioOutputParams outParams = vcaItem->outputParams();
+    outParams.auxSends = vcaAuxSends(groups.at(groupIndex));
+    vcaItem->loadOutputParams(outParams);
+}
+
+std::vector<MixerChannelItem*> MixerPanelModel::vcaMemberItems(const VcaGroup& group) const
+{
+    std::vector<MixerChannelItem*> result;
+
+    for (const InstrumentTrackId& instrumentTrackId : group.members) {
+        if (MixerChannelItem* member = findInstrumentChannelItem(instrumentTrackId)) {
+            result.push_back(member);
+        }
+    }
+
+    return result;
+}
+
+MixerChannelItem* MixerPanelModel::findVcaChannelItem(size_t groupIndex) const
+{
+    for (auto it = m_vcaGroupIndexByItem.cbegin(); it != m_vcaGroupIndexByItem.cend(); ++it) {
+        if (it.value() == groupIndex) {
+            return const_cast<MixerChannelItem*>(it.key());
+        }
+    }
+
+    return nullptr;
 }
 
 std::optional<size_t> MixerPanelModel::vcaGroupIndexOf(const InstrumentTrackId& instrumentTrackId) const
@@ -1052,6 +1276,14 @@ void MixerPanelModel::loadOutputParams(MixerChannelItem* item, const AudioOutput
 
     item->loadOutputParams(params);
     updateOutputResourceItemCount();
+
+    // A VCA strip's aux send knobs follow its members' sends
+    const MixerChannelItem::Type type = item->type();
+    if (type == MixerChannelItem::Type::PrimaryInstrument || type == MixerChannelItem::Type::SecondaryInstrument) {
+        if (const std::optional<size_t> groupIndex = vcaGroupIndexOf(item->instrumentTrackId())) {
+            refreshVcaAuxSends(*groupIndex);
+        }
+    }
 }
 
 void MixerPanelModel::updateOutputResourceItemCount()

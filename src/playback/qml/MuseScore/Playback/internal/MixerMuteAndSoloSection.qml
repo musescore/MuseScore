@@ -44,8 +44,6 @@ MixerPanelSection {
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
 
-            visible: content.channelItem.type !== MixerChannelItem.Vca
-
             spacing: 6
 
             FlatToggleButton {

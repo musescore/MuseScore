@@ -654,6 +654,9 @@ VcaGroupList ProjectAudioSettings::vcaGroupsFromJson(const QJsonArray& array) co
         VcaGroup group;
         group.name = groupObject.value("name").toString();
         group.volume = groupObject.value("volumeDb").toVariant().toFloat();
+        group.balance = groupObject.value("balance").toVariant().toFloat();
+        group.muted = groupObject.value("mute").toBool();
+        group.solo = groupObject.value("solo").toBool();
 
         for (const QJsonValue memberValue : groupObject.value("members").toArray()) {
             QJsonObject memberObject = memberValue.toObject();
@@ -690,6 +693,9 @@ QJsonArray ProjectAudioSettings::vcaGroupsToJson(const VcaGroupList& groups) con
         QJsonObject groupObject;
         groupObject.insert("name", group.name.toQString());
         groupObject.insert("volumeDb", group.volume.raw());
+        groupObject.insert("balance", group.balance.raw());
+        groupObject.insert("mute", group.muted);
+        groupObject.insert("solo", group.solo);
         groupObject.insert("members", membersArray);
 
         result.append(groupObject);

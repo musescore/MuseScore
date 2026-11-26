@@ -248,5 +248,6 @@ protected:
     muse::ui::NavigationPanel* m_panel = nullptr;
 
     bool m_outputResourceItemsLoading = false;
+    bool m_auxSendItemsLoading = false;
 };
 }

@@ -221,6 +221,7 @@ private:
 
     void updateSoloMuteStates();
     void updateAuxMuteStates();
+    void updateVcaSoloMuteTrackIds(engraving::InstrumentTrackIdSet& mutedTrackIds, engraving::InstrumentTrackIdSet& soloedTrackIds) const;
 
     using TrackAddFinished = std::function<void ()>;
 
@@ -289,6 +290,10 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, AutomationEnvelopes> m_automationEnvelopesCache; // only tracks with automation
     AutomationEnvelopes m_masterAutomationEnvelopes;
+
+    project::IProjectAudioSettingsPtr m_vcaAudioSettings;
+    engraving::InstrumentTrackIdSet m_vcaMutedTrackIds;
+    engraving::InstrumentTrackIdSet m_vcaSoloedTrackIds;
 
     muse::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;

@@ -77,18 +77,26 @@ struct AudioOutputParams {
     }
 };
 
-//! NOTE A VCA group controls the volume of its member tracks without routing audio through it.
-//! Moving the group fader shifts every member's own volume by the same number of dB,
-//! so the members' volumes always hold the real result and stay valid without the group.
+//! NOTE A VCA group controls its member tracks without routing audio through it.
+//! Moving the group fader or pan knob shifts every member's own volume or pan by the same amount,
+//! so the members' settings always hold the real result and stay valid without the group.
+//! Muting or soloing the group mutes or solos the members during playback
+//! without changing their own mute and solo buttons.
 struct VcaGroup {
     muse::String name;
     muse::audio::volume_db_t volume = 0.f;
+    muse::audio::balance_t balance = 0.f;
+    bool muted = false;
+    bool solo = false;
     std::vector<engraving::InstrumentTrackId> members;
 
     bool operator ==(const VcaGroup& other) const
     {
         return name == other.name
                && muse::is_equal(volume, other.volume)
+               && muse::is_equal(balance, other.balance)
+               && muted == other.muted
+               && solo == other.solo
                && members == other.members;
     }
 };

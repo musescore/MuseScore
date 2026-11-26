@@ -24,6 +24,8 @@
 
 #include <QPointer>
 
+#include <cmath>
+
 #include "defer.h"
 #include "translation.h"
 #include "log.h"
@@ -368,6 +370,21 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
 
         emit auxSendItemListChanged();
     }, async::Asyncable::Mode::SetReplace);
+
+    // Show the new values on the existing knobs without sending them back as a change
+    {
+        m_auxSendItemsLoading = true;
+        DEFER {
+            m_auxSendItemsLoading = false;
+        };
+
+        for (auto it = m_auxSendItems.begin(); it != m_auxSendItems.end(); ++it) {
+            if (it.key() < auxSends.size()) {
+                it.value()->setIsActive(auxSends[it.key()].active);
+                it.value()->setAudioSignalPercentage(static_cast<int>(std::lround(auxSends[it.key()].signalAmount * 100.f)));
+            }
+        }
+    }
 
     if (m_auxSendItems.size() == static_cast<int>(auxSends.size())) {
         return;
@@ -747,6 +764,10 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     newItem->blockSignals(false);
 
     connect(newItem, &AuxSendItem::isActiveChanged, this, [this, index](bool active) {
+        if (m_auxSendItemsLoading) {
+            return;
+        }
+
         IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
             return;
         }
@@ -756,6 +777,10 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     });
 
     connect(newItem, &AuxSendItem::audioSignalPercentageChanged, this, [this, index](int percentage) {
+        if (m_auxSendItemsLoading) {
+            return;
+        }
+
         IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {
             return;
         }

@@ -29,6 +29,7 @@
 #include <qqmlintegration.h>
 
 #include <optional>
+#include <vector>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -115,7 +116,15 @@ private:
 
     void reloadVcaItems();
     int vcaInsertIndex() const;
-    void onVcaVolumeChangeRequested(MixerChannelItem* vcaItem, float requestedVolume);
+    void onVcaControlParamsChanged(MixerChannelItem* vcaItem);
+    bool shiftVcaMembersVolume(project::VcaGroup& group, float requestedVolume) const;
+    bool shiftVcaMembersBalance(project::VcaGroup& group, int requestedBalance, float balanceScale) const;
+    void onVcaSoloMuteStateChanged(MixerChannelItem* vcaItem, const notation::INotationSoloMuteState::SoloMuteState& state);
+    void onVcaAuxSendsChangeRequested(MixerChannelItem* vcaItem, const muse::audio::AuxSendsParams& requested);
+    muse::audio::AuxSendsParams vcaAuxSends(const project::VcaGroup& group) const;
+    void refreshVcaAuxSends(size_t groupIndex);
+    std::vector<MixerChannelItem*> vcaMemberItems(const project::VcaGroup& group) const;
+    MixerChannelItem* findVcaChannelItem(size_t groupIndex) const;
 
     std::optional<size_t> vcaGroupIndexOf(const engraving::InstrumentTrackId& instrumentTrackId) const;
     std::optional<size_t> vcaGroupIndexOf(const MixerChannelItem* vcaItem) const;
