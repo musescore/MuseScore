@@ -120,10 +120,8 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
 
     // Find the part of the line inside the mask, in unit of fraction of the line.
     const PointF lineVector = end - start;
-    // Make pessimistic assumption that the whole line is masked...
     double maskEntryFraction = 0.0;
     double maskExitFraction = 1.0;
-    // Whether it clips with mask in one axis.
     auto isClipping = [&maskEntryFraction, &maskExitFraction](double lineOrigin, double lineDelta,
                                                               double maskStart, double maskEnd) -> bool {
         if (muse::RealIsNull(lineDelta)) {
@@ -134,7 +132,7 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
         if (axisEntryFraction > axisExitFraction) {
             std::swap(axisEntryFraction, axisExitFraction);
         }
-        // ...then calculate actual masked range in each axis optimistically
+        // only count a segment as masked when both axes report it masked.
         maskEntryFraction = std::max(maskEntryFraction, axisEntryFraction);
         maskExitFraction = std::min(maskExitFraction, axisExitFraction);
         return maskEntryFraction <= maskExitFraction;
@@ -156,6 +154,66 @@ void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& sh
     if (ldata->hideEnd) {
         end = origin + lineVector * maskExitFraction;
     }
+}
+
+bool TextLineBaseSegment::isMiddleTextCramped() const
+{
+    if (m_middleText->empty()) {
+        return false;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+    const RectF middleBounds = m_middleText->ldata()->bbox().translated(m_middleText->pos()).adjusted(-padding, 0.0, padding, 0.0);
+    return (!m_text->empty() && middleBounds.intersects(m_text->ldata()->bbox().translated(m_text->pos())))
+           || (!m_endText->empty() && middleBounds.intersects(m_endText->ldata()->bbox().translated(m_endText->pos())));
+}
+
+double TextLineBaseSegment::layoutEndText(Shape& shape)
+{
+    if (m_endText->empty()) {
+        return 0.0;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    double clearance = 0.0;
+    if (tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO) {
+        clearance = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+        switch (m_endText->position()) {
+        case AlignH::RIGHT:
+            clearance += m_endText->ldata()->bbox().width();
+            break;
+        case AlignH::HCENTER:
+            clearance += m_endText->ldata()->bbox().width() / 2;
+            break;
+        default:
+            break;
+        }
+    }
+    const double endTextX = std::max(pos2().x(), shape.bbox().right() + clearance);
+    m_endText->mutldata()->setPosX(endTextX);
+    shape.add(m_endText->ldata()->bbox().translated(m_endText->pos()), this);
+    return clearance;
+}
+
+void TextLineBaseSegment::layoutCrampedTexts(Shape& shape)
+{
+    if (m_middleText->empty() || (m_text->empty() && m_endText->empty())) {
+        return;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+    // Reset the shape, since now we need to move the end text further away to make room for mid text
+    shape = Shape();
+    if (!m_text->empty()) {
+        shape.add(m_text->ldata()->bbox().translated(m_text->pos()), this);
+    }
+    const RectF middleBounds = m_middleText->ldata()->bbox();
+    m_middleText->mutldata()->setPos(PointF(shape.bbox().right() + padding - middleBounds.left(), -middleBounds.center().y()));
+    mutldata()->setMask(Shape());
+    shape.add(m_middleText->ldata()->bbox().translated(m_middleText->pos()), m_middleText);
+    layoutEndText(shape);
 }
 
 bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)

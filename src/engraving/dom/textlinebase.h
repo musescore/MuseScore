@@ -64,6 +64,9 @@ public:
     Text* middleText() const { return m_middleText; }
 
     void layoutMiddleText(PointF& start, PointF& end, Shape& shape);
+    bool isMiddleTextCramped() const;
+    double layoutEndText(Shape& shape);
+    void layoutCrampedTexts(Shape& shape);
 
     struct LayoutData : public EngravingItem::LayoutData {
         std::array<PointF, 6> points;

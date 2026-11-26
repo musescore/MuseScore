@@ -7,6 +7,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
 #include "engraving/rendering/iscorerenderer.h"
+#include "engraving/rendering/single/singlerenderer.h"
 
 #include "utils/scorerw.h"
 
@@ -58,12 +59,6 @@ TEST_F(Engraving_MiddleTextTests, middleTextAcrossSystems)
         const PointF textCenter = textSegment->middleText()->ldata()->bbox().translated(textSegment->middleText()->pos()).center();
         EXPECT_NEAR(textCenter.x(), midpoint.x(), 1e-6);
         EXPECT_NEAR(textCenter.y(), midpoint.y(), 1e-6);
-    }
-
-    line->setProperty(Pid::MIDDLE_TEXT_CUT_THROUGH, false);
-    score->doLayout();
-    for (SpannerSegment* segment : line->spannerSegments()) {
-        EXPECT_TRUE(toTextLineBaseSegment(segment)->ldata()->mask().empty());
     }
 }
 
@@ -175,3 +170,144 @@ TEST_F(Engraving_MiddleTextLayoutTests, middleTextDiagonalLengths)
         EXPECT_EQ(ld->npoints, 0);
     }
 }
+
+struct MiddleTextLayoutMode {
+    bool single;
+    bool diagonal;
+    double endY;
+};
+
+class Engraving_MiddleTextOverflowTests : public Engraving_MiddleTextLayoutTests, public ::testing::WithParamInterface<MiddleTextLayoutMode>
+{
+protected:
+    const TextLineBaseSegment::LayoutData* layout()
+    {
+        if (GetParam().single) {
+            rendering::single::SingleRenderer renderer;
+            m_line.setSpannerSegments({ &m_segment });
+            renderer.layoutItem(&m_line);
+            m_line.setSpannerSegments({});
+            return m_segment.ldata();
+        }
+        return Engraving_MiddleTextLayoutTests::layout();
+    }
+};
+
+TEST_F(Engraving_MiddleTextLayoutTests, middleTextSingleHiddenLine)
+{
+    m_line.setBeginText(u"Begin");
+    m_line.setEndText(u"End");
+    m_line.setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+    m_line.setEndTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+    rendering::single::SingleRenderer renderer;
+    for (HookType hook : { HookType::NONE, HookType::HOOK_45, HookType::HOOK_90T, HookType::ARROW_FILLED }) {
+        SCOPED_TRACE(static_cast<int>(hook));
+        m_line.setBeginHookType(hook);
+        m_line.setEndHookType(hook);
+        m_line.setLineVisible(true);
+        m_segment.setPos2(PointF(30.0 * m_line.spatium(), 0.0));
+        m_line.setSpannerSegments({ &m_segment });
+        renderer.layoutItem(&m_line);
+        m_line.setSpannerSegments({});
+        ASSERT_GT(m_segment.ldata()->npoints, 0);
+
+        m_line.setLineVisible(false);
+        for (double length : { 30.0, 1.0 }) {
+            SCOPED_TRACE(length);
+            m_segment.setPos2(PointF(length * m_line.spatium(), 0.0));
+            m_line.setSpannerSegments({ &m_segment });
+            renderer.layoutItem(&m_line);
+            m_line.setSpannerSegments({});
+            const auto ld = m_segment.ldata();
+            const RectF beginBounds = m_segment.text()->ldata()->bbox().translated(m_segment.text()->pos());
+            const RectF middleBounds = m_segment.middleText()->ldata()->bbox().translated(m_segment.middleText()->pos());
+            const RectF endBounds = m_segment.endText()->ldata()->bbox().translated(m_segment.endText()->pos());
+            EXPECT_EQ(ld->npoints, 0);
+            EXPECT_EQ(ld->shape().size(), 3u);
+            for (const RectF& bounds : { beginBounds, middleBounds, endBounds }) {
+                EXPECT_TRUE(ld->shape().bbox().contains(bounds));
+            }
+            if (length == 30.0) {
+                EXPECT_NEAR(middleBounds.center().x(), m_segment.pos2().x() * 0.5, 1e-6);
+                EXPECT_NEAR(middleBounds.center().y(), 0.0, 1e-6);
+            } else {
+                const double gap = m_line.absoluteFromSpatium(m_line.gapBetweenTextAndLine());
+                EXPECT_NEAR(middleBounds.left() - beginBounds.right(), gap, 1e-6);
+                EXPECT_NEAR(endBounds.left() - middleBounds.right(), gap, 1e-6);
+            }
+        }
+    }
+}
+
+TEST_P(Engraving_MiddleTextOverflowTests, middleTextAfterOverlongBeginning)
+{
+    m_line.setDiagonal(GetParam().diagonal);
+    const Align middleAlign = m_segment.middleText()->align();
+    m_segment.setPos2(PointF(5.0, GetParam().endY) * m_line.spatium());
+    m_line.setBeginText(u"BeginTextBeingMuchTooLongForTheAvailableLine");
+    m_line.setEndText(u"End");
+    m_line.setBeginTextAlign({ AlignH::LEFT, AlignV::BASELINE });
+    m_line.setEndTextAlign({ AlignH::LEFT, AlignV::BASELINE });
+    for (HookType hook : { HookType::NONE, HookType::HOOK_45, HookType::ARROW_FILLED }) {
+        SCOPED_TRACE(static_cast<int>(hook));
+        m_line.setBeginHookType(hook);
+        m_line.setEndHookType(hook);
+        const auto ld = layout();
+        const RectF beginBounds = m_segment.text()->ldata()->bbox().translated(m_segment.text()->pos());
+        const RectF middleBounds = m_segment.middleText()->ldata()->bbox().translated(m_segment.middleText()->pos());
+        const RectF endBounds = m_segment.endText()->ldata()->bbox().translated(m_segment.endText()->pos());
+        const double gap = m_line.absoluteFromSpatium(m_line.gapBetweenTextAndLine());
+        EXPECT_GT(beginBounds.right(), m_segment.pos2().x());
+        EXPECT_NEAR(middleBounds.left() - beginBounds.right(), gap, 1e-6);
+        EXPECT_NEAR(endBounds.left() - middleBounds.right(), gap, 1e-6);
+        EXPECT_EQ(m_segment.middleText()->align(), middleAlign);
+        EXPECT_NEAR(m_segment.text()->ldata()->blocks.front().y(), 0.0, 1e-6);
+        EXPECT_NEAR(m_segment.endText()->ldata()->blocks.front().y(), 0.0, 1e-6);
+        EXPECT_NEAR(middleBounds.center().y(), 0.0, 1e-6);
+        for (const RectF& bounds : { beginBounds, middleBounds, endBounds }) {
+            EXPECT_TRUE(ld->shape().bbox().contains(bounds));
+        }
+        ASSERT_EQ(ld->npoints, 0);
+        EXPECT_TRUE(ld->mask().empty());
+    }
+}
+
+TEST_P(Engraving_MiddleTextOverflowTests, middleTextConsumesRemainingLine)
+{
+    m_line.setDiagonal(GetParam().diagonal);
+    m_line.setBeginText(u"Begin");
+    m_line.setMiddleText(u"Mid");
+    m_line.setGapBetweenTextAndLine(Spatium(0.1));
+    m_line.setEndText(u"End");
+    m_line.setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+    m_line.setEndTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+    const Align middleAlign = m_segment.middleText()->align();
+    const double endY = GetParam().endY * m_line.spatium();
+    m_segment.setPos2(PointF(30.0 * m_line.spatium(), endY));
+    ASSERT_GT(layout()->npoints, 0);
+    const double gap = m_line.absoluteFromSpatium(m_line.gapBetweenTextAndLine());
+    const double beginWidth = m_segment.text()->ldata()->bbox().width();
+    const double middleWidth = m_segment.middleText()->ldata()->bbox().width();
+    m_segment.setPos2(PointF(beginWidth + 2.0 * gap + middleWidth * 0.5, endY));
+    const auto ld = layout();
+    const RectF beginBounds = m_segment.text()->ldata()->bbox().translated(m_segment.text()->pos());
+    const RectF middleBounds = m_segment.middleText()->ldata()->bbox().translated(m_segment.middleText()->pos());
+    const RectF endBounds = m_segment.endText()->ldata()->bbox().translated(m_segment.endText()->pos());
+    EXPECT_NEAR(middleBounds.left() - beginBounds.right(), gap, 1e-6);
+    EXPECT_NEAR(endBounds.left() - middleBounds.right(), gap, 1e-6);
+    EXPECT_NEAR(middleBounds.center().y(), beginBounds.center().y(), 1e-6);
+    EXPECT_NEAR(middleBounds.center().y(), endBounds.center().y(), 1e-6);
+    EXPECT_EQ(m_segment.middleText()->align(), middleAlign);
+    EXPECT_EQ(ld->npoints, 0);
+    EXPECT_TRUE(ld->mask().empty());
+    for (const RectF& bounds : { beginBounds, middleBounds, endBounds }) {
+        EXPECT_TRUE(ld->shape().bbox().contains(bounds));
+    }
+    m_segment.setPos2(PointF(30.0 * m_line.spatium(), endY));
+    EXPECT_GT(layout()->npoints, 0);
+}
+
+INSTANTIATE_TEST_SUITE_P(ScoreAndSingle, Engraving_MiddleTextOverflowTests, ::testing::Values(
+                             MiddleTextLayoutMode { false, false, 0.0 }, MiddleTextLayoutMode { true, false, 0.0 },
+                             MiddleTextLayoutMode { false, true, -2.0 }, MiddleTextLayoutMode { true, true, -2.0 },
+                             MiddleTextLayoutMode { false, true, 2.0 }, MiddleTextLayoutMode { true, true, 2.0 }));
