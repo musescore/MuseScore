@@ -64,7 +64,7 @@ public:
     MOCK_METHOD(INotationInteractionPtr, notationInteraction, (), (const, override));
     MOCK_METHOD(INotationPlaybackPtr, notationPlayback, (), (const, override));
 
-    MOCK_METHOD(QQuickItem*, asItem, (), (override));
+    MOCK_METHOD(void, setViewCursor, (ViewCursor), (override));
 
     MOCK_METHOD(void, startOutgoingDrag, (const OutgoingDrag&, const muse::PointF&), (override));
     MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));

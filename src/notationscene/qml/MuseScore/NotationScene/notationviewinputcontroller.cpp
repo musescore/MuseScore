@@ -24,8 +24,6 @@
 
 #include <set>
 
-#include <QQuickItem>
-#include <QTimer>
 #include <QtMath>
 
 #include "defer.h"
@@ -670,7 +668,7 @@ void NotationViewInputController::mousePressEvent(const muse::PointerEvent& even
     }
 
     // triple click
-    if (m_tripleClickPending) {
+    if (isTripleClickPending()) {
         if (viewInteraction()->isTextEditingStarted()) {
             viewInteraction()->selectText(mu::engraving::SelectTextType::All);
             return;
@@ -814,7 +812,7 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
     m_mouseDownInfo.dragAction = MouseDownInfo::PasteRangeOnRelease;
 
     const bool canDrop = viewInteraction()->updateDropRange(ctx.logicClickPos);
-    m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : Qt::ForbiddenCursor);
+    m_view->setViewCursor(canDrop ? ViewCursor::DragCopy : ViewCursor::Forbidden);
 
     return true;
 }
@@ -1079,7 +1077,7 @@ void NotationViewInputController::mouseMoveEvent(const muse::PointerEvent& event
         }
 
         const bool canDrop = viewInteraction()->updateDropRange(logicPos, preserveMeasureAlignment);
-        m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : Qt::ForbiddenCursor);
+        m_view->setViewCursor(canDrop ? ViewCursor::DragCopy : ViewCursor::Forbidden);
         return;
     }
     case MouseDownInfo::Nothing:
@@ -1191,7 +1189,7 @@ void NotationViewInputController::mouseReleaseEvent(const muse::PointerEvent& ev
 
     DEFER {
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
-        m_view->asItem()->setCursor(QCursor());
+        m_view->setViewCursor(ViewCursor::Default);
     };
 
     if (m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
@@ -1305,12 +1303,7 @@ void NotationViewInputController::mouseDoubleClickEvent(const muse::PointerEvent
         return;
     }
 
-    // Can't pass `this` as the second argument, because not QObject. But `m_view` works as well.
-    QTimer::singleShot(uiConfiguration()->doubleClickIntervalMs(), m_view->asItem(), [this]() {
-        m_tripleClickPending = false;
-    });
-
-    m_tripleClickPending = true;
+    m_lastDoubleClickTime = std::chrono::steady_clock::now();
 
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->selectText(mu::engraving::SelectTextType::Word);
@@ -1465,7 +1458,7 @@ void NotationViewInputController::keyPressEvent(muse::KeyEvent& event)
         // Cancel "Alt+click to paste range"
         viewInteraction()->endDrop();
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
-        m_view->asItem()->setCursor({});
+        m_view->setViewCursor(ViewCursor::Default);
         event.accept();
     } else if (viewInteraction()->isEditingElement()) {
         viewInteraction()->editElement(event);
@@ -1501,48 +1494,23 @@ void NotationViewInputController::inputMethodEvent(muse::TextInputEvent& event)
     }
 }
 
-bool NotationViewInputController::canHandleInputMethodQuery(Qt::InputMethodQuery query) const
+//! NOTE: Copied from ScoreView::inputMethodQuery
+std::optional<RectF> NotationViewInputController::textCursorRect() const
 {
     if (!viewInteraction()->isTextEditingStarted()) {
-        return false;
+        return std::nullopt;
     }
 
-    static const QList<Qt::InputMethodQuery> allowedQueries {
-        Qt::ImCursorRectangle,
-        Qt::ImEnabled,
-        Qt::ImHints
-    };
+    const TextBase* editedText = viewInteraction()->editedText();
+    RectF cursorRect = editedText->cursor()->cursorRect().translated(editedText->canvasPos());
 
-    return allowedQueries.contains(query);
+    return m_view->fromLogical(cursorRect);
 }
 
-//! NOTE: Copied from ScoreView::inputMethodQuery
-QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery query) const
+bool NotationViewInputController::isTripleClickPending() const
 {
-    if (!viewInteraction()->isTextEditingStarted()) {
-        return QVariant();
-    }
-
-    switch (query) {
-    case Qt::ImCursorRectangle: {
-        const TextBase* editedText = viewInteraction()->editedText();
-        RectF cursorRect = editedText->cursor()->cursorRect().translated(editedText->canvasPos());
-
-        QRectF rect = m_view->fromLogical(cursorRect).toQRectF();
-        rect.setWidth(1);     // InputMethod doesn't display properly if width left at 0
-        rect.setHeight(rect.height() + 10);     // add a little margin under the cursor
-
-        return rect;
-    }
-    case Qt::ImEnabled:
-        return true;     // TextBase will always accept input method input
-    case Qt::ImHints:
-        return Qt::ImhNone;     // No hints for now, but maybe in future will give hints
-    default:
-        break;
-    }
-
-    return QVariant();
+    const auto elapsed = std::chrono::steady_clock::now() - m_lastDoubleClickTime;
+    return elapsed < std::chrono::milliseconds(uiConfiguration()->doubleClickIntervalMs());
 }
 
 void NotationViewInputController::dragEnterEvent(muse::DragEvent& event)

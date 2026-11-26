@@ -1306,3 +1306,50 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_
 
     EXPECT_EQ(endedDrops, 1);
 }
+
+TEST_F(NotationViewInputControllerTests, TripleClick_PressSoonAfterDoubleClickInTheText_SelectsAllText)
+{
+    //! [GIVEN] The text is being edited, the double click interval is long
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(true));
+    ON_CALL(*m_uiConfiguration, doubleClickIntervalMs()).WillByDefault(Return(60000));
+
+    {
+        InSequence seq;
+
+        //! [THEN] The double click selects the word, the next press selects all the text
+        EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::Word)).Times(1);
+        EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::All)).Times(1);
+    }
+
+    //! [WHEN] Double click and then press
+    m_controller->mouseDoubleClickEvent(muse::PointerEvent());
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton));
+}
+
+TEST_F(NotationViewInputControllerTests, TripleClick_PressAfterTheDoubleClickInterval_DoesNotSelectAllText)
+{
+    //! [GIVEN] The text is being edited, the double click interval is over at once
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(true));
+    ON_CALL(*m_uiConfiguration, doubleClickIntervalMs()).WillByDefault(Return(0));
+
+    //! [GIVEN] Nothing is selected, the press goes the usual way
+    const std::vector<EngravingItem*> noElements;
+    ON_CALL(*m_selection, elements()).WillByDefault(ReturnRef(noElements));
+
+    //! [THEN] Only the double click selects the word
+    EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::Word)).Times(1);
+    EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::All)).Times(0);
+
+    //! [WHEN] Double click and then press
+    m_controller->mouseDoubleClickEvent(muse::PointerEvent());
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton));
+}
+
+TEST_F(NotationViewInputControllerTests, TextCursorRect_TextIsNotEdited_ProvidesNothing)
+{
+    //! [GIVEN] The text is not being edited
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(false));
+
+    //! [THEN] There is no cursor of the text
+    EXPECT_FALSE(m_controller->textCursorRect().has_value());
+}

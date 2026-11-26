@@ -66,6 +66,7 @@ target_sources(notation PRIVATE
     types/staffparttypes.h
     types/stringtunings.h
     types/tempo.h
+    types/viewcursor.h
     types/viewmode.h
     types/zoomtype.h
 

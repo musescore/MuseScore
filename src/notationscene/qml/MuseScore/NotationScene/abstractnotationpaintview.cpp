@@ -602,9 +602,19 @@ INotationPlaybackPtr AbstractNotationPaintView::notationPlayback() const
     return notation() ? notation()->masterNotation()->playback() : nullptr;
 }
 
-QQuickItem* AbstractNotationPaintView::asItem()
+void AbstractNotationPaintView::setViewCursor(ViewCursor cursor)
 {
-    return this;
+    switch (cursor) {
+    case ViewCursor::Default:
+        QQuickItem::setCursor(QCursor());
+        break;
+    case ViewCursor::DragCopy:
+        QQuickItem::setCursor(Qt::DragCopyCursor);
+        break;
+    case ViewCursor::Forbidden:
+        QQuickItem::setCursor(Qt::ForbiddenCursor);
+        break;
+    }
 }
 
 INotationNoteInputPtr AbstractNotationPaintView::notationNoteInput() const
@@ -1342,8 +1352,23 @@ void AbstractNotationPaintView::inputMethodEvent(QInputMethodEvent* event)
 
 QVariant AbstractNotationPaintView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    if (isInited() && m_inputController->canHandleInputMethodQuery(query)) {
-        return m_inputController->inputMethodQuery(query);
+    if (isInited()) {
+        if (const std::optional<RectF> cursorRect = m_inputController->textCursorRect()) {
+            switch (query) {
+            case Qt::ImCursorRectangle: {
+                QRectF rect = cursorRect->toQRectF();
+                rect.setWidth(1); // InputMethod doesn't display properly if width left at 0
+                rect.setHeight(rect.height() + 10); // add a little margin under the cursor
+                return rect;
+            }
+            case Qt::ImEnabled:
+                return true; // TextBase will always accept input method input
+            case Qt::ImHints:
+                return Qt::ImhNone; // No hints for now, but maybe in future will give hints
+            default:
+                break;
+            }
+        }
     }
 
     return QQuickPaintedItem::inputMethodQuery(query);

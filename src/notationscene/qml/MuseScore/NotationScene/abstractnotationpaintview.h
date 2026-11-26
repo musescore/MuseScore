@@ -144,7 +144,7 @@ public:
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
-    QQuickItem* asItem() override;
+    void setViewCursor(ViewCursor cursor) override;
 
     void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) override;
     bool isOutgoingDragStarted() const override;

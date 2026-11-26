@@ -21,6 +21,9 @@
  */
 #pragma once
 
+#include <chrono>
+#include <optional>
+
 #include <QtEvents>
 
 #include "notation/inotationviewcontroller.h"
@@ -39,6 +42,7 @@
 #include "notation/inotationcontextconfiguration.h"
 #include "types/inputevents.h"
 #include "notation/types/outgoingdrag.h"
+#include "notation/types/viewcursor.h"
 #include "notation/types/viewmode.h"
 
 #include "notation/inotationcommandscontroller.h"
@@ -52,8 +56,6 @@
 #include "rcommand/icommanddispatcher.h"
 
 #include "abstractelementpopupmodel.h"
-
-class QQuickItem;
 
 namespace mu::notation {
 class IControlledView
@@ -96,7 +98,7 @@ public:
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 
-    virtual QQuickItem* asItem() = 0;
+    virtual void setViewCursor(ViewCursor cursor) = 0;
 
     virtual void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) = 0;
     virtual bool isOutgoingDragStarted() const = 0;
@@ -175,8 +177,8 @@ public:
     void keyReleaseEvent(muse::KeyEvent& event);
     void inputMethodEvent(muse::TextInputEvent& event);
 
-    bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    //! The cursor of the edited text in the view coordinates, if the text is being edited
+    std::optional<muse::RectF> textCursorRect() const;
 
     bool ignoreNextMouseContextMenuEvent() const { return m_ignoreNextMouseContextMenuEvent; }
 
@@ -250,7 +252,8 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
-    bool m_tripleClickPending = false;
+    bool isTripleClickPending() const;
+    std::chrono::steady_clock::time_point m_lastDoubleClickTime;
 
     struct MouseDownInfo {
         enum DragAction {
