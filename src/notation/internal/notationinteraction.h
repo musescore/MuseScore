@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iinputstate.h"
+#include "global/iclipboard.h"
 #include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 #include "interactive/iinteractive.h"
@@ -67,6 +68,7 @@ class NotationInteraction : public INotationInteraction, public IInteractionForS
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::IInputState> inputState;
+    muse::GlobalInject<muse::IClipboard> clipboard;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;

@@ -27,10 +27,7 @@
 #include <memory>
 #include <limits>
 
-#include <QClipboard>
-#include <QGuiApplication>
 #include <QKeySequence>
-#include <QMimeData>
 #include <QPainter>
 #include <QRectF>
 #include <QRegularExpression>
@@ -44,9 +41,6 @@
 #include "draw/types/pen.h"
 
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
-
-// TODO: Don't include from engraving/internal
-#include "types/qtmimedata.h"
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
@@ -4426,8 +4420,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
 
     textEl->mousePress(m_editData);
     if (m_editData.buttons == muse::MouseButton::MiddleButton) {
-        QString txt = QGuiApplication::clipboard()->text();
-        textEl->paste(txt);
+        textEl->paste(clipboard()->text());
     }
 
     notifyAboutTextEditingChanged();
@@ -5061,17 +5054,20 @@ void NotationInteraction::copySelection()
         m_editData.element->editCopy(m_editData);
         mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
-            QMimeData* mimeData = new QMimeData();
-            mimeData->setData(TextEditData::mimeRichTextFormat, ted->selectedText.toQString().toUtf8());
-            mimeData->setText(ted->selectedPlainText);
-            QGuiApplication::clipboard()->setMimeData(mimeData);
+            MimeData mimeData;
+            mimeData.setData(TextEditData::mimeRichTextFormat, ted->selectedText.toUtf8());
+            mimeData.setText(ted->selectedPlainText);
+            clipboard()->setMimeData(mimeData);
         }
     } else {
-        QMimeData* mimeData = selection()->qMimeData();
-        if (!mimeData) {
+        const String mimeType = selection()->mimeType();
+        if (mimeType.isEmpty()) {
             return;
         }
-        QGuiApplication::clipboard()->setMimeData(mimeData);
+
+        MimeData mimeData;
+        mimeData.setData(mimeType.toStdString(), selection()->mimeData());
+        clipboard()->setMimeData(mimeData);
     }
 }
 
@@ -5184,8 +5180,7 @@ void NotationInteraction::repeatSelection()
 
 void NotationInteraction::copyLyrics()
 {
-    QString text = score()->extractLyrics();
-    QGuiApplication::clipboard()->setText(text);
+    clipboard()->setText(score()->extractLyrics());
 }
 
 void NotationInteraction::pasteSelection(const Fraction& scale)
@@ -5196,9 +5191,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (isTextEditingStarted()) {
         pasteIntoTextEdit();
     } else {
-        const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
-        const muse::MimeData ma = muse::fromQtMimeData(mimeData);
-        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), ma, nullptr, scale);
+        const MimeData mimeData = clipboard()->mimeData();
+        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), mimeData, nullptr, scale);
         m_editData.element = nullptr;
     }
 
@@ -5216,15 +5210,15 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 
 void NotationInteraction::pasteIntoTextEdit()
 {
-    const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
-    if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
-        const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
+    const MimeData mimeData = clipboard()->mimeData();
+    if (mimeData.hasFormat(TextEditData::mimeRichTextFormat)) {
+        const String txt = String::fromUtf8(mimeData.data(TextEditData::mimeRichTextFormat));
         toTextBase(m_editData.element)->paste(txt);
         notifyAboutTextEditingChanged();
         return;
     }
 
-    QString clipboardText = mimeData->text();
+    QString clipboardText = mimeData.text().toQString();
     QString textForPaste = clipboardText;
     if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
         textForPaste = extractSyllable(clipboardText);
@@ -5246,7 +5240,7 @@ void NotationInteraction::pasteIntoTextEdit()
     }
 
     const QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
-    QGuiApplication::clipboard()->setText(textForNextPaste);
+    clipboard()->setText(String::fromQString(textForNextPaste));
 }
 
 void NotationInteraction::swapSelection()
@@ -5255,17 +5249,18 @@ void NotationInteraction::swapSelection()
         return;
     }
 
-    // Store the old selection...
-    mu::engraving::Selection& selection = score()->selection();
-    QByteArray oldSelection = selection.mimeData().toQByteArray();
+    // Store the old selection with its type, the pasting changes the selection...
+    const mu::engraving::Selection& selection = score()->selection();
+    const String oldMimeType = selection.mimeType();
+    const ByteArray oldSelection = selection.mimeData();
 
     // Paste using contents of clipboard...
     pasteSelection();
 
     // Save old selection to clipboard...
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setData(selection.mimeType(), oldSelection);
-    QGuiApplication::clipboard()->setMimeData(mimeData);
+    MimeData mimeData;
+    mimeData.setData(oldMimeType.toStdString(), oldSelection);
+    clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::deleteSelection()

@@ -24,6 +24,8 @@
 #include "async/processevents.h"
 #include "modularity/ioc.h"
 
+#include "global/tests/mocks/clipboardmock.h"
+
 #include "engraving/tests/utils/scorerw.h"
 
 #include "engraving/dom/dummyparent.h"
@@ -66,6 +68,11 @@ protected:
         m_configuration = std::make_shared<NiceMock<NotationConfigurationMock> >();
         modularity::globalIoc()->registerExport<INotationConfiguration>(TEST_MODULE, m_configuration);
 
+        //! NOTE The test environment has the real clipboard, it is replaced with the mock
+        modularity::globalIoc()->unregister<IClipboard>(TEST_MODULE);
+        m_clipboard = std::make_shared<NiceMock<ClipboardMock> >();
+        modularity::globalIoc()->registerExport<IClipboard>(TEST_MODULE, m_clipboard);
+
         m_score.reset(ScoreRW::readScore(TEST_SCORE_PATH));
         m_notation = std::make_shared<Notation>(nullptr, m_iocCtx, m_score.get());
     }
@@ -77,6 +84,7 @@ protected:
         m_score.reset();
 
         modularity::globalIoc()->unregister<INotationConfiguration>(TEST_MODULE);
+        modularity::globalIoc()->unregister<IClipboard>(TEST_MODULE);
         modularity::removeIoC(m_iocCtx);
     }
 
@@ -123,6 +131,7 @@ protected:
     modularity::ContextPtr m_iocCtx;
     std::shared_ptr<SelectInstrumentsScenarioMock> m_selectInstrumentScenario;
     std::shared_ptr<NotationConfigurationMock> m_configuration;
+    std::shared_ptr<ClipboardMock> m_clipboard;
     std::unique_ptr<MasterScore> m_score;
     std::shared_ptr<Notation> m_notation;
     async::Promise<InstrumentTemplate>::Resolve m_resolve;
@@ -336,4 +345,33 @@ TEST_F(Notation_NotationInteractionTests, OutgoingDragRange_RangeIsSelected_Prov
     //! [THEN] There is no preview
     EXPECT_FALSE(drag->previewRect.isValid());
     EXPECT_FALSE(drag->paintPreview);
+}
+
+TEST_F(Notation_NotationInteractionTests, SwapSelection_PasteChangesTheSelection_ClipboardGetsTheOriginalDataWithItsType)
+{
+    //! [GIVEN] The clipboard has a range
+    selectFirstMeasure();
+    ASSERT_TRUE(m_notation->interaction()->selection()->isRange());
+
+    MimeData rangeData;
+    rangeData.setData(m_notation->interaction()->selection()->mimeType().toStdString(), m_notation->interaction()->selection()->mimeData());
+    ON_CALL(*m_clipboard, mimeData()).WillByDefault(Return(rangeData));
+
+    //! [GIVEN] A chord is selected, its type of the data is not the type of a range
+    selectFirstChordRest();
+    const INotationSelectionPtr selection = m_notation->interaction()->selection();
+    const std::string originalType = selection->mimeType().toStdString();
+    const ByteArray originalData = selection->mimeData();
+    ASSERT_NE(originalType, rangeData.formats().front());
+
+    //! [THEN] The original data is put to the clipboard with the type, it was taken with, even if the pasted range is selected
+    MimeData swapped;
+    EXPECT_CALL(*m_clipboard, setMimeData(_)).WillOnce(SaveArg<0>(&swapped));
+
+    //! [WHEN] Swapping the selection with the clipboard
+    m_notation->interaction()->swapSelection();
+
+    ASSERT_TRUE(swapped.hasFormat(originalType));
+    EXPECT_EQ(swapped.data(originalType), originalData);
+    EXPECT_EQ(swapped.formats().size(), 1u);
 }

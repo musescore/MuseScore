@@ -21,8 +21,6 @@
  */
 #include "notationselection.h"
 
-#include <QMimeData>
-
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
@@ -91,17 +89,9 @@ muse::ByteArray NotationSelection::mimeData() const
     return score()->selection().mimeData();
 }
 
-QMimeData* NotationSelection::qMimeData() const
+muse::String NotationSelection::mimeType() const
 {
-    QString mimeType = score()->selection().mimeType();
-    if (mimeType.isEmpty()) {
-        return nullptr;
-    }
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setData(mimeType, score()->selection().mimeData().toQByteArray());
-
-    return mimeData;
+    return score()->selection().mimeType();
 }
 
 EngravingItem* NotationSelection::element() const

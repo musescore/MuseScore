@@ -29,8 +29,6 @@
 
 #include "inotationselectionrange.h"
 
-class QMimeData;
-
 namespace mu::engraving {
 class EngravingItem;
 class MeasureBase;
@@ -62,7 +60,7 @@ public:
 
     virtual muse::Ret canCopy() const = 0;
     virtual muse::ByteArray mimeData() const = 0;
-    virtual QMimeData* qMimeData() const = 0;
+    virtual muse::String mimeType() const = 0;
 
     virtual engraving::EngravingItem* element() const = 0;
     virtual const std::vector<engraving::EngravingItem*>& elements() const = 0;

@@ -69,7 +69,7 @@ public:
 
     muse::Ret canCopy() const override;
     muse::ByteArray mimeData() const override;
-    QMimeData* qMimeData() const override;
+    muse::String mimeType() const override;
 
     engraving::EngravingItem* element() const override;
     const std::vector<engraving::EngravingItem*>& elements() const override;
