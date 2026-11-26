@@ -586,30 +586,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        SPLIT_MEASURE_COMMAND,
-        TranslatableString("action", "&Split measure before selected note/rest"),
-        TranslatableString("action", "Split measure before selected note/rest"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        JOIN_MEASURES_COMMAND,
-        TranslatableString("action", "&Join selected measures"),
-        TranslatableString("action", "Join selected measures"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        OPEN_EDIT_STYLE_COMMAND,
-        TranslatableString("action", "&Style…"),
-        TranslatableString("action", "Format style"),
-        InputSchema({
-            { "page_code", Arg(DataType::String, u"Page code") },
-            { "sub_page_code", Arg(DataType::String, u"Sub page code") },
-        }),
-        Decoration()
-    },
+    makeCommandInfo<SplitMeasureCommand>(),
+    makeCommandInfo<JoinMeasuresCommand>(),
+    makeCommandInfo<OpenEditStyleCommand>(),
     makeCommandInfo<OpenPageSettingsCommand>(),
     makeCommandInfo<OpenStaffPropertiesCommand>(),
     makeCommandInfo<OpenEditStringsCommand>(),
@@ -632,33 +611,15 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<AddOttavaCommand>(),
     makeCommandInfo<AddOttava8vaCommand>(),
     makeCommandInfo<AddOttava8vbCommand>(),
-    CommandInfo{
-        ADD_DYNAMIC_COMMAND,
-        TranslatableString("action", "&Dynamic"),
-        TranslatableString("action", "Add dynamic"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddDynamicCommand>(),
     makeCommandInfo<AddHairpinCommand>(),
     makeCommandInfo<AddHairpinCrescendoCommand>(),
     makeCommandInfo<AddHairpinDiminuendoCommand>(),
     makeCommandInfo<ChangeDynamicCommand>(),
     makeCommandInfo<IncreaseDynamicCommand>(),
     makeCommandInfo<DecreaseDynamicCommand>(),
-    CommandInfo{
-        ADD_NOTELINE_COMMAND,
-        TranslatableString("action", "&Note-anchored line"),
-        TranslatableString("action", "Add note-anchored line"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_IMAGE_COMMAND,
-        TranslatableString("action", "Image"),
-        TranslatableString("action", "Add image"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddNoteLineCommand>(),
+    makeCommandInfo<AddImageCommand>(),
 
     makeCommandInfo<AddFiguredBassCommand>(),
 
@@ -684,20 +645,9 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ShowSoundFlagsCommand>(),
     makeCommandInfo<ShowIrregularCommand>(),
     makeCommandInfo<ToggleConcertPitchCommand>(),
-    CommandInfo{
-        STAFF_EXPLODE_COMMAND,
-        TranslatableString("action", "&Explode"),
-        TranslatableString("action", "Explode"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        STAFF_IMPLODE_COMMAND,
-        TranslatableString("action", "&Implode"),
-        TranslatableString("action", "Implode"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<StaffImplodeExplodeCommand>(),
+    makeCommandInfo<StaffExplodeCommand>(),
+    makeCommandInfo<StaffImplodeCommand>(),
 
     makeCommandInfo<SetBeamSelectedRangeCommand>(),
 
@@ -749,75 +699,24 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        SLASH_FILL_COMMAND,
-        TranslatableString("action", "Fill with &slashes"),
-        TranslatableString("action", "Fill with slashes"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        SLASH_RHYTHM_COMMAND,
-        TranslatableString("action", "Toggle rhythmic sl&ash notation"),
-        TranslatableString("action", "Toggle rhythmic slash notation"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        PITCH_SPELL_COMMAND,
-        TranslatableString("action", "&Optimize enharmonic spelling"),
-        TranslatableString("action", "Optimize enharmonic spelling"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        PITCH_SPELL_SHARPS_COMMAND,
-        TranslatableString("action", "Respell pitches with &sharps"),
-        TranslatableString("action", "Respell pitches with sharps"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        PITCH_SPELL_FLATS_COMMAND,
-        TranslatableString("action", "Respell pitches with &flats"),
-        TranslatableString("action", "Respell pitches with flats"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENHARMONIC_SPELL_BOTH_COMMAND,
-        TranslatableString("action", "Change enharmonic spelling (concert and transposed &pitch)"),
-        TranslatableString("action", "Change enharmonic spelling (concert and transposed pitch)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ENHARMONIC_SPELL_CURRENT_COMMAND,
-        TranslatableString("action", "Change enharmonic spelling (&current pitch mode only)"),
-        TranslatableString("action", "Change enharmonic spelling (current pitch mode only)"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<SlashFillCommand>(),
+    makeCommandInfo<SlashRhythmCommand>(),
+    makeCommandInfo<OptimizeEnharmonicSpellingCommand>(),
+    makeCommandInfo<RespellPitchesCommand>(),
+    makeCommandInfo<RespellPitchesSharpsCommand>(),
+    makeCommandInfo<RespellPitchesFlatsCommand>(),
+    makeCommandInfo<ChangeEnharmonicSpellingCommand>(),
+    makeCommandInfo<ChangeEnharmonicSpellingBothCommand>(),
+    makeCommandInfo<ChangeEnharmonicSpellingCurrentCommand>(),
 
     makeCommandInfo<RegroupRhythmsCommand>(),
     makeCommandInfo<ResequenceRehearsalMarksCommand>(),
     makeCommandInfo<UnrollRepeatsCommand>(),
     makeCommandInfo<RepeatSelectionCommand>(),
 
-    CommandInfo{
-        ADD_UP_BOW_COMMAND,
-        TranslatableString("action", "Toggle up bow"),
-        TranslatableString("action", "Add bowing: up bow"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        ADD_DOWN_BOW_COMMAND,
-        TranslatableString("action", "Toggle down bow"),
-        TranslatableString("action", "Add bowing: down bow"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ToggleBowCommand>(),
+    makeCommandInfo<ToggleUpBowCommand>(),
+    makeCommandInfo<ToggleDownBowCommand>(),
     makeCommandInfo<TransposeSemitoneCommand>(),
     makeCommandInfo<TransposeSemitoneUpCommand>(),
     makeCommandInfo<TransposeSemitoneDownCommand>(),
@@ -859,13 +758,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-    CommandInfo{
-        ADD_FULL_MEASURE_REST_COMMAND,
-        TranslatableString("action", "Full measure rest"),
-        TranslatableString("action", "Insert full measure rest"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<AddFullMeasureRestCommand>(),
 
     // TAB commands
     CommandInfo {

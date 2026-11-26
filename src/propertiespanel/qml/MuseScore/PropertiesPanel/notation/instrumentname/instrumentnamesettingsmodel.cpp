@@ -51,10 +51,7 @@ void InstrumentNameSettingsModel::openStyleSettings()
         subPageCode = "instrument-name-short";
     }
 
-    commandDispatcher()->dispatch(OPEN_EDIT_STYLE_COMMAND, {
-        { "page_code", muse::Val("text-styles") },
-        { "sub_page_code", muse::Val(subPageCode) },
-    });
+    commandDispatcher()->dispatch(OpenEditStyleCommand { "text-styles", subPageCode });
 }
 
 void InstrumentNameSettingsModel::openStaffAndPartProperties()
