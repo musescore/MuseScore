@@ -83,6 +83,7 @@ public:
 
 private:
     friend class NotationProject;
+    friend class ProjectAudioSettingsTests;
     ProjectAudioSettings(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
