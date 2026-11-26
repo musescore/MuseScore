@@ -52,8 +52,6 @@
 #include "scorecallbacks.h"
 #include "notationselection.h"
 
-class QDrag;
-
 namespace mu::engraving {
 class Lasso;
 class Transaction;
@@ -136,10 +134,8 @@ public:
     muse::async::Notification dragChanged() const override;
 
     bool isOutgoingDragElementAllowed(const EngravingItem* element) const override;
-    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) override;
-    void startOutgoingDragRange(QObject* dragSource) override;
-    bool isOutgoingDragStarted() const override;
-    void endOutgoingDrag() override;
+    std::optional<OutgoingDrag> outgoingDragElement(const EngravingItem* element) const override;
+    std::optional<OutgoingDrag> outgoingDragRange() const override;
 
     // Drop
     bool startDropSingle(const muse::ByteArray& edata) override;
@@ -581,8 +577,6 @@ private:
     DragData m_dragData;
     muse::async::Notification m_dragChanged;
     std::vector<muse::LineF> m_anchorLines;
-
-    QDrag* m_outgoingDrag = nullptr;
 
     mu::engraving::EditData m_editData;
 

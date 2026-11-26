@@ -58,6 +58,7 @@ target_sources(notation PRIVATE
     types/instrumentstypes.h
     types/loopboundaries.h
     types/noteinputtypes.h
+    types/outgoingdrag.h
     types/propertystyletypes.h
     types/scorecreateoptions.h
     types/staffparttypes.h

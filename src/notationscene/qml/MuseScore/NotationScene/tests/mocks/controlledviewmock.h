@@ -66,6 +66,10 @@ public:
 
     MOCK_METHOD(QQuickItem*, asItem, (), (override));
 
+    MOCK_METHOD(void, startOutgoingDrag, (const OutgoingDrag&, const muse::PointF&), (override));
+    MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));
+    MOCK_METHOD(void, endOutgoingDrag, (), (override));
+
     MOCK_METHOD(void, scheduleRedraw, (const muse::RectF&), (override));
 };
 }

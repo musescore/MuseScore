@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <QDrag>
+#include <QPointer>
 #include <QTimer>
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
@@ -32,6 +34,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "notation/types/outgoingdrag.h"
 #include "project/iprojectsession.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
@@ -139,6 +142,10 @@ public:
     INotationPlaybackPtr notationPlayback() const override;
 
     QQuickItem* asItem() override;
+
+    void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) override;
+    bool isOutgoingDragStarted() const override;
+    void endOutgoingDrag() override;
 
     void scheduleRedraw(const muse::RectF& rect = muse::RectF()) override;
 
@@ -307,6 +314,8 @@ private:
     bool m_readonly = false;
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
+
+    QPointer<QDrag> m_outgoingDrag;
     bool m_isMainView = false;
 
     bool m_autoScrollEnabled = true;

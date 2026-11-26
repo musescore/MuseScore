@@ -1043,7 +1043,7 @@ void NotationViewInputController::mouseMoveEvent(const muse::PointerEvent& event
 
     const bool isDragStarted = m_isCanvasDragged
                                || viewInteraction()->isDragStarted()
-                               || viewInteraction()->isOutgoingDragStarted();
+                               || m_view->isOutgoingDragStarted();
     if (!isDragStarted) {
         // only start drag operations after a minimum of movement:
         const bool canStartDrag = physicalDragDelta.manhattanLength() > 4;
@@ -1058,13 +1058,17 @@ void NotationViewInputController::mouseMoveEvent(const muse::PointerEvent& event
             const EngravingItem* element = viewInteraction()->hitElementContext().element;
             const PointF hotSpot = m_mouseDownInfo.logicalBeginPoint - element->canvasBoundingRect().topLeft();
 
-            viewInteraction()->startOutgoingDragElement(element, m_view->asItem(), hotSpot);
+            if (const std::optional<OutgoingDrag> drag = viewInteraction()->outgoingDragElement(element)) {
+                m_view->startOutgoingDrag(*drag, hotSpot);
+            }
         }
         return;
     }
     case MouseDownInfo::DragOutgoingRange: {
         if (!isDragStarted) {
-            viewInteraction()->startOutgoingDragRange(m_view->asItem());
+            if (const std::optional<OutgoingDrag> drag = viewInteraction()->outgoingDragRange()) {
+                m_view->startOutgoingDrag(*drag, PointF());
+            }
         }
         return;
     }
@@ -1237,8 +1241,8 @@ void NotationViewInputController::mouseReleaseEvent(const muse::PointerEvent& ev
         }
     }
 
-    if (interaction->isOutgoingDragStarted()) {
-        interaction->endOutgoingDrag();
+    if (m_view->isOutgoingDragStarted()) {
+        m_view->endOutgoingDrag();
     }
 
     m_notesBeingDragged.clear();

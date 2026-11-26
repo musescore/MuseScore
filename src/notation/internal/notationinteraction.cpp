@@ -28,7 +28,6 @@
 #include <limits>
 
 #include <QClipboard>
-#include <QDrag>
 #include <QGuiApplication>
 #include <QKeySequence>
 #include <QMimeData>
@@ -1282,98 +1281,38 @@ bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* elem
 }
 
 //! NOTE: Copied from ScoreView::cloneElement
-void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const PointF& hotSpot)
+std::optional<OutgoingDrag> NotationInteraction::outgoingDragElement(const EngravingItem* element) const
 {
-    if (isDragStarted()) {
-        endOutgoingDrag();
-    }
+    OutgoingDrag drag;
+    const ByteArray data = element->isSpannerSegment() ? toSpannerSegment(element)->spanner()->mimeData() : element->mimeData();
+    drag.mimeData.setData(mu::engraving::mimeSymbolFormat, data);
 
-    QMimeData* mimeData = new QMimeData();
-    if (element->isSpannerSegment()) {
-        Spanner* s = toSpannerSegment(element)->spanner();
-        mimeData->setData(mu::engraving::mimeSymbolFormat, s->mimeData().toQByteArray());
-    } else {
-        mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
-    }
+    drag.previewRect = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
+    drag.paintPreview = [this, element](Painter* painter) {
+        mu::engraving::rendering::PaintOptions opt;
+        opt.invertColors = configuration()->shouldInvertScore();
+        engravingRenderer()->drawItem(element, painter, opt);
+    };
 
-    m_outgoingDrag = new QDrag(dragSource);
-    m_outgoingDrag->setMimeData(mimeData);
-
-    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
-        m_outgoingDrag = nullptr;
-    });
-
-    const QScreen* screen = QGuiApplication::primaryScreen();
-    const qreal physDpiRatio = screen->physicalDotsPerInch() / mu::engraving::DPI;
-    const qreal devicePixelRatio = screen->devicePixelRatio();
-
-    const RectF bbox = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
-    const double scaledWidth = bbox.width() * physDpiRatio;
-    const double scaledHeight = bbox.height() * physDpiRatio;
-
-    QPixmap pixmap(qCeil(scaledWidth * devicePixelRatio),
-                   qCeil(scaledHeight * devicePixelRatio));
-    pixmap.setDevicePixelRatio(devicePixelRatio);
-    pixmap.fill(Qt::transparent);
-
-    QPainter qp(&pixmap);
-
-    Painter p(&qp, "startOutgoingDragElement");
-    p.setAntialiasing(true);
-
-    p.scale(physDpiRatio, physDpiRatio);
-    p.translate(qAbs(bbox.x()), qAbs(bbox.y()));
-
-    mu::engraving::rendering::PaintOptions opt;
-    opt.invertColors = configuration()->shouldInvertScore();
-    engravingRenderer()->drawItem(element, &p, opt);
-
-    m_outgoingDrag->setPixmap(pixmap);
-    m_outgoingDrag->setHotSpot((hotSpot * physDpiRatio).toQPoint());
-
-    m_outgoingDrag->exec(Qt::CopyAction);
+    return drag;
 }
 
-void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
+std::optional<OutgoingDrag> NotationInteraction::outgoingDragRange() const
 {
-    if (isDragStarted()) {
-        endOutgoingDrag();
-    }
-
     if (!selection()->isRange() || !selection()->canCopy()) {
-        return;
+        return std::nullopt;
     }
 
-    QMimeData* mimeData = selection()->qMimeData();
-    if (!mimeData) {
-        return;
+    const String mimeType = score()->selection().mimeType();
+    if (mimeType.isEmpty()) {
+        return std::nullopt;
     }
 
-    m_outgoingDrag = new QDrag(dragSource);
-    m_outgoingDrag->setMimeData(mimeData);
+    OutgoingDrag drag;
+    drag.mimeData.setData(mimeType.toStdString(), selection()->mimeData());
+    drag.isMoveAllowed = true;
 
-    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
-        m_outgoingDrag = nullptr;
-    });
-
-    QPixmap pixmap(1, 1);
-    pixmap.fill(Qt::transparent);
-    m_outgoingDrag->setPixmap(pixmap);
-
-    m_outgoingDrag->exec(Qt::MoveAction | Qt::CopyAction);
-}
-
-bool NotationInteraction::isOutgoingDragStarted() const
-{
-    return m_outgoingDrag != nullptr;
-}
-
-void NotationInteraction::endOutgoingDrag()
-{
-    if (m_outgoingDrag) {
-        delete m_outgoingDrag;
-        m_outgoingDrag = nullptr;
-    }
+    return drag;
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent

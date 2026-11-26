@@ -32,9 +32,11 @@
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/segment.h"
 
 #include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 #include "notation/inotationundostack.h"
 #include "notation/internal/notation.h"
 #include "notation/tests/mocks/notationconfigurationmock.h"
@@ -92,6 +94,11 @@ protected:
     {
         Segment* segment = score()->firstMeasure()->first(SegmentType::ChordRest);
         m_notation->interaction()->select({ segment->element(0) }, SelectType::SINGLE);
+    }
+
+    void selectFirstMeasure()
+    {
+        m_notation->interaction()->select({ score()->firstMeasure() }, SelectType::SINGLE);
     }
 
     InstrumentChange* findInstrumentChange() const
@@ -275,4 +282,58 @@ TEST_F(Notation_NotationInteractionTests, DropInstrumentChange_WithTheChosenInst
     m_notation->undoStack()->undo(nullptr);
     EXPECT_EQ(findInstrumentChange(), nullptr);
     EXPECT_FALSE(m_notation->undoStack()->canUndo());
+}
+
+TEST_F(Notation_NotationInteractionTests, OutgoingDragElement_ProvidesTheSymbolDataAndThePreview)
+{
+    //! [GIVEN] A chord is selected
+    selectFirstChordRest();
+    const EngravingItem* element = m_notation->interaction()->selection()->element();
+    ASSERT_NE(element, nullptr);
+
+    //! [WHEN] The element is dragged out of the score
+    const std::optional<OutgoingDrag> drag = m_notation->interaction()->outgoingDragElement(element);
+
+    //! [THEN] The data is the element in the symbol format, that can only be copied
+    ASSERT_TRUE(drag.has_value());
+    EXPECT_TRUE(drag->mimeData.hasFormat(mimeSymbolFormat));
+    EXPECT_FALSE(drag->mimeData.data(mimeSymbolFormat).empty());
+    EXPECT_FALSE(drag->isMoveAllowed);
+
+    //! [THEN] There is a preview of the element
+    EXPECT_TRUE(drag->previewRect.isValid());
+    EXPECT_TRUE(drag->paintPreview);
+}
+
+TEST_F(Notation_NotationInteractionTests, OutgoingDragRange_NoRangeIsSelected_ProvidesNothing)
+{
+    //! [GIVEN] Only a chord is selected
+    selectFirstChordRest();
+    ASSERT_FALSE(m_notation->interaction()->selection()->isRange());
+
+    //! [WHEN] Dragging the range out of the score
+    const std::optional<OutgoingDrag> drag = m_notation->interaction()->outgoingDragRange();
+
+    //! [THEN] There is nothing to drag
+    EXPECT_FALSE(drag.has_value());
+}
+
+TEST_F(Notation_NotationInteractionTests, OutgoingDragRange_RangeIsSelected_ProvidesTheStaffListDataThatCanBeMoved)
+{
+    //! [GIVEN] A measure is selected, it is a range
+    selectFirstMeasure();
+    ASSERT_TRUE(m_notation->interaction()->selection()->isRange());
+
+    //! [WHEN] Dragging the range out of the score
+    const std::optional<OutgoingDrag> drag = m_notation->interaction()->outgoingDragRange();
+
+    //! [THEN] The data is the range in the staff list format, that can be moved or copied
+    ASSERT_TRUE(drag.has_value());
+    EXPECT_TRUE(drag->mimeData.hasFormat(mimeStaffListFormat));
+    EXPECT_FALSE(drag->mimeData.data(mimeStaffListFormat).empty());
+    EXPECT_TRUE(drag->isMoveAllowed);
+
+    //! [THEN] There is no preview
+    EXPECT_FALSE(drag->previewRect.isValid());
+    EXPECT_FALSE(drag->paintPreview);
 }

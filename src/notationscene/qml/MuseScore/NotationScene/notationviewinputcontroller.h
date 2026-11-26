@@ -37,6 +37,7 @@
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
 #include "types/inputevents.h"
+#include "notation/types/outgoingdrag.h"
 #include "notation/types/viewmode.h"
 
 #include "notation/inotationcommandscontroller.h"
@@ -96,6 +97,10 @@ public:
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 
     virtual QQuickItem* asItem() = 0;
+
+    virtual void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) = 0;
+    virtual bool isOutgoingDragStarted() const = 0;
+    virtual void endOutgoingDrag() = 0;
 
     virtual void scheduleRedraw(const muse::RectF& rect = muse::RectF()) = 0;
 };

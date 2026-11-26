@@ -23,11 +23,17 @@
 #include "abstractnotationpaintview.h"
 
 #include <QCursor>
-#include <QPainter>
+#include <QDrag>
+#include <QGuiApplication>
 #include <QMimeData>
+#include <QPainter>
+#include <QPixmap>
+#include <QScreen>
+#include <QtMath>
 
 #include "async/async.h"
 
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/shadownote.h"
 
@@ -42,6 +48,7 @@
 #include "notation/inotationviewstate.h"
 
 #include "types/qtinputconvert.h"
+#include "types/qtmimedata.h"
 
 #include "log.h"
 
@@ -664,6 +671,61 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
     }
 
     emit showContextMenuRequested(static_cast<int>(elementType), _pos.toQPointF());
+}
+
+void AbstractNotationPaintView::startOutgoingDrag(const OutgoingDrag& drag, const PointF& hotSpot)
+{
+    endOutgoingDrag();
+
+    QMimeData* mimeData = toQtMimeData(drag.mimeData);
+
+    m_outgoingDrag = new QDrag(this);
+    m_outgoingDrag->setMimeData(mimeData);
+
+    QPixmap pixmap(1, 1);
+    pixmap.fill(Qt::transparent);
+
+    if (drag.paintPreview && drag.previewRect.isValid()) {
+        const QScreen* screen = QGuiApplication::primaryScreen();
+        const qreal physDpiRatio = screen->physicalDotsPerInch() / mu::engraving::DPI;
+        const qreal devicePixelRatio = screen->devicePixelRatio();
+
+        const RectF& bbox = drag.previewRect;
+        const double scaledWidth = bbox.width() * physDpiRatio;
+        const double scaledHeight = bbox.height() * physDpiRatio;
+
+        pixmap = QPixmap(qCeil(scaledWidth * devicePixelRatio), qCeil(scaledHeight * devicePixelRatio));
+        pixmap.setDevicePixelRatio(devicePixelRatio);
+        pixmap.fill(Qt::transparent);
+
+        QPainter qp(&pixmap);
+
+        Painter p(&qp, "startOutgoingDrag");
+        p.setAntialiasing(true);
+
+        p.scale(physDpiRatio, physDpiRatio);
+        p.translate(qAbs(bbox.x()), qAbs(bbox.y()));
+
+        drag.paintPreview(&p);
+
+        m_outgoingDrag->setHotSpot((hotSpot * physDpiRatio).toQPoint());
+    }
+
+    m_outgoingDrag->setPixmap(pixmap);
+
+    m_outgoingDrag->exec(drag.isMoveAllowed ? (Qt::MoveAction | Qt::CopyAction) : Qt::CopyAction);
+}
+
+bool AbstractNotationPaintView::isOutgoingDragStarted() const
+{
+    return m_outgoingDrag != nullptr;
+}
+
+void AbstractNotationPaintView::endOutgoingDrag()
+{
+    if (m_outgoingDrag) {
+        delete m_outgoingDrag;
+    }
 }
 
 void AbstractNotationPaintView::hideContextMenu()

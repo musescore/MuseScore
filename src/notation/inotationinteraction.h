@@ -33,6 +33,7 @@
 #include "types/inputevents.h"
 #include "types/instrumentstypes.h"
 #include "types/noteinputtypes.h"
+#include "types/outgoingdrag.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -114,10 +115,8 @@ public:
     virtual muse::async::Notification dragChanged() const = 0;
 
     virtual bool isOutgoingDragElementAllowed(const EngravingItem* element) const = 0;
-    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) = 0;
-    virtual void startOutgoingDragRange(QObject* dragSource) = 0;
-    virtual bool isOutgoingDragStarted() const = 0;
-    virtual void endOutgoingDrag() = 0;
+    virtual std::optional<OutgoingDrag> outgoingDragElement(const EngravingItem* element) const = 0;
+    virtual std::optional<OutgoingDrag> outgoingDragRange() const = 0;
 
     // Drop
     //! TODO Change KeyboardModifiers to modes

@@ -67,10 +67,8 @@ public:
     MOCK_METHOD(muse::async::Notification, dragChanged, (), (const, override));
 
     MOCK_METHOD(bool, isOutgoingDragElementAllowed, (const EngravingItem*), (const, override));
-    MOCK_METHOD(void, startOutgoingDragElement, (const EngravingItem*, QObject*, const muse::PointF&), (override));
-    MOCK_METHOD(void, startOutgoingDragRange, (QObject*), (override));
-    MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));
-    MOCK_METHOD(void, endOutgoingDrag, (), (override));
+    MOCK_METHOD(std::optional<OutgoingDrag>, outgoingDragElement, (const EngravingItem*), (const, override));
+    MOCK_METHOD(std::optional<OutgoingDrag>, outgoingDragRange, (), (const, override));
 
     MOCK_METHOD(bool, startDropSingle, (const muse::ByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const muse::ByteArray&), (override));
