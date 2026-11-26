@@ -58,14 +58,20 @@ using namespace muse;
 using namespace muse::ui;
 using namespace muse::draw;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
-
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+
+    // Must be connected before the handlers of the size change, they use the size of the transform
+    connect(this, &QQuickPaintedItem::widthChanged, this, [this]() {
+        m_transform.setViewSize(SizeF(width(), height()));
+    });
+    connect(this, &QQuickPaintedItem::heightChanged, this, [this]() {
+        m_transform.setViewSize(SizeF(width(), height()));
+    });
 
     connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
@@ -136,12 +142,16 @@ void AbstractNotationPaintView::load()
 
     m_elapsedTimer.start();
 
+    // Before the notation is loaded: the saved matrix is restored with the constraints of the scrollable area
+    m_transform.setScrollAreaLimited(configuration()->isLimitCanvasScrollArea());
+
     onNotationSetup();
 
     initBackground();
     initNavigatorOrientation();
 
     configuration()->isLimitCanvasScrollAreaChanged().onNotify(this, [this]() {
+        m_transform.setScrollAreaLimited(configuration()->isLimitCanvasScrollArea());
         ensureViewportInsideScrollableArea();
 
         emit horizontalScrollChanged();
@@ -196,11 +206,10 @@ void AbstractNotationPaintView::moveCanvasToCenter()
         return;
     }
 
-    PointF canvasCenter = this->canvasCenter();
-    Transform oldMatrix = m_matrix;
+    Transform oldMatrix = m_transform.matrix();
 
-    if (doMoveCanvas(canvasCenter.x(), canvasCenter.y())) {
-        onMatrixChanged(oldMatrix, m_matrix, false);
+    if (m_notation && m_transform.moveCanvasToCenter()) {
+        onMatrixChanged(oldMatrix, m_transform.matrix(), false);
     }
 }
 
@@ -213,7 +222,7 @@ void AbstractNotationPaintView::scrollHorizontal(qreal position)
         return;
     }
 
-    qreal dx = horizontalScrollableSize() * scrollStep;
+    qreal dx = m_transform.horizontalScrollableSize() * scrollStep;
     moveCanvasHorizontal(-dx);
 }
 
@@ -226,7 +235,7 @@ void AbstractNotationPaintView::scrollVertical(qreal position)
         return;
     }
 
-    qreal dy = verticalScrollableSize() * scrollStep;
+    qreal dy = m_transform.verticalScrollableSize() * scrollStep;
     moveCanvasVertical(-dy);
 }
 
@@ -285,7 +294,11 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         m_notation->painting()->setViewMode(m_notation->viewState()->viewMode());
     }
 
+    // The view mode changes the layout, and the subscriptions below that keep the content up to date are not installed yet
+    updateTransformContent();
+
     m_notation->notationChanged().onReceive(this, [this](const RectF& updateRect) {
+        updateTransformContent();
         m_pageCache.clear();
         updateLoopMarkers();
         updateShadowNoteVisibility();
@@ -294,6 +307,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     // Layout may delete the cached page before notationChanged is sent
     m_notation->elements()->msScore()->changesChannel().onReceive(this, [this](const engraving::ScoreChanges&) {
+        updateTransformContent();
         m_pageCache.clear();
     });
 
@@ -457,12 +471,12 @@ void AbstractNotationPaintView::initZoomAndPosition()
 
 void AbstractNotationPaintView::setMatrix(const Transform& matrix)
 {
-    if (m_matrix == matrix) {
+    if (m_transform.matrix() == matrix) {
         return;
     }
 
-    Transform oldMatrix = m_matrix;
-    m_matrix = matrix;
+    Transform oldMatrix = m_transform.matrix();
+    m_transform.setMatrix(matrix);
 
     // If `ensureViewportInsideScrollableArea` returns true, it has already
     // notified about matrix changed, so no need to do it again.
@@ -470,7 +484,7 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
-    onMatrixChanged(oldMatrix, m_matrix, false);
+    onMatrixChanged(oldMatrix, m_transform.matrix(), false);
 }
 
 void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
@@ -815,7 +829,7 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     Transform guiScalingCompensation;
     guiScalingCompensation.scale(guiScaling, guiScaling);
 
-    painter->setWorldTransform(m_matrix * guiScalingCompensation);
+    painter->setWorldTransform(m_transform.matrix() * guiScalingCompensation);
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
     const bool isAutomation = automationMode();
@@ -837,8 +851,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     if (notation()->viewMode() == engraving::LayoutMode::LINE) {
         ContinuousPanel::NotationViewContext nvCtx;
-        nvCtx.xOffset = m_matrix.dx();
-        nvCtx.yOffset = m_matrix.dy();
+        nvCtx.xOffset = m_transform.matrix().dx();
+        nvCtx.yOffset = m_transform.matrix().dy();
         nvCtx.scaling = currentScaling();
         nvCtx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
 
@@ -900,68 +914,23 @@ void AbstractNotationPaintView::paintBackground(const RectF& rect, muse::draw::P
     if (notationConfiguration()->backgroundUseColor() || wallpaper.isNull()) {
         painter->fillRect(rect, notationConfiguration()->backgroundColor());
     } else {
-        painter->drawTiledPixmap(rect, wallpaper, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
+        painter->drawTiledPixmap(rect, wallpaper, rect.topLeft() - PointF(m_transform.matrix().m31(), m_transform.matrix().m32()));
     }
-}
-
-PointF AbstractNotationPaintView::canvasCenter() const
-{
-    TRACEFUNC;
-    RectF canvasRect = m_matrix.map(notationContentRect());
-
-    qreal canvasWidth = canvasRect.width();
-    qreal canvasHeight = canvasRect.height();
-
-    qreal x = (width() - canvasWidth) / 2;
-    qreal y = (height() - canvasHeight) / 2;
-
-    return toLogical(PointF(x, y));
-}
-
-std::pair<qreal, qreal> AbstractNotationPaintView::constraintCanvas(qreal dx, qreal dy) const
-{
-    TRACEFUNC;
-    RectF scrollableArea = scrollableAreaRect();
-    RectF viewport = this->viewport();
-
-    // horizontal
-    {
-        qreal newLeft = viewport.left() - dx;
-        if (viewport.width() > scrollableArea.width()) {
-            newLeft = scrollableArea.center().x() - viewport.width() / 2;
-        } else {
-            newLeft = qBound(scrollableArea.left(), newLeft, scrollableArea.right() - viewport.width());
-        }
-        dx = viewport.left() - newLeft;
-    }
-
-    // vertical
-    {
-        qreal newTop = viewport.top() - dy;
-        if (viewport.height() > scrollableArea.height()) {
-            newTop = scrollableArea.center().y() - viewport.height() / 2;
-        } else {
-            newTop = qBound(scrollableArea.top(), newTop, scrollableArea.bottom() - viewport.height());
-        }
-        dy = viewport.top() - newTop;
-    }
-
-    return { dx, dy };
 }
 
 QVariant AbstractNotationPaintView::matrix() const
 {
-    return Transform::toQTransform(m_matrix);
+    return Transform::toQTransform(m_transform.matrix());
 }
 
 PointF AbstractNotationPaintView::viewportTopLeft() const
 {
-    return toLogical(PointF(0.0, 0.0));
+    return m_transform.viewportTopLeft();
 }
 
 RectF AbstractNotationPaintView::viewport() const
 {
-    return toLogical(RectF(0.0, 0.0, width(), height()));
+    return m_transform.viewport();
 }
 
 QRectF AbstractNotationPaintView::viewport_property() const
@@ -984,118 +953,24 @@ RectF AbstractNotationPaintView::notationContentRect() const
     return result;
 }
 
-RectF AbstractNotationPaintView::scrollableAreaRect() const
-{
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
-
-    qreal overscrollX = viewport.width() * overscrollFactor;
-    qreal overscrollY = viewport.height() * overscrollFactor;
-
-    return notationContentRect().adjusted(-overscrollX, -overscrollY, overscrollX, overscrollY);
-}
-
-qreal AbstractNotationPaintView::horizontalScrollableSize() const
-{
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    qreal left = std::min(contentRect.left(), viewport.left());
-    qreal right = std::max(contentRect.right(), viewport.right());
-
-    qreal size = 0;
-    if ((left < 0) && (right > 0)) {
-        size = std::abs(left) + right;
-    } else {
-        size = std::abs(right) - std::abs(left);
-    }
-
-    return size;
-}
-
-qreal AbstractNotationPaintView::verticalScrollableSize() const
-{
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    qreal top = std::min(contentRect.top(), viewport.top());
-    qreal bottom = std::max(contentRect.bottom(), viewport.bottom());
-
-    qreal size = 0;
-    if ((top < 0) && (bottom > 0)) {
-        size = std::abs(top) + bottom;
-    } else {
-        size = std::abs(bottom) - std::abs(top);
-    }
-
-    return size;
-}
-
 qreal AbstractNotationPaintView::horizontalScrollbarSize() const
 {
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    if (viewport.left() < contentRect.left()
-        && viewport.right() > contentRect.right()) {
-        return 0;
-    }
-
-    qreal scrollableWidth = horizontalScrollableSize();
-    if (qFuzzyIsNull(scrollableWidth)) {
-        return 0;
-    }
-
-    return viewport.width() / scrollableWidth;
+    return m_transform.horizontalScrollbarSize();
 }
 
 qreal AbstractNotationPaintView::verticalScrollbarSize() const
 {
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    if (viewport.top() < contentRect.top()
-        && viewport.bottom() > contentRect.bottom()) {
-        return 0;
-    }
-
-    qreal scrollableHeight = verticalScrollableSize();
-    if (qFuzzyIsNull(scrollableHeight)) {
-        return 0;
-    }
-
-    return viewport.height() / scrollableHeight;
+    return m_transform.verticalScrollbarSize();
 }
 
 qreal AbstractNotationPaintView::startHorizontalScrollPosition() const
 {
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    if (!viewport.isValid() || !contentRect.isValid()) {
-        return 0.0;
-    }
-
-    return (viewport.left() - contentRect.left()) / contentRect.width();
+    return m_transform.startHorizontalScrollPosition();
 }
 
 qreal AbstractNotationPaintView::startVerticalScrollPosition() const
 {
-    TRACEFUNC;
-    RectF viewport = this->viewport();
-    RectF contentRect = notationContentRect();
-
-    if (!viewport.isValid() || !contentRect.isValid()) {
-        return 0.0;
-    }
-
-    return (viewport.top() - contentRect.top()) / contentRect.height();
+    return m_transform.startVerticalScrollPosition();
 }
 
 bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjustVertically)
@@ -1183,22 +1058,12 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
         return false;
     }
 
-    // When the viewport is empty, which might happen for example when the view
-    // is being loaded or unloaded, the scrollable area is computed without any
-    // overscroll allowance, resulting in unexpected clamping of the canvas
-    // position to (0, 0).
-    if (size().isEmpty()) {
+    Transform oldMatrix = m_transform.matrix();
+    if (!m_transform.ensureViewportInsideScrollableArea()) {
         return false;
     }
 
-    auto [dx, dy] = constraintCanvas(0, 0);
-    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
-        return false;
-    }
-
-    Transform oldMatrix = m_matrix;
-    m_matrix.translate(dx, dy);
-    onMatrixChanged(oldMatrix, m_matrix, false);
+    onMatrixChanged(oldMatrix, m_transform.matrix(), false);
     return true;
 }
 
@@ -1206,10 +1071,9 @@ bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
 {
     TRACEFUNC;
 
-    PointF viewTopLeft = viewportTopLeft();
-    Transform oldMatrix = m_matrix;
-    if (doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y())) {
-        onMatrixChanged(oldMatrix, m_matrix, false);
+    Transform oldMatrix = m_transform.matrix();
+    if (m_notation && m_transform.moveCanvasToPosition(logicPos)) {
+        onMatrixChanged(oldMatrix, m_transform.matrix(), false);
         return true;
     }
 
@@ -1220,11 +1084,11 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
     TRACEFUNC;
 
-    Transform oldMatrix = m_matrix;
+    Transform oldMatrix = m_transform.matrix();
     bool moved = doMoveCanvas(dx, dy);
 
     if (moved) {
-        onMatrixChanged(oldMatrix, m_matrix, false);
+        onMatrixChanged(oldMatrix, m_transform.matrix(), false);
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
@@ -1241,18 +1105,7 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
         return false;
     }
 
-    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
-        return false;
-    }
-
-    auto [correctedDX, correctedDY] = constraintCanvas(dx, dy);
-    if (qFuzzyIsNull(correctedDX) && qFuzzyIsNull(correctedDY)) {
-        return false;
-    }
-
-    m_matrix.translate(correctedDX, correctedDY);
-
-    return true;
+    return m_transform.moveCanvas(dx, dy);
 }
 
 void AbstractNotationPaintView::scheduleRedraw(const muse::RectF& rect)
@@ -1293,7 +1146,7 @@ void AbstractNotationPaintView::moveCanvasHorizontal(qreal dx)
 
 qreal AbstractNotationPaintView::currentScaling() const
 {
-    return m_matrix.m11();
+    return m_transform.scaling();
 }
 
 void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, bool overrideZoomType)
@@ -1306,22 +1159,10 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos, boo
 
     hideElementPopup();
 
-    qreal currentScaling = this->currentScaling();
-
-    IF_ASSERT_FAILED(!qFuzzyIsNull(scaling)) {
-        return;
+    Transform oldMatrix = m_transform.matrix();
+    if (m_transform.setScaling(scaling, pos)) {
+        onMatrixChanged(oldMatrix, m_transform.matrix(), overrideZoomType);
     }
-
-    if (qFuzzyCompare(currentScaling, scaling)) {
-        return;
-    }
-
-    if (qFuzzyIsNull(currentScaling)) {
-        currentScaling = 1;
-    }
-
-    qreal deltaScaling = scaling / currentScaling;
-    scale(deltaScaling, pos, overrideZoomType);
 }
 
 void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool overrideZoomType)
@@ -1332,23 +1173,10 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
         return;
     }
 
-    if (qFuzzyCompare(factor, 1.0)) {
-        return;
+    Transform oldMatrix = m_transform.matrix();
+    if (m_transform.scale(factor, pos)) {
+        onMatrixChanged(oldMatrix, m_transform.matrix(), overrideZoomType);
     }
-
-    PointF pointBeforeScaling = toLogical(pos);
-
-    Transform oldMatrix = m_matrix;
-    m_matrix.scale(factor, factor);
-
-    PointF pointAfterScaling = toLogical(pos);
-
-    qreal dx = pointAfterScaling.x() - pointBeforeScaling.x();
-    qreal dy = pointAfterScaling.y() - pointBeforeScaling.y();
-
-    doMoveCanvas(dx, dy);
-
-    onMatrixChanged(oldMatrix, m_matrix, overrideZoomType);
 }
 
 void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
@@ -1574,6 +1402,7 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     m_notation = notation;
+    updateTransformContent();
 
     if (publishMode() && isNoteEnterMode()) {
         notationNoteInput()->endNoteInput(true);
@@ -1608,13 +1437,13 @@ void AbstractNotationPaintView::setReadonly(bool readonly)
 
 void AbstractNotationPaintView::clear()
 {
-    Transform oldMatrix = m_matrix;
-    m_matrix = Transform();
+    Transform oldMatrix = m_transform.matrix();
+    m_transform.reset();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
     m_shadowNoteRect = RectF();
     m_previewMeasureRect = RectF();
-    onMatrixChanged(oldMatrix, m_matrix, false);
+    onMatrixChanged(oldMatrix, m_transform.matrix(), false);
 }
 
 qreal AbstractNotationPaintView::width() const
@@ -1629,7 +1458,7 @@ qreal AbstractNotationPaintView::height() const
 
 PointF AbstractNotationPaintView::toLogical(const PointF& point) const
 {
-    return m_matrix.inverted().map(point);
+    return m_transform.toLogical(point);
 }
 
 PointF AbstractNotationPaintView::toLogical(const QPointF& point) const
@@ -1639,17 +1468,22 @@ PointF AbstractNotationPaintView::toLogical(const QPointF& point) const
 
 RectF AbstractNotationPaintView::toLogical(const RectF& rect) const
 {
-    return m_matrix.inverted().map(rect);
+    return m_transform.toLogical(rect);
 }
 
 PointF AbstractNotationPaintView::fromLogical(const PointF& point) const
 {
-    return m_matrix.map(point);
+    return m_transform.fromLogical(point);
 }
 
 RectF AbstractNotationPaintView::fromLogical(const RectF& rect) const
 {
-    return m_matrix.map(rect);
+    return m_transform.fromLogical(rect);
+}
+
+void AbstractNotationPaintView::updateTransformContent()
+{
+    m_transform.setContentRect(notationContentRect());
 }
 
 bool AbstractNotationPaintView::isInited() const

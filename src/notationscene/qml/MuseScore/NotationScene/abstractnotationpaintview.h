@@ -34,6 +34,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "notation/viewtransform.h"
 #include "notation/types/outgoingdrag.h"
 #include "project/iprojectsession.h"
 #include "ui/idragcontroller.h"
@@ -265,11 +266,6 @@ private:
 
     bool ensureViewportInsideScrollableArea();
 
-    muse::RectF scrollableAreaRect() const;
-
-    qreal horizontalScrollableSize() const;
-    qreal verticalScrollableSize() const;
-
     bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
@@ -292,11 +288,10 @@ private:
 
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
-    muse::PointF canvasCenter() const;
-    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
+    void updateTransformContent();
 
     INotationPtr m_notation;
-    muse::draw::Transform m_matrix;
+    ViewTransform m_transform;
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
