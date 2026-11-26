@@ -44,6 +44,7 @@
 #include "editing/editchord.h"
 #include "editing/reset.h"
 #include "editing/transaction/transaction.h"
+#include "iengravingfont.h"
 #include "rendering/iscorerenderer.h"
 #include "rw/compat/compatutils.h"
 #include "types/types.h"
@@ -71,6 +72,10 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
         resetMarkerLeftFontSize(score);
         resetRestVerticalOffsets(score);
         adjustVBoxDistances(score);
+    }
+
+    if (mscVersion < 500) {
+        migrateOversizedNoteheads(score);
     }
 
     if (mscVersion < 470) {
@@ -369,9 +374,10 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
 void EngravingCompat::migrateOversizedNoteheads(MasterScore* masterScore)
 {
     for (Score* score : masterScore->scoreList()) {
-        if (score->engravingFont() && score->engravingFont()->hasOversizedNoteheadsSupport()) {
+        const std::string fontName = score->style().styleSt(Sid::musicalSymbolFont).toStdString();
+        const IEngravingFontPtr font = engravingFonts()->fontByName(fontName);
+        if (font && font->hasOversizedNoteheadsSupport()) {
             score->style().set(Sid::oversizedNoteheads, true);
-            score->setLayoutAll();
         }
     }
 }
@@ -437,7 +443,6 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
     }
 
     if (mscVersion < 500) {
-        migrateOversizedNoteheads(score);
         migrateOffset500(score);
         AlignmentMigration500::migrateSnappedAndSameItemTypeAlignment(score);
         AlignmentMigration500::migrateHopoLetterAlignment(score);

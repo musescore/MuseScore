@@ -23,6 +23,8 @@
 #pragma once
 
 #include <vector>
+#include "modularity/ioc.h"
+#include "engraving/iengravingfontsprovider.h"
 
 namespace mu::engraving {
 class MasterScore;
@@ -38,6 +40,8 @@ public:
     static void doPostLayoutCompatIfNeeded(MasterScore* score);
 
 private:
+    static inline muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
+
     static void correctPedalEndPoints(MasterScore* score);
     static void undoStaffTextExcludeFromPart(MasterScore* masterScore);
     static void migrateDynamicPosOnVocalStaves(MasterScore* masterScore);
