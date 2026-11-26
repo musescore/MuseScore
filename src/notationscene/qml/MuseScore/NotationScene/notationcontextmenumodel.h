@@ -59,7 +59,9 @@ private:
     muse::uicomponents::MenuItemList makeSelectItems();
     muse::uicomponents::MenuItemList makeElementItems();
     muse::uicomponents::MenuItemList makeInsertMeasuresItems();
-    muse::uicomponents::MenuItemList makeMoveMeasureItems();
+    muse::uicomponents::MenuItemList makeSystemAndPageLayoutItems();
+    muse::uicomponents::MenuItemList makeSystemLayoutItems(bool locked, int nSystems, int nMeasures);
+    muse::uicomponents::MenuItemList makePageLayoutItems(bool locked, int nPages, int nSystems);
     muse::uicomponents::MenuItemList makeChangeInstrumentItems();
     muse::uicomponents::MenuItemList makeVerticalBoxItems();
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();
