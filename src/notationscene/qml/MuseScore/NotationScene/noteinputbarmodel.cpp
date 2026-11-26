@@ -390,7 +390,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
         makeSeparator(),
         makeMenuItem(AddSystemTextCommand::id),
         makeMenuItem(AddStaffTextCommand::id),
-        makeMenuItem(ADD_DYNAMIC_COMMAND),
+        makeMenuItem(AddDynamicCommand::id),
         makeMenuItem(AddExpressionTextCommand::id),
         makeMenuItem(AddRehearsalMarkTextCommand::id),
         makeMenuItem(AddInstrumentChangeTextCommand::id),
@@ -416,7 +416,7 @@ MenuItemList NoteInputBarModel::makeLinesItems()
         makeMenuItem(AddHairpinDiminuendoCommand::id),
         makeMenuItem(AddOttava8vaCommand::id),
         makeMenuItem(AddOttava8vbCommand::id),
-        makeMenuItem(ADD_NOTELINE_COMMAND)
+        makeMenuItem(AddNoteLineCommand::id)
     };
 
     return items;

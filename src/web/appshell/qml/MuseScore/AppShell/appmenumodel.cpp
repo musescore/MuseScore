@@ -287,7 +287,7 @@ MenuItemList AppMenuModel::makeTextItems()
         makeSeparator(),
         makeMenuItem(AddSystemTextCommand::id),
         makeMenuItem(AddStaffTextCommand::id),
-        makeMenuItem(ADD_DYNAMIC_COMMAND),
+        makeMenuItem(AddDynamicCommand::id),
         makeMenuItem(AddExpressionTextCommand::id),
         makeMenuItem(AddRehearsalMarkTextCommand::id),
         makeMenuItem(AddInstrumentChangeTextCommand::id),
@@ -313,7 +313,7 @@ MenuItemList AppMenuModel::makeLinesItems()
         makeMenuItem(AddHairpinDiminuendoCommand::id),
         makeMenuItem(AddOttava8vaCommand::id),
         makeMenuItem(AddOttava8vbCommand::id),
-        makeMenuItem(ADD_NOTELINE_COMMAND)
+        makeMenuItem(AddNoteLineCommand::id)
     };
 
     return items;
@@ -352,7 +352,7 @@ MenuItem* AppMenuModel::makeAddMenu()
 MenuItem* AppMenuModel::makeFormatMenu()
 {
     MenuItemList formatItems {
-        makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
+        makeMenuItem(OpenEditStyleCommand::id),
         makeMenuItem(OpenPageSettingsCommand::id),
         makeSeparator(),
         makeMenuItem(OpenBreaksCommand::id),
@@ -379,8 +379,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
     MenuItemList toolsItems {
         makeMenuItem(OpenTransposeCommand::id),
         makeSeparator(),
-        makeMenuItem(STAFF_EXPLODE_COMMAND),
-        makeMenuItem(STAFF_IMPLODE_COMMAND),
+        makeMenuItem(StaffExplodeCommand::id),
+        makeMenuItem(StaffImplodeCommand::id),
         makeMenuItem(OpenRealizeChordSymbolsCommand::id),
         makeMenu(TranslatableString("appshell/menu/tools", "&Voices"), {
             makeMenuItem(SwapVoice12Command::id),
@@ -391,20 +391,20 @@ MenuItem* AppMenuModel::makeToolsMenu()
             makeMenuItem(SwapVoice34Command::id)
         }, "menu-voices"),
         makeMenu(TranslatableString("appshell/menu/tools", "&Measures"), {
-            makeMenuItem(SPLIT_MEASURE_COMMAND),
-            makeMenuItem(JOIN_MEASURES_COMMAND)
+            makeMenuItem(SplitMeasureCommand::id),
+            makeMenuItem(JoinMeasuresCommand::id)
         }, "menu-tools-measures"),
         makeMenuItem(REMOVE_SELECTED_RANGE_COMMAND),
         makeSeparator(),
-        makeMenuItem(SLASH_FILL_COMMAND),
-        makeMenuItem(SLASH_RHYTHM_COMMAND),
+        makeMenuItem(SlashFillCommand::id),
+        makeMenuItem(SlashRhythmCommand::id),
         makeSeparator(),
-        makeMenuItem(PITCH_SPELL_SHARPS_COMMAND),
-        makeMenuItem(PITCH_SPELL_FLATS_COMMAND),
+        makeMenuItem(RespellPitchesSharpsCommand::id),
+        makeMenuItem(RespellPitchesFlatsCommand::id),
         makeMenu(TranslatableString("appshell/menu/tools", "Enharmonic spelling"), {
-            makeMenuItem(ENHARMONIC_SPELL_BOTH_COMMAND),
-            makeMenuItem(ENHARMONIC_SPELL_CURRENT_COMMAND),
-            makeMenuItem(PITCH_SPELL_COMMAND),
+            makeMenuItem(ChangeEnharmonicSpellingBothCommand::id),
+            makeMenuItem(ChangeEnharmonicSpellingCurrentCommand::id),
+            makeMenuItem(OptimizeEnharmonicSpellingCommand::id),
         }, "menu-enharmonic-spelling"),
         makeSeparator(),
         makeMenuItem(RegroupRhythmsCommand::id),

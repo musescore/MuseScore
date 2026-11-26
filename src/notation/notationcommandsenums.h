@@ -271,6 +271,34 @@ struct ArticulationTypeContract {
     } };
 };
 
+struct BowTypeContract {
+    static constexpr EnumTable<BowType, 2> table { {
+        { "up", BowType::UP, "up bow" },
+        { "down", BowType::DOWN, "down bow" },
+    } };
+};
+
+struct StaffImplodeExplodeModeContract {
+    static constexpr EnumTable<StaffImplodeExplodeMode, 2> table { {
+        { "explode", StaffImplodeExplodeMode::Explode, "explode" },
+        { "implode", StaffImplodeExplodeMode::Implode, "implode" },
+    } };
+};
+
+struct EnharmonicSpellingModeContract {
+    static constexpr EnumTable<EnharmonicSpellingMode, 2> table { {
+        { "both", EnharmonicSpellingMode::Both, "concert and transposed pitch" },
+        { "current", EnharmonicSpellingMode::Current, "current pitch mode only" },
+    } };
+};
+
+struct RespellPitchesModeContract {
+    static constexpr EnumTable<RespellPitchesMode, 2> table { {
+        { "sharps", RespellPitchesMode::Sharps, "sharps" },
+        { "flats", RespellPitchesMode::Flats, "flats" },
+    } };
+};
+
 struct OttavaTypeContract {
     static constexpr EnumTable<OttavaType, 6> table { {
         { "8va", OttavaType::OTTAVA_8VA, "8va alta" },
@@ -426,6 +454,10 @@ DECLARE_ENUM_CONTRACT(mu::notation::TextStyleTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::BeamModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OrnamentTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ArticulationTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::BowTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::StaffImplodeExplodeModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::EnharmonicSpellingModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::RespellPitchesModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::HairpinTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TransposeDirectionContract);

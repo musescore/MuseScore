@@ -2675,7 +2675,12 @@ struct AddOttava8vbCommand {
     cprop_decl redirect = AddOttavaCommand(OttavaType::OTTAVA_8VB);
 };
 
-inline static const muse::rcommand::Command ADD_DYNAMIC_COMMAND("command://notation/add-dynamic");
+struct AddDynamicCommand {
+    cprop_decl id = Command("command://notation/add-dynamic");
+    cprop_decl title = MnemonicString("action", "&Dynamic");
+    cprop_decl description = TranslatableString("action", "Add dynamic");
+    cprop_decl availabilities = Availability::UI; // show popup with dynamic options
+};
 
 struct AddHairpinCommand {
     cprop_decl id = Command("command://notation/add-hairpin");
@@ -2735,12 +2740,48 @@ struct DecreaseDynamicCommand {
     cprop_decl redirect = ChangeDynamicCommand(-1);
 };
 
-inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");
+struct AddNoteLineCommand {
+    cprop_decl id = Command("command://notation/add-noteline");
+    cprop_decl title = MnemonicString("action", "&Note-anchored line");
+    cprop_decl description = TranslatableString("action", "Add note-anchored line");
+    cprop_decl availabilities = Availability::All;
+};
 
-inline static const muse::rcommand::Command ADD_IMAGE_COMMAND("command://notation/add-image");
+struct AddImageCommand {
+    cprop_decl id = Command("command://notation/add-image");
+    cprop_decl title = MnemonicString("action", "Image");
+    cprop_decl description = TranslatableString("action", "Add image");
+    cprop_decl availabilities = Availability::All;
+};
 
-inline static const muse::rcommand::Command ADD_UP_BOW_COMMAND("command://notation/add-up-bow");
-inline static const muse::rcommand::Command ADD_DOWN_BOW_COMMAND("command://notation/add-down-bow");
+struct ToggleBowCommand {
+    cprop_decl id = Command("command://notation/toggle-bow");
+    cprop_decl title = MnemonicString("action", "Toggle bow");
+    cprop_decl description = TranslatableString("action", "Toggle bowing");
+    cprop_decl availabilities = Availability::API;
+
+    BowType type = BowType::UP;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &ToggleBowCommand::type, "Bow type" },
+    };
+};
+
+struct ToggleUpBowCommand {
+    cprop_decl id = Command("command://notation/toggle-bow/up");
+    cprop_decl title = MnemonicString("action", "Toggle up bow");
+    cprop_decl description = TranslatableString("action", "Add bowing: up bow");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleBowCommand(BowType::UP);
+};
+
+struct ToggleDownBowCommand {
+    cprop_decl id = Command("command://notation/toggle-bow/down");
+    cprop_decl title = MnemonicString("action", "Toggle down bow");
+    cprop_decl description = TranslatableString("action", "Add bowing: down bow");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleBowCommand(BowType::DOWN);
+};
 
 // add text commands
 
@@ -2789,7 +2830,12 @@ struct AddClefBassCommand {
     cprop_decl redirect = AddClefCommand(ClefType::F);
 };
 
-inline static const muse::rcommand::Command ADD_FULL_MEASURE_REST_COMMAND("command://notation/add-full-measure-rest");
+struct AddFullMeasureRestCommand {
+    cprop_decl id = Command("command://notation/add-full-measure-rest");
+    cprop_decl title = MnemonicString("action", "Full measure rest");
+    cprop_decl description = TranslatableString("action", "Insert full measure rest");
+    cprop_decl availabilities = Availability::All;
+};
 
 inline static const muse::rcommand::Command EDIT_ELEMENT_COMMAND("command://notation/edit-element");
 
@@ -2861,8 +2907,19 @@ struct ToggleSnapToNextCommand {
 // layout commands: measure
 inline static const muse::rcommand::Command MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND("command://notation/move-measure-to-prev-system");
 inline static const muse::rcommand::Command MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND("command://notation/move-measure-to-next-system");
-inline static const muse::rcommand::Command SPLIT_MEASURE_COMMAND("command://notation/split-measure");
-inline static const muse::rcommand::Command JOIN_MEASURES_COMMAND("command://notation/join-measures");
+struct SplitMeasureCommand {
+    cprop_decl id = Command("command://notation/split-measure");
+    cprop_decl title = MnemonicString("action", "&Split measure before selected note/rest");
+    cprop_decl description = TranslatableString("action", "Split measure before selected note/rest");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct JoinMeasuresCommand {
+    cprop_decl id = Command("command://notation/join-measures");
+    cprop_decl title = MnemonicString("action", "&Join selected measures");
+    cprop_decl description = TranslatableString("action", "Join selected measures");
+    cprop_decl availabilities = Availability::All;
+};
 
 // layout commands: section
 inline static const muse::rcommand::Command TOGGLE_SECTION_BREAK_COMMAND("command://notation/toggle-section-break");
@@ -3018,7 +3075,20 @@ struct SaveStyleCommand {
     cprop_decl availabilities = Availability::All;
 };
 
-inline static const muse::rcommand::Command OPEN_EDIT_STYLE_COMMAND("command://notation/open-edit-style");
+struct OpenEditStyleCommand {
+    cprop_decl id = Command("command://notation/open-edit-style");
+    cprop_decl title = MnemonicString("action", "&Style…");
+    cprop_decl description = TranslatableString("action", "Format style");
+    cprop_decl availabilities = Availability::UI;
+
+    std::string pageCode;
+    std::string subPageCode;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "page_code", &OpenEditStyleCommand::pageCode, "Page code", Presence::Optional },
+        Field{ "sub_page_code", &OpenEditStyleCommand::subPageCode, "Sub page code", Presence::Optional },
+    };
+};
 
 struct ToggleConcertPitchCommand {
     cprop_decl id = Command("command://notation/toggle-concert-pitch");
@@ -3137,23 +3207,122 @@ struct ShowIrregularCommand {
 };
 
 // staff commands
-inline static const muse::rcommand::Command STAFF_EXPLODE_COMMAND("command://notation/staff-explode");
-inline static const muse::rcommand::Command STAFF_IMPLODE_COMMAND("command://notation/staff-implode");
+
+struct StaffImplodeExplodeCommand {
+    cprop_decl id = Command("command://notation/staff-implode-explode");
+    cprop_decl title = MnemonicString("action", "Implode or explode");
+    cprop_decl description = TranslatableString("action", "Implode or explode the selected staff");
+    cprop_decl availabilities = Availability::API;
+
+    StaffImplodeExplodeMode mode = StaffImplodeExplodeMode::Explode;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "mode", &StaffImplodeExplodeCommand::mode, "Implode or explode" },
+    };
+};
+
+struct StaffExplodeCommand {
+    cprop_decl id = Command("command://notation/staff-implode-explode/explode");
+    cprop_decl title = MnemonicString("action", "&Explode");
+    cprop_decl description = TranslatableString("action", "Explode");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = StaffImplodeExplodeCommand(StaffImplodeExplodeMode::Explode);
+};
+
+struct StaffImplodeCommand {
+    cprop_decl id = Command("command://notation/staff-implode-explode/implode");
+    cprop_decl title = MnemonicString("action", "&Implode");
+    cprop_decl description = TranslatableString("action", "Implode");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = StaffImplodeExplodeCommand(StaffImplodeExplodeMode::Implode);
+};
 
 // remove commands
 inline static const muse::rcommand::Command REMOVE_SELECTED_RANGE_COMMAND("command://notation/remove-selected-range");
 inline static const muse::rcommand::Command REMOVE_EMPTY_TRAILING_MEASURES_COMMAND("command://notation/remove-empty-trailing-measures");
 
 // slash commands
-inline static const muse::rcommand::Command SLASH_FILL_COMMAND("command://notation/slash-fill");
-inline static const muse::rcommand::Command SLASH_RHYTHM_COMMAND("command://notation/slash-rhythm");
+
+struct SlashFillCommand {
+    cprop_decl id = Command("command://notation/slash-fill");
+    cprop_decl title = MnemonicString("action", "Fill with &slashes");
+    cprop_decl description = TranslatableString("action", "Fill with slashes");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct SlashRhythmCommand {
+    cprop_decl id = Command("command://notation/slash-rhythm");
+    cprop_decl title = MnemonicString("action", "Toggle rhythmic sl&ash notation");
+    cprop_decl description = TranslatableString("action", "Toggle rhythmic slash notation");
+    cprop_decl availabilities = Availability::All;
+};
 
 // spelling commands
-inline static const muse::rcommand::Command PITCH_SPELL_COMMAND("command://notation/pitch-spell");
-inline static const muse::rcommand::Command PITCH_SPELL_SHARPS_COMMAND("command://notation/pitch-spell-sharps");
-inline static const muse::rcommand::Command PITCH_SPELL_FLATS_COMMAND("command://notation/pitch-spell-flats");
-inline static const muse::rcommand::Command ENHARMONIC_SPELL_BOTH_COMMAND("command://notation/enharmonic-spell-both");
-inline static const muse::rcommand::Command ENHARMONIC_SPELL_CURRENT_COMMAND("command://notation/enharmonic-spell-current");
+
+struct OptimizeEnharmonicSpellingCommand {
+    cprop_decl id = Command("command://notation/pitch-spell");
+    cprop_decl title = MnemonicString("action", "&Optimize enharmonic spelling");
+    cprop_decl description = TranslatableString("action", "Optimize enharmonic spelling");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct RespellPitchesCommand {
+    cprop_decl id = Command("command://notation/respell-pitches");
+    cprop_decl title = MnemonicString("action", "Respell pitches");
+    cprop_decl description = TranslatableString("action", "Respell pitches with sharps or flats");
+    cprop_decl availabilities = Availability::API;
+
+    RespellPitchesMode mode = RespellPitchesMode::Sharps;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "mode", &RespellPitchesCommand::mode, "Sharps or flats" },
+    };
+};
+
+struct RespellPitchesSharpsCommand {
+    cprop_decl id = Command("command://notation/respell-pitches/sharps");
+    cprop_decl title = MnemonicString("action", "Respell pitches with &sharps");
+    cprop_decl description = TranslatableString("action", "Respell pitches with sharps");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = RespellPitchesCommand(RespellPitchesMode::Sharps);
+};
+
+struct RespellPitchesFlatsCommand {
+    cprop_decl id = Command("command://notation/respell-pitches/flats");
+    cprop_decl title = MnemonicString("action", "Respell pitches with &flats");
+    cprop_decl description = TranslatableString("action", "Respell pitches with flats");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = RespellPitchesCommand(RespellPitchesMode::Flats);
+};
+
+struct ChangeEnharmonicSpellingCommand {
+    cprop_decl id = Command("command://notation/enharmonic-spell");
+    cprop_decl title = MnemonicString("action", "Change enharmonic spelling");
+    cprop_decl description = TranslatableString("action", "Change enharmonic spelling");
+    cprop_decl availabilities = Availability::API;
+
+    EnharmonicSpellingMode mode = EnharmonicSpellingMode::Both;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "mode", &ChangeEnharmonicSpellingCommand::mode, "Enharmonic spelling mode" },
+    };
+};
+
+struct ChangeEnharmonicSpellingBothCommand {
+    cprop_decl id = Command("command://notation/enharmonic-spell/both");
+    cprop_decl title = MnemonicString("action", "Change enharmonic spelling (concert and transposed &pitch)");
+    cprop_decl description = TranslatableString("action", "Change enharmonic spelling (concert and transposed pitch)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeEnharmonicSpellingCommand(EnharmonicSpellingMode::Both);
+};
+
+struct ChangeEnharmonicSpellingCurrentCommand {
+    cprop_decl id = Command("command://notation/enharmonic-spell/current");
+    cprop_decl title = MnemonicString("action", "Change enharmonic spelling (&current pitch mode only)");
+    cprop_decl description = TranslatableString("action", "Change enharmonic spelling (current pitch mode only)");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ChangeEnharmonicSpellingCommand(EnharmonicSpellingMode::Current);
+};
 
 // screen commands
 inline static const muse::rcommand::Command SCREEN_PUT_NOTE_COMMAND("command://notation/screen-put-note"); // with params

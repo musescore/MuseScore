@@ -108,5 +108,5 @@ void ScoreAppearanceSettingsModel::showPageSettings()
 
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
-    commandDispatcher()->dispatch(OPEN_EDIT_STYLE_COMMAND);
+    commandDispatcher()->dispatch(OpenEditStyleCommand {});
 }

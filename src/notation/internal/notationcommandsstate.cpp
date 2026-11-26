@@ -234,7 +234,7 @@ static const std::vector<Command> TUPLET_COMMANDS = {
 };
 
 static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
-    ADD_DYNAMIC_COMMAND,
+    AddDynamicCommand::id,
     AddHairpinCrescendoCommand::id,
     AddHairpinDiminuendoCommand::id,
 };
@@ -519,7 +519,7 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
     }
 
-    if (command == ADD_DYNAMIC_COMMAND) {
+    if (command == AddDynamicCommand::id) {
         return CommandState(controller()->isNoteOrRestSelected() || controller()->isHairpinSelected(), false);
     }
 

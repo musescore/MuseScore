@@ -105,7 +105,7 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
 MenuItemList NotationContextMenuModel::makePageItems()
 {
     MenuItemList items {
-        makeMenuItem(OPEN_EDIT_STYLE_COMMAND),
+        makeMenuItem(OpenEditStyleCommand::id),
         makeMenuItem(OpenPageSettingsCommand::id),
         makeMenuItem(LoadStyleCommand::id),
     };
@@ -350,7 +350,7 @@ MenuItemList NotationContextMenuModel::makeVerticalBoxItems()
     addMenuItems << makeMenuItem(AddComposerTextCommand::id);
     addMenuItems << makeMenuItem(AddLyricistTextCommand::id);
     addMenuItems << makeMenuItem(AddPartTextCommand::id);
-    addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
+    addMenuItems << makeMenuItem(AddImageCommand::id);
 
     MenuItemList items = makeElementItems();
     items << makeSeparator();
@@ -363,7 +363,7 @@ MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
 {
     MenuItemList addMenuItems;
     addMenuItems << makeMenuItem(AddFrameTextCommand::id);
-    addMenuItems << makeMenuItem(ADD_IMAGE_COMMAND);
+    addMenuItems << makeMenuItem(AddImageCommand::id);
 
     MenuItemList items = makeElementItems();
     items << makeSeparator();
@@ -445,12 +445,12 @@ MenuItemList NotationContextMenuModel::makeTextItems()
 
 MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
 {
-    MenuItem* item = makeMenuItem(OPEN_EDIT_STYLE_COMMAND);
+    MenuItem* item = makeMenuItem(OpenEditStyleCommand::id);
 
     if (element) {
         std::string pageCode = EditStyleUtils::pageCodeForElement(element).toStdString();
         if (!pageCode.empty()) {
-            rcommand::CommandQuery query(OPEN_EDIT_STYLE_COMMAND);
+            rcommand::CommandQuery query(OpenEditStyleCommand::id);
             query.addParam("page_code", Val(pageCode));
 
             std::string subPageCode = EditStyleUtils::subPageCodeForElement(element).toStdString();

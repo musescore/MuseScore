@@ -112,6 +112,27 @@ enum class ArticulationType {
     STACCATO = (int)mu::engraving::SymId::articStaccatoAbove,
 };
 
+//! NOTE Values mirror SymId so the command argument casts to a symbol id.
+enum class BowType {
+    UP = (int)mu::engraving::SymId::stringsUpBow,
+    DOWN = (int)mu::engraving::SymId::stringsDownBow,
+};
+
+enum class StaffImplodeExplodeMode : unsigned char {
+    Explode,
+    Implode,
+};
+
+enum class EnharmonicSpellingMode : unsigned char {
+    Both,
+    Current,
+};
+
+enum class RespellPitchesMode : unsigned char {
+    Sharps,
+    Flats,
+};
+
 enum class DragMode : unsigned char
 {
     BothXY = 0,
