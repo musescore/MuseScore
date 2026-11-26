@@ -22,7 +22,11 @@
 
 #pragma once
 
+#include <optional>
+#include <set>
+
 #include <QAbstractItemModel>
+#include <QPersistentModelIndex>
 #include <QQmlParserStatus>
 #include <QVariant>
 #include <qqmlintegration.h>
@@ -36,6 +40,7 @@
 #include "rcommand/icommanddispatcher.h"
 #include "interactive/iinteractive.h"
 #include "shortcuts_v2/icommandshortcutsregister.h"
+#include "ui/inavigationcontroller.h"
 
 #include "layoutpanelutils.h"
 
@@ -64,6 +69,8 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY scoreChanged FINAL)
     Q_PROPERTY(QString scoreName READ scoreName NOTIFY scoreChanged FINAL)
     Q_PROPERTY(bool hasHiddenOtherInstruments READ hasHiddenOtherInstruments NOTIFY hasHiddenOtherInstrumentsChanged FINAL)
+    Q_PROPERTY(AbstractLayoutPanelTreeItem * draggedItem READ draggedItem NOTIFY draggedIndexChanged FINAL)
+    Q_PROPERTY(QModelIndex draggedIndex READ draggedIndex NOTIFY draggedIndexChanged FINAL)
 
     QML_ELEMENT
 
@@ -73,6 +80,7 @@ public:
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
 
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
     ~LayoutPanelTreeModel() override;
@@ -101,6 +109,9 @@ public:
     QString scoreName() const;
     bool hasHiddenOtherInstruments() const;
 
+    AbstractLayoutPanelTreeItem* draggedItem() const;
+    QModelIndex draggedIndex() const;
+
     Q_INVOKABLE void load();
     Q_INVOKABLE void showOtherInstruments();
     Q_INVOKABLE void toggleStaveSharing(bool on);
@@ -118,13 +129,18 @@ public:
     Q_INVOKABLE void changeVisibility(const QModelIndex& index, bool visible);
     Q_INVOKABLE void changeEnabledOfSelectedRows(bool enable);
     Q_INVOKABLE void changeEnabled(const QModelIndex& index, bool enable);
+    Q_INVOKABLE void setExpanded(const QModelIndex& index, bool expand);
+    Q_INVOKABLE void setAllExpanded(bool expand);
 
-    Q_INVOKABLE void startActiveDrag();
+    //! Brings back the keyboard focus that expanding or collapsing a row took from its rebuilt controls
+    Q_INVOKABLE void restoreNavigation();
+
+    Q_INVOKABLE void startActiveDrag(const QModelIndex& draggedIndex);
     Q_INVOKABLE void endActiveDrag();
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
-    Q_INVOKABLE QModelIndex dragOver(const QModelIndex& sourceIndex, const QModelIndex& targetIndex);
+    Q_INVOKABLE void dragOver(const QModelIndex& targetIndex);
 
 signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
@@ -137,9 +153,10 @@ signals:
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
     void isHideEmptyStavesEnabledChanged(bool enabled);
-    void sharedGroupEnabledChanged();
+    void expandedChanged(const QModelIndex& index);
     void scoreChanged();
     void hasHiddenOtherInstrumentsChanged();
+    void draggedIndexChanged();
 
 private slots:
     void updateRearrangementAvailability();
@@ -167,7 +184,6 @@ private:
 
     bool shouldShowSystemObjectLayers() const;
 
-    void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
     using PartList = std::vector<const engraving::Part*>;
@@ -190,6 +206,13 @@ private:
     void setHasHiddenOtherInstruments(bool hasHidden);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
+
+    void initExpanded(AbstractLayoutPanelTreeItem* item);
+    void applyExpanded(AbstractLayoutPanelTreeItem* item, bool expand);
+    void updateExpanded(AbstractLayoutPanelTreeItem* item);
+
+    QModelIndexList sortedSelectedIndexes() const;
+    bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow);
 
     bool needWarnOnRemoveRows(int row, int count);
     muse::async::Promise<bool> askAboutRemovingInstruments(int count);
@@ -235,6 +258,16 @@ private:
 
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
+    QPersistentModelIndex m_draggedIndex;
+
+    std::set<muse::ID> m_expandedItems;
+
+    struct NavigationTarget {
+        std::string section;
+        std::string panel;
+        muse::ui::INavigation::Index index;
+    };
+    std::optional<NavigationTarget> m_navigationToRestore;
 
     muse::ID m_systemStaffToSelect;
 };

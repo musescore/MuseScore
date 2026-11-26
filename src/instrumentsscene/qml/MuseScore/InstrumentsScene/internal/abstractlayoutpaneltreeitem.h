@@ -49,6 +49,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
     Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
+    Q_PROPERTY(bool isExpanded READ isExpanded NOTIFY isExpandedChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
@@ -72,6 +73,7 @@ public:
     bool isEnabled() const;
     bool isVisible() const;
     bool isExpandable() const;
+    bool isExpanded() const;
     bool isRemovable() const;
 
     bool isSelectable() const;
@@ -117,6 +119,7 @@ public slots:
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
+    void setIsExpanded(bool expanded);
     void setIsRemovable(bool removable);
     void setIsSelectable(bool selectable);
     void setIsSelected(bool selected);
@@ -128,6 +131,7 @@ signals:
     void isEnabledChanged(bool enabled);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
+    void isExpandedChanged();
     void isRemovableChanged(bool isRemovable);
     void isSelectableChanged(bool isSelectable);
     void isSelectedChanged(bool isSelected);
@@ -157,6 +161,7 @@ private:
     bool m_isEnabled = true;
     bool m_isVisible = false;
     bool m_isExpandable = false;
+    bool m_isExpanded = false;
     bool m_isRemovable = false;
     bool m_isSelectable = false;
     bool m_isSelected = false;

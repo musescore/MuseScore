@@ -58,6 +58,7 @@
 #include "project/tests/mocks/projectsessionmock.h"
 #include "rcommand/tests/mocks/commanddispatchermock.h"
 #include "shortcuts_v2/tests/mocks/commandshortcutsregistermock.h"
+#include "ui/tests/mocks/navigationmocks.h"
 
 using namespace ::testing;
 using namespace mu::instrumentsscene;
@@ -89,6 +90,7 @@ protected:
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         m_dispatcher = std::make_shared<NiceMock<muse::rcommand::CommandDispatcherMock> >();
         m_shortcuts = std::make_shared<NiceMock<muse::shortcuts::CommandShortcutsRegisterMock> >();
+        m_navigation = std::make_shared<NiceMock<muse::ui::NavigationControllerMock> >();
 
         ON_CALL(*m_session, masterNotation()).WillByDefault(Return(m_masterNotation));
         ON_CALL(*m_session, masterNotationChanged()).WillByDefault(Return(m_masterNotationChanged));
@@ -225,6 +227,19 @@ protected:
         ON_CALL(*m_parts, partExists(_)).WillByDefault(Invoke(contains));
     }
 
+    //! Keyboard focus on the control at the index of the "Section" section's "Panel" panel
+    void focusNavigationControl(const muse::ui::INavigation::Index& index)
+    {
+        m_focusedControlIndex = index;
+
+        ON_CALL(m_navigationSection, name()).WillByDefault(Return(QString("Section")));
+        ON_CALL(m_navigationPanel, name()).WillByDefault(Return(QString("Panel")));
+        ON_CALL(m_navigationPanel, section()).WillByDefault(Return(&m_navigationSection));
+        ON_CALL(m_navigationControl, panel()).WillByDefault(Return(&m_navigationPanel));
+        ON_CALL(m_navigationControl, index()).WillByDefault(ReturnRef(m_focusedControlIndex));
+        ON_CALL(*m_navigation, activeControl()).WillByDefault(Return(&m_navigationControl));
+    }
+
     //! Same as QML: classBegin() runs init(), which loads the current notation
     void createModel()
     {
@@ -235,6 +250,7 @@ protected:
         m_model->interactive.set(m_interactive);
         m_model->commandDispatcher.set(m_dispatcher);
         m_model->commandShortcutsRegister.set(m_shortcuts);
+        m_model->navigationController.set(m_navigation);
 
         static_cast<QQmlParserStatus*>(m_model)->classBegin();
     }
@@ -351,6 +367,11 @@ protected:
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<muse::rcommand::CommandDispatcherMock> m_dispatcher;
     std::shared_ptr<muse::shortcuts::CommandShortcutsRegisterMock> m_shortcuts;
+    std::shared_ptr<muse::ui::NavigationControllerMock> m_navigation;
+    NiceMock<muse::ui::NavigationSectionMock> m_navigationSection;
+    NiceMock<muse::ui::NavigationPanelMock> m_navigationPanel;
+    NiceMock<muse::ui::NavigationControlMock> m_navigationControl;
+    muse::ui::INavigation::Index m_focusedControlIndex;
 
     async::ChangedNotifier<const Part*> m_partsNotifier;
     std::map<ID, async::ChangedNotifier<const Staff*> > m_staffNotifiers;
@@ -455,6 +476,25 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_SharedPart)
     EXPECT_EQ(item(2)->type(), ItemType::SHARED_PART);
     EXPECT_EQ(item(2)->id(), s->id());
     EXPECT_TRUE(item(2)->isEmpty());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_EndsActiveDrag)
+{
+    // [GIVEN] An instrument being dragged
+    addPart(u"A");
+    addPart(u"B");
+    createModel(); // [A:0] A B
+    m_model->startActiveDrag(row(1));
+
+    // [WHEN] The panel reloads
+    m_partsNotifier.changed();
+
+    // [THEN] Nothing is dragged any more
+    EXPECT_EQ(m_model->draggedItem(), nullptr);
+
+    // [THEN] Ending the drag sends nothing to the score
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
+    m_model->endActiveDrag();
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_GroupedInstrumentWithoutAddStaffRow)
@@ -1139,6 +1179,42 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveSelectedRowsDown_Staff)
     EXPECT_FALSE(m_model->isMovingDownAvailable());
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, StartActiveDrag_CollapsedWhileDragged)
+{
+    // [GIVEN] An expanded instrument, and a shared-staves group that isn't combined, so it can't collapse
+    addPart(u"A");
+    addSharedPart(u"S");
+    createModel(); // [A:0] A S
+    m_model->setExpanded(row(1), true);
+
+    std::shared_ptr<int> expandedChanges = countEmits(&LayoutPanelTreeModel::expandedChanged);
+
+    // [WHEN] The instrument is dragged
+    m_model->startActiveDrag(row(1));
+
+    // [THEN] It's shown collapsed
+    EXPECT_FALSE(item(1)->isExpanded());
+
+    // [WHEN] It's dropped
+    m_model->endActiveDrag();
+
+    // [THEN] It's expanded again
+    EXPECT_TRUE(item(1)->isExpanded());
+    EXPECT_EQ(*expandedChanges, 2);
+
+    // [WHEN] The group is dragged
+    m_model->startActiveDrag(row(2));
+
+    // [THEN] It's shown collapsed
+    EXPECT_FALSE(item(2)->isExpanded());
+
+    // [WHEN] It's dropped
+    m_model->endActiveDrag();
+
+    // [THEN] It's open again
+    EXPECT_TRUE(item(2)->isExpanded());
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_AppliesOrder)
 {
     // [GIVEN] Three instruments
@@ -1151,7 +1227,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_AppliesOrder)
     EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A is dragged down past B and C
-    m_model->startActiveDrag();
+    m_model->startActiveDrag(row(1));
     EXPECT_TRUE(moveRootRows(1, 1, 2));
     EXPECT_TRUE(moveRootRows(2, 1, 3));
 
@@ -1178,8 +1254,27 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_WithoutMoves)
     EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
 
     // [WHEN] A drag ends without moving anything
-    m_model->startActiveDrag();
+    m_model->startActiveDrag(row(1));
     m_model->endActiveDrag();
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, EndActiveDrag_WithoutDrag)
+{
+    // [GIVEN] Two instruments
+    addPart(u"A");
+    addPart(u"B");
+    createModel(); // [A:0] A B
+
+    std::shared_ptr<int> dragChanges = countEmits(&LayoutPanelTreeModel::draggedIndexChanged);
+
+    // [THEN] Nothing is sent to the score
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
+
+    // [WHEN] A drag ends that never started
+    m_model->endActiveDrag();
+
+    // [THEN] Nothing is reported
+    EXPECT_EQ(*dragChanges, 0);
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_MarkingsOntoMarkings)
@@ -1314,12 +1409,12 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_GroupHeader)
     createModel(); // [A:0] A S B C
 
     // [WHEN] The group header is dragged onto C
-    m_model->startActiveDrag();
-    const QModelIndex movedIndex = m_model->dragOver(row(2), row(4));
+    m_model->startActiveDrag(row(2));
+    m_model->dragOver(row(4));
 
-    // [THEN] The group moves below C with its instrument, and the header's new row is returned
+    // [THEN] The group moves below C with its instrument, and the dragged row follows the header
     EXPECT_EQ(rowNames(), "[A:0] A C S B");
-    EXPECT_EQ(movedIndex, row(3));
+    EXPECT_EQ(m_model->draggedIndex(), row(3));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_NotMoved)
@@ -1332,12 +1427,12 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_NotMoved)
     createModel(); // [A:0] A S B
 
     // [WHEN] B is dragged onto the group header
-    m_model->startActiveDrag();
-    const QModelIndex movedIndex = m_model->dragOver(row(3), row(2));
+    m_model->startActiveDrag(row(3));
+    m_model->dragOver(row(2));
 
-    // [THEN] B stays in the group, and its row is returned
+    // [THEN] B stays in the group, and is still the dragged row
     EXPECT_EQ(rowNames(), "[A:0] A S B");
-    EXPECT_EQ(movedIndex, row(3));
+    EXPECT_EQ(m_model->draggedIndex(), row(3));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_StaffRow)
@@ -1350,23 +1445,23 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_StaffRow)
     createModel(); // [A:0] A S B
 
     // [WHEN] A's first staff is dragged onto its third, which has the group header's row number
-    m_model->startActiveDrag();
-    const QModelIndex movedIndex = m_model->dragOver(childRow(1, 0), childRow(1, 2));
+    m_model->startActiveDrag(childRow(1, 0));
+    m_model->dragOver(childRow(1, 2));
 
-    // [THEN] Only the staff moves, and its new row is returned
+    // [THEN] Only the staff moves, and the dragged row follows it
     EXPECT_EQ(rowNames(), "[A:0] A S B");
     EXPECT_EQ(childItem(1, 2)->id(), a->staff(0)->id());
-    EXPECT_EQ(movedIndex, childRow(1, 2));
+    EXPECT_EQ(m_model->draggedIndex(), childRow(1, 2));
 
     m_model->endActiveDrag();
 
     // [WHEN] The group header is dragged onto A's second staff, whose row number is A's
-    m_model->startActiveDrag();
-    const QModelIndex notMovedIndex = m_model->dragOver(row(2), childRow(1, 1));
+    m_model->startActiveDrag(row(2));
+    m_model->dragOver(childRow(1, 1));
 
     // [THEN] A staff doesn't take a group, so nothing moves
     EXPECT_EQ(rowNames(), "[A:0] A S B");
-    EXPECT_EQ(notMovedIndex, row(2));
+    EXPECT_EQ(m_model->draggedIndex(), row(2));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SelectRow_MarksItemsSelected)
@@ -1615,22 +1710,45 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_UpdatesSetting
     EXPECT_EQ(*hideChanges, 1);
 }
 
-TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_SharedGroupEnabledChanged)
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_CombinedGroupCollapses)
 {
     // [GIVEN] An instrument and a shared-staves group, stave sharing off
     addPart(u"A");
     addSharedPart(u"S");
     createModel(); // [A:0] A S
 
-    std::shared_ptr<int> groupChanges = countEmits(&LayoutPanelTreeModel::sharedGroupEnabledChanged);
+    std::shared_ptr<int> expandedChanges = countEmits(&LayoutPanelTreeModel::expandedChanged);
+
+    // [THEN] The group can't collapse, so it's open
+    EXPECT_TRUE(item(2)->isExpanded());
 
     // [WHEN] The score turns on stave sharing
     m_score->style().set(Sid::enableStaveSharing, true);
     m_scoreChanges.send(ScoreChanges());
 
-    // [THEN] The panel reports that the group is now combined
+    // [THEN] The group is now combined and collapsed, and the panel reports it
     EXPECT_TRUE(item(2)->isEnabled());
-    EXPECT_EQ(*groupChanges, 1);
+    EXPECT_FALSE(item(2)->isExpanded());
+    EXPECT_EQ(*expandedChanges, 1);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, OnScoreChanged_RecombinedGroupKeepsExpanded)
+{
+    // [GIVEN] An instrument and an expanded, combined shared-staves group
+    addPart(u"A");
+    addSharedPart(u"S");
+    m_score->style().set(Sid::enableStaveSharing, true);
+    createModel(); // [A:0] A S
+    m_model->setExpanded(row(2), true);
+
+    // [WHEN] The score turns stave sharing off and on again
+    m_score->style().set(Sid::enableStaveSharing, false);
+    m_scoreChanges.send(ScoreChanges());
+    m_score->style().set(Sid::enableStaveSharing, true);
+    m_scoreChanges.send(ScoreChanges());
+
+    // [THEN] The group is still expanded
+    EXPECT_TRUE(item(2)->isExpanded());
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetupNotationConnections_TextEditingIgnored)
@@ -1923,6 +2041,135 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, ChangeEnabledOfSelectedRows)
     // [THEN] The panel keeps its rows
     EXPECT_TRUE(item(2)->isEnabled());
     EXPECT_EQ(*resets, 0);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetExpanded_KeptOnReload)
+{
+    // [GIVEN] Two instruments and a combined shared-staves group, all collapsed
+    addPart(u"A");
+    addPart(u"B");
+    addSharedPart(u"S");
+    m_score->style().set(Sid::enableStaveSharing, true);
+    createModel(); // [A:0] A B S
+
+    EXPECT_FALSE(item(1)->isExpanded());
+    EXPECT_FALSE(item(3)->isExpanded());
+
+    // [WHEN] A and the group are expanded
+    m_model->setExpanded(row(1), true);
+    m_model->setExpanded(row(3), true);
+
+    // [THEN] Both are open
+    EXPECT_TRUE(item(1)->isExpanded());
+    EXPECT_TRUE(item(3)->isExpanded());
+
+    std::vector<int> reportedRows;
+    QObject::connect(m_model, &LayoutPanelTreeModel::expandedChanged, m_model, [&reportedRows](const QModelIndex& index) {
+        reportedRows.push_back(index.row());
+    });
+
+    // [WHEN] The panel reloads
+    m_partsNotifier.changed();
+
+    // [THEN] Both are still open, and B is still collapsed
+    EXPECT_TRUE(item(1)->isExpanded());
+    EXPECT_FALSE(item(2)->isExpanded());
+    EXPECT_TRUE(item(3)->isExpanded());
+
+    // [THEN] Only they are reported, so that the view shows their rows again
+    EXPECT_EQ(reportedRows, (std::vector<int> { 1, 3 }));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetExpanded_NotExpandable)
+{
+    // [GIVEN] An instrument and a shared-staves group that isn't combined
+    addPart(u"A");
+    addSharedPart(u"S");
+    createModel(); // [A:0] A S
+
+    // [WHEN] The group is collapsed
+    m_model->setExpanded(row(2), false);
+
+    // [THEN] It stays open
+    EXPECT_TRUE(item(2)->isExpanded());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SetAllExpanded)
+{
+    // [GIVEN] An instrument and two combined shared-staves groups
+    addPart(u"A");
+    addSharedPart(u"S");
+    addSharedPart(u"T");
+    m_score->style().set(Sid::enableStaveSharing, true);
+    createModel(); // [A:0] A S T
+
+    // [WHEN] Everything is expanded
+    m_model->setAllExpanded(true);
+
+    // [THEN] The instrument and both groups are open
+    EXPECT_TRUE(item(1)->isExpanded());
+    EXPECT_TRUE(item(2)->isExpanded());
+    EXPECT_TRUE(item(3)->isExpanded());
+
+    // [WHEN] Everything is collapsed
+    m_model->setAllExpanded(false);
+
+    // [THEN] All three are collapsed
+    EXPECT_FALSE(item(1)->isExpanded());
+    EXPECT_FALSE(item(2)->isExpanded());
+    EXPECT_FALSE(item(3)->isExpanded());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RestoreNavigation_AfterExpanding)
+{
+    // [GIVEN] An instrument, and keyboard focus on a control
+    addPart(u"A");
+    createModel(); // [A:0] A
+    focusNavigationControl({ 2, 1 });
+
+    // [WHEN] The instrument is expanded
+    m_model->setExpanded(row(1), true);
+
+    // [THEN] The control is focused again once the view is relaid out
+    EXPECT_CALL(*m_navigation, requestActivateByIndex("Section", "Panel", m_focusedControlIndex)).Times(1);
+    m_model->restoreNavigation();
+
+    Mock::VerifyAndClearExpectations(m_navigation.get());
+
+    // [THEN] Only once
+    EXPECT_CALL(*m_navigation, requestActivateByIndex(_, _, _)).Times(0);
+    m_model->restoreNavigation();
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RestoreNavigation_NothingChanged)
+{
+    // [GIVEN] An expanded instrument, and keyboard focus on a control
+    addPart(u"A");
+    createModel(); // [A:0] A
+    m_model->setExpanded(row(1), true);
+    focusNavigationControl({ 2, 1 });
+
+    // [WHEN] The instrument is expanded again
+    m_model->setExpanded(row(1), true);
+
+    // [THEN] There's nothing to bring back
+    EXPECT_CALL(*m_navigation, requestActivateByIndex(_, _, _)).Times(0);
+    m_model->restoreNavigation();
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RestoreNavigation_AfterExpandingAll)
+{
+    // [GIVEN] An instrument, and keyboard focus on a control, e.g. in the menu
+    addPart(u"A");
+    createModel(); // [A:0] A
+    focusNavigationControl({ 2, 1 });
+
+    // [WHEN] Everything is expanded
+    m_model->setAllExpanded(true);
+
+    // [THEN] There's nothing to bring back: no row's own control was used
+    EXPECT_CALL(*m_navigation, requestActivateByIndex(_, _, _)).Times(0);
+    m_model->restoreNavigation();
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, AddInstruments)

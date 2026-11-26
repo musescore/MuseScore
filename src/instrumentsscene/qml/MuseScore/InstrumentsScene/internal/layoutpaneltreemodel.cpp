@@ -117,7 +117,6 @@ void LayoutPanelTreeModel::onNotationChanged()
         return;
     }
 
-    onBeforeChangeNotation();
     m_notation = context()->currentNotation();
     m_showsOtherInstruments = false;
 
@@ -173,21 +172,6 @@ bool LayoutPanelTreeModel::shouldShowSystemObjectLayers() const
     // Only show system object staves in master score
     // TODO: extend system object staves logic to parts
     return isMasterScore();
-}
-
-void LayoutPanelTreeModel::onBeforeChangeNotation()
-{
-    if (!m_notation || !m_rootItem) {
-        return;
-    }
-
-    QList<muse::ID> partIdList;
-
-    for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-        if (item->type() == LayoutPanelItemType::ItemType::PART) {
-            partIdList << item->id();
-        }
-    }
 }
 
 void LayoutPanelTreeModel::setLoadingBlocked(bool blocked)
@@ -396,7 +380,12 @@ void LayoutPanelTreeModel::clear()
 void LayoutPanelTreeModel::deleteItems()
 {
     m_dragSourceParentItem = nullptr;
-    m_dragInProgress = false;
+
+    if (m_dragInProgress) {
+        m_dragInProgress = false;
+        m_draggedIndex = QPersistentModelIndex();
+        emit draggedIndexChanged();
+    }
 
     m_selectionModel->clear();
     delete m_rootItem;
@@ -467,7 +456,18 @@ void LayoutPanelTreeModel::load()
 
     m_rootItem->setChildren(rows);
 
+    for (AbstractLayoutPanelTreeItem* item : rows) {
+        initExpanded(item);
+    }
+
     endResetModel();
+
+    // The view shows expanded rows only when told
+    for (const AbstractLayoutPanelTreeItem* item : rows) {
+        if (item->isExpandable() && item->isExpanded()) {
+            emit expandedChanged(index(item->row(), 0, QModelIndex()));
+        }
+    }
 
     m_shouldUpdateSystemObjectLayers = false;
 
@@ -596,28 +596,13 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
         return;
     }
 
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexList = sortedSelectedIndexes();
     if (selectedIndexList.isEmpty()) {
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](QModelIndex f, QModelIndex s) -> bool {
-        return f.row() < s.row();
-    });
-
-    const QModelIndex& sourceRowFirst = selectedIndexList.first();
-
-    if (sourceRowFirst.parent().isValid()) {
-        moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
-                 sourceRowFirst.row() - 1);
-        return;
-    }
-
-    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceRowFirst.row(), selectedIndexList.last().row(),
-                                                                              sourceRowFirst.row() - 1);
-    if (move) {
-        moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
-    }
+    const QModelIndex& first = selectedIndexList.first();
+    moveRowRange(first.parent(), first.row(), selectedIndexList.last().row(), first.row() - 1);
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -626,29 +611,14 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
         return;
     }
 
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexList = sortedSelectedIndexes();
     if (selectedIndexList.isEmpty()) {
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
-        return f.row() < s.row();
-    });
-
-    const QModelIndex& sourceRowFirst = selectedIndexList.first();
-    const QModelIndex& sourceRowLast = selectedIndexList.last();
-
-    if (sourceRowFirst.parent().isValid()) {
-        moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
-                 sourceRowLast.row() + 1);
-        return;
-    }
-
-    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceRowFirst.row(), sourceRowLast.row(),
-                                                                              sourceRowLast.row() + 1);
-    if (move) {
-        moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
-    }
+    const QModelIndex& first = selectedIndexList.first();
+    const QModelIndex& last = selectedIndexList.last();
+    moveRowRange(first.parent(), first.row(), last.row(), last.row() + 1);
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -657,16 +627,12 @@ void LayoutPanelTreeModel::removeSelectedRows()
         return;
     }
 
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexList = sortedSelectedIndexes();
     if (selectedIndexList.empty()) {
         return;
     }
 
-    QModelIndex firstIndex = *std::min_element(selectedIndexList.cbegin(), selectedIndexList.cend(),
-                                               [](const QModelIndex& f, const QModelIndex& s) {
-        return f.row() < s.row();
-    });
-
+    const QModelIndex firstIndex = selectedIndexList.first();
     const int count = selectedIndexList.size();
 
     // When removing instruments, the user needs to be warned in some cases
@@ -690,43 +656,16 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         setLoadingBlocked(false);
     };
 
-    AbstractLayoutPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
-    AbstractLayoutPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
-
-    if (!sourceParentItem) {
-        sourceParentItem = m_rootItem;
-    }
-
-    if (!destinationParentItem) {
-        destinationParentItem = m_rootItem;
-    }
-
-    int sourceFirstRow = sourceRow;
-    int sourceLastRow = sourceRow + count - 1;
-
-    if (sourceRow < 0 || count <= 0 || destinationChild < 0) {
+    AbstractLayoutPanelTreeItem* sourceParentItem = sourceParent.isValid() ? modelIndexToItem(sourceParent) : m_rootItem;
+    AbstractLayoutPanelTreeItem* destinationParentItem = destinationParent.isValid() ? modelIndexToItem(destinationParent) : m_rootItem;
+    if (!sourceParentItem || !destinationParentItem || count <= 0 || sourceRow == destinationChild) {
         return false;
     }
 
-    if (sourceRow == destinationChild) {
-        return false;
-    }
-
-    int destinationRow = (sourceLastRow > destinationChild) ? destinationChild : destinationChild + 1;
-
-    if (sourceParentItem && destinationParentItem) {
-        int maxRow = sourceParentItem->childCount() - 1;
-
-        if (sourceLastRow > maxRow || destinationRow > maxRow + 1) {
-            return false;
-        }
-    }
-
-    if (!sourceParentItem || !destinationParentItem) {
-        return false;
-    }
-
-    if (sourceFirstRow >= sourceParentItem->childCount()) {
+    const int sourceLastRow = sourceRow + count - 1;
+    const int destinationRow = (sourceLastRow > destinationChild) ? destinationChild : destinationChild + 1;
+    const int maxRow = sourceParentItem->childCount() - 1;
+    if (sourceRow < 0 || destinationChild < 0 || sourceLastRow > maxRow || destinationRow > maxRow + 1) {
         return false;
     }
 
@@ -739,8 +678,8 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         m_dragSourceParentItem = sourceParentItem;
     }
 
-    beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
+    beginMoveRows(sourceParent, sourceRow, sourceLastRow, destinationParent, destinationRow);
+    sourceParentItem->moveChildren(sourceRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
     if (!m_dragInProgress) {
@@ -752,36 +691,56 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     return true;
 }
 
-QModelIndex LayoutPanelTreeModel::dragOver(const QModelIndex& sourceIndex, const QModelIndex& targetIndex)
+void LayoutPanelTreeModel::dragOver(const QModelIndex& targetIndex)
 {
-    AbstractLayoutPanelTreeItem* draggedItem = modelIndexToItem(sourceIndex);
+    AbstractLayoutPanelTreeItem* sourceItem = modelIndexToItem(m_draggedIndex);
     const AbstractLayoutPanelTreeItem* targetItem = modelIndexToItem(targetIndex);
-    if (!draggedItem || !targetItem || draggedItem == targetItem
-        || !targetItem->canAcceptDrop(QVariant::fromValue(static_cast<QObject*>(draggedItem)))) {
-        return sourceIndex;
+    if (!sourceItem || !targetItem) {
+        return;
     }
 
-    if (sourceIndex.parent().isValid()) {
-        const bool moved = moveRows(sourceIndex.parent(), sourceIndex.row(), 1, targetIndex.parent(), targetIndex.row());
-        return moved ? index(targetIndex.row(), 0, targetIndex.parent()) : sourceIndex;
+    const QModelIndex parent = m_draggedIndex.parent();
+    if (targetIndex.parent() != parent) {
+        return;
     }
 
-    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(sourceIndex.row(), sourceIndex.row(), targetIndex.row());
-    if (!move || !moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow)) {
-        return sourceIndex;
+    const QVariant source = QVariant::fromValue(static_cast<QObject*>(sourceItem));
+    if (!targetItem->canAcceptDrop(source)) {
+        return;
     }
 
-    const int newRow = move->destinationRow > move->sourceRow ? move->destinationRow - move->count + 1 : move->destinationRow;
-    return index(newRow, 0, QModelIndex());
+    // m_draggedIndex has followed the row
+    const int row = m_draggedIndex.row();
+    if (moveRowRange(parent, row, row, targetIndex.row())) {
+        emit draggedIndexChanged();
+    }
 }
 
-void LayoutPanelTreeModel::startActiveDrag()
+void LayoutPanelTreeModel::startActiveDrag(const QModelIndex& draggedIndex)
 {
     m_dragInProgress = true;
+    m_draggedIndex = draggedIndex;
+    emit draggedIndexChanged();
+
+    if (AbstractLayoutPanelTreeItem* item = draggedItem()) {
+        updateExpanded(item);
+    }
 }
 
 void LayoutPanelTreeModel::endActiveDrag()
 {
+    if (!m_dragInProgress) {
+        return;
+    }
+
+    AbstractLayoutPanelTreeItem* item = draggedItem();
+    m_draggedIndex = QPersistentModelIndex();
+    emit draggedIndexChanged();
+
+    if (item) {
+        updateExpanded(item);
+    }
+
     setLoadingBlocked(true);
 
     if (m_dragSourceParentItem) {
@@ -830,6 +789,51 @@ void LayoutPanelTreeModel::changeEnabled(const QModelIndex& index, bool enable)
     item->setIsEnabled(enable);
 
     setLoadingBlocked(false);
+}
+
+void LayoutPanelTreeModel::setExpanded(const QModelIndex& index, bool expand)
+{
+    AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
+    if (!item) {
+        return;
+    }
+
+    const bool wasExpanded = item->isExpanded();
+    applyExpanded(item, expand);
+    if (item->isExpanded() == wasExpanded) {
+        return;
+    }
+
+    // Expanding or collapsing doesn't move the row, so its control has the same index once the row is rebuilt
+    const muse::ui::INavigationControl* control = navigationController()->activeControl();
+    if (control) {
+        const muse::ui::INavigationPanel* panel = control->panel();
+        m_navigationToRestore = NavigationTarget { panel->section()->name().toStdString(), panel->name().toStdString(),
+                                                   control->index() };
+    }
+}
+
+void LayoutPanelTreeModel::setAllExpanded(bool expand)
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        applyExpanded(item, expand);
+    }
+}
+
+void LayoutPanelTreeModel::restoreNavigation()
+{
+    if (!m_navigationToRestore) {
+        return;
+    }
+
+    const NavigationTarget target = *m_navigationToRestore;
+    m_navigationToRestore.reset();
+
+    navigationController()->requestActivateByIndex(target.section, target.panel, target.index);
 }
 
 QModelIndex LayoutPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
@@ -981,6 +985,16 @@ bool LayoutPanelTreeModel::hasHiddenOtherInstruments() const
     return m_hasHiddenOtherInstruments;
 }
 
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::draggedItem() const
+{
+    return modelIndexToItem(m_draggedIndex);
+}
+
+QModelIndex LayoutPanelTreeModel::draggedIndex() const
+{
+    return m_draggedIndex;
+}
+
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
     muse::shortcuts::Shortcut shortcut = commandShortcutsRegister()->shortcut(INSTRUMENTS_SELECT_COMMAND);
@@ -1013,56 +1027,28 @@ void LayoutPanelTreeModel::setHasHiddenOtherInstruments(bool hasHidden)
 
 void LayoutPanelTreeModel::updateRearrangementAvailability()
 {
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+    const QModelIndexList selectedIndexList = sortedSelectedIndexes();
 
-    if (selectedIndexList.isEmpty()) {
+    const auto hasFirstItemType = [this, &selectedIndexList](const QModelIndex& index) {
+        return modelIndexToItem(index)->type() == modelIndexToItem(selectedIndexList.first())->type();
+    };
+
+    if (selectedIndexList.isEmpty() || !std::all_of(selectedIndexList.cbegin(), selectedIndexList.cend(), hasFirstItemType)) {
         updateMovingUpAvailability(false);
         updateMovingDownAvailability(false);
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
-        return f.row() < s.row();
-    });
-
-    bool isRearrangementAvailable = true;
-
-    QMutableListIterator<QModelIndex> it(selectedIndexList);
-    LayoutPanelItemType::ItemType prevItemType = LayoutPanelItemType::UNDEFINED;
-
-    while (it.hasNext() && selectedIndexList.count() > 1) {
-        int nextRow = it.next().row();
-        int previousRow = it.peekPrevious().row();
-
-        isRearrangementAvailable = (nextRow - previousRow <= 1);
-
-        if (isRearrangementAvailable) {
-            const AbstractLayoutPanelTreeItem* item = modelIndexToItem(it.value());
-
-            if (prevItemType != LayoutPanelItemType::UNDEFINED) {
-                isRearrangementAvailable = item->type() == prevItemType;
-            }
-
-            prevItemType = item->type();
-        }
-
-        if (!isRearrangementAvailable) {
-            updateMovingUpAvailability(isRearrangementAvailable);
-            updateMovingDownAvailability(isRearrangementAvailable);
-            return;
-        }
-    }
-
     const QModelIndex& first = selectedIndexList.first();
     QModelIndex last = selectedIndexList.last();
-    bool isMovingUpAllowed = isRearrangementAvailable;
-    bool isMovingDownAllowed = isRearrangementAvailable;
+    bool isMovingUpAllowed = true;
+    bool isMovingDownAllowed = true;
 
     if (!first.parent().isValid()) {
         const std::optional<RootTreeItem::RowMove> upMove = m_rootItem->resolveMove(first.row(), last.row(), first.row() - 1);
         const std::optional<RootTreeItem::RowMove> downMove = m_rootItem->resolveMove(first.row(), last.row(), last.row() + 1);
-        isMovingUpAllowed = isMovingUpAllowed && upMove.has_value();
-        isMovingDownAllowed = isMovingDownAllowed && downMove.has_value();
+        isMovingUpAllowed = upMove.has_value();
+        isMovingDownAllowed = downMove.has_value();
 
         if (downMove) {
             last = index(downMove->sourceRow + downMove->count - 1, 0, QModelIndex());
@@ -1119,37 +1105,24 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
 void LayoutPanelTreeModel::updateRemovingAvailability()
 {
     const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    const QModelIndex parent = selectedIndexes.empty() ? QModelIndex() : selectedIndexes.first().parent();
 
-    bool isRemovingAvailable = !selectedIndexes.empty();
-    const AbstractLayoutPanelTreeItem* parent = nullptr;
-
-    for (const QModelIndex& index : selectedIndexes) {
+    //! NOTE: all selected items must have the same parent
+    const auto isRemovable = [this, &parent](const QModelIndex& index) {
         const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
-        isRemovingAvailable = item && item->isRemovable();
+        return item && item->isRemovable() && index.parent() == parent;
+    };
 
-        //! NOTE: all selected items must have the same parent
-        if (isRemovingAvailable && parent) {
-            if (parent != item->parentItem()) {
-                isRemovingAvailable = false;
-            }
-        }
-
-        if (!isRemovingAvailable) {
-            break;
-        }
-
-        parent = item->parentItem();
-    }
+    bool isRemovingAvailable = !selectedIndexes.empty()
+                               && std::all_of(selectedIndexes.cbegin(), selectedIndexes.cend(), isRemovable);
 
     //! NOTE: the user is allowed to remove all children only for the root item
-    if (isRemovingAvailable && parent != m_rootItem) {
-        int removableChildCount = 0;
-
-        for (const AbstractLayoutPanelTreeItem* item : parent->childItems()) {
-            if (item->isRemovable()) {
-                removableChildCount++;
-            }
-        }
+    if (isRemovingAvailable && parent.isValid()) {
+        const QList<AbstractLayoutPanelTreeItem*>& children = modelIndexToItem(parent)->childItems();
+        const qsizetype removableChildCount = std::count_if(children.cbegin(), children.cend(),
+                                                            [](const AbstractLayoutPanelTreeItem* item) {
+            return item->isRemovable();
+        });
 
         isRemovingAvailable = selectedIndexes.size() < removableChildCount;
     }
@@ -1181,15 +1154,11 @@ void LayoutPanelTreeModel::updateIsAddingSystemMarkingsAvailable()
 {
     bool addingSysMarkAvailable = false;
 
-    if (!isAddingAvailable() || !isMasterScore()) {
-        addingSysMarkAvailable = false;
-    } else {
-        int systemLayerCount = 0;
-        for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-            if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-                ++systemLayerCount;
-            }
-        }
+    if (isAddingAvailable() && isMasterScore()) {
+        const QList<AbstractLayoutPanelTreeItem*>& children = m_rootItem->childItems();
+        const qsizetype systemLayerCount = std::count_if(children.cbegin(), children.cend(), [](const AbstractLayoutPanelTreeItem* item) {
+            return item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
+        });
 
         addingSysMarkAvailable = systemLayerCount < 0.5 * m_rootItem->childCount();
     }
@@ -1234,6 +1203,65 @@ void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool
     }
 }
 
+void LayoutPanelTreeModel::initExpanded(AbstractLayoutPanelTreeItem* item)
+{
+    updateExpanded(item);
+
+    connect(item, &AbstractLayoutPanelTreeItem::isExpandableChanged, this, [this, item]() {
+        updateExpanded(item);
+    });
+
+    connect(item, &AbstractLayoutPanelTreeItem::isExpandedChanged, this, [this, item]() {
+        emit expandedChanged(index(item->row(), 0, QModelIndex()));
+    });
+}
+
+void LayoutPanelTreeModel::applyExpanded(AbstractLayoutPanelTreeItem* item, bool expand)
+{
+    if (!item->isExpandable()) {
+        return;
+    }
+
+    if (expand) {
+        m_expandedItems.insert(item->id());
+    } else {
+        m_expandedItems.erase(item->id());
+    }
+
+    updateExpanded(item);
+}
+
+void LayoutPanelTreeModel::updateExpanded(AbstractLayoutPanelTreeItem* item)
+{
+    if (item == draggedItem()) {
+        item->setIsExpanded(false);
+        return;
+    }
+
+    // E.g. a group that isn't combined can't collapse
+    item->setIsExpanded(!item->isExpandable() || muse::contains(m_expandedItems, item->id()));
+}
+
+QModelIndexList LayoutPanelTreeModel::sortedSelectedIndexes() const
+{
+    QModelIndexList indexes = m_selectionModel->selectedIndexes();
+    std::stable_sort(indexes.begin(), indexes.end(), [](const QModelIndex& f, const QModelIndex& s) {
+        return f.row() < s.row();
+    });
+
+    return indexes;
+}
+
+bool LayoutPanelTreeModel::moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow)
+{
+    if (parent.isValid()) {
+        return moveRows(parent, firstRow, lastRow - firstRow + 1, parent, targetRow);
+    }
+
+    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(firstRow, lastRow, targetRow);
+    return move && moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
+}
+
 bool LayoutPanelTreeModel::needWarnOnRemoveRows(int row, int count)
 {
     for (int i = row + count - 1; i >= row; --i) {
@@ -1265,9 +1293,6 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSharedPartItem(const Par
 {
     auto sharedPartItem = new SharedPartTreeItem(m_masterNotation, m_notation, m_rootItem);
     sharedPartItem->init(part);
-
-    connect(sharedPartItem, &AbstractLayoutPanelTreeItem::isEnabledChanged,
-            this, &LayoutPanelTreeModel::sharedGroupEnabledChanged);
 
     return sharedPartItem;
 }

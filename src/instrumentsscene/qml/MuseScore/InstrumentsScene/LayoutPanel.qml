@@ -67,7 +67,7 @@ Item {
         id: contextMenuModel
 
         onExpandCollapseAllRequested: function(expand) {
-            tree.expandCollapseAll(expand)
+            treeModel.setAllExpanded(expand)
         }
     }
 

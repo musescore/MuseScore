@@ -41,33 +41,6 @@ Item {
 
     readonly property real contentHeight: layoutPanelTreeView.contentHeight
 
-    function expandCollapseAll(expand) {
-        let groups = Object.assign({}, prv.expandedGroups)
-
-        for (let i = 0; i < root.model.rowCount(); ++i) {
-            const modelIndex = root.model.index(i, 0)
-            const item = root.model.modelIndexToItem(modelIndex)
-            if (!item.isExpandable) {
-                continue
-            }
-
-            if (item.type === LayoutPanelItemType.SHARED_PART) {
-                groups[item.id] = expand
-                continue
-            }
-
-            const row = layoutPanelTreeView.rowAtIndex(modelIndex)
-            if (expand) {
-                layoutPanelTreeView.expand(row)
-            } else {
-                layoutPanelTreeView.collapse(row)
-            }
-        }
-
-        prv.expandedGroups = groups
-        layoutPanelTreeView.forceLayout()
-    }
-
     QtObject {
         id: prv
 
@@ -80,103 +53,11 @@ Item {
         readonly property int groupRadius: 6
 
         property LayoutPanelCard pressedDelegate: null
-
-        property AbstractLayoutPanelTreeItem draggedItem: null
-        readonly property PartTreeItem draggedGroupHeader: prv.draggedItem?.type === LayoutPanelItemType.SHARED_PART
-                                                           ? prv.draggedItem as PartTreeItem : null
-        property var draggedIndex: null
-        property int draggedDepth: 0
         property real dragStartY: 0
-
-        property int focusedRow: -1
-        property int focusedColumn: -1
-        property bool focusedHighlight: false
-
-        property var expandedGroups: ({})
 
         // Rows clear it only if it's still theirs, as enter/leave can come in either order
         property LayoutPanelTreeDelegate hoveredGroupRow: null
         property PartTreeItem pressedGroupHeader: null
-
-        //! NOTE Only combined groups can be collapsed, but a dragged group always is
-        function isGroupCollapsed(part) {
-            const header = part?.sharedGroupHeader ?? null
-            return Boolean(header) && (header === prv.draggedGroupHeader || (header.isEnabled && !prv.expandedGroups[header.id]))
-        }
-
-        //! NOTE Row heights aren't bindings, so the view is relaid out by hand
-        onDraggedGroupHeaderChanged: {
-            Qt.callLater(layoutPanelTreeView.forceLayout)
-        }
-
-        function setExpanded(delegate, expand) {
-            if (treeNavigationPanel.active) {
-                const navigation = prv.findNavigation(delegate, function(nav) { return nav.active })
-                if (navigation) {
-                    prv.focusedRow = delegate.row
-                    prv.focusedColumn = navigation.column
-                    prv.focusedHighlight = navigation.highlight
-                }
-            }
-
-            if (delegate.type === LayoutPanelItemType.SHARED_PART) {
-                let groups = Object.assign({}, prv.expandedGroups)
-                groups[delegate.item.id] = expand
-                prv.expandedGroups = groups
-
-                layoutPanelTreeView.forceLayout()
-                return
-            }
-
-            if (expand) {
-                layoutPanelTreeView.expand(delegate.row)
-            } else {
-                layoutPanelTreeView.collapse(delegate.row)
-            }
-        }
-
-        //! NOTE Expanding or collapsing doesn't move the toggled row
-        function restoreFocus() {
-            const row = prv.focusedRow
-            prv.focusedRow = -1
-            if (row < 0) {
-                return
-            }
-
-            const cell = layoutPanelTreeView.itemAtCell(Qt.point(0, row))
-            if (!cell) {
-                return
-            }
-
-            const column = prv.focusedColumn
-            const navigation = prv.findNavigation(cell, function(nav) { return nav.column === column })
-            if (navigation) {
-                navigation.requestActive(prv.focusedHighlight)
-            }
-        }
-
-        //! NOTE Walks the row's items, so that VisibilityControls' buttons are found too
-        function findNavigation(item, predicate) {
-            const navigation = item.navigation
-            if (navigation && navigation.panel === treeNavigationPanel && predicate(navigation)) {
-                return navigation
-            }
-
-            for (let i = 0; i < item.children.length; ++i) {
-                const found = prv.findNavigation(item.children[i], predicate)
-                if (found) {
-                    return found
-                }
-            }
-
-            return null
-        }
-
-        function releasePressedDelegate() {
-            if (!rowDragHandler.active) {
-                prv.pressedDelegate = null
-            }
-        }
 
         function startDrag() {
             const delegate = prv.pressedDelegate
@@ -184,40 +65,10 @@ Item {
                 return
             }
 
-            prv.draggedIndex = delegate.modelIndex
-            prv.draggedDepth = delegate.depth
             const isGroupHeader = delegate.type === LayoutPanelItemType.SHARED_PART
             prv.dragStartY = delegate.mapToItem(layoutPanelTreeView.contentItem, 0, 0).y - (isGroupHeader ? prv.groupPadding : 0)
-            prv.draggedItem = delegate.item
 
-            root.model.startActiveDrag()
-
-            if (!isGroupHeader && delegate.isExpanded) {
-                layoutPanelTreeView.collapse(delegate.row)
-            }
-        }
-
-        function endDrag() {
-            const wasDragging = Boolean(prv.draggedItem)
-
-            prv.draggedItem = null
-            prv.draggedIndex = null
-            prv.pressedDelegate = null
-
-            if (wasDragging) {
-                root.model.endActiveDrag()
-            }
-        }
-
-        function cancelDrag() {
-            prv.draggedItem = null
-            prv.draggedIndex = null
-        }
-
-        function dragOver(targetIndex) {
-            if (prv.draggedIndex) {
-                prv.draggedIndex = root.model.dragOver(prv.draggedIndex, targetIndex)
-            }
+            root.model.startActiveDrag(delegate.modelIndex)
         }
     }
 
@@ -249,7 +100,8 @@ Item {
             if (rowDragHandler.active) {
                 prv.startDrag()
             } else {
-                prv.endDrag()
+                prv.pressedDelegate = null
+                root.model.endActiveDrag()
             }
         }
     }
@@ -257,12 +109,15 @@ Item {
     Connections {
         target: root.model
 
-        function onModelAboutToBeReset() {
-            prv.cancelDrag()
-        }
+        // Group instruments are hidden by rowHeightProvider, not by collapse
+        function onExpandedChanged(index) {
+            const row = layoutPanelTreeView.rowAtIndex(index)
+            if (root.model.modelIndexToItem(index).isExpanded) {
+                layoutPanelTreeView.expand(row)
+            } else {
+                layoutPanelTreeView.collapse(row)
+            }
 
-        //! NOTE Combining a group on or off changes no rows, so the view isn't relaid out by itself
-        function onSharedGroupEnabledChanged() {
             Qt.callLater(layoutPanelTreeView.forceLayout)
         }
     }
@@ -277,7 +132,7 @@ Item {
         model: root.model
 
         onLayoutChanged: {
-            prv.restoreFocus()
+            root.model.restoreNavigation()
         }
 
         columnWidthProvider: function(column) {
@@ -288,9 +143,9 @@ Item {
         rowHeightProvider: function(row) {
             const index = layoutPanelTreeView.index(row, 0)
             const part = root.model.modelIndexToItem(index.parent.valid ? index.parent : index) as PartTreeItem
-            const isMember = Boolean(part) && part.type === LayoutPanelItemType.PART
+            const header = part?.type === LayoutPanelItemType.PART ? part.sharedGroupHeader : null
 
-            return isMember && prv.isGroupCollapsed(part) ? 0 : -1
+            return header && !header.isExpanded ? 0 : -1
         }
 
         // Blank space below the last row; sits behind the rows
@@ -305,9 +160,9 @@ Item {
         Loader {
             id: draggedItemLoader
 
-            active: Boolean(prv.draggedItem)
+            active: Boolean(root.model.draggedItem)
 
-            readonly property bool isGroup: Boolean(prv.draggedGroupHeader)
+            readonly property bool isGroup: root.model.draggedItem?.type === LayoutPanelItemType.SHARED_PART
 
             width: layoutPanelTreeView.width
             height: prv.rowContentHeight + (draggedItemLoader.isGroup ? 2 * prv.groupPadding : 0)
@@ -321,10 +176,10 @@ Item {
 
             sourceComponent: LayoutPanelCard {
                 treeView: layoutPanelTreeView
-                item: prv.draggedItem
-                modelIndex: prv.draggedIndex
+                item: root.model.draggedItem
+                modelIndex: root.model.draggedIndex
                 row: -1
-                depth: prv.draggedDepth
+                depth: root.model.draggedIndex.parent.valid ? 1 : 0
                 isExpanded: false
                 isDragged: true
 
@@ -342,8 +197,7 @@ Item {
             treeModel: root.model
             navigationPanel: treeNavigationPanel
 
-            draggedItem: prv.draggedItem
-            isGroupCollapsed: prv.isGroupCollapsed(treeDelegate.item as PartTreeItem)
+            draggedItem: root.model.draggedItem
             hoveredGroupHeader: prv.hoveredGroupRow?.groupHeader ?? null
             pressedGroupHeader: prv.pressedGroupHeader
 
@@ -369,12 +223,17 @@ Item {
                 prv.pressedDelegate = card
             }
 
+            // Also sent when the drag takes the grab; the drag clears pressedDelegate when it ends
             onCardReleased: {
-                Qt.callLater(prv.releasePressedDelegate)
+                Qt.callLater(function() {
+                    if (!rowDragHandler.active) {
+                        prv.pressedDelegate = null
+                    }
+                })
             }
 
             onExpandRequested: function(card, expand) {
-                prv.setExpanded(card, expand)
+                root.model.setExpanded(card.modelIndex, expand)
             }
 
             onPopupOpenedChanged: function(opened) {
@@ -386,7 +245,7 @@ Item {
             }
 
             onDragEntered: {
-                Qt.callLater(prv.dragOver, treeDelegate.modelIndex)
+                Qt.callLater(root.model.dragOver, treeDelegate.modelIndex)
             }
         }
     }

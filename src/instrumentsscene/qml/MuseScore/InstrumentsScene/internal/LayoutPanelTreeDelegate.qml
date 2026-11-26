@@ -36,7 +36,6 @@ DropArea {
     required property int row
     required property int column
     required property int depth
-    required property bool expanded
     required property AbstractLayoutPanelTreeItem item
 
     required property LayoutPanelTreeModel treeModel
@@ -44,7 +43,6 @@ DropArea {
 
     // Shared by all rows, owned by the tree
     required property AbstractLayoutPanelTreeItem draggedItem
-    required property bool isGroupCollapsed
     required property PartTreeItem hoveredGroupHeader
     required property PartTreeItem pressedGroupHeader
 
@@ -56,6 +54,7 @@ DropArea {
 
     readonly property var modelIndex: root.treeView.index(root.row, root.column)
     readonly property PartTreeItem groupHeader: prv.groupPart?.sharedGroupHeader ?? null
+    readonly property bool isGroupCollapsed: Boolean(root.groupHeader) && !root.groupHeader.isExpanded
 
     signal groupHoverChanged(bool hovered)
     signal groupPressChanged(bool pressed)
@@ -76,7 +75,9 @@ DropArea {
         readonly property bool isGroupHeader: root.item?.type === LayoutPanelItemType.SHARED_PART
         readonly property bool isDraggedGroup: prv.isDragged && prv.isGroupHeader
 
-        readonly property bool isCardBottom: root.depth === 0 ? !root.expanded : Boolean(root.item?.isLastChild)
+        readonly property bool isExpanded: Boolean(root.item?.isExpandable) && root.item.isExpanded
+        //! NOTE A group header has no child rows: its instruments are separate cards
+        readonly property bool isCardBottom: root.depth === 0 ? !prv.isExpanded || prv.isGroupHeader : Boolean(root.item?.isLastChild)
 
         // Staves and "Add staff" rows are in their part's group
         readonly property PartTreeItem groupPart: {
@@ -227,7 +228,7 @@ DropArea {
             modelIndex: root.modelIndex
             row: root.row
             depth: root.depth
-            isExpanded: prv.isGroupHeader ? !root.isGroupCollapsed : root.expanded
+            isExpanded: prv.isExpanded
             isInCombinedGroup: prv.isInCombinedGroup
 
             sideMargin: root.sideMargin
