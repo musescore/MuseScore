@@ -105,7 +105,7 @@ public:
     qreal height() const override;
 
     muse::PointF toLogical(const muse::PointF& point) const override;
-    muse::PointF toLogical(const QPointF& point) const override;
+    muse::PointF toLogical(const QPointF& point) const;
     muse::RectF toLogical(const muse::RectF& rect) const;
 
     muse::PointF fromLogical(const muse::PointF& point) const override;
@@ -123,7 +123,7 @@ public:
 
     bool isNoteEnterMode() const override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
+    void showContextMenu(const ElementType& elementType, const muse::PointF& pos) override;
     void hideContextMenu() override;
 
     void showSearch() override;

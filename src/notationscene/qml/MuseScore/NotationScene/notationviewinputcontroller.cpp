@@ -486,7 +486,7 @@ void NotationViewInputController::setViewMode(ViewMode viewMode)
 
 void NotationViewInputController::openContextMenuOfSelection()
 {
-    m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
+    m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()));
 }
 
 constexpr qreal scrollStep = .8;
@@ -502,7 +502,7 @@ void NotationViewInputController::moveScreen(int direction)
     if (notation->viewMode() == ViewMode::LINE) {
         m_view->moveCanvasHorizontal(m_view->width() * direction * scrollStep / scale);
     } else {
-        auto offset = m_view->toLogical(QPoint());
+        auto offset = m_view->toLogical(PointF());
         auto rect = m_view->notationContentRect();
         if (direction > 0 && offset.y() <= 0.0) {
             if (offset.x() >= -notationScreenPadding) {
@@ -533,11 +533,11 @@ void NotationViewInputController::movePage(int direction)
     Page* page = notation->elements()->msScore()->pages().back();
     if (configuration()->canvasOrientation().val == muse::Orientation::Vertical) {
         qreal offset = std::min((page->height() + notationScreenPadding) * direction,
-                                m_view->toLogical(QPoint()).y() + notationScreenPadding);
+                                m_view->toLogical(PointF()).y() + notationScreenPadding);
         m_view->moveCanvasVertical(offset);
     } else {
         qreal offset = std::min((page->width() + notationScreenPadding) * direction,
-                                m_view->toLogical(QPoint()).x() + notationScreenPadding);
+                                m_view->toLogical(PointF()).x() + notationScreenPadding);
         m_view->moveCanvasHorizontal(offset);
     }
 }
@@ -564,7 +564,7 @@ void NotationViewInputController::previousPage()
 
 void NotationViewInputController::startOfScore()
 {
-    auto offset = m_view->toLogical(QPoint());
+    auto offset = m_view->toLogical(PointF());
     m_view->moveCanvas(offset.x() + notationScreenPadding, offset.y() + notationScreenPadding);
 }
 
@@ -580,58 +580,51 @@ void NotationViewInputController::endOfScore()
     qreal desiredX = std::max(-notationScreenPadding, lmRect.right() + notationScreenPadding - m_view->width() / scale);
     qreal desiredY = std::max(-notationScreenPadding, lmRect.bottom()
                               + lastMeasure->score()->style().styleD(mu::engraving::Sid::spatium) * 5 - m_view->height() / scale);
-    auto offset = m_view->toLogical(QPoint());
+    auto offset = m_view->toLogical(PointF());
     m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
 }
 
-void NotationViewInputController::pinchToZoom(qreal scaleFactor, const QPointF& pos)
+void NotationViewInputController::pinchToZoom(qreal scaleFactor, const PointF& pos)
 {
     double scale = m_view->currentScaling() * scaleFactor;
-    setScaling(scale, PointF::fromQPointF(pos));
+    setScaling(scale, pos);
 }
 
-void NotationViewInputController::wheelEvent(QWheelEvent* event)
+void NotationViewInputController::wheelEvent(const muse::WheelEvent& event)
 {
-    QPoint pixelsScrolled = event->pixelDelta();
-    QPoint stepsScrolled = event->angleDelta();
+    const muse::Point pixelsScrolled = event.pixelDelta;
+    const muse::Point stepsScrolled = event.angleDelta;
+    const bool hasPixelsScrolled = pixelsScrolled.x() != 0 || pixelsScrolled.y() != 0;
+    const bool hasStepsScrolled = stepsScrolled.x() != 0 || stepsScrolled.y() != 0;
 
     int dx = 0;
     int dy = 0;
     qreal stepsX = 0.0;
     qreal stepsY = 0.0;
 
-// pixelDelta is unreliable on X11
-#ifdef Q_OS_LINUX
-    if (std::getenv("WAYLAND_DISPLAY") == NULL) {
-        // Ignore pixelsScrolled unless Wayland is used
-        pixelsScrolled.setX(0);
-        pixelsScrolled.setY(0);
-    }
-#endif
-
-    if (!pixelsScrolled.isNull()) {
+    if (hasPixelsScrolled) {
         dx = pixelsScrolled.x();
         dy = pixelsScrolled.y();
         stepsX = dx / static_cast<qreal>(PIXELSSTEPSFACTOR);
         stepsY = dy / static_cast<qreal>(PIXELSSTEPSFACTOR);
-    } else if (!stepsScrolled.isNull()) {
-        dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
-        dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
-        stepsX = static_cast<qreal>(stepsScrolled.x()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
-        stepsY = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
+    } else if (hasStepsScrolled) {
+        dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / static_cast<qreal>(muse::WheelEvent::DefaultDeltasPerStep);
+        dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / static_cast<qreal>(muse::WheelEvent::DefaultDeltasPerStep);
+        stepsX = static_cast<qreal>(stepsScrolled.x()) / static_cast<qreal>(muse::WheelEvent::DefaultDeltasPerStep);
+        stepsY = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(muse::WheelEvent::DefaultDeltasPerStep);
     }
 
-    Qt::KeyboardModifiers keyState = event->modifiers();
+    muse::KeyboardModifiers keyState = event.modifiers;
 
     // Windows touch pad pinches also execute this
-    if (keyState & Qt::ControlModifier) {
+    if (keyState & muse::KeyboardModifier::ControlModifier) {
         double zoomSpeed = qPow(2.0, 1.0 / configuration()->mouseZoomPrecision());
         qreal absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
         double scale = m_view->currentScaling() * qPow(zoomSpeed, absSteps);
-        setScaling(scale, PointF::fromQPointF(event->position()));
+        setScaling(scale, event.position);
     } else {
         qreal correction = 1.0 / m_view->currentScaling();
-        if (keyState & Qt::ShiftModifier) {
+        if (keyState & muse::KeyboardModifier::ShiftModifier) {
             int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
             m_view->moveCanvasHorizontal(abs * correction);
         } else {
@@ -640,14 +633,14 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
     }
 }
 
-void NotationViewInputController::mousePressEvent(QMouseEvent* event)
+void NotationViewInputController::mousePressEvent(const muse::PointerEvent& event)
 {
-    PointF logicPos = m_view->toLogical(event->pos());
-    Qt::MouseButton button = event->button();
+    PointF logicPos = m_view->toLogical(event.position);
+    const muse::MouseButton button = event.button;
 
     m_mouseDownInfo = {
         /*.dragAction =*/ MouseDownInfo::Other,
-        /*.physicalBeginPoint =*/ event->pos(),
+        /*.physicalBeginPoint =*/ event.position,
         /*.logicalBeginPoint =*/ logicPos
     };
 
@@ -655,7 +648,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_ignoreNextMouseContextMenuEvent = false;
 
     // When using MiddleButton, just start moving the canvas
-    if (button == Qt::MiddleButton) {
+    if (button == muse::MouseButton::MiddleButton) {
         return;
     }
 
@@ -696,7 +689,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ctx.hitElement = hitElement;
     ctx.hitStaff = hitStaffIndex;
     ctx.isHitGrip = viewInteraction()->isHitGrip(logicPos);
-    ctx.event = event;
+    ctx.event = &event;
 
     // Grip
     bool consumed = mousePress_considerGrip(ctx);
@@ -734,27 +727,27 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     mousePress_seekSelection(ctx);
 
     // Misc
-    if (button == Qt::LeftButton) {
+    if (button == muse::MouseButton::LeftButton) {
         handleLeftClick(ctx);
-    } else if (button == Qt::RightButton) {
+    } else if (button == muse::MouseButton::RightButton) {
         handleRightClick();
     }
 }
 
-void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
+void NotationViewInputController::handleClickInNoteInputMode(const muse::PointerEvent& event)
 {
-    const PointF logicPos = m_view->toLogical(event->pos());
+    const PointF logicPos = m_view->toLogical(event.position);
 
-    if (event->button() == Qt::RightButton) {
+    if (event.button == muse::MouseButton::RightButton) {
         m_ignoreNextMouseContextMenuEvent = true;
         muse::rcommand::CommandQuery query(SCREEN_REMOVE_NOTE_COMMAND);
         query.set("pos_x", muse::Val(logicPos.x()));
         query.set("pos_y", muse::Val(logicPos.y()));
         commandDispatcher()->dispatch(query);
     } else {
-        const Qt::KeyboardModifiers keyState = event->modifiers();
-        const bool replace = keyState & Qt::ShiftModifier;
-        const bool insert = keyState & Qt::ControlModifier;
+        const muse::KeyboardModifiers keyState = event.modifiers;
+        const bool replace = keyState & muse::KeyboardModifier::ShiftModifier;
+        const bool insert = keyState & muse::KeyboardModifier::ControlModifier;
 
         muse::rcommand::CommandQuery query(SCREEN_PUT_NOTE_COMMAND);
         query.set("pos_x", muse::Val(logicPos.x()));
@@ -767,7 +760,7 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
 
 bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ctx)
 {
-    if (ctx.isHitGrip && ctx.event->button() == Qt::LeftButton) {
+    if (ctx.isHitGrip && ctx.event->button == muse::MouseButton::LeftButton) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
         return true;
     } else if (viewInteraction()->isGripEditStarted()) {
@@ -779,8 +772,8 @@ bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ct
 
 bool NotationViewInputController::mousePress_considerDragOutgoingElement(const ClickContext& ctx)
 {
-    if (ctx.event->button() != Qt::LeftButton
-        || ctx.event->modifiers() != (Qt::ShiftModifier | Qt::ControlModifier)) {
+    if (ctx.event->button != muse::MouseButton::LeftButton
+        || ctx.event->modifiers != (muse::KeyboardModifier::ShiftModifier | muse::KeyboardModifier::ControlModifier)) {
         return false;
     }
 
@@ -798,7 +791,7 @@ bool NotationViewInputController::mousePress_considerDragOutgoingElement(const C
 bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx)
 {
     // Check if this is a left click with Alt modifier
-    if (ctx.event->button() != Qt::LeftButton || !(ctx.event->modifiers() & Qt::AltModifier)) {
+    if (ctx.event->button != muse::MouseButton::LeftButton || !(ctx.event->modifiers & muse::KeyboardModifier::AltModifier)) {
         return false;
     }
 
@@ -836,24 +829,24 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
 
     m_hitElementWasAlreadySingleSelected = ctx.hitElement == viewInteraction()->selection()->element();
 
-    if (ctx.event->button() == Qt::LeftButton) {
-        if (ctx.event->modifiers() & Qt::ControlModifier) {
+    if (ctx.event->button == muse::MouseButton::LeftButton) {
+        if (ctx.event->modifiers & muse::KeyboardModifier::ControlModifier) {
             const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
             if (overlappingHitElements.size() > 1) {
                 cycleOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
                 return;
             }
         }
-    } else if (ctx.event->button() == Qt::RightButton) {
+    } else if (ctx.event->button == muse::MouseButton::RightButton) {
         if (ctx.hitElement->selected()) {
             return;
         }
     }
 
     SelectType selectType = SelectType::SINGLE;
-    if (ctx.event->modifiers() & Qt::ShiftModifier) {
+    if (ctx.event->modifiers & muse::KeyboardModifier::ShiftModifier) {
         selectType = SelectType::RANGE;
-    } else if (ctx.event->modifiers() & Qt::ControlModifier) {
+    } else if (ctx.event->modifiers & muse::KeyboardModifier::ControlModifier) {
         selectType = SelectType::ADD;
     } else {
         const INotationSelectionPtr selection = viewInteraction()->selection();
@@ -944,7 +937,7 @@ void NotationViewInputController::cycleOverlappingHitElements(const std::vector<
 
 bool NotationViewInputController::mousePress_considerDragOutgoingRange(const ClickContext& ctx)
 {
-    if (ctx.event->button() != Qt::LeftButton) {
+    if (ctx.event->button != muse::MouseButton::LeftButton) {
         return false;
     }
 
@@ -1040,13 +1033,13 @@ bool NotationViewInputController::tryPercussionShortcut(const muse::KeyEvent& ev
     return true;
 }
 
-void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
+void NotationViewInputController::mouseMoveEvent(const muse::PointerEvent& event)
 {
     if (m_mouseDownInfo.dragAction == MouseDownInfo::Nothing) {
         return;
     }
 
-    const QPointF physicalDragDelta = event->pos() - m_mouseDownInfo.physicalBeginPoint;
+    const PointF physicalDragDelta = event.position - m_mouseDownInfo.physicalBeginPoint;
 
     const bool isDragStarted = m_isCanvasDragged
                                || viewInteraction()->isDragStarted()
@@ -1076,7 +1069,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
     case MouseDownInfo::PasteRangeOnRelease: {
-        const PointF logicPos = m_view->toLogical(event->pos());
+        const PointF logicPos = m_view->toLogical(event.position);
 
         std::optional<bool> preserveMeasureAlignment;
         if (physicalDragDelta.manhattanLength() > 4) {
@@ -1093,17 +1086,17 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         break;
     }
 
-    const Qt::KeyboardModifiers keyState = event->modifiers();
+    const muse::KeyboardModifiers keyState = event.modifiers;
 
     m_view->hideContextMenu();
     if (!viewInteraction()->isTextEditingStarted()) {
         m_view->hideElementPopup();
     }
 
-    const PointF logicPos = m_view->toLogical(event->pos());
+    const PointF logicPos = m_view->toLogical(event.position);
 
     const bool isNoteEnterMode = m_view->isNoteEnterMode();
-    const bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
+    const bool isMiddleButton  = (event.buttons & muse::MouseButton::MiddleButton);
     const bool isDragObjectsAllowed = !(readonly() || isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
@@ -1122,9 +1115,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             }
 
             DragMode mode = DragMode::BothXY;
-            if (keyState & Qt::ShiftModifier) {
+            if (keyState & muse::KeyboardModifier::ShiftModifier) {
                 mode = DragMode::OnlyY;
-            } else if (keyState & Qt::ControlModifier) {
+            } else if (keyState & muse::KeyboardModifier::ControlModifier) {
                 mode = DragMode::OnlyX;
             }
 
@@ -1136,7 +1129,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             }
 
             return;
-        } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
+        } else if (hitElement == nullptr && (keyState & muse::KeyboardModifier::ShiftModifier)) {
             if (!viewInteraction()->isDragStarted()) {
                 viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
             }
@@ -1184,7 +1177,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
     }
 }
 
-void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
+void NotationViewInputController::mouseReleaseEvent(const muse::PointerEvent& event)
 {
     if (m_mouseDownInfo.dragAction == MouseDownInfo::Nothing) {
         return;
@@ -1210,20 +1203,20 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
             viewInteraction()->endDrop();
             return;
         }
-        PointF logicPos = m_view->toLogical(event->pos());
+        PointF logicPos = m_view->toLogical(event.position);
         viewInteraction()->dropRange(rangeData.toQByteArrayNoCopy(), logicPos, false);
         return;
     }
 
-    if (event->modifiers() != Qt::ControlModifier && event->modifiers() != Qt::ShiftModifier) {
+    if (event.modifiers != muse::KeyboardModifier::ControlModifier && event.modifiers != muse::KeyboardModifier::ShiftModifier) {
         if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
             && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
             interaction->clearSelection();
         }
     }
 
-    if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
-        handleLeftClickRelease(event->pos());
+    if (event.button == muse::MouseButton::LeftButton && event.modifiers == muse::KeyboardModifier::NoModifier) {
+        handleLeftClickRelease(event.position);
     }
 
     m_isCanvasDragged = false;
@@ -1251,7 +1244,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     m_notesBeingDragged.clear();
 }
 
-void NotationViewInputController::handleLeftClickRelease(const QPointF& releasePoint)
+void NotationViewInputController::handleLeftClickRelease(const PointF& releasePoint)
 {
     if (m_view->isNoteEnterMode() || playbackController()->isPlaying()) {
         return;
@@ -1304,7 +1297,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 }
 
-void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
+void NotationViewInputController::mouseDoubleClickEvent(const muse::PointerEvent& event)
 {
     if (m_view->isNoteEnterMode()) {
         return;
@@ -1332,15 +1325,15 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    const Qt::KeyboardModifiers modifiers = event->modifiers();
+    const muse::KeyboardModifiers modifiers = event.modifiers;
 
     std::optional<SelectType> selectType;
     switch (modifiers) {
-    case Qt::NoModifier: {
+    case muse::KeyboardModifier::NoModifier: {
         selectType = SelectType::REPLACE;
         break;
     }
-    case Qt::ControlModifier: {
+    case muse::KeyboardModifier::ControlModifier: {
         selectType = SelectType::ADD;
         break;
     }
@@ -1352,14 +1345,14 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 
     switch (hitElement->type()) {
     case ElementType::INSTRUMENT_NAME: {
-        if (modifiers != Qt::NoModifier) {
+        if (modifiers != muse::KeyboardModifier::NoModifier) {
             break;     // Doesn't support modifiers...
         }
         m_shouldStartEditOnLeftClickRelease = true;
         break;
     }
     case ElementType::MEASURE: {
-        if (modifiers != Qt::NoModifier) {
+        if (modifiers != muse::KeyboardModifier::NoModifier) {
             break;     // Doesn't support modifiers...
         }
         commandDispatcher()->dispatch(ToggleNoteInputDefaultCommand {});
@@ -1396,14 +1389,14 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
+void NotationViewInputController::hoverMoveEvent(const muse::HoverEvent& event)
 {
     if (!m_view->isNoteEnterMode()) {
         return;
     }
 
-    const PointF oldPos = m_view->toLogical(event->oldPosF());
-    PointF pos = m_view->toLogical(event->position());
+    const PointF oldPos = m_view->toLogical(event.oldPosition);
+    PointF pos = m_view->toLogical(event.position);
 
     const ShadowNote* shadowNote = viewInteraction()->shadowNote();
     if (shadowNote && m_view->elementPopupIsOpen(shadowNote->type())) {
@@ -1417,12 +1410,12 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
     viewInteraction()->showShadowNoteForPosition(pos);
 
-    if (event->modifiers() == Qt::ShiftModifier) {
+    if (event.modifiers == muse::KeyboardModifier::ShiftModifier) {
         updateShadowNotePopupVisibility();
     }
 }
 
-void NotationViewInputController::hoverLeaveEvent(QHoverEvent*)
+void NotationViewInputController::hoverLeaveEvent(const muse::HoverEvent&)
 {
     viewInteraction()->hideShadowNote();
 }
@@ -1623,7 +1616,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    PointF pos = m_view->toLogical(event->position());
+    PointF pos = m_view->toLogical(PointF::fromQPointF(event->position()));
     const muse::KeyboardModifiers modifiers = muse::fromQtModifiers(event->modifiers());
 
     bool isAccepted = false;
@@ -1699,7 +1692,7 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
         return false;
     }
 
-    PointF pos = m_view->toLogical(event.position);
+    PointF pos = m_view->toLogical(PointF::fromQPointF(event.position));
     const muse::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;

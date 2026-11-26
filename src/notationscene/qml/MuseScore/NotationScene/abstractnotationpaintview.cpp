@@ -650,7 +650,7 @@ bool AbstractNotationPaintView::isNoteEnterMode() const
     return notationNoteInput() ? notationNoteInput()->isNoteInputMode() : false;
 }
 
-void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
+void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const PointF& pos)
 {
     TRACEFUNC;
 
@@ -658,12 +658,12 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
         return;
     }
 
-    QPointF _pos = pos;
+    PointF _pos = pos;
     if (_pos.isNull()) {
-        _pos = QPointF(width() / 2, height() / 2);
+        _pos = PointF(width() / 2, height() / 2);
     }
 
-    emit showContextMenuRequested(static_cast<int>(elementType), _pos);
+    emit showContextMenuRequested(static_cast<int>(elementType), _pos.toQPointF());
 }
 
 void AbstractNotationPaintView::hideContextMenu()
@@ -1292,7 +1292,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
 void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
 {
     if (isInited()) {
-        m_inputController->pinchToZoom(scaleFactor, pos);
+        m_inputController->pinchToZoom(scaleFactor, PointF::fromQPointF(pos));
     }
 }
 
@@ -1300,7 +1300,7 @@ void AbstractNotationPaintView::wheelEvent(QWheelEvent* event)
 {
     TRACEFUNC;
     if (isInited()) {
-        m_inputController->wheelEvent(event);
+        m_inputController->wheelEvent(fromQtWheelEvent(event));
     }
 }
 
@@ -1328,7 +1328,7 @@ void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)
     forceFocusIn();
 
     if (isInited()) {
-        m_inputController->mousePressEvent(event);
+        m_inputController->mousePressEvent(fromQtMouseEvent(event));
     }
 }
 
@@ -1336,7 +1336,7 @@ void AbstractNotationPaintView::mouseMoveEvent(QMouseEvent* event)
 {
     TRACEFUNC;
     if (isInited()) {
-        m_inputController->mouseMoveEvent(event);
+        m_inputController->mouseMoveEvent(fromQtMouseEvent(event));
     }
 }
 
@@ -1346,28 +1346,28 @@ void AbstractNotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
     forceFocusIn();
 
     if (isInited()) {
-        m_inputController->mouseDoubleClickEvent(event);
+        m_inputController->mouseDoubleClickEvent(fromQtMouseEvent(event));
     }
 }
 
 void AbstractNotationPaintView::mouseReleaseEvent(QMouseEvent* event)
 {
     if (isInited()) {
-        m_inputController->mouseReleaseEvent(event);
+        m_inputController->mouseReleaseEvent(fromQtMouseEvent(event));
     }
 }
 
 void AbstractNotationPaintView::hoverMoveEvent(QHoverEvent* event)
 {
     if (isInited()) {
-        m_inputController->hoverMoveEvent(event);
+        m_inputController->hoverMoveEvent(fromQtHoverEvent(event));
     }
 }
 
 void AbstractNotationPaintView::hoverLeaveEvent(QHoverEvent* event)
 {
     if (isInited()) {
-        m_inputController->hoverLeaveEvent(event);
+        m_inputController->hoverLeaveEvent(fromQtHoverEvent(event));
     }
 }
 
@@ -1423,9 +1423,9 @@ bool AbstractNotationPaintView::event(QEvent* event)
             && m_inputController->ignoreNextMouseContextMenuEvent()) {
             return true;
         }
-        QPointF pos = contextMenuEvent && !contextMenuEvent->pos().isNull()
-                      ? mapFromGlobal(contextMenuEvent->globalPos())
-                      : fromLogical(m_inputController->selectionElementPos()).toQPointF();
+        PointF pos = contextMenuEvent && !contextMenuEvent->pos().isNull()
+                     ? PointF::fromQPointF(mapFromGlobal(contextMenuEvent->globalPos()))
+                     : fromLogical(m_inputController->selectionElementPos());
         showContextMenu(m_inputController->selectionType(), pos);
         return true;
     } else if (eventType == QEvent::Type::ShortcutOverride) {

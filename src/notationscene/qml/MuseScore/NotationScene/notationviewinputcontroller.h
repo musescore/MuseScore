@@ -74,13 +74,12 @@ public:
     virtual void setScaling(qreal scaling, const muse::PointF& pos, bool overrideZoomType = true) = 0;
 
     virtual muse::PointF toLogical(const muse::PointF& p) const = 0;
-    virtual muse::PointF toLogical(const QPointF& p) const = 0;
     virtual muse::PointF fromLogical(const muse::PointF& r) const = 0;
     virtual muse::RectF fromLogical(const muse::RectF& r) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const muse::PointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
     virtual void showSearch() = 0;
@@ -157,14 +156,14 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
-    void pinchToZoom(qreal scaleFactor, const QPointF& pos);
-    void wheelEvent(QWheelEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event);
-    void hoverMoveEvent(QHoverEvent* event);
-    void hoverLeaveEvent(QHoverEvent* event);
+    void pinchToZoom(qreal scaleFactor, const muse::PointF& pos);
+    void wheelEvent(const muse::WheelEvent& event);
+    void mousePressEvent(const muse::PointerEvent& event);
+    void mouseMoveEvent(const muse::PointerEvent& event);
+    void mouseReleaseEvent(const muse::PointerEvent& event);
+    void mouseDoubleClickEvent(const muse::PointerEvent& event);
+    void hoverMoveEvent(const muse::HoverEvent& event);
+    void hoverLeaveEvent(const muse::HoverEvent& event);
     bool shortcutOverrideEvent(const muse::KeyEvent& event);
     void keyPressEvent(muse::KeyEvent& event);
     void keyReleaseEvent(muse::KeyEvent& event);
@@ -214,13 +213,13 @@ private:
 
     struct ClickContext {
         muse::PointF logicClickPos;
-        const QMouseEvent* event = nullptr;
+        const muse::PointerEvent* event = nullptr;
         mu::engraving::EngravingItem* hitElement = nullptr;
         mu::engraving::staff_idx_t hitStaff = muse::nidx;
         bool isHitGrip = false;
     };
 
-    void handleClickInNoteInputMode(QMouseEvent* event);
+    void handleClickInNoteInputMode(const muse::PointerEvent& event);
     bool mousePress_considerGrip(const ClickContext& ctx); // returns true if event is consumed
     bool mousePress_considerDragOutgoingElement(const ClickContext& ctx);
     void mousePress_considerSelect(const ClickContext& ctx);
@@ -230,7 +229,7 @@ private:
     bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick();
-    void handleLeftClickRelease(const QPointF& releasePoint);
+    void handleLeftClickRelease(const muse::PointF& releasePoint);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
@@ -256,7 +255,7 @@ private:
             Nothing
         } dragAction = Other;
 
-        QPointF physicalBeginPoint;
+        muse::PointF physicalBeginPoint;
         muse::PointF logicalBeginPoint;
     } m_mouseDownInfo;
 
