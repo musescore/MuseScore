@@ -250,7 +250,7 @@ TEST_F(Notation_NotationInteractionTests, DropInstrumentChange_WithTheChosenInst
 {
     //! [GIVEN] An instrument change is dragged onto the first chord
     std::unique_ptr<InstrumentChange> paletteElement(Factory::createInstrumentChange(score()->dummy()));
-    ASSERT_TRUE(m_notation->interaction()->startDropSingle(paletteElement->mimeData().toQByteArray()));
+    ASSERT_TRUE(m_notation->interaction()->startDropSingle(paletteElement->mimeData()));
     EXPECT_TRUE(m_notation->interaction()->isDroppingInstrumentChange());
 
     Segment* segment = score()->firstMeasure()->first(SegmentType::ChordRest);

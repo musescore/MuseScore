@@ -25,6 +25,8 @@
 #include <functional>
 
 #include "async/notification.h"
+#include "io/path.h"
+#include "types/bytearray.h"
 
 #include "inotation_fwd.h"
 #include "notationtypes.h"
@@ -119,11 +121,11 @@ public:
 
     // Drop
     //! TODO Change KeyboardModifiers to modes
-    virtual bool startDropSingle(const QByteArray& edata) = 0;
-    virtual bool startDropRange(const QByteArray& data) = 0;
+    virtual bool startDropSingle(const muse::ByteArray& edata) = 0;
+    virtual bool startDropRange(const muse::ByteArray& data) = 0;
     virtual bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
                                 size_t numStaves, bool preserveMeasureAlignment) = 0;
-    virtual bool startDropImage(const QUrl& url) = 0;
+    virtual bool startDropImage(const muse::io::path_t& path) = 0;
     virtual bool updateDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) = 0;
 
@@ -132,7 +134,7 @@ public:
     virtual bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers,
                             const std::optional<InstrumentTemplate>& instrument = std::nullopt) = 0;
 
-    virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
+    virtual bool dropRange(const muse::ByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRects(const std::vector<muse::RectF>& rects) = 0;
     virtual void endDrop() = 0;

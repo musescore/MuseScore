@@ -72,16 +72,16 @@ public:
     MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));
     MOCK_METHOD(void, endOutgoingDrag, (), (override));
 
-    MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
-    MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
+    MOCK_METHOD(bool, startDropSingle, (const muse::ByteArray&), (override));
+    MOCK_METHOD(bool, startDropRange, (const muse::ByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const Fraction&, const Fraction&, engraving::staff_idx_t, size_t, bool), (override));
-    MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
+    MOCK_METHOD(bool, startDropImage, (const muse::io::path_t&), (override));
     MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, muse::KeyboardModifiers), (override));
     MOCK_METHOD(bool, updateDropRange, (const muse::PointF&, std::optional<bool>), (override));
     MOCK_METHOD(muse::Ret, canDropSingle, (const muse::PointF&), (override));
     MOCK_METHOD(bool, isDroppingInstrumentChange, (), (const, override));
     MOCK_METHOD(bool, dropSingle, (const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>&), (override));
-    MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&, bool), (override));
+    MOCK_METHOD(bool, dropRange, (const muse::ByteArray&, const muse::PointF&, bool), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
     MOCK_METHOD(void, setDropRects, (const std::vector<muse::RectF>&), (override));
     MOCK_METHOD(void, endDrop, (), (override));

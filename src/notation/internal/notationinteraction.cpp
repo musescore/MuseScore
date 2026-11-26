@@ -1377,7 +1377,7 @@ void NotationInteraction::endOutgoingDrag()
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent
-bool NotationInteraction::startDropSingle(const QByteArray& edata)
+bool NotationInteraction::startDropSingle(const ByteArray& edata)
 {
     resetDropData();
 
@@ -1408,7 +1408,7 @@ bool NotationInteraction::startDropSingle(const QByteArray& edata)
     return false;
 }
 
-bool NotationInteraction::startDropRange(const QByteArray& data)
+bool NotationInteraction::startDropRange(const ByteArray& data)
 {
     resetDropData();
 
@@ -1457,14 +1457,10 @@ bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fract
     return true;
 }
 
-bool NotationInteraction::startDropImage(const QUrl& url)
+bool NotationInteraction::startDropImage(const muse::io::path_t& path)
 {
-    if (url.scheme() != "file") {
-        return false;
-    }
-
     auto image = toImage(Factory::createItem(mu::engraving::ElementType::IMAGE, score()->dummy()));
-    if (!image->loadFromFile(url.toLocalFile())) {
+    if (!image->loadFromFile(path)) {
         return false;
     }
 
@@ -2103,7 +2099,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
     return true;
 }
 
-bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, bool deleteSourceMaterial)
+bool NotationInteraction::dropRange(const ByteArray& data, const PointF& pos, bool deleteSourceMaterial)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;

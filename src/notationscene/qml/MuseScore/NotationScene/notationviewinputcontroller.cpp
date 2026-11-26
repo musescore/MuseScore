@@ -1204,7 +1204,7 @@ void NotationViewInputController::mouseReleaseEvent(const muse::PointerEvent& ev
             return;
         }
         PointF logicPos = m_view->toLogical(event.position);
-        viewInteraction()->dropRange(rangeData.toQByteArrayNoCopy(), logicPos, false);
+        viewInteraction()->dropRange(rangeData, logicPos, false);
         return;
     }
 
@@ -1563,7 +1563,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
             return;
         }
 
-        QByteArray edata = mimeData->data(mimeSymbolFormat);
+        const muse::ByteArray edata = muse::ByteArray::fromQByteArray(mimeData->data(mimeSymbolFormat));
         if (viewInteraction()->startDropSingle(edata)) {
             event->accept();
             return;
@@ -1589,7 +1589,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
             }
         }
 
-        QByteArray edata = mimeData->data(mimeStaffListFormat);
+        const muse::ByteArray edata = muse::ByteArray::fromQByteArray(mimeData->data(mimeStaffListFormat));
         if (viewInteraction()->startDropRange(edata)) {
             event->accept();
             return;
@@ -1600,7 +1600,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
     }
 
     for (const QUrl& url : mimeData->urls()) {
-        if (viewInteraction()->startDropImage(url)) {
+        if (url.isLocalFile() && viewInteraction()->startDropImage(muse::io::path_t(url.toLocalFile()))) {
             event->accept();
             return;
         }
@@ -1699,7 +1699,7 @@ bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QM
     if (mimeData->hasFormat(mimeStaffListFormat)) {
         bool isInternal = event.source == m_view->asItem();
         bool isMove = isInternal && event.dropAction == Qt::MoveAction;
-        isAccepted = viewInteraction()->dropRange(mimeData->data(mimeStaffListFormat), pos, isMove);
+        isAccepted = viewInteraction()->dropRange(muse::ByteArray::fromQByteArray(mimeData->data(mimeStaffListFormat)), pos, isMove);
     } else {
         isAccepted = dropSingle(pos, modifiers);
     }

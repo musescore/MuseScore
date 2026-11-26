@@ -142,11 +142,11 @@ public:
     void endOutgoingDrag() override;
 
     // Drop
-    bool startDropSingle(const QByteArray& edata) override;
-    bool startDropRange(const QByteArray& data) override;
+    bool startDropSingle(const muse::ByteArray& edata) override;
+    bool startDropRange(const muse::ByteArray& data) override;
     bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx, size_t numStaves,
                         bool preserveMeasureAlignment) override;
-    bool startDropImage(const QUrl& url) override;
+    bool startDropImage(const muse::io::path_t& path) override;
     bool updateDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers) override;
     bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) override;
 
@@ -155,7 +155,7 @@ public:
     bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers,
                     const std::optional<InstrumentTemplate>& instrument = std::nullopt) override;
 
-    bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
+    bool dropRange(const muse::ByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRects(const std::vector<muse::RectF>& rects) override;
     void endDrop() override;
