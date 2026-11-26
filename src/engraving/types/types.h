@@ -31,6 +31,7 @@
 #include "global/types/translatablestring.h"
 #include "global/types/flags.h"
 
+#include "draw/types/bezier.h"
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
@@ -386,6 +387,7 @@ using PainterPath = muse::draw::PainterPath; // P_TYPE::PATH
 using ScaleF = muse::ScaleF;              // P_TYPE::SCALE
 using PairF = muse::PairF;                // P_TYPE::PAIR_REAL
 using PolygonF = muse::PolygonF;
+using Bezier = muse::draw::Bezier;
 
 // --- Draw ---
 using Color = muse::draw::Color;        // P_TYPE::COLOR

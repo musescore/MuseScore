@@ -123,7 +123,6 @@
 
 #include "dom/shadownote.h"
 #include "dom/slur.h"
-#include "dom/slurtie.h"
 #include "dom/spacer.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
@@ -2960,51 +2959,7 @@ void TLayout::fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBe
     if (path.elementCount() < 2) {
         shape.add(ldata->bbox(), item);
     } else {
-        const double lw2 = 0.5 * item->lineWidth();
-        const double maxStep = 0.5 * item->spatium();
-
-        auto nbSteps = [maxStep](const PointF& a, const PointF& b) {
-            const double len = std::hypot(b.x() - a.x(), b.y() - a.y());
-            return std::clamp(static_cast<int>(std::ceil(len / maxStep)), 1, 30);
-        };
-        auto addStep = [&shape, item, lw2](const PointF& a, const PointF& b) {
-            shape.add(RectF(a, b).normalized().adjusted(-lw2, -lw2, lw2, lw2), item);
-        };
-
-        PointF cur;
-        const size_t count = path.elementCount();
-        for (size_t i = 0; i < count; ++i) {
-            const PainterPath::Element e = path.elementAt(i);
-            if (e.isMoveTo()) {
-                cur = e;
-            } else if (e.isLineTo()) {
-                const PointF end = e;
-                const int n = nbSteps(cur, end);
-                PointF prev = cur;
-                for (int k = 1; k <= n; ++k) {
-                    const PointF pt = cur + (end - cur) * (double(k) / n); // evenly spaced points along the line
-                    addStep(prev, pt);
-                    prev = pt;
-                }
-                cur = end;
-            } else if (e.isCurveTo() && i + 2 < count) {
-                // CurveTo holds the 1st control point, followed by two CurveToData (2nd control point, end point)
-                const PointF c1 = e;
-                const PointF c2 = path.elementAt(i + 1);
-                const PointF end = path.elementAt(i + 2);
-                const CubicBezier b(cur, c1, c2, end);
-
-                const int n = std::max(nbSteps(cur, c1) + nbSteps(c1, c2) + nbSteps(c2, end), 8);
-                PointF prev = cur;
-                for (int k = 1; k <= n; ++k) {
-                    const PointF pt = b.pointAtPercent(double(k) / n);
-                    addStep(prev, pt);
-                    prev = pt;
-                }
-                cur = end;
-                i += 2;
-            }
-        }
+        shape.addPath(path, 0.5 * item->lineWidth(), 0.5 * item->spatium(), item);
 
         const PolygonF& arrow = ldata->arrow();
         if (!arrow.empty() && item->staff()->isTabStaff(item->tick())) {

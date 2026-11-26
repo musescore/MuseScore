@@ -28,7 +28,6 @@
 #include "dom/parenthesis.h"
 #include "dom/score.h"
 #include "dom/segment.h"
-#include "dom/slurtie.h"
 #include "dom/staff.h"
 #include "dom/timesig.h"
 #include "horizontalspacing.h"
@@ -317,10 +316,10 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     nbShapes = std::clamp(nbShapes, 3, 10);
     PointF bezier1mid = bezier1for - PointF(midPointThickness * direction, 0.0);
     PointF bezier2mid = bezier2for - PointF(midPointThickness * direction, 0.0);
-    const CubicBezier b(startPoint, bezier1mid, bezier2mid, endNormalised);
+    const Bezier b = Bezier::fromPoints(startPoint, bezier1mid, bezier2mid, endNormalised);
     for (int i = 1; i <= nbShapes; i++) {
         double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
-        const PointF point = b.pointAtPercent(percent);
+        const PointF point = b.pointAt(percent);
         RectF re = RectF(startPoint, point).normalized();
         double approxThicknessAtPercent = (1 - 2 * std::abs(0.5 - percent)) * midThickness;
         if (re.width() < approxThicknessAtPercent) {

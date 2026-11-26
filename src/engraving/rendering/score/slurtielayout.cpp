@@ -1053,10 +1053,10 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
         toSystemCoordinates.rotateRadians(slurAngle);
         // Create rectangles
         slurRects.clear();
-        CubicBezier clearanceBezier(PointF(0, 0), p3 + PointF(0.0, arcClearance), p4 + PointF(0.0, arcClearance), p2);
+        const Bezier clearanceBezier = Bezier::fromPoints(PointF(0, 0), p3 + PointF(0.0, arcClearance), p4 + PointF(0.0, arcClearance), p2);
         for (unsigned i = 0; i < npoints - 1; i++) {
-            PointF clearancePoint1 = clearanceBezier.pointAtPercent(double(i) / double(npoints));
-            PointF clearancePoint2 = clearanceBezier.pointAtPercent(double(i + 1) / double(npoints));
+            PointF clearancePoint1 = clearanceBezier.pointAt(double(i) / double(npoints));
+            PointF clearancePoint2 = clearanceBezier.pointAt(double(i + 1) / double(npoints));
             clearancePoint1 = toSystemCoordinates.map(clearancePoint1);
             clearancePoint2 = toSystemCoordinates.map(clearancePoint2);
             slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
@@ -3314,11 +3314,11 @@ void SlurTieLayout::fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthIn
     int nbShapes = round(5.0 * slurTieLengthInSp);
     nbShapes = std::max(nbShapes, 20);
     nbShapes = std::min(nbShapes, 50);
-    const CubicBezier b(startPoint, slurTieSeg->ups(Grip::BEZIER1).pos(), slurTieSeg->ups(Grip::BEZIER2).pos(),
-                        slurTieSeg->ups(Grip::END).pos());
+    const Bezier b = Bezier::fromPoints(startPoint, slurTieSeg->ups(Grip::BEZIER1).pos(), slurTieSeg->ups(Grip::BEZIER2).pos(),
+                                        slurTieSeg->ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
         double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
-        const PointF point = b.pointAtPercent(percent);
+        const PointF point = b.pointAt(percent);
         RectF re = RectF(startPoint, point).normalized();
         double approxThicknessAtPercent = midThickness;
         if (slurTieSeg->slurTie()->styleType() == SlurStyleType::Solid) {

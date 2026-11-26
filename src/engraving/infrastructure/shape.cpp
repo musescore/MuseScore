@@ -544,6 +544,63 @@ void Shape::add(const ShapeElement& shapeEl)
     invalidateBBox();
 }
 
+static int nbSubdivisions(const PointF& p1, const PointF& p2, double maxStep)
+{
+    static constexpr int MAX_SUBDIVISIONS = 30;
+
+    if (maxStep <= 0.0) {
+        return 1;
+    }
+
+    const double len = std::hypot(p2.x() - p1.x(), p2.y() - p1.y());
+    return std::clamp(static_cast<int>(std::ceil(len / maxStep)), 1, MAX_SUBDIVISIONS);
+}
+
+void Shape::addLine(const PointF& p1, const PointF& p2, double halfWidth, double maxStep, const EngravingItem* p)
+{
+    const int n = nbSubdivisions(p1, p2, maxStep);
+    PointF prev = p1;
+    for (int i = 1; i <= n; ++i) {
+        const PointF cur = p1 + (p2 - p1) * (double(i) / n);
+        add(RectF(prev, cur).normalized().adjusted(-halfWidth, -halfWidth, halfWidth, halfWidth), p);
+        prev = cur;
+    }
+}
+
+void Shape::addPath(const PainterPath& path, double halfWidth, double maxStep, const EngravingItem* p)
+{
+    static constexpr int MIN_CURVE_SUBDIVISIONS = 8;
+
+    PointF cur;
+    const size_t count = path.elementCount();
+    for (size_t i = 0; i < count; ++i) {
+        const PainterPath::Element e = path.elementAt(i);
+        if (e.isMoveTo()) {
+            cur = e;
+        } else if (e.isLineTo()) {
+            addLine(cur, e, halfWidth, maxStep, p);
+            cur = e;
+        } else if (e.isCurveTo() && i + 2 < count) {
+            // A CurveTo element holds the 1st control point, followed by two CurveToData (2nd control point, end point)
+            const PointF c1 = e;
+            const PointF c2 = path.elementAt(i + 1);
+            const PointF end = path.elementAt(i + 2);
+            const Bezier b = Bezier::fromPoints(cur, c1, c2, end);
+
+            const int n = std::max(nbSubdivisions(cur, c1, maxStep) + nbSubdivisions(c1, c2, maxStep) + nbSubdivisions(c2, end, maxStep),
+                                   MIN_CURVE_SUBDIVISIONS);
+            PointF prev = cur;
+            for (int k = 1; k <= n; ++k) {
+                const PointF pt = b.pointAt(double(k) / n);
+                add(RectF(prev, pt).normalized().adjusted(-halfWidth, -halfWidth, halfWidth, halfWidth), p);
+                prev = pt;
+            }
+            cur = end;
+            i += 2;
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
