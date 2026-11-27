@@ -1616,15 +1616,20 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
 
 bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& needsRestateOnNewSystem, StaveSharingContext& ctx)
 {
-    std::vector<track_idx_t> originTracksOfThisNote;
-    for (EngravingItem* originNote : unisonNote->originItems()) {
-        originTracksOfThisNote.push_back(originNote->track());
-    }
-
     Note* prevNote = nullptr;
-    track_idx_t curTrack = unisonNote->track();
-    Segment* curSegment = unisonNote->chord()->segment();
+    const track_idx_t curTrack = unisonNote->track();
+    const Segment* curSegment = unisonNote->chord()->segment();
+    const Measure* lastMeasure = curSegment->measure();
+
     for (Segment* seg = curSegment->prev1(SegmentType::ChordRest); seg; seg = seg->prev1(SegmentType::ChordRest)) {
+        // Treat a section break like the start of the score
+        const Measure* measure = seg->measure();
+        if (measure != lastMeasure) {
+            if (lastMeasure->isFirstInSection()) {
+                break;
+            }
+            lastMeasure = measure;
+        }
         if (EngravingItem* el = seg->element(curTrack); el && el->isChord()) {
             for (Note* note : toChord(el)->notes()) {
                 if (!note->originItems().empty()) {
@@ -1640,6 +1645,11 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& needsResta
 
     if (!prevNote) {
         return true;
+    }
+
+    std::vector<track_idx_t> originTracksOfThisNote;
+    for (EngravingItem* originNote : unisonNote->originItems()) {
+        originTracksOfThisNote.push_back(originNote->track());
     }
 
     std::vector<track_idx_t> originTracksOfPrevNote;
