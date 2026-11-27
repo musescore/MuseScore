@@ -28,6 +28,7 @@
 
 #include "engraving/automation/automationtypes.h"
 #include "engraving/types/bps.h"
+#include "engraving/types/constants.h"
 
 namespace mu::engraving {
 using PausesMap = std::map<int, double>; // utick -> held seconds
@@ -38,6 +39,7 @@ struct TempoTimePoint {
     double time = 0.0;  // cumulative nominal elapsed time at utick, pauses already included
     double bps = 0.0;   // tempo held flat from utick until the next point (or indefinitely, for the last one)
     double pause = 0.0; // seconds held at utick before "time" was reached, if this point is a pause
+    double pauseSum = 0.0; // pauses up to and including this point
 };
 
 class TempoTimeline
@@ -49,6 +51,7 @@ public:
     double utick2utime(int utick) const;
     int utime2utick(double time) const;
     BeatsPerSecond tempo(int utick) const;
+    const BeatsPerSecond& maxTempo() const { return m_maxTempo; }
 
     const PausesMap& pauses() const { return m_pauses; }
     const std::vector<TempoTimePoint>& points() const { return m_points; }
@@ -60,6 +63,7 @@ private:
     std::vector<TempoTimePoint> m_points; // sorted by utick for O(logN) lookup
     PausesMap m_pauses;
     BeatsPerSecond m_tempoMultiplier = 1.0;
+    BeatsPerSecond m_maxTempo = Constants::DEFAULT_TEMPO;
 
     mutable size_t m_utick2utimeHint = 0; // cached m_points index for utick2utime()
     mutable size_t m_utime2utickHint = 0; // cached m_points index for utime2utick()

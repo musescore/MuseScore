@@ -38,20 +38,15 @@ inline muse::mpe::timestamp_t timestampFromTicks(const Score* score, const int t
 
 inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t timestamp)
 {
-    return score->tempoTimeline().utime2utick(timestamp / 1000000.f);
+    return score->tempoTimeline().utime2utick(timestamp / 1000000.0);
 }
 
 // Returns the pause at `tick` in microseconds, or 0
 inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int tickPositionOffset)
 {
-    const TempoTimeline& timeline = score->tempoTimeline();
-    const auto pauseIt = timeline.pauses().find(tick + tickPositionOffset);
-    if (pauseIt == timeline.pauses().end()) {
-        return 0;
-    }
-
-    double secs = pauseIt->second / timeline.tempoMultiplier().val;
-    return muse::RealIsNull(secs) ? 0 : secs* 1000000;
+    const PausesMap& pauses = score->tempoTimeline().pauses();
+    const auto pauseIt = pauses.find(tick + tickPositionOffset);
+    return pauseIt == pauses.end() ? 0 : pauseIt->second* 1000000;
 }
 
 inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick,
@@ -86,7 +81,7 @@ inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationT
 inline muse::mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, const int durationTicks,
                                                        const int ticksPerBeat = Constants::DIVISION)
 {
-    float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
+    const double beatsNumber = static_cast<double>(durationTicks) / static_cast<double>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000000;
 }
