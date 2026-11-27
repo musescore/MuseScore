@@ -25,9 +25,11 @@
 #endif
 
 #include <gtest/gtest.h>
+#include <memory>
 
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/stafftext.h"
@@ -260,5 +262,49 @@ TEST_F(Engraving_TextBaseTests, lineBreakTest)
         ASSERT_TRUE(staffText);
 
         EXPECT_EQ(staffText->xmlText(), TEXT);
+    }
+}
+
+TEST_F(Engraving_TextBaseTests, harmonyUnicodeSymbols)
+{
+    struct Case {
+        const char16_t* input;
+        const char16_t* expected;
+    };
+    const Case cases[] = {
+        { u"C\U0001D12A7", u"C##7" },
+        { u"C\U0001D12B7", u"Cbb7" },
+        { u"C7/G\U0001D12A", u"C7/G##" },
+        { u"C7/G\U0001D12B", u"C7/Gbb" },
+        { u"C\u00B07", u"Co7" },
+        { u"C\u266F7", u"C#7" },
+        { u"C\u266D7", u"Cb7" },
+    };
+    for (const Case& test : cases) {
+        SCOPED_TRACE(String(test.input).toStdString());
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"test.mscx"));
+        ASSERT_TRUE(score);
+        Segment* segment = score->firstSegment(SegmentType::ChordRest);
+        ASSERT_TRUE(segment);
+        Harmony expected(segment);
+        expected.setTrack(0);
+        expected.setHarmony(test.expected);
+        ASSERT_EQ(expected.chords().size(), 1);
+
+        Harmony* harmony = new Harmony(segment);
+        harmony->setTrack(0);
+        segment->add(harmony);
+        EditData ed;
+        harmony->startEdit(ed);
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Edit chord symbol"), [&](Transaction&) {
+            score->undo(new InsertText(harmony->cursor(), String(test.input)));
+        });
+        harmony->endEdit(ed);
+
+        ASSERT_EQ(harmony->chords().size(), 1);
+        EXPECT_EQ(harmony->harmonyName(), expected.harmonyName());
+        EXPECT_EQ(harmony->chords().front()->rootTpc(), expected.chords().front()->rootTpc());
+        EXPECT_EQ(harmony->chords().front()->bassTpc(), expected.chords().front()->bassTpc());
+        EXPECT_EQ(harmony->chords().front()->id(), expected.chords().front()->id());
     }
 }
