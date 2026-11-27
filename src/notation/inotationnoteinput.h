@@ -60,7 +60,7 @@ public:
 
     virtual void addTuplet(const TupletOptions& options) = 0;
 
-    // In By duration and Rhythm input, a tuplet waits for the next duration
+    // During note input, a tuplet waits for the next note (By note name, Insert) or duration (By duration and Rhythm)
     virtual bool tupletPending() const = 0;
     virtual void setPendingTuplet(const TupletOptions& options) = 0;
     virtual void cancelPendingTuplet() = 0;

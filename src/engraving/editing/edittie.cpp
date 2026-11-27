@@ -23,6 +23,7 @@
 #include "edittie.h"
 
 #include "../dom/chord.h"
+#include "../dom/drumset.h"
 #include "../dom/factory.h"
 #include "../dom/input.h"
 #include "../dom/laissezvib.h"
@@ -104,6 +105,17 @@ static Tie* createAndAddTie(Note* startNote, Note* endNote)
 void EditTie::cmdAddTie(Score* score, bool addToChord)
 {
     std::vector<Note*> noteList = cmdTieNoteList(score->selection(), score->noteEntryMode());
+
+    // a waiting tuplet takes a note tied from the chord before the input position, even if a chord is selected there
+    InputState& is = score->inputState();
+    const bool insert = is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    const bool tupletWaits = is.pendingTupletHere() && (insert || is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME));
+    if (score->noteEntryMode() && tupletWaits && is.segment() && !is.beyondScore()) {
+        const Segment* before = is.segment()->prev1();
+        const ChordRest* prev = before ? before->nextChordRest(is.track(), /*backwards*/ true) : nullptr;
+        noteList = prev && prev->isChord() ? toChord(prev)->notes() : std::vector<Note*>();
+    }
+
     if (noteList.empty()) {
         LOGD("no notes selected");
         return;
@@ -118,8 +130,6 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
     Chord* lastAddedChord = nullptr;
 
     Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
-
-    InputState& is = score->inputState();
 
     for (Note* note : noteList) {
         if (note->tieFor()) {
@@ -144,7 +154,17 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
             is.setTrack(note->chord()->track());
             is.setSegment(note->chord()->segment());
             is.moveToNextInputPos();
-            if (is.beyondScore()) {
+            if (is.beyondScore() && is.pendingTupletHere()) {
+                // a tuplet waiting past the end appends the measure itself, and starts it; an unmapped drum leaves
+                // it waiting
+                if (is.drumset() && !is.drumset()->isValid(note->pitch())) {
+                    continue;
+                }
+                if (!NoteInput::addPendingTupletForNote(tx, score, note->pitch())) {
+                    // refused: the error rolls the whole command back
+                    break;
+                }
+            } else if (is.beyondScore()) {
                 score->appendMeasures(1);
                 is.moveToNextInputPos();
             }
@@ -180,6 +200,10 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
         NoteVal nval(note->noteVal());
         if (!n) {
             n = NoteInput::addPitch(tx, score, nval, addFlag);
+            if (!n) {
+                // refused, e.g. an unmapped drum: the other notes still get their ties
+                continue;
+            }
             if (staffMove != 0) {
                 score->undo(new ChangeChordStaffMove(n->chord(), staffMove));
             }

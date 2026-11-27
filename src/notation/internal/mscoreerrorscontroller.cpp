@@ -46,12 +46,14 @@ void MScoreErrorsController::checkAndShowMScoreError()
     if (!configuration()->needToShowMScoreError(MScore::errorToString(err))) {
         // screen reader users still need to know why nothing was entered
         if (err == MsError::NO_SPACE_FOR_TUPLET) {
-            accessibilityController()->announce(muse::mtrc("notation", "No space for the tuplet with this duration. "
-                                                                       "Choose a shorter duration, or press Escape to cancel it."));
+            accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: not enough space"));
         } else if (err == MsError::TUPLET_NOTE_VALUE_TOO_SHORT) {
             accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: note value is too short"));
         } else if (err == MsError::TUPLET_RATIO_NOT_POSSIBLE) {
             accessibilityController()->announce(muse::mtrc("notation", "This ratio cannot be used for a tuplet of this duration."));
+        } else if (err == MsError::CANNOT_INSERT_TUPLET_IN_TUPLET) {
+            accessibilityController()->announce(muse::mtrc("notation", "Cannot create tuplet: a tuplet can’t be inserted "
+                                                                       "inside another tuplet"));
         }
         return;
     }
@@ -204,6 +206,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::TUPLET_RATIO_NOT_POSSIBLE:
         title = muse::trc("notation", "Cannot create tuplet");
         message = muse::trc("notation", "This ratio cannot be used for a tuplet of this duration.");
+        break;
+    case MsError::CANNOT_INSERT_TUPLET_IN_TUPLET:
+        title = muse::trc("notation", "Cannot create tuplet");
+        message = muse::trc("notation", "A tuplet can’t be inserted inside another tuplet.");
         break;
     }
 

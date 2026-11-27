@@ -557,7 +557,7 @@ muse::Ret NotationActionController::resetState()
     if (noteInput->isNoteInputMode()) {
         noteInput->forgetPendingTuplets();
 
-        // the first Escape cancels a pending tuplet, the next one ends note input
+        // Escape cancels one level of a pending tuplet, else ends note input
         if (noteInput->tupletPending()) {
             noteInput->cancelPendingTuplet();
             return muse::make_ok();
@@ -1536,6 +1536,13 @@ muse::Ret NotationActionController::putTuplet(const AddTupletCommand& command)
     // in By duration and Rhythm input, the next duration sizes the tuplet
     if (noteInput->isNoteInputMode()
         && (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION) || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM))) {
+        noteInput->setPendingTuplet(options);
+        return muse::make_ok();
+    }
+
+    // in By note name and Insert input, the tuplet waits for the next note
+    if (noteInput->isNoteInputMode()
+        && (noteInput->usingNoteInputMethod(NoteInputMethod::BY_NOTE_NAME) || noteInput->usingNoteInputMethod(NoteInputMethod::TIMEWISE))) {
         noteInput->setPendingTuplet(options);
         return muse::make_ok();
     }

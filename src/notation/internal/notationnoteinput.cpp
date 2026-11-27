@@ -70,10 +70,27 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
     return TranslatableString("noteInputMethod", "Unknown note input mode");
 }
 
-static String pendingTupletAnnouncement(const PendingTuplet& pending)
+static String pendingTupletAnnouncement(const PendingTuplet& pending, bool fits)
 {
+    if (!pending.duration) {
+        //: %1 is a tuplet type, e.g. "Triplet"
+        return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+    }
+
+    // the innermost tuplet, and the one it is nested in
+    const PendingTuplet& inner = pending.nested.empty() ? pending : pending.nested.back();
+    String type = Tuplet::typeUserName(inner.ratio.numerator());
+    if (!pending.nested.empty()) {
+        const PendingTuplet& outer = pending.nested.size() > 1 ? pending.nested[pending.nested.size() - 2] : pending;
+        //: %1 is a tuplet type, e.g. "Triplet"; %2 is the tuplet it is nested in, in lower case, e.g. "triplet"
+        type = muse::mtrc("notation", "%1 in a %2").arg(type, Tuplet::typeUserName(outer.ratio.numerator()).toLower());
+    }
+    if (!fits) {
+        //: %1 is a tuplet type, e.g. "Triplet"
+        return muse::mtrc("notation", "%1 waiting for a note, doesn’t fit").arg(type);
+    }
     //: %1 is a tuplet type, e.g. "Triplet"
-    return muse::mtrc("notation", "%1 waiting for a duration").arg(Tuplet::typeUserName(pending.ratio.numerator()));
+    return muse::mtrc("notation", "%1 waiting for a note").arg(type);
 }
 
 static String cancelledTupletAnnouncement(const PendingTuplet& pending)
@@ -483,7 +500,7 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
         // the input method comes first, as when note input starts
         const String announcement = nameOfNoteInputMethod(method).translated() + u", "
                                     + cancelledTupletAnnouncement(*is.pendingTuplet());
-        is.setPendingTuplet(std::nullopt);
+        NoteInput::cancelPendingTuplet(score(), /*allLevels*/ true);
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
     }
@@ -857,25 +874,33 @@ void NotationNoteInput::setPendingTuplet(const TupletOptions& options)
 {
     NoteInputState& is = score()->inputState();
 
-    // the tuplet waits in the voice the next drum goes into
-    NoteInput::useSelectedNoteForRhythm(score());
-    if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
-        is.setVoice(*drumVoice);
-    }
-
     PendingTuplet pending;
     pending.ratio = options.ratio;
     pending.numberType = options.numberType;
     pending.bracketType = options.bracketType;
     pending.autoBaseLen = options.autoBaseLen;
     pending.durationAsSubdivision = options.selectedDurationAs == TupletSelectedDuration::SUBDIVISION;
-    pending.tick = is.tick();
-    pending.track = is.track();
-    pending.beyondScore = is.beyondScore();
-    is.setPendingTuplet(pending);
+    if (is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME) || is.usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
+        // sized by the input duration now; the engine sets any error
+        if (!NoteInput::setPendingTuplet(score(), pending)) {
+            m_interaction->checkAndShowError();
+            return;
+        }
+    } else {
+        // the tuplet waits in the voice the next drum goes into
+        NoteInput::useSelectedNoteForRhythm(score());
+        if (const std::optional<voice_idx_t> drumVoice = is.otherDrumVoice()) {
+            is.setVoice(*drumVoice);
+        }
+
+        pending.tick = is.tick();
+        pending.track = is.track();
+        pending.beyondScore = is.beyondScore();
+        is.setPendingTuplet(pending);
+    }
 
     m_tupletWasPending = true;
-    accessibilityController()->announce(pendingTupletAnnouncement(pending));
+    accessibilityController()->announce(pendingTupletAnnouncement(*is.pendingTuplet(), NoteInput::pendingTupletFitsHere(score())));
     notifyAboutStateChanged();
 }
 
@@ -886,11 +911,18 @@ void NotationNoteInput::cancelPendingTuplet()
         return;
     }
 
-    const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
-    is.setPendingTuplet(std::nullopt);
+    // the innermost level
+    const PendingTuplet& pending = *is.pendingTuplet();
+    const bool nested = !pending.nested.empty();
+    const String type = Tuplet::typeUserName((nested ? pending.nested.back() : pending).ratio.numerator());
+    NoteInput::cancelPendingTuplet(score());
 
-    m_tupletWasPending = false;
-    accessibilityController()->announce(announcement);
+    m_tupletWasPending = is.pendingTuplet().has_value();
+    accessibilityController()->announce(nested
+                                        //: %1 is a tuplet type in lower case, e.g. "triplet"
+                                        ? muse::mtrc("notation", "Nested %1 cancelled").arg(type.toLower())
+                                        //: %1 is a tuplet type, e.g. "Triplet"
+                                        : muse::mtrc("notation", "%1 cancelled").arg(type));
     notifyAboutStateChanged();
 }
 
@@ -901,7 +933,8 @@ void NotationNoteInput::forgetPendingTuplets()
 
 String NotationNoteInput::pendingTupletInfo() const
 {
-    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet()) : String();
+    return tupletPending() ? pendingTupletAnnouncement(*score()->inputState().pendingTuplet(),
+                                                       NoteInput::pendingTupletFitsHere(score())) : String();
 }
 
 // Moving the input position elsewhere cancels a pending tuplet
@@ -910,7 +943,7 @@ void NotationNoteInput::cancelPendingTupletIfMoved()
     NoteInputState& is = score()->inputState();
     if (is.pendingTuplet() && !is.pendingTupletHere()) {
         const String announcement = cancelledTupletAnnouncement(*is.pendingTuplet());
-        is.setPendingTuplet(std::nullopt);
+        NoteInput::cancelPendingTuplet(score(), /*allLevels*/ true);
         m_tupletWasPending = false;
         accessibilityController()->announce(announcement);
         notifyAboutStateChanged();
@@ -921,7 +954,8 @@ void NotationNoteInput::announcePendingTupletChange()
 {
     const bool pending = tupletPending();
     if (pending && !m_tupletWasPending) {
-        accessibilityController()->announce(pendingTupletAnnouncement(*score()->inputState().pendingTuplet()));
+        accessibilityController()->announce(pendingTupletAnnouncement(*score()->inputState().pendingTuplet(),
+                                                                      NoteInput::pendingTupletFitsHere(score())));
     }
     m_tupletWasPending = pending;
 }

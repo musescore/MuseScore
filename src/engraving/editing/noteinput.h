@@ -44,6 +44,7 @@ class TDuration;
 class Transaction;
 
 struct NoteVal;
+struct PendingTuplet;
 struct Position;
 
 enum class AccidentalType : unsigned char;
@@ -57,8 +58,21 @@ struct NoteInputParams {
 
 // the tuplet waiting at the input position
 struct TupletPreview {
-    Fraction ratio;
-    TupletNumberType numberType {};
+    struct Level {
+        Fraction ratio;
+        TupletNumberType numberType {};
+        // in score time
+        Fraction ticks;
+    };
+
+    Fraction tick;
+    // from the outermost to the innermost
+    std::vector<Level> levels;
+    // for the outermost: the time to the barline or the end of the enclosing tuplet
+    Fraction space;
+    bool fits = true;
+    // not sized yet (By duration and Rhythm)
+    bool waiting = false;
 };
 
 class NoteInput
@@ -87,11 +101,13 @@ public:
                                                       bool forceAccidental = false);
 
     static muse::Ret putNote(Transaction& tx, Score* score, const muse::PointF& pos, bool replace, bool insert);
-    static muse::Ret putNote(Transaction& tx, Score* score, const Position& pos, bool replace);
+    static muse::Ret putNote(Transaction& tx, Score* score, const Position& pos, bool replace, bool insert = false);
     static muse::Ret repitchNote(Transaction& tx, Score* score, const Position& pos, bool replace);
     static muse::Ret insertChordByInsertingTime(Transaction& tx, Score* score, const Position& pos);
+    static Segment* insertTime(Transaction& tx, Score* score, Segment* seg, const Fraction& len);
 
     static void truncateChordRest(Transaction& tx, Score* score, ChordRest* cr, const Fraction& tick, bool fillWithRest);
+    static Fraction insertedTupletDuration(const InputState& is, const Fraction& duration);
 
     static void nextInputPos(Transaction& tx, Score* score, const ChordRest* cr, bool doSelect);
 
@@ -105,6 +121,10 @@ public:
     static bool addFretRemovesMeasureRepeat(Score* score);
 
     static void setDuration(Transaction& tx, Score* score, DurationType duration);
+    static bool setPendingTuplet(Score* score, PendingTuplet pending);
+    static void cancelPendingTuplet(Score* score, bool allLevels = false);
+    static bool pendingTupletFitsHere(const Score* score);
+    static bool addPendingTupletForNote(Transaction& tx, Score* score, int pitch, bool insertTime = false);
     static std::optional<TupletPreview> tupletPreview(const Score* score);
     static void useSelectedNoteForRhythm(Score* score);
     static void toggleRest(Transaction& tx, Score* score);

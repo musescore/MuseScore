@@ -119,6 +119,7 @@
 #include "inserttime.h"
 #include "mscoreview.h"
 #include "navigation.h"
+#include "noteinput.h"
 #include "splitjoinmeasure.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
@@ -2757,6 +2758,14 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
 {
     InputState& is = externalInputState ? (*externalInputState) : m_is;
 
+    // a tuplet waiting here takes the rest
+    if (!externalInputState && !NoteInput::addPendingTupletForNote(transactionManager()->currentOrDummyTransaction(), this, -1)) {
+        return;
+    }
+
+    // capped at the end of an inserted tuplet
+    const Fraction duration = NoteInput::insertedTupletDuration(is, d.fraction());
+
     if (is.beyondScore()) {
         appendMeasures(1);
         is.moveToNextInputPos();
@@ -2772,7 +2781,7 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
     const track_idx_t track = is.track();
     NoteVal nval;
     setNoteRest(is.segment(), track, nval,
-                d.fraction(), DirectionV::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
+                duration, DirectionV::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
                 externalInputState);
     is.moveToNextInputPos();
     if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::BY_NOTE_NAME)) {
