@@ -42,10 +42,14 @@ public:
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2);
 
     static void createBeamSegments(TremoloTwoChord* item, const LayoutContext& ctx);
+
+    static void computeShape(TremoloSingleChord* item, const LayoutContext& ctx);
 private:
     static void layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
     static void layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
     static void calcIsUp(TremoloTwoChord* item);
+
+    static PainterPath basePath(const TremoloSingleChord* item, const LayoutContext& ctx);
 };
 }
 

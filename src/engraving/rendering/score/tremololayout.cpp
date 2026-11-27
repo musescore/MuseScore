@@ -23,6 +23,8 @@
 
 #include "global/types/number.h"
 
+#include "draw/types/transform.h"
+
 #include "dom/chord.h"
 #include "dom/stem.h"
 #include "dom/tremolotwochord.h"
@@ -69,8 +71,7 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         return;
     }
 
-    item->computeShape();      // set bbox
-    item->setPath(item->basePath());
+    computeShape(item, ctx);
 
     Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
     Stem* stem = item->chord()->stem();
@@ -204,6 +205,49 @@ void TremoloLayout::calcIsUp(TremoloTwoChord* item)
     item->setUp(isUp);
     item->chord1()->setUp(item->chord1()->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
     item->chord2()->setUp(item->chord2()->staffMove() == 0 ? isUp : !isUp);
+}
+
+void TremoloLayout::computeShape(TremoloSingleChord* item, const LayoutContext& ctx)
+{
+    item->setPath(basePath(item, ctx));
+    if (item->isBuzzRoll()) {
+        item->setbbox(item->symBbox(SymId::buzzRoll));
+    } else {
+        item->setbbox(item->path().boundingRect());
+    }
+}
+
+PainterPath TremoloLayout::basePath(const TremoloSingleChord* item, const LayoutContext& ctx)
+{
+    if (item->isBuzzRoll()) {
+        return PainterPath();
+    }
+
+    const MStyle& style = ctx.conf().style();
+
+    const double sp = item->spatium() * item->chordMag();
+
+    double w2  = sp * style.styleS(Sid::tremoloWidth).val() * .5;
+    double lw  = sp * style.styleS(Sid::tremoloLineWidth).val();
+    double td  = sp * style.styleS(Sid::tremoloDistance).val();
+
+    PainterPath ppath;
+
+    // first line
+    ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
+    double ty = td;
+
+    // other lines
+    for (int i = 1; i < item->lines(); i++) {
+        ppath.addRect(-w2, ty, 2.0 * w2, lw);
+        ty += td;
+    }
+
+    muse::draw::Transform shearTransform;
+    shearTransform.shear(0.0, -(lw / 2.0) / w2);
+    ppath = shearTransform.map(ppath);
+
+    return ppath;
 }
 
 //---------------------------------------------------------

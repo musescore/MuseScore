@@ -67,9 +67,6 @@ public:
 
     int lines() const { return m_lines; }
 
-    void spatiumChanged(double oldValue, double newValue) override;
-    void localSpatiumChanged(double oldValue, double newValue) override;
-    void styleChanged() override;
     staff_idx_t vStaffIdx() const override;
     String accessibleInfo() const override;
 
@@ -82,11 +79,8 @@ public:
 
     bool isMovable() const override { return true; }
 
-    muse::draw::PainterPath basePath(double stretch = 0) const;
     const muse::draw::PainterPath& path() const { return m_path; }
     void setPath(const muse::draw::PainterPath& p) { m_path = p; }
-
-    void computeShape();
 
 private:
     friend class Factory;

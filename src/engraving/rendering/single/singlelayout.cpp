@@ -1814,10 +1814,10 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     }
 }
 
-void SingleLayout::layout(TremoloSingleChord* item, const Context&)
+void SingleLayout::layout(TremoloSingleChord* item, const Context& ctx)
 {
-    item->computeShape();      // set bbox
-    item->setPath(item->basePath());
+    LayoutContext tctx(ctx.dontUseScore());
+    TremoloLayout::computeShape(item, tctx);
 }
 
 void SingleLayout::layout(TremoloTwoChord* item, const Context&)
