@@ -54,33 +54,6 @@ struct UP {
     bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
 };
 
-//---------------------------------------------------------
-//   CubicBezier
-//    Helper class to optimize cubic Bezier curve points
-//    calculation.
-//---------------------------------------------------------
-
-class CubicBezier
-{
-    PointF p1;
-    PointF p2;
-    PointF p3;
-    PointF p4;
-
-public:
-    CubicBezier(PointF _p1, PointF _p2, PointF _p3, PointF _p4)
-        : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
-
-    PointF pointAtPercent(double t) const
-    {
-        assert(t >= 0.0 && t <= 1.0);
-        const double r = 1.0 - t;
-        const PointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
-        const PointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
-        return r * B123 + t * B234;
-    }
-};
-
 class SlurTie;
 
 //---------------------------------------------------------
@@ -113,6 +86,9 @@ public:
 
     int subtype() const override;
     TranslatableString subtypeUserName() const override;
+
+    bool masksOverSignatures() const;
+    bool masksOverMeasureNumbers() const;
 
     void setSlurOffset(Grip i, const PointF& val) { m_ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
@@ -151,7 +127,8 @@ protected:
 //   @@ SlurTie
 //   @P lineType       int  (0 - solid, 1 - dotted, 2 - dashed, 3 - wide dashed)
 //   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
-//   @P maskSlurTie    enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
+//   @P maskSlurTieSignatures enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
+//   @P maskSlurTieMeasureNumbers enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner
@@ -180,8 +157,10 @@ public:
     int subtype() const override { return static_cast<int>(m_styleType) + 1; }
     TranslatableString subtypeUserName() const override;
 
-    AutoOnOff maskSlurTie() const { return m_maskSlurTie; }
-    void setMaskSlurTie(AutoOnOff val) { m_maskSlurTie = val; }
+    AutoOnOff maskSlurTieSignatures() const { return m_maskSlurTieSignatures; }
+    void setMaskSlurTieSignatures(AutoOnOff val) { m_maskSlurTieSignatures = val; }
+    AutoOnOff maskSlurTieMeasureNumbers() const { return m_maskSlurTieMeasureNumbers; }
+    void setMaskSlurTieMeasureNumbers(AutoOnOff val) { m_maskSlurTieMeasureNumbers = val; }
 
     virtual SlurTieSegment* newSlurTieSegment() = 0;
 
@@ -202,6 +181,7 @@ protected:
 private:
 
     SlurStyleType m_styleType = SlurStyleType::Undefined;
-    AutoOnOff m_maskSlurTie = AutoOnOff::AUTO;
+    AutoOnOff m_maskSlurTieSignatures = AutoOnOff::AUTO;
+    AutoOnOff m_maskSlurTieMeasureNumbers = AutoOnOff::AUTO;
 };
 }

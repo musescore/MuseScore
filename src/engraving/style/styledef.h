@@ -633,8 +633,10 @@ enum class Sid : short {
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
-    maskSlurs,
-    maskTies,
+    maskSlursOverSignatures,
+    maskTiesOverSignatures,
+    maskSlursOverMeasureNumbers,
+    maskTiesOverMeasureNumbers,
     laissezVibMinDistance,
     headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
     lineEndToBarlineDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) in relation to barlines
@@ -1324,6 +1326,7 @@ enum class Sid : short {
     measureNumberPosition,
     measureNumberTextStyle,
     measureNumberAlignToBarline,
+    measureNumberAvoidance,
 
     measureNumberAlternateFontFace,
     measureNumberAlternateFontSize,

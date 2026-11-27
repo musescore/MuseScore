@@ -115,6 +115,10 @@ public:
     void add(const RectF& r, const EngravingItem* p) { add(ShapeElement(r, p)); }
     void add(const RectF& r) { add(ShapeElement(r)); }
 
+    // Approximate a line/path by a chain of rects of at most `maxStep` length each, padded by `halfWidth`
+    void addLine(const PointF& p1, const PointF& p2, double halfWidth, double maxStep, const EngravingItem* p);
+    void addPath(const PainterPath& path, double halfWidth, double maxStep, const EngravingItem* p);
+
     void remove(const RectF&);
     void remove(const Shape&);
     template<typename Predicate>

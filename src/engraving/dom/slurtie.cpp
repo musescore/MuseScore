@@ -228,7 +228,8 @@ PropertyDelegate SlurTieSegment::resolvePropertyDelegate(Pid pid) const
     switch (pid) {
     case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
-    case Pid::MASK_SLURTIE:
+    case Pid::MASK_SLURTIE_SIGNATURES:
+    case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         return PropertyDelegate(slurTie());
     default:
         return SpannerSegment::resolvePropertyDelegate(pid);
@@ -342,6 +343,35 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
     SpannerSegment::undoChangeProperty(pid, val, ps);
 }
 
+static bool resolveMask(const SlurTieSegment* segment, Pid maskPid, Sid slurSid, Sid tieSid)
+{
+    if (segment->isTappingHalfSlurSegment()) {
+        return false;
+    }
+
+    switch (segment->getProperty(maskPid).value<AutoOnOff>()) {
+    case AutoOnOff::ON:
+        return true;
+    case AutoOnOff::OFF:
+        return false;
+    case AutoOnOff::AUTO:
+        break;
+    }
+
+    return (segment->isSlurSegment() && segment->style().styleB(slurSid))
+           || (segment->isTieSegment() && segment->style().styleB(tieSid));
+}
+
+bool SlurTieSegment::masksOverSignatures() const
+{
+    return resolveMask(this, Pid::MASK_SLURTIE_SIGNATURES, Sid::maskSlursOverSignatures, Sid::maskTiesOverSignatures);
+}
+
+bool SlurTieSegment::masksOverMeasureNumbers() const
+{
+    return resolveMask(this, Pid::MASK_SLURTIE_MEASURE_NUMBERS, Sid::maskSlursOverMeasureNumbers, Sid::maskTiesOverMeasureNumbers);
+}
+
 //---------------------------------------------------------
 //   SlurTie
 //---------------------------------------------------------
@@ -352,7 +382,8 @@ SlurTie::SlurTie(const ElementType& type, EngravingObject* parent)
     m_slurDirection = DirectionV::AUTO;
     m_up            = true;
     m_styleType     = SlurStyleType::Solid;
-    m_maskSlurTie   = AutoOnOff::AUTO;
+    m_maskSlurTieSignatures = AutoOnOff::AUTO;
+    m_maskSlurTieMeasureNumbers = AutoOnOff::AUTO;
 }
 
 SlurTie::SlurTie(const SlurTie& t)
@@ -361,7 +392,8 @@ SlurTie::SlurTie(const SlurTie& t)
     m_up            = t.m_up;
     m_slurDirection = t.m_slurDirection;
     m_styleType     = t.m_styleType;
-    m_maskSlurTie   = t.m_maskSlurTie;
+    m_maskSlurTieSignatures = t.m_maskSlurTieSignatures;
+    m_maskSlurTieMeasureNumbers = t.m_maskSlurTieMeasureNumbers;
 }
 
 //---------------------------------------------------------
@@ -392,8 +424,10 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
         return styleType();
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(slurDirection());
-    case Pid::MASK_SLURTIE:
-        return maskSlurTie();
+    case Pid::MASK_SLURTIE_SIGNATURES:
+        return maskSlurTieSignatures();
+    case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
+        return maskSlurTieMeasureNumbers();
     default:
         return Spanner::getProperty(propertyId);
     }
@@ -412,8 +446,11 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SLUR_DIRECTION:
         setSlurDirection(v.value<DirectionV>());
         break;
-    case Pid::MASK_SLURTIE:
-        setMaskSlurTie(v.value<AutoOnOff>());
+    case Pid::MASK_SLURTIE_SIGNATURES:
+        setMaskSlurTieSignatures(v.value<AutoOnOff>());
+        break;
+    case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
+        setMaskSlurTieMeasureNumbers(v.value<AutoOnOff>());
         break;
     default:
         return Spanner::setProperty(propertyId, v);
@@ -433,7 +470,8 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
         return SlurStyleType::Solid;
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
-    case Pid::MASK_SLURTIE:
+    case Pid::MASK_SLURTIE_SIGNATURES:
+    case Pid::MASK_SLURTIE_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
     default:
         return Spanner::propertyDefault(id);
@@ -458,7 +496,8 @@ void SlurTie::reset()
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::SLUR_STYLE_TYPE);
-    undoResetProperty(Pid::MASK_SLURTIE);
+    undoResetProperty(Pid::MASK_SLURTIE_SIGNATURES);
+    undoResetProperty(Pid::MASK_SLURTIE_MEASURE_NUMBERS);
 }
 
 muse::TranslatableString SlurTie::subtypeUserName() const

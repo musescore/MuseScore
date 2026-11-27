@@ -2954,7 +2954,19 @@ void TLayout::fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBe
 {
     LAYOUT_CALL_ITEM(item);
     Shape shape;
-    shape.add(ldata->bbox(), item);
+
+    const PainterPath& path = ldata->path();
+    if (path.elementCount() < 2) {
+        shape.add(ldata->bbox(), item);
+    } else {
+        shape.addPath(path, 0.5 * item->lineWidth(), 0.5 * item->spatium(), item);
+
+        const PolygonF& arrow = ldata->arrow();
+        if (!arrow.empty() && item->staff()->isTabStaff(item->tick())) {
+            shape.add(arrow.boundingRect(), item);
+        }
+    }
+
     if (!item->bendText()->empty()) {
         shape.add(item->bendText()->shape().translate(item->bendText()->pos()));
     }

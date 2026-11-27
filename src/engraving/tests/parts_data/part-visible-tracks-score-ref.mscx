@@ -243,12 +243,13 @@
         <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
         <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
         <arpeggioAccidentalDistance>0.5</arpeggioAccidentalDistance>
-        <maskSlurs>0</maskSlurs>
-        <maskTies>0</maskTies>
+        <maskSlursOverSignatures>0</maskSlursOverSignatures>
+        <maskTiesOverSignatures>0</maskTiesOverSignatures>
         <tiePlacementChord>inside</tiePlacementChord>
         <dynamicsPosAbove x="0" y="-1.5"/>
         <dynamicsPosBelow x="0" y="2.5"/>
         <measureNumberPosBelow x="0" y="1"/>
+        <measureNumberAvoidance>move-clear</measureNumberAvoidance>
         <repeatLeftFontSize>18</repeatLeftFontSize>
         <systemTextLineFontSize>12</systemTextLineFontSize>
         <defaultsVersion>410</defaultsVersion>

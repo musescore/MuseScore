@@ -103,11 +103,27 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: maskSection
         titleText: qsTrc("propertiespanel", "Mask over clefs, key and time signatures")
-        propertyItem: root.model ? root.model.maskSlurTie : null
+        propertyItem: root.model ? root.model.maskSlurTieSignatures : null
 
         navigationPanel: root.navigationPanel
         navigationName: "Mask"
         navigationRowStart: tiePlacementSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("propertiespanel", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
+            { text: qsTrc("propertiespanel", "On"), value: CommonTypes.AUTO_ON_OFF_ON },
+            { text: qsTrc("propertiespanel", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF }
+        ]
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: maskMeasureNumbersSection
+        titleText: qsTrc("propertiespanel", "Mask over measure numbers")
+        propertyItem: root.model ? root.model.maskSlurTieMeasureNumbers : null
+
+        navigationPanel: root.navigationPanel
+        navigationName: "MaskMeasureNumbers"
+        navigationRowStart: maskSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("propertiespanel", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
@@ -130,7 +146,7 @@ Column {
 
         navigationName: "Minimum length"
         navigationPanel: root.navigationPanel
-        navigationRowStart: maskSection.navigationRowEnd + 1
+        navigationRowStart: maskMeasureNumbersSection.navigationRowEnd + 1
     }
 
 }

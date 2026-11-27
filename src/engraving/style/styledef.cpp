@@ -624,8 +624,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minWigglyGlissandoLength,                   2.0_sp),
     styleDef(slurMinDistance,                            0.5_sp),
     styleDef(tieMinDistance,                             0.5_sp),
-    styleDef(maskSlurs,                                  true),
-    styleDef(maskTies,                                   true),
+    styleDef(maskSlursOverSignatures,                    true),
+    styleDef(maskTiesOverSignatures,                     true),
+    styleDef(maskSlursOverMeasureNumbers,                false),
+    styleDef(maskTiesOverMeasureNumbers,                 false),
     styleDef(laissezVibMinDistance,                      0.5_sp),
     styleDef(headerToLineStartDistance,                  1.0_sp),
     styleDef(lineEndToBarlineDistance,                   0.25_sp),
@@ -1316,6 +1318,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(measureNumberTextStyle,                     TextStyleType::MEASURE_NUMBER),
     styleDef(measureNumberAlignToBarline,                true),
+    styleDef(measureNumberAvoidance,                     MeasureNumberAvoidance::FIT_IN_GAPS),
 
     styleDef(measureNumberAlternateFontFace,             "Edwin"),
     styleDef(measureNumberAlternateFontSize,             10.0),

@@ -41,8 +41,10 @@ SlursAndTiesPageModel::SlursAndTiesPageModel(QObject* parent)
     StyleId::tieDotsPlacement,
     StyleId::minLaissezVibLength,
     StyleId::laissezVibUseSmuflSym,
-    StyleId::maskSlurs,
-    StyleId::maskTies
+    StyleId::maskSlursOverSignatures,
+    StyleId::maskTiesOverSignatures,
+    StyleId::maskSlursOverMeasureNumbers,
+    StyleId::maskTiesOverMeasureNumbers
 })
 {
 }
@@ -127,12 +129,22 @@ StyleItem* SlursAndTiesPageModel::laissezVibUseSmuflSym() const
     return styleItem(StyleId::laissezVibUseSmuflSym);
 }
 
-StyleItem* SlursAndTiesPageModel::maskSlurs() const
+StyleItem* SlursAndTiesPageModel::maskSlursOverSignatures() const
 {
-    return styleItem(StyleId::maskSlurs);
+    return styleItem(StyleId::maskSlursOverSignatures);
 }
 
-StyleItem* SlursAndTiesPageModel::maskTies() const
+StyleItem* SlursAndTiesPageModel::maskTiesOverSignatures() const
 {
-    return styleItem(StyleId::maskTies);
+    return styleItem(StyleId::maskTiesOverSignatures);
+}
+
+StyleItem* SlursAndTiesPageModel::maskSlursOverMeasureNumbers() const
+{
+    return styleItem(StyleId::maskSlursOverMeasureNumbers);
+}
+
+StyleItem* SlursAndTiesPageModel::maskTiesOverMeasureNumbers() const
+{
+    return styleItem(StyleId::maskTiesOverMeasureNumbers);
 }
