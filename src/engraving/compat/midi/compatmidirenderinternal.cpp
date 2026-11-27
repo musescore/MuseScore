@@ -1497,6 +1497,16 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
     int staffIdx = static_cast<int>(s->staffIdx());
 
     if (s->isPedal()) {
+        // MIDI export filters events using master-score staff indices.
+        // Map the part-local staff index so sustain events survive part export.
+        const Staff* pedalStaff = s->staff();
+
+        for (const Staff* masterStaff : pedalStaff->masterScore()->staves()) {
+            if (pedalStaff->id() == masterStaff->id()) {
+                staffIdx = static_cast<int>(masterStaff->idx());
+                break;
+            }
+        }
         PedalEvent lastEvent;
 
         if (!pedalEventList.empty()) {

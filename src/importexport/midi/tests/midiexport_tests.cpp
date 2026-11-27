@@ -26,8 +26,12 @@
 
 #include <gtest/gtest.h>
 
+#include <QFile>
 #include <QString>
 
+#include "importexport/midi/internal/midishared/midifile.h"
+#include "engraving/dom/part.h"
+#include "engraving/tests/utils/testutils.h"
 #include "global/io/ifilesystem.h"
 #include "global/io/buffer.h"
 #include "global/io/path.h"
@@ -314,6 +318,69 @@ TEST_F(MidiExportTests, DISABLED_midiSingleNoteDynamics)
 class MidiExportEventsTests : public MidiExportTests, public ::testing::WithParamInterface<std::string_view>
 {
 };
+
+// Place other instruments before the piano so its part-local and
+// master-score staff indices differ, reproducing issue #35552.
+TEST_F(MidiExportTests, partExportPreservesSustain)
+{
+    std::unique_ptr<MasterScore> score {
+        ScoreRW::readScore(
+            MIDI_EXPORT_DATA_DIR + u"/testPartMidSustain.mscx")
+    };
+    ASSERT_TRUE(score);
+
+    ASSERT_EQ(score->parts().size(), 3u);
+
+    // Fixture order: alto saxophone, baritone saxophone, piano.
+    ASSERT_EQ(score->parts().at(2)->instrument()->id(), String(u"piano"));
+
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    Score* pianoPart = TestUtils::createPart(score.get(), 2);
+    ASSERT_TRUE(pianoPart);
+
+    pianoPart->doLayout();
+    score->rebuildMidiMapping();
+
+    ASSERT_TRUE(saveMidi(pianoPart, "testPartMidSustain-part.mid"));
+
+    QFile midiInput(QStringLiteral("testPartMidSustain-part.mid"));
+    ASSERT_TRUE(midiInput.open(QIODevice::ReadOnly))
+        << midiInput.errorString().toStdString();
+
+    MidiFile exportedMidi;
+    ASSERT_TRUE(exportedMidi.read(&midiInput));
+    midiInput.close();
+
+    int sustainOnCount = 0;
+    int sustainOffCount = 0;
+    // Verify the exported MIDI contains both pedal-down and pedal-up events.
+    for (const MidiTrack& track : exportedMidi.tracks()) {
+        for (const auto& [tick, event] : track.events()) {
+            if (event.type() != ME_CONTROLLER
+                || event.controller() != CTRL_SUSTAIN) {
+                continue;
+            }
+
+            if (event.value() == 127) {
+                ++sustainOnCount;
+            } else if (event.value() == 0) {
+                ++sustainOffCount;
+            } else {
+                ADD_FAILURE()
+                    << "Unexpected sustain value "
+                    << static_cast<int>(event.value())
+                    << " at tick " << tick;
+            }
+        }
+    }
+
+    EXPECT_EQ(sustainOnCount, 1)
+        << "The piano-part export should contain one sustain-on event.";
+    EXPECT_EQ(sustainOffCount, 1)
+        << "The piano-part export should contain one sustain-off event.";
+}
 
 //! TODO: investigate failures
 TEST_P(MidiExportEventsTests, DISABLED_eventsTest) {
