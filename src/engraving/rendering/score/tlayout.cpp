@@ -494,7 +494,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TIME_TICK_ANCHOR: layoutTimeTickAnchor(static_cast<TimeTickAnchor*>(item), ctx);
         break;
-    case ElementType::TREMOLO_SINGLECHORD: layoutTremoloSingle(item_cast<TremoloSingleChord*>(item), ctx);
+    case ElementType::TREMOLO_SINGLECHORD: layoutTremoloSingle(item_cast<TremoloSingleChord*>(item),
+                                                               static_cast<TremoloSingleChord::LayoutData*>(ldata), ctx);
         break;
     case ElementType::TREMOLO_TWOCHORD:    layoutTremoloTwo(item_cast<TremoloTwoChord*>(item), ctx);
         break;
@@ -6580,10 +6581,10 @@ void TLayout::layoutTimeTickAnchor(TimeTickAnchor* item, LayoutContext&)
     ldata->setBbox(0.0, 0.0, width, height);
 }
 
-void TLayout::layoutTremoloSingle(TremoloSingleChord* item, LayoutContext& ctx)
+void TLayout::layoutTremoloSingle(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    TremoloLayout::layout(item, ctx);
+    TremoloLayout::layout(item, ldata, ctx);
 }
 
 void TLayout::layoutTremoloTwo(TremoloTwoChord* item, LayoutContext& ctx)

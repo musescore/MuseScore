@@ -23,6 +23,8 @@
 
 #include "global/types/number.h"
 
+#include "draw/types/transform.h"
+
 #include "dom/chord.h"
 #include "dom/stem.h"
 #include "dom/tremolotwochord.h"
@@ -63,14 +65,13 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
 }
 
-void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
+void TremoloLayout::layout(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
-    item->computeShape();      // set bbox
-    item->setPath(item->basePath());
+    computeShape(item, ldata, ctx);
 
     Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
     Stem* stem = item->chord()->stem();
@@ -96,17 +97,19 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         }
 
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord()->intrinsicMag();
+        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + ldata->bbox().height()) * item->chord()->intrinsicMag();
     }
 
-    layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
+    layoutOneNoteTremolo(item, ldata, ctx, x, y, h, item->spatium());
 }
 
 //---------------------------------------------------------
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx,
+                                         double x, double y, double h,
+                                         double spatium)
 {
     const StaffType* staffType = item->staffType();
 
@@ -152,7 +155,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
     } else {
         y = std::max(y, 0.0);
     }
-    item->setPos(x, y);
+    ldata->setPos(x, y);
 }
 
 void TremoloLayout::calcIsUp(TremoloTwoChord* item)
@@ -204,6 +207,49 @@ void TremoloLayout::calcIsUp(TremoloTwoChord* item)
     item->setUp(isUp);
     item->chord1()->setUp(item->chord1()->staffMove() == 0 ? isUp : !isUp); // if on a different staff, flip stem dir
     item->chord2()->setUp(item->chord2()->staffMove() == 0 ? isUp : !isUp);
+}
+
+void TremoloLayout::computeShape(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx)
+{
+    ldata->path = basePath(item, ctx);
+    if (item->isBuzzRoll()) {
+        ldata->setBbox(item->symBbox(SymId::buzzRoll));
+    } else {
+        ldata->setBbox(ldata->path().boundingRect());
+    }
+}
+
+PainterPath TremoloLayout::basePath(const TremoloSingleChord* item, const LayoutContext& ctx)
+{
+    if (item->isBuzzRoll()) {
+        return PainterPath();
+    }
+
+    const MStyle& style = ctx.conf().style();
+
+    const double sp = item->spatium() * item->chordMag();
+
+    double w2  = sp * style.styleS(Sid::tremoloWidth).val() * .5;
+    double lw  = sp * style.styleS(Sid::tremoloLineWidth).val();
+    double td  = sp * style.styleS(Sid::tremoloDistance).val();
+
+    PainterPath ppath;
+
+    // first line
+    ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
+    double ty = td;
+
+    // other lines
+    for (int i = 1; i < item->lines(); i++) {
+        ppath.addRect(-w2, ty, 2.0 * w2, lw);
+        ty += td;
+    }
+
+    muse::draw::Transform shearTransform;
+    shearTransform.shear(0.0, -(lw / 2.0) / w2);
+    ppath = shearTransform.map(ppath);
+
+    return ppath;
 }
 
 //---------------------------------------------------------

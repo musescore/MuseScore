@@ -225,8 +225,8 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                             }
                         }
                         ChordLayout::layoutSpanners(c, ctx);
-                        if (c->tremoloSingleChord()) {
-                            TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                        if (TremoloSingleChord* tremolo = c->tremoloSingleChord()) {
+                            TremoloLayout::layout(tremolo, tremolo->mutldata(), ctx);
                         } else if (c->tremoloTwoChord()) {
                             TremoloTwoChord* t = c->tremoloTwoChord();
                             Chord* c1 = t->chord1();

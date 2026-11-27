@@ -19,16 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_TREMOLOLAYOUT_DEV_H
-#define MU_ENGRAVING_TREMOLOLAYOUT_DEV_H
+#pragma once
 
 #include <utility>
 
 #include "layoutcontext.h"
+#include "dom/tremolosinglechord.h"
 
 namespace mu::engraving {
 class TremoloTwoChord;
-class TremoloSingleChord;
 }
 
 namespace mu::engraving::rendering::score {
@@ -37,16 +36,19 @@ class TremoloLayout
 public:
 
     static void layout(TremoloTwoChord* item, const LayoutContext& ctx);
-    static void layout(TremoloSingleChord* item, const LayoutContext& ctx);
+    static void layout(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx);
 
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2);
 
     static void createBeamSegments(TremoloTwoChord* item, const LayoutContext& ctx);
+
+    static void computeShape(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx);
 private:
-    static void layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void layoutOneNoteTremolo(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx,
+                                     double x, double y, double h, double spatium);
     static void layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
     static void calcIsUp(TremoloTwoChord* item);
+
+    static PainterPath basePath(const TremoloSingleChord* item, const LayoutContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_TREMOLOLAYOUT_DEV_H

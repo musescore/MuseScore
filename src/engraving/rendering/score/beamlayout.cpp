@@ -117,7 +117,8 @@ void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
     for (ChordRest* cr : item->elements()) {
         ChordLayout::computeUp(cr, ctx);
         if (cr->isChord() && toChord(cr)->tremoloSingleChord()) {
-            TremoloLayout::layout(toChord(cr)->tremoloSingleChord(), ctx);
+            TremoloSingleChord* tremolo = toChord(cr)->tremoloSingleChord();
+            TremoloLayout::layout(tremolo, tremolo->mutldata(), ctx);
         }
     }
 }
