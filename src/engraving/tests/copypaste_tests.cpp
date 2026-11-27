@@ -22,10 +22,13 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include <QMimeData>
 
 #include "engraving/internal/qmimedataadapter.h"
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/durationtype.h"
@@ -33,6 +36,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 
 #include "engraving/editing/paste.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -519,6 +523,41 @@ void Engraving_CopyPasteTests::copypastenote(const String& idx, Fraction scale)
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "copypasteNote" + idx + ".mscx",
                                             COPYPASTE_DATA_DIR + "copypasteNote" + idx + "-ref.mscx"));
+}
+
+TEST_F(Engraving_CopyPasteTests, copyMidMeasureBarlinePreservesSpan)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(u"barline_data/barline-span-editing.mscx"));
+    ASSERT_TRUE(score);
+    Measure* measure = score->firstMeasure();
+    Segment* barlines = measure->findSegment(SegmentType::BarLine, Fraction(1, 2));
+    ASSERT_TRUE(barlines);
+    BarLine* source = toBarLine(barlines->element(0));
+    ASSERT_TRUE(source);
+    ASSERT_TRUE(source->spanStaff());
+    ASSERT_TRUE(score->staff(0)->barLineSpan());
+
+    score->staff(1)->setProperty(Pid::STAFF_BARLINE_SPAN, false);
+    EngravingItem* existing = barlines->element(VOICES);
+    ASSERT_TRUE(existing);
+    score->removeElement(existing);
+    delete existing;
+    EngravingItem* target = measure->first(SegmentType::ChordRest)->element(VOICES);
+    ASSERT_TRUE(target && target->isRest());
+
+    score->select(source);
+    QMimeData data;
+    data.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+    QMimeDataAdapter mimeData(&data);
+    score->select(target);
+    score->startCmd(TranslatableString::untranslatable("Paste mid-measure barline"));
+    const bool pasted = Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score.get(), &mimeData, nullptr);
+    score->endCmd();
+    ASSERT_TRUE(pasted);
+    BarLine* copy = toBarLine(barlines->element(VOICES));
+    ASSERT_TRUE(copy);
+    EXPECT_TRUE(copy->spanStaff());
+    EXPECT_FALSE(copy->spanStaffInherited());
 }
 
 TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoWholeRest)
