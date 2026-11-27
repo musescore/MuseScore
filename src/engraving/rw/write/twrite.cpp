@@ -869,6 +869,7 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::BARLINE_SPAN);
     writeProperty(item, xml, Pid::BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::BARLINE_SPAN_TO);
+    writeProperty(item, xml, Pid::BARLINE_SPAN_STYLE);
 
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
