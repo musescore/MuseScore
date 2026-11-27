@@ -29,10 +29,12 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/text.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
@@ -42,6 +44,7 @@
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayertreeitem.h"
 
 #include "interactive/tests/mocks/interactivemock.h"
+#include "notation/tests/mocks/excerptnotationmock.h"
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
 #include "notation/tests/mocks/notationpartsmock.h"
@@ -69,6 +72,7 @@ protected:
         ON_CALL(*m_notation, parts()).WillByDefault(Return(m_parts));
         ON_CALL(*m_masterNotation, notation()).WillByDefault(Return(m_notation));
         ON_CALL(*m_masterNotation, parts()).WillByDefault(Return(m_masterParts));
+        ON_CALL(*m_masterNotation, excerpts()).WillByDefault(ReturnRef(m_excerpts));
 
         ON_CALL(*m_parts, part(_)).WillByDefault(Invoke([this](const ID& partId) -> const Part* {
             return isInPartScore(partId) ? m_score->partById(partId) : nullptr;
@@ -105,8 +109,22 @@ protected:
 
     void TearDown() override
     {
+        for (EngravingItem* element : m_elements) {
+            delete element;
+        }
+
         delete m_root;
         delete m_score;
+    }
+
+    //! A score element on the staff; without a staff, it has no instrument
+    EngravingItem* addElement(const Staff* staff)
+    {
+        Text* text = Factory::createText(m_score->dummy(), TextStyleType::DEFAULT, false);
+        text->setTrack(staff ? staff->idx() * VOICES : muse::nidx);
+        m_elements.push_back(text);
+
+        return text;
     }
 
     const Part* addPart(size_t staffCount = 1, const String& name = u"")
@@ -120,6 +138,11 @@ protected:
         }
 
         return part;
+    }
+
+    void addExcerpt()
+    {
+        m_excerpts.push_back(std::make_shared<NiceMock<ExcerptNotationMock> >());
     }
 
     //! Not in the part score the panel shows
@@ -216,8 +239,11 @@ protected:
 
     std::shared_ptr<NotationMock> m_notation;
     std::shared_ptr<MasterNotationMock> m_masterNotation;
+    ExcerptNotationList m_excerpts;
 
 private:
+    std::vector<EngravingItem*> m_elements;
+
     bool isInPartScore(const ID& partId) const
     {
         return !muse::contains(m_partsMissingFromPartScore, partId);
@@ -524,6 +550,86 @@ TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_GroupHeaderOnOtherGroup
     // [THEN] Only instruments join groups: the first group moves onto B's row, without a drop target
     EXPECT_EQ(bItem->dropTarget(firstHeader, LayoutPanelItemType::ON_ITEM), nullptr);
     EXPECT_TRUE(bItem->canAcceptDrop(firstHeader, LayoutPanelItemType::ON_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, ResolveMove_StavesAboveAddStaffRow)
+{
+    // [GIVEN] An instrument with two staves, then the "add staff" row
+    buildPartTreeItem(addPart(2));
+
+    // [THEN] The staves swap places
+    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = m_partItem->resolveMove(0, 0, 1);
+    ASSERT_TRUE(move);
+    EXPECT_EQ(move->sourceRow, 0);
+    EXPECT_EQ(move->count, 1);
+    EXPECT_EQ(move->destinationRow, 1);
+
+    // [THEN] Nothing moves onto the "add staff" row, above the first staff, or onto itself
+    EXPECT_FALSE(m_partItem->resolveMove(1, 1, 2));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, -1));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, 0));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, NeedsRemovalConfirmation_OnlyWithPartScores)
+{
+    // [GIVEN] An instrument, and no part scores
+    buildPartTreeItem(addPart());
+
+    // [THEN] It's removed without asking
+    EXPECT_FALSE(m_partItem->needsRemovalConfirmation());
+
+    // [WHEN] There is a part score
+    addExcerpt();
+
+    // [THEN] Removing it asks first, as it's also removed from the part score
+    EXPECT_TRUE(m_partItem->needsRemovalConfirmation());
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, IsSelectedInScore)
+{
+    // [GIVEN] Two instruments
+    const Part* a = addPart();
+    const Part* b = addPart();
+    PartTreeItem* aItem = buildPartTreeItem(a);
+
+    // [THEN] A's row follows a selection with an element of A
+    EXPECT_TRUE(aItem->isSelectedInScore({ addElement(b->staff(0)), addElement(a->staff(0)) }));
+
+    // [THEN] But not one with only other elements, or an empty one
+    EXPECT_FALSE(aItem->isSelectedInScore({ addElement(b->staff(0)), addElement(nullptr) }));
+    EXPECT_FALSE(aItem->isSelectedInScore({}));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, IsHiddenByCollapse)
+{
+    // [GIVEN] A collapsed, then B with two staves in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart(2);
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    PartTreeItem* header = buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    aItem->setIsExpanded(false);
+
+    // [WHEN] The group is expanded
+    header->setIsExpanded(true);
+
+    // [THEN] Nothing is hidden
+    EXPECT_FALSE(bItem->isHiddenByCollapse());
+    EXPECT_FALSE(bItem->childAtRow(0)->isHiddenByCollapse());
+
+    // [WHEN] The group is collapsed
+    header->setIsExpanded(false);
+
+    // [THEN] B and its staves are hidden, the header and A aren't
+    EXPECT_TRUE(bItem->isHiddenByCollapse());
+    EXPECT_TRUE(bItem->childAtRow(0)->isHiddenByCollapse());
+    EXPECT_TRUE(bItem->childAtRow(1)->isHiddenByCollapse());
+    EXPECT_FALSE(header->isHiddenByCollapse());
+
+    // [THEN] Neither are A's rows: the view hides the children of a collapsed row itself
+    EXPECT_FALSE(aItem->isHiddenByCollapse());
+    EXPECT_FALSE(aItem->childAtRow(0)->isHiddenByCollapse());
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, InstrumentId)

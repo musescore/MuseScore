@@ -25,9 +25,11 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/text.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/sharedparttreeitem.h"
@@ -71,8 +73,21 @@ protected:
 
     void TearDown() override
     {
+        for (EngravingItem* element : m_elements) {
+            delete element;
+        }
+
         delete m_root;
         delete m_score;
+    }
+
+    EngravingItem* addElement(const Staff* staff)
+    {
+        Text* text = Factory::createText(m_score->dummy(), TextStyleType::DEFAULT, false);
+        text->setTrack(staff->idx() * VOICES);
+        m_elements.push_back(text);
+
+        return text;
     }
 
     Part* addPart(const String& name)
@@ -131,6 +146,8 @@ protected:
     std::shared_ptr<NotationPartsMock> m_parts;
 
 private:
+    std::vector<EngravingItem*> m_elements;
+
     std::shared_ptr<NotationMock> m_notation;
     std::shared_ptr<MasterNotationMock> m_masterNotation;
 };
@@ -274,4 +291,15 @@ TEST_F(InstrumentsScene_SharedPartTreeItemTests, ApplyDrop_JoinsGroup)
 
     // [WHEN] It's dropped on the group
     item->applyDrop(partItem);
+}
+
+TEST_F(InstrumentsScene_SharedPartTreeItemTests, IsSelectedInScore_NotSelected)
+{
+    // [GIVEN] A group of two trumpets
+    SharedPart* sharedPart = addSharedPart({ u"Trumpet 1", u"Trumpet 2" });
+    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
+
+    // [THEN] The header doesn't follow the selection of the combined staff, nor of its trumpets
+    EXPECT_FALSE(item->isSelectedInScore({ addElement(sharedPart->staff(0)) }));
+    EXPECT_FALSE(item->isSelectedInScore({ addElement(sharedPart->originParts().at(0)->staff(0)) }));
 }

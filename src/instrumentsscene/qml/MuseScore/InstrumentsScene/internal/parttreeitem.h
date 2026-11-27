@@ -71,6 +71,17 @@ public:
     AbstractLayoutPanelTreeItem* dropTarget(const AbstractLayoutPanelTreeItem* dragged,
                                             LayoutPanelItemType::DropPosition position) const override;
 
+    //! Staves stay above the "Add staff" row
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const override;
+
+    //! Removing an instrument also removes it from all part scores
+    bool needsRemovalConfirmation() const override;
+
+    bool isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const override;
+
+    //! The instruments of a collapsed group
+    Q_INVOKABLE bool isHiddenByCollapse() const override;
+
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();

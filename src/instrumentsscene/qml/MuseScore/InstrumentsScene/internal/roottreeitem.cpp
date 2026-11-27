@@ -181,7 +181,7 @@ std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int
     }
 
     const int minRow = childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER ? 1 : 0;
-    if (destinationRow < minRow || destinationRow >= childCount()) {
+    if (firstRow < minRow || destinationRow < minRow || destinationRow >= childCount()) {
         return std::nullopt;
     }
 

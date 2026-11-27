@@ -163,8 +163,6 @@ signals:
 
 private slots:
     void updateRearrangementAvailability();
-    void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
-    void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
     void updateSelectedItemsType();
     void updateIsAddingSystemMarkingsAvailable();
@@ -216,10 +214,10 @@ private:
 
     QModelIndexList sortedSelectedIndexes() const;
     bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow);
+    AbstractLayoutPanelTreeItem* itemOrRoot(const QModelIndex& index) const;
     void moveDraggedRow(int targetRow);
     void setDropTarget(AbstractLayoutPanelTreeItem* target);
 
-    bool needWarnOnRemoveRows(int row, int count);
     muse::async::Promise<bool> askAboutRemovingInstruments(int count);
 
     AbstractLayoutPanelTreeItem* buildSharedPartItem(const notation::Part* part);

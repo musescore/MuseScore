@@ -37,6 +37,7 @@
 #include "layoutpanelitemtype.h"
 
 namespace mu::engraving {
+class EngravingItem;
 struct ScoreChanges;
 }
 
@@ -95,6 +96,23 @@ public:
 
     //! Called on release on dropTarget()
     virtual void applyDrop(const AbstractLayoutPanelTreeItem* dragged);
+
+    struct RowMove {
+        int sourceRow = 0;
+        int count = 0;
+        int destinationRow = 0;
+    };
+
+    //! Moves the child rows onto targetRow; nullopt if they can't move there
+    virtual std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const;
+
+    virtual bool needsRemovalConfirmation() const;
+
+    //! Whether the row follows these selected score elements
+    virtual bool isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const;
+
+    //! Hidden in the view because a row it belongs to is collapsed
+    Q_INVOKABLE virtual bool isHiddenByCollapse() const;
 
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);

@@ -139,13 +139,10 @@ Item {
             return layoutPanelTreeView.width
         }
 
-        // 0 hides a collapsed group's instruments and their staves; -1 keeps the delegate's implicitHeight
+        // 0 hides the row; -1 keeps the delegate's implicitHeight
         rowHeightProvider: function(row) {
-            const index = layoutPanelTreeView.index(row, 0)
-            const part = root.model.modelIndexToItem(index.parent.valid ? index.parent : index) as PartTreeItem
-            const header = part?.type === LayoutPanelItemType.PART ? part.sharedGroupHeader : null
-
-            return header && !header.isExpanded ? 0 : -1
+            const item = root.model.modelIndexToItem(layoutPanelTreeView.index(row, 0))
+            return item?.isHiddenByCollapse() ? 0 : -1
         }
 
         // Blank space below the last row; sits behind the rows

@@ -318,7 +318,7 @@ DropArea {
         }
     }
 
-    // Below the item: the gap under the group's background
+    // The gap under the group
     function dropPosition(drag) {
         return drag.y >= groupBackground.height ? LayoutPanelItemType.BELOW_ITEM : LayoutPanelItemType.ON_ITEM
     }

@@ -47,15 +47,9 @@ public:
 
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
-    struct RowMove {
-        int sourceRow = 0;
-        int count = 0;
-        int destinationRow = 0;
-    };
-
-    //! Moves the rows onto targetRow; down, at least past their last row. A group header moves with its
-    //! instruments, and other groups are skipped. nullopt if the rows can't move there, e.g. out of their group
-    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const;
+    //! A group header takes its instruments along, and other groups are jumped over as a whole
+    //! Rows can't leave their group or go above the top markings row; moving down, they land below lastRow
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const override;
 
 private:
     struct RowRange {

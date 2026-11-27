@@ -329,19 +329,8 @@ void LayoutPanelTreeModel::updateSelectedRows()
         return;
     }
 
-    std::vector<muse::ID> selectedPartIds;
-    for (const EngravingItem* element : selectedElements) {
-        if (!element->part()) {
-            continue;
-        }
-
-        selectedPartIds.push_back(element->part()->id());
-    }
-
-    for (const muse::ID& selectedPartId : selectedPartIds) {
-        AbstractLayoutPanelTreeItem* item = m_rootItem->childAtId(selectedPartId, LayoutPanelItemType::PART);
-
-        if (item) {
+    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->isSelectedInScore(selectedElements)) {
             m_selectionModel->select(createIndex(item->row(), 0, item), QItemSelectionModel::Select);
         }
     }
@@ -636,8 +625,11 @@ void LayoutPanelTreeModel::removeSelectedRows()
     const QModelIndex firstIndex = selectedIndexList.first();
     const int count = selectedIndexList.size();
 
-    // When removing instruments, the user needs to be warned in some cases
-    if (firstIndex.parent().isValid() || !needWarnOnRemoveRows(firstIndex.row(), count) || m_masterNotation->excerpts().empty()) {
+    const bool needsConfirmation = std::any_of(selectedIndexList.cbegin(), selectedIndexList.cend(), [this](const QModelIndex& index) {
+        return modelIndexToItem(index)->needsRemovalConfirmation();
+    });
+
+    if (!needsConfirmation) {
         removeRows(firstIndex.row(), count, firstIndex.parent());
         return;
     }
@@ -657,8 +649,8 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
         setLoadingBlocked(false);
     };
 
-    AbstractLayoutPanelTreeItem* sourceParentItem = sourceParent.isValid() ? modelIndexToItem(sourceParent) : m_rootItem;
-    AbstractLayoutPanelTreeItem* destinationParentItem = destinationParent.isValid() ? modelIndexToItem(destinationParent) : m_rootItem;
+    AbstractLayoutPanelTreeItem* sourceParentItem = itemOrRoot(sourceParent);
+    AbstractLayoutPanelTreeItem* destinationParentItem = itemOrRoot(destinationParent);
     if (!sourceParentItem || !destinationParentItem || count <= 0 || sourceRow == destinationChild) {
         return false;
     }
@@ -1072,72 +1064,17 @@ void LayoutPanelTreeModel::updateRearrangementAvailability()
     };
 
     if (selectedIndexList.isEmpty() || !std::all_of(selectedIndexList.cbegin(), selectedIndexList.cend(), hasFirstItemType)) {
-        updateMovingUpAvailability(false);
-        updateMovingDownAvailability(false);
-        return;
-    }
-
-    const QModelIndex& first = selectedIndexList.first();
-    QModelIndex last = selectedIndexList.last();
-    bool isMovingUpAllowed = true;
-    bool isMovingDownAllowed = true;
-
-    if (!first.parent().isValid()) {
-        const std::optional<RootTreeItem::RowMove> upMove = m_rootItem->resolveMove(first.row(), last.row(), first.row() - 1);
-        const std::optional<RootTreeItem::RowMove> downMove = m_rootItem->resolveMove(first.row(), last.row(), last.row() + 1);
-        isMovingUpAllowed = upMove.has_value();
-        isMovingDownAllowed = downMove.has_value();
-
-        if (downMove) {
-            last = index(downMove->sourceRow + downMove->count - 1, 0, QModelIndex());
-        }
-    }
-
-    updateMovingUpAvailability(isMovingUpAllowed, first);
-    updateMovingDownAvailability(isMovingDownAllowed, last);
-}
-
-void LayoutPanelTreeModel::updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex)
-{
-    const AbstractLayoutPanelTreeItem* parentItem = modelIndexToItem(firstSelectedRowIndex.parent());
-    if (!parentItem) {
-        parentItem = m_rootItem;
-    }
-
-    // can't go above the topmost system objects layer
-    int minAllowedRow = 0;
-    if (parentItem->childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        minAllowedRow = 1;
-    }
-
-    bool isRowInBoundaries = firstSelectedRowIndex.isValid() && firstSelectedRowIndex.row() > minAllowedRow;
-
-    setIsMovingUpAvailable(isSelectionMovable && isRowInBoundaries);
-}
-
-void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
-{
-    const AbstractLayoutPanelTreeItem* parentItem = modelIndexToItem(lastSelectedRowIndex.parent());
-    if (!parentItem) {
-        parentItem = m_rootItem;
-    }
-
-    // exclude the control item
-    const bool hasControlItem = parentItem->childType(parentItem->childCount() - 1) == LayoutPanelItemType::CONTROL_ADD_STAFF;
-    const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
-    bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
-
-    if (lastSelectedRowIndex.row() == 0 && lastSelectedIsSystemObjectLayer) {
-        // Selecting/moving the top system object layer not allowed
+        setIsMovingUpAvailable(false);
         setIsMovingDownAvailable(false);
         return;
     }
 
-    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0);
+    const int firstRow = selectedIndexList.first().row();
+    const int lastRow = selectedIndexList.last().row();
+    const AbstractLayoutPanelTreeItem* parentItem = itemOrRoot(selectedIndexList.first().parent());
 
-    bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
-
-    setIsMovingDownAvailable(isSelectionMovable && isRowInBoundaries);
+    setIsMovingUpAvailable(parentItem->resolveMove(firstRow, lastRow, firstRow - 1).has_value());
+    setIsMovingDownAvailable(parentItem->resolveMove(firstRow, lastRow, lastRow + 1).has_value());
 }
 
 void LayoutPanelTreeModel::updateRemovingAvailability()
@@ -1292,23 +1229,13 @@ QModelIndexList LayoutPanelTreeModel::sortedSelectedIndexes() const
 
 bool LayoutPanelTreeModel::moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow)
 {
-    if (parent.isValid()) {
-        return moveRows(parent, firstRow, lastRow - firstRow + 1, parent, targetRow);
-    }
-
-    const std::optional<RootTreeItem::RowMove> move = m_rootItem->resolveMove(firstRow, lastRow, targetRow);
-    return move && moveRows(QModelIndex(), move->sourceRow, move->count, QModelIndex(), move->destinationRow);
+    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = itemOrRoot(parent)->resolveMove(firstRow, lastRow, targetRow);
+    return move && moveRows(parent, move->sourceRow, move->count, parent, move->destinationRow);
 }
 
-bool LayoutPanelTreeModel::needWarnOnRemoveRows(int row, int count)
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::itemOrRoot(const QModelIndex& index) const
 {
-    for (int i = row + count - 1; i >= row; --i) {
-        if (m_rootItem->childType(i) != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            return true;
-        }
-    }
-
-    return false;
+    return index.isValid() ? modelIndexToItem(index) : m_rootItem;
 }
 
 muse::async::Promise<bool> LayoutPanelTreeModel::askAboutRemovingInstruments(int count)

@@ -39,6 +39,9 @@ public:
 
     void applyDrop(const AbstractLayoutPanelTreeItem* dragged) override;
 
+    //! Only the group's instruments follow the score's selection
+    bool isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const override;
+
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 

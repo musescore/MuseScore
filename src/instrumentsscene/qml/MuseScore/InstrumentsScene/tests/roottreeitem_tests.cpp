@@ -901,6 +901,9 @@ TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_Ends)
     EXPECT_EQ(rowMove(2, 2, 3), "none");
     EXPECT_EQ(rowMove(1, 1, 1), "none");
 
+    // [THEN] The first markings row doesn't move
+    EXPECT_EQ(rowMove(0, 0, 1), "none");
+
     // [THEN] The instruments swap places
     EXPECT_EQ(rowMove(1, 1, 2), "1 1 2");
     EXPECT_EQ(rowMove(2, 2, 1), "2 1 1");

@@ -132,6 +132,31 @@ void AbstractLayoutPanelTreeItem::applyDrop(const AbstractLayoutPanelTreeItem*)
 {
 }
 
+std::optional<AbstractLayoutPanelTreeItem::RowMove> AbstractLayoutPanelTreeItem::resolveMove(int firstRow, int lastRow,
+                                                                                             int targetRow) const
+{
+    if (targetRow == firstRow || targetRow < 0 || targetRow >= childCount()) {
+        return std::nullopt;
+    }
+
+    return RowMove { firstRow, lastRow - firstRow + 1, targetRow };
+}
+
+bool AbstractLayoutPanelTreeItem::needsRemovalConfirmation() const
+{
+    return false;
+}
+
+bool AbstractLayoutPanelTreeItem::isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>&) const
+{
+    return false;
+}
+
+bool AbstractLayoutPanelTreeItem::isHiddenByCollapse() const
+{
+    return m_parent && m_parent->isHiddenByCollapse();
+}
+
 void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
                                                AbstractLayoutPanelTreeItem* destinationParent,
                                                int destinationRow, bool)

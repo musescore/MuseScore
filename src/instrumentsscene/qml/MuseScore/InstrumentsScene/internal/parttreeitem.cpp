@@ -21,8 +21,11 @@
  */
 #include "parttreeitem.h"
 
+#include <algorithm>
+
 #include "async/notifylist.h"
 
+#include "engraving/dom/engravingitem.h"
 #include "engraving/dom/sharedpart.h"
 
 #include "notation/inotation.h"
@@ -282,6 +285,33 @@ PartTreeItem* PartTreeItem::groupToJoin(const AbstractLayoutPanelTreeItem* dragg
     }
 
     return group;
+}
+
+std::optional<AbstractLayoutPanelTreeItem::RowMove> PartTreeItem::resolveMove(int firstRow, int lastRow, int targetRow) const
+{
+    if (childType(targetRow) == LayoutPanelItemType::CONTROL_ADD_STAFF) {
+        return std::nullopt;
+    }
+
+    return AbstractLayoutPanelTreeItem::resolveMove(firstRow, lastRow, targetRow);
+}
+
+bool PartTreeItem::needsRemovalConfirmation() const
+{
+    return !masterNotation()->excerpts().empty();
+}
+
+bool PartTreeItem::isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const
+{
+    return std::any_of(selection.cbegin(), selection.cend(), [this](const mu::engraving::EngravingItem* element) {
+        return element->part() && element->part()->id() == id();
+    });
+}
+
+bool PartTreeItem::isHiddenByCollapse() const
+{
+    const PartTreeItem* header = sharedGroupHeader();
+    return header && header != this && !header->isExpanded();
 }
 
 QString PartTreeItem::instrumentId() const
