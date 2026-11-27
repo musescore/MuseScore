@@ -36,7 +36,7 @@ class TremoloLayout
 public:
 
     static void layout(TremoloTwoChord* item, const LayoutContext& ctx);
-    static void layout(TremoloSingleChord* item, const LayoutContext& ctx);
+    static void layout(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx);
 
     static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2);
 
@@ -44,7 +44,8 @@ public:
 
     static void computeShape(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx);
 private:
-    static void layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void layoutOneNoteTremolo(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx,
+                                     double x, double y, double h, double spatium);
     static void layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
     static void calcIsUp(TremoloTwoChord* item);
 

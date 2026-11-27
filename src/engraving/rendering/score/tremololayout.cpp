@@ -65,13 +65,13 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
 }
 
-void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
+void TremoloLayout::layout(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
-    computeShape(item, item->mutldata(), ctx);
+    computeShape(item, ldata, ctx);
 
     Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
     Stem* stem = item->chord()->stem();
@@ -97,17 +97,19 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         }
 
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord()->intrinsicMag();
+        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + ldata->bbox().height()) * item->chord()->intrinsicMag();
     }
 
-    layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
+    layoutOneNoteTremolo(item, ldata, ctx, x, y, h, item->spatium());
 }
 
 //---------------------------------------------------------
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx,
+                                         double x, double y, double h,
+                                         double spatium)
 {
     const StaffType* staffType = item->staffType();
 
@@ -153,7 +155,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
     } else {
         y = std::max(y, 0.0);
     }
-    item->setPos(x, y);
+    ldata->setPos(x, y);
 }
 
 void TremoloLayout::calcIsUp(TremoloTwoChord* item)

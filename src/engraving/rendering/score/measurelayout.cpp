@@ -733,8 +733,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 e->mutldata()->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                if (c->tremoloSingleChord()) {
-                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                if (TremoloSingleChord* tremolo = c->tremoloSingleChord()) {
+                    TremoloLayout::layout(tremolo, tremolo->mutldata(), ctx);
                 }
 
                 if (c->tremoloTwoChord()) {
@@ -747,8 +747,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 }
 
                 for (Chord* g : c->graceNotes()) {
-                    if (g->tremoloSingleChord()) {
-                        TremoloLayout::layout(g->tremoloSingleChord(), ctx);
+                    if (TremoloSingleChord* tremolo = g->tremoloSingleChord()) {
+                        TremoloLayout::layout(tremolo, tremolo->mutldata(), ctx);
                     }
 
                     if (g->tremoloTwoChord()) {
@@ -2220,8 +2220,8 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                 e->mutldata()->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                if (c->tremoloSingleChord()) {
-                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                if (TremoloSingleChord* tremolo = c->tremoloSingleChord()) {
+                    TremoloLayout::layout(tremolo, tremolo->mutldata(), ctx);
                 } else if (c->tremoloTwoChord()) {
                     TremoloTwoChord* tr = c->tremoloTwoChord();
                     Chord* c1 = tr->chord1();

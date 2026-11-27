@@ -108,6 +108,7 @@
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
 #include "../../dom/timesig.h"
+#include "../../dom/tremolosinglechord.h"
 #include "../../dom/anchors.h"
 #include "../../dom/tremolobar.h"
 #include "../../dom/tripletfeel.h"
@@ -367,7 +368,7 @@ public:
     static void layoutTie(Tie* item, LayoutContext& ctx);
     static void layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutTimeTickAnchor(TimeTickAnchor* item, LayoutContext&);
-    static void layoutTremoloSingle(TremoloSingleChord* item, LayoutContext& ctx);
+    static void layoutTremoloSingle(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, LayoutContext& ctx);
     static void layoutTremoloTwo(TremoloTwoChord* item, LayoutContext& ctx);
     static void layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata);
     static void layoutTrill(Trill* item, LayoutContext& ctx);
