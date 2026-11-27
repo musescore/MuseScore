@@ -1523,6 +1523,20 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
     if (!note->fretString().empty() && item2->isNote()) { // This is a TAB fret mark
         static constexpr double tabFretPaddingIncrease = 1.5; // TODO: style?
         padding *= tabFretPaddingIncrease;
+
+        // Zig-zag TAB: the clear gap between fret marks of neighbouring chords must be at least 1.5sp.
+        // The note shapes already include the zig-zag x offsets, so this is a gap between actual extents.
+        const Chord* chord1 = note->chord();
+        const Chord* chord2 = toNote(item2)->chord();
+        auto isZigzagTab = [](const Chord* chord) {
+            const Staff* staff = chord ? chord->staff() : nullptr;
+            const StaffType* stType = staff ? staff->staffType(chord->tick()) : nullptr;
+            return stType && stType->isTabStaff() && stType->zigzagFretNumbers();
+        };
+        if (isZigzagTab(chord1) || isZigzagTab(chord2)) {
+            static constexpr double minZigzagGap = 1.5; // staff spaces
+            padding = std::max(padding, minZigzagGap * std::max(note->spatium(), chord2 ? chord2->spatium() : 0.0));
+        }
     }
 
     if (!item2->isNote()) {

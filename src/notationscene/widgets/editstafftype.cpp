@@ -155,8 +155,17 @@ EditStaffType::EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* p
     connect(linesThroughRadio, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(onLinesRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(showTabFingering,  &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(zigzagFretNumbers, &QCheckBox::toggled, this, &EditStaffType::tabZigzagToggled);
+
     connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
-    connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(numbersRadio,      &QCheckBox::toggled, this, [this](bool useNumbers) {
+        // Zig-zag layout only makes sense for fret numbers
+        if (!useNumbers) {
+            zigzagFretNumbers->setChecked(false); // restores line distance via tabZigzagToggled
+        }
+        zigzagFretNumbers->setEnabled(useNumbers);
+        updatePreview();
+    });
 
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
@@ -338,6 +347,7 @@ void EditStaffType::setValues()
     {
         upsideDown->setChecked(staffType.upsideDown());
         showTabFingering->setChecked(staffType.showTabFingering());
+        zigzagFretNumbers->setChecked(staffType.zigzagFretNumbers());
 
         textStyleRadioButton->setChecked(staffType.fretUseTextStyle());
         presetRadioButton->setChecked(!staffType.fretUseTextStyle());
@@ -350,6 +360,7 @@ void EditStaffType::setValues()
 
         numbersRadio->setChecked(staffType.useNumbers());
         lettersRadio->setChecked(!staffType.useNumbers());
+        zigzagFretNumbers->setEnabled(staffType.useNumbers());
         onLinesRadio->setChecked(staffType.onLines());
         aboveLinesRadio->setChecked(!staffType.onLines());
         linesThroughRadio->setChecked(staffType.linesThrough());
@@ -570,6 +581,7 @@ void EditStaffType::setFromDlg()
         staffType.setShowRests(showRests->isChecked());
         staffType.setUpsideDown(upsideDown->isChecked());
         staffType.setShowTabFingering(showTabFingering->isChecked());
+        staffType.setZigzagFretNumbers(numbersRadio->isChecked() && zigzagFretNumbers->isChecked());
         staffType.setUseNumbers(numbersRadio->isChecked());
         //note values
         staffType.setStemsDown(stemBelowRadio->isChecked());
@@ -607,6 +619,7 @@ void EditStaffType::blockSignals(bool block)
 
     upsideDown->blockSignals(block);
     showTabFingering->blockSignals(block);
+    zigzagFretNumbers->blockSignals(block);
 
     textStyleRadioButton->blockSignals(block);
     presetRadioButton->blockSignals(block);
@@ -713,6 +726,29 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
     minimShortRadio->setEnabled(enab);
     stemAboveRadio->setEnabled(enab);
     stemBelowRadio->setEnabled(enab);
+}
+
+//---------------------------------------------------------
+//   Tabulature "zigzag" toggled
+//---------------------------------------------------------
+
+void EditStaffType::tabZigzagToggled(bool checked)
+{
+    tabZigzagCompatibility(checked);
+    updatePreview();
+}
+
+//---------------------------------------------------------
+//   Tabulature "zigzag" compatibility
+//
+//    Adjusts line distance when zigzag is toggled
+//---------------------------------------------------------
+
+void EditStaffType::tabZigzagCompatibility(bool checked)
+{
+    static constexpr double zigzagCoefficient = 0.82;
+    double val = lineDistance->value();
+    lineDistance->setValue(checked ? val * zigzagCoefficient : val / zigzagCoefficient);
 }
 
 //---------------------------------------------------------

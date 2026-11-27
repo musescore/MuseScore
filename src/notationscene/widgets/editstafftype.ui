@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>736</height>
+    <height>792</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -707,6 +707,30 @@
                      <string notr="true">ContinuousBrokenLinesbuttGroup</string>
                     </attribute>
                    </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_zigzag">
+                  <item>
+                   <widget class="QCheckBox" name="zigzagFretNumbers">
+                    <property name="text">
+                     <string>Use zig-zag number layout (space saving)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_zigzag">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                  </layout>
                 </item>
@@ -1459,6 +1483,7 @@
   <tabstop>aboveLinesRadio</tabstop>
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
+  <tabstop>zigzagFretNumbers</tabstop>
   <tabstop>showTabFingering</tabstop>
   <tabstop>noteValuesSymb</tabstop>
   <tabstop>noteValuesStems</tabstop>
