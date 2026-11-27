@@ -183,6 +183,14 @@ class Score : public apiv1::ScoreElement, public muse::Contextable
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves)
 
     /** APIDOC
+     * Additional staves configured to display system objects, excluding the top staff.
+     * @readonly
+     * @q_property {Engraving.Staff[]}
+     * @since 5.0
+     */
+    Q_PROPERTY(QQmlListProperty<apiv1::Staff> systemObjectStaves READ systemObjectStaves)
+
+    /** APIDOC
      * Number of tracks
      * @readonly
      * @q_property {Number}
@@ -418,6 +426,8 @@ public:
 
     int nstaves() const { return static_cast<int>(score()->nstaves()); }
     QQmlListProperty<apiv1::Staff> staves() const;
+    /** Returns the additional system-object staves, excluding the top staff. */
+    QQmlListProperty<apiv1::Staff> systemObjectStaves() const;
 
     int ntracks() const { return static_cast<int>(score()->ntracks()); }
 
