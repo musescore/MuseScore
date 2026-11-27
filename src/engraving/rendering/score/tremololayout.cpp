@@ -71,7 +71,7 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         return;
     }
 
-    computeShape(item, ctx);
+    computeShape(item, item->mutldata(), ctx);
 
     Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
     Stem* stem = item->chord()->stem();
@@ -207,13 +207,13 @@ void TremoloLayout::calcIsUp(TremoloTwoChord* item)
     item->chord2()->setUp(item->chord2()->staffMove() == 0 ? isUp : !isUp);
 }
 
-void TremoloLayout::computeShape(TremoloSingleChord* item, const LayoutContext& ctx)
+void TremoloLayout::computeShape(const TremoloSingleChord* item, TremoloSingleChord::LayoutData* ldata, const LayoutContext& ctx)
 {
-    item->setPath(basePath(item, ctx));
+    ldata->path = basePath(item, ctx);
     if (item->isBuzzRoll()) {
-        item->setbbox(item->symBbox(SymId::buzzRoll));
+        ldata->setBbox(item->symBbox(SymId::buzzRoll));
     } else {
-        item->setbbox(item->path().boundingRect());
+        ldata->setBbox(ldata->path().boundingRect());
     }
 }
 

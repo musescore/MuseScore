@@ -1817,7 +1817,7 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
 void SingleLayout::layout(TremoloSingleChord* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
-    TremoloLayout::computeShape(item, tctx);
+    TremoloLayout::computeShape(item, item->mutldata(), tctx);
 }
 
 void SingleLayout::layout(TremoloTwoChord* item, const Context&)

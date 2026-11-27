@@ -2479,7 +2479,7 @@ void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter, const Pa
     } else {
         painter->setBrush(Brush(item->curColor(opt)));
         painter->setNoPen();
-        painter->drawPath(item->path());
+        painter->drawPath(ldata->path());
     }
 
     // vertical line (stem)
@@ -2491,7 +2491,7 @@ void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter, const Pa
         if (item->isBuzzRoll()) {
             painter->drawLine(LineF(x, -sp, x, ldata->bbox().bottom() + sp));
         } else {
-            painter->drawLine(LineF(x, -sp * .5, x, item->path().boundingRect().height() + sp));
+            painter->drawLine(LineF(x, -sp * .5, x, ldata->path().boundingRect().height() + sp));
         }
     }
 }

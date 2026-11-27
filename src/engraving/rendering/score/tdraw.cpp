@@ -3464,13 +3464,15 @@ void TDraw::draw(const TremoloSingleChord* item, Painter* painter, const PaintOp
 {
     TRACE_DRAW_ITEM;
 
+    const TremoloSingleChord::LayoutData* ldata = item->ldata();
+
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor(opt));
         item->drawSymbol(SymId::buzzRoll, painter);
     } else {
         painter->setBrush(Brush(item->curColor(opt)));
         painter->setNoPen();
-        painter->drawPath(item->path());
+        painter->drawPath(ldata->path());
     }
 }
 

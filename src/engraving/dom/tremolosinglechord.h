@@ -79,8 +79,13 @@ public:
 
     bool isMovable() const override { return true; }
 
-    const muse::draw::PainterPath& path() const { return m_path; }
-    void setPath(const muse::draw::PainterPath& p) { m_path = p; }
+    struct LayoutData : public EngravingItem::LayoutData {
+    public:
+        ld_field<muse::draw::PainterPath> path = { "[TremoloSingleChord] path" };
+
+        bool isValid() const override { return EngravingItem::LayoutData::isValid() && path.has_value(); }
+    };
+    DECLARE_LAYOUTDATA_METHODS(TremoloSingleChord)
 
 private:
     friend class Factory;
@@ -90,7 +95,6 @@ private:
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
     TDuration m_durationType;
-    muse::draw::PainterPath m_path;
     bool m_playTremolo = true;
 
     int m_lines = 0; // derived from _subtype
