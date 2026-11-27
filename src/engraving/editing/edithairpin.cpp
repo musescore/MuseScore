@@ -227,3 +227,32 @@ Hairpin* EditHairpin::addHairpinToDynamicOnGripDrag(Transaction&, Score* score, 
 
     return hairpin;
 }
+
+void EditHairpin::autoFlipHairpinsType(Transaction&, Dynamic* dynamic)
+{
+    dynamic->findAdjacentHairpins();
+    if (Hairpin* leftHp = dynamic->leftHairpin()) {
+        const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
+        if (startDyn
+            && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
+            && !leftHp->isLineType()) {
+            if (int(startDyn->dynamicType()) > int(dynamic->dynamicType())) {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
+            } else {
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            }
+        }
+    }
+    if (Hairpin* rightHp = dynamic->rightHairpin()) {
+        const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
+        if (endDyn
+            && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
+            && !rightHp->isLineType()) {
+            if (int(endDyn->dynamicType()) > int(dynamic->dynamicType())) {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
+            } else {
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
+            }
+        }
+    }
+}

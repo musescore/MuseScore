@@ -101,6 +101,7 @@
 #include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editdynamic.h"
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editspanner.h"
@@ -5793,39 +5794,14 @@ void NotationInteraction::increaseDecreaseSelectedDynamicsValues(int delta)
         return;
     }
 
-    const auto inRange = [](DynamicType type) {
-        return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
-    };
+    transaction(delta > 0 // positive: increase dynamics, negative: decrease dynamics
+                ? TranslatableString("undoableAction", "Increase dynamics")
+                : TranslatableString("undoableAction", "Decrease dynamics"),
+                [&](Transaction& tx) {
+        EditDynamic::increaseDecreaseSelectedDynamicsValues(tx, score(), delta);
+    });
 
-    std::map<Dynamic*, /*newType*/ DynamicType> dynamicsMap;
-
-    // Collect valid dynamics before trying anything (avoid unnecessary calls to startEdit etc)...
-    for (EngravingItem* item : selection()->elements()) {
-        if (!item->isDynamic()) {
-            continue;
-        }
-        Dynamic* dynamic = toDynamic(item);
-        DynamicType newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) + delta);
-        if (inRange(newType)) {
-            dynamicsMap.emplace(dynamic, newType);
-        }
-    }
-
-    if (dynamicsMap.empty()) {
-        return;
-    }
-
-    startEdit(delta > 0 // positive: increase dynamics, negative: decrease dynamics
-              ? TranslatableString("undoableAction", "Increase dynamics")
-              : TranslatableString("undoableAction", "Decrease dynamics"));
-
-    for (const auto& [dynamic, newType] : dynamicsMap) {
-        dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
-        dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
-        doAutoFlipHairpinsType(dynamic);
-    }
-
-    apply();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::autoFlipHairpinsType(Dynamic* dynamic)
@@ -5833,38 +5809,12 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* dynamic)
     if (!dynamic || dynamic->dynamicType() == DynamicType::OTHER || dynamic->dynamicType() >= DynamicType::FP) {
         return;
     }
-    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
-    doAutoFlipHairpinsType(dynamic);
-    apply();
-}
 
-void NotationInteraction::doAutoFlipHairpinsType(Dynamic* dynamic)
-{
-    dynamic->findAdjacentHairpins();
-    if (Hairpin* leftHp = dynamic->leftHairpin()) {
-        const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
-        if (startDyn
-            && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
-            && !leftHp->isLineType()) {
-            if (int(startDyn->dynamicType()) > int(dynamic->dynamicType())) {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
-            } else {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
-            }
-        }
-    }
-    if (Hairpin* rightHp = dynamic->rightHairpin()) {
-        const Dynamic* endDyn = rightHp->dynamicSnappedAfter();
-        if (endDyn
-            && !(endDyn->dynamicType() == DynamicType::OTHER || endDyn->dynamicType() >= DynamicType::FP)
-            && !rightHp->isLineType()) {
-            if (int(endDyn->dynamicType()) > int(dynamic->dynamicType())) {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
-            } else {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
-            }
-        }
-    }
+    transaction(TranslatableString("undoableAction", "Change hairpin type"), [&](Transaction& tx) {
+        EditHairpin::autoFlipHairpinsType(tx, dynamic);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::toggleDynamicPopup()

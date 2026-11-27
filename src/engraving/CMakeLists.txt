@@ -128,6 +128,8 @@ target_sources(engraving PRIVATE
     editing/editdata.h
     editing/editduration.cpp
     editing/editduration.h
+    editing/editdynamic.cpp
+    editing/editdynamic.h
     editing/editenharmonicspelling.cpp
     editing/editenharmonicspelling.h
     editing/editexcerpt.cpp

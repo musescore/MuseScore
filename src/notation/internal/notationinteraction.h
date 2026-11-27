@@ -494,8 +494,6 @@ private:
     void endEditSlurToReplace(const mu::engraving::Slur* slurTemplate);
     void selectAddedSlur(mu::engraving::Slur* slur, bool replacedSlur, bool toNextChord);
 
-    void doAutoFlipHairpinsType(mu::engraving::Dynamic* dynamic);
-
     bool scoreHasMeasure() const;
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
