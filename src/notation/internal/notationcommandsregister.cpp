@@ -488,76 +488,17 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<ToggleSnapToNextCommand>(),
 
     // layout commands
-    CommandInfo{
-        TOGGLE_SYSTEM_BREAK_COMMAND,
-        TranslatableString("action", "Add/remove system break"),
-        TranslatableString("action", "Add/remove system break"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_PAGE_BREAK_COMMAND,
-        TranslatableString("action", "Add/remove page break"),
-        TranslatableString("action", "Add/remove page break"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_SECTION_BREAK_COMMAND,
-        TranslatableString("action", "Add/remove section break"),
-        TranslatableString("action", "Add/remove section break"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        APPLY_SYSTEM_LOCK_COMMAND,
-        TranslatableString("action", "Add/remove system lock"),
-        TranslatableString("action", "Add/remove system lock"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_SYSTEM_LOCK_COMMAND,
-        TranslatableString("action", "Lock/unlock selected system(s)"),
-        TranslatableString("action", "Lock/unlock selected system(s)"),
-        InputSchema(),
-        Decoration(IconCode::Code::SYSTEM_LOCK)
-    },
-    CommandInfo{
-        APPLY_PAGE_LOCK_COMMAND,
-        TranslatableString("action", "Add/remove page lock"),
-        TranslatableString("action", "Add/remove page lock"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_PAGE_LOCK_COMMAND,
-        TranslatableString("action", "Lock/unlock selected page(s)"),
-        TranslatableString("action", "Lock/unlock selected page(s)"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        TOGGLE_SCORE_LOCK_COMMAND,
-        TranslatableString("action", "Lock/unlock all systems"),
-        TranslatableString("action", "Lock/unlock all systems"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        MAKE_INTO_SYSTEM_COMMAND,
-        TranslatableString("action", "Create system from selection"),
-        TranslatableString("action", "Create system from selection"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        MAKE_INTO_PAGE_COMMAND,
-        TranslatableString("action", "Create page from selection"),
-        TranslatableString("action", "Create page from selection"),
-        InputSchema(),
-        Decoration()
-    },
+    makeCommandInfo<ToggleLayoutBreakCommand>(),
+    makeCommandInfo<ToggleSystemBreakCommand>(),
+    makeCommandInfo<TogglePageBreakCommand>(),
+    makeCommandInfo<ToggleSectionBreakCommand>(),
+    makeCommandInfo<ApplySystemLockCommand>(),
+    makeCommandInfo<ToggleSystemLockCommand>(),
+    makeCommandInfo<ApplyPageLockCommand>(),
+    makeCommandInfo<TogglePageLockCommand>(),
+    makeCommandInfo<ToggleScoreLockCommand>(),
+    makeCommandInfo<MakeIntoSystemCommand>(),
+    makeCommandInfo<MakeIntoPageCommand>(),
     CommandInfo{
         MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
         TranslatableString("action", "Move measure to previous system"),
@@ -652,27 +593,10 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<SetBeamSelectedRangeCommand>(),
 
     // add brackets commands
-    CommandInfo{
-        ADD_BRACKETS_COMMAND,
-        TranslatableString("action", "Add brackets to accidental"),
-        TranslatableString("action", "Add brackets to accidental"),
-        InputSchema(),
-        Decoration(IconCode::Code::BRACKET_PARENTHESES_SQUARE)
-    },
-    CommandInfo{
-        ADD_BRACES_COMMAND,
-        TranslatableString("action", "Add braces to element"),
-        TranslatableString("action", "Add braces to element"),
-        InputSchema(),
-        Decoration(IconCode::Code::BRACE)
-    },
-    CommandInfo{
-        ADD_PARENTHESES_COMMAND,
-        TranslatableString("action", "Add parentheses to element"),
-        TranslatableString("action", "Add parentheses to element"),
-        InputSchema(),
-        Decoration(IconCode::Code::BRACKET_PARENTHESES)
-    },
+    makeCommandInfo<AddAccidentalBracketsCommand>(),
+    makeCommandInfo<AddBracketsCommand>(),
+    makeCommandInfo<AddBracesCommand>(),
+    makeCommandInfo<ToggleParenthesesCommand>(),
 
     // text editing commands
     makeCommandInfo<EditTextFontStyleCommand>(),
@@ -840,66 +764,15 @@ static const std::vector<CommandInfo> s_commandInfos = {
     },
     makeCommandInfo<EnterRestTabCommand>(),
 
-    CommandInfo {
-        ADD_STANDARD_BEND_COMMAND,
-        TranslatableString("action", "Standard bend"),
-        TranslatableString("action", "Add standard bend"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_BEND_REGULAR)
-    },
-    CommandInfo {
-        ADD_PRE_BEND_COMMAND,
-        TranslatableString("action", "Pre-bend"),
-        TranslatableString("action", "Add pre-bend"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_PRE_BEND)
-    },
-    CommandInfo {
-        ADD_GRACE_NOTE_BEND_COMMAND,
-        TranslatableString("action", "Grace note bend"),
-        TranslatableString("action", "Add grace note bend"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_GRACE_NOTE_BEND)
-    },
-    CommandInfo {
-        ADD_SLIGHT_BEND_COMMAND,
-        TranslatableString("action", "Slight bend"),
-        TranslatableString("action", "Add slight bend"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_SLIGHT_BEND)
-    },
-    CommandInfo {
-        ADD_DIVE_COMMAND,
-        //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
-        TranslatableString("action", "Dive"),
-        TranslatableString("action", "Add dive"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_DIVE_REGULAR)
-    },
-    CommandInfo {
-        ADD_PRE_DIVE_COMMAND,
-        //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
-        TranslatableString("action", "Pre-dive"),
-        TranslatableString("action", "Add pre-dive"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_PRE_DIVE)
-    },
-    CommandInfo {
-        ADD_DIP_COMMAND,
-        //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
-        TranslatableString("action", "Dip"),
-        TranslatableString("action", "Add dip"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_DIP_DOWN)
-    },
-    CommandInfo {
-        ADD_SCOOP_COMMAND,
-        //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
-        TranslatableString("action", "Scoop"),
-        TranslatableString("action", "Add scoop"),
-        InputSchema(),
-        Decoration(IconCode::Code::GUITAR_SCOOP)
-    },
+    makeCommandInfo<AddGuitarBendCommand>(),
+    makeCommandInfo<AddStandardBendCommand>(),
+    makeCommandInfo<AddPreBendCommand>(),
+    makeCommandInfo<AddGraceNoteBendCommand>(),
+    makeCommandInfo<AddSlightBendCommand>(),
+    makeCommandInfo<AddDiveCommand>(),
+    makeCommandInfo<AddPreDiveCommand>(),
+    makeCommandInfo<AddDipCommand>(),
+    makeCommandInfo<AddScoopCommand>(),
     CommandInfo {
         ADD_HAMMER_ON_PULL_OFF_COMMAND,
         TranslatableString("action", "Hammer-on/pull-off"),

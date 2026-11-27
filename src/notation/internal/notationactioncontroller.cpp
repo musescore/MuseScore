@@ -182,9 +182,8 @@ void NotationActionController::init()
     registerCommand<AddFiguredBassCommand>(&Controller::addFiguredBass);
 
     // add brackets commands
-    registerCommand(ADD_BRACKETS_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Brackets);
-    registerCommand(ADD_BRACES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Braces);
-    registerCommand(ADD_PARENTHESES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Parentheses);
+    registerCommand<AddAccidentalBracketsCommand>(&Controller::addAccidentalBrackets);
+    registerCommand<ToggleParenthesesCommand>(&Controller::toggleParentheses);
 
     // clef commands
     registerCommand<AddClefCommand>(&Controller::insertClef);
@@ -223,18 +222,16 @@ void NotationActionController::init()
     registerCommand<ToggleSnapToCommand>(&Controller::toggleSnapTo);
 
     // layout commands
-    registerCommand(TOGGLE_SYSTEM_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::LINE);
-    registerCommand(TOGGLE_PAGE_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::PAGE);
-    registerCommand(TOGGLE_SECTION_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION);
+    registerCommand<ToggleLayoutBreakCommand>(&Controller::toggleLayoutBreak);
 
-    registerCommand(APPLY_SYSTEM_LOCK_COMMAND, &Interaction::applySystemLock);
-    registerCommand(TOGGLE_SYSTEM_LOCK_COMMAND, &Interaction::toggleSystemLock);
-    registerCommand(APPLY_PAGE_LOCK_COMMAND, &Interaction::applyPageLock);
-    registerCommand(TOGGLE_PAGE_LOCK_COMMAND, &Interaction::togglePageLock);
-    registerCommand(TOGGLE_SCORE_LOCK_COMMAND, &Interaction::toggleScoreLock);
+    registerCommand<ApplySystemLockCommand>(&Controller::applySystemLock);
+    registerCommand<ToggleSystemLockCommand>(&Controller::toggleSystemLock);
+    registerCommand<ApplyPageLockCommand>(&Controller::applyPageLock);
+    registerCommand<TogglePageLockCommand>(&Controller::togglePageLock);
+    registerCommand<ToggleScoreLockCommand>(&Controller::toggleScoreLock);
 
-    registerCommand(MAKE_INTO_SYSTEM_COMMAND, &Interaction::makeIntoSystem);
-    registerCommand(MAKE_INTO_PAGE_COMMAND, &Interaction::makeIntoPage);
+    registerCommand<MakeIntoSystemCommand>(&Controller::makeIntoSystem);
+    registerCommand<MakeIntoPageCommand>(&Controller::makeIntoPage);
 
     registerCommand(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, &Interaction::moveMeasureToPrevSystem);
     registerCommand(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, &Interaction::moveMeasureToNextSystem);
@@ -339,14 +336,7 @@ void NotationActionController::init()
 
     registerCommand<EnterRestTabCommand>(&Controller::putRestToSelection);
 
-    registerCommand(ADD_STANDARD_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::BEND); });
-    registerCommand(ADD_PRE_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
-    registerCommand(ADD_GRACE_NOTE_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
-    registerCommand(ADD_SLIGHT_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
-    registerCommand(ADD_DIVE_COMMAND, [this]() { addGuitarBend(GuitarBendType::DIVE); });
-    registerCommand(ADD_PRE_DIVE_COMMAND, [this]() { addGuitarBend(GuitarBendType::PRE_DIVE); });
-    registerCommand(ADD_DIP_COMMAND, [this]() { addGuitarBend(GuitarBendType::DIP); });
-    registerCommand(ADD_SCOOP_COMMAND, [this]() { addGuitarBend(GuitarBendType::SCOOP); });
+    registerCommand<AddGuitarBendCommand>(&Controller::addGuitarBend);
 
     registerCommand(ADD_HAMMER_ON_PULL_OFF_COMMAND, [this]() { addHammerOnPullOff(); });
 
@@ -2146,16 +2136,143 @@ muse::Ret NotationActionController::addFiguredBass()
     return muse::make_ok();
 }
 
-void NotationActionController::addGuitarBend(GuitarBendType bendType)
+muse::Ret NotationActionController::addAccidentalBrackets(const AddAccidentalBracketsCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    const BracketsType type = command.mode == AccidentalBracketsMode::Brackets
+                              ? BracketsType::Brackets
+                              : BracketsType::Braces;
+    interaction->addBracketsToSelection(type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleParentheses()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->addBracketsToSelection(BracketsType::Parentheses);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleLayoutBreak(const ToggleLayoutBreakCommand& command)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    LayoutBreakType type = LayoutBreakType::LINE;
+    switch (command.type) {
+    case LayoutBreakMode::System:
+        type = LayoutBreakType::LINE;
+        break;
+    case LayoutBreakMode::Page:
+        type = LayoutBreakType::PAGE;
+        break;
+    case LayoutBreakMode::Section:
+        type = LayoutBreakType::SECTION;
+        break;
+    }
+
+    interaction->toggleLayoutBreak(type);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::applySystemLock()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->applySystemLock();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleSystemLock()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->toggleSystemLock();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::applyPageLock()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->applyPageLock();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::togglePageLock()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->togglePageLock();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::toggleScoreLock()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->toggleScoreLock();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::makeIntoSystem()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->makeIntoSystem();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::makeIntoPage()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return muse::make_ret(Ret::Code::InternalError);
+    }
+
+    interaction->makeIntoPage();
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::addGuitarBend(const AddGuitarBendCommand& command)
 {
     TRACEFUNC;
 
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(Ret::Code::InternalError);
     }
 
-    interaction->addGuitarBend(bendType);
+    interaction->addGuitarBend(command.type);
+    return muse::make_ok();
 }
 
 muse::Ret NotationActionController::addFretboardDiagram()

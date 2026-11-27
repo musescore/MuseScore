@@ -226,7 +226,7 @@ private:
     muse::Ret addNoteLine();
     muse::Ret addImage();
     muse::Ret addFiguredBass();
-    void addGuitarBend(GuitarBendType bendType);
+    muse::Ret addGuitarBend(const AddGuitarBendCommand& command);
     muse::Ret addFretboardDiagram();
 
     muse::Ret startEditSelectedElement(const muse::rcommand::Params& params);
@@ -259,6 +259,16 @@ private:
     muse::Ret changeEnharmonicSpelling(const ChangeEnharmonicSpellingCommand& command);
     muse::Ret optimizeEnharmonicSpelling();
     muse::Ret respellPitches(const RespellPitchesCommand& command);
+    muse::Ret addAccidentalBrackets(const AddAccidentalBracketsCommand& command);
+    muse::Ret toggleParentheses();
+    muse::Ret toggleLayoutBreak(const ToggleLayoutBreakCommand& command);
+    muse::Ret applySystemLock();
+    muse::Ret toggleSystemLock();
+    muse::Ret applyPageLock();
+    muse::Ret togglePageLock();
+    muse::Ret toggleScoreLock();
+    muse::Ret makeIntoSystem();
+    muse::Ret makeIntoPage();
 
     muse::Ret openEditStyleDialog(const OpenEditStyleCommand& command);
     muse::Ret openPageSettingsDialog();

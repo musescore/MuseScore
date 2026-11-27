@@ -253,9 +253,10 @@ static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
 };
 
 static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
-    TOGGLE_SYSTEM_BREAK_COMMAND,
-    TOGGLE_PAGE_BREAK_COMMAND,
-    TOGGLE_SECTION_BREAK_COMMAND
+    ToggleLayoutBreakCommand::id,
+    ToggleSystemBreakCommand::id,
+    TogglePageBreakCommand::id,
+    ToggleSectionBreakCommand::id
 };
 
 static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {

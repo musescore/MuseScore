@@ -133,6 +133,17 @@ enum class RespellPitchesMode : unsigned char {
     Flats,
 };
 
+enum class AccidentalBracketsMode : unsigned char {
+    Brackets,
+    Braces,
+};
+
+enum class LayoutBreakMode : unsigned char {
+    System,
+    Page,
+    Section,
+};
+
 enum class DragMode : unsigned char
 {
     BothXY = 0,
