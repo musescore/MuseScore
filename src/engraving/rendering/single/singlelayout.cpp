@@ -545,7 +545,7 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
     ldata->isDrawBeam = nl.size() > 1;
     ldata->isDrawFlag = nl.size() == 1;
     ldata->spatium = spatium;
-    ldata->headsym = SymId::noteheadBlack;
+    ldata->headsym = item->score()->resolveSym(SymId::noteheadBlack);
     ldata->flagsym = SymId::flag32ndUp;
     ldata->stemLineW = ldata->spatium * 0.1;
 

@@ -93,6 +93,15 @@ double EngravingFont::textEnclosureThickness()
     return m_textEnclosureThickness;
 }
 
+bool EngravingFont::hasOversizedNoteheadsSupport() const
+{
+    // Petaluma would map to identical glyphs with shifted bounding boxes
+    if (m_family == "Petaluma") {
+        return false;
+    }
+    return m_symbols[static_cast<size_t>(SymId::noteheadBlackOversized)].isValid();
+}
+
 // =============================================
 // Load
 // =============================================
@@ -246,23 +255,23 @@ static const struct GlyphWithAlternates {
     },
     { std::string("noteheadBlack"),
       std::string("noteheadBlackOversized"),
-      SymId::noteheadBlack
+      SymId::noteheadBlackOversized
     },
     { std::string("noteheadHalf"),
       std::string("noteheadHalfOversized"),
-      SymId::noteheadHalf
+      SymId::noteheadHalfOversized
     },
     { std::string("noteheadWhole"),
       std::string("noteheadWholeOversized"),
-      SymId::noteheadWhole
+      SymId::noteheadWholeOversized
     },
     { std::string("noteheadDoubleWhole"),
       std::string("noteheadDoubleWholeOversized"),
-      SymId::noteheadDoubleWhole
+      SymId::noteheadDoubleWholeOversized
     },
     { std::string("noteheadDoubleWholeSquare"),
       std::string("noteheadDoubleWholeSquareOversized"),
-      SymId::noteheadDoubleWholeSquare
+      SymId::noteheadDoubleWholeSquareOversized
     },
     { std::string("noteheadDoubleWhole"),
       std::string("noteheadDoubleWholeAlt"),
@@ -846,6 +855,9 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
 
         applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
+
+    bool defaultOversized = (m_family == "Bravura");
+    m_engravingDefaults.insert({ Sid::oversizedNoteheads, defaultOversized });
 
     m_engravingDefaults.insert({ Sid::musicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
