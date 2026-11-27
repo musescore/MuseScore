@@ -559,12 +559,18 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
                 Tie* tie = Factory::createTie(note2);
                 tie->setEndNote(end_note);
                 end_note->setHarmonic(true_note->harmonic());
+                if (true_note->harmonic() && !end_note->deadNote()) {
+                    end_note->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+                }
                 end_note = note2;
                 note2->add(tie);
             }
             Tie* tie = Factory::createTie(true_note);
             tie->setEndNote(end_note);
             end_note->setHarmonic(true_note->harmonic());
+            if (true_note->harmonic() && !end_note->deadNote()) {
+                end_note->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+            }
             true_note->add(tie);
         }
         if (!found) {

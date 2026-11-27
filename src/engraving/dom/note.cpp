@@ -3226,8 +3226,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::DEAD:
         setDeadNote(v.toBool());
         if (!staff()->isDrumStaff(tick())) {
-            NoteHeadGroup head
-                = (m_deadNote && m_headGroup != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
+            NoteHeadGroup head = m_deadNote ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
             setHeadGroup(head);
         }
         break;

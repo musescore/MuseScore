@@ -4220,12 +4220,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         noteBBox = RectF(0, -height * .5, width, height);
     } else {
-        if (item->deadNote()) {
-            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
-        } else if (item->harmonic()) {
-            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
-        }
-
         SymId nh = item->noteHead();
         ldata->cachedNoteheadSym.set_value(nh);
 

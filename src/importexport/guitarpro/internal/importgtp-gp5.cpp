@@ -1293,6 +1293,9 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             int fret = note->fret();
 
             note->setHarmonic(true);
+            if (!note->deadNote()) {
+                note->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+            }
             float harmonicFret = naturalHarmonicFromFret(fret);
             int harmonicOvertone = utils::harmonicOvertone(note, harmonicFret, type);
             note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
@@ -1316,6 +1319,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Note* harmonicNote = Factory::createNote(note->chord());
 
             harmonicNote->setHarmonic(true);
+            harmonicNote->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
             harmonicNote->setPlay(false);
             note->setPlay(true);
             /// @note option to show or not additional harmonic fret in "<>" to be implemented
@@ -1656,12 +1660,18 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                 Tie* tie = Factory::createTie(note2);
                 tie->setEndNote(end_note);
                 end_note->setHarmonic(true_note->harmonic());
+                if (true_note->harmonic() && !end_note->deadNote()) {
+                    end_note->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+                }
                 end_note = note2;
                 note2->add(tie);
             }
             Tie* tie = Factory::createTie(true_note);
             tie->setEndNote(end_note);
             end_note->setHarmonic(true_note->harmonic());
+            if (true_note->harmonic() && !end_note->deadNote()) {
+                end_note->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+            }
             true_note->add(tie);
         }
         if (!found) {
