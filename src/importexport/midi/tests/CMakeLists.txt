@@ -25,6 +25,8 @@ set(MODULE_TEST_SRC
     ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
     ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
     ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/testutils.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/testutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/utils/smfyamlserializer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils/smfyamlserializer.h
