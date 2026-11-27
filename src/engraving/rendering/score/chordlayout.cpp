@@ -31,6 +31,7 @@
 #include "dom/chordbracket.h"
 #include "dom/beam.h"
 #include "dom/chord.h"
+#include "dom/clef.h"
 #include "dom/factory.h"
 #include "dom/fingering.h"
 #include "dom/glissando.h"
@@ -1777,10 +1778,11 @@ void ChordLayout::layoutJianpuOctaveDots(Chord* item, LayoutContext& ctx)
     KeyMode mode;
     int tonicTpc;
     jianpuKeyMapping(ks, mode, tonicTpc);
+    const int referenceOctaveOffset = ClefInfo::octaveOffset(staff->clef(tick));
 
     for (Note* note : item->notes()) {
         const double distance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
-        const int octave = pitch2JianpuOctave(note->epitch(), note->tpc(), tonicTpc, mode);
+        const int octave = pitch2JianpuOctave(note->epitch(), note->tpc(), tonicTpc, mode, referenceOctaveOffset);
         const int dots = abs(octave);
         double offsetY = 0;
         if (octave > 0) {

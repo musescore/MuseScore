@@ -66,12 +66,14 @@ struct ClefInfo
     ClefType m_type = ClefType::INVALID;
     int m_line = 0;                 ///< Line positioning on the staff
     int m_pitchOffset = 0;          ///< Pitch offset for line 0.
+    int m_octaveOffset = 0;         ///< Octave shift relative to the untransposed clef.
     signed char m_lines[14];
     SymId m_symId = SymId::noSym;
     StaffGroup m_staffGroup = StaffGroup::STANDARD;
 
     static int line(ClefType t) { return clefTable[int(t)].m_line; }
     static int pitchOffset(ClefType t) { return clefTable[int(t)].m_pitchOffset; }
+    static int octaveOffset(ClefType t) { return clefTable[int(t)].m_octaveOffset; }
     static SymId symId(ClefType t) { return clefTable[int(t)].m_symId; }
     static const signed char* lines(ClefType t) { return clefTable[int(t)].m_lines; }
     static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)].m_staffGroup; }

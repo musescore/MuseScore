@@ -550,22 +550,24 @@ void tpc2Jianpu(int tpc, int tonicTpc, KeyMode mode, String& accName, String& st
     }
 }
 
-int pitch2JianpuOctave(int pitch, int tpc, int tonicTpc, KeyMode mode)
+int pitch2JianpuOctave(int pitch, int tpc, int tonicTpc, KeyMode mode, int referenceOctaveOffset)
 {
     tonicTpc = clampEnharmonic(tonicTpc);
     tpc = clampEnharmonic(tpc);
     const int noteOctave = (clampPitchOctaved(pitch) - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
     const int absStep = noteOctave * STEP_DELTA_OCTAVE + tpc2step(tpc);
-    const int tonicAbsStep = 4 * STEP_DELTA_OCTAVE + tpc2step(tonicTpc);
+    constexpr int JIANPU_BASE_OCTAVE_INDEX = 5; // C4: MIDI 60 / 12.
+    const int referenceOctaveIndex = JIANPU_BASE_OCTAVE_INDEX + referenceOctaveOffset;
+    const int tonicAbsStep = referenceOctaveIndex * STEP_DELTA_OCTAVE + tpc2step(tonicTpc);
     const int degreeOneOffset = (STEP_DELTA_OCTAVE - jianpuModeDegreeOffset(mode)) % STEP_DELTA_OCTAVE;
     const int relativeStep = absStep - tonicAbsStep - degreeOneOffset;
     return relativeStep >= 0 ? relativeStep / STEP_DELTA_OCTAVE
            : (relativeStep - STEP_DELTA_OCTAVE + 1) / STEP_DELTA_OCTAVE;
 }
 
-int pitch2JianpuOctave(int pitch, int tpc, Key key, KeyMode mode)
+int pitch2JianpuOctave(int pitch, int tpc, Key key, KeyMode mode, int referenceOctaveOffset)
 {
-    return pitch2JianpuOctave(pitch, tpc, key2Tpc(key), mode);
+    return pitch2JianpuOctave(pitch, tpc, key2Tpc(key), mode, referenceOctaveOffset);
 }
 
 void jianpuKeyMapping(const KeySigEvent& ks, KeyMode& mode, int& tonicTpc)

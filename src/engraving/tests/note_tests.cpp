@@ -720,18 +720,21 @@ TEST_F(Engraving_NoteTests, jianpuDurationLinesReserveSpace)
 
 TEST_F(Engraving_NoteTests, jianpuOctave)
 {
-    EXPECT_EQ(pitch2JianpuOctave(36, Tpc::TPC_C, Key::C, KeyMode::MAJOR), -1);
-    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 1);
-    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 2);
+    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::C, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 1);
+    EXPECT_EQ(pitch2JianpuOctave(84, Tpc::TPC_C, Key::C, KeyMode::MAJOR), 2);
 
-    EXPECT_EQ(pitch2JianpuOctave(43, Tpc::TPC_G, Key::G, KeyMode::MAJOR), -1);
-    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::G, KeyMode::MAJOR), -1);
-    EXPECT_EQ(pitch2JianpuOctave(55, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::G, KeyMode::MAJOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(66, Tpc::TPC_F_S, Key::G, KeyMode::MAJOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(67, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 1);
-    EXPECT_EQ(pitch2JianpuOctave(79, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 2);
+    EXPECT_EQ(pitch2JianpuOctave(48, Tpc::TPC_C, Key::C, KeyMode::MAJOR, -1), 0);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, Key::C, KeyMode::MAJOR, +1), 0);
+
+    EXPECT_EQ(pitch2JianpuOctave(55, Tpc::TPC_G, Key::G, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, Key::G, KeyMode::MAJOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(67, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(78, Tpc::TPC_F_S, Key::G, KeyMode::MAJOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(79, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 1);
+    EXPECT_EQ(pitch2JianpuOctave(91, Tpc::TPC_G, Key::G, KeyMode::MAJOR), 2);
 }
 
 TEST_F(Engraving_NoteTests, jianpuModeMapping)
@@ -782,13 +785,13 @@ TEST_F(Engraving_NoteTests, jianpuModeMapping)
     EXPECT_EQ(degree, u"1");
     EXPECT_TRUE(accidental.empty());
 
-    EXPECT_EQ(pitch2JianpuOctave(58, Tpc::TPC_B_B, cDorianTonic, KeyMode::DORIAN), 0);
-    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, cDorianTonic, KeyMode::DORIAN), 0);
-    EXPECT_EQ(pitch2JianpuOctave(57, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), -1);
-    EXPECT_EQ(pitch2JianpuOctave(59, Tpc::TPC_B, aMinorTonic, KeyMode::MINOR), -1);
-    EXPECT_EQ(pitch2JianpuOctave(60, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(69, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), 0);
-    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 1);
+    EXPECT_EQ(pitch2JianpuOctave(70, Tpc::TPC_B_B, cDorianTonic, KeyMode::DORIAN), 0);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, cDorianTonic, KeyMode::DORIAN), 0);
+    EXPECT_EQ(pitch2JianpuOctave(69, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(71, Tpc::TPC_B, aMinorTonic, KeyMode::MINOR), -1);
+    EXPECT_EQ(pitch2JianpuOctave(72, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(81, Tpc::TPC_A, aMinorTonic, KeyMode::MINOR), 0);
+    EXPECT_EQ(pitch2JianpuOctave(84, Tpc::TPC_C, aMinorTonic, KeyMode::MINOR), 1);
 }
 
 // KeyMode::UNKNOWN is the mode stored for any ordinary key signature that never had an
