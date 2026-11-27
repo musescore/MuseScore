@@ -37,26 +37,26 @@ namespace mu::iex::tabledit {
 Fraction TupletHandler::doTuplet(const TefNote* const tefNote)
 {
     Fraction res { 0, 1 };
-    Fraction correction { tefNote->length, 64 };
+    Fraction correction { tefNote->type(), WHOLE_DIVISION };
     correction *= { 1, 6 };
     LOGN("position %d string %d fret %d length %d triplet %d",
-         tefNote->position, tefNote->string, tefNote->fret, tefNote->length, tefNote->triplet);
+         tefNote->position, tefNote->string, tefNote->fret, tefNote->type(), tefNote->tuplet());
     LOGN("before inTuplet %d count %d totalLength %d", inTuplet, count, totalLength);
-    if (tefNote->triplet) {
+    if (tefNote->tuplet()) {
         if (!inTuplet) {
             LOGN("start triplet");
         }
         inTuplet = true;
-        res = Fraction { totalLength, 2 * 3 * 64 };
+        res = Fraction { totalLength, 2 * 3 * WHOLE_DIVISION };
         LOGN("res %d/%d", res.numerator(), res.denominator());
         ++count;
-        totalLength += tefNote->length;
+        totalLength += tefNote->type();
         LOGN("totalLength %d", totalLength);
     }
-    if (!tefNote->triplet || (inTuplet && (totalLength % 3) == 0)) {
+    if (!tefNote->tuplet() || (inTuplet && (totalLength % 3) == 0)) {
         if (inTuplet) {
             LOGN("stop triplet");
-            const Fraction l { totalLength, 3 * 64 };
+            const Fraction l { totalLength, 3 * WHOLE_DIVISION };
             LOGN("baselen %d/%d", l.numerator(), l.denominator());
             tuplet->setBaseLen(l);
         }

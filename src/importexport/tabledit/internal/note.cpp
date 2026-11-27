@@ -21,6 +21,7 @@
  */
 
 #include "note.h"
+#include "log.h"
 
 namespace mu::iex::tabledit {
 EffectType TefNote::effect() const
@@ -82,37 +83,155 @@ EffectType TefNote::combinationEffect() const
     }
 }
 
-// return TablEdit note length in 64th (including triplets rounded down to nearest note length)
-// TODO: remove code duplication with importtef.cpp duration2length()
+//---------------------------------------------------------
+// type
+// convert TablEdit duration to note type in 64th
+// i.e. the nominal duration (excluding dots or tuplet)
+//---------------------------------------------------------
 
-int durationToInt(uint8_t duration)
+int TefNote::type() const
 {
     switch (duration) {
-    case  0: return 64; //"whole";
-    case  1: return 48; //"half dotted";
-    case  2: return 32; //"whole triplet";
-    case  3: return 32; //"half";
-    case  4: return 24; //"quarter dotted";
-    case  5: return 16; //"half triplet";
-    case  6: return 16; //"quarter";
-    case  7: return 12; //"eighth dotted";
-    case  8: return 8; //"quarter triplet";
-    case  9: return 8; //"eighth";
-    case 10: return 6; //"16th dotted";
-    case 11: return 4; //"eighth triplet";
-    case 12: return 4; //"16th";
-    case 13: return 3; //"32nd dotted";
-    case 14: return 2; //"16th triplet";
-    case 15: return 2; //"32nd";
-    //case 16: return "64th dotted";
-    case 17: return 1; //"32nd triplet";
-    case 18: return 1; //"64th";
-    case 19: return 56; //"half double dotted";
-    //case 20: return "16th quintuplet";
-    case 22: return 28; //"quarter double dotted";
-    case 25: return 14; //"eighth double dotted";
-    case 28: return 7; //"16th double dotted";
-    default: return 0; //"undefined";
+    case NoteDuration::V_WHOLE:
+    case NoteDuration::V_WHOLE_DOTTED:
+    case NoteDuration::V_WHOLE_TRIPLET:
+        return 64;
+    case NoteDuration::V_HALF:
+    case NoteDuration::V_HALF_DOTTED:
+    case NoteDuration::V_HALF_DOUBLE_DOTTED:
+    case NoteDuration::V_HALF_TRIPLET:
+        return 32;
+    case NoteDuration::V_QUARTER:
+    case NoteDuration::V_QUARTER_DOTTED:
+    case NoteDuration::V_QUARTER_DOUBLE_DOTTED:
+    case NoteDuration::V_QUARTER_TRIPLET:
+        return 16;
+    case NoteDuration::V_EIGHTH:
+    case NoteDuration::V_EIGHTH_DOTTED:
+    case NoteDuration::V_EIGHTH_DOUBLE_DOTTED:
+    case NoteDuration::V_EIGHTH_TRIPLET:
+        return 8;
+    case NoteDuration::V_16TH:
+    case NoteDuration::V_16TH_DOTTED:
+    case NoteDuration::V_16TH_DOUBLE_DOTTED:
+    case NoteDuration::V_16TH_TRIPLET:
+        return 4;
+    case NoteDuration::V_32ND:
+    case NoteDuration::V_32ND_DOTTED:
+    case NoteDuration::V_32ND_TRIPLET:
+        return 2;
+    case NoteDuration::V_64TH:
+        return 1;
+    case NoteDuration::V_16TH_QUINTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_SEPTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_NONUPLET: // not supported by importer yet
+    case NoteDuration::V_64TH_DOTTED:
+    default:
+        LOGD("invalid note duration %d", static_cast<int>(duration));
+        return 0; // invalid (result is weird layout)
+    }
+}
+
+//---------------------------------------------------------
+// dots
+// convert TablEdit duration to number of dots
+//---------------------------------------------------------
+
+int TefNote::dots() const
+{
+    switch (duration) {
+    case NoteDuration::V_WHOLE_DOTTED:
+    case NoteDuration::V_HALF_DOTTED:
+    case NoteDuration::V_QUARTER_DOTTED:
+    case NoteDuration::V_EIGHTH_DOTTED:
+    case NoteDuration::V_16TH_DOTTED:
+    case NoteDuration::V_32ND_DOTTED:
+    case NoteDuration::V_64TH_DOTTED:
+        return 1;
+    case NoteDuration::V_HALF_DOUBLE_DOTTED:
+    case NoteDuration::V_QUARTER_DOUBLE_DOTTED:
+    case NoteDuration::V_EIGHTH_DOUBLE_DOTTED:
+    case NoteDuration::V_16TH_DOUBLE_DOTTED:
+        return 2;
+    case NoteDuration::V_16TH_QUINTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_SEPTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_NONUPLET: // not supported by importer yet
+    default:
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+// tuplet
+// convert TablEdit duration to tuplet type
+// currently a bool (triplet yes/no), in future the tuplet value
+//---------------------------------------------------------
+
+bool TefNote::tuplet() const
+{
+    switch (duration) {
+    case NoteDuration::V_WHOLE_TRIPLET:
+    case NoteDuration::V_HALF_TRIPLET:
+    case NoteDuration::V_QUARTER_TRIPLET:
+    case NoteDuration::V_EIGHTH_TRIPLET:
+    case NoteDuration::V_16TH_TRIPLET:
+    case NoteDuration::V_32ND_TRIPLET:
+        return true;
+    case NoteDuration::V_16TH_QUINTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_SEPTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_NONUPLET: // not supported by importer yet
+    case NoteDuration::V_64TH_DOTTED:
+    default:
+        return false;
+    }
+}
+
+//---------------------------------------------------------
+// lengthInclDots
+// convert TablEdit duration to length in 64th
+// i.e. the nominal duration (including dot(s), excluding tuplet)
+//---------------------------------------------------------
+
+int TefNote::lengthInclDots() const
+{
+    const int length { type() };
+    switch (dots()) {
+    case 0: return length;
+    case 1: return 3 * length / 2;
+    case 2: return 7 * length / 4;
+    default:
+        LOGD("number of dots (%d) not supported", dots());
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+// durationToTablEditLength
+// return TablEdit note length in 64th (including dots and
+// triplets).
+// Note TablEdit rounds down notes in tuplets to the nearest
+// note length. E.g. in a eighth note triplet, the notes
+// will be at 1/16th intervals with a gap after the last note
+//---------------------------------------------------------
+
+int TefNote::tablEditLength() const
+{
+    if (!tuplet()) {
+        return lengthInclDots();
+    }
+    switch (duration) {
+    case NoteDuration::V_WHOLE_TRIPLET: return 32;
+    case NoteDuration::V_HALF_TRIPLET: return 16;
+    case NoteDuration::V_QUARTER_TRIPLET: return 8;
+    case NoteDuration::V_EIGHTH_TRIPLET: return 4;
+    case NoteDuration::V_16TH_TRIPLET: return 2;
+    case NoteDuration::V_32ND_TRIPLET: return 1;
+    case NoteDuration::V_16TH_QUINTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_SEPTUPLET: // not supported by importer yet
+    case NoteDuration::V_32ND_NONUPLET: // not supported by importer yet
+    default:
+        LOGD("invalid note duration %d", static_cast<int>(duration));
+        return 0; // invalid (result is weird layout)
     }
 }
 } // namespace mu::iex::tabledit

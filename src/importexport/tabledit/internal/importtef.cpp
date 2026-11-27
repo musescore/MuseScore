@@ -22,6 +22,7 @@
 
 #include "importtef.h"
 #include "measurehandler.h"
+#include "note.h"
 #include "readinglist.h"
 #include "tuplethandler.h"
 
@@ -429,23 +430,19 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                 }
 
                 const TefNote* const firstNote { tefNotes.at(0) };
-                Fraction length { firstNote->length, 64 }; // length is in 64th
-                if (firstNote->dots == 1) {
-                    length *= Fraction{ 3, 2 };
-                } else if (firstNote->dots == 2) {
-                    length *= Fraction{ 7, 4 };
-                }
 
+                const Fraction length { firstNote->lengthInclDots(), WHOLE_DIVISION };
                 TDuration tDuration(length);
-                if (firstNote->dots) {
-                    tDuration.setDots(firstNote->dots);
+                const int dots { firstNote->dots() };
+                if (dots) {
+                    tDuration.setDots(dots);
                 }
 
                 const auto idx { measureHandler.measureIndex(firstNote->position, tefMeasures) };
-                const Fraction gapCorrection { measureHandler.sumPreviousGaps(idx), 64 };
+                const Fraction gapCorrection { measureHandler.sumPreviousGaps(idx), WHOLE_DIVISION };
                 const auto positionCorrection = tupletHandler.doTuplet(firstNote);
 
-                Fraction tick { firstNote->position, 64 }; // position is in 64th
+                Fraction tick { firstNote->position, WHOLE_DIVISION };
                 tick += positionCorrection;
                 tick -= gapCorrection;
                 LOGN("    positionCorrection %d/%d tick %d/%d length %d/%d",
@@ -818,7 +815,7 @@ void TablEdit::createLinkedTabs()
 
 static Fraction reducedActualLength(const int actual, const int nominalDenominator)
 {
-    Fraction res { actual, 64 };
+    Fraction res { actual, WHOLE_DIVISION };
     while (res.denominator() >= 2 * nominalDenominator && res.numerator() % 2 == 0) {
         res.setNumerator(res.numerator() / 2);
         res.setDenominator(res.denominator() / 2);
@@ -1106,7 +1103,7 @@ void TablEdit::createTexts()
         const auto track = part * VOICES;
         LOGN("part %zu track %zu", part, track);
 
-        Fraction tick { textMarker.position, 64 }; // position is in 64th
+        Fraction tick { textMarker.position, WHOLE_DIVISION };
         Measure* measure { score->tick2measure(tick) };
         if (!measure) {
             LOGD("error: no measure");
@@ -1145,96 +1142,6 @@ void TablEdit::createTitleFrame()
         Text* s = Factory::createText(vbox, TextStyleType::SUBTITLE);
         s->setPlainText(muse::String::fromStdString(tefHeader.subTitle));
         vbox->add(s);
-    }
-}
-
-/*
- * encoding of note durations
- * 0 whole
- * 1 half dotted
- * 2 whole triplet
- * 3 half
- * 4 quarter dotted
- * 5 half triplet
- * 6 quarter
- * 7 eight dotted
- * 8 quarter triplet
- * ...
- * 18 1/64th note
- * 19 half double dotted
- * 22 quarter double dotted
- * 25 eighth double dotted
- * 28 16th double dotted
- */
-
-// return TablEdit note length in 64th
-// (including triplets rounded down to nearest note length)
-// TODO: remove code duplication with voiceallocator.cpp durationToInt()
-
-static int duration2length(const int duration)
-{
-    if (0 <= duration && duration <= 18) {
-        // remove dot and triplet
-        int noteType { 0 };
-        int dotOrTriplet { duration % 3 };
-        switch (dotOrTriplet) {
-        case 0: noteType = duration / 3;
-            break;
-        case 1: noteType = (duration + 2) / 3;
-            break;
-        case 2: noteType = (duration - 2) / 3;
-            break;
-        default: LOGD("impossible value %d", dotOrTriplet);
-        }
-        switch (noteType) {
-        case 0: return 64; // 1/1
-        case 1: return 32; // 1/2
-        case 2: return 16; // 1/4
-        case 3: return 8;  // 1/8
-        case 4: return 4;  // 1/16
-        case 5: return 2;  // 1/32
-        case 6: return 1;  // 1/64
-        // as long as the if statement above is correct, this cannot actually happen
-        default: LOGD("impossible value %d", dotOrTriplet);
-        }
-    } else {
-        switch (duration) {
-        case 19: return 32; // 1/2
-        case 22: return 16; // 1/4
-        case 25: return 8;  // 1/8
-        case 28: return 4;  // 1/16
-        default: LOGD("impossible value %d", duration);
-        }
-    }
-    LOGD("invalid note duration %d", duration);
-    return 0; // invalid (result is weird layout)
-}
-
-// return the number of dots
-// TODO: remove code duplication with voiceallocator.cpp durationToInt()
-
-static int duration2dots(const int duration)
-{
-    if (0 <= duration && duration <= 18 && (duration % 3) == 0) {
-        return 0;
-    } else if (0 <= duration && duration <= 18 && (duration % 3) == 1) {
-        return 1;
-    } else if (duration == 19 || duration == 22 || duration == 25 || duration == 28) {
-        return 2;
-    }
-    LOGD("invalid note duration %d", duration);
-    return 0; // invalid
-}
-
-// check if 3:2 tuplet
-
-static bool duration2triplet(const int duration)
-{
-    if (0 <= duration && duration <= 18) {
-        return duration % 3 == 2;
-    } else {
-        LOGD("invalid note duration %d", duration);
-        return false; // invalid
     }
 }
 
@@ -1293,13 +1200,10 @@ void TablEdit::readTefContents()
             note.rest = true;
         } else {
             // not a note or rest
-            //LOGD("marker %d duration %d length %d dots %d", noteRestMarker, note.duration, note.length, note.dots);
+            //LOGD("marker %d duration %d length %d dots %d", noteRestMarker, static_cast<int>(note.duration), note.length, note.dots);
         }
         if (noteRestMarker <= 0x33) {
-            note.duration = byte2 & 0x1F;
-            note.length = duration2length(note.duration);
-            note.dots = duration2dots(note.duration);
-            note.triplet = duration2triplet(note.duration);
+            note.duration = static_cast<NoteDuration>(byte2 & 0x1F);
             note.voice = extractVoice(byte3);
             note.tie = (byte2 / 0x20) == 7;
             if (byte1 & 0x40) {
@@ -1527,8 +1431,8 @@ Err TablEdit::import()
     for (const auto& note : tefContents) {
         LOGN("position %d rest %d string %d fret %d duration %d length %d dots %d tie %d triplet %d voice %d",
              note.position, note.rest, note.string, note.fret,
-             note.duration, note.length, note.dots,
-             note.tie, note.triplet, static_cast<int>(note.voice));
+             static_cast<int>(note.duration), note.type(), note.dots(),
+             note.tie, note.tuplet(), static_cast<int>(note.voice));
     }
     for (const auto& textMarker : tefTextMarkers) {
         LOGN("position %d string %d text marker %d", textMarker.position, textMarker.string, textMarker.index);
