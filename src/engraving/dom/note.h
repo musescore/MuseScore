@@ -252,8 +252,6 @@ public:
     void setHarmonicPitchOffset(int val) { m_harmonicPitchOffset = val; }
     DisplayFretOption displayFret() const { return m_displayFret; }
     void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
-    String fretString() const { return m_fretString; }
-    void setFretString(const String& s) { m_fretString = s; }
     bool negativeFretUsed() const;
     int string() const { return m_string; }
     void setString(int val) { m_string = val; }
@@ -266,11 +264,6 @@ public:
 
     bool fretConflict() const { return m_fretConflict; }
     void setFretConflict(bool val) { m_fretConflict = val; }
-
-    String jianpuDigit() const { return m_jianpuDigit; }
-    void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
-    String jianpuAccidental() const { return m_jianpuAccidental; }
-    void setJianpuAccidental(const String& s) { m_jianpuAccidental = s; }
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
@@ -469,6 +462,9 @@ public:
         ld_field<SymId> cachedSymNull = { "[Note] cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
         ld_field<bool> mirror = { "[Note] mirror", false };                                  // True if note is mirrored at stem.
         ld_field<bool> hasGeneratedParens = { "[Note] hasGeneratedParens", false };          // Should generated parens be created
+        ld_field<String> fretString = { "[Note] fretString", String() };                     // TAB fret text
+        ld_field<String> jianpuDigit = { "[Note] jianpuDigit", String() };
+        ld_field<String> jianpuAccidental = { "[Note] jianpuAccidental", String() };
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
 
@@ -566,9 +562,6 @@ private:
     std::vector<Spanner*> m_spannerFor;
     std::vector<Spanner*> m_spannerBack;
 
-    String m_fretString;
-    String m_jianpuDigit;
-    String m_jianpuAccidental;
     std::vector<JianpuOctaveDot*> m_jianpuOctaveDots;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
