@@ -68,6 +68,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layoutelements_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/links_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measure_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/middletext_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midi/midirenderer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midi/midirenderer_bend_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/midimapping_tests.cpp doesn't compile and needs actualization

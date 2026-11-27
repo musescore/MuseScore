@@ -133,6 +133,7 @@ TextLineSegment::TextLineSegment(TextLine* sp, bool system)
     initStyle();
 
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
+    m_middleText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
@@ -160,10 +161,13 @@ TextLine::TextLine(DummyParentOr<Note> parent, bool system)
     initStyle();
 
     setBeginText(u"");
-    setContinueText(u"");
-    setEndText(u"");
     setBeginTextOffset(PointF(0, 0));
+    setMiddleText(u"");
+    setMiddleTextOffset(PointF(0, 0));
+    setMiddleTextCutThrough(true);
+    setContinueText(u"");
     setContinueTextOffset(PointF(0, 0));
+    setEndText(u"");
     setEndTextOffset(PointF(0, 0));
     setLineVisible(true);
 

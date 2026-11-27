@@ -22,6 +22,9 @@
 
 #include "textlinebase.h"
 
+#include <algorithm>
+#include <cmath>
+
 #include "rendering/iscorerenderer.h"
 
 #include "factory.h"
@@ -43,8 +46,10 @@ TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* 
     : LineSegment(type, sp, f)
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
+    m_middleText = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_text->setFlag(ElementFlag::MOVABLE, false);
+    m_middleText->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
 }
 
@@ -52,8 +57,10 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     : LineSegment(seg)
 {
     m_text    = seg.m_text->clone();
+    m_middleText = seg.m_middleText->clone();
     m_endText = seg.m_endText->clone();
     m_text->setOwnershipParent(this);
+    m_middleText->setOwnershipParent(this);
     m_endText->setOwnershipParent(this);
     // set the right _text
     renderer()->layoutTextLineBaseSegment(this);
@@ -62,6 +69,7 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
 TextLineBaseSegment::~TextLineBaseSegment()
 {
     delete m_text;
+    delete m_middleText;
     delete m_endText;
 }
 
@@ -73,6 +81,7 @@ void TextLineBaseSegment::setSelected(bool f)
 {
     SpannerSegment::setSelected(f);
     m_text->setSelected(f);
+    m_middleText->setSelected(f);
     m_endText->setSelected(f);
 }
 
@@ -87,6 +96,153 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
     return RectF(p1 - b, p1 + b).normalized().united(RectF(p2 - b, p2 + b).normalized());
 }
 
+void TextLineBaseSegment::layoutMiddleText(PointF& start, PointF& end, Shape& shape)
+{
+    LayoutData* ldata = mutldata();
+    ldata->setMask(Shape());
+    ldata->gapIndex = -1;
+    ldata->splitMiddleLine = false;
+    ldata->hideBegin = false;
+    ldata->hideEnd = false;
+    if (m_middleText->empty()) {
+        return;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    m_middleText->mutldata()->setPos((start + end) * 0.5 - m_middleText->ldata()->bbox().center());
+    const RectF textBounds = m_middleText->ldata()->bbox().translated(m_middleText->pos());
+    shape.add(textBounds, m_middleText);
+    if (!tl->middleTextCutThrough()) {
+        return;
+    }
+
+    const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+    const RectF mask = textBounds.padded(padding);
+    // For middle text cutting through lines:
+    // We normally use two additional points to creat a break at the center,
+    // but it doesn't work for hairpins, so we use masks.
+    if (twoLines()) {
+        ldata->setMask(Shape(mask));
+    }
+
+    // Find the part of the line inside the mask, in unit of fraction of the line.
+    const PointF lineVector = end - start;
+    double maskEntryFraction = 0.0;
+    double maskExitFraction = 1.0;
+    auto isClipping = [&maskEntryFraction, &maskExitFraction](double lineOrigin, double lineDelta,
+                                                              double maskStart, double maskEnd) -> bool {
+        if (muse::RealIsNull(lineDelta)) {
+            return lineOrigin >= maskStart && lineOrigin <= maskEnd;
+        }
+        double axisEntryFraction = (maskStart - lineOrigin) / lineDelta;
+        double axisExitFraction = (maskEnd - lineOrigin) / lineDelta;
+        if (axisEntryFraction > axisExitFraction) {
+            std::swap(axisEntryFraction, axisExitFraction);
+        }
+        // only count a segment as masked when both axes report it masked.
+        maskEntryFraction = std::max(maskEntryFraction, axisEntryFraction);
+        maskExitFraction = std::min(maskExitFraction, axisExitFraction);
+        return maskEntryFraction <= maskExitFraction;
+    };
+    if (!isClipping(start.x(), lineVector.x(), mask.left(), mask.right())
+        || !isClipping(start.y(), lineVector.y(), mask.top(), mask.bottom())) {
+        return;
+    }
+
+    // Hide the hook if needed, and move the line start/end point (thus also hiding the start/end segment).
+    const double hideThreshold = std::max(0.0, tl->absoluteFromSpatium(tl->middleTextMinLineLength()));
+    const double lineLength = std::hypot(lineVector.x(), lineVector.y());
+    ldata->hideBegin = maskEntryFraction == 0.0 || lineLength * maskEntryFraction < hideThreshold;
+    ldata->hideEnd = maskExitFraction == 1.0 || lineLength * (1.0 - maskExitFraction) < hideThreshold;
+    const PointF origin = start;
+    ldata->middleGapStart = origin + lineVector * maskEntryFraction;
+    ldata->middleGapEnd = origin + lineVector * maskExitFraction;
+    ldata->splitMiddleLine = !twoLines() && !ldata->hideBegin && !ldata->hideEnd;
+    if (ldata->hideBegin) {
+        start = twoLines() ? ldata->middleGapStart : ldata->middleGapEnd;
+    }
+    if (ldata->hideEnd) {
+        end = twoLines() ? ldata->middleGapEnd : ldata->middleGapStart;
+    }
+}
+
+void TextLineBaseSegment::splitMiddleTextLine(int mainLineStart)
+{
+    LayoutData* ldata = mutldata();
+    if (!ldata->splitMiddleLine) {
+        return;
+    }
+
+    const int insert = mainLineStart + 1;
+    for (int i = ldata->npoints - 1; i >= insert; --i) {
+        ldata->points[i + 2] = ldata->points[i];
+    }
+    ldata->points[insert] = ldata->middleGapStart;
+    ldata->points[insert + 1] = ldata->middleGapEnd;
+    ldata->npoints += 2;
+    ldata->gapIndex = insert;
+}
+
+bool TextLineBaseSegment::isMiddleTextCramped() const
+{
+    if (m_middleText->empty()) {
+        return false;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+    const RectF middleBounds = m_middleText->ldata()->bbox().translated(m_middleText->pos()).adjusted(-padding, 0.0, padding, 0.0);
+    return (!m_text->empty() && middleBounds.intersects(m_text->ldata()->bbox().translated(m_text->pos())))
+           || (!m_endText->empty() && middleBounds.intersects(m_endText->ldata()->bbox().translated(m_endText->pos())));
+}
+
+double TextLineBaseSegment::layoutEndText(Shape& shape)
+{
+    if (m_endText->empty()) {
+        return 0.0;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    double clearance = 0.0;
+    if (tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO) {
+        clearance = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+        switch (m_endText->position()) {
+        case AlignH::RIGHT:
+            clearance += m_endText->ldata()->bbox().width();
+            break;
+        case AlignH::HCENTER:
+            clearance += m_endText->ldata()->bbox().width() / 2;
+            break;
+        default:
+            break;
+        }
+    }
+    const double endTextX = std::max(pos2().x(), shape.bbox().right() + clearance);
+    m_endText->mutldata()->setPosX(endTextX);
+    shape.add(m_endText->ldata()->bbox().translated(m_endText->pos()), this);
+    return clearance;
+}
+
+void TextLineBaseSegment::layoutCrampedTexts(Shape& shape)
+{
+    if (m_middleText->empty() || (m_text->empty() && m_endText->empty())) {
+        return;
+    }
+
+    const TextLineBase* tl = textLineBase();
+    const double padding = tl->absoluteFromSpatium(tl->gapBetweenTextAndLine());
+    // Reset the shape, since now we need to move the end text further away to make room for mid text
+    shape = Shape();
+    if (!m_text->empty()) {
+        shape.add(m_text->ldata()->bbox().translated(m_text->pos()), this);
+    }
+    const RectF middleBounds = m_middleText->ldata()->bbox();
+    m_middleText->mutldata()->setPos(PointF(shape.bbox().right() + padding - middleBounds.left(), -middleBounds.center().y()));
+    mutldata()->setMask(Shape());
+    shape.add(m_middleText->ldata()->bbox().translated(m_middleText->pos()), m_middleText);
+    layoutEndText(shape);
+}
+
 bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {
@@ -94,6 +250,10 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 
         if (m_text) {
             m_text->setColor(color);
+        }
+
+        if (m_middleText) {
+            m_middleText->setColor(color);
         }
 
         if (m_endText) {
@@ -114,10 +274,15 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
 
     textLineBase()->spatiumChanged(ov, nv);
     m_text->spatiumChanged(ov, nv);
+    m_middleText->spatiumChanged(ov, nv);
     m_endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 45> TextLineBasePropertyId = { {
+static constexpr std::array<Pid, 49> TextLineBasePropertyId = { {
+    Pid::MIDDLE_TEXT,
+    Pid::MIDDLE_TEXT_OFFSET,
+    Pid::MIDDLE_TEXT_CUT_THROUGH,
+    Pid::MIDDLE_TEXT_MIN_LINE_LENGTH,
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
@@ -165,7 +330,7 @@ static constexpr std::array<Pid, 45> TextLineBasePropertyId = { {
     Pid::TEXT_SIZE_SPATIUM_DEPENDENT
 } };
 
-const std::array<Pid, 45>& TextLineBase::textLineBasePropertyIds()
+const std::array<Pid, 49>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
 }
@@ -173,15 +338,20 @@ const std::array<Pid, 45>& TextLineBase::textLineBasePropertyIds()
 void TextLineBase::reset()
 {
     String beginText = _beginText;
+    String middleText = _middleText;
     String contText = _continueText;
     String endText = _endText;
     bool beginStyled = isStyled(Pid::BEGIN_TEXT);
+    bool middleStyled = isStyled(Pid::MIDDLE_TEXT);
     bool contStyled = isStyled(Pid::CONTINUE_TEXT);
     bool endStyled = isStyled(Pid::END_TEXT);
 
     SLine::reset();
     if (!beginStyled) {
         undoChangeProperty(Pid::BEGIN_TEXT, beginText, PropertyFlags::UNSTYLED);
+    }
+    if (!middleStyled) {
+        undoChangeProperty(Pid::MIDDLE_TEXT, middleText);
     }
     if (!contStyled) {
         undoChangeProperty(Pid::CONTINUE_TEXT, contText, PropertyFlags::UNSTYLED);
@@ -241,6 +411,14 @@ PropertyValue TextLineBase::getProperty(Pid id) const
     case Pid::ALIGN: // Redirect to begin text...
     case Pid::BEGIN_TEXT_ALIGN:
         return PropertyValue::fromValue(beginTextAlign());
+    case Pid::MIDDLE_TEXT:
+        return middleText();
+    case Pid::MIDDLE_TEXT_OFFSET:
+        return middleTextOffset();
+    case Pid::MIDDLE_TEXT_CUT_THROUGH:
+        return middleTextCutThrough();
+    case Pid::MIDDLE_TEXT_MIN_LINE_LENGTH:
+        return middleTextMinLineLength();
     case Pid::CONTINUE_TEXT_ALIGN:
         return PropertyValue::fromValue(continueTextAlign());
     case Pid::END_TEXT_ALIGN:
@@ -371,6 +549,18 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE:
         setBeginTextMusicSymbolsSize(v.toReal());
+        break;
+    case Pid::MIDDLE_TEXT:
+        setMiddleText(v.value<String>());
+        break;
+    case Pid::MIDDLE_TEXT_OFFSET:
+        setMiddleTextOffset(v.value<PointF>());
+        break;
+    case Pid::MIDDLE_TEXT_CUT_THROUGH:
+        setMiddleTextCutThrough(v.toBool());
+        break;
+    case Pid::MIDDLE_TEXT_MIN_LINE_LENGTH:
+        setMiddleTextMinLineLength(v.value<Spatium>());
         break;
     case Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE:
         setContinueTextMusicalSymbolsScale(v.toReal());
@@ -554,6 +744,14 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::MIDDLE_TEXT:
+        return String();
+    case Pid::MIDDLE_TEXT_OFFSET:
+        return PointF();
+    case Pid::MIDDLE_TEXT_CUT_THROUGH:
+        return true;
+    case Pid::MIDDLE_TEXT_MIN_LINE_LENGTH:
+        return Spatium(0.75);
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return 0.5_sp;
 

@@ -64,6 +64,11 @@ class TextLineSettingsModel : public ModelWithVoiceAndPositionOptions
     Q_PROPERTY(mu::propertiespanel::PropertyItem * beginningText READ beginningText CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * beginningTextOffset READ beginningTextOffset CONSTANT)
 
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * middleText READ middleText CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * middleTextOffset READ middleTextOffset CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * middleTextCutThrough READ middleTextCutThrough CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * middleTextMinLineLength READ middleTextMinLineLength CONSTANT)
+
     Q_PROPERTY(mu::propertiespanel::PropertyItem * continuousText READ continuousText CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * continuousTextOffset READ continuousTextOffset CONSTANT)
 
@@ -114,6 +119,11 @@ public:
 
     PropertyItem* beginningText() const;
     PropertyItem* beginningTextOffset() const;
+
+    PropertyItem* middleText() const;
+    PropertyItem* middleTextOffset() const;
+    PropertyItem* middleTextCutThrough() const;
+    PropertyItem* middleTextMinLineLength() const;
 
     PropertyItem* continuousText() const;
     PropertyItem* continuousTextOffset() const;
@@ -211,6 +221,11 @@ private:
 
     PropertyItem* m_beginningText = nullptr;
     PointFPropertyItem* m_beginningTextOffset = nullptr;
+
+    PropertyItem* m_middleText = nullptr;
+    PointFPropertyItem* m_middleTextOffset = nullptr;
+    PropertyItem* m_middleTextCutThrough = nullptr;
+    PropertyItem* m_middleTextMinLineLength = nullptr;
 
     PropertyItem* m_continuousText = nullptr;
     PointFPropertyItem* m_continuousTextOffset = nullptr;

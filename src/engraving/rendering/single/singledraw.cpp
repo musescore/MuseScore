@@ -1662,6 +1662,13 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
         painter->translate(-item->text()->pos());
     }
 
+    if (!item->middleText()->empty()) {
+        painter->translate(item->middleText()->pos());
+        item->middleText()->setVisible(tl->visible());
+        draw(item->middleText(), painter, opt);
+        painter->translate(-item->middleText()->pos());
+    }
+
     if (!item->endText()->empty()) {
         painter->translate(item->endText()->pos());
         item->endText()->setVisible(tl->visible());
@@ -1672,6 +1679,9 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     if (ldata->npoints == 0) {
         return;
     }
+
+    painter->save();
+    setMask(item, painter);
 
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor(), opt);
@@ -1701,13 +1711,14 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
         } else {
             painter->drawLines(&ldata->points[0], 2);
         }
+        painter->restore();
         return;
     }
 
     int start = 0, end = ldata->npoints;
 
     // Draw begin hook, if it needs to be drawn separately
-    if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+    if (!ldata->hideBegin && item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
         if (tl->beginHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
@@ -1740,7 +1751,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     }
 
     // Draw end hook, if it needs to be drawn separately
-    if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
+    if (!ldata->hideEnd && item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
         if (tl->endHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
@@ -1778,7 +1789,13 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     }
 
     painter->setPen(pen);
-    painter->drawPolyline(&ldata->points[start], end - start);
+    if (ldata->gapIndex < start || ldata->gapIndex + 1 >= end) {
+        painter->drawPolyline(&ldata->points[start], end - start);
+    } else {
+        painter->drawPolyline(&ldata->points[start], ldata->gapIndex - start + 1);
+        painter->drawPolyline(&ldata->points[ldata->gapIndex + 1], end - ldata->gapIndex - 1);
+    }
+    painter->restore();
 }
 
 void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter, const PaintOptions& opt)

@@ -36,6 +36,7 @@
 #include "exportmusicxml.h"
 
 #include <math.h>
+#include <limits>
 #include <set>
 
 #include "containers.h"
@@ -399,6 +400,8 @@ private:
                const MeasurePrintContext& mpc);
     void measureLayout(const double distance);
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
+    void collectMiddleTexts();
+    void middleTexts(const Measure* measure, staff_idx_t staffIdx, staff_idx_t xmlStaff);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(EngravingItem* el, const Measure* m, staff_idx_t sstaff, bool useDrumset);
     void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack, const staff_idx_t partRelStaffNo,
@@ -429,6 +432,7 @@ private:
     const Ottava* m_ottavas[MAX_NUMBER_LEVEL];
     const Trill* m_trills[MAX_NUMBER_LEVEL];
     std::vector<const Jump*> m_jumpElements;
+    std::map<const Measure*, std::vector<const TextLineBaseSegment*> > m_middleTexts;
     ArpeggioMap m_measArpeggios;
     int m_div = 0;
     double m_millimeters = 0.0;
@@ -5607,6 +5611,98 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
 }
 
 //---------------------------------------------------------
+//   collectMiddleTexts
+//---------------------------------------------------------
+
+void ExportMusicXml::collectMiddleTexts()
+{
+    m_middleTexts.clear();
+    for (const auto& entry : m_score->spanner()) {
+        const Spanner* spanner = entry.second;
+        if (!spanner->isTextLineBase() || !canWrite(spanner) || toTextLineBase(spanner)->middleText().empty()) {
+            continue;
+        }
+        for (const SpannerSegment* segment : spanner->spannerSegments()) {
+            const TextLineBaseSegment* textSegment = toTextLineBaseSegment(segment);
+            const Text* text = textSegment->middleText();
+            const System* system = segment->system();
+            if (!system || text->empty()) {
+                continue;
+            }
+
+            // Find a measure to place the text, without applying its offset.
+            const double centerX = text->canvasPos().x() + text->ldata()->bbox().center().x() - text->offset().x();
+            const Measure* measure = nullptr;
+            for (const MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+                measure = toMeasure(mb);
+                if (centerX < measure->canvasPos().x() + measure->width()) {
+                    break;
+                }
+            }
+            if (measure) {
+                m_middleTexts[measure->isMMRest() ? measure->mmRestFirst() : measure].push_back(textSegment);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   middleTexts
+//---------------------------------------------------------
+
+void ExportMusicXml::middleTexts(const Measure* measure, staff_idx_t staffIdx, staff_idx_t xmlStaff)
+{
+    const auto it = m_middleTexts.find(measure);
+    if (it == m_middleTexts.end()) {
+        return;
+    }
+    const Measure* layoutMeasure = measure->coveringMMRestOrThis();
+    for (const TextLineBaseSegment* segment : it->second) {
+        const TextLineBase* line = segment->textLineBase();
+        if (line->staffIdx() != staffIdx) {
+            continue;
+        }
+        const Text* text = segment->middleText();
+        const PointF center = text->canvasPos() + text->ldata()->bbox().center();
+        const double anchorX = center.x() - text->offset().x();
+        Fraction anchorTick = std::max(measure->tick(), line->tick());
+        double distance = std::numeric_limits<double>::max();
+        for (const Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+            if (seg->tick() < line->tick() || seg->tick() >= line->tick2()) {
+                continue;
+            }
+            bool hasChordRest = false;
+            for (track_idx_t track = staff2track(staffIdx); track < staff2track(staffIdx + 1); ++track) {
+                hasChordRest |= seg->element(track) != nullptr;
+            }
+            const double dx = std::abs(seg->canvasPos().x() - anchorX);
+            if (hasChordRest && dx < distance) {
+                distance = dx;
+                anchorTick = seg->tick();
+            }
+        }
+
+        directionTag(m_xml, m_attr, line);
+        m_xml.startElement("direction-type");
+        String attr = u" halign=\"center\" valign=\"middle\"";
+        attr += color2xml(text);
+        if (configuration()->exportLayout()) {
+            const PointF position(center.x() - layoutMeasure->canvasPos().x(),
+                                  center.y() - segment->system()->staffCanvasYpage(staffIdx));
+            attr += positionToString(position, PointF(), m_score->style().spatium());
+        }
+        MScoreTextToMusicXml mttm(u"words", attr, formatForWords(m_score->style()), m_score->style().styleSt(Sid::musicalTextFont));
+        mttm.writeTextFragments(text->fragmentList(), m_xml);
+        m_xml.endElement();
+        const Fraction offset = (anchorTick - m_tick) * stretch(m_score, line->track(), measure->tick());
+        directionETag(m_xml, xmlStaff, calculateDurationInDivisions(offset, m_div));
+    }
+}
+
+//---------------------------------------------------------
 //   findOttava -- get index of ottava in ottava table
 //   return -1 if not found
 //---------------------------------------------------------
@@ -8578,6 +8674,8 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
         // special number 0 -> don’t show staff number in xml output
         // (because there is only one staff)
 
+        middleTexts(m, staffIdx, partRelStaffNo);
+
         // in presence of a MeasureRepeat, adjust m to point to the actual content being repeated
         if (m->isMeasureRepeatGroup(staffIdx)) {
             MeasureRepeat* mr = nullptr;
@@ -8927,6 +9025,7 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
     }
 
     m_jumpElements = findJumpElements(m_score);
+    collectMiddleTexts();
 
     m_xml.setDevice(dev);
     m_xml.startDocument();

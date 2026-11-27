@@ -67,6 +67,7 @@ void HairpinSettingsModel::createProperties()
     isLineVisible()->setIsVisible(false);
     allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(true);
+    middleTextMinLineLength()->setIsVisible(false);
 }
 
 void HairpinSettingsModel::loadProperties()

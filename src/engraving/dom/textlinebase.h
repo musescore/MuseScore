@@ -61,14 +61,27 @@ public:
 
     Text* text() const { return m_text; }
     Text* endText() const { return m_endText; }
+    Text* middleText() const { return m_middleText; }
+
+    void layoutMiddleText(PointF& start, PointF& end, Shape& shape);
+    void splitMiddleTextLine(int mainLineStart);
+    bool isMiddleTextCramped() const;
+    double layoutEndText(Shape& shape);
+    void layoutCrampedTexts(Shape& shape);
 
     struct LayoutData : public EngravingItem::LayoutData {
-        std::array<PointF, 6> points;
+        std::array<PointF, 8> points;
+        bool splitMiddleLine = false;
+        int gapIndex = -1; // skip the segment between points[gapIndex] and points[gapIndex + 1].
+        PointF middleGapStart;
+        PointF middleGapEnd;
         PolygonF joinedHairpin = PolygonF();
         PolygonF beginArrow = PolygonF();
         PolygonF endArrow = PolygonF();
         int npoints = 0;
         double lineLength = 0;
+        bool hideBegin = false;
+        bool hideEnd = false;
     };
     DECLARE_LAYOUTDATA_METHODS(TextLineBaseSegment)
 
@@ -77,6 +90,7 @@ public:
 protected:
 
     Text* m_text = nullptr;
+    Text* m_middleText = nullptr;
     Text* m_endText = nullptr;
 
     bool m_twoLines = false;
@@ -99,6 +113,10 @@ class TextLineBase : public SLine
     M_PROPERTY(Spatium,    beginLineArrowWidth,     setBeginLineArrowWidth)
     M_PROPERTY(Spatium,    beginFilledArrowHeight,  setBeginFilledArrowHeight)
     M_PROPERTY(Spatium,    beginFilledArrowWidth,   setBeginFilledArrowWidth)
+    M_PROPERTY(String,     middleText,             setMiddleText)
+    M_PROPERTY(PointF,     middleTextOffset,       setMiddleTextOffset)
+    M_PROPERTY2(bool,      middleTextCutThrough,   setMiddleTextCutThrough, true)
+    M_PROPERTY2(Spatium,   middleTextMinLineLength, setMiddleTextMinLineLength, Spatium(0.75))
     M_PROPERTY(Spatium,    endLineArrowHeight,      setEndLineArrowHeight)
     M_PROPERTY(Spatium,    endLineArrowWidth,       setEndLineArrowWidth)
     M_PROPERTY(Spatium,    endFilledArrowHeight,    setEndFilledArrowHeight)
@@ -150,7 +168,7 @@ public:
     PropertyFlags propertyFlags(Pid) const override;
     void setPropertyFlags(Pid, PropertyFlags) override;
 
-    static const std::array<Pid, 45>& textLineBasePropertyIds();
+    static const std::array<Pid, 49>& textLineBasePropertyIds();
 
     void reset() override;
 

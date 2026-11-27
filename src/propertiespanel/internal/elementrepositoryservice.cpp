@@ -400,6 +400,10 @@ std::vector<EngravingItem*> ElementRepositoryService::findTextDelegates(Engravin
                 textItems.push_back(text);
             }
 
+            if (Text* middleText = toTextLineBaseSegment(seg)->middleText()) {
+                textItems.push_back(middleText);
+            }
+
             if (Text* endText = toTextLineBaseSegment(seg)->endText()) {
                 textItems.push_back(endText);
             }
