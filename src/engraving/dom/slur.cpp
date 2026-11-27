@@ -92,16 +92,16 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
     const bool moveStart = ed.curGrip == Grip::START;
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
 
-    if (!((ed.modifiers & ShiftModifier) && (isSingleType()
-                                             || (isBeginType() && moveStart) || (isEndType() && moveEnd)))) {
+    if (!((ed.modifiers & muse::KeyboardModifier::ShiftModifier) && (isSingleType()
+                                                                     || (isBeginType() && moveStart) || (isEndType() && moveEnd)))) {
         return false;
     }
 
     static const std::set<int> navigationKeys {
-        Key_Left,
-        Key_Up,
-        Key_Down,
-        Key_Right
+        muse::KeyboardKey::Key_Left,
+        muse::KeyboardKey::Key_Up,
+        muse::KeyboardKey::Key_Down,
+        muse::KeyboardKey::Key_Right
     };
 
     return muse::contains(navigationKeys, ed.key);
@@ -136,16 +136,16 @@ bool SlurSegment::edit(EditData& ed)
         e1 = sl->startCR();
     }
 
-    const bool altMod = ed.modifiers & AltModifier;
-    const bool shiftMod = ed.modifiers & ShiftModifier;
-    const bool ctrlMod = ed.modifiers & ControlModifier;
+    const bool altMod = ed.modifiers & muse::KeyboardModifier::AltModifier;
+    const bool shiftMod = ed.modifiers & muse::KeyboardModifier::ShiftModifier;
+    const bool ctrlMod = ed.modifiers & muse::KeyboardModifier::ControlModifier;
     const bool extendToBarLine = shiftMod && altMod;
     const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
 
     ChordRestNavigateOptions options;
     options.disableOverRepeats = true;
 
-    if (ed.key == Key_Left) {
+    if (ed.key == muse::KeyboardKey::Key_Left) {
         if (extendToBarLine) {
             const Measure* measure = e->measure();
             if (start) {
@@ -171,7 +171,7 @@ bool SlurSegment::edit(EditData& ed)
                 }
             }
         }
-    } else if (ed.key == Key_Right) {
+    } else if (ed.key == muse::KeyboardKey::Key_Right) {
         if (extendToBarLine) {
             const Measure* measure = e->measure();
             if (start && e->hasPrecedingJumpItem()) {
@@ -197,11 +197,11 @@ bool SlurSegment::edit(EditData& ed)
                 }
             }
         }
-    } else if (ed.key == Key_Up) {
+    } else if (ed.key == muse::KeyboardKey::Key_Up) {
         track_idx_t startTrack = e->part()->trackRange().startTrack;
         track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
-    } else if (ed.key == Key_Down) {
+    } else if (ed.key == muse::KeyboardKey::Key_Down) {
         track_idx_t startTrack = e->track() + 1;
         track_idx_t endTrack   = e->part()->trackRange().endTrack;
         cr = searchCR(e->segment(), startTrack, endTrack);
@@ -296,13 +296,13 @@ void SlurSegment::dragGrip(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Slur* slr = slur();
-            KeyboardModifiers km = ed.modifiers;
+            muse::KeyboardModifiers km = ed.modifiers;
             EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
                 if ((g == Grip::END && tick > slr->tick()) || (g == Grip::START && tick < slr->tick2())) {
-                    if (km != (ShiftModifier | ControlModifier)) {
+                    if (km != (muse::KeyboardModifier::ShiftModifier | muse::KeyboardModifier::ControlModifier)) {
                         Chord* c = note->chord();
                         ed.view()->setDropTarget(note);
                         if (c->part() == slr->part() && c != slr->endCR()) {

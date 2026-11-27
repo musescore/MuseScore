@@ -30,6 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
+#include "global/iinputstate.h"
 #include "inotationconfiguration.h"
 #include "rcommand/icommanddispatcher.h"
 
@@ -47,6 +48,7 @@ namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::IInputState> inputState;
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
 public:

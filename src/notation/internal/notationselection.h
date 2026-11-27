@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+
+#include "global/iinputstate.h"
 #include "../inotationselection.h"
 
 #include "igetscore.h"
@@ -55,6 +58,8 @@ public:
 class NotationSelection : public INotationSelection
 {
 public:
+    muse::GlobalInject<muse::IInputState> inputState;
+
     NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;
@@ -64,7 +69,7 @@ public:
 
     muse::Ret canCopy() const override;
     muse::ByteArray mimeData() const override;
-    QMimeData* qMimeData() const override;
+    muse::String mimeType() const override;
 
     engraving::EngravingItem* element() const override;
     const std::vector<engraving::EngravingItem*>& elements() const override;

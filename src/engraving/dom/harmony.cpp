@@ -720,15 +720,16 @@ bool Harmony::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.key == Key_Semicolon || ed.key == Key_Colon) {
+    if (ed.key == muse::KeyboardKey::Key_Semicolon || ed.key == muse::KeyboardKey::Key_Colon) {
         return false;
     }
 
-    if ((ed.key == Key_Left || ed.key == Key_Right) && (ed.modifiers & ControlModifier)) {
+    if ((ed.key == muse::KeyboardKey::Key_Left || ed.key == muse::KeyboardKey::Key_Right)
+        && (ed.modifiers & muse::KeyboardModifier::ControlModifier)) {
         return false;
     }
 
-    if (ed.key == Key_Return || ed.key == Key_Enter) {
+    if (ed.key == muse::KeyboardKey::Key_Return || ed.key == muse::KeyboardKey::Key_Enter) {
         // This "edit" is actually handled in NotationInteraction::editElement
         return true;
     }

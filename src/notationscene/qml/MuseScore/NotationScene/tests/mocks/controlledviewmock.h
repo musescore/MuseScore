@@ -44,13 +44,12 @@ public:
     MOCK_METHOD(void, setScaling, (qreal, const muse::PointF&, bool), (override));
 
     MOCK_METHOD(muse::PointF, toLogical, (const muse::PointF&), (const, override));
-    MOCK_METHOD(muse::PointF, toLogical, (const QPointF&), (const, override));
     MOCK_METHOD(muse::PointF, fromLogical, (const muse::PointF&), (const, override));
     MOCK_METHOD(muse::RectF, fromLogical, (const muse::RectF&), (const, override));
 
     MOCK_METHOD(bool, isNoteEnterMode, (), (const, override));
 
-    MOCK_METHOD(void, showContextMenu, (const ElementType&, const QPointF&), (override));
+    MOCK_METHOD(void, showContextMenu, (const ElementType&, const muse::PointF&), (override));
     MOCK_METHOD(void, hideContextMenu, (), (override));
 
     MOCK_METHOD(void, showSearch, (), (override));
@@ -65,7 +64,11 @@ public:
     MOCK_METHOD(INotationInteractionPtr, notationInteraction, (), (const, override));
     MOCK_METHOD(INotationPlaybackPtr, notationPlayback, (), (const, override));
 
-    MOCK_METHOD(QQuickItem*, asItem, (), (override));
+    MOCK_METHOD(void, setViewCursor, (ViewCursor), (override));
+
+    MOCK_METHOD(void, startOutgoingDrag, (const OutgoingDrag&, const muse::PointF&), (override));
+    MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));
+    MOCK_METHOD(void, endOutgoingDrag, (), (override));
 
     MOCK_METHOD(void, scheduleRedraw, (const muse::RectF&), (override));
 };

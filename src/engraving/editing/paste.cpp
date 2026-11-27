@@ -26,7 +26,7 @@
 #include "io/buffer.h"
 #include "modularity/ioc.h"
 
-#include "imimedata.h"
+#include "types/mimedata.h"
 
 #include "editmeasures.h"
 #include "editparentheses.h"
@@ -544,9 +544,9 @@ static EngravingItem* pasteSystemObject(Transaction& tx, EditData& srcData, Engr
 //   cmdPaste
 //---------------------------------------------------------
 
-bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreView* view, Fraction scale)
+bool Paste::paste(Transaction& tx, Score* score, const muse::MimeData& ms, MuseScoreView* view, Fraction scale)
 {
-    if (!ms) {
+    if (ms.isEmpty()) {
         LOGE() << "No MIME data given";
         return false;
     }
@@ -557,27 +557,27 @@ bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreV
         return false;
     }
 
-    if (ms->hasFormat(mimeSymbolFormat)) {
-        muse::ByteArray data = ms->data(mimeSymbolFormat);
+    if (ms.hasFormat(mimeSymbolFormat)) {
+        muse::ByteArray data = ms.data(mimeSymbolFormat);
         return pasteSymbol(tx, score, data, view, scale);
     }
 
-    if (ms->hasFormat(mimeStaffListFormat)) {
-        muse::ByteArray data = ms->data(mimeStaffListFormat);
+    if (ms.hasFormat(mimeStaffListFormat)) {
+        muse::ByteArray data = ms.data(mimeStaffListFormat);
         return pasteStaffList(tx, score, data, scale);
     }
 
-    if (ms->hasFormat(mimeSymbolListFormat)) {
-        muse::ByteArray data = ms->data(mimeSymbolListFormat);
+    if (ms.hasFormat(mimeSymbolListFormat)) {
+        muse::ByteArray data = ms.data(mimeSymbolListFormat);
         return pasteSymbolList(tx, score, data);
     }
 
-    if (ms->hasImage()) {
+    if (ms.hasImage()) {
         muse::ByteArray ba;
         auto buffer = Buffer::opened(IODevice::WriteOnly, &ba);
 
         muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
-        auto px = ms->imageData();
+        auto px = ms.imageData();
         imageProvider()->saveAsPng(px, &buffer);
 
         std::unique_ptr<Image> image(new Image(score->dummy()));
@@ -609,7 +609,7 @@ bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreV
         return true;
     }
 
-    LOGE() << "Unsupported MIME data (formats: " << ms->formats() << ")";
+    LOGE() << "Unsupported MIME data (formats: " << ms.formats() << ")";
     return false;
 }
 }

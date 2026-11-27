@@ -27,13 +27,7 @@
 #include <memory>
 #include <limits>
 
-#include <QApplication> // for QApplication::cursorFlashTime()
-#include <QClipboard>
-#include <QDrag>
-#include <QGuiApplication>
-#include <QKeyEvent>
 #include <QKeySequence>
-#include <QMimeData>
 #include <QPainter>
 #include <QRectF>
 #include <QRegularExpression>
@@ -47,9 +41,6 @@
 #include "draw/types/pen.h"
 
 #include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
-
-// TODO: Don't include from engraving/internal
-#include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
@@ -157,11 +148,6 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::draw;
 using namespace muse::io;
-
-static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
-{
-    return mu::engraving::KeyboardModifier(int(km));
-}
 
 static double nudgeDistance(const EngravingItem* item, bool quickly, double raster)
 {
@@ -1063,7 +1049,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_dragData.reset();
     m_dragData.elements = elems;
     m_dragData.elementOffset = eoffset;
-    m_editData.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_editData.modifiers = inputState()->keyboardModifiers();
 
     for (EngravingItem* e : m_dragData.elements) {
         bool draggable = isDraggable(e);
@@ -1094,7 +1080,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
         return;
     }
 
-    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_dragData.ed.modifiers = inputState()->keyboardModifiers();
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
     }
@@ -1165,7 +1151,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.moveDelta = moveDelta;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos = toPos;
-    m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
+    m_dragData.ed.modifiers = inputState()->keyboardModifiers();
 
     m_dragData.ed.isEditMode = isEditingElement();
 
@@ -1289,102 +1275,42 @@ bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* elem
 }
 
 //! NOTE: Copied from ScoreView::cloneElement
-void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const PointF& hotSpot)
+std::optional<OutgoingDrag> NotationInteraction::outgoingDragElement(const EngravingItem* element) const
 {
-    if (isDragStarted()) {
-        endOutgoingDrag();
-    }
+    OutgoingDrag drag;
+    const ByteArray data = element->isSpannerSegment() ? toSpannerSegment(element)->spanner()->mimeData() : element->mimeData();
+    drag.mimeData.setData(mu::engraving::mimeSymbolFormat, data);
 
-    QMimeData* mimeData = new QMimeData();
-    if (element->isSpannerSegment()) {
-        Spanner* s = toSpannerSegment(element)->spanner();
-        mimeData->setData(mu::engraving::mimeSymbolFormat, s->mimeData().toQByteArray());
-    } else {
-        mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
-    }
+    drag.previewRect = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
+    drag.paintPreview = [this, element](Painter* painter) {
+        mu::engraving::rendering::PaintOptions opt;
+        opt.invertColors = configuration()->shouldInvertScore();
+        engravingRenderer()->drawItem(element, painter, opt);
+    };
 
-    m_outgoingDrag = new QDrag(dragSource);
-    m_outgoingDrag->setMimeData(mimeData);
-
-    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
-        m_outgoingDrag = nullptr;
-    });
-
-    const QScreen* screen = QGuiApplication::primaryScreen();
-    const qreal physDpiRatio = screen->physicalDotsPerInch() / mu::engraving::DPI;
-    const qreal devicePixelRatio = screen->devicePixelRatio();
-
-    const RectF bbox = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
-    const double scaledWidth = bbox.width() * physDpiRatio;
-    const double scaledHeight = bbox.height() * physDpiRatio;
-
-    QPixmap pixmap(qCeil(scaledWidth * devicePixelRatio),
-                   qCeil(scaledHeight * devicePixelRatio));
-    pixmap.setDevicePixelRatio(devicePixelRatio);
-    pixmap.fill(Qt::transparent);
-
-    QPainter qp(&pixmap);
-
-    Painter p(&qp, "startOutgoingDragElement");
-    p.setAntialiasing(true);
-
-    p.scale(physDpiRatio, physDpiRatio);
-    p.translate(qAbs(bbox.x()), qAbs(bbox.y()));
-
-    mu::engraving::rendering::PaintOptions opt;
-    opt.invertColors = configuration()->shouldInvertScore();
-    engravingRenderer()->drawItem(element, &p, opt);
-
-    m_outgoingDrag->setPixmap(pixmap);
-    m_outgoingDrag->setHotSpot((hotSpot * physDpiRatio).toQPoint());
-
-    m_outgoingDrag->exec(Qt::CopyAction);
+    return drag;
 }
 
-void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
+std::optional<OutgoingDrag> NotationInteraction::outgoingDragRange() const
 {
-    if (isDragStarted()) {
-        endOutgoingDrag();
-    }
-
     if (!selection()->isRange() || !selection()->canCopy()) {
-        return;
+        return std::nullopt;
     }
 
-    QMimeData* mimeData = selection()->qMimeData();
-    if (!mimeData) {
-        return;
+    const String mimeType = score()->selection().mimeType();
+    if (mimeType.isEmpty()) {
+        return std::nullopt;
     }
 
-    m_outgoingDrag = new QDrag(dragSource);
-    m_outgoingDrag->setMimeData(mimeData);
+    OutgoingDrag drag;
+    drag.mimeData.setData(mimeType.toStdString(), selection()->mimeData());
+    drag.isMoveAllowed = true;
 
-    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
-        m_outgoingDrag = nullptr;
-    });
-
-    QPixmap pixmap(1, 1);
-    pixmap.fill(Qt::transparent);
-    m_outgoingDrag->setPixmap(pixmap);
-
-    m_outgoingDrag->exec(Qt::MoveAction | Qt::CopyAction);
-}
-
-bool NotationInteraction::isOutgoingDragStarted() const
-{
-    return m_outgoingDrag != nullptr;
-}
-
-void NotationInteraction::endOutgoingDrag()
-{
-    if (m_outgoingDrag) {
-        delete m_outgoingDrag;
-        m_outgoingDrag = nullptr;
-    }
+    return drag;
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent
-bool NotationInteraction::startDropSingle(const QByteArray& edata)
+bool NotationInteraction::startDropSingle(const ByteArray& edata)
 {
     resetDropData();
 
@@ -1415,7 +1341,7 @@ bool NotationInteraction::startDropSingle(const QByteArray& edata)
     return false;
 }
 
-bool NotationInteraction::startDropRange(const QByteArray& data)
+bool NotationInteraction::startDropRange(const ByteArray& data)
 {
     resetDropData();
 
@@ -1464,14 +1390,10 @@ bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fract
     return true;
 }
 
-bool NotationInteraction::startDropImage(const QUrl& url)
+bool NotationInteraction::startDropImage(const muse::io::path_t& path)
 {
-    if (url.scheme() != "file") {
-        return false;
-    }
-
     auto image = toImage(Factory::createItem(mu::engraving::ElementType::IMAGE, score()->dummy()));
-    if (!image->loadFromFile(url.toLocalFile())) {
+    if (!image->loadFromFile(path)) {
         return false;
     }
 
@@ -1491,7 +1413,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::updateDropSingle(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1518,7 +1440,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::STAFFTYPE_CHANGE:
     case ElementType::STRING_TUNINGS:
     case ElementType::VOLTA: {
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
         return prepareDropMeasureBaseAnchorElement(pos);
     }
     case ElementType::PEDAL:
@@ -1530,7 +1452,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::HAIRPIN:
     case ElementType::TEXTLINE:
     case ElementType::WHAMMY_BAR: {
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
         return prepareDropTimeAnchorElement(pos);
     }
     case ElementType::IMAGE:
@@ -1590,7 +1512,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::SYSTEM_LOCK:
         case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
-            edd.ed.modifiers = keyboardModifier(modifiers);
+            edd.ed.modifiers = modifiers;
             return prepareDropMeasureBaseAnchorElement(pos);
         }
         // Other action icons (e.g parenthesis) can be dragged normally
@@ -1845,7 +1767,7 @@ Ret NotationInteraction::canDropSingle(const PointF& pos)
     return make_ok();
 }
 
-bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doDropSingle(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1868,7 +1790,7 @@ bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers 
         edd.ed.pos = pos;
     }
 
-    edd.ed.modifiers = keyboardModifier(modifiers);
+    edd.ed.modifiers = modifiers;
     edd.ed.dropElement->styleChanged();
 
     bool systemStavesOnly = false;
@@ -1882,7 +1804,7 @@ bool NotationInteraction::doDropSingle(const PointF& pos, Qt::KeyboardModifiers 
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
-        systemStavesOnly = !(edd.ed.modifiers & Qt::ControlModifier);
+        systemStavesOnly = !(edd.ed.modifiers & muse::KeyboardModifier::ControlModifier);
         [[fallthrough]];
     case ElementType::TEXTLINE:
     case ElementType::OTTAVA:
@@ -2011,7 +1933,7 @@ bool NotationInteraction::isDroppingInstrumentChange() const
     return dropElement && dropElement->isInstrumentChange();
 }
 
-bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers,
+bool NotationInteraction::dropSingle(const PointF& pos, muse::KeyboardModifiers modifiers,
                                      const std::optional<InstrumentTemplate>& instrument)
 {
     m_chosenInstrument = instrument;
@@ -2110,7 +2032,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
     return true;
 }
 
-bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, bool deleteSourceMaterial)
+bool NotationInteraction::dropRange(const ByteArray& data, const PointF& pos, bool deleteSourceMaterial)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
@@ -2254,7 +2176,7 @@ Ret NotationInteraction::canApplyPaletteElement(EngravingItem* element) const
     return make_ok();
 }
 
-bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     IF_ASSERT_FAILED(element) {
         return false;
@@ -2277,7 +2199,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
     return doApplyPaletteElement(element, modifiers);
 }
 
-void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     //! NOTE The instrument is chosen before the edit, so that the edit doesn't wait for the user.
     //! The palette element is copied, as it may be gone by then
@@ -2293,7 +2215,7 @@ void NotationInteraction::applyInstrumentChangePaletteElement(EngravingItem* ele
     });
 }
 
-bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, muse::KeyboardModifiers modifiers)
 {
     mu::engraving::Score* score = this->score();
     if (!score) {
@@ -2327,7 +2249,7 @@ bool NotationInteraction::doApplyPaletteElement(EngravingItem* element, Qt::Keyb
 }
 
 void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score,
-                                                    const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
+                                                    const mu::engraving::Selection& sel, muse::KeyboardModifiers modifiers)
 {
     engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
@@ -2366,7 +2288,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
     if (isEntryDrumStaff() && element->isChord()) {
         mu::engraving::InputState& is = score->inputState();
         EngravingItem* e = nullptr;
-        if (!(modifiers & Qt::ShiftModifier)) {
+        if (!(modifiers & muse::KeyboardModifier::ShiftModifier)) {
             // shift+double-click: add note to "chord"
             // use input position rather than selection if possible
             // look for a cr in the voice predefined for the drum in the palette
@@ -2463,12 +2385,13 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
                 startEditElement(frontSegment);
             }
         } else {
-            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
+            bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & muse::KeyboardModifier::ControlModifier);
             staff_idx_t targetStaff = firstStaffOnly ? 0 : cr1->staffIdx();
-            EditSpanner::addSpanner(tx, score, spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, targetStaff, startSegment, endSegment,
+                                    modifiers & muse::KeyboardModifier::ControlModifier);
         }
         if (spanner->hasVoiceAssignmentProperties()) {
-            spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & ControlModifier);
+            spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & muse::KeyboardModifier::ControlModifier);
         } else if (spanner->isVoiceSpecific()) {
             spanner->setTrack(cr1->track());
         }
@@ -2514,7 +2437,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
 }
 
 void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score,
-                                                     const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
+                                                     const mu::engraving::Selection& sel, muse::KeyboardModifiers modifiers)
 {
     engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     const ElementType elementType = element->type();
@@ -2550,7 +2473,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             m2 = m2->nextMeasureMM();
         }
         // Clefs always apply to every selected staff, key and time signatures only when added locally
-        const bool applyToEachStaff = element->isClef() || (modifiers & Qt::ControlModifier);
+        const bool applyToEachStaff = element->isClef() || (modifiers & muse::KeyboardModifier::ControlModifier);
         staff_idx_t staffIdx1 = sel.staffStart();
         staff_idx_t staffIdx2 = applyToEachStaff ? sel.staffEnd() : staffIdx1 + 1;
         for (staff_idx_t i = staffIdx1; i < staffIdx2; ++i) {
@@ -2635,16 +2558,16 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
     if (element->isSLine() && elementType != ElementType::GLISSANDO) {
         Segment* startSegment = sel.startSegment();
         Segment* endSegment = sel.endSegment();
-        bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
+        bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & muse::KeyboardModifier::ControlModifier);
         staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
         staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
         for (staff_idx_t i = startStaff; i < endStaff; ++i) {
             Spanner* spanner = toSpanner(element->clone());
             spanner->setScore(score);
             spanner->styleChanged();
-            EditSpanner::addSpanner(tx, score, spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, i, startSegment, endSegment, modifiers & muse::KeyboardModifier::ControlModifier);
             if (spanner->hasVoiceAssignmentProperties()) {
-                spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & ControlModifier);
+                spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & muse::KeyboardModifier::ControlModifier);
             }
             selectAndStartEditIfNeeded(spanner);
         }
@@ -2775,7 +2698,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
 
 //! NOTE Copied from Palette applyDrop
 void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target,
-                                                  mu::engraving::EngravingItem* e, Qt::KeyboardModifiers modifiers,
+                                                  mu::engraving::EngravingItem* e, muse::KeyboardModifiers modifiers,
                                                   track_idx_t track)
 {
     if (!target) {
@@ -2789,7 +2712,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         dropData = &m_editData;
     }
 
-    dropData->modifiers = keyboardModifier(modifiers);
+    dropData->modifiers = modifiers;
     dropData->dropElement = e;
     dropData->track = (track == muse::nidx) ? target->track() : track;
     dropData->pos = target->pageBoundingRect().topLeft();
@@ -2823,7 +2746,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         if (el && el->hasVoiceAssignmentProperties()) {
             // If target has voice assignment properties, dropped element takes those and discards the default
             if (!target->hasVoiceAssignmentProperties()) {
-                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & ControlModifier);
+                el->setInitialTrackAndVoiceAssignment(target->track(), modifiers & muse::KeyboardModifier::ControlModifier);
             }
         }
 
@@ -3015,7 +2938,7 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
     return nullptr;
 }
 
-bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::prepareDropStandardElement(const PointF& pos, muse::KeyboardModifiers modifiers)
 {
     IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
         return false;
@@ -3031,7 +2954,7 @@ bool NotationInteraction::prepareDropStandardElement(const PointF& pos, Qt::Keyb
     // Update the tree when starting a new drag (ed.pos hasn't been set yet), if the modifier changed, or when crossing a page
     if (edd.ed.pos.isNull() || edd.ed.modifiers != modifiers || page != m_currentDropPage) {
         m_currentDropPage = page;
-        edd.ed.modifiers = keyboardModifier(modifiers);
+        edd.ed.modifiers = modifiers;
 
         // Where "m" is the number of page elements and "n" is the number of elements accepting a drop...
         // O(log m) operation
@@ -3116,7 +3039,7 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
     case ElementType::KEYSIG:
     case ElementType::TIMESIG: {
         // If ctrl is pressed, break and target a specific staff
-        if (edd.ed.modifiers & Qt::ControlModifier) {
+        if (edd.ed.modifiers & muse::KeyboardModifier::ControlModifier) {
             break;
         }
     }
@@ -3169,7 +3092,7 @@ bool NotationInteraction::prepareDropMeasureBaseAnchorElement(const PointF& pos)
 }
 
 std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* dropElem, const EngravingItem* targetElem,
-                                                           KeyboardModifiers modifiers) const
+                                                           muse::KeyboardModifiers modifiers) const
 {
     const MeasureBase* targetMeasureBase = targetElem->findMeasureBase();
     if (!targetMeasureBase) {
@@ -3200,7 +3123,7 @@ std::vector<RectF> NotationInteraction::dropHighlightRects(const EngravingItem* 
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::KEYSIG:
     case ElementType::TIMESIG:
-        if (modifiers & ControlModifier) {
+        if (modifiers & muse::KeyboardModifier::ControlModifier) {
             return { staffRect };
         }
         return { targetMeasureBase->canvasBoundingRect() };
@@ -4017,7 +3940,7 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
     }
 
     const EngravingItem* element = m_editData.element;
-    const bool quickly = m_editData.modifiers & mu::engraving::ControlModifier;
+    const bool quickly = m_editData.modifiers & muse::KeyboardModifier::ControlModifier;
     const double hRaster = gridRaster(element, muse::Orientation::Horizontal);
     const double vRaster = gridRaster(element, muse::Orientation::Vertical);
 
@@ -4207,7 +4130,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
 }
 
 //! NOTE: Copied from TextBase::inputTransition
-void NotationInteraction::editText(QInputMethodEvent* event)
+void NotationInteraction::editText(TextInputEvent& event)
 {
     if (!isTextEditingStarted()) {
         return;
@@ -4228,13 +4151,13 @@ void NotationInteraction::editText(QInputMethodEvent* event)
         }
     }
 
-    if (!event->commitString().isEmpty()) {
+    if (!event.commitString.isEmpty()) {
         score()->startCmd(TranslatableString("undoableAction", "Edit text"));
-        text->insertText(event->commitString());
+        text->insertText(event.commitString);
         score()->endCmd();
         preeditString.clear();
     } else {
-        preeditString = event->preeditString();
+        preeditString = event.preeditString;
 
         if (!preeditString.isEmpty()) {
             cursor->updateCursorFormat();
@@ -4245,11 +4168,11 @@ void NotationInteraction::editText(QInputMethodEvent* event)
         }
     }
 
-    event->accept();
+    event.accept();
     notifyAboutTextEditingChanged();
 }
 
-bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
+bool NotationInteraction::needStartEditGrip(const KeyEvent& event) const
 {
     if (!m_editData.element || !m_editData.element->hasGrips()) {
         return false;
@@ -4259,17 +4182,17 @@ bool NotationInteraction::needStartEditGrip(QKeyEvent* event) const
         return false;
     }
 
-    static const std::set<Qt::Key> arrows {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Up,
-        Qt::Key_Down
+    static const std::set<int> arrows {
+        muse::KeyboardKey::Key_Left,
+        muse::KeyboardKey::Key_Right,
+        muse::KeyboardKey::Key_Up,
+        muse::KeyboardKey::Key_Down
     };
 
-    return muse::contains(arrows, static_cast<Qt::Key>(event->key()));
+    return muse::contains(arrows, event.key);
 }
 
-bool NotationInteraction::handleKeyPress(QKeyEvent* event)
+bool NotationInteraction::handleKeyPress(const KeyEvent& event)
 {
     mu::engraving::EngravingItem* editElem = m_editData.element;
     IF_ASSERT_FAILED(editElem) {
@@ -4290,37 +4213,37 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         rollback();
     }
 
-    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+    if (event.modifiers & muse::KeyboardModifier::AltModifier) {
         return false;
     }
 
     MoveDirection direction = MoveDirection::Undefined;
 
-    switch (event->key()) {
-    case Qt::Key_Tab:
+    switch (event.key) {
+    case muse::KeyboardKey::Key_Tab:
         if (!editElem->hasGrips()) {
             return false;
         }
         editElem->nextGrip(m_editData);
         notifyAboutNotationChanged();
         return true;
-    case Qt::Key_Backtab:
+    case muse::KeyboardKey::Key_Backtab:
         if (!editElem->hasGrips()) {
             return false;
         }
         editElem->prevGrip(m_editData);
         notifyAboutNotationChanged();
         return true;
-    case Qt::Key_Left:
+    case muse::KeyboardKey::Key_Left:
         direction = MoveDirection::Left;
         break;
-    case Qt::Key_Right:
+    case muse::KeyboardKey::Key_Right:
         direction = MoveDirection::Right;
         break;
-    case Qt::Key_Up:
+    case muse::KeyboardKey::Key_Up:
         direction = MoveDirection::Up;
         break;
-    case Qt::Key_Down:
+    case muse::KeyboardKey::Key_Down:
         direction = MoveDirection::Down;
         break;
     default:
@@ -4335,9 +4258,9 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
+bool NotationInteraction::doTextEdit(const KeyEvent& event, TextBase* tb)
 {
-    IF_ASSERT_FAILED(event && tb) {
+    IF_ASSERT_FAILED(tb) {
         return false;
     }
 
@@ -4352,8 +4275,8 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     apply();
 
     // Replace newly added straight quotes with curly ones in a separate undo action...
-    const bool isSingleQuoteInput = event->text() == u"\'";
-    const bool isDoubleQuoteInput = event->text() == u"\"";
+    const bool isSingleQuoteInput = event.text == u"\'";
+    const bool isDoubleQuoteInput = event.text == u"\"";
     if (!isSingleQuoteInput && !isDoubleQuoteInput) {
         return true;
     }
@@ -4373,7 +4296,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
 
     cursor->movePosition(TextCursor::MoveOperation::Left);
-    score()->undo(new RemoveText(cursor, event->text()));
+    score()->undo(new RemoveText(cursor, event.text));
 
     //: Single open quotation mark
     const String singleOpenQuote = muse::mtrc("notation", u"‘");
@@ -4437,7 +4360,7 @@ void NotationInteraction::blinkTextCursor()
 
 void NotationInteraction::startTextCursorBlinkTimer()
 {
-    const int cursorFlashTime = QApplication::cursorFlashTime() / 2;
+    const int cursorFlashTime = uiConfiguration()->cursorFlashTimeMs() / 2;
     if (cursorFlashTime > 0) {
         m_textCursorBlinkTimer.start(cursorFlashTime);
     } else {
@@ -4496,9 +4419,8 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     mu::engraving::TextBase* textEl = mu::engraving::toTextBase(m_editData.element);
 
     textEl->mousePress(m_editData);
-    if (m_editData.buttons == mu::engraving::MiddleButton) {
-        QString txt = QGuiApplication::clipboard()->text();
-        textEl->paste(txt);
+    if (m_editData.buttons == muse::MouseButton::MiddleButton) {
+        textEl->paste(clipboard()->text());
     }
 
     notifyAboutTextEditingChanged();
@@ -4713,22 +4635,22 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
     }
 }
 
-bool NotationInteraction::isEditAllowed(QKeyEvent* event)
+bool NotationInteraction::isEditAllowed(const KeyEvent& event)
 {
     if (!m_editData.element) {
         return false;
     }
 
     mu::engraving::EditData editData = m_editData;
-    editData.modifiers = keyboardModifier(event->modifiers());
-    editData.key = event->key();
-    editData.s = event->text();
+    editData.modifiers = event.modifiers;
+    editData.key = event.key;
+    editData.s = event.text;
 
     if (editData.element->isEditAllowed(editData)) {
         return true;
     }
 
-    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+    if (event.modifiers & muse::KeyboardModifier::AltModifier) {
         return false;
     }
 
@@ -4737,20 +4659,20 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
     }
 
     static QSet<int> navigationKeys = {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Up,
-        Qt::Key_Down
+        muse::KeyboardKey::Key_Left,
+        muse::KeyboardKey::Key_Right,
+        muse::KeyboardKey::Key_Up,
+        muse::KeyboardKey::Key_Down
     };
 
     if (editData.element->hasGrips()) {
-        navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
+        navigationKeys += { muse::KeyboardKey::Key_Tab, muse::KeyboardKey::Key_Backtab };
     }
 
-    return navigationKeys.contains(event->key());
+    return navigationKeys.contains(event.key);
 }
 
-void NotationInteraction::editElement(QKeyEvent* event)
+void NotationInteraction::editElement(KeyEvent& event)
 {
 #if 0
     static int index = 0;
@@ -4761,14 +4683,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    m_editData.modifiers = keyboardModifier(event->modifiers());
+    m_editData.modifiers = event.modifiers;
 
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
     }
 
-    m_editData.key = event->key();
-    m_editData.s = event->text();
+    m_editData.key = event.key;
+    m_editData.s = event.text;
 
     // Brackets get deleted during layout with their system, so the best we can do to maintain
     // the bracket selected is to store their indices and use them to find the new ones
@@ -4785,7 +4707,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
             systemIndex = muse::indexOf(score()->systems(), system);
         }
     } else if (m_editData.element->isHarmony()) {
-        if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+        if (isTextEditingStarted() && (event.key == muse::KeyboardKey::Key_Return || event.key == muse::KeyboardKey::Key_Enter)) {
             endEditText();
             return;
         }
@@ -4810,7 +4732,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
             updateGripAnchorLines();
         }
 
-        event->accept();
+        event.accept();
     }
 
     if (isTextEditingStarted()) {
@@ -4846,10 +4768,10 @@ muse::async::Notification NotationInteraction::isEditingElementChanged() const
     return m_isEditingElementChanged;
 }
 
-void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
+void NotationInteraction::updateTimeTickAnchors(const KeyEvent& event)
 {
     EngravingItem* selectedElement = m_selection->element();
-    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
+    if (selectedElement && selectedElement->allowTimeAnchor() && event.type == KeyEvent::Type::Press && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
         updateDragAnchorLines();
         score()->update();
@@ -4861,7 +4783,7 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::moveElementAnchors(QKeyEvent* event)
+void NotationInteraction::moveElementAnchors(const KeyEvent& event)
 {
     EngravingItem* element = selection()->element();
     IF_ASSERT_FAILED(element) {
@@ -4870,7 +4792,7 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
 
     startEdit(TranslatableString("undoableAction", "Move element anchors"));
 
-    MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+    MoveElementAnchors::moveElementAnchors(element, muse::KeyboardKey(event.key), event.modifiers);
 
     apply();
 
@@ -5132,17 +5054,20 @@ void NotationInteraction::copySelection()
         m_editData.element->editCopy(m_editData);
         mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
-            QMimeData* mimeData = new QMimeData();
-            mimeData->setData(TextEditData::mimeRichTextFormat, ted->selectedText.toQString().toUtf8());
-            mimeData->setText(ted->selectedPlainText);
-            QGuiApplication::clipboard()->setMimeData(mimeData);
+            MimeData mimeData;
+            mimeData.setData(TextEditData::mimeRichTextFormat, ted->selectedText.toUtf8());
+            mimeData.setText(ted->selectedPlainText);
+            clipboard()->setMimeData(mimeData);
         }
     } else {
-        QMimeData* mimeData = selection()->qMimeData();
-        if (!mimeData) {
+        const String mimeType = selection()->mimeType();
+        if (mimeType.isEmpty()) {
             return;
         }
-        QGuiApplication::clipboard()->setMimeData(mimeData);
+
+        MimeData mimeData;
+        mimeData.setData(mimeType.toStdString(), selection()->mimeData());
+        clipboard()->setMimeData(mimeData);
     }
 }
 
@@ -5255,8 +5180,7 @@ void NotationInteraction::repeatSelection()
 
 void NotationInteraction::copyLyrics()
 {
-    QString text = score()->extractLyrics();
-    QGuiApplication::clipboard()->setText(text);
+    clipboard()->setText(score()->extractLyrics());
 }
 
 void NotationInteraction::pasteSelection(const Fraction& scale)
@@ -5267,9 +5191,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (isTextEditingStarted()) {
         pasteIntoTextEdit();
     } else {
-        const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
-        QMimeDataAdapter ma(mimeData);
-        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), &ma, nullptr, scale);
+        const MimeData mimeData = clipboard()->mimeData();
+        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), mimeData, nullptr, scale);
         m_editData.element = nullptr;
     }
 
@@ -5287,15 +5210,15 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 
 void NotationInteraction::pasteIntoTextEdit()
 {
-    const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
-    if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
-        const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
+    const MimeData mimeData = clipboard()->mimeData();
+    if (mimeData.hasFormat(TextEditData::mimeRichTextFormat)) {
+        const String txt = String::fromUtf8(mimeData.data(TextEditData::mimeRichTextFormat));
         toTextBase(m_editData.element)->paste(txt);
         notifyAboutTextEditingChanged();
         return;
     }
 
-    QString clipboardText = mimeData->text();
+    QString clipboardText = mimeData.text().toQString();
     QString textForPaste = clipboardText;
     if ((!clipboardText.startsWith('<') || !clipboardText.contains('>')) && m_editData.element->isLyrics()) {
         textForPaste = extractSyllable(clipboardText);
@@ -5317,7 +5240,7 @@ void NotationInteraction::pasteIntoTextEdit()
     }
 
     const QString textForNextPaste = clipboardText.remove(0, clipboardText.indexOf(textForPaste) + textForPaste.size());
-    QGuiApplication::clipboard()->setText(textForNextPaste);
+    clipboard()->setText(String::fromQString(textForNextPaste));
 }
 
 void NotationInteraction::swapSelection()
@@ -5326,17 +5249,18 @@ void NotationInteraction::swapSelection()
         return;
     }
 
-    // Store the old selection...
-    mu::engraving::Selection& selection = score()->selection();
-    QByteArray oldSelection = selection.mimeData().toQByteArray();
+    // Store the old selection with its type, the pasting changes the selection...
+    const mu::engraving::Selection& selection = score()->selection();
+    const String oldMimeType = selection.mimeType();
+    const ByteArray oldSelection = selection.mimeData();
 
     // Paste using contents of clipboard...
     pasteSelection();
 
     // Save old selection to clipboard...
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setData(selection.mimeType(), oldSelection);
-    QGuiApplication::clipboard()->setMimeData(mimeData);
+    MimeData mimeData;
+    mimeData.setData(oldMimeType.toStdString(), oldSelection);
+    clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::deleteSelection()
@@ -5350,7 +5274,7 @@ void NotationInteraction::deleteSelection()
     if (isTextEditingStarted()) {
         mu::engraving::TextBase* textBase = toTextBase(m_editData.element);
         if (!textBase->deleteSelectedText()) {
-            m_editData.key = Qt::Key_Backspace;
+            m_editData.key = muse::KeyboardKey::Key_Backspace;
             m_editData.modifiers = {};
             if (textBase->edit(m_editData)) {
                 notifyAboutTextEditingChanged();

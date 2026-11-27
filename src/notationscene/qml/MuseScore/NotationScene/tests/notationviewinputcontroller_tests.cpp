@@ -21,12 +21,10 @@
  */
 #include <gmock/gmock.h>
 
-#include <QMimeData>
-
 #include "async/processevents.h"
 
 #include "mocks/controlledviewmock.h"
-#include "mocks/dragcontrollermock.h"
+#include "global/tests/mocks/inputstatemock.h"
 #include "interactive/tests/mocks/interactivemock.h"
 #include "ui/tests/mocks/uiconfigurationmock.h"
 #include "notation/tests/mocks/notationconfigurationmock.h"
@@ -80,14 +78,14 @@ public:
         m_configuration = std::make_shared<NiceMock<NotationConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
 
+        m_inputState = std::make_shared<NiceMock<muse::InputStateMock> >();
+        m_controller->inputState.set(m_inputState);
+
         m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
         m_uiConfiguration = std::make_shared<NiceMock<muse::ui::UiConfigurationMock> >();
         m_controller->uiConfiguration.set(m_uiConfiguration);
-
-        m_dragController = std::make_shared<NiceMock<muse::ui::DragControllerMock> >();
-        m_controller->dragController.set(m_dragController);
 
         m_interactive = std::make_shared<NiceMock<InteractiveMock> >();
         ON_CALL(*m_interactive, buttonData(_)).WillByDefault([](IInteractive::Button button) {
@@ -97,25 +95,22 @@ public:
 
         m_selectInstrumentScenario = std::make_shared<NiceMock<SelectInstrumentsScenarioMock> >();
         m_controller->selectInstrumentScenario.set(m_selectInstrumentScenario);
-
-        setNoWaylandForLinux();
     }
 
     void TearDown() override
     {
-        qDeleteAll(m_events);
         delete m_controller;
     }
 
     NotationViewInputController* m_controller = nullptr;
     NiceMock<ControlledViewMock> m_view;
     std::shared_ptr<NotationConfigurationMock> m_configuration;
+    std::shared_ptr<muse::InputStateMock> m_inputState;
     std::shared_ptr<NotationInteractionMock> m_interaction;
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
     std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
     std::shared_ptr<muse::ui::UiConfigurationMock> m_uiConfiguration;
-    std::shared_ptr<muse::ui::DragControllerMock> m_dragController;
     std::shared_ptr<InteractiveMock> m_interactive;
     std::shared_ptr<SelectInstrumentsScenarioMock> m_selectInstrumentScenario;
     playback::IPlaybackController::PlayParams m_playParams;
@@ -125,13 +120,11 @@ public:
     void dragOverAndLeave()
     {
         ON_CALL(*m_uiConfiguration, isSystemDragSupported()).WillByDefault(Return(false));
-        ON_CALL(*m_dragController, mimeData(_)).WillByDefault(Return(&m_dragMimeData));
 
-        QDragMoveEvent moveEvent(QPoint(100, 100), Qt::CopyAction, &m_dragMimeData, Qt::LeftButton, Qt::NoModifier);
-        m_controller->dragMoveEvent(&moveEvent);
+        muse::DragEvent moveEvent = make_dragEvent(m_dragMimeData);
+        m_controller->dragMoveEvent(moveEvent);
 
-        QDragLeaveEvent leaveEvent;
-        m_controller->dragLeaveEvent(&leaveEvent);
+        m_controller->dragLeaveEvent();
     }
 
     //! The user's answer to the question, which waits until `answer` is called
@@ -180,9 +173,15 @@ public:
 
     int m_instrumentQuestions = 0;
 
-    QMimeData m_dragMimeData;
+    muse::MimeData m_dragMimeData;
 
-    mutable QList<QInputEvent*> m_events;
+    static muse::DragEvent make_dragEvent(const muse::MimeData& mimeData)
+    {
+        muse::DragEvent ev;
+        ev.position = muse::PointF(100, 100);
+        ev.mimeData = mimeData;
+        return ev;
+    }
 
     struct HitContextConfig
     {
@@ -190,31 +189,30 @@ public:
         bool start = true;
     };
 
-    QWheelEvent* make_wheelEvent(QPoint pixelDelta,
-                                 QPoint angleDelta,
-                                 Qt::KeyboardModifiers modifiers = Qt::NoModifier,
-                                 QPointF pos = QPointF(100, 100)) const
+    static WheelEvent make_wheelEvent(muse::Point pixelDelta,
+                                      muse::Point angleDelta,
+                                      muse::KeyboardModifiers modifiers = muse::KeyboardModifier::NoModifier,
+                                      muse::PointF pos = muse::PointF(100, 100))
     {
-        QPointF globalPos = pos;
-        Qt::MouseButtons buttons = Qt::NoButton;
-
-        QWheelEvent* ev = new QWheelEvent(pos,  globalPos,  pixelDelta,  angleDelta,
-                                          buttons, modifiers, Qt::ScrollPhase::NoScrollPhase, false);
-
-        m_events << ev;
-
+        WheelEvent ev;
+        ev.position = pos;
+        ev.pixelDelta = pixelDelta;
+        ev.angleDelta = angleDelta;
+        ev.modifiers = modifiers;
         return ev;
     }
 
-    QMouseEvent* make_mousePressEvent(
-        Qt::MouseButton button,
-        Qt::KeyboardModifiers modifiers = Qt::NoModifier,
-        QPointF pos = QPointF(100, 100)) const
+    static PointerEvent make_mousePressEvent(
+        muse::MouseButton button,
+        muse::KeyboardModifiers modifiers = muse::KeyboardModifier::NoModifier,
+        muse::PointF pos = muse::PointF(100, 100))
     {
-        QMouseEvent* ev = new QMouseEvent(QMouseEvent::Type::MouseButtonPress, pos, pos, button, {}, modifiers);
-
-        m_events << ev;
-
+        PointerEvent ev;
+        ev.type = PointerEvent::Type::Press;
+        ev.position = pos;
+        ev.button = button;
+        ev.buttons = button;
+        ev.modifiers = modifiers;
         return ev;
     }
 
@@ -275,14 +273,6 @@ public:
 
         return context;
     }
-
-    void setNoWaylandForLinux()
-    {
-#ifdef Q_OS_LINUX
-        //! [GIVEN] No Wayland display
-        setenv("WAYLAND_DISPLAY", "OFF", false);
-#endif
-    }
 };
 
 namespace mu::playback {
@@ -303,14 +293,14 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
-    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 180), QPoint(0, 120)));
+    m_controller->wheelEvent(make_wheelEvent(muse::Point(0, 180), muse::Point(0, 120)));
 
     //! [THEN] Should be called vertical scroll with value 80
     EXPECT_CALL(m_view, moveCanvas(0, 80))
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
-    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 80), QPoint(0, 120)));
+    m_controller->wheelEvent(make_wheelEvent(muse::Point(0, 80), muse::Point(0, 120)));
 
     //! [GIVEN] pixelDelta is Null
     //!  dy = (angleDelta.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
@@ -323,7 +313,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
     .WillOnce(Return(500));
 
     //! [WHEN] User scrolled mouse wheel
-    m_controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120)));
+    m_controller->wheelEvent(make_wheelEvent(muse::Point(), muse::Point(0, 120)));
 }
 
 /**
@@ -337,7 +327,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollHorizontal)
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
-    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 120), QPoint(), Qt::ShiftModifier));
+    m_controller->wheelEvent(make_wheelEvent(muse::Point(0, 120), muse::Point(), muse::KeyboardModifier::ShiftModifier));
 }
 
 /**
@@ -360,10 +350,11 @@ TEST_F(NotationViewInputControllerTests, DISABLED_WheelEvent_Zoom)
     EXPECT_CALL(m_view, height())
     .WillOnce(Return(500));
 
-    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
+    EXPECT_CALL(m_view, toLogical(muse::PointF(100, 100)))
     .WillOnce(Return(PointF(100, 100)));
 
-    m_controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120), Qt::ControlModifier, QPointF(100, 100)));
+    m_controller->wheelEvent(make_wheelEvent(muse::Point(), muse::Point(0, 120), muse::KeyboardModifier::ControlModifier,
+                                             muse::PointF(100, 100)));
 }
 
 /**
@@ -429,7 +420,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -500,7 +492,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Text_Element)
     .Times(1);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -573,7 +566,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -647,7 +641,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::ShiftModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -695,7 +690,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -743,7 +739,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::ShiftModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -804,7 +801,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .WillByDefault(Return(false));
 
     //! [WHEN] User pressed left mouse button with NoModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -869,7 +867,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::ShiftModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -939,10 +938,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     //! Note: the context menu itself is shown by AbstractNotationPaintView::event
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::ShiftModifier,
+                                                       muse::PointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::RightButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 /**
@@ -1016,10 +1017,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     //! Note: the context menu itself is shown by AbstractNotationPaintView::event
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton, muse::KeyboardModifier::ShiftModifier,
+                                                       muse::PointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::RightButton, muse::KeyboardModifier::NoModifier,
+                                                       muse::PointF(100, 100)));
 }
 
 TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_UserAgrees_DropsAfterTheAnswer)
@@ -1031,7 +1034,7 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_UserAgrees_Drops
     int drops = 0;
     int endedDrops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>&) {
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>&) {
         EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
         ++drops;
         return true;
@@ -1109,9 +1112,9 @@ TEST_F(NotationViewInputControllerTests, Drop_NeedsConfirmation_AnotherDragIsNot
     EXPECT_CALL(*m_interaction, startDropSingle(_)).Times(0);
 
     //! [WHEN] Another element is dragged into the view...
-    m_dragMimeData.setData(engraving::mimeSymbolFormat, QByteArray("B"));
-    QDragEnterEvent enterEvent(QPoint(100, 100), Qt::CopyAction, &m_dragMimeData, Qt::LeftButton, Qt::NoModifier);
-    m_controller->dragEnterEvent(&enterEvent);
+    m_dragMimeData.setData(engraving::mimeSymbolFormat, muse::ByteArray("B"));
+    muse::DragEvent enterEvent = make_dragEvent(m_dragMimeData);
+    m_controller->dragEnterEvent(enterEvent);
 
     //! [THEN] ...it is ignored
     EXPECT_FALSE(enterEvent.isAccepted());
@@ -1156,8 +1159,9 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChange_UserChoosesAnInst
     int drops = 0;
     int endedDrops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops, &endedDrops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
-        EXPECT_EQ(endedDrops, 0) << "the drop is not ended before the element is dropped";
+    .WillByDefault([&drops, &endedDrops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+        EXPECT_EQ(endedDrops,
+                  0) << "the drop is not ended before the element is dropped";
         EXPECT_TRUE(instrument.has_value()) << "an instrument change is dropped with the chosen instrument";
         EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
         ++drops;
@@ -1253,7 +1257,7 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_
 
     int drops = 0;
     ON_CALL(*m_interaction, dropSingle(_, _, _))
-    .WillByDefault([&drops](const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
+    .WillByDefault([&drops](const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>& instrument) {
         EXPECT_EQ(instrument.value_or(InstrumentTemplate()).id, u"flute");
         ++drops;
         return true;
@@ -1301,4 +1305,51 @@ TEST_F(NotationViewInputControllerTests, Drop_InstrumentChangeNeedsConfirmation_
     answer(IInteractive::Button::Cancel);
 
     EXPECT_EQ(endedDrops, 1);
+}
+
+TEST_F(NotationViewInputControllerTests, TripleClick_PressSoonAfterDoubleClickInTheText_SelectsAllText)
+{
+    //! [GIVEN] The text is being edited, the double click interval is long
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(true));
+    ON_CALL(*m_uiConfiguration, doubleClickIntervalMs()).WillByDefault(Return(60000));
+
+    {
+        InSequence seq;
+
+        //! [THEN] The double click selects the word, the next press selects all the text
+        EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::Word)).Times(1);
+        EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::All)).Times(1);
+    }
+
+    //! [WHEN] Double click and then press
+    m_controller->mouseDoubleClickEvent(muse::PointerEvent());
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton));
+}
+
+TEST_F(NotationViewInputControllerTests, TripleClick_PressAfterTheDoubleClickInterval_DoesNotSelectAllText)
+{
+    //! [GIVEN] The text is being edited, the double click interval is over at once
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(true));
+    ON_CALL(*m_uiConfiguration, doubleClickIntervalMs()).WillByDefault(Return(0));
+
+    //! [GIVEN] Nothing is selected, the press goes the usual way
+    const std::vector<EngravingItem*> noElements;
+    ON_CALL(*m_selection, elements()).WillByDefault(ReturnRef(noElements));
+
+    //! [THEN] Only the double click selects the word
+    EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::Word)).Times(1);
+    EXPECT_CALL(*m_interaction, selectText(mu::engraving::SelectTextType::All)).Times(0);
+
+    //! [WHEN] Double click and then press
+    m_controller->mouseDoubleClickEvent(muse::PointerEvent());
+    m_controller->mousePressEvent(make_mousePressEvent(muse::MouseButton::LeftButton));
+}
+
+TEST_F(NotationViewInputControllerTests, TextCursorRect_TextIsNotEdited_ProvidesNothing)
+{
+    //! [GIVEN] The text is not being edited
+    ON_CALL(*m_interaction, isTextEditingStarted()).WillByDefault(Return(false));
+
+    //! [THEN] There is no cursor of the text
+    EXPECT_FALSE(m_controller->textCursorRect().has_value());
 }

@@ -241,7 +241,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             SplitJoinMeasure::splitMeasure(tx, masterScore(), barLineTick);
             m = score()->tick2measure(tick());
             // consume the ControlModifier flag
-            data.modifiers &= ~ControlModifier;
+            data.modifiers &= ~muse::KeyboardModifier::ControlModifier;
         }
 
         if (barLineTick == m->tick() || barLineTick == m->endTick()) {
@@ -435,7 +435,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 
     case ElementType::KEYSIG:
     {
-        if (data.modifiers & ControlModifier) {
+        if (data.modifiers & muse::KeyboardModifier::ControlModifier) {
             // apply only to this stave
             KeySigEvent k = toKeySig(e)->keySigEvent();
             EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);

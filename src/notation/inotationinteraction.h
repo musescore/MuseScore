@@ -25,14 +25,15 @@
 #include <functional>
 
 #include "async/notification.h"
+#include "io/path.h"
+#include "types/bytearray.h"
 
 #include "inotation_fwd.h"
 #include "notationtypes.h"
+#include "types/inputevents.h"
 #include "types/instrumentstypes.h"
 #include "types/noteinputtypes.h"
-
-class QKeyEvent;
-class QInputMethodEvent;
+#include "types/outgoingdrag.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -114,34 +115,32 @@ public:
     virtual muse::async::Notification dragChanged() const = 0;
 
     virtual bool isOutgoingDragElementAllowed(const EngravingItem* element) const = 0;
-    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) = 0;
-    virtual void startOutgoingDragRange(QObject* dragSource) = 0;
-    virtual bool isOutgoingDragStarted() const = 0;
-    virtual void endOutgoingDrag() = 0;
+    virtual std::optional<OutgoingDrag> outgoingDragElement(const EngravingItem* element) const = 0;
+    virtual std::optional<OutgoingDrag> outgoingDragRange() const = 0;
 
     // Drop
     //! TODO Change KeyboardModifiers to modes
-    virtual bool startDropSingle(const QByteArray& edata) = 0;
-    virtual bool startDropRange(const QByteArray& data) = 0;
+    virtual bool startDropSingle(const muse::ByteArray& edata) = 0;
+    virtual bool startDropRange(const muse::ByteArray& data) = 0;
     virtual bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
                                 size_t numStaves, bool preserveMeasureAlignment) = 0;
-    virtual bool startDropImage(const QUrl& url) = 0;
-    virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool startDropImage(const muse::io::path_t& path) = 0;
+    virtual bool updateDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) = 0;
 
     virtual muse::Ret canDropSingle(const muse::PointF& pos) = 0;
     virtual bool isDroppingInstrumentChange() const = 0;
-    virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers,
+    virtual bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers,
                             const std::optional<InstrumentTemplate>& instrument = std::nullopt) = 0;
 
-    virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
+    virtual bool dropRange(const muse::ByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRects(const std::vector<muse::RectF>& rects) = 0;
     virtual void endDrop() = 0;
     virtual muse::async::Notification dropChanged() const = 0;
 
     virtual muse::Ret canApplyPaletteElement(mu::engraving::EngravingItem* element) const = 0;
-    virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers = {}) = 0;
 
     virtual void undo() = 0;
     virtual void redo() = 0;
@@ -159,7 +158,7 @@ public:
     virtual bool isTextEditingStarted() const = 0;
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const muse::PointF& elementPos = muse::PointF()) = 0;
-    virtual void editText(QInputMethodEvent* event) = 0;
+    virtual void editText(muse::TextInputEvent& event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const muse::PointF& newCursorPos) = 0;
     virtual void selectText(mu::engraving::SelectTextType type) = 0;
@@ -180,13 +179,13 @@ public:
     virtual muse::async::Notification isEditingElementChanged() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
-    virtual bool isEditAllowed(QKeyEvent* event) = 0;
-    virtual void editElement(QKeyEvent* event) = 0;
+    virtual bool isEditAllowed(const muse::KeyEvent& event) = 0;
+    virtual void editElement(muse::KeyEvent& event) = 0;
     virtual void endEditElement() = 0;
 
     // Anchors edit
-    virtual void updateTimeTickAnchors(QKeyEvent* event) = 0;
-    virtual void moveElementAnchors(QKeyEvent* event) = 0;
+    virtual void updateTimeTickAnchors(const muse::KeyEvent& event) = 0;
+    virtual void moveElementAnchors(const muse::KeyEvent& event) = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;

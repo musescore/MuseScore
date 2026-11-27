@@ -73,7 +73,6 @@ target_sources(engraving PRIVATE
     iengravingfont.h
     iengravingfontsprovider.h
 
-    infrastructure/imimedata.h
     infrastructure/mscio.h
     infrastructure/mscreader.cpp
     infrastructure/mscreader.h
@@ -415,8 +414,6 @@ else()
         internal/engravingconfiguration.h
         internal/engravingcontextconfiguration.cpp
         internal/engravingcontextconfiguration.h
-        internal/qmimedataadapter.cpp
-        internal/qmimedataadapter.h
         internal/engravingfontsprovider.cpp
         internal/engravingfontsprovider.h
         internal/engravingfont.cpp

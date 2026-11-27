@@ -67,10 +67,10 @@ RehearsalMark::RehearsalMark(DummyParentOr<Segment> parent)
 
 bool RehearsalMark::isEditAllowed(EditData& ed) const
 {
-    bool ctrlPressed  = ed.modifiers & ControlModifier;
-    bool shiftPressed = ed.modifiers & ShiftModifier;
-    bool altPressed = ed.modifiers & AltModifier;
-    if (altPressed && !ctrlPressed && !shiftPressed && (ed.key == Key_Left || ed.key == Key_Right)) {
+    bool ctrlPressed  = ed.modifiers & muse::KeyboardModifier::ControlModifier;
+    bool shiftPressed = ed.modifiers & muse::KeyboardModifier::ShiftModifier;
+    bool altPressed = ed.modifiers & muse::KeyboardModifier::AltModifier;
+    if (altPressed && !ctrlPressed && !shiftPressed && (ed.key == muse::KeyboardKey::Key_Left || ed.key == muse::KeyboardKey::Key_Right)) {
         return false;
     }
 

@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationinteraction_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/viewtransform_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationinteractionmock.h

@@ -303,38 +303,39 @@ bool TextBase::isEditAllowed(EditData& ed) const
 {
     // Keep this method closely in sync with TextBase::edit()!
 
-    if (ed.key == Key_Shift || ed.key == Key_Escape || ed.key == Key_Tab) {
+    if (ed.key == muse::KeyboardKey::Key_Shift || ed.key == muse::KeyboardKey::Key_Escape || ed.key == muse::KeyboardKey::Key_Tab) {
         return false;
     }
 
-    bool ctrlPressed  = ed.modifiers & ControlModifier;
-    bool shiftPressed = ed.modifiers & ShiftModifier;
-    bool altPressed = ed.modifiers & AltModifier;
+    bool ctrlPressed  = ed.modifiers & muse::KeyboardModifier::ControlModifier;
+    bool shiftPressed = ed.modifiers & muse::KeyboardModifier::ShiftModifier;
+    bool altPressed = ed.modifiers & muse::KeyboardModifier::AltModifier;
 
     // Hex
-    if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
+    if (ed.modifiers
+        == (muse::KeyboardModifier::ControlModifier | muse::KeyboardModifier::ShiftModifier | muse::KeyboardModifier::KeypadModifier)) {
         switch (ed.key) {
-        case Key_0:
-        case Key_1:
-        case Key_2:
-        case Key_3:
-        case Key_4:
-        case Key_5:
-        case Key_6:
-        case Key_7:
-        case Key_8:
-        case Key_9:
+        case muse::KeyboardKey::Key_0:
+        case muse::KeyboardKey::Key_1:
+        case muse::KeyboardKey::Key_2:
+        case muse::KeyboardKey::Key_3:
+        case muse::KeyboardKey::Key_4:
+        case muse::KeyboardKey::Key_5:
+        case muse::KeyboardKey::Key_6:
+        case muse::KeyboardKey::Key_7:
+        case muse::KeyboardKey::Key_8:
+        case muse::KeyboardKey::Key_9:
             return true;
         default: break;
         }
-    } else if (ed.modifiers == (ControlModifier | ShiftModifier)) {
+    } else if (ed.modifiers == (muse::KeyboardModifier::ControlModifier | muse::KeyboardModifier::ShiftModifier)) {
         switch (ed.key) {
-        case Key_A:
-        case Key_B:
-        case Key_C:
-        case Key_D:
-        case Key_E:
-        case Key_F:
+        case muse::KeyboardKey::Key_A:
+        case muse::KeyboardKey::Key_B:
+        case muse::KeyboardKey::Key_C:
+        case muse::KeyboardKey::Key_D:
+        case muse::KeyboardKey::Key_E:
+        case muse::KeyboardKey::Key_F:
             return true;
         default: break;
         }
@@ -342,40 +343,40 @@ bool TextBase::isEditAllowed(EditData& ed) const
 
     switch (ed.key) {
     // Basic editing / navigation
-    case Key_Enter:
-    case Key_Return:
-    case Key_Delete:
-    case Key_Backspace:
-    case Key_Left:
-    case Key_Right:
-    case Key_Up:
-    case Key_Down:
-    case Key_Home:
-    case Key_End:
-    case Key_Space:
-    case Key_Minus:
-    case Key_Underscore:
+    case muse::KeyboardKey::Key_Enter:
+    case muse::KeyboardKey::Key_Return:
+    case muse::KeyboardKey::Key_Delete:
+    case muse::KeyboardKey::Key_Backspace:
+    case muse::KeyboardKey::Key_Left:
+    case muse::KeyboardKey::Key_Right:
+    case muse::KeyboardKey::Key_Up:
+    case muse::KeyboardKey::Key_Down:
+    case muse::KeyboardKey::Key_Home:
+    case muse::KeyboardKey::Key_End:
+    case muse::KeyboardKey::Key_Space:
+    case muse::KeyboardKey::Key_Minus:
+    case muse::KeyboardKey::Key_Underscore:
         return true;
     // Select all is handled by us
-    case Key_A:
+    case muse::KeyboardKey::Key_A:
         if (ctrlPressed && !shiftPressed) {
             return true;
         }
         break;
-    case Key_Z:
+    case muse::KeyboardKey::Key_Z:
         if (ctrlPressed /* undo */ || (ctrlPressed && shiftPressed) /* redo */) {
             return false;
         }
         break;
     // Several commands
     // TODO: looks like we're hard-coding keyboard shortcuts here, but what if user has edited those?
-    case Key_B:
-    case Key_C:
-    case Key_I:
-    case Key_U:
-    case Key_V:
-    case Key_X:
-    case Key_Y:
+    case muse::KeyboardKey::Key_B:
+    case muse::KeyboardKey::Key_C:
+    case muse::KeyboardKey::Key_I:
+    case muse::KeyboardKey::Key_U:
+    case muse::KeyboardKey::Key_V:
+    case muse::KeyboardKey::Key_X:
+    case muse::KeyboardKey::Key_Y:
         if (ctrlPressed && !shiftPressed) {
             return false; // handled at application level
         }
@@ -387,32 +388,33 @@ bool TextBase::isEditAllowed(EditData& ed) const
     // Insert special characters
     if (ctrlPressed && shiftPressed) {
         switch (ed.key) {
-        case Key_U:
-        case Key_B:
-        case Key_NumberSign: // e.g. QWERTY (US)
-        case Key_AsciiTilde: // e.g. QWERTY (GB)
-        case Key_Apostrophe: // e.g. QWERTZ (DE)
-        case Key_periodcentered: // e.g. QWERTY (ES)
-        case Key_3: // e.g. AZERTY (FR, BE)
-        case Key_H:
-        case Key_Space:
-        case Key_F:
-        case Key_M:
-        case Key_N:
-        case Key_P:
-        case Key_S:
-        case Key_R:
+        case muse::KeyboardKey::Key_U:
+        case muse::KeyboardKey::Key_B:
+        case muse::KeyboardKey::Key_NumberSign: // e.g. QWERTY (US)
+        case muse::KeyboardKey::Key_AsciiTilde: // e.g. QWERTY (GB)
+        case muse::KeyboardKey::Key_Apostrophe: // e.g. QWERTZ (DE)
+        case muse::KeyboardKey::Key_periodcentered: // e.g. QWERTY (ES)
+        case muse::KeyboardKey::Key_3: // e.g. AZERTY (FR, BE)
+        case muse::KeyboardKey::Key_H:
+        case muse::KeyboardKey::Key_Space:
+        case muse::KeyboardKey::Key_F:
+        case muse::KeyboardKey::Key_M:
+        case muse::KeyboardKey::Key_N:
+        case muse::KeyboardKey::Key_P:
+        case muse::KeyboardKey::Key_S:
+        case muse::KeyboardKey::Key_R:
             return true;
         }
     }
     if (ctrlPressed && altPressed) {
-        if (ed.key == Key_Minus) {
+        if (ed.key == muse::KeyboardKey::Key_Minus) {
             return true;
         }
 
 #if defined(Q_OS_WIN)
         // Allow special characters to be typed with AltGr / Ctrl+Alt (they are the same in Windows)
-        if (!ed.s.empty() && (ed.key < Key_A || ed.key > Key_Z) && (ed.key < Key_0 || ed.key > Key_9)) {
+        if (!ed.s.empty() && (ed.key < muse::KeyboardKey::Key_A || ed.key > muse::KeyboardKey::Key_Z)
+            && (ed.key < muse::KeyboardKey::Key_0 || ed.key > muse::KeyboardKey::Key_9)) {
             return true;
         }
 #endif
@@ -442,26 +444,27 @@ bool TextBase::edit(EditData& ed)
     CharFormat* currentFormat = cursor->format();
 
     String s         = ed.s;
-    bool ctrlPressed  = ed.modifiers & ControlModifier;
-    bool shiftPressed = ed.modifiers & ShiftModifier;
-    bool altPressed = ed.modifiers & AltModifier;
+    bool ctrlPressed  = ed.modifiers & muse::KeyboardModifier::ControlModifier;
+    bool shiftPressed = ed.modifiers & muse::KeyboardModifier::ShiftModifier;
+    bool altPressed = ed.modifiers & muse::KeyboardModifier::AltModifier;
 
     TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
     if (m_hexState >= 0) {
-        if (ed.modifiers == (ControlModifier | ShiftModifier | KeypadModifier)) {
+        if (ed.modifiers
+            == (muse::KeyboardModifier::ControlModifier | muse::KeyboardModifier::ShiftModifier | muse::KeyboardModifier::KeypadModifier)) {
             switch (ed.key) {
-            case Key_0:
-            case Key_1:
-            case Key_2:
-            case Key_3:
-            case Key_4:
-            case Key_5:
-            case Key_6:
-            case Key_7:
-            case Key_8:
-            case Key_9:
+            case muse::KeyboardKey::Key_0:
+            case muse::KeyboardKey::Key_1:
+            case muse::KeyboardKey::Key_2:
+            case muse::KeyboardKey::Key_3:
+            case muse::KeyboardKey::Key_4:
+            case muse::KeyboardKey::Key_5:
+            case muse::KeyboardKey::Key_6:
+            case muse::KeyboardKey::Key_7:
+            case muse::KeyboardKey::Key_8:
+            case muse::KeyboardKey::Key_9:
                 s = Char::fromAscii(ed.key);
                 ++m_hexState;
                 wasHex = true;
@@ -469,14 +472,14 @@ bool TextBase::edit(EditData& ed)
             default:
                 break;
             }
-        } else if (ed.modifiers == (ControlModifier | ShiftModifier)) {
+        } else if (ed.modifiers == (muse::KeyboardModifier::ControlModifier | muse::KeyboardModifier::ShiftModifier)) {
             switch (ed.key) {
-            case Key_A:
-            case Key_B:
-            case Key_C:
-            case Key_D:
-            case Key_E:
-            case Key_F:
+            case muse::KeyboardKey::Key_A:
+            case muse::KeyboardKey::Key_B:
+            case muse::KeyboardKey::Key_C:
+            case muse::KeyboardKey::Key_D:
+            case muse::KeyboardKey::Key_E:
+            case muse::KeyboardKey::Key_F:
                 s = Char::fromAscii(ed.key);
                 ++m_hexState;
                 wasHex = true;
@@ -491,8 +494,8 @@ bool TextBase::edit(EditData& ed)
 //printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
         switch (ed.key) {
-        case Key_Enter:
-        case Key_Return:
+        case muse::KeyboardKey::Key_Enter:
+        case muse::KeyboardKey::Key_Return:
             deleteSelectedText();
             score()->undo(new SplitText(cursor));
 
@@ -500,7 +503,7 @@ bool TextBase::edit(EditData& ed)
 
             return true;
 
-        case Key_Delete: {
+        case muse::KeyboardKey::Key_Delete: {
             int startPosition = cursor->currentPosition();
 
             if (ctrlPressed) {
@@ -536,7 +539,7 @@ bool TextBase::edit(EditData& ed)
             return true;
         }
 
-        case Key_Backspace: {
+        case muse::KeyboardKey::Key_Backspace: {
             int startPosition = cursor->currentPosition();
 
             if (ctrlPressed) {
@@ -569,7 +572,7 @@ bool TextBase::edit(EditData& ed)
             return true;
         }
 
-        case Key_Left:
+        case muse::KeyboardKey::Key_Left:
             if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left, mm)
                 && isLyrics()) {
                 return false;
@@ -580,7 +583,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_Right:
+        case muse::KeyboardKey::Key_Right:
             if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right, mm)
                 && isLyrics()) {
                 return false;
@@ -591,7 +594,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_Up:
+        case muse::KeyboardKey::Key_Up:
 #if defined(Q_OS_MAC)
             if (!cursor->movePosition(TextCursor::MoveOperation::Up, mm)) {
                 cursor->movePosition(TextCursor::MoveOperation::StartOfLine, mm);
@@ -605,7 +608,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_Down:
+        case muse::KeyboardKey::Key_Down:
 #if defined(Q_OS_MAC)
             if (!cursor->movePosition(TextCursor::MoveOperation::Down, mm)) {
                 cursor->movePosition(TextCursor::MoveOperation::EndOfLine, mm);
@@ -619,7 +622,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_Home:
+        case muse::KeyboardKey::Key_Home:
             if (ctrlPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::Start, mm);
             } else {
@@ -632,7 +635,7 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_End:
+        case muse::KeyboardKey::Key_End:
             if (ctrlPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::End, mm);
             } else {
@@ -645,13 +648,13 @@ bool TextBase::edit(EditData& ed)
 
             break;
 
-        case Key_Space:
+        case muse::KeyboardKey::Key_Space:
             if ((ed.modifiers & TextEditingControlModifier) || currentFormat->fontFamily() == u"ScoreText") {
                 s = String(Char(0xa0)); // non-breaking space
             } else {
                 if (isFingering() && ed.view()) {
                     score()->endCmd();
-                    ed.view()->textTab(ed.modifiers & ShiftModifier);
+                    ed.view()->textTab(ed.modifiers & muse::KeyboardModifier::ShiftModifier);
                     return true;
                 }
                 s = u" ";
@@ -659,19 +662,19 @@ bool TextBase::edit(EditData& ed)
             ed.modifiers = {};
             break;
 
-        case Key_Minus:
+        case muse::KeyboardKey::Key_Minus:
             if (ed.modifiers == 0) {
                 s = u"-";
             }
             break;
 
-        case Key_Underscore:
+        case muse::KeyboardKey::Key_Underscore:
             if (ed.modifiers == 0) {
                 s = u"_";
             }
             break;
 
-        case Key_A:
+        case muse::KeyboardKey::Key_A:
             if (ctrlPressed && !shiftPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
                 cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
@@ -680,18 +683,18 @@ bool TextBase::edit(EditData& ed)
                 notifyAboutTextCursorChanged();
             }
             break;
-        case Key_Z:
+        case muse::KeyboardKey::Key_Z:
             if (ctrlPressed /* undo */ || (ctrlPressed && shiftPressed) /* redo */) {
                 return false;
             }
             break;
-        case Key_B:
-        case Key_C:
-        case Key_I:
-        case Key_U:
-        case Key_V:
-        case Key_X:
-        case Key_Y:
+        case muse::KeyboardKey::Key_B:
+        case muse::KeyboardKey::Key_C:
+        case muse::KeyboardKey::Key_I:
+        case muse::KeyboardKey::Key_U:
+        case muse::KeyboardKey::Key_V:
+        case muse::KeyboardKey::Key_X:
+        case muse::KeyboardKey::Key_Y:
             if (ctrlPressed && !shiftPressed) {
                 return false; // handled at application level
             }
@@ -701,47 +704,47 @@ bool TextBase::edit(EditData& ed)
         }
         if (ctrlPressed && shiftPressed) {
             switch (ed.key) {
-            case Key_U:
+            case muse::KeyboardKey::Key_U:
                 if (m_hexState == -1) {
                     m_hexState = 0;
                     s = u"u";
                 }
                 break;
-            case Key_B:
+            case muse::KeyboardKey::Key_B:
                 s = u"\u266d";               // Unicode flat
                 break;
-            case Key_NumberSign: // e.g. QWERTY (US)
-            case Key_AsciiTilde: // e.g. QWERTY (GB)
-            case Key_Apostrophe: // e.g. QWERTZ (DE)
-            case Key_periodcentered: // e.g. QWERTY (ES)
-            case Key_3: // e.g. AZERTY (FR, BE)
+            case muse::KeyboardKey::Key_NumberSign: // e.g. QWERTY (US)
+            case muse::KeyboardKey::Key_AsciiTilde: // e.g. QWERTY (GB)
+            case muse::KeyboardKey::Key_Apostrophe: // e.g. QWERTZ (DE)
+            case muse::KeyboardKey::Key_periodcentered: // e.g. QWERTY (ES)
+            case muse::KeyboardKey::Key_3: // e.g. AZERTY (FR, BE)
                 s = u"\u266f";               // Unicode sharp
                 break;
-            case Key_H:
+            case muse::KeyboardKey::Key_H:
                 s = u"\u266e";               // Unicode natural
                 break;
-            case Key_Space:
+            case muse::KeyboardKey::Key_Space:
                 insertSym(SymId::space);
                 return true;
-            case Key_F:
+            case muse::KeyboardKey::Key_F:
                 insertSym(SymId::dynamicForte);
                 return true;
-            case Key_M:
+            case muse::KeyboardKey::Key_M:
                 insertSym(SymId::dynamicMezzo);
                 return true;
-            case Key_N:
+            case muse::KeyboardKey::Key_N:
                 insertSym(SymId::dynamicNiente);
                 return true;
-            case Key_P:
+            case muse::KeyboardKey::Key_P:
                 insertSym(SymId::dynamicPiano);
                 return true;
-            case Key_S:
+            case muse::KeyboardKey::Key_S:
                 insertSym(SymId::dynamicSforzando);
                 return true;
-            case Key_R:
+            case muse::KeyboardKey::Key_R:
                 insertSym(SymId::dynamicRinforzando);
                 return true;
-            case Key_Z:
+            case muse::KeyboardKey::Key_Z:
                 // Ctrl+Z is normally "undo"
                 // but this code gets hit even if you are also holding Shift
                 // so Shift+Ctrl+Z works
@@ -750,7 +753,7 @@ bool TextBase::edit(EditData& ed)
             }
         }
         if (ctrlPressed && altPressed) {
-            if (ed.key == Key_Minus || ed.key == Key_Underscore) {
+            if (ed.key == muse::KeyboardKey::Key_Minus || ed.key == muse::KeyboardKey::Key_Underscore) {
                 insertSym(SymId::lyricsElision);
                 return true;
             }

@@ -29,6 +29,8 @@
 #include <QMimeData>
 #include <QStandardPaths>
 
+#include "global/qt/qtinputconvert.h"
+
 #include "engraving/dom/mscore.h"
 
 #include "notation/inotation.h"
@@ -603,13 +605,13 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
         interactive()->askToContinue(ret).onResolve(this, [this, weakNotation, element, modifiers](bool proceed) {
             mu::notation::INotationPtr notation = weakNotation.lock();
             if (proceed && notation && notation == projectSession()->currentNotation()) {
-                notation->interaction()->applyPaletteElement(element.get(), modifiers);
+                notation->interaction()->applyPaletteElement(element.get(), muse::fromQtModifiers(modifiers));
             }
         });
         return true;
     }
 
-    return interaction->applyPaletteElement(element.get(), modifiers);
+    return interaction->applyPaletteElement(element.get(), muse::fromQtModifiers(modifiers));
 }
 
 // ========================================================

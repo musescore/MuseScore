@@ -28,6 +28,9 @@
 #include <QTimer>
 
 #include "modularity/ioc.h"
+#include "global/iinputstate.h"
+#include "global/iclipboard.h"
+#include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 #include "interactive/iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
@@ -50,8 +53,6 @@
 #include "scorecallbacks.h"
 #include "notationselection.h"
 
-class QDrag;
-
 namespace mu::engraving {
 class Lasso;
 class Transaction;
@@ -66,6 +67,9 @@ class NotationInteraction : public INotationInteraction, public IInteractionForS
     public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::IInputState> inputState;
+    muse::GlobalInject<muse::IClipboard> clipboard;
+    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
@@ -132,33 +136,31 @@ public:
     muse::async::Notification dragChanged() const override;
 
     bool isOutgoingDragElementAllowed(const EngravingItem* element) const override;
-    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource, const muse::PointF& hotSpot) override;
-    void startOutgoingDragRange(QObject* dragSource) override;
-    bool isOutgoingDragStarted() const override;
-    void endOutgoingDrag() override;
+    std::optional<OutgoingDrag> outgoingDragElement(const EngravingItem* element) const override;
+    std::optional<OutgoingDrag> outgoingDragRange() const override;
 
     // Drop
-    bool startDropSingle(const QByteArray& edata) override;
-    bool startDropRange(const QByteArray& data) override;
+    bool startDropSingle(const muse::ByteArray& edata) override;
+    bool startDropRange(const muse::ByteArray& data) override;
     bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx, size_t numStaves,
                         bool preserveMeasureAlignment) override;
-    bool startDropImage(const QUrl& url) override;
-    bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool startDropImage(const muse::io::path_t& path) override;
+    bool updateDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers) override;
     bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) override;
 
     muse::Ret canDropSingle(const muse::PointF& pos) override;
     bool isDroppingInstrumentChange() const override;
-    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers,
+    bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers,
                     const std::optional<InstrumentTemplate>& instrument = std::nullopt) override;
 
-    bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
+    bool dropRange(const muse::ByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRects(const std::vector<muse::RectF>& rects) override;
     void endDrop() override;
     muse::async::Notification dropChanged() const override;
 
     muse::Ret canApplyPaletteElement(mu::engraving::EngravingItem* element) const override;
-    bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
+    bool applyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers = {}) override;
 
     void undo() override;
     void redo() override;
@@ -176,7 +178,7 @@ public:
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const muse::PointF& cursorPos = muse::PointF()) override;
-    void editText(QInputMethodEvent* event) override;
+    void editText(muse::TextInputEvent& event) override;
     void endEditText() override;
     void changeTextCursorPosition(const muse::PointF& newCursorPos) override;
     void selectText(mu::engraving::SelectTextType type) override;
@@ -198,13 +200,13 @@ public:
     muse::async::Notification isEditingElementChanged() const override;
     void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
-    bool isEditAllowed(QKeyEvent* event) override;
-    void editElement(QKeyEvent* event) override;
+    bool isEditAllowed(const muse::KeyEvent& event) override;
+    void editElement(muse::KeyEvent& event) override;
     void endEditElement() override;
 
     // Anchors edit
-    void updateTimeTickAnchors(QKeyEvent* event) override;
-    void moveElementAnchors(QKeyEvent* event) override;
+    void updateTimeTickAnchors(const muse::KeyEvent& event) override;
+    void moveElementAnchors(const muse::KeyEvent& event) override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -383,20 +385,20 @@ private:
 
     bool doShowShadowNote(mu::engraving::ShadowNote& note, ShadowNoteParams& params);
 
-    bool needStartEditGrip(QKeyEvent* event) const;
-    bool handleKeyPress(QKeyEvent* event);
-    bool doTextEdit(QKeyEvent* event, TextBase* tb);
+    bool needStartEditGrip(const muse::KeyEvent& event) const;
+    bool handleKeyPress(const muse::KeyEvent& event);
+    bool doTextEdit(const muse::KeyEvent& event, TextBase* tb);
 
     void doEndEditElement();
     void doEndDrag();
 
     //! NOTE: Helper methods for applyPaletteElement
     void applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
-                                   Qt::KeyboardModifiers modifiers = {});
+                                   muse::KeyboardModifiers modifiers = {});
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
-                                    Qt::KeyboardModifiers modifiers = {});
+                                    muse::KeyboardModifiers modifiers = {});
 
-    bool doDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    bool doDropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers);
     bool doDropStandard(mu::engraving::Transaction& tx);
     bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);
 
@@ -467,24 +469,23 @@ private:
     void drawDrop(muse::draw::Painter* painter);
 
     EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
-    bool prepareDropStandardElement(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    bool prepareDropStandardElement(const muse::PointF& pos, muse::KeyboardModifiers modifiers);
     bool prepareDropMeasureBaseAnchorElement(const muse::PointF& pos);
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     std::vector<muse::RectF> dropHighlightRects(const mu::engraving::EngravingItem* dropElem,
-                                                const mu::engraving::EngravingItem* targetElem,
-                                                mu::engraving::KeyboardModifiers modifiers) const;
+                                                const mu::engraving::EngravingItem* targetElem, muse::KeyboardModifiers modifiers) const;
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
 
     void doFinishAddFretboardDiagram();
 
     void setupInstrumentChange(mu::engraving::InstrumentChange* instrumentChange, const InstrumentTemplate& instrument);
-    void applyInstrumentChangePaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
-    bool doApplyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers);
+    void applyInstrumentChangePaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers);
+    bool doApplyPaletteElement(mu::engraving::EngravingItem* element, muse::KeyboardModifiers modifiers);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
-                                 Qt::KeyboardModifiers modifiers, mu::engraving::track_idx_t track = muse::nidx);
+                                 muse::KeyboardModifiers modifiers, mu::engraving::track_idx_t track = muse::nidx);
 
     void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
 
@@ -578,8 +579,6 @@ private:
     DragData m_dragData;
     muse::async::Notification m_dragChanged;
     std::vector<muse::LineF> m_anchorLines;
-
-    QDrag* m_outgoingDrag = nullptr;
 
     mu::engraving::EditData m_editData;
 

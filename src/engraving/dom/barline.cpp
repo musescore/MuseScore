@@ -566,7 +566,7 @@ void BarLine::startEdit(EditData& ed)
 
 bool BarLine::isEditAllowed(EditData& ed) const
 {
-    return (ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())
+    return (ed.key == muse::KeyboardKey::Key_Up && spanStaff()) || (ed.key == muse::KeyboardKey::Key_Down && !spanStaff())
            || EngravingItem::isEditAllowed(ed);
 }
 
@@ -577,7 +577,7 @@ bool BarLine::edit(EditData& ed)
     }
 
     bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
-    if ((ed.key == Key_Up && spanStaff()) || (ed.key == Key_Down && !spanStaff())) {
+    if ((ed.key == muse::KeyboardKey::Key_Up && spanStaff()) || (ed.key == muse::KeyboardKey::Key_Down && !spanStaff())) {
         if (local) {
             BarLine* b = toBarLine(segment()->element(staffIdx() * VOICES));
             if (b) {

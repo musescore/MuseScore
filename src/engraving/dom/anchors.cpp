@@ -157,7 +157,7 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
     MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
-void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
+void MoveElementAnchors::moveElementAnchors(EngravingItem* element, muse::KeyboardKey key, muse::KeyboardModifiers mod)
 {
     EngravingObject* owner = element->ownershipParent();
     Segment* segment = owner && owner->isSegment() ? toSegment(owner) : nullptr;
@@ -165,7 +165,7 @@ void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey 
         return;
     }
 
-    bool altMod = mod & AltModifier;
+    bool altMod = mod & muse::KeyboardModifier::AltModifier;
 
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
     bool changeAnchorType = altMod && canAnchorToEndOfPrevious(element);
@@ -174,14 +174,15 @@ void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey 
         element->undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious,
                                     element->propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
 
-        bool needMoveSeg = (key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious);
+        bool needMoveSeg = (key == muse::KeyboardKey::Key_Left && anchorToEndOfPrevious)
+                           || (key == muse::KeyboardKey::Key_Right && !anchorToEndOfPrevious);
         if (!needMoveSeg) {
             checkMeasureBoundariesAndMoveIfNeed(element);
             return;
         }
     }
 
-    moveSegment(element, /*forward*/ key == Key_Right);
+    moveSegment(element, /*forward*/ key == muse::KeyboardKey::Key_Right);
     EditTimeTickAnchors::updateAnchors(element);
     checkMeasureBoundariesAndMoveIfNeed(element);
 }
@@ -238,8 +239,8 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
         return;
     }
 
-    KeyboardModifiers km = ed.modifiers;
-    if (km & (ShiftModifier | ControlModifier)) {
+    muse::KeyboardModifiers km = ed.modifiers;
+    if (km & (muse::KeyboardModifier::ShiftModifier | muse::KeyboardModifier::ControlModifier)) {
         return;
     }
 
@@ -287,10 +288,10 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
     SLine* line = lineSegment->line();
     Score* score = lineSegment->score();
     if (!line->allowTimeAnchor()) {
-        if (ed.key == Key_Left) {
+        if (ed.key == muse::KeyboardKey::Key_Left) {
             return curSeg->prev1WithElemsOnStaff(lineSegment->staffIdx());
         }
-        if (ed.key == Key_Right) {
+        if (ed.key == muse::KeyboardKey::Key_Right) {
             Segment* lastCRSegInScore = score->lastSegment();
             while (lastCRSegInScore && !lastCRSegInScore->isChordRestType()) {
                 lastCRSegInScore = lastCRSegInScore->prev1(SegmentType::ChordRest);
@@ -307,15 +308,15 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
     }
 
     switch (ed.key) {
-    case Key_Left: {
-        if (ed.modifiers & ControlModifier) {
+    case muse::KeyboardKey::Key_Left: {
+        if (ed.modifiers & muse::KeyboardModifier::ControlModifier) {
             Measure* m = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
             return m ? m->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
         }
         return findNewAnchorableSegment(curSeg, /*forward*/ false);
     }
-    case Key_Right: {
-        if (ed.modifiers & ControlModifier) {
+    case muse::KeyboardKey::Key_Right: {
+        if (ed.modifiers & muse::KeyboardModifier::ControlModifier) {
             if (Measure* measure = curSeg->measure()->nextMeasure()) {
                 return measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
             } else {
@@ -326,14 +327,14 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
         }
         return findNewAnchorableSegment(curSeg, /*forward*/ true);
     }
-    case Key_Home: {
+    case muse::KeyboardKey::Key_Home: {
         Measure* m = curSeg->measure()->system()->firstMeasure();
         if (curSeg->rtick() == Fraction(0, 1) && m == curSeg->measure() && m->prevMeasure()) {
             m = m->prevMeasure()->system()->firstMeasure();
         }
         return m->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
     }
-    case Key_End: {
+    case muse::KeyboardKey::Key_End: {
         Measure* measure = curSeg->measure()->system()->lastMeasure()->nextMeasure();
         if (measure) {
             return measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));

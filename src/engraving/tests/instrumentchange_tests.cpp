@@ -21,9 +21,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <QMimeData>
-
-#include "engraving/internal/qmimedataadapter.h"
+#include "types/mimedata.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/masterscore.h"
@@ -164,16 +162,15 @@ TEST_F(Engraving_InstrumentChangeTests, testPasteKeepsCustomText)
 
     score->select(ic);
     ASSERT_TRUE(score->selection().canCopy());
-    QMimeData* mimeData = new QMimeData;
-    mimeData->setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+    muse::MimeData mimeData;
+    mimeData.setData(score->selection().mimeType().toStdString(), score->selection().mimeData());
 
     Measure* target = m->nextMeasure()->nextMeasure();
     Segment* targetSeg = target->first(SegmentType::ChordRest);
     score->select(targetSeg->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Instrument change tests"));
-    QMimeDataAdapter ma(mimeData);
-    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, mimeData, 0);
     score->endCmd();
 
     EngravingItem* pasted = targetSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE, 0, 0);

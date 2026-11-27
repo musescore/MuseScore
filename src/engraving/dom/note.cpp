@@ -2126,7 +2126,7 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
         const ChordRest* cr = nullptr;
-        if (data.modifiers & ShiftModifier) {
+        if (data.modifiers & muse::KeyboardModifier::ShiftModifier) {
             // add note to chord
             NoteInput::addNote(tx, score(), ch, nval);
         } else {
@@ -2797,7 +2797,8 @@ RectF Note::drag(EditData& ed)
     }
 
     bool isSingleNoteSelection = score()->getSelectedElement() == this;
-    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & ControlModifier)) {
+    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection
+        && !(ed.modifiers & muse::KeyboardModifier::ControlModifier)) {
         horizontalDrag(ed);
     } else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch) {
         verticalDrag(ed);
@@ -2837,7 +2838,7 @@ void Note::dragInEditMode(EditData& editData)
     Chord* ch = chord();
     Segment* seg = ch->segment();
 
-    if (editData.modifiers & ShiftModifier) {
+    if (editData.modifiers & muse::KeyboardModifier::ShiftModifier) {
         const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
         seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
     } else if (ch->notes().size() == 1) {

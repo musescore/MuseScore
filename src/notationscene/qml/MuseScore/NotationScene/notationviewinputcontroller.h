@@ -21,12 +21,16 @@
  */
 #pragma once
 
+#include <chrono>
+#include <optional>
+
 #include <QtEvents>
 
 #include "notation/inotationviewcontroller.h"
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "types/dragevent.h"
 
 #include "async/asyncable.h"
 
@@ -36,6 +40,9 @@
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "types/inputevents.h"
+#include "notation/types/outgoingdrag.h"
+#include "notation/types/viewcursor.h"
 #include "notation/types/viewmode.h"
 
 #include "notation/inotationcommandscontroller.h"
@@ -43,14 +50,12 @@
 
 #include "playback/iplaybackcontroller.h"
 
+#include "global/iinputstate.h"
 #include "global/iglobalconfiguration.h"
-#include "ui/idragcontroller.h"
 #include "ui/iuiconfiguration.h"
 #include "rcommand/icommanddispatcher.h"
 
 #include "abstractelementpopupmodel.h"
-
-class QQuickItem;
 
 namespace mu::notation {
 class IControlledView
@@ -73,13 +78,12 @@ public:
     virtual void setScaling(qreal scaling, const muse::PointF& pos, bool overrideZoomType = true) = 0;
 
     virtual muse::PointF toLogical(const muse::PointF& p) const = 0;
-    virtual muse::PointF toLogical(const QPointF& p) const = 0;
     virtual muse::PointF fromLogical(const muse::PointF& r) const = 0;
     virtual muse::RectF fromLogical(const muse::RectF& r) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const muse::PointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
     virtual void showSearch() = 0;
@@ -94,7 +98,11 @@ public:
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 
-    virtual QQuickItem* asItem() = 0;
+    virtual void setViewCursor(ViewCursor cursor) = 0;
+
+    virtual void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) = 0;
+    virtual bool isOutgoingDragStarted() const = 0;
+    virtual void endOutgoingDrag() = 0;
 
     virtual void scheduleRedraw(const muse::RectF& rect = muse::RectF()) = 0;
 };
@@ -104,12 +112,12 @@ class NotationViewInputController : public INotationViewController, public muse:
 public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<muse::IInputState> inputState;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
-    muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<INotationCommandsController> commandsController = { this };
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
@@ -156,28 +164,28 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
-    void pinchToZoom(qreal scaleFactor, const QPointF& pos);
-    void wheelEvent(QWheelEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event);
-    void hoverMoveEvent(QHoverEvent* event);
-    void hoverLeaveEvent(QHoverEvent* event);
-    bool shortcutOverrideEvent(QKeyEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
-    void inputMethodEvent(QInputMethodEvent* event);
+    void pinchToZoom(qreal scaleFactor, const muse::PointF& pos);
+    void wheelEvent(const muse::WheelEvent& event);
+    void mousePressEvent(const muse::PointerEvent& event);
+    void mouseMoveEvent(const muse::PointerEvent& event);
+    void mouseReleaseEvent(const muse::PointerEvent& event);
+    void mouseDoubleClickEvent(const muse::PointerEvent& event);
+    void hoverMoveEvent(const muse::HoverEvent& event);
+    void hoverLeaveEvent(const muse::HoverEvent& event);
+    bool shortcutOverrideEvent(const muse::KeyEvent& event);
+    void keyPressEvent(muse::KeyEvent& event);
+    void keyReleaseEvent(muse::KeyEvent& event);
+    void inputMethodEvent(muse::TextInputEvent& event);
 
-    bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    //! The cursor of the edited text in the view coordinates, if the text is being edited
+    std::optional<muse::RectF> textCursorRect() const;
 
     bool ignoreNextMouseContextMenuEvent() const { return m_ignoreNextMouseContextMenuEvent; }
 
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dragLeaveEvent(QDragLeaveEvent* event);
-    void dragMoveEvent(QDragMoveEvent* event);
-    void dropEvent(QDropEvent* event);
+    void dragEnterEvent(muse::DragEvent& event);
+    void dragLeaveEvent();
+    void dragMoveEvent(muse::DragEvent& event);
+    void dropEvent(muse::DragEvent& event);
 
     ElementType selectionType() const;
     muse::PointF selectionElementPos() const;
@@ -213,13 +221,13 @@ private:
 
     struct ClickContext {
         muse::PointF logicClickPos;
-        const QMouseEvent* event = nullptr;
+        const muse::PointerEvent* event = nullptr;
         mu::engraving::EngravingItem* hitElement = nullptr;
         mu::engraving::staff_idx_t hitStaff = muse::nidx;
         bool isHitGrip = false;
     };
 
-    void handleClickInNoteInputMode(QMouseEvent* event);
+    void handleClickInNoteInputMode(const muse::PointerEvent& event);
     bool mousePress_considerGrip(const ClickContext& ctx); // returns true if event is consumed
     bool mousePress_considerDragOutgoingElement(const ClickContext& ctx);
     void mousePress_considerSelect(const ClickContext& ctx);
@@ -229,14 +237,14 @@ private:
     bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick();
-    void handleLeftClickRelease(const QPointF& releasePoint);
+    void handleLeftClickRelease(const muse::PointF& releasePoint);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
-    bool isAnchorEditingEvent(QKeyEvent* event) const;
+    bool isAnchorEditingEvent(const muse::KeyEvent& event) const;
 
-    bool tryPercussionShortcut(QKeyEvent* event);
+    bool tryPercussionShortcut(const muse::KeyEvent& event);
 
     IControlledView* m_view = nullptr;
 
@@ -244,7 +252,8 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
-    bool m_tripleClickPending = false;
+    bool isTripleClickPending() const;
+    std::chrono::steady_clock::time_point m_lastDoubleClickTime;
 
     struct MouseDownInfo {
         enum DragAction {
@@ -255,31 +264,24 @@ private:
             Nothing
         } dragAction = Other;
 
-        QPointF physicalBeginPoint;
+        muse::PointF physicalBeginPoint;
         muse::PointF logicalBeginPoint;
     } m_mouseDownInfo;
 
-    struct DragMoveEvent {
-        QPointF position;
-        Qt::KeyboardModifiers modifiers;
-        Qt::DropAction dropAction = Qt::DropAction::CopyAction;
-        QObject* source = nullptr;
-    };
-
-    bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
-    bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers);
+    bool doDrop(const muse::DragEvent& event);
+    bool dropSingle(const muse::PointF& pos, muse::KeyboardModifiers modifiers);
     void selectInstrumentForPendingDrop();
     void finishPendingDrop(bool drop, const std::optional<InstrumentTemplate>& instrument = std::nullopt);
 
     std::vector<int> pitchesBeingDragged() const;
 
-    DragMoveEvent m_lastDragMoveEvent;
+    muse::DragEvent m_lastDragMoveEvent;
 
     //! NOTE The drop that waits for the user's answer
     struct PendingDrop {
         std::weak_ptr<INotationInteraction> interaction; // the notation may be closed while the user is asked
         muse::PointF pos;
-        Qt::KeyboardModifiers modifiers;
+        muse::KeyboardModifiers modifiers;
     };
     std::optional<PendingDrop> m_pendingDrop;
 

@@ -67,28 +67,26 @@ public:
     MOCK_METHOD(muse::async::Notification, dragChanged, (), (const, override));
 
     MOCK_METHOD(bool, isOutgoingDragElementAllowed, (const EngravingItem*), (const, override));
-    MOCK_METHOD(void, startOutgoingDragElement, (const EngravingItem*, QObject*, const muse::PointF&), (override));
-    MOCK_METHOD(void, startOutgoingDragRange, (QObject*), (override));
-    MOCK_METHOD(bool, isOutgoingDragStarted, (), (const, override));
-    MOCK_METHOD(void, endOutgoingDrag, (), (override));
+    MOCK_METHOD(std::optional<OutgoingDrag>, outgoingDragElement, (const EngravingItem*), (const, override));
+    MOCK_METHOD(std::optional<OutgoingDrag>, outgoingDragRange, (), (const, override));
 
-    MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
-    MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
+    MOCK_METHOD(bool, startDropSingle, (const muse::ByteArray&), (override));
+    MOCK_METHOD(bool, startDropRange, (const muse::ByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const Fraction&, const Fraction&, engraving::staff_idx_t, size_t, bool), (override));
-    MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
-    MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, startDropImage, (const muse::io::path_t&), (override));
+    MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, muse::KeyboardModifiers), (override));
     MOCK_METHOD(bool, updateDropRange, (const muse::PointF&, std::optional<bool>), (override));
     MOCK_METHOD(muse::Ret, canDropSingle, (const muse::PointF&), (override));
     MOCK_METHOD(bool, isDroppingInstrumentChange, (), (const, override));
-    MOCK_METHOD(bool, dropSingle, (const muse::PointF&, Qt::KeyboardModifiers, const std::optional<InstrumentTemplate>&), (override));
-    MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&, bool), (override));
+    MOCK_METHOD(bool, dropSingle, (const muse::PointF&, muse::KeyboardModifiers, const std::optional<InstrumentTemplate>&), (override));
+    MOCK_METHOD(bool, dropRange, (const muse::ByteArray&, const muse::PointF&, bool), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
     MOCK_METHOD(void, setDropRects, (const std::vector<muse::RectF>&), (override));
     MOCK_METHOD(void, endDrop, (), (override));
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
 
     MOCK_METHOD(muse::Ret, canApplyPaletteElement, (mu::engraving::EngravingItem*), (const, override));
-    MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, muse::KeyboardModifiers), (override));
 
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
@@ -109,7 +107,7 @@ public:
     MOCK_METHOD(bool, isTextEditingStarted, (), (const, override));
     MOCK_METHOD(bool, textEditingAllowed, (const EngravingItem*), (const, override));
     MOCK_METHOD(void, startEditText, (EngravingItem*, const muse::PointF&), (override));
-    MOCK_METHOD(void, editText, (QInputMethodEvent*), (override));
+    MOCK_METHOD(void, editText, (muse::TextInputEvent&), (override));
     MOCK_METHOD(void, endEditText, (), (override));
     MOCK_METHOD(void, changeTextCursorPosition, (const muse::PointF&), (override));
     MOCK_METHOD(void, selectText, (mu::engraving::SelectTextType), (override));
@@ -130,12 +128,12 @@ public:
     MOCK_METHOD(muse::async::Notification, isEditingElementChanged, (), (const, override));
     MOCK_METHOD(void, startEditElement, (EngravingItem*), (override));
     MOCK_METHOD(void, changeEditElement, (EngravingItem*), (override));
-    MOCK_METHOD(bool, isEditAllowed, (QKeyEvent*), (override));
-    MOCK_METHOD(void, editElement, (QKeyEvent*), (override));
+    MOCK_METHOD(bool, isEditAllowed, (const muse::KeyEvent&), (override));
+    MOCK_METHOD(void, editElement, (muse::KeyEvent&), (override));
     MOCK_METHOD(void, endEditElement, (), (override));
 
-    MOCK_METHOD(void, updateTimeTickAnchors, (QKeyEvent*), (override));
-    MOCK_METHOD(void, moveElementAnchors, (QKeyEvent*), (override));
+    MOCK_METHOD(void, updateTimeTickAnchors, (const muse::KeyEvent&), (override));
+    MOCK_METHOD(void, moveElementAnchors, (const muse::KeyEvent&), (override));
 
     MOCK_METHOD(void, splitSelectedMeasure, (), (override));
     MOCK_METHOD(void, joinSelectedMeasures, (), (override));

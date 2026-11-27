@@ -13,24 +13,19 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
 
-#include <gmock/gmock.h>
-
-#include "ui/idragcontroller.h"
-
-namespace muse::ui {
-class DragControllerMock : public IDragController
-{
-public:
-    MOCK_METHOD(void, setCurrentData, (const DragDataPtr&), (override));
-    MOCK_METHOD(const DragDataPtr&, dragData, (), (const, override));
-    MOCK_METHOD(const QMimeData*, mimeData, (const QDropEvent*), (const, override));
+namespace mu::notation {
+//! NOTE The cursor of the mouse over the view, the view maps it to the cursor of its toolkit
+enum class ViewCursor {
+    Default,
+    DragCopy,
+    Forbidden
 };
 }

@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <QDrag>
+#include <QPointer>
 #include <QTimer>
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
@@ -32,7 +34,10 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "notation/viewtransform.h"
+#include "notation/types/outgoingdrag.h"
 #include "project/iprojectsession.h"
+#include "ui/idragcontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "playback/iplaybackcontroller.h"
@@ -78,6 +83,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<project::IProjectSession> projectSession = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::ui::IDragController> dragController = { this };
     muse::ContextInject<playback::IPlaybackState> playbackState = { this };
 
 public:
@@ -105,7 +111,7 @@ public:
     qreal height() const override;
 
     muse::PointF toLogical(const muse::PointF& point) const override;
-    muse::PointF toLogical(const QPointF& point) const override;
+    muse::PointF toLogical(const QPointF& point) const;
     muse::RectF toLogical(const muse::RectF& rect) const;
 
     muse::PointF fromLogical(const muse::PointF& point) const override;
@@ -123,7 +129,7 @@ public:
 
     bool isNoteEnterMode() const override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
+    void showContextMenu(const ElementType& elementType, const muse::PointF& pos) override;
     void hideContextMenu() override;
 
     void showSearch() override;
@@ -138,7 +144,11 @@ public:
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
-    QQuickItem* asItem() override;
+    void setViewCursor(ViewCursor cursor) override;
+
+    void startOutgoingDrag(const OutgoingDrag& drag, const muse::PointF& hotSpot) override;
+    bool isOutgoingDragStarted() const override;
+    void endOutgoingDrag() override;
 
     void scheduleRedraw(const muse::RectF& rect = muse::RectF()) override;
 
@@ -256,11 +266,6 @@ private:
 
     bool ensureViewportInsideScrollableArea();
 
-    muse::RectF scrollableAreaRect() const;
-
-    qreal horizontalScrollableSize() const;
-    qreal verticalScrollableSize() const;
-
     bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
@@ -283,11 +288,10 @@ private:
 
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
-    muse::PointF canvasCenter() const;
-    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
+    void updateTransformContent();
 
     INotationPtr m_notation;
-    muse::draw::Transform m_matrix;
+    ViewTransform m_transform;
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
@@ -307,6 +311,8 @@ private:
     bool m_readonly = false;
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
+
+    QPointer<QDrag> m_outgoingDrag;
     bool m_isMainView = false;
 
     bool m_autoScrollEnabled = true;
