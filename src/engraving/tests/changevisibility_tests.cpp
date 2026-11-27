@@ -25,6 +25,7 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/rest.h"
@@ -602,5 +603,55 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     // [THEN] Including the previously hidden notes
     for (Note* note : chord->notes()) {
         EXPECT_TRUE(note->visible());
+    }
+}
+
+TEST_F(Engraving_ChangeVisibilityTests, TabBendVisibilitySaveReopen)
+{
+    delete m_score;
+    m_score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"tab-bend.mscx");
+    ASSERT_TRUE(m_score);
+    Chord* chord = findChord(0);
+    ASSERT_TRUE(chord);
+    Note* start = chord->upNote();
+    ASSERT_TRUE(start->bendFor());
+    Note* end = start->bendFor()->endNote();
+    ASSERT_TRUE(end);
+    ASSERT_FALSE(end->visible());
+    ASSERT_FALSE(end->overrideBendVisibilityRules());
+
+    const String automatic(u"tab-bend-automatic.mscx");
+    ASSERT_TRUE(ScoreRW::saveScore(m_score, automatic));
+    MasterScore* automaticScore = ScoreRW::readScore(automatic, true);
+    ASSERT_TRUE(automaticScore);
+    Note* automaticEnd = toChord(automaticScore->findCR(end->tick(), 0))->upNote();
+    EXPECT_FALSE(automaticEnd->visible());
+    EXPECT_FALSE(automaticEnd->overrideBendVisibilityRules());
+    delete automaticScore;
+
+    for (Note* note : { start, end }) {
+        const bool initialVisible = note->visible();
+        for (bool visible : { !initialVisible, initialVisible }) {
+            m_score->select(note);
+            m_score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Toggle visibility"), [&](Transaction& tx) {
+                EditVisibility::toggleVisible(tx, m_score);
+            });
+            EXPECT_EQ(note->visible(), visible);
+            EXPECT_TRUE(note->overrideBendVisibilityRules());
+
+            const String saved(u"tab-bend-visibility.mscx");
+            ASSERT_TRUE(ScoreRW::saveScore(m_score, saved));
+            MasterScore* reopened = ScoreRW::readScore(saved, true);
+            ASSERT_TRUE(reopened);
+            Note* reopenedNote = toChord(reopened->findCR(note->tick(), 0))->upNote();
+            EXPECT_EQ(reopenedNote->visible(), visible);
+            EXPECT_TRUE(reopenedNote->overrideBendVisibilityRules());
+            delete reopened;
+        }
+
+        m_score->undoRedo(true, nullptr);
+        EXPECT_EQ(note->visible(), !initialVisible);
+        m_score->undoRedo(false, nullptr);
+        EXPECT_EQ(note->visible(), initialVisible);
     }
 }

@@ -675,7 +675,8 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
 
     for (Pid pid : { Pid::COLOR, Pid::VISIBLE, Pid::Z }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
-            writeProperty(item, xml, pid);
+            bool force = pid == Pid::VISIBLE && item->isNote() && toNote(item)->overrideBendVisibilityRules();
+            writeProperty(item, xml, pid, force);
         }
     }
 
