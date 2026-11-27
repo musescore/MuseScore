@@ -331,7 +331,7 @@
         <eid>y_y</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>z_z</eid>
             </Fermata>
           <Dynamic>

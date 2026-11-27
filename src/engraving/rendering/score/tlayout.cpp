@@ -2082,20 +2082,8 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
         }
     }
 
-    String name = String::fromAscii(SymNames::nameForSymId(item->symId()).ascii());
-    if (item->placeAbove()) {
-        if (name.endsWith(u"Below")) {
-            //! NOTE It is not clear whether SymId is layout data or given data.
-            const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Above"));
-        }
-    } else {
-        if (name.endsWith(u"Above")) {
-            //! NOTE It is not clear whether SymId is layout data or given data.
-            const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
-        }
-    }
-
-    ldata->setShape(Shape(item->symBbox(item->symId()), item));
+    ldata->symId = Fermata::symIdForFermataType(item->fermataType(), item->placeAbove());
+    ldata->setShape(Shape(item->symBbox(ldata->symId), item));
     x -= 0.5 * ldata->bbox().width();
 
     ldata->setPos(x, y);

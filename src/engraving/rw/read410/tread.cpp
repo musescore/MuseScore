@@ -1497,7 +1497,7 @@ bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
     if (tag == "subtype") {
         AsciiStringView s = xml.readAsciiText();
         SymId id = SymNames::symIdByName(s);
-        f->setSymIdAndTimeStretch(id);
+        f->setFermataTypeAndTimeStretch(Fermata::fermataTypeFromSymId(id));
     } else if (tag == "play") {
         f->setPlay(xml.readBool());
     } else if (tag == "timeStretch") {

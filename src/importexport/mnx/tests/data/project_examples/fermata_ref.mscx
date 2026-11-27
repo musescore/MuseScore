@@ -117,7 +117,7 @@
         <eid>K_K</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>L_L</eid>
             </Fermata>
           <Chord>
@@ -136,7 +136,7 @@
           </voice>
         <voice>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>P_P</eid>
             </Fermata>
           <Chord>
@@ -158,7 +158,7 @@
         <eid>T_T</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>U_U</eid>
             </Fermata>
           <Chord>
@@ -181,7 +181,7 @@
         <eid>Y_Y</eid>
         <voice>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>Z_Z</eid>
             </Fermata>
           <Rest>
@@ -195,7 +195,7 @@
         <eid>b_b</eid>
         <voice>
           <Fermata>
-            <subtype>fermataShortBelow</subtype>
+            <fermataType>short</fermataType>
             <eid>c_c</eid>
             <placement>below</placement>
             </Fermata>
@@ -218,7 +218,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>h_h</eid>
             </Fermata>
           <Beam>
@@ -276,7 +276,7 @@
           </voice>
         <voice>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>r_r</eid>
             <placement>above</placement>
             </Fermata>
@@ -301,7 +301,7 @@
             <duration>4/4</duration>
             </Rest>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>w_w</eid>
             </Fermata>
           </voice>
@@ -320,7 +320,7 @@
         <eid>z_z</eid>
         <voice>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>0_0</eid>
             </Fermata>
           <Rest>
@@ -338,7 +338,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataShortHenzeAbove</subtype>
+            <fermataType>shortHenze</fermataType>
             <eid>4_4</eid>
             </Fermata>
           <Chord>

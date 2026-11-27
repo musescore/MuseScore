@@ -288,7 +288,7 @@
         <eid>4_4</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>5_5</eid>
             </Fermata>

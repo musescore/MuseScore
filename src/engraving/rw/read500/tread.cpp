@@ -489,6 +489,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
     case P_TYPE::MARKER_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), MarkerType::USER));
+    case P_TYPE::FERMATA_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), FermataType::Undefined));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -1534,10 +1536,7 @@ bool TRead::readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx)
 {
     const AsciiStringView tag(xml.name());
 
-    if (tag == "subtype") {
-        AsciiStringView s = xml.readAsciiText();
-        SymId id = SymNames::symIdByName(s);
-        f->setSymIdAndTimeStretch(id);
+    if (readProperty(f, tag, xml, ctx, Pid::FERMATA_TYPE)) {
     } else if (tag == "play") {
         f->setPlay(xml.readBool());
     } else if (tag == "timeStretch") {

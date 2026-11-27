@@ -945,10 +945,12 @@ void SingleLayout::layout(Expression* item, const Context& ctx)
 
 void SingleLayout::layout(Fermata* item, const Context&)
 {
+    Fermata::LayoutData* ldata = item->mutldata();
     item->setPos(PointF());
     item->setOffset(PointF());
-    RectF b(item->symBbox(item->symId()));
-    item->setbbox(b.translated(-0.5 * b.width(), 0.0));
+    ldata->symId = Fermata::symIdForFermataType(item->fermataType(), item->placeAbove());
+    RectF b(item->symBbox(ldata->symId));
+    ldata->setBbox(b.translated(-0.5 * b.width(), 0.0));
 }
 
 void SingleLayout::layout(Fingering* item, const Context& ctx)

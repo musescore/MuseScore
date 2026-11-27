@@ -1202,7 +1202,8 @@ enum class FermataType : signed char {
     Normal,
     Long,
     LongHenze,
-    VeryLong
+    VeryLong,
+    Curlew
 };
 
 enum class ChordLineType : unsigned char {

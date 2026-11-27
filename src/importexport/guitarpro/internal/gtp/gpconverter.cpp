@@ -1411,11 +1411,11 @@ void GPConverter::addFermatas()
 {
     auto fermataType = [](const GPMasterBar::Fermata& fer) {
         if (fer.type == GPMasterBar::Fermata::Type::Long) {
-            return SymId::fermataLongAbove;
+            return FermataType::Long;
         } else if (fer.type == GPMasterBar::Fermata::Type::Short) {
-            return SymId::fermataShortAbove;
+            return FermataType::Short;
         }
-        return SymId::fermataAbove;
+        return FermataType::Normal;
     };
 
     for (const auto& fr : _fermatas) {
@@ -1428,8 +1428,7 @@ void GPConverter::addFermatas()
 
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
             Fermata* fermata = mu::engraving::Factory::createFermata(seg);
-            SymId type = fermataType(fr.second);
-            fermata->setSymIdAndTimeStretch(type);
+            fermata->setFermataTypeAndTimeStretch(fermataType(fr.second));
             fermata->setTimeStretch(convertingLength);
             fermata->setTrack(staffIdx * VOICES);
             seg->add(fermata);

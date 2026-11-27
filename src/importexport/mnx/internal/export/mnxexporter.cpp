@@ -101,7 +101,7 @@ mnx::Fermata MnxExporter::mnxFermataFromFermata(const Fermata* fermata)
 {
     mnx::Fermata result;
     result.set_or_clear_duration(toMnxFermataDuration(fermata->fermataType()));
-    result.set_or_clear_symbol(toMnxFermataSymbol(fermata->symId()));
+    result.set_or_clear_symbol(toMnxFermataSymbol(Fermata::symIdForFermataType(fermata->fermataType(), fermata->placeAbove())));
     result.set_or_clear_orient(toMnxOrientation(fermata->placement()));
     return result;
 }

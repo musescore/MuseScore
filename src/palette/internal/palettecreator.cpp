@@ -969,27 +969,28 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 
     // Fermatas
 
-    static const SymIdList defaultFermatas {
-        SymId::fermataAbove,
-        SymId::fermataShortAbove,
-        SymId::fermataLongAbove
+    static const std::vector<FermataType> defaultFermatas {
+        FermataType::Normal,
+        FermataType::Short,
+        FermataType::Long
     };
 
-    static const SymIdList masterFermatas {
-        SymId::fermataAbove,
-        SymId::fermataShortAbove,
-        SymId::fermataLongAbove,
-        SymId::fermataLongHenzeAbove,
-        SymId::fermataShortHenzeAbove,
-        SymId::fermataVeryLongAbove,
-        SymId::fermataVeryShortAbove,
+    static const std::vector<FermataType> masterFermatas {
+        FermataType::Normal,
+        FermataType::Short,
+        FermataType::Long,
+        FermataType::LongHenze,
+        FermataType::ShortHenze,
+        FermataType::VeryLong,
+        FermataType::VeryShort,
+        FermataType::Curlew
     };
 
     // Breaths
 
-    for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
+    for (FermataType type : defaultPalette ? defaultFermatas : masterFermatas) {
         auto f = Factory::makeFermata(paletteScore()->dummy());
-        f->setSymIdAndTimeStretch(i);
+        f->setFermataTypeAndTimeStretch(type);
         sp->appendElement(f, f->subtypeUserName());
     }
 

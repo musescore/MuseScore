@@ -180,7 +180,7 @@
         <eid>Y_Y</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>Z_Z</eid>
             </Fermata>
           <Chord>

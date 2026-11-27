@@ -2073,25 +2073,19 @@ QString Braille::brailleFermata(Fermata* fermata)
     // Table 22B. Page 18. Music Braille Code 2015.
     // TODO Could not find dedicated Braille symbols for Henze
     // or very long variants, so regular ones were used. Are there dedicated symbols?
-    switch (fermata->symId()) {
-    case SymId::fermataAbove:
-    case SymId::fermataBelow:
+    switch (fermata->fermataType()) {
+    case FermataType::Normal:
         return BRAILLE_FERMATA;
-    case SymId::fermataVeryShortAbove:
-    case SymId::fermataVeryShortBelow:
-    case SymId::fermataShortHenzeAbove:
-    case SymId::fermataShortHenzeBelow:
-    case SymId::fermataShortAbove:
-    case SymId::fermataShortBelow:
+    case FermataType::VeryShort:
+    case FermataType::ShortHenze:
+    case FermataType::Short:
         return BRAILLE_SHORT_FERMATA;
-    case SymId::fermataVeryLongAbove:
-    case SymId::fermataVeryLongBelow:
-    case SymId::fermataLongHenzeAbove:
-    case SymId::fermataLongHenzeBelow:
-    case SymId::fermataLongAbove:
-    case SymId::fermataLongBelow:
+    case FermataType::VeryLong:
+    case FermataType::LongHenze:
+    case FermataType::Long:
         return BRAILLE_LONG_FERMATA;
-    default:
+    case FermataType::Curlew:
+    case FermataType::Undefined:
         break;
     }
     return QString();

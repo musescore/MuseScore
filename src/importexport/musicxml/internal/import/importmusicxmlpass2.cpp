@@ -1372,7 +1372,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     const String direction = notation.attribute(u"type");
     Segment* seg = cr->segment();
     Fermata* fermata = Factory::createFermata(parentOrDummy(seg, cr->score()->dummy()));
-    fermata->setSymIdAndTimeStretch(articSym);
+    fermata->setFermataTypeAndTimeStretch(Fermata::fermataTypeFromSymId(articSym));
     fermata->setTrack(cr->track());
     fermata->setVisible(notation.visible());
     colorItem(fermata, Color::fromString(notation.attribute(u"color")));
@@ -5928,7 +5928,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             Segment* const segment = measure->getSegment(st, locTick);
             const track_idx_t track = m_pass1.trackForPart(partId);
             Fermata* fermata = Factory::createFermata(segment);
-            fermata->setSymId(convertFermataToSymId(m_e.readText()));
+            fermata->setFermataType(Fermata::fermataTypeFromSymId(convertFermataToSymId(m_e.readText())));
             fermata->setTrack(track);
             segment->add(fermata);
             colorItem(fermata, fermataColor);

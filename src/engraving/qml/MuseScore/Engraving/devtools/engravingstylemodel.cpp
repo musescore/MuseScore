@@ -211,6 +211,7 @@ QString EngravingStyleModel::typeToString(P_TYPE pt) const
     case P_TYPE::PARENTHESES_MODE:   return "Int";
     case P_TYPE::PLAY_COUNT_PRESET:   return "Int";
     case P_TYPE::MARKER_TYPE:         return "Int";
+    case P_TYPE::FERMATA_TYPE:        return "Int";
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return "Int";
     case P_TYPE::INSTRUMENT_LABEL_VISIBILITY: return "Int";
     case P_TYPE::UNDEFINED: return "Undefined";

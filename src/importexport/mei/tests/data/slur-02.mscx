@@ -964,7 +964,7 @@
             </Chord>
           <endTuplet/>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>mC_mC</eid>
             </Fermata>
@@ -1225,7 +1225,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>YD_YD</eid>
             <placement>below</placement>

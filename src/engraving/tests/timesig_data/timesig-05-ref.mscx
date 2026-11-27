@@ -126,7 +126,7 @@
         <eid>S_S</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>T_T</eid>
             </Fermata>
           <Chord>

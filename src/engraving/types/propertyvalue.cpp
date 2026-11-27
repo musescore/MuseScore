@@ -184,6 +184,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PARENTHESES_MODE: return static_cast<int>(value<ParenthesesMode>());
     case P_TYPE::PLAY_COUNT_PRESET: return static_cast<int>(value<RepeatPlayCountPreset>());
     case P_TYPE::MARKER_TYPE: return static_cast<int>(value<MarkerType>());
+    case P_TYPE::FERMATA_TYPE: return static_cast<int>(value<FermataType>());
     case P_TYPE::ACTION_TYPE: return static_cast<int>(value<ActionIconType>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
@@ -317,6 +318,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PARENTHESES_MODE:   return PropertyValue(ParenthesesMode(v.toInt()));
     case P_TYPE::PLAY_COUNT_PRESET:   return PropertyValue(RepeatPlayCountPreset(v.toInt()));
     case P_TYPE::MARKER_TYPE:         return PropertyValue(MarkerType(v.toInt()));
+    case P_TYPE::FERMATA_TYPE:        return PropertyValue(FermataType(v.toInt()));
     case P_TYPE::ACTION_TYPE: return PropertyValue(ActionIconType(v.toInt()));
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return PropertyValue(MeasureNumberPlacement(v.toInt()));
     case P_TYPE::CAPO_TRANSPOSE_MODE: return PropertyValue(CapoParams::TransposeMode(v.toInt()));

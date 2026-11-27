@@ -171,7 +171,7 @@
         <eid>O_O</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>P_P</eid>
             </Fermata>
           <Chord>

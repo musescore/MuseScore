@@ -1359,6 +1359,7 @@ enum class FermataType {
     Long       = int(mu::engraving::FermataType::Long),
     LongHenze  = int(mu::engraving::FermataType::LongHenze),
     VeryLong   = int(mu::engraving::FermataType::VeryLong),
+    Curlew     = int(mu::engraving::FermataType::Curlew),
 };
 Q_ENUM_NS(FermataType);
 

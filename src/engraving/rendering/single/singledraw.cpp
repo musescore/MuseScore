@@ -1146,7 +1146,7 @@ void SingleDraw::draw(const Fermata* item, Painter* painter, const PaintOptions&
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor(opt));
-    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    item->drawSymbol(item->ldata()->symId, painter, PointF(-0.5 * item->width(), 0.0));
 }
 
 void SingleDraw::draw(const FiguredBass* item, Painter* painter, const PaintOptions& opt)

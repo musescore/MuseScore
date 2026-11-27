@@ -167,7 +167,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>N_N</eid>
             </Fermata>
           <Chord>
@@ -395,7 +395,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>GB_GB</eid>
             </Fermata>
           <Chord>
@@ -857,7 +857,7 @@
                 </Note>
               </Chord>
             <Fermata>
-              <subtype>fermataAbove</subtype>
+              <fermataType>normal</fermataType>
               <eid>SC_SC</eid>
               <linkedTo>N_N</linkedTo>
               </Fermata>
@@ -1130,7 +1130,7 @@
                 </Note>
               </Chord>
             <Fermata>
-              <subtype>fermataAbove</subtype>
+              <fermataType>normal</fermataType>
               <eid>DD_DD</eid>
               <linkedTo>GB_GB</linkedTo>
               </Fermata>

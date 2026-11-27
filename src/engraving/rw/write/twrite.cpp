@@ -1388,7 +1388,7 @@ void TWrite::write(const Fermata* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     xml.startElement(item);
-    xml.tag("subtype", SymNames::nameForSymId(item->symId()));
+    writeProperty(item, xml, Pid::FERMATA_TYPE);
     writeProperty(item, xml, Pid::TIME_STRETCH);
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::MIN_DISTANCE);

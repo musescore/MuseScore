@@ -93,7 +93,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>I_I</eid>
             </Fermata>
           <Chord>
@@ -106,7 +106,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>L_L</eid>
             <placement>below</placement>
             </Fermata>
@@ -120,7 +120,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>O_O</eid>
             </Fermata>
           <Chord>
@@ -133,7 +133,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortBelow</subtype>
+            <fermataType>short</fermataType>
             <eid>R_R</eid>
             <placement>below</placement>
             </Fermata>
@@ -152,7 +152,7 @@
         <eid>U_U</eid>
         <voice>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>V_V</eid>
             </Fermata>
           <Chord>
@@ -165,7 +165,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataLongBelow</subtype>
+            <fermataType>long</fermataType>
             <eid>Y_Y</eid>
             <placement>below</placement>
             </Fermata>
@@ -179,7 +179,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>b_b</eid>
             </Fermata>
           <Chord>
@@ -192,7 +192,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataVeryLongBelow</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>e_e</eid>
             <placement>below</placement>
             </Fermata>
@@ -630,7 +630,7 @@
         <eid>/B_/B</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>AC_AC</eid>
             </Fermata>
           <Rest>
@@ -655,7 +655,7 @@
         <eid>FC_FC</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>GC_GC</eid>
             </Fermata>
           <Rest>

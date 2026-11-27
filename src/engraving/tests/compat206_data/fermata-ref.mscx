@@ -110,7 +110,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <play>0</play>
             <eid>H_H</eid>
             <placement>below</placement>
@@ -130,7 +130,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <play>0</play>
             <eid>L_L</eid>
             <placement>below</placement>
@@ -145,7 +145,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>3</timeStretch>
             <eid>O_O</eid>
             <offset x="-2.05234" y="-4.89487"/>
@@ -160,7 +160,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>R_R</eid>
             </Fermata>
           <Chord>
@@ -187,7 +187,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>X_X</eid>
             </Fermata>
           <Chord>
@@ -209,7 +209,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>c_c</eid>
             <placement>below</placement>
             </Fermata>
@@ -228,7 +228,7 @@
         <eid>f_f</eid>
         <voice>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>1.5</timeStretch>
             <eid>g_g</eid>
             <placement>below</placement>
@@ -262,7 +262,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>n_n</eid>
             </Fermata>
           <Chord>
@@ -284,7 +284,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>s_s</eid>
             </Fermata>
           <Chord>
@@ -297,7 +297,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <play>0</play>
             <eid>v_v</eid>
             </Fermata>
@@ -334,7 +334,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>3_3</eid>
             </Fermata>
           <Chord>

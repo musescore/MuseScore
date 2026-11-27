@@ -128,7 +128,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>L_L</eid>
             </Fermata>
           <Chord>
@@ -142,7 +142,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>O_O</eid>
             <placement>below</placement>
             </Fermata>
@@ -621,7 +621,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>yB_yB</eid>
             </Fermata>
           <Chord>
@@ -635,7 +635,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>1B_1B</eid>
             </Fermata>
           <Chord>

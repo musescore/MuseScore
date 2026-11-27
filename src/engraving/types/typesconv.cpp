@@ -2648,6 +2648,28 @@ TremoloType TConv::fromXml(const AsciiStringView& tag, TremoloType def)
     return findTypeByXmlTag<TremoloType>(TREMOLO_TYPES, tag, def);
 }
 
+static const std::array<Item<FermataType>, 9> FERMATA_TYPES = { {
+    { FermataType::Undefined,  "" },
+    { FermataType::VeryShort,  "veryShort" },
+    { FermataType::Short,      "short" },
+    { FermataType::ShortHenze, "shortHenze" },
+    { FermataType::Normal,     "normal" },
+    { FermataType::Long,       "long" },
+    { FermataType::LongHenze,  "longHenze" },
+    { FermataType::VeryLong,   "veryLong" },
+    { FermataType::Curlew,     "curlew" },
+} };
+
+AsciiStringView TConv::toXml(FermataType v)
+{
+    return findXmlTagByType<FermataType>(FERMATA_TYPES, v);
+}
+
+FermataType TConv::fromXml(const AsciiStringView& tag, FermataType def)
+{
+    return findTypeByXmlTag<FermataType>(FERMATA_TYPES, tag, def);
+}
+
 static const std::vector<Item<TremoloBarType> > TREMOLOBAR_TYPES = { {
     { TremoloBarType::DIP, "dip" },
     { TremoloBarType::DIVE, "dive" },
