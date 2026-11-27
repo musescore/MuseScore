@@ -33,7 +33,7 @@
 namespace mu::engraving {
 class XmlWriter;
 class Spanner;
-class MeasureBase;
+class Measure;
 }
 
 namespace mu::engraving::write {
@@ -73,6 +73,6 @@ public:
     SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* spanner, int track, Fraction frac,
                   bool start);
 
-    static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
+    static void fillSpannerPosition(Location& l, const Measure* endpoint, const Fraction& tick, bool clipboardmode);
 };
 }

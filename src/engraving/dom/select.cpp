@@ -364,6 +364,27 @@ Measure* Selection::findMeasure() const
     return m;
 }
 
+// first or last measure base for given elements...
+static MeasureBase* measureBaseFromElements(const std::vector<EngravingItem*>& elements, bool first)
+{
+    MeasureBase* result = nullptr;
+    for (EngravingItem* el : elements) {
+        MeasureBase* mb = el->findMeasureBase();
+        if (mb && mb->isMeasure()) {
+            mb = toMeasure(mb)->coveringMMRestOrThis();
+        }
+        if (!mb) {
+            continue;
+        }
+        const bool isNewFirst = first && result && mb->isBefore(result);
+        const bool isNewLast = !first && result && mb->isAfter(result);
+        if (!result || isNewFirst || isNewLast) {
+            result = mb;
+        }
+    }
+    return result;
+}
+
 MeasureBase* Selection::startMeasureBase() const
 {
     EngravingItem* selectionElement = element();
@@ -373,6 +394,12 @@ MeasureBase* Selection::startMeasureBase() const
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
         if (mb) {
+            return mb;
+        }
+    }
+
+    if (m_state == SelState::LIST) {
+        if (MeasureBase* mb = measureBaseFromElements(m_el, /*first*/ true)) {
             return mb;
         }
     }
@@ -401,6 +428,12 @@ MeasureBase* Selection::endMeasureBase() const
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
         if (mb) {
+            return mb;
+        }
+    }
+
+    if (m_state == SelState::LIST) {
+        if (MeasureBase* mb = measureBaseFromElements(m_el, /*first*/ false)) {
             return mb;
         }
     }
@@ -887,8 +920,11 @@ void Selection::updateSelectedElements()
     const Fraction rangeStart = tickStart();
     const Fraction rangeEnd = tickEnd();
 
+    //! NOTE: A box-only range has no duration, so it shouldn't contain any spanners (even ones that span across it)...
+    const bool isBoxOnlyRange = m_startBox && m_endBox && rangeStart == rangeEnd;
+
     //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChordRest...
-    for (auto i = m_score->spanner().begin(); i != m_score->spanner().end(); ++i) {
+    for (auto i = m_score->spanner().begin(); !isBoxOnlyRange && i != m_score->spanner().end(); ++i) {
         Spanner* sp = (*i).second;
         // ignore spanners belonging to other tracks
         if (sp->track() < startTrack || sp->track() >= endTrack) {

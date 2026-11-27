@@ -92,7 +92,7 @@ private:
             }
             if (system != k.system) {
                 // On different systems...
-                return system->first()->index() < k.system->first()->index();
+                return system->first()->measureBaseIndex() < k.system->first()->measureBaseIndex();
             }
             if (staffIdx != k.staffIdx) {
                 // On different staves...

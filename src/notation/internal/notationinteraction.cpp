@@ -4966,8 +4966,8 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         if (selection()->isRange()) {
             INotationSelectionRange::MeasureBaseRange range = selection()->range()->measureBaseRange();
 
-            const int startMeasureIndex = range.startMeasureBase ? range.startMeasureBase->index() : 0;
-            const int endMeasureIndex = range.endMeasureBase ? range.endMeasureBase->index() + 1 : 0;
+            const int startMeasureIndex = range.startMeasureBase ? range.startMeasureBase->measureBaseIndex() : 0;
+            const int endMeasureIndex = range.endMeasureBase ? range.endMeasureBase->measureBaseIndex() + 1 : 0;
 
             beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
                              ? startMeasureIndex
@@ -4989,7 +4989,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
                 continue;
             }
 
-            int itemMeasureIndex = itemMeasure->index();
+            int itemMeasureIndex = itemMeasure->measureBaseIndex();
             if (itemMeasureIndex < 0) {
                 continue;
             }
@@ -5045,7 +5045,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
     } break;
     case AddBoxesTarget::AtStartOfScore: {
         Measure* firstMeasure = score()->firstMeasure();
-        beforeBoxIndex = firstMeasure ? firstMeasure->index() : -1;
+        beforeBoxIndex = firstMeasure ? firstMeasure->measureBaseIndex() : -1;
     } break;
     case AddBoxesTarget::AtEndOfScore:
         beforeBoxIndex = -1;
@@ -6532,11 +6532,11 @@ void NotationInteraction::removeSelectedMeasures()
         for (EngravingItem* element : elements) {
             mu::engraving::MeasureBase* elementMeasure = element->findMeasureBase();
 
-            if (!firstMeasureBase || firstMeasureBase->index() > elementMeasure->index()) {
+            if (!firstMeasureBase || firstMeasureBase->measureBaseIndex() > elementMeasure->measureBaseIndex()) {
                 firstMeasureBase = elementMeasure;
             }
 
-            if (!lastMeasureBase || lastMeasureBase->index() < elementMeasure->index()) {
+            if (!lastMeasureBase || lastMeasureBase->measureBaseIndex() < elementMeasure->measureBaseIndex()) {
                 lastMeasureBase = elementMeasure;
             }
         }
@@ -6549,8 +6549,6 @@ void NotationInteraction::removeSelectedMeasures()
     m_selection->select({ firstMeasureBase }, SelectType::REPLACE);
     m_selection->select({ lastMeasureBase }, SelectType::RANGE);
 
-    // Slight hack because measureIndex is only meaningful for Measure types (perhaps this property shouldn't
-    // exist on MeasureBase in the first place)...
     const Measure* firstMeasure = firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : firstMeasureBase->nextMeasure();
     const Measure* lastMeasure = lastMeasureBase->isMeasure() ? toMeasure(lastMeasureBase) : lastMeasureBase->prevMeasure();
 

@@ -26,6 +26,7 @@
 
 #include "propertiespanelabstractmodel.h"
 #include "notation/notationtypes.h"
+#include "rcommand/icommandsstate.h"
 
 namespace mu::propertiespanel {
 class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
@@ -47,12 +48,19 @@ class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(bool allPagesAreLocked READ allPagesAreLocked NOTIFY allPagesAreLockedChanged)
     Q_PROPERTY(bool scoreIsInPageView READ scoreIsInPageView NOTIFY scoreIsInPageViewChanged)
     Q_PROPERTY(bool isBoxOnlySelection READ isBoxOnlySelection NOTIFY isBoxOnlySelectionChanged)
-    Q_PROPERTY(bool isMakeIntoSystemAvailable READ isMakeIntoSystemAvailable NOTIFY isMakeIntoSystemAvailableChanged)
-    Q_PROPERTY(bool isMakeIntoPageAvailable READ isMakeIntoPageAvailable NOTIFY isMakeIntoPageAvailableChanged)
     Q_PROPERTY(bool isSystemTabAvailable READ isSystemTabAvailable NOTIFY isSystemTabAvailableChanged)
 
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
+
+    Q_PROPERTY(bool isToggleSystemLockEnabled READ isToggleSystemLockEnabled NOTIFY commandStatesChanged)
+    Q_PROPERTY(bool isMoveNextPrevSystemEnabled READ isMoveNextPrevSystemEnabled NOTIFY commandStatesChanged)
+    Q_PROPERTY(bool isMakeIntoSystemEnabled READ isMakeIntoSystemEnabled NOTIFY commandStatesChanged)
+    Q_PROPERTY(bool isTogglePageLockEnabled READ isTogglePageLockEnabled NOTIFY commandStatesChanged)
+    Q_PROPERTY(bool isMoveNextPrevPageEnabled READ isMoveNextPrevPageEnabled NOTIFY commandStatesChanged)
+    Q_PROPERTY(bool isMakeIntoPageEnabled READ isMakeIntoPageEnabled NOTIFY commandStatesChanged)
+
+    muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
 
 public:
     explicit SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
@@ -89,12 +97,17 @@ public:
 
     bool scoreIsInPageView() const;
     bool isBoxOnlySelection() const;
-    bool isMakeIntoSystemAvailable() const;
-    bool isMakeIntoPageAvailable() const;
     bool isSystemTabAvailable() const;
 
     int systemCount() const;
     int pageCount() const;
+
+    bool isToggleSystemLockEnabled() const;
+    bool isMoveNextPrevSystemEnabled() const;
+    bool isMakeIntoSystemEnabled() const;
+    bool isTogglePageLockEnabled() const;
+    bool isMoveNextPrevPageEnabled() const;
+    bool isMakeIntoPageEnabled() const;
 
 protected:
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
@@ -104,8 +117,6 @@ private:
     void updateAllPagesAreLocked();
     void updateScoreIsInPageView();
     void updateIsBoxOnlySelection(const QSet<mu::notation::BoxType>& boxTypes);
-    void updateIsMakeIntoSystemAvailable(const QSet<mu::notation::BoxType>& boxTypes);
-    void updateIsMakeIntoPageAvailable(const QSet<mu::notation::BoxType>& boxTypes);
     void updateIsSystemTabAvailable(const QSet<mu::notation::BoxType>& boxTypes);
 
     QSet<mu::notation::BoxType> boxTypesInSelection() const;
@@ -118,22 +129,21 @@ signals:
     void allPagesAreLockedChanged(bool allLocked);
     void scoreIsInPageViewChanged(bool isInPageView);
     void isBoxOnlySelectionChanged(bool isBoxOnlySelection);
-    void isMakeIntoSystemAvailableChanged(bool isMakeIntoSystemAvailable);
-    void isMakeIntoPageAvailableChanged(bool isMakeIntoPageAvailable);
     void isSystemTabAvailableChanged(bool isSystemTabAvailable);
     void systemCountChanged(int count);
     void pageCountChanged(int count);
+    void commandStatesChanged();
 
 private:
     bool m_allSystemsAreLocked = false;
     bool m_allPagesAreLocked = false;
     bool m_scoreIsInPageView = false;
     bool m_isBoxOnlySelection = false;
-    bool m_isMakeIntoSystemAvailable = false;
-    bool m_isMakeIntoPageAvailable = false;
     bool m_isSystemTabAvailable = false;
 
     size_t m_systemCount = 0;
     size_t m_pageCount = 0;
+
+    std::map<muse::rcommand::Command, bool> m_commandsEnabledMap;
 };
 }
