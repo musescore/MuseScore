@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='utf-8'?>
+<museScore version="4.70">
+  <programVersion>4.7.5</programVersion>
+  <programRevision>3654226</programRevision>
+  <Score>
+    <eid>mZhhZHdOwiP_1Fa343kPGaO</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger" />
+    <metaTag name="audioComUrl" />
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright" />
+    <metaTag name="creationDate">2026-10-23</metaTag>
+    <metaTag name="lyricist" />
+    <metaTag name="movementNumber" />
+    <metaTag name="movementTitle" />
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source" />
+    <metaTag name="sourceRevisionId" />
+    <metaTag name="translator" />
+    <metaTag name="workNumber" />
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds" />
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass" />
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion" />
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion" />
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted />
+      <soloists />
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>+qyQfQ0hGZ_HXk+BqdAzkG</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <preferSharpFlat>none</preferSharpFlat>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Channel>
+          <program value="0" />
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0" />
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>DVM1q+r+ALE_Sote2SNWYjO</eid>
+        <Text>
+          <eid>hClOYiTNT+L_KryNoNCeq+B</eid>
+          <style>title</style>
+          <text>Jazz chord interpretation test: 11ths</text>
+          </Text>
+        <Text>
+          <eid>7aTuLmnzZmP_09CmwitP16E</eid>
+          <style>composer</style>
+          <text>NJ</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <eid>2Cu2m8yN18C_JARcUPUMIPL</eid>
+        <voice>
+          <KeySig>
+            <eid>RIy1aWcPBzD_+Wxs2FTlxiB</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>G9UOUWIQmqC_hCiZUHiSQMN</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Harmony>
+            <rootCase>1</rootCase>
+            <harmonyInfo>
+              <name>11</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>cr9dsBNQLHC_o4zGHPMqg1L</eid>
+            </Harmony>
+          <SystemText>
+            <eid>KPeAlrDUuQD_dzA9QhtVCBF</eid>
+            <minDistance>1.5</minDistance>
+            <bold>1</bold>
+            <text>Chord symbols only - realize these chords</text></SystemText>
+          <Rest><durationType>measure</durationType></Rest></voice>
+        </Measure>
+      <Measure>
+        <eid>qjD5VWDvNHO_UyROywZBUvC</eid>
+        <voice>
+          <Harmony>
+            <rootCase>1</rootCase>
+            <harmonyInfo>
+              <name>11</name>
+              <root>8</root>
+              </harmonyInfo>
+            <eid>C3kv02AYVaJ_JkF+HI7kIkB</eid>
+            </Harmony>
+          <Rest><durationType>measure</durationType></Rest><BarLine>
+            <subtype>end</subtype>
+            <eid>rTPoZ2JauuB_p0wKOI2Bqd</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

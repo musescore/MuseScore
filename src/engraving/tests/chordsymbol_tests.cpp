@@ -22,6 +22,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <set>
+
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/durationtype.h"
@@ -394,6 +397,91 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
     RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-jazz");
+}
+
+//---------------------------------------------------------
+//   Regression tests for Jazz realization of 11th chords
+//   See https://github.com/musescore/MuseScore/issues/35368
+//---------------------------------------------------------
+static std::set<int> realizedPitchClasses(Harmony* harmony, bool literal)
+{
+    const RealizedHarmony::PitchMap notes = harmony->realizedHarmony().generateNotes(
+        harmony->rootTpc(), Tpc::TPC_INVALID, literal, Voicing::CLOSE, 0);
+
+    std::set<int> result;
+    for (const auto& note : notes) {
+        result.insert(note.first % 12);
+    }
+    return result;
+}
+
+static std::vector<Harmony*> issue35368ChordSymbols(MasterScore* score)
+{
+    std::vector<Harmony*> result;
+    for (Segment* segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1()) {
+        EngravingItem* item = segment->findAnnotation(ElementType::HARMONY, 0, score->ntracks());
+        if (item && item->isHarmony()) {
+            result.push_back(toHarmony(item));
+        }
+    }
+    return result;
+}
+
+TEST_F(Engraving_ChordSymbolTests, testIssue35368JazzAndLiteral11ths)
+{
+    // Both measures contain chord symbols and rests, not pre-realized notes.
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"issue35368-11ths.mscx"));
+    ASSERT_NE(score, nullptr);
+    score->doLayout();
+
+    const std::vector<Harmony*> symbols = issue35368ChordSymbols(score.get());
+    ASSERT_EQ(symbols.size(), 2u);
+
+    // Jazz keeps the 11th (F for C11; C-flat for G-flat 11) and omits the third.
+    EXPECT_EQ(realizedPitchClasses(symbols[0], false), (std::set<int> { 0, 2, 5, 7, 10 }));
+    EXPECT_EQ(realizedPitchClasses(symbols[1], false), (std::set<int> { 1, 4, 6, 8, 11 }));
+
+    // Literal includes both the third and the 11th.
+    EXPECT_EQ(realizedPitchClasses(symbols[0], true), (std::set<int> { 0, 2, 4, 5, 7, 10 }));
+    EXPECT_EQ(realizedPitchClasses(symbols[1], true), (std::set<int> { 1, 4, 6, 8, 10, 11 }));
+}
+
+TEST_F(Engraving_ChordSymbolTests, testIssue35368ThirteenthChordControls)
+{
+    // A 13th chord falls through the same switch case as an 11th chord.
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"issue35368-13ths.mscx"));
+    ASSERT_NE(score, nullptr);
+    score->doLayout();
+
+    const std::vector<Harmony*> symbols = issue35368ChordSymbols(score.get());
+    ASSERT_EQ(symbols.size(), 2u);
+
+    // Jazz C13 and G-flat 13 retain their thirds and 13ths, without the 11th.
+    EXPECT_EQ(realizedPitchClasses(symbols[0], false), (std::set<int> { 0, 2, 4, 7, 9, 10 }));
+    EXPECT_EQ(realizedPitchClasses(symbols[1], false), (std::set<int> { 1, 3, 4, 6, 8, 10 }));
+
+    // Literal 13ths retain the 11th as well.
+    EXPECT_EQ(realizedPitchClasses(symbols[0], true), (std::set<int> { 0, 2, 4, 5, 7, 9, 10 }));
+    EXPECT_EQ(realizedPitchClasses(symbols[1], true), (std::set<int> { 1, 3, 4, 6, 8, 10, 11 }));
+}
+
+TEST_F(Engraving_ChordSymbolTests, testIssue35368Minor11PreservesThird)
+{
+    // A minor third is a whole step below the natural 11th, so it may remain.
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(CHORDSYMBOL_DATA_DIR + u"issue35368-minor11ths.mscx"));
+    ASSERT_NE(score, nullptr);
+    score->doLayout();
+
+    const std::vector<Harmony*> symbols = issue35368ChordSymbols(score.get());
+    ASSERT_EQ(symbols.size(), 2u);
+
+    // In both modes, Cm11 contains E-flat and F; G-flat minor 11 contains A and C-flat.
+    const std::set<int> cMinor11 = { 0, 2, 3, 5, 7, 10 };
+    const std::set<int> gFlatMinor11 = { 1, 4, 6, 8, 9, 11 };
+    EXPECT_EQ(realizedPitchClasses(symbols[0], false), cMinor11);
+    EXPECT_EQ(realizedPitchClasses(symbols[1], false), gFlatMinor11);
+    EXPECT_EQ(realizedPitchClasses(symbols[0], true), cMinor11);
+    EXPECT_EQ(realizedPitchClasses(symbols[1], true), gFlatMinor11);
 }
 
 TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
