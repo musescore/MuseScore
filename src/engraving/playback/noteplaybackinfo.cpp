@@ -89,6 +89,13 @@ void addSource(std::vector<NotePlaybackSource>& sources, const NotePlaybackSourc
     }
 }
 
+bool isGradualChange(const EngravingItem* item)
+{
+    return item
+           && (item->isHairpin() || item->isGradualTempoChange());
+}
+
+//! A change has no effect yet on its first tick, where it starts from the value before it
 void addGradualChangeSources(
     const MasterScore* score,
     const Note* note,
@@ -105,10 +112,8 @@ void addGradualChangeSources(
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
-        if (spanner
-            && spanner->playSpanner()
-            && (spanner->tick().ticks() <= tick)
-            && (tick < spanner->tick2().ticks())
+        if (spanner && spanner->playSpanner()
+            && (spanner->tick().ticks() < tick) && (tick < spanner->tick2().ticks())
             && predicate(spanner)
             ) {
             addSource(sources, { spanner, false });
@@ -391,9 +396,7 @@ void addGradualChangeOrigins(
     std::vector<NotePlaybackSource>& origins)
 {
     for (const NotePlaybackSource& source : sources) {
-        const bool isGradualChange = source.item && ((source.item->isHairpin()) || (source.item->isGradualTempoChange()));
-
-        if (!isGradualChange) {
+        if (!isGradualChange(source.item)) {
             continue;
         }
 
@@ -412,6 +415,39 @@ void addGradualChangeOrigins(
             addSource(origins, src);
         }
     }
+}
+
+//! A gradual change has no effect yet on its first tick: a curve point there can still carry the change's id, so
+//! credit the source of the value it starts from instead (unless the point was edited in the automation lane)
+void creditUnstartedGradualChanges(
+    const MasterScore* score,
+    const AutomationCurve& curve,
+    int tick,
+    const std::function<utick_t(int)>& toCurveUTick,
+    std::vector<NotePlaybackSource>& sources)
+{
+    std::vector<NotePlaybackSource> credited;
+
+    for (const NotePlaybackSource& source : sources) {
+        const bool isUnstarted = isGradualChange(source.item)
+                                 && !source.editedInAutomation
+                                 && (toSpanner(source.item)->tick().ticks() >= tick);
+
+        if (!isUnstarted) {
+            addSource(credited, source);
+            continue;
+        }
+
+        const std::optional<NotePlaybackSource> origin = gradualChangeOrigin(score, curve, toCurveUTick(tick), source.item);
+
+        if (origin) {
+            addSource(credited, origin.value());
+        }
+    }
+
+    // e.g. a hairpin right after another one starts from the dynamic the first one ends on
+    creditHairpinEndDynamics(credited, tick);
+    sources = std::move(credited);
 }
 
 //! The ottava whose pitch shift playback uses for the note (mirrors Staff::updateOttava: the latest-starting one wins)
@@ -628,9 +664,11 @@ NotePlaybackInfo collectNotePlaybackInfo(const Note* note, bool expandRepeats)
                    : expandedRepeats.tick2utick(t);
         };
 
+        creditUnstartedGradualChanges(master, tempoCurve, tick, toTempoCurveUTick, pass.tempoSources);
         addGradualChangeOrigins(master, tempoCurve, pass.tempoSources, toTempoCurveUTick, pass.tempoOrigins);
 
         if (dynCurve) {
+            creditUnstartedGradualChanges(master, *dynCurve, attackTick, toPassUTick, pass.dynamicSources);
             addGradualChangeOrigins(master, *dynCurve, pass.dynamicSources, toPassUTick, pass.dynamicOrigins);
         }
 

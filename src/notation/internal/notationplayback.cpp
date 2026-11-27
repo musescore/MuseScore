@@ -463,47 +463,7 @@ tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
 
 NotePlaybackInfo NotationPlayback::notePlaybackInfo(const Note* note) const
 {
-    if (!note || !score()) {
-        return {};
-    }
-
-    NotePlaybackInfo info = mu::engraving::collectNotePlaybackInfo(note, m_playbackModel.isPlayRepeatsEnabled());
-
-    if (!info.isValid()) {
-        return info;
-    }
-
-    // Articulations don't change between repeat passes, so the first pass is enough
-    const NotePlaybackPass& firstPass = info.passes.front();
-    const int tickPositionOffset = firstPass.utick - info.note->tick().ticks();
-
-    mu::engraving::addArticulationMarkings(
-        info,
-        m_playbackModel.articulationSources(info.attackNote, tickPositionOffset)
-        );
-
-    const mu::engraving::PlaybackContextSources sound = m_playbackModel.soundSources(info.attackNote, tickPositionOffset);
-
-    info.sound.playingTechnique = sound.playingTechnique;
-    info.sound.syllable = sound.syllable;
-    info.sound.syllableStartsHere = sound.syllableStartsHere;
-
-    // Flags with both a preset and a technique are found twice
-    for (const mu::engraving::EngravingItem* flag : sound.soundPresets) {
-        if (!muse::contains(info.sound.soundFlags, flag)) {
-            info.sound.soundFlags.push_back(flag);
-        }
-    }
-
-    const bool isFlagTechnique = (sound.textArticulation != nullptr)
-                                 && (sound.textArticulation != sound.playingTechnique)
-                                 && !muse::contains(info.sound.soundFlags, sound.textArticulation);
-
-    if (isFlagTechnique) {
-        info.sound.soundFlags.push_back(sound.textArticulation);
-    }
-
-    return info;
+    return m_playbackModel.notePlaybackInfo(note);
 }
 
 double NotationPlayback::tempoMultiplier() const

@@ -45,6 +45,7 @@
 #include "metaparsers/internal/tremolometaparser.h"
 #include "utils/expressionutils.h"
 
+#include "containers.h"
 #include "defer.h"
 #include "log.h"
 
@@ -1318,6 +1319,48 @@ PlaybackContextSources PlaybackModel::soundSources(const Note* note, int tickPos
     }
 
     return sources;
+}
+
+NotePlaybackInfo PlaybackModel::notePlaybackInfo(const Note* note) const
+{
+    if (!note || !m_score) {
+        return {};
+    }
+
+    NotePlaybackInfo info = collectNotePlaybackInfo(note, isPlayRepeatsEnabled());
+
+    if (!info.isValid()) {
+        return info;
+    }
+
+    // Articulations don't change between repeat passes, so the first pass is enough
+    const NotePlaybackPass& firstPass = info.passes.front();
+    const int tickPositionOffset = firstPass.utick - info.note->tick().ticks();
+
+    addArticulationMarkings(info, articulationSources(info.attackNote, tickPositionOffset));
+
+    const PlaybackContextSources sound = soundSources(info.attackNote, tickPositionOffset);
+
+    info.sound.playingTechnique = sound.playingTechnique;
+    info.sound.syllable = sound.syllable;
+    info.sound.syllableStartsHere = sound.syllableStartsHere;
+
+    // Flags with both a preset and a technique are found twice
+    for (const EngravingItem* flag : sound.soundPresets) {
+        if (!muse::contains(info.sound.soundFlags, flag)) {
+            info.sound.soundFlags.push_back(flag);
+        }
+    }
+
+    const bool isFlagTechnique = (sound.textArticulation != nullptr)
+                                 && (sound.textArticulation != sound.playingTechnique)
+                                 && !muse::contains(info.sound.soundFlags, sound.textArticulation);
+
+    if (isFlagTechnique) {
+        info.sound.soundFlags.push_back(sound.textArticulation);
+    }
+
+    return info;
 }
 
 muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const

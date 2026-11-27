@@ -38,6 +38,7 @@
 #include "playbackeventsrenderer.h"
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
+#include "noteplaybackinfo.h"
 
 namespace mu::engraving {
 class Score;
@@ -100,6 +101,9 @@ public:
     //! lyric syllable (on this note, or held from an earlier one through its melisma). Each applies from where it is
     //! until the next one.
     PlaybackContextSources soundSources(const Note* note, int tickPositionOffset) const;
+
+    //! Everything that shapes how the note plays (see NotePlaybackInfo), with the repeats played as playback plays them
+    NotePlaybackInfo notePlaybackInfo(const Note* note) const;
 
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
