@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>MEI microtonal round-trip regression</title>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2026-08-13" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Voice</label>
+                        <labelAbbr>Vo.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="section1">
+                  <measure xml:id="measure1" n="1">
+                     <staff xml:id="staff1" n="1">
+                        <layer xml:id="layer1" n="1">
+                           <note xml:id="control-sharp" dur="4" pname="c" oct="4"><accid accid="s" /></note>
+                           <note xml:id="quarter-sharp" dur="4" pname="d" oct="4"><accid accid="1qs" /></note>
+                           <note xml:id="three-quarter-sharp" dur="4" pname="e" oct="4"><accid accid="3qs" /></note>
+                           <note xml:id="sharp-down" dur="4" pname="f" oct="4"><accid accid="sd" /></note>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="measure2" n="2" right="end">
+                     <staff xml:id="staff2" n="1">
+                        <layer xml:id="layer2" n="1">
+                           <note xml:id="sharp-up" dur="4" pname="g" oct="4"><accid accid="su" /></note>
+                           <rest xml:id="rest1" dur="2" />
+                           <rest xml:id="rest2" dur="4" />
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
