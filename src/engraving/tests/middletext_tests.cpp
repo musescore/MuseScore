@@ -163,12 +163,17 @@ TEST_F(Engraving_MiddleTextLayoutTests, middleTextCutThrough)
     EXPECT_GT(ld->npoints, 0);
 
     m_line.setMiddleTextOffset(PointF());
+    m_line.setMiddleTextMinLineLength(Spatium(2.0));
+    layout();
+    ASSERT_EQ(ld->gapIndex, 1);
+
     m_line.setMiddleTextCutThrough(false);
     layout();
     EXPECT_FALSE(ld->hideBegin);
     EXPECT_FALSE(ld->hideEnd);
     EXPECT_TRUE(ld->mask().empty());
-    EXPECT_GT(ld->npoints, 0);
+    EXPECT_EQ(ld->gapIndex, -1);
+    EXPECT_EQ(ld->npoints, 2);
 }
 
 TEST_F(Engraving_MiddleTextLayoutTests, middleTextDiagonalLengths)

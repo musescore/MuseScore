@@ -26,12 +26,14 @@
 
 #include "engraving/engravingerrors.h"
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/text.h"
+#include "engraving/dom/textline.h"
 #include "engraving/dom/textlinebase.h"
 
 #include "settings.h"
@@ -453,6 +455,42 @@ TEST_F(MusicXml_Tests, middleText)
             EXPECT_EQ(bracketCount, lineVisible ? 2u : 0u); // Currently we don't export line cutouts.
         }
     }
+}
+
+TEST_F(MusicXml_Tests, middleTextLocalTimeSignature)
+{
+    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
+    std::unique_ptr<MasterScore> score(readScore(XML_IO_DATA_DIR + u"testLocalTimesig6.mscx"));
+    ASSERT_TRUE(score);
+
+    // The second staff has a local 3/4 signature in a 9/8 measure. Span its second beat.
+    TextLine* line = Factory::createTextLine(score->dummy());
+    line->setTrack(staff2track(1));
+    line->setTrack2(line->track());
+    line->setTick(Fraction(3, 8));
+    line->setTicks(Fraction(3, 8));
+    line->setMiddleText(u"Middle");
+    score->addSpanner(line);
+    score->doLayout();
+
+    auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
+    ASSERT_TRUE(saveXml(score.get(), &buffer));
+
+    XmlStreamReader xml(buffer.data());
+    bool middleTextDirection = false;
+    int offset = 0;
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.isStartElement() && xml.name() == "words" && xml.asciiAttribute("halign") == "center") {
+            middleTextDirection = xml.readText() == u"Middle";
+        } else if (xml.isStartElement() && xml.name() == "offset" && middleTextDirection) {
+            offset = xml.readInt();
+        } else if (xml.isEndElement() && xml.name() == "direction") {
+            middleTextDirection = false;
+        }
+    }
+    EXPECT_FALSE(xml.isError());
+    EXPECT_EQ(offset, 2); // One local quarter note at two divisions per quarter.
 }
 
 TEST_F(MusicXml_Tests, accidentals1) {

@@ -5697,7 +5697,8 @@ void ExportMusicXml::middleTexts(const Measure* measure, staff_idx_t staffIdx, s
         MScoreTextToMusicXml mttm(u"words", attr, formatForWords(m_score->style()), m_score->style().styleSt(Sid::musicalTextFont));
         mttm.writeTextFragments(text->fragmentList(), m_xml);
         m_xml.endElement();
-        directionETag(m_xml, xmlStaff, calculateTimeDeltaInDivisions(anchorTick, m_tick, m_div));
+        const Fraction offset = (anchorTick - m_tick) * stretch(m_score, line->track(), measure->tick());
+        directionETag(m_xml, xmlStaff, calculateDurationInDivisions(offset, m_div));
     }
 }
 
