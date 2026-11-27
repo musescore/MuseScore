@@ -327,6 +327,24 @@ protected:
         return titles;
     }
 
+    //! The ids in the right-click menu's "Move to shared stave group" submenu
+    QStringList moveToGroupMenuIds() const
+    {
+        QStringList ids;
+        for (const QVariant& menuItem : m_model->rowContextMenuItems()) {
+            for (const QVariant& subitem : menuItem.toMap().value("subitems").toList()) {
+                ids << subitem.toMap().value("id").toString();
+            }
+        }
+
+        return ids;
+    }
+
+    static QString moveToGroupMenuId(const Part* sharedPart)
+    {
+        return QString("move-to-group:") + sharedPart->id().toQString();
+    }
+
     //! E.g. "[A:0] A B [C:0] C": instrument titles, and "[instrument:staff index]" for system markings rows
     std::string rowNames() const
     {
@@ -1159,6 +1177,91 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_Remo
     const QVariantList menuItems = m_model->rowContextMenuItems();
     ASSERT_EQ(menuItems.size(), 1);
     m_model->handleRowContextMenuItem(menuItems.first().toMap().value("id").toString());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup)
+{
+    // [GIVEN] A, then B in group S, then C in group T
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* t = addSharedPart(u"T");
+    const Part* c = addPart(u"C");
+    addToSharedPart(s, b);
+    addToSharedPart(t, c);
+    createModel(); // [A:0] A S B T C
+
+    // [WHEN] A is selected
+    m_model->selectRow(row(1));
+
+    // [THEN] It can be moved into either group
+    EXPECT_EQ(rowContextMenuTitles(), (QStringList { QString("Remove instrument(s)"), QString("Move to shared stave group") }));
+    EXPECT_EQ(moveToGroupMenuIds(), (QStringList { moveToGroupMenuId(s), moveToGroupMenuId(t) }));
+
+    // [WHEN] B is selected
+    m_model->selectRow(row(3));
+
+    // [THEN] Not into its own group
+    EXPECT_EQ(moveToGroupMenuIds(), QStringList { moveToGroupMenuId(t) });
+
+    // [WHEN] A and B are selected
+    selectRows({ row(1), row(3) });
+
+    // [THEN] Into either group, as they aren't all in S
+    EXPECT_EQ(moveToGroupMenuIds(), (QStringList { moveToGroupMenuId(s), moveToGroupMenuId(t) }));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup_NoGroups)
+{
+    // [GIVEN] Two instruments, and no group
+    addPart(u"A");
+    addPart(u"B");
+    createModel(); // [A:0] A B
+
+    // [WHEN] A is selected
+    m_model->selectRow(row(1));
+
+    // [THEN] There's no group to move it into
+    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove instrument(s)") });
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup_PartScore)
+{
+    // [GIVEN] A part score with A and B; in the main score, B is in a group
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    showPartScore({ a, b });
+    createModel(); // A B
+
+    // [WHEN] A is selected
+    m_model->selectRow(row(0));
+
+    // [THEN] Groups aren't offered in part scores
+    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove instrument(s)") });
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_MoveToGroup)
+{
+    // [GIVEN] A, then B in group S, then C
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addToSharedPart(s, b);
+    m_score->style().set(Sid::enableStaveSharing, true);
+    createModel(); // [A:0] A S B C
+
+    // [THEN] A and C join S, in the panel's order
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(IDList { a->id(), c->id() }, s->id())).Times(1);
+
+    // [WHEN] C and A are selected, and S is chosen
+    selectRows({ row(4), row(1) });
+    m_model->handleRowContextMenuItem(moveToGroupMenuId(s));
+
+    // [THEN] S is open to show its new instruments
+    EXPECT_TRUE(item(2)->isExpanded());
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_InvalidArguments)
