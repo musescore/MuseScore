@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <Division>480</Division>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched"><name>stdNormal</name></StaffType>
+      </Staff>
+      <Instrument>
+        <trackName>Violin</trackName>
+        <instrumentId>strings.violin</instrumentId>
+        <Channel><program value="40"/></Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig><sigN>4</sigN><sigD>4</sigD></TimeSig>
+          <Chord>
+            <durationType>whole</durationType>
+            <Articulation>
+              <subtype>articStaccatoAbove</subtype>
+              <channel name="pizzicato"/>
+              <play>0</play>
+            </Articulation>
+            <Ornament>
+              <subtype>ornamentTrill</subtype>
+              <channel name="pizzicato"/>
+              <play>0</play>
+            </Ornament>
+            <Tapping>
+              <hand>right</hand>
+              <channel name="pizzicato"/>
+              <play>0</play>
+            </Tapping>
+            <Note><pitch>60</pitch><tpc>14</tpc></Note>
+          </Chord>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>
