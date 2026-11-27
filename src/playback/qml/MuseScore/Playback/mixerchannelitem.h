@@ -90,6 +90,7 @@ public:
         Metronome,
         Aux,
         Master,
+        Vca,
     };
     Q_ENUM(Type)
 
@@ -247,5 +248,6 @@ protected:
     muse::ui::NavigationPanel* m_panel = nullptr;
 
     bool m_outputResourceItemsLoading = false;
+    bool m_auxSendItemsLoading = false;
 };
 }

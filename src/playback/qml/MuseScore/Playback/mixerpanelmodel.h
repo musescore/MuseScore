@@ -25,7 +25,11 @@
 #include <QAbstractListModel>
 #include <QQmlParserStatus>
 #include <QList>
+#include <QHash>
 #include <qqmlintegration.h>
+
+#include <optional>
+#include <vector>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -61,6 +65,10 @@ public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QVariantMap get(int index);
+
+    Q_INVOKABLE QVariantList channelContextMenuItems(int index) const;
+    Q_INVOKABLE void handleChannelContextMenuItem(int index, const QString& itemId);
+    Q_INVOKABLE void renameVcaGroup(int index, const QString& name);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -104,6 +112,29 @@ private:
                                                  bool isPrimary = true);
     MixerChannelItem* buildAuxChannelItem(muse::audio::aux_channel_idx_t index, const muse::audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
+    MixerChannelItem* buildVcaChannelItem(size_t groupIndex, const project::VcaGroup& group);
+
+    void reloadVcaItems();
+    int vcaInsertIndex() const;
+    void onVcaControlParamsChanged(MixerChannelItem* vcaItem);
+    bool shiftVcaMembersVolume(project::VcaGroup& group, float requestedVolume) const;
+    bool shiftVcaMembersBalance(project::VcaGroup& group, int requestedBalance, float balanceScale) const;
+    void onVcaSoloMuteStateChanged(MixerChannelItem* vcaItem, const notation::INotationSoloMuteState::SoloMuteState& state);
+    void onVcaAuxSendsChangeRequested(MixerChannelItem* vcaItem, const muse::audio::AuxSendsParams& requested);
+    muse::audio::AuxSendsParams vcaAuxSends(const project::VcaGroup& group) const;
+    void refreshVcaAuxSends(size_t groupIndex);
+    std::vector<MixerChannelItem*> vcaMemberItems(const project::VcaGroup& group) const;
+    MixerChannelItem* findVcaChannelItem(size_t groupIndex) const;
+
+    std::optional<size_t> vcaGroupIndexOf(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    std::optional<size_t> vcaGroupIndexOf(const MixerChannelItem* vcaItem) const;
+    void addToVcaGroup(const engraving::InstrumentTrackId& instrumentTrackId, std::optional<size_t> groupIndex);
+    void removeFromVcaGroup(const engraving::InstrumentTrackId& instrumentTrackId);
+    void deleteVcaGroup(size_t groupIndex);
+    void applyVcaGroupsChange(const project::VcaGroupList& groups);
+    QString newVcaGroupName(const project::VcaGroupList& groups) const;
+
+    MixerChannelItem* findInstrumentChannelItem(const engraving::InstrumentTrackId& instrumentTrackId) const;
 
     int masterChannelIndex() const;
 
@@ -119,6 +150,7 @@ private:
 
     QList<MixerChannelItem*> m_mixerChannelList;
     MixerChannelItem* m_masterChannelItem = nullptr;
+    QHash<const MixerChannelItem*, size_t> m_vcaGroupIndexByItem;
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;

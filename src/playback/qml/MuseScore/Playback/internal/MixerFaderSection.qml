@@ -76,6 +76,9 @@ MixerPanelSection {
             Row {
                 anchors.verticalCenter: parent.verticalCenter
 
+                // A VCA group has no audio signal to meter
+                visible: content.channelItem.type !== MixerChannelItem.Vca
+
                 spacing: 2
 
                 VolumePressureMeter {

@@ -51,6 +51,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/recentfilescontroller_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmigratortests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/projectaudiosettings_tests.cpp
 )
 
 set(MODULE_TEST_INCLUDE

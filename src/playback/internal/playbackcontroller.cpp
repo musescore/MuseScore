@@ -1175,6 +1175,13 @@ void PlaybackController::resetPlayback()
     m_automationEnvelopesCache.clear();
     m_masterAutomationEnvelopes = {};
 
+    if (m_vcaAudioSettings) {
+        m_vcaAudioSettings->settingsChanged().disconnect(this);
+        m_vcaAudioSettings = nullptr;
+    }
+    m_vcaMutedTrackIds.clear();
+    m_vcaSoloedTrackIds.clear();
+
     m_isRangeSelection = false;
 
     m_isPlaybackInited = false;
@@ -1675,6 +1682,20 @@ void PlaybackController::setupPlayback()
 
 void PlaybackController::subscribeOnAudioParamsChanges()
 {
+    // Muting or soloing a VCA group in the mixer changes which tracks are heard
+    m_vcaAudioSettings = audioSettings();
+    if (m_vcaAudioSettings) {
+        m_vcaAudioSettings->settingsChanged().onNotify(this, [this]() {
+            InstrumentTrackIdSet mutedTrackIds;
+            InstrumentTrackIdSet soloedTrackIds;
+            updateVcaSoloMuteTrackIds(mutedTrackIds, soloedTrackIds);
+
+            if (mutedTrackIds != m_vcaMutedTrackIds || soloedTrackIds != m_vcaSoloedTrackIds) {
+                updateSoloMuteStates();
+            }
+        });
+    }
+
     playback()->masterControlParamsChanged().onReceive(this, [this](const ControlParams& params) {
         AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
         outParams.setControl(params);
@@ -1886,11 +1907,18 @@ void PlaybackController::updateSoloMuteStates()
     InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
     bool hasSolo = false;
 
+    updateVcaSoloMuteTrackIds(m_vcaMutedTrackIds, m_vcaSoloedTrackIds);
+
+    auto isSoloed = [this](const InstrumentTrackId& instrumentTrackId) {
+        return m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId).solo
+               || muse::contains(m_vcaSoloedTrackIds, instrumentTrackId);
+    };
+
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
         if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
             continue;
         }
-        if (m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId).solo) {
+        if (isSoloed(instrumentTrackId)) {
             hasSolo = true;
             break;
         }
@@ -1912,7 +1940,10 @@ void PlaybackController::updateSoloMuteStates()
         const auto& soloMuteState = m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId);
 
         // 2. Evaluate "force mute" (disabling the mute button)
-        bool shouldForceMute = hasSolo && !soloMuteState.solo;
+        bool shouldForceMute = hasSolo && !isSoloed(instrumentTrackId);
+        if (!shouldForceMute) {
+            shouldForceMute = muse::contains(m_vcaMutedTrackIds, instrumentTrackId);
+        }
         if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId) && !shouldForceMute) {
             shouldForceMute = !notationConfiguration()->isPlayChordSymbolsEnabled();
         }
@@ -1932,6 +1963,27 @@ void PlaybackController::updateSoloMuteStates()
     }
 
     updateAuxMuteStates();
+}
+
+void PlaybackController::updateVcaSoloMuteTrackIds(InstrumentTrackIdSet& mutedTrackIds, InstrumentTrackIdSet& soloedTrackIds) const
+{
+    mutedTrackIds.clear();
+    soloedTrackIds.clear();
+
+    const project::IProjectAudioSettingsPtr settings = audioSettings();
+    if (!settings) {
+        return;
+    }
+
+    for (const project::VcaGroup& group : settings->vcaGroups()) {
+        if (group.muted) {
+            mutedTrackIds.insert(group.members.cbegin(), group.members.cend());
+        }
+
+        if (group.solo) {
+            soloedTrackIds.insert(group.members.cbegin(), group.members.cend());
+        }
+    }
 }
 
 void PlaybackController::updateAuxMuteStates()

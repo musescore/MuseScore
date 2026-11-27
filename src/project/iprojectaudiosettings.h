@@ -23,6 +23,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "async/notification.h"
 #include "audio/common/audiotypes.h"
@@ -76,6 +77,32 @@ struct AudioOutputParams {
     }
 };
 
+//! NOTE A VCA group controls its member tracks without routing audio through it.
+//! Moving the group fader or pan knob shifts every member's own volume or pan by the same amount,
+//! so the members' settings always hold the real result and stay valid without the group.
+//! Muting or soloing the group mutes or solos the members during playback
+//! without changing their own mute and solo buttons.
+struct VcaGroup {
+    muse::String name;
+    muse::audio::volume_db_t volume = 0.f;
+    muse::audio::balance_t balance = 0.f;
+    bool muted = false;
+    bool solo = false;
+    std::vector<engraving::InstrumentTrackId> members;
+
+    bool operator ==(const VcaGroup& other) const
+    {
+        return name == other.name
+               && muse::is_equal(volume, other.volume)
+               && muse::is_equal(balance, other.balance)
+               && muted == other.muted
+               && solo == other.solo
+               && members == other.members;
+    }
+};
+
+using VcaGroupList = std::vector<VcaGroup>;
+
 class IProjectAudioSettings
 {
 public:
@@ -110,6 +137,9 @@ public:
     virtual muse::async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const = 0;
 
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
+
+    virtual const VcaGroupList& vcaGroups() const = 0;
+    virtual void setVcaGroups(const VcaGroupList& groups) = 0;
 
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;

@@ -67,6 +67,9 @@ public:
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
+    const VcaGroupList& vcaGroups() const override;
+    void setVcaGroups(const VcaGroupList& groups) override;
+
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
 
@@ -80,6 +83,7 @@ public:
 
 private:
     friend class NotationProject;
+    friend class ProjectAudioSettingsTests;
     ProjectAudioSettings(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
@@ -110,6 +114,9 @@ private:
 
     QString sourceTypeToString(const muse::audio::AudioSourceType& type) const;
 
+    VcaGroupList vcaGroupsFromJson(const QJsonArray& array) const;
+    QJsonArray vcaGroupsToJson(const VcaGroupList& groups) const;
+
     QJsonObject buildAuxObject(muse::audio::aux_channel_idx_t index, const AudioOutputParams& params) const;
     QJsonObject buildTrackObject(notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr, const engraving::InstrumentTrackId& id) const;
 
@@ -121,6 +128,8 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, AudioOutputParams> m_trackOutputParamsMap;
+
+    VcaGroupList m_vcaGroups;
 
     muse::async::Notification m_settingsChanged;
     muse::async::Channel<engraving::InstrumentTrackId> m_trackInputParamsChanged;
