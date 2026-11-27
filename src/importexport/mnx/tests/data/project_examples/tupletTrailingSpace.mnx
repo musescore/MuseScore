@@ -1,0 +1,678 @@
+{
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 3,
+                    "unit": 2
+                }
+            },
+            {
+                "id": "m2"
+            }
+        ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys2"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "mnxdom": {
+                "client": {
+                    "commit": "fbcdd1de5f26",
+                    "name": "denigma",
+                    "version": "4.0.0"
+                },
+                "createdAt": "2026-09-25T02:21:42Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/40",
+                "mnxdom": {
+                    "commit": "8c5056c",
+                    "version": "3.1.0"
+                },
+                "provenanceSchemaVersion": 1,
+                "source": {
+                    "filename": "tupletTrailingSpace.enigmaxml",
+                    "format": "enigmaxml"
+                }
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 40
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "glyph": "fClef",
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "dynamics": [
+                        {
+                            "glyphs": [
+                                "dynamicForte"
+                            ],
+                            "placement": "between",
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "type": "immediate",
+                            "value": "f"
+                        },
+                        {
+                            "glyphs": [
+                                "dynamicPP"
+                            ],
+                            "placement": "between",
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            },
+                            "type": "immediate",
+                            "value": "pp"
+                        }
+                    ],
+                    "id": "P1.m1",
+                    "ottavas": [
+                        {
+                            "end": {
+                                "measure": "m1",
+                                "position": {
+                                    "fraction": [
+                                        0,
+                                        1
+                                    ],
+                                    "graceIndex": 0
+                                }
+                            },
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "staff": 1,
+                            "value": 1
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole",
+                                        "dots": 1
+                                    },
+                                    "id": "ev9",
+                                    "markings": {
+                                        "accent": {}
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev9n1",
+                                            "pitch": {
+                                                "octave": 6,
+                                                "step": "F"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "up"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "accidentalDisplay": {
+                                                "enclosure": {
+                                                    "symbol": "parentheses"
+                                                },
+                                                "force": true,
+                                                "show": true
+                                            },
+                                            "id": "ev9n2",
+                                            "pitch": {
+                                                "octave": 7,
+                                                "step": "D"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "up"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "directionHint": "upper",
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev10",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "ev11",
+                                    "notes": [
+                                        {
+                                            "id": "ev11n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "side": "down",
+                                                    "target": "ev16n1",
+                                                    "targetType": "nextNote"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "slurs": [
+                                        {
+                                            "lineType": "solid",
+                                            "target": "ev24"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "directionHint": "lower",
+                            "staff": 1,
+                            "voice": "s1layer2"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "whole",
+                                        "dots": 1
+                                    },
+                                    "id": "ev12",
+                                    "markings": {
+                                        "accent": {}
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev12n3",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "D"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "up"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "ev12n4",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 4,
+                                                "step": "B"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "up"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "directionHint": "upper",
+                            "staff": 2,
+                            "voice": "s2layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev13",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev14",
+                                    "markings": {
+                                        "accent": {}
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev14n1",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "E"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "target": "ev15n1",
+                                                    "targetType": "nextNote"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "ev14n2",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "B"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "target": "ev15n2",
+                                                    "targetType": "nextNote"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "whole"
+                                    },
+                                    "id": "ev15",
+                                    "notes": [
+                                        {
+                                            "id": "ev15n1",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "E"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "down"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "ev15n2",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "B"
+                                            },
+                                            "ties": [
+                                                {
+                                                    "lv": true,
+                                                    "side": "down"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "directionHint": "lower",
+                            "staff": 2,
+                            "voice": "s2layer2"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m2",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "bracket": "yes",
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "quarter"
+                                            },
+                                            "id": "ev16",
+                                            "notes": [
+                                                {
+                                                    "id": "ev16n1",
+                                                    "pitch": {
+                                                        "octave": 4,
+                                                        "step": "G"
+                                                    }
+                                                }
+                                            ],
+                                            "stemDirection": "down"
+                                        },
+                                        {
+                                            "duration": [
+                                                1,
+                                                4
+                                            ],
+                                            "type": "space"
+                                        },
+                                        {
+                                            "duration": [
+                                                1,
+                                                4
+                                            ],
+                                            "type": "space"
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "placement": "below",
+                                    "type": "tuplet"
+                                },
+                                {
+                                    "duration": [
+                                        1,
+                                        2
+                                    ],
+                                    "type": "space"
+                                },
+                                {
+                                    "duration": [
+                                        1,
+                                        2
+                                    ],
+                                    "type": "space"
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer2"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "bracket": "yes",
+                                    "content": [
+                                        {
+                                            "duration": [
+                                                1,
+                                                4
+                                            ],
+                                            "type": "space"
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "quarter"
+                                            },
+                                            "id": "ev22",
+                                            "notes": [
+                                                {
+                                                    "id": "ev22n1",
+                                                    "pitch": {
+                                                        "octave": 4,
+                                                        "step": "C"
+                                                    }
+                                                }
+                                            ],
+                                            "stemDirection": "up"
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "quarter"
+                                            },
+                                            "id": "ev23",
+                                            "notes": [
+                                                {
+                                                    "id": "ev23n1",
+                                                    "pitch": {
+                                                        "octave": 3,
+                                                        "step": "A"
+                                                    },
+                                                    "ties": [
+                                                        {
+                                                            "target": "ev24n1",
+                                                            "targetType": "nextNote"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "stemDirection": "up"
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "placement": "above",
+                                    "type": "tuplet"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev24",
+                                    "notes": [
+                                        {
+                                            "id": "ev24n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "bracket": "yes",
+                                    "content": [
+                                        {
+                                            "duration": {
+                                                "base": "half"
+                                            },
+                                            "id": "ev25",
+                                            "notes": [
+                                                {
+                                                    "id": "ev25n1",
+                                                    "pitch": {
+                                                        "octave": 3,
+                                                        "step": "D"
+                                                    }
+                                                }
+                                            ],
+                                            "stemDirection": "up"
+                                        },
+                                        {
+                                            "duration": {
+                                                "base": "quarter"
+                                            },
+                                            "id": "ev26",
+                                            "notes": [
+                                                {
+                                                    "id": "ev26n1",
+                                                    "pitch": {
+                                                        "octave": 2,
+                                                        "step": "B"
+                                                    },
+                                                    "ties": [
+                                                        {
+                                                            "lv": true,
+                                                            "side": "up"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "inner": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 3
+                                    },
+                                    "outer": {
+                                        "duration": {
+                                            "base": "quarter"
+                                        },
+                                        "multiple": 2
+                                    },
+                                    "placement": "above",
+                                    "type": "tuplet"
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer1"
+                        }
+                    ]
+                }
+            ],
+            "staves": 2
+        }
+    ],
+    "scores": [
+        {
+            "layout": "S0-ScrVw",
+            "name": "Score",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
+                        },
+                        {
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -166,8 +166,8 @@
         <Jump>
           <style>repeat_right</style>
           <eid>V_V</eid>
-          <text>Dal Doppio Segno</text>
-          <jumpTo>varsegno</jumpTo>
+          <text>D.S.</text>
+          <jumpTo>segno</jumpTo>
           <playUntil>end</playUntil>
           <continueAt></continueAt>
           </Jump>
