@@ -2636,9 +2636,9 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         Segment* startSegment = sel.startSegment();
         Segment* endSegment = sel.endSegment();
         bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
-        staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
-        staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
-        for (staff_idx_t i = startStaff; i < endStaff; ++i) {
+        const std::vector<staff_idx_t> staves = firstStaffOnly
+                                                ? std::vector<staff_idx_t> { 0 } : sel.staffIdxsExcludingLinkedInSameScore();
+        for (staff_idx_t i : staves) {
             Spanner* spanner = toSpanner(element->clone());
             spanner->setScore(score);
             spanner->styleChanged();

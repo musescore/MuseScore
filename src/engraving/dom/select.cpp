@@ -1407,6 +1407,34 @@ std::vector<EngravingItem*> Selection::elements(ElementType type) const
     return result;
 }
 
+//---------------------------------------------------------
+//   staffIdxsExcludingLinkedInSameScore
+///   Staves of the range selection, skipping any staff that is
+///   linked to a staff earlier in the range. Commands that add an
+///   element to each selected staff should iterate these: adding
+///   to one staff already replicates the element onto its linked
+///   staves in the same score, so visiting both would duplicate it.
+//---------------------------------------------------------
+
+std::vector<staff_idx_t> Selection::staffIdxsExcludingLinkedInSameScore() const
+{
+    std::vector<staff_idx_t> result;
+    for (staff_idx_t staffIdx = m_staffStart; staffIdx < m_staffEnd; ++staffIdx) {
+        const Staff* staff = m_score->staff(staffIdx);
+        bool linkedToEarlier = false;
+        for (staff_idx_t prevIdx : result) {
+            if (staff->isLinked(m_score->staff(prevIdx))) {
+                linkedToEarlier = true;
+                break;
+            }
+        }
+        if (!linkedToEarlier) {
+            result.push_back(staffIdx);
+        }
+    }
+    return result;
+}
+
 std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
 {
     std::vector<Note*> nl;

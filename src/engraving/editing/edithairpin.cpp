@@ -42,7 +42,7 @@ std::vector<Hairpin*> EditHairpin::addHairpins(Transaction& tx, Score* score, Ha
     // add hairpin on each staff if possible
     const Selection& selection = score->selection();
     if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
-        for (staff_idx_t staffIdx = selection.staffStart(); staffIdx < selection.staffEnd(); ++staffIdx) {
+        for (staff_idx_t staffIdx : selection.staffIdxsExcludingLinkedInSameScore()) {
             ChordRest* cr1 = selection.firstChordRest(staffIdx * VOICES);
             ChordRest* cr2 = selection.lastChordRest(staffIdx * VOICES);
             Hairpin* h = cr1 ? addHairpin(tx, score, type, cr1, cr2)

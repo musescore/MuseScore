@@ -1087,7 +1087,7 @@ void Score::cmdAddOttava(OttavaType type)
     const Selection sel = selection();   // copy selection state before the operation.
     // add on each staff if possible
     if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
-        for (staff_idx_t staffIdx = sel.staffStart(); staffIdx < sel.staffEnd(); ++staffIdx) {
+        for (staff_idx_t staffIdx : sel.staffIdxsExcludingLinkedInSameScore()) {
             ChordRest* cr1 = sel.firstChordRest(staffIdx * VOICES);
             ChordRest* cr2 = sel.lastChordRest(staffIdx * VOICES);
             if (!cr1) {

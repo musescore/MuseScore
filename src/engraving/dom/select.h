@@ -175,6 +175,7 @@ public:
     Fraction tickEnd() const;
     staff_idx_t staffStart() const { return m_staffStart; }
     staff_idx_t staffEnd() const { return m_staffEnd; }
+    std::vector<staff_idx_t> staffIdxsExcludingLinkedInSameScore() const;
     track_idx_t activeTrack() const { return m_activeTrack; }
     void setStaffStart(int v) { m_staffStart = v; }
     void setStaffEnd(int v) { m_staffEnd = v; }
