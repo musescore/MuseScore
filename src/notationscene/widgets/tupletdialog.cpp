@@ -28,6 +28,8 @@
 
 #include "ui/view/widgetstatestore.h"
 
+#include "containers.h"
+
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::ui;
@@ -51,10 +53,8 @@ void TupletDialog::componentComplete()
     connect(buttonBox, &QDialogButtonBox::clicked, this, &TupletDialog::bboxClicked);
 
     defaultToStyleSettings();
-
-    const TupletSelectedDuration selectedDurationAsPreference = configuration()->tupletCommandsSelectedDurationAs();
-    subdivision->setChecked(selectedDurationAsPreference == TupletSelectedDuration::SUBDIVISION);
-    tupletLength->setChecked(selectedDurationAsPreference == TupletSelectedDuration::TUPLET_LENGTH);
+    setSelectedDurationAs(configuration()->tupletCommandsSelectedDurationAs());
+    restorePreviousState();
 
     numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
     bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
@@ -71,16 +71,28 @@ void TupletDialog::componentComplete()
 
 void TupletDialog::defaultToStyleSettings()
 {
-    mu::engraving::TupletNumberType nt = mu::engraving::TupletNumberType(style()->styleValue(mu::engraving::Sid::tupletNumberType).toInt());
-    number->setChecked(nt == mu::engraving::TupletNumberType::SHOW_NUMBER);
-    relation->setChecked(nt == mu::engraving::TupletNumberType::SHOW_RELATION);
-    noNumber->setChecked(nt == mu::engraving::TupletNumberType::NO_TEXT);
+    setNumberType(TupletNumberType(style()->styleValue(Sid::tupletNumberType).toInt()));
+    setBracketType(TupletBracketType(style()->styleValue(Sid::tupletBracketType).toInt()));
+}
 
-    mu::engraving::TupletBracketType bt = mu::engraving::TupletBracketType(style()->styleValue(
-                                                                               mu::engraving::Sid::tupletBracketType).toInt());
-    autoBracket->setChecked(bt == mu::engraving::TupletBracketType::AUTO_BRACKET);
-    bracket->setChecked(bt == mu::engraving::TupletBracketType::SHOW_BRACKET);
-    noBracket->setChecked(bt == mu::engraving::TupletBracketType::SHOW_NO_BRACKET);
+void TupletDialog::setNumberType(TupletNumberType type)
+{
+    number->setChecked(type == TupletNumberType::SHOW_NUMBER);
+    relation->setChecked(type == TupletNumberType::SHOW_RELATION);
+    noNumber->setChecked(type == TupletNumberType::NO_TEXT);
+}
+
+void TupletDialog::setBracketType(TupletBracketType type)
+{
+    autoBracket->setChecked(type == TupletBracketType::AUTO_BRACKET);
+    bracket->setChecked(type == TupletBracketType::SHOW_BRACKET);
+    noBracket->setChecked(type == TupletBracketType::SHOW_NO_BRACKET);
+}
+
+void TupletDialog::setSelectedDurationAs(TupletSelectedDuration value)
+{
+    subdivision->setChecked(value == TupletSelectedDuration::SUBDIVISION);
+    tupletLength->setChecked(value == TupletSelectedDuration::TUPLET_LENGTH);
 }
 
 TupletNumberType TupletDialog::numberType() const
@@ -118,6 +130,61 @@ TupletSelectedDuration TupletDialog::selectedDurationAs() const
     return TupletSelectedDuration::SUBDIVISION;
 }
 
+std::vector<TupletDialogState>& TupletDialog::previousStates()
+{
+    // one for each open score: scores in other windows can share this process
+    static std::vector<TupletDialogState> states;
+    return states;
+}
+
+TupletDialogState* TupletDialog::previousState()
+{
+    const IMasterNotationPtr masterNotation = projectSession()->masterNotation();
+    if (!masterNotation) {
+        return nullptr;
+    }
+
+    for (TupletDialogState& state : previousStates()) {
+        if (state.masterNotation.lock() == masterNotation) {
+            return &state;
+        }
+    }
+
+    return nullptr;
+}
+
+void TupletDialog::saveState()
+{
+    // forget closed scores
+    muse::remove_if(previousStates(), [](const TupletDialogState& state) { return state.masterNotation.expired(); });
+
+    TupletDialogState* state = previousState();
+    if (!state) {
+        state = &previousStates().emplace_back();
+        state->masterNotation = projectSession()->masterNotation();
+    }
+
+    state->ratio = Fraction(actualNotes->value(), normalNotes->value());
+    state->selectedDurationAs = selectedDurationAs();
+    state->numberType = numberType();
+    state->bracketType = bracketType();
+}
+
+void TupletDialog::restorePreviousState()
+{
+    // choices made in another score don't carry over
+    const TupletDialogState* state = previousState();
+    if (!state) {
+        return;
+    }
+
+    actualNotes->setValue(state->ratio.numerator());
+    normalNotes->setValue(state->ratio.denominator());
+    setSelectedDurationAs(state->selectedDurationAs);
+    setNumberType(state->numberType);
+    setBracketType(state->bracketType);
+}
+
 void TupletDialog::showEvent(QShowEvent* event)
 {
     WidgetStateStore::restoreGeometry(this);
@@ -148,6 +215,8 @@ void TupletDialog::apply()
     cmd.bracketType = bracketType();
     cmd.selectedDurationAs = selectedDurationAs();
     cmd.autoBaseLen = false;
+
+    saveState();
 
     dispatcher()->dispatch(cmd);
 }
