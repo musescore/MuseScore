@@ -1383,8 +1383,10 @@ muse::ByteArray Selection::symbolListMimeData() const
                 }
             }
         } else {
-            while (seg && iter->second.s != seg) {
-                seg = seg->nextCR(currTrack);
+            const Fraction symbolTick = iter->second.s->tick();
+            for (Segment* next = seg ? seg->nextCR(currTrack) : nullptr;
+                 next && next->tick() <= symbolTick; next = next->nextCR(currTrack)) {
+                seg = next;
                 numSegs++;
             }
         }
