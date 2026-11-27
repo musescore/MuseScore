@@ -1929,7 +1929,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::v
     std::vector<SpannerSegment*> segments;
     for (Spanner* sp : lines) {
         SpannerSegment* ss = TLayout::layoutSystem(sp, system, ctx);        // create/layout spanner segment for this system
-        if (ss->autoplace()) {
+        if (ss->autoplaceApplies() && ss->autoplace()) {
             segments.push_back(ss);
         }
     }

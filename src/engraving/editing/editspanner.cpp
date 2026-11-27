@@ -76,7 +76,7 @@ void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, const
 void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
                              Segment* endSegment, bool ctrlModifier, voice_idx_t voice)
 {
-    track_idx_t track = staffIdx * VOICES + voice;
+    track_idx_t track = staff2track(staffIdx, voice);
     spanner->setTrack(track);
     spanner->setTrack2(track);
     for (auto ss : spanner->spannerSegments()) {

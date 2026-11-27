@@ -429,13 +429,8 @@ public:
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
 
-    // Whether autoplace is in effect: the AUTOPLACE property is on and autoplace applies to the item
+    virtual bool autoplaceApplies() const { return autoplaceAppliesToType(type()); }
     bool autoplace() const;
-    // Value of the AUTOPLACE property, regardless of whether autoplace currently applies
-    bool autoplaceProperty() const;
-    // False for items whose current configuration makes autoplace meaningless, regardless of the
-    // AUTOPLACE property, which is kept so it applies again once the configuration changes
-    virtual bool autoplaceApplies() const { return true; }
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }
 

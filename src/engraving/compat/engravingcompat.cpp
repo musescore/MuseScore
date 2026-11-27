@@ -446,7 +446,7 @@ static void doMigrateOffsetAfterAutoplace(EngravingItem* item)
 
     // We can't fix the offset for some types.
     // These are types where layout is spread out in multiple steps and cannot be accurately calculated with one TLayout::layoutItem call.
-    if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace() || item->offset().isNull()
+    if (item->generated() || !item->autoplaceApplies() || !item->autoplace() || item->offset().isNull()
         || item->isRest()
         || item->isLyrics()
         || item->isLyricsLineSegment()

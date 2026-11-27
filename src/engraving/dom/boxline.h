@@ -108,7 +108,7 @@ public:
 
     void reset() override;
 
-    bool autoplaceApplies() const override { return !m_centerOnStaff; }
+    bool autoplaceApplies() const override { return EngravingItem::autoplaceApplies() && !m_centerOnStaff; }
 
     Spatium boxHeight() const { return m_height; }
     void setBoxHeight(const Spatium& v);

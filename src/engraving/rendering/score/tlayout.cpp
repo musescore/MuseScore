@@ -1492,7 +1492,9 @@ void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
     }
     ldata->setShape(shape);
 
-    Autoplace::autoplaceSpannerSegment(item, ldata);
+    if (item->autoplaceApplies()) {
+        Autoplace::autoplaceSpannerSegment(item, ldata);
+    }
 }
 
 void TLayout::layoutBoxLine(BoxLine* item, LayoutContext& ctx)

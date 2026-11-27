@@ -297,8 +297,9 @@ TEST_F(Engraving_BoxLineTests, centeredBoxDoesNotAutoplace)
     BoxLineSegment* seg = front(box);
 
     // [THEN] Autoplace doesn't apply, even if the AUTOPLACE property is kept untouched
-    EXPECT_FALSE(seg->autoplace());
-    EXPECT_FALSE(box->autoplace());
+    EXPECT_FALSE(seg->autoplaceApplies());
+    EXPECT_FALSE(box->autoplaceApplies());
+    EXPECT_TRUE(seg->autoplace());
     EXPECT_TRUE(seg->getProperty(Pid::AUTOPLACE).toBool());
 
     // [WHEN] It goes back to being placed above the staff
@@ -306,8 +307,9 @@ TEST_F(Engraving_BoxLineTests, centeredBoxDoesNotAutoplace)
     m_score->doLayout();
 
     // [THEN] Autoplace applies again
+    EXPECT_TRUE(front(box)->autoplaceApplies());
+    EXPECT_TRUE(box->autoplaceApplies());
     EXPECT_TRUE(front(box)->autoplace());
-    EXPECT_TRUE(box->autoplace());
 }
 
 TEST_F(Engraving_BoxLineTests, centeredBoxHeightGripGrowsBothWays)
@@ -437,7 +439,7 @@ TEST_F(Engraving_EditBoxLineTests, rangeSelectionAddsOneBoxPerStaff)
     // [THEN] Each staff gets a box covering the range
     ASSERT_EQ(boxes.size(), 2);
     for (size_t i = 0; i < boxes.size(); ++i) {
-        EXPECT_EQ(boxes[i]->track(), i * VOICES);
+        EXPECT_EQ(boxes[i]->track(), staff2track(i));
         EXPECT_EQ(boxes[i]->tick(), Fraction(0, 1));
         EXPECT_EQ(boxes[i]->tick2(), Fraction(2, 1));
     }

@@ -1174,11 +1174,6 @@ bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e
 
 bool EngravingItem::autoplace() const
 {
-    return autoplaceProperty() && autoplaceApplies();
-}
-
-bool EngravingItem::autoplaceProperty() const
-{
     if (!score() || !style().styleB(Sid::autoplaceEnabled)) {
         return false;
     }
@@ -1213,7 +1208,7 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
     case Pid::PLACEMENT:
         return placement();
     case Pid::AUTOPLACE:
-        return autoplaceProperty();
+        return autoplace();
     case Pid::Z:
         return z();
     case Pid::SYSTEM_FLAG:

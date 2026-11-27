@@ -78,7 +78,7 @@ void EditPosition::freezeItemsPositions(Transaction&, const std::vector<Engravin
     // Slur and tie segments also need their grips (relative to pos) kept in place
     std::unordered_map<SlurTieSegment*, SlurTieGripPoints> frozenSlurTieGrips;
     for (EngravingItem* item : items) {
-        if (item->generated() || !autoplaceAppliesToType(item->type()) || !item->autoplace()) {
+        if (item->generated() || !item->autoplaceApplies() || !item->autoplace()) {
             continue;
         }
 

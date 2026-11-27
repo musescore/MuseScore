@@ -269,12 +269,12 @@ bool Cursor::nextMeasure()
 }
 
 //---------------------------------------------------------
-//   isCursorAddableLine
+//   isLineAddable
 ///   Lines anchored to segments or measures. Note-anchored lines are
 ///   added through Note.add(), and lyrics lines belong to their lyrics.
 //---------------------------------------------------------
 
-static bool isCursorAddableLine(const mu::engraving::EngravingItem* e)
+static bool isLineAddable(const mu::engraving::EngravingItem* e)
 {
     using Anchor = mu::engraving::Spanner::Anchor;
 
@@ -368,7 +368,7 @@ void Cursor::add(EngravingItem* wrapped)
         s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
         return;
     }
-    if (isCursorAddableLine(s)) {
+    if (isLineAddable(s)) {
         addLine(mu::engraving::toSpanner(s));
         return;
     }
