@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.70">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.9685</pageHeight>
+      <pagePrintableWidth>3.54331</pagePrintableWidth>
+      <pageEvenLeftMargin>0.19685</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.19685</pageOddLeftMargin>
+      <pageEvenTopMargin>0.19685</pageEvenTopMargin>
+      <pageOddTopMargin>0.19685</pageOddTopMargin>
+      <showMeasureNumber>0</showMeasureNumber>
+      <showHeader>0</showHeader>
+      <showFooter>0</showFooter>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
+      <tiePlacementChord>outside</tiePlacementChord>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="flute">
+        <trackName>Flute</trackName>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <LaissezVib>
+                <up>up</up>
+                </LaissezVib>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Note>
+              <LaissezVib/>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <LaissezVib/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Note>
+              <LaissezVib>
+                <up>down</up>
+                </LaissezVib>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
