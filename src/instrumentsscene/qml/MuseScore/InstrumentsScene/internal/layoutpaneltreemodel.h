@@ -225,7 +225,10 @@ private:
     muse::async::Promise<bool> askAboutRemovingInstruments(int count);
 
     std::vector<const PartTreeItem*> sharedGroupsToMoveInto(const std::vector<const PartTreeItem*>& parts) const;
-    void moveSelectedPartsToSharedGroup(const muse::ID& sharedPartId);
+    std::vector<const PartTreeItem*> selectedPartItems() const;
+    void movePartsToSharedGroup(const muse::IDList& partIds, const muse::ID& sharedPartId);
+    void movePartsToNewSharedGroup(const muse::IDList& partIds);
+    void expandSharedGroup(const muse::ID& sharedPartId);
 
     AbstractLayoutPanelTreeItem* buildSharedPartItem(const notation::Part* part);
     AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);

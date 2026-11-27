@@ -331,13 +331,37 @@ protected:
     QStringList moveToGroupMenuIds() const
     {
         QStringList ids;
-        for (const QVariant& menuItem : m_model->rowContextMenuItems()) {
-            for (const QVariant& subitem : menuItem.toMap().value("subitems").toList()) {
-                ids << subitem.toMap().value("id").toString();
+        for (const QVariant& subitem : moveToGroupSubmenu()) {
+            const QString id = subitem.toMap().value("id").toString();
+            if (id.startsWith(QString("move-to-group:"))) {
+                ids << id;
             }
         }
 
         return ids;
+    }
+
+    //! The titles in the "Move to shared stave group" submenu; an empty one is a separator
+    QStringList moveToGroupMenuTitles() const
+    {
+        QStringList titles;
+        for (const QVariant& subitem : moveToGroupSubmenu()) {
+            titles << subitem.toMap().value("title").toString();
+        }
+
+        return titles;
+    }
+
+    QVariantList moveToGroupSubmenu() const
+    {
+        for (const QVariant& menuItem : m_model->rowContextMenuItems()) {
+            const QVariantMap item = menuItem.toMap();
+            if (item.contains("subitems")) {
+                return item.value("subitems").toList();
+            }
+        }
+
+        return {};
     }
 
     static QString moveToGroupMenuId(const Part* sharedPart)
@@ -1115,8 +1139,9 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_Instrumen
     // [WHEN] B is selected
     m_model->selectRow(row(2));
 
-    // [THEN] It can be removed
-    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove instrument(s)") });
+    // [THEN] It can be removed, or moved into a new group
+    EXPECT_EQ(rowContextMenuTitles(), (QStringList { QString("Remove instrument(s)"), QString("Move to shared stave group") }));
+    EXPECT_EQ(moveToGroupMenuTitles(), QStringList { QString("New group with instrument(s)") });
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_Markings)
@@ -1136,8 +1161,8 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_Markings)
     // [WHEN] The markings row and B are selected
     selectRows({ row(2), row(3) });
 
-    // [THEN] Both can be removed
-    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove selected") });
+    // [THEN] Both can be removed, and B moved into a group; the markings stay
+    EXPECT_EQ(rowContextMenuTitles(), (QStringList { QString("Remove selected"), QString("Move to shared stave group") }));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_NoMenu)
@@ -1174,9 +1199,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_Remo
     EXPECT_CALL(*m_parts, removeParts(_)).Times(1);
 
     // [WHEN] "Remove instrument(s)" is chosen
-    const QVariantList menuItems = m_model->rowContextMenuItems();
-    ASSERT_EQ(menuItems.size(), 1);
-    m_model->handleRowContextMenuItem(menuItems.first().toMap().value("id").toString());
+    m_model->handleRowContextMenuItem(QString("remove"));
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup)
@@ -1198,6 +1221,11 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGro
     EXPECT_EQ(rowContextMenuTitles(), (QStringList { QString("Remove instrument(s)"), QString("Move to shared stave group") }));
     EXPECT_EQ(moveToGroupMenuIds(), (QStringList { moveToGroupMenuId(s), moveToGroupMenuId(t) }));
 
+    // [THEN] A new group comes after the groups, below a separator
+    const QStringList titles = moveToGroupMenuTitles();
+    ASSERT_EQ(titles.size(), 4);
+    EXPECT_EQ(titles.at(2), QString());
+
     // [WHEN] B is selected
     m_model->selectRow(row(3));
 
@@ -1209,20 +1237,6 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGro
 
     // [THEN] Into either group, as they aren't all in S
     EXPECT_EQ(moveToGroupMenuIds(), (QStringList { moveToGroupMenuId(s), moveToGroupMenuId(t) }));
-}
-
-TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup_NoGroups)
-{
-    // [GIVEN] Two instruments, and no group
-    addPart(u"A");
-    addPart(u"B");
-    createModel(); // [A:0] A B
-
-    // [WHEN] A is selected
-    m_model->selectRow(row(1));
-
-    // [THEN] There's no group to move it into
-    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove instrument(s)") });
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_MoveToGroup_PartScore)
@@ -1262,6 +1276,50 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_Move
 
     // [THEN] S is open to show its new instruments
     EXPECT_TRUE(item(2)->isExpanded());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_NewGroup)
+{
+    // [GIVEN] Three instruments, stave sharing off
+    const Part* a = addPart(u"A");
+    addPart(u"B");
+    const Part* c = addPart(u"C");
+    createModel(); // [A:0] A B C
+
+    // [THEN] Stave sharing is turned on first, then A and C form a group, in the panel's order
+    InSequence sequence;
+    EXPECT_CALL(*m_parts, toggleStaveSharing(true)).Times(1);
+    EXPECT_CALL(*m_parts, movePartsToNewSharedPart(IDList { a->id(), c->id() })).Times(1);
+
+    // [WHEN] C and A are selected, and a new group is chosen
+    selectRows({ row(3), row(1) });
+    m_model->handleRowContextMenuItem(QString("move-to-new-group"));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_NewGroup_Opened)
+{
+    // [GIVEN] Two instruments, stave sharing on
+    const Part* a = addPart(u"A");
+    addPart(u"B");
+    m_score->style().set(Sid::enableStaveSharing, true);
+    createModel(); // [A:0] A B
+
+    // [THEN] Stave sharing stays as it is, and the score gets the new group
+    EXPECT_CALL(*m_parts, toggleStaveSharing(_)).Times(0);
+    EXPECT_CALL(*m_parts, movePartsToNewSharedPart(IDList { a->id() })).WillOnce(InvokeWithoutArgs([this]() {
+        return static_cast<const SharedPart*>(addSharedPart(u"N"));
+    }));
+
+    // [WHEN] A is selected, and a new group is chosen
+    m_model->selectRow(row(1));
+    m_model->handleRowContextMenuItem(QString("move-to-new-group"));
+
+    // [WHEN] The panel reloads with the new group
+    m_partsNotifier.changed();
+
+    // [THEN] The group is open
+    EXPECT_EQ(item(3)->type(), ItemType::SHARED_PART);
+    EXPECT_TRUE(item(3)->isExpanded());
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_InvalidArguments)

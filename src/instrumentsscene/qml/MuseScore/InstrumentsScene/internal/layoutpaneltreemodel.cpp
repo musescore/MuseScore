@@ -58,7 +58,7 @@ using namespace muse::uicomponents;
 
 static const QString REMOVE_MENU_ITEM_ID("remove");
 static const QString MOVE_TO_GROUP_MENU_ITEM_ID("move-to-group");
-static const QString MOVE_TO_GROUP_MENU_ITEM_PREFIX("move-to-group:");
+static const QString NEW_GROUP_MENU_ITEM_ID("move-to-new-group");
 
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -648,21 +648,12 @@ void LayoutPanelTreeModel::removeSelectedRows()
 
 QVariantList LayoutPanelTreeModel::rowContextMenuItems() const
 {
-    std::vector<const PartTreeItem*> selectedParts;
-    int systemMarkingsCount = 0;
+    const std::vector<const PartTreeItem*> selectedParts = selectedPartItems();
 
-    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
-        const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
-        if (!item) {
-            continue;
-        }
-
-        if (item->type() == LayoutPanelItemType::PART) {
-            selectedParts.push_back(static_cast<const PartTreeItem*>(item));
-        } else if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            ++systemMarkingsCount;
-        }
-    }
+    const QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    const qsizetype systemMarkingsCount = std::count_if(selectedIndexes.cbegin(), selectedIndexes.cend(), [this](const QModelIndex& index) {
+        return modelIndexToItem(index)->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
+    });
 
     if (selectedParts.empty() && systemMarkingsCount == 0) {
         return {};
@@ -677,20 +668,33 @@ QVariantList LayoutPanelTreeModel::rowContextMenuItems() const
         removeTitle = muse::qtrc("layoutpanel", "Remove selected");
     }
 
-    QVariantList items { QVariantMap { { "id", REMOVE_MENU_ITEM_ID }, { "title", removeTitle } } };
+    // "Remove …" and "Move to shared stave group"
+    QVariantList items;
+    items.reserve(2);
+    items << QVariantMap { { "id", REMOVE_MENU_ITEM_ID }, { "title", removeTitle } };
 
     // Only in the main score; in a mixed selection, the system markings simply aren't moved
     if (isMasterScore() && !selectedParts.empty()) {
+        const std::vector<const PartTreeItem*> groups = sharedGroupsToMoveInto(selectedParts);
+
+        // The groups, a separator and "New group with…"
         QVariantList groupItems;
-        for (const PartTreeItem* group : sharedGroupsToMoveInto(selectedParts)) {
-            groupItems << QVariantMap { { "id", MOVE_TO_GROUP_MENU_ITEM_PREFIX + group->idStr() }, { "title", group->title() } };
+        groupItems.reserve(groups.size() + 2);
+        for (const PartTreeItem* group : groups) {
+            groupItems << QVariantMap { { "id", MOVE_TO_GROUP_MENU_ITEM_ID + ':' + group->idStr() }, { "title", group->title() } };
         }
 
         if (!groupItems.empty()) {
-            items << QVariantMap { { "id", MOVE_TO_GROUP_MENU_ITEM_ID },
-                { "title", muse::qtrc("layoutpanel", "Move to shared stave group") },
-                { "subitems", groupItems } };
+            groupItems << QVariantMap(); // separator
         }
+
+        const QString newGroupTitle = muse::qtrc("layoutpanel", "New group with instrument(s)", nullptr,
+                                                 static_cast<int>(selectedParts.size()));
+        groupItems << QVariantMap { { "id", NEW_GROUP_MENU_ITEM_ID }, { "title", newGroupTitle } };
+
+        items << QVariantMap { { "id", MOVE_TO_GROUP_MENU_ITEM_ID },
+            { "title", muse::qtrc("layoutpanel", "Move to shared stave group") },
+            { "subitems", groupItems } };
     }
 
     return items;
@@ -703,8 +707,26 @@ void LayoutPanelTreeModel::handleRowContextMenuItem(const QString& itemId)
         return;
     }
 
-    if (itemId.startsWith(MOVE_TO_GROUP_MENU_ITEM_PREFIX)) {
-        moveSelectedPartsToSharedGroup(ID(itemId.mid(MOVE_TO_GROUP_MENU_ITEM_PREFIX.size())));
+    const std::vector<const PartTreeItem*> partItems = selectedPartItems();
+
+    IDList partIds;
+    partIds.reserve(partItems.size());
+    for (const PartTreeItem* item : partItems) {
+        partIds.push_back(item->id());
+    }
+
+    if (partIds.empty()) {
+        return;
+    }
+
+    if (itemId == NEW_GROUP_MENU_ITEM_ID) {
+        movePartsToNewSharedGroup(partIds);
+        return;
+    }
+
+    const QString groupItemPrefix = MOVE_TO_GROUP_MENU_ITEM_ID + ':';
+    if (itemId.startsWith(groupItemPrefix)) {
+        movePartsToSharedGroup(partIds, ID(itemId.mid(groupItemPrefix.size())));
     }
 }
 
@@ -719,8 +741,11 @@ std::vector<const PartTreeItem*> LayoutPanelTreeModel::sharedGroupsToMoveInto(co
         }
     }
 
+    const QList<AbstractLayoutPanelTreeItem*>& rows = m_rootItem->childItems();
+
     std::vector<const PartTreeItem*> groups;
-    for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+    groups.reserve(rows.size());
+    for (const AbstractLayoutPanelTreeItem* item : rows) {
         if (item->type() == LayoutPanelItemType::SHARED_PART && item != currentGroup) {
             groups.push_back(static_cast<const PartTreeItem*>(item));
         }
@@ -729,26 +754,44 @@ std::vector<const PartTreeItem*> LayoutPanelTreeModel::sharedGroupsToMoveInto(co
     return groups;
 }
 
-void LayoutPanelTreeModel::moveSelectedPartsToSharedGroup(const ID& sharedPartId)
+std::vector<const PartTreeItem*> LayoutPanelTreeModel::selectedPartItems() const
 {
-    IDList partIds;
+    std::vector<const PartTreeItem*> partItems;
     for (const QModelIndex& index : sortedSelectedIndexes()) {
         const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
         if (item->type() == LayoutPanelItemType::PART) {
-            partIds.push_back(item->id());
+            partItems.push_back(static_cast<const PartTreeItem*>(item));
         }
     }
 
-    if (partIds.empty()) {
-        return;
+    return partItems;
+}
+
+void LayoutPanelTreeModel::movePartsToSharedGroup(const IDList& partIds, const ID& sharedPartId)
+{
+    expandSharedGroup(sharedPartId);
+    m_notation->parts()->movePartsToSharedPart(partIds, sharedPartId);
+}
+
+void LayoutPanelTreeModel::movePartsToNewSharedGroup(const IDList& partIds)
+{
+    // A separate undo step
+    if (!isStaveSharingEnabled()) {
+        toggleStaveSharing(true);
     }
 
-    // The group opens to show its new instruments; the reload that follows keeps it open
+    if (const SharedPart* sharedPart = m_notation->parts()->movePartsToNewSharedPart(partIds)) {
+        expandSharedGroup(sharedPart->id());
+    }
+}
+
+void LayoutPanelTreeModel::expandSharedGroup(const ID& sharedPartId)
+{
+    // Kept open by the reload that follows, or open once the new group is in the panel
+    m_expandedItems.insert(sharedPartId);
     if (const AbstractLayoutPanelTreeItem* group = m_rootItem->childAtId(sharedPartId, LayoutPanelItemType::SHARED_PART)) {
         setExpanded(index(group->row(), 0, QModelIndex()), true);
     }
-
-    m_masterNotation->parts()->movePartsToSharedPart(partIds, sharedPartId);
 }
 
 bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
