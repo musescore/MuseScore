@@ -153,6 +153,15 @@ class Score : public apiv1::ScoreElement, public muse::Contextable
     Q_PROPERTY(QQmlListProperty<apiv1::Page> pages READ pages)
 
     /** APIDOC
+     * List of measures and frames in score order, including individual measures
+     * within multimeasure rests. This list does not expand playback repeats.
+     * @readonly
+     * @q_property {Engraving.MeasureBase[]}
+     * @since 5.0
+     */
+    Q_PROPERTY(QQmlListProperty<apiv1::MeasureBase> measures READ measures)
+
+    /** APIDOC
      * Page numbering offset. The user-visible number of the given page is defined as
      * ```
      * page.pagenumber + 1 + score.pageNumberOffset
@@ -397,6 +406,8 @@ public:
 
     int npages() const { return static_cast<int>(score()->npages()); }
     QQmlListProperty<apiv1::Page> pages() const;
+    /** Returns read-only access to the score's measures and frames. */
+    QQmlListProperty<apiv1::MeasureBase> measures();
     int pageNumberOffset() const { return score()->pageNumberOffset(); }
     void setPageNumberOffset(int offset) { score()->undoChangePageNumberOffset(offset); }
 

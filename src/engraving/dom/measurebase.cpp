@@ -834,8 +834,25 @@ MeasureBaseList::MeasureBaseList()
     m_size  = 0;
 }
 
+/** Returns a score-order item in constant time after lazily rebuilding the index. */
+MeasureBase* MeasureBaseList::at(size_t index) const
+{
+    if (index >= static_cast<size_t>(m_size)) {
+        return nullptr;
+    }
+    if (m_index.empty()) {
+        m_index.reserve(m_size);
+        for (MeasureBase* measure = m_first; measure; measure = measure->next()) {
+            m_index.push_back(measure);
+        }
+    }
+    return m_index.at(index);
+}
+
+/** Empties the list and invalidates its lookup indexes without deleting its items. */
 void MeasureBaseList::clear()
 {
+    m_index.clear();
     m_first = nullptr;
     m_last = nullptr;
     m_size = 0;
@@ -846,8 +863,10 @@ void MeasureBaseList::clear()
 //   push_back
 //---------------------------------------------------------
 
+/** Links an item at the end and invalidates indexed access. */
 void MeasureBaseList::push_back(MeasureBase* m)
 {
+    m_index.clear();
     ++m_size;
     if (m_last) {
         m_last->setNext(m);
@@ -865,8 +884,10 @@ void MeasureBaseList::push_back(MeasureBase* m)
 //   push_front
 //---------------------------------------------------------
 
+/** Links an item at the beginning and invalidates indexed access. */
 void MeasureBaseList::push_front(MeasureBase* m)
 {
+    m_index.clear();
     ++m_size;
     if (m_first) {
         m_first->setPrev(m);
@@ -885,8 +906,10 @@ void MeasureBaseList::push_front(MeasureBase* m)
 //    insert m before m->next()
 //---------------------------------------------------------
 
+/** Inserts an item before its next item and invalidates indexed access. */
 void MeasureBaseList::add(MeasureBase* m)
 {
+    m_index.clear();
     MeasureBase* el = m->next();
     if (el == 0) {
         append(m);
@@ -906,8 +929,10 @@ void MeasureBaseList::add(MeasureBase* m)
 //   remove
 //---------------------------------------------------------
 
+/** Unlinks one item and invalidates indexed access without deleting the item. */
 void MeasureBaseList::remove(MeasureBase* m)
 {
+    m_index.clear();
     --m_size;
     if (m->prev()) {
         m->prev()->setNext(m->next());
@@ -925,8 +950,10 @@ void MeasureBaseList::remove(MeasureBase* m)
 //   insert
 //---------------------------------------------------------
 
+/** Inserts an inclusive linked range and invalidates indexed access. */
 void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 {
+    m_index.clear();
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
         ++m_size;
     }
@@ -949,8 +976,10 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 //   remove
 //---------------------------------------------------------
 
+/** Unlinks an inclusive range and invalidates indexed access without deleting its items. */
 void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
 {
+    m_index.clear();
     for (MeasureBase* m = fm; m != lm; m = m->next()) {
         --m_size;
     }
@@ -973,8 +1002,10 @@ void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
 //   change
 //---------------------------------------------------------
 
+/** Replaces an item in place and invalidates indexed access even when the size is unchanged. */
 void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 {
+    m_index.clear();
     nb->setPrev(ob->prev());
     nb->setNext(ob->next());
     if (ob->prev()) {
