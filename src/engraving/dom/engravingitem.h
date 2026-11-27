@@ -429,6 +429,7 @@ public:
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
 
+    virtual bool autoplaceApplies() const { return autoplaceAppliesToType(type()); }
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }

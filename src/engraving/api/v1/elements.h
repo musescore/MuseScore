@@ -999,6 +999,21 @@ class EngravingItem : public apiv1::ScoreElement
     /// For text-line-based elements, the offset face of the ending text.
     API_PROPERTY_T(QPointF, endTextOffset, END_TEXT_OFFSET)
 
+    /** APIDOC
+     * For box lines and their segments: the box height, in spatium units.
+     * @q_property {Number}
+     * @since 5.0
+     */
+    API_PROPERTY(boxLineHeight,           BOXLINE_HEIGHT)
+
+    /** APIDOC
+     * For box lines and their segments: whether the box is centred on the staff
+     * instead of being placed above or below it.
+     * @q_property {Boolean}
+     * @since 5.0
+     */
+    API_PROPERTY_T(bool, boxLineCenterOnStaff, BOXLINE_CENTER_ON_STAFF)
+
     /// For note-anchored-lines: Controls their placement relative to notes.
     /// One of PluginAPI::PluginAPI::NoteLineEndPlacement values.
     ///\since MuseScore 4.6

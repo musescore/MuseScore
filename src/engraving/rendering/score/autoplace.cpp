@@ -122,7 +122,7 @@ double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLin
 void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
                                    double minSkylineHorizontalClearance, double spatium)
 {
-    DO_ASSERT(autoplaceAppliesToType(item->type()));
+    DO_ASSERT(item->autoplaceApplies());
     IF_ASSERT_FAILED(system) {
         return;
     }

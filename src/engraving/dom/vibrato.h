@@ -81,8 +81,6 @@ public:
     VibratoType vibratoType() const { return m_vibratoType; }
     String vibratoTypeUserName() const;
 
-    Segment* segment() const { return (Segment*)ownershipParent(); }
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

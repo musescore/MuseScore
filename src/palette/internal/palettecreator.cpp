@@ -34,6 +34,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/bagpembell.h"
 #include "engraving/dom/barline.h"
+#include "engraving/dom/boxline.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/capo.h"
@@ -1348,6 +1349,9 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
         sp->appendElement(c, names[i]);
     }
+
+    auto boxLine = makeElement<BoxLine>(paletteScore());
+    sp->appendElement(boxLine, QT_TRANSLATE_NOOP("palette", "Box (staff-attached)"));
 
     return sp;
 }

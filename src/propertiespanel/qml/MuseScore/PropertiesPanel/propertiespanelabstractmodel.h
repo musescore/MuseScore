@@ -112,6 +112,7 @@ public:
         TYPE_OTTAVA,
         TYPE_VOLTA,
         TYPE_VIBRATO,
+        TYPE_BOXLINE,
         TYPE_SLUR,
         TYPE_HAMMER_ON_PULL_OFF,
         TYPE_TIE,

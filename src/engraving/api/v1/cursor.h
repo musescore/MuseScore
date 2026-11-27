@@ -36,6 +36,7 @@ class Chord;
 class Rest;
 class Note;
 class Segment;
+class Spanner;
 class ChordRest;
 class StaffText;
 class Measure;
@@ -148,6 +149,7 @@ private:
     // utility methods
     void prevInTrack();
     void nextInTrack();
+    void addLine(mu::engraving::Spanner* spanner);
     void setScore(mu::engraving::Score* s);
     mu::engraving::EngravingItem* currentElement() const;
 

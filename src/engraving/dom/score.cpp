@@ -1160,6 +1160,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::VOLTA:
     case ElementType::TRILL:
     case ElementType::VIBRATO:
+    case ElementType::BOXLINE:
     case ElementType::PEDAL:
     case ElementType::TEXTLINE:
     case ElementType::HAIRPIN:
@@ -1356,6 +1357,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::VOLTA:
     case ElementType::TRILL:
     case ElementType::VIBRATO:
+    case ElementType::BOXLINE:
     case ElementType::PEDAL:
     case ElementType::LET_RING:
     case ElementType::GRADUAL_TEMPO_CHANGE:

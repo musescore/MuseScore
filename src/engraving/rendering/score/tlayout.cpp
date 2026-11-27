@@ -47,6 +47,7 @@
 #include "dom/beam.h"
 #include "dom/bend.h"
 #include "dom/box.h"
+#include "dom/boxline.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -240,6 +241,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TBOX:
         layoutTBox(item_cast<const TBox*>(item), static_cast<TBox::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::BOXLINE:
+        layoutBoxLine(item_cast<BoxLine*>(item), ctx);
+        break;
+    case ElementType::BOXLINE_SEGMENT:
+        layoutBoxLineSegment(item_cast<BoxLineSegment*>(item), ctx);
         break;
     case ElementType::BRACKET:
         layoutBracket(item_cast<const Bracket*>(item), static_cast<Bracket::LayoutData*>(ldata), ctx.conf());
@@ -1429,6 +1436,71 @@ void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const Layout
 {
     LAYOUT_CALL_ITEM(item);
     BoxLayout::layoutTBox(item, ldata, ctx);
+}
+
+void TLayout::layoutBoxLineSegment(BoxLineSegment* item, LayoutContext&)
+{
+    LAYOUT_CALL_ITEM(item);
+    BoxLineSegment::LayoutData* ldata = item->mutldata();
+    const BoxLine* box = item->boxLine();
+
+    Fraction tick = item->tick();
+
+    // A continuation segment may be on a system whose staff type differs from the one at the spanner's start
+    if (!item->isSingleBeginType() && item->system()) {
+        if (const Measure* m = item->system()->firstMeasure()) {
+            tick = m->tick();
+        }
+    }
+
+    if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(tick));
+    }
+    const double staffHeight = item->staff() ? item->staff()->staffHeight(tick) : 0.0;
+    if (box->centerOnStaff()) {
+        ldata->setPosY(0.5 * staffHeight);
+    } else if (box->placeBelow()) {
+        ldata->setPosY(staffHeight);
+    }
+
+    ldata->move(item->defaultPos());
+    ldata->moveY(item->staffOffsetY());
+
+    const double w = item->pos2().x();
+    const double h = item->absoluteFromSpatium(box->boxHeight());
+
+    // Line y is the box's vertical centre when centred on the staff,
+    // otherwise its bottom edge when above and its top edge when below
+    if (box->centerOnStaff()) {
+        ldata->rect = RectF(0.0, -0.5 * h, w, h);
+    } else {
+        ldata->rect = box->placeAbove() ? RectF(0.0, -h, w, h) : RectF(0.0, 0.0, w, h);
+    }
+    ldata->closedLeft  = item->isSingleBeginType();
+    ldata->closedRight = item->isSingleEndType();
+
+    const RectF& r = ldata->rect;
+    const double lw2 = 0.5 * item->absoluteFromSpatium(box->lineWidth());
+    Shape shape;
+    shape.add(RectF(r.left(), r.top(), r.width(), 0.0).padded(lw2), item);
+    shape.add(RectF(r.left(), r.bottom(), r.width(), 0.0).padded(lw2), item);
+    if (ldata->closedLeft) {
+        shape.add(RectF(r.left(), r.top(), 0.0, r.height()).padded(lw2), item);
+    }
+    if (ldata->closedRight) {
+        shape.add(RectF(r.right(), r.top(), 0.0, r.height()).padded(lw2), item);
+    }
+    ldata->setShape(shape);
+
+    if (item->autoplaceApplies()) {
+        Autoplace::autoplaceSpannerSegment(item, ldata);
+    }
+}
+
+void TLayout::layoutBoxLine(BoxLine* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+    layoutLine(static_cast<SLine*>(item), ctx);
 }
 
 void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)

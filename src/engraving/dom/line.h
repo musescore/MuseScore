@@ -94,7 +94,8 @@ private:
 
 //---------------------------------------------------------
 //   @@ SLine
-///    virtual base class for Hairpin, Trill and TextLine
+///    virtual base class for BoxLine, Glissando, GuitarBend,
+///    LyricsLine, TextLineBase, Trill, Vibrato
 //---------------------------------------------------------
 
 class SLine : public Spanner

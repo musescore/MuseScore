@@ -91,6 +91,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
+    case mu::engraving::ElementType::BOXLINE:
     case mu::engraving::ElementType::HAIRPIN:
     case mu::engraving::ElementType::VOLTA:
     case mu::engraving::ElementType::LET_RING:
@@ -314,6 +315,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
     static const QMap<mu::engraving::ElementType, mu::engraving::ElementType> lineTypeToSegmentType {
         { mu::engraving::ElementType::GLISSANDO, mu::engraving::ElementType::GLISSANDO_SEGMENT },
         { mu::engraving::ElementType::VIBRATO, mu::engraving::ElementType::VIBRATO_SEGMENT },
+        { mu::engraving::ElementType::BOXLINE, mu::engraving::ElementType::BOXLINE_SEGMENT },
         { mu::engraving::ElementType::PEDAL, mu::engraving::ElementType::PEDAL_SEGMENT },
         { mu::engraving::ElementType::HAIRPIN, mu::engraving::ElementType::HAIRPIN_SEGMENT },
         { mu::engraving::ElementType::VOLTA, mu::engraving::ElementType::VOLTA_SEGMENT },

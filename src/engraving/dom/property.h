@@ -408,6 +408,9 @@ enum class Pid : short {
     END_FONT_STYLE,
     END_TEXT_OFFSET,
 
+    BOXLINE_HEIGHT,
+    BOXLINE_CENTER_ON_STAFF,
+
     NOTELINE_PLACEMENT,
 
     AVOID_BARLINES, // meant for Dynamics

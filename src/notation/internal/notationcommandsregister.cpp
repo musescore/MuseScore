@@ -619,6 +619,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
     makeCommandInfo<IncreaseDynamicCommand>(),
     makeCommandInfo<DecreaseDynamicCommand>(),
     makeCommandInfo<AddNoteLineCommand>(),
+    makeCommandInfo<AddBoxLineCommand>(),
     makeCommandInfo<AddImageCommand>(),
 
     makeCommandInfo<AddFiguredBassCommand>(),

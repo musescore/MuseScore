@@ -41,6 +41,8 @@ class Articulation;
 class BagpipeEmbellishment;
 class BarLine;
 class Bend;
+class BoxLine;
+class BoxLineSegment;
 class Bracket;
 class Breath;
 
@@ -165,6 +167,7 @@ public:
     static void layout(BagpipeEmbellishment* item, const Context& ctx);
     static void layout(BarLine* item, const Context& ctx);
     static void layout(Bend* item, const Context& ctx);
+    static void layout(BoxLine* item, const Context& ctx);
     static void layout(Bracket* item, const Context& ctx);
     static void layout(Breath* item, const Context&);
 
@@ -246,6 +249,7 @@ public:
     static void layout(WhammyBar* item, const Context& ctx);
 
 private:
+    static void layout(BoxLineSegment* item, const Context& ctx);
     static void layout(GlissandoSegment* item, const Context& ctx);
     static void layout(GradualTempoChangeSegment* item, const Context& ctx);
     static void layout(GuitarBendSegment* item, const Context& ctx);

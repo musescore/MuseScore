@@ -1595,6 +1595,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::TRILL_SEGMENT:
     case ElementType::VIBRATO_SEGMENT:
+    case ElementType::BOXLINE_SEGMENT:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
@@ -2038,6 +2039,7 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         ElementType::OTTAVA,
         ElementType::TRILL,
         ElementType::VIBRATO,
+        ElementType::BOXLINE
     };
 
     // undoRemoveElement and undoChangeProperty also handle linked elements, so we need
@@ -4338,6 +4340,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::OTTAVA
             && et != ElementType::TRILL
             && et != ElementType::VIBRATO
+            && et != ElementType::BOXLINE
             && et != ElementType::TEXTLINE
             && et != ElementType::PEDAL
             && et != ElementType::LET_RING
@@ -4410,6 +4413,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::SLUR,
             ElementType::HAMMER_ON_PULL_OFF,
             ElementType::VIBRATO,
+            ElementType::BOXLINE,
             ElementType::TEXTLINE,
             ElementType::PEDAL,
             ElementType::LYRICS,
@@ -4629,6 +4633,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                    || element->isOttava()
                    || element->isTrill()
                    || element->isVibrato()
+                   || element->isBoxLine()
                    || element->isTextLine()
                    || element->isPedal()
                    || element->isLetRing()
