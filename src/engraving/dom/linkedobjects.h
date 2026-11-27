@@ -27,6 +27,8 @@
 #include "engravingobject.h"
 
 namespace mu::engraving {
+class Score;
+
 class LinkedObjects : public std::list<EngravingObject*>
 {
     OBJECT_ALLOCATOR(engraving, LinkedObjects)
@@ -34,7 +36,7 @@ class LinkedObjects : public std::list<EngravingObject*>
 public:
     bool contains(const EngravingObject* o) const;
 
-    EngravingObject* mainElement();
+    EngravingObject* mainElement(const Score* preferredScore = nullptr);
 };
 }
 
