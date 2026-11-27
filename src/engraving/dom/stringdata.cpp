@@ -22,7 +22,11 @@
 
 #include "stringdata.h"
 
+#include <algorithm>
+#include <cstdlib>
+#include <climits>
 #include <map>
+#include <utility>
 
 #include "defer.h"
 
@@ -33,7 +37,9 @@
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
+#include "measure.h"
 
+#include "../editing/navigation.h"
 #include "types/types.h"
 
 using namespace mu;
@@ -167,6 +173,457 @@ int StringData::fret(int pitch, int string, const Staff* staff, const Fraction& 
 }
 
 //---------------------------------------------------------
+//   getBassNote
+//    Returns the lowest pitched note in a given voicing of a chord.
+//---------------------------------------------------------
+Note* StringData::getBassNote(const Chord* chord) const
+{
+    Note* bassNote = nullptr;
+
+    for (Note* n : chord->notes()) {
+        if (!bassNote || n->pitch() < bassNote->pitch()) {
+            bassNote = n;
+        }
+    }
+
+    return bassNote;
+}
+
+//---------------------------------------------------------
+//   collectNotesAtSameTick
+//    Gathers every note sounding at the same segment across all voices
+//    and chords at a given tick.
+//---------------------------------------------------------
+std::vector<Note*> StringData::collectNotesAtSameTick(const Chord* chord) const
+{
+    std::vector<Note*> notes;
+
+    // helper lambda function
+    auto addChord = [&](const Chord* c) {
+        for (Note* n : c->notes()) {
+            notes.push_back(n);
+        }
+    };
+
+    if (!chord->ownershipParent()->isSegment()) {
+        addChord(chord);
+    } else {
+        Segment* seg = chord->segment();
+        track_idx_t trkFrom = (chord->track() / VOICES) * VOICES;
+        track_idx_t trkTo   = trkFrom + VOICES;
+        for (track_idx_t trk = trkFrom; trk < trkTo; ++trk) {
+            EngravingItem* ch = seg->elist().at(trk);
+            if (ch && ch->isChord()) {
+                addChord(toChord(ch));
+            }
+        }
+    }
+
+    return notes;
+}
+
+//---------------------------------------------------------
+//   getBassNoteOfVoicings
+//    Returns the lowest pitched note across all voicings at a given tick
+//    given a const pointer to a Chord object. Uses getBassNote as a helper function.
+//
+//    Chord's downNote method will not necessarily work since
+//    it is based off the line/string and not just pitch.
+//---------------------------------------------------------
+Note* StringData::getBassNoteOfVoicings(const Chord* chord) const
+{
+    Note* bassNote = nullptr;
+
+    for (Note* n : collectNotesAtSameTick(chord)) {
+        if (!bassNote || n->pitch() < bassNote->pitch()) {
+            bassNote = n;
+        }
+    }
+
+    return bassNote;
+}
+
+//---------------------------------------------------------
+//   glissandoTo
+//    Takes in a const ptr to a note, returns a ptr to the note that is being slid to via a glissando
+//---------------------------------------------------------
+Note* StringData::glissandoTo(const Note* note) const
+{
+    for (Spanner* sp : note->spannerFor()) {
+        if (sp->isGlissando()) {
+            EngravingItem* end = sp->endElement();
+            if (end && end->isNote()) {
+                return toNote(end);
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   glissandoFrom
+//    Takes in a const ptr to a note, returns the note that is being slid from via a glissando
+//---------------------------------------------------------
+Note* StringData::glissandoFrom(const Note* note) const
+{
+    for (Spanner* sp : note->spannerBack()) {
+        if (sp->isGlissando()) {
+            EngravingItem* start = sp->startElement();
+            if (start && start->isNote()) {
+                return toNote(start);
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   stringSupportsGlissando
+//    Checks if a given string can support a glissando to a given note.
+//---------------------------------------------------------
+bool StringData::stringSupportsGlissando(const Note* note, int candidateString) const
+{
+    Note* target = glissandoTo(note);
+    if (!target) {
+        return true;
+    }
+    Chord* targetChord = target->chord();
+    int offset = pitchOffsetAt(targetChord->staff(), targetChord->tick(), candidateString);
+    return fret(target->pitch(), candidateString, offset) != INVALID_FRET_INDEX;
+}
+
+//---------------------------------------------------------
+//   resolveForcedString
+//    If this note is the destination of a gliss whose source is already a valid string, this allows us to back-propagate multi-note
+//    glissando chains across multiple chords/notes. Returns INVALID_STRING_INDEX if no need for glissando chain to be considered.
+//---------------------------------------------------------
+int StringData::resolveForcedString(const Note* note) const
+{
+    Note* source = glissandoFrom(note);
+    int strings = static_cast<int>(this->strings());
+
+    if (source && source->string() != INVALID_STRING_INDEX && source->string() < strings) {
+        return source->string();
+    }
+
+    return INVALID_STRING_INDEX;
+}
+
+//---------------------------------------------------------
+//   scoreFrettingCandidate
+//    Takes in a const reference to the previous fretting pair (string #, fret #)
+//    and a const reference to the candidate fretting pair (string #, fret #) as
+//    well as a const pointer to the chord.
+//
+//    Outputs the score for a given candidate in such a way that
+//    candidates that are easier for the player to move their fingers to are prioritized.
+//    What counts as 'easier' is based off a set of heuristics, but the general idea
+//    is to minimize the distance we'll be moving in total across all ticks.
+//---------------------------------------------------------
+int StringData::scoreFrettingCandidate(const std::pair<int, int>& anchor, const std::pair<int, int>& candidate) const
+{
+    int verticalDistance = std::abs(anchor.first - candidate.first);
+    int horizontalDistance = std::abs(anchor.second - candidate.second);
+
+    if (verticalDistance == 0 && candidate.second == 0) {
+        horizontalDistance = 0; // if the note we are going to has a fret of 0
+    }
+
+    return horizontalDistance + verticalDistance;
+}
+
+//---------------------------------------------------------
+//   findPrecedingChordAcrossRests
+//      Takes a pointer to a chord, finds the actual previous chord since apparently
+//      chord->prev() gets set to nullptr if the previous chord is a rest.
+//---------------------------------------------------------
+Chord* StringData::findPrecedingChordAcrossRests(Chord* chord) const
+{
+    ChordRest* cr = Navigation::prevChordRest(chord);
+    while (cr && !cr->isChord()) {
+        cr = Navigation::prevChordRest(cr);
+    }
+
+    return cr ? toChord(cr) : nullptr;
+}
+
+//---------------------------------------------------------
+//   findLastNonOpenAnchor
+//      Takes a pointer to a chord, finds the previous anchor to compare against
+//      for score calculations for fret candidates.
+//---------------------------------------------------------
+std::pair<int, int> StringData::findLastNonOpenAnchor(Chord* chord) const
+{
+    Chord* cur = chord;
+
+    while (cur) {
+        Note* bassNote = getBassNoteOfVoicings(cur);
+        if (bassNote && bassNote->string() != INVALID_STRING_INDEX && bassNote->fret() != 0) {
+            return { bassNote->string(), bassNote->fret() };
+        }
+        cur = findPrecedingChordAcrossRests(cur);
+    }
+
+    return defaultFretboardAnchor();
+}
+
+//---------------------------------------------------------
+//   fretReachableFromAll
+//      Determines whether a fret is reachable from all the other given ones. Returns the result as a boolean.
+//---------------------------------------------------------
+bool StringData::fretReachableFromAll(int candidate, const std::vector<int>& placedFrets) const
+{
+    if (candidate == 0) {
+        return true;
+    }
+
+    for (int placed: placedFrets) {
+        if (placed == 0) {
+            continue;
+        }
+
+        if (std::abs(candidate - placed) > MAX_FRET_SPAN) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------
+//   assignRemainingNotesAroundBass
+//      Frets the other notes frets based off the bass note
+//      Takes in a const pointer to a chord, a pointer to the bassNote, and a pair containing
+//      the string number and fret number respectively.
+//
+//      Doesn't return anything, instead persists changes to each note object within the chord.
+//---------------------------------------------------------
+void StringData::assignRemainingNotesAroundBass(const Chord* chord, Note* bassNote, const std::pair<int, int>& bassFretting) const
+{
+    int strings = static_cast<int>(this->strings());
+    std::vector<bool> used(strings, false);
+    int bassString = bassFretting.first;
+    used[bassString] = true;
+
+    std::vector<Note*> notes = collectNotesAtSameTick(chord);
+    bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
+
+    std::vector<int> placedFrets;
+    placedFrets.push_back(bassFretting.second);
+
+    for (Note* n : notes) {
+        if (n == bassNote || n->string() < 0 || n->string() >= strings) {
+            continue;
+        }
+        const bool frozen = n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()
+                            || (skipDeadNotes && n->deadNote());
+        const bool validFretting = !frozen && getPitch(n->string(), n->fret(), n->staff(), n->tick()) == n->pitch();
+        if (frozen || validFretting) {
+            used[n->string()] = true;
+        }
+        if (validFretting) {
+            placedFrets.push_back(n->fret());
+        }
+    }
+
+    std::sort(notes.begin(), notes.end(), [bassNote](Note* a, Note* b) {
+        return std::abs(a->pitch() - bassNote->pitch()) < std::abs(b->pitch() - bassNote->pitch()); // sort notes by how close each note's pitch is to the bassNote's pitch
+    });
+
+    for (Note* note: notes) {
+        if (note == bassNote || note->displayFret() != Note::DisplayFretOption::NoHarmonic || note->negativeFretUsed()
+            || (skipDeadNotes && note->deadNote())) {
+            continue;
+        }
+
+        int forcedString = resolveForcedString(note);
+        if (getPitch(note->string(), note->fret(), note->staff(),
+                     note->tick()) == note->pitch() && (forcedString == INVALID_STRING_INDEX || note->string() == forcedString)) {
+            continue;
+        }
+
+        std::pair<int, int> best = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
+        if (forcedString != INVALID_STRING_INDEX) {
+            int offset = pitchOffsetAt(chord->staff(), chord->tick(), forcedString);
+            int f = fret(note->pitch(), forcedString, offset);
+            if (f != INVALID_FRET_INDEX) {
+                best = { forcedString, f };
+            }
+            // otherwise we fallback to setfretconflict
+        } else {
+            int bestDistance = INT_MAX;
+            int bestDistanceNoGliss = INT_MAX;
+            std::pair<int, int> bestNoGliss = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
+
+            // we always want the notes to be on higher strings than the bass note.
+            for (int s = 0; s < bassString; ++s) {
+                if (used[s]) {
+                    continue;
+                }
+
+                int offset = pitchOffsetAt(chord->staff(), chord->tick(), s);
+                int f = fret(note->pitch(), s, offset);
+
+                if (f == INVALID_FRET_INDEX || !fretReachableFromAll(f, placedFrets)) {
+                    continue;
+                }
+
+                std::pair<int, int> candidate = { s, f };
+                int distance = scoreFrettingCandidate(bassFretting, candidate);
+
+                if (distance < bestDistanceNoGliss) {
+                    bestDistanceNoGliss = distance;
+                    bestNoGliss = candidate;
+                }
+
+                if (stringSupportsGlissando(note, s) && distance < bestDistance) {
+                    bestDistance = distance;
+                    best = candidate;
+                }
+            }
+
+            if (best.first == INVALID_STRING_INDEX) {
+                best = bestNoGliss;
+            }
+        }
+
+        if (best.first != INVALID_STRING_INDEX) {
+            note->undoChangeProperty(Pid::STRING, best.first);
+            note->undoChangeProperty(Pid::FRET, best.second);
+            used[best.first] = true;
+            placedFrets.push_back(best.second);
+        }
+
+        // if no candidate found, then the convertPitch/bUsed pipeline
+        // will attempt it again just for good measure
+    }
+}
+
+//---------------------------------------------------------
+//   allCandidateFrettings
+//    Returns all possible places on the fretboard that we can play a note
+//    with a given pitch and given pitchOffset.
+//
+//    Will return a vector of integer pairs containing the string number and
+//    fret number respectively.
+//---------------------------------------------------------
+std::vector<std::pair<int, int> > StringData::allCandidateFrettings(int pitch, const Staff* staff, const Fraction& tick) const
+{
+    std::vector<std::pair<int, int> > candidateFrettings;
+    int strings = static_cast<int>(m_stringTable.size());
+
+    for (int visualStringNumber = 0; visualStringNumber < strings; ++visualStringNumber) {
+        int offset = pitchOffsetAt(staff, tick, visualStringNumber);
+        int fretNumber = fret(pitch, visualStringNumber, offset);
+
+        if (fretNumber != INVALID_FRET_INDEX) {
+            candidateFrettings.push_back({ visualStringNumber, fretNumber });
+        }
+    }
+
+    return candidateFrettings;
+}
+
+//---------------------------------------------------------
+//   getBestFrettingForBassNote
+//    Take in the fretting for the previous chord's bass note and a pointer to the current chord, and
+//    decides the best bass note to use for the chord depending on that.
+//---------------------------------------------------------
+std::pair<Note*, std::pair<int, int> > StringData::getBestFrettingForBassNote(const std::pair<int, int>& prevFretting, Chord* chord) const
+{
+    Note* desiredBassNote = getBassNoteOfVoicings(chord);
+
+    int forcedString = resolveForcedString(desiredBassNote);
+    if (forcedString != INVALID_STRING_INDEX) {
+        int offset = pitchOffsetAt(chord->staff(), chord->tick(), forcedString);
+        int f = fret(desiredBassNote->pitch(), forcedString, offset);
+        if (f != INVALID_FRET_INDEX) {
+            return { desiredBassNote, { forcedString, f } };
+        }
+    }
+
+    int noteCount = static_cast<int>(collectNotesAtSameTick(chord).size());
+    int minBassString = noteCount - 1;
+
+    std::vector<std::pair<int, int> > candidates = allCandidateFrettings(desiredBassNote->pitch(), chord->staff(), chord->tick());
+    // bestScore represents the minimum possible score a candidate can have
+    // the candidate with the 'lowest' score has the best score here
+    int bestScoreConstrained = INT_MAX;
+    int bestScoreNotGlissConstrained = INT_MAX;
+    std::pair<int, int> bestConstrainedFretting = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
+    std::pair<int, int> bestConstrainedFrettingNotGliss = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
+
+    int bestScoreNotGlissUnconstrained = INT_MAX;
+    std::pair<int, int> bestUnconstrainedFrettingNotGliss = { INVALID_STRING_INDEX, INVALID_FRET_INDEX };
+
+    for (std::pair<int, int> candidate : candidates) {
+        int score = scoreFrettingCandidate(prevFretting, candidate);
+
+        if (score < bestScoreNotGlissUnconstrained) { // fallback tracking
+            bestScoreNotGlissUnconstrained = score;
+            bestUnconstrainedFrettingNotGliss = candidate;
+        }
+
+        if (candidate.first < minBassString) {
+            continue;
+        }
+
+        if (score < bestScoreNotGlissConstrained) {
+            bestScoreNotGlissConstrained = score;
+            bestConstrainedFrettingNotGliss = candidate;
+        }
+
+        if (stringSupportsGlissando(desiredBassNote, candidate.first) && score < bestScoreConstrained) {
+            bestScoreConstrained = score;
+            bestConstrainedFretting = candidate;
+        }
+    }
+
+    if (bestConstrainedFretting.first != INVALID_STRING_INDEX) {
+        return { desiredBassNote, bestConstrainedFretting };
+    }
+
+    if (bestConstrainedFrettingNotGliss.first != INVALID_STRING_INDEX) {
+        return { desiredBassNote, bestConstrainedFrettingNotGliss };
+    }
+
+    return { desiredBassNote, bestUnconstrainedFrettingNotGliss };
+}
+
+//---------------------------------------------------------
+//   assignBestFrettingForBassNote
+//    Persists changes to the optimal fretting of the bass note based off the scoring functions.
+//    Also updates the last seen non-open chord.
+//---------------------------------------------------------
+void StringData::assignBestFrettingForBassNote(std::pair<int, int> bestFretting, Note* desiredBassNote, Chord* chord) const
+{
+    if (bestFretting.first != INVALID_STRING_INDEX) {
+        desiredBassNote->undoChangeProperty(Pid::STRING, bestFretting.first);
+        desiredBassNote->undoChangeProperty(Pid::FRET, bestFretting.second);
+        assignRemainingNotesAroundBass(chord, desiredBassNote, bestFretting);
+    } else {
+        desiredBassNote->setFretConflict(true);
+    }
+    return;
+}
+
+//---------------------------------------------------------
+//   defaultFretboardAnchor
+//    Dynamically computes the approximate "middle" of the fretboard.
+//    Returns a string#-fret# pair representing this.
+//---------------------------------------------------------
+std::pair<int, int> StringData::defaultFretboardAnchor() const
+{
+    int strings = static_cast<int>(this->strings());
+
+    // consider experimenting with making this divide by 3?
+    int middleString = strings / 2;
+    return { middleString, DEFAULT_ANCHOR_FRET };
+}
+
+//---------------------------------------------------------
 //   fretChords
 //    Assigns fretting to all the notes of each chord in the same segment of chord
 //    re-using existing fretting wherever possible
@@ -187,14 +644,76 @@ void StringData::fretChords(Chord* chord) const
         bFretting = false;
     };
 
+    Chord* prevChord = chord->prev();
+    Note* prevBassNote = nullptr;
+
     int strings = static_cast<int>(this->strings());
+    if (!strings) {
+        return;
+    }
+
     const bool skipDeadNotes = chord->configuration()->keepDeadNotesUnchangedOnTranspose();
+    Note* candidateBassNote = getBassNoteOfVoicings(chord);
+    Chord* lastRealChord = findPrecedingChordAcrossRests(chord);
+
+    if (!prevChord && lastRealChord) {
+        Fraction gap = chord->tick() - lastRealChord->endTick();
+        Fraction oneBar = chord->measure() ? chord->measure()->ticks() : Fraction(1, 1); // calculate duration of one bar
+
+        // if we have 1 or more bars of rest, then we start fretting around the default anchor
+        // (middle of fretboard) instead of based off the actual previous chord
+        if (gap < oneBar) {
+            prevBassNote = getBassNoteOfVoicings(lastRealChord);
+        }
+    } else if (prevChord) {
+        prevBassNote = getBassNoteOfVoicings(prevChord);
+    }
+
+    auto needsFretting = [&](const Note* n) {
+        if (n->displayFret() != Note::DisplayFretOption::NoHarmonic || n->negativeFretUsed()
+            || (skipDeadNotes && n->deadNote())) {
+            return false;
+        }
+        if (n->string() < 0 || n->string() >= strings || n->fret() == INVALID_FRET_INDEX) {
+            return true;
+        }
+        return getPitch(n->string(), n->fret(), n->staff(), n->tick()) != n->pitch();
+    };
+
+    bool bassNoteEligible = candidateBassNote
+                            && candidateBassNote->displayFret() == Note::DisplayFretOption::NoHarmonic
+                            && !candidateBassNote->negativeFretUsed()
+                            && !(skipDeadNotes && candidateBassNote->deadNote());
+
+    bool useSameString = chord->configuration()->preferSameStringForTranspose();
+
+    if (!useSameString) {
+        if (bassNoteEligible && prevBassNote && prevBassNote->string() != INVALID_STRING_INDEX && needsFretting(candidateBassNote)) {
+            std::pair<int, int> prevFretting = { prevBassNote->string(), prevBassNote->fret() };
+
+            if (prevFretting.second == 0) {
+                if (prevChord) {
+                    prevFretting = findLastNonOpenAnchor(prevChord);
+                } else {
+                    prevFretting = findLastNonOpenAnchor(lastRealChord);
+                }
+            }
+
+            auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(prevFretting, chord);
+            assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
+        } else if (bassNoteEligible && strings > 0 && needsFretting(candidateBassNote)) {
+            auto [desiredBassNote, bestFretting] = getBestFrettingForBassNote(defaultFretboardAnchor(), chord);
+            assignBestFrettingForBassNote(bestFretting, desiredBassNote, chord);
+        } else if (bassNoteEligible && candidateBassNote->string() != INVALID_STRING_INDEX) {
+            std::pair<int, int> existingBassFretting = { candidateBassNote->string(), candidateBassNote->fret() };
+            assignRemainingNotesAroundBass(chord, candidateBassNote, existingBassFretting);
+        }
+    }
 
     // we need the notes sorted in order of string (from highest to lowest) and then pitch
+    // looping backwards effectively does the reverse, we go from lower -> highest
     std::map<int, Note*> sortedNotes;
     int count = 0;
-    // if chord parent is not a segment, the chord is special (usually a grace chord):
-    // fret it by itself, ignoring the segment
     if (!chord->ownershipParent()->isSegment()) {
         sortChordNotes(sortedNotes, chord, &count);
     } else {
@@ -219,10 +738,6 @@ void StringData::fretChords(Chord* chord) const
         }
     }
 
-    if (!strings) {
-        return;
-    }
-
     // we need to keep track of string allocation
     std::vector<int> bUsed(strings);
 
@@ -242,6 +757,7 @@ void StringData::fretChords(Chord* chord) const
         }
     }
 
+    // main assignment loop
     // scan chord notes from highest, matching with strings from the highest
     for (const auto& p : sortedNotes) {
         Note* note = p.second;
@@ -254,8 +770,10 @@ void StringData::fretChords(Chord* chord) const
         if (skipDeadNotes && note->deadNote()) {
             continue;
         }
+
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
-        if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
+        // this will be skipped since the earlier logic in fretChords should cover this. this block exists only as a fallback in case that method fails.
+        if (nString == INVALID_STRING_INDEX) {
             const CapoParams& capo = note->staff()->capo(note->tick());
             // get a new fretting
             if (convertPitch(note->pitch(), pitchOffsetAt(chord->staff(), chord->tick()), &nNewString, &nNewFret,
@@ -280,6 +798,7 @@ void StringData::fretChords(Chord* chord) const
             }
         }
 
+        // just fixing things after in the case we play two notes on the same string at the same time (?)
         // if the note string (either original or newly assigned) is also used by another note
         if (note->displayFret() == Note::DisplayFretOption::NoHarmonic && bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
@@ -302,8 +821,6 @@ void StringData::fretChords(Chord* chord) const
             && bUsed[nNewString] > 1) {
             tryResolveStringConflictWithOutOfRangeFret(note, strings, bUsed, nNewString, nNewFret);
         }
-
-        // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
         if (nFret != nNewFret) {
@@ -422,6 +939,7 @@ int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick, int stri
 
 bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret, const CapoParams& capo) const
 {
+    // string and fret are overwritten by this function, their previous values are irrelevant
     int strings = static_cast<int>(m_stringTable.size());
     if (strings < 1) {
         return false;
