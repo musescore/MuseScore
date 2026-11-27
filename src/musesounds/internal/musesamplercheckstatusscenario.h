@@ -28,9 +28,8 @@
 
 #include "musesounds/imusesamplercheckstatusservice.h"
 #include "musesounds/imusesoundsconfiguration.h"
+#include "musesounds/imusehublauncher.h"
 #include "global/iinteractive.h"
-#include "global/iprocess.h"
-#include "global/iglobalconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
@@ -39,10 +38,9 @@ class MuseSamplerCheckStatusScenario : public IMuseSamplerCheckStatusScenario, p
 {
 public:
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
-    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::GlobalInject<muse::IProcess> process;
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::ContextInject<IMuseSamplerCheckStatusService> service = { this };
+    muse::ContextInject<IMuseHubLauncher> museHubLauncher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
@@ -59,7 +57,6 @@ private:
     void showNewVersionNotification();
 
     void openMuseHub(bool quit);
-    void openMuseHubWebsite(bool quit);
 
     bool m_alreadyChecked = false;
 };

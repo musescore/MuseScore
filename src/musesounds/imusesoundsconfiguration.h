@@ -27,6 +27,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "musesoundstypes.h"
+
 namespace mu::musesounds {
 class IMuseSoundsConfiguration : MODULE_GLOBAL_INTERFACE
 {
@@ -38,7 +40,9 @@ public:
     virtual muse::network::RequestHeaders headers() const = 0;
 
     virtual muse::UriQuery soundsUri() const = 0;
-    virtual muse::UriQuery soundPageUri(const muse::String& soundCode) const = 0;
+
+    virtual MuseHubUrls museHubUrls(MuseHubPage page, const std::string& utmContent,
+                                    const SoundLibraryInfo& soundLibrary = SoundLibraryInfo()) const = 0;
 
     virtual bool needCheckForMuseSoundsUpdate() const = 0;
 

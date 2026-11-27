@@ -40,7 +40,9 @@ public:
     muse::network::RequestHeaders headers() const override;
 
     muse::UriQuery soundsUri() const override;
-    muse::UriQuery soundPageUri(const muse::String& soundCode) const override;
+
+    MuseHubUrls museHubUrls(MuseHubPage page, const std::string& utmContent,
+                            const SoundLibraryInfo& soundLibrary = SoundLibraryInfo()) const override;
 
     bool needCheckForMuseSoundsUpdate() const override;
 

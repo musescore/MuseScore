@@ -33,7 +33,8 @@ public:
     MOCK_METHOD(muse::network::RequestHeaders, headers, (), (const, override));
 
     MOCK_METHOD(muse::UriQuery, soundsUri, (), (const, override));
-    MOCK_METHOD(muse::UriQuery, soundPageUri, (const muse::String&), (const, override));
+
+    MOCK_METHOD(MuseHubUrls, museHubUrls, (MuseHubPage, const std::string&, const SoundLibraryInfo&), (const, override));
 
     MOCK_METHOD(bool, needCheckForMuseSoundsUpdate, (), (const, override));
 

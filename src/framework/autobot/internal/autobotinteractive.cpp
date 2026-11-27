@@ -234,7 +234,12 @@ Ret AutobotInteractive::isAppExists(const std::string& appIdentifier) const
     return m_real->isAppExists(appIdentifier);
 }
 
-Ret AutobotInteractive::canOpenApp(const UriQuery& uri) const
+Ret AutobotInteractive::canOpenAppSync(const UriQuery& uri) const
+{
+    return m_real->canOpenAppSync(uri);
+}
+
+async::Promise<Ret> AutobotInteractive::canOpenApp(const UriQuery& uri) const
 {
     return m_real->canOpenApp(uri);
 }

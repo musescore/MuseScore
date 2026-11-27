@@ -35,8 +35,7 @@ static std::vector<QVariantMap> welcomeDialogData()
     museSoundsPro.insert("description", muse::qtrc("appshell/welcome",
                                                    "Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio."));
     museSoundsPro.insert("buttonText", muse::qtrc("appshell/welcome", "Get MuseSounds Pro"));
-    museSoundsPro.insert("destinationUrl",
-                         "https://www.musehub.com/muse-sounds/musesounds-pro?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=welcome_screen");
+    museSoundsPro.insert("museHubPage", static_cast<int>(mu::musesounds::MuseHubPage::MuseSoundsPro));
 
     QVariantMap whatsNew;
     whatsNew.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
@@ -61,8 +60,7 @@ static std::vector<QVariantMap> welcomeDialogData()
     freeMuseSounds.insert("description", muse::qtrc("appshell/welcome",
                                                     "Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub."));
     freeMuseSounds.insert("buttonText", muse::qtrc("appshell/welcome", "Get it on MuseHub"));
-    freeMuseSounds.insert("destinationUrl",
-                          "https://www.musehub.com/free-musesounds?utm_medium=Referral&utm_source=mss&utm_campaign=MH_WW_REF_MSS_DESKTOP_ALL_261026_crosslink&utm_content=welcome_screen");
+    freeMuseSounds.insert("museHubPage", static_cast<int>(mu::musesounds::MuseHubPage::MuseSoundsCore));
 
     QVariantMap exploreTutorials;
     exploreTutorials.insert("title", muse::qtrc("appshell/welcome", "Explore our tutorials"));
@@ -142,6 +140,23 @@ void WelcomeDialogModel::prevItem()
     configuration()->setWelcomeDialogLastShownIndex(static_cast<int>(m_currentIndex));
 
     emit currentItemChanged();
+}
+
+void WelcomeDialogModel::openCurrentItem()
+{
+    if (m_items.empty()) {
+        return;
+    }
+
+    const QVariantMap& item = m_items.at(m_currentIndex);
+    const QVariantMap::const_iterator pageIt = item.constFind("museHubPage");
+
+    if (pageIt != item.cend()) {
+        museHubLauncher()->open(static_cast<mu::musesounds::MuseHubPage>(pageIt.value().toInt()), "welcome_screen");
+        return;
+    }
+
+    interactive()->openUrl(item.value("destinationUrl").toString().toStdString());
 }
 
 bool WelcomeDialogModel::showOnStartup() const

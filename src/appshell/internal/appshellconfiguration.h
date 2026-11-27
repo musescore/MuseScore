@@ -83,7 +83,6 @@ public:
     std::string museScoreUrl() const override;
     std::string museScoreForumUrl() const override;
     std::string museScoreContributionUrl() const override;
-    std::string museHubFreeMuseSoundsUrl() const override;
     std::string musicXMLLicenseUrl() const override;
     std::string musicXMLLicenseDeedUrl() const override;
 

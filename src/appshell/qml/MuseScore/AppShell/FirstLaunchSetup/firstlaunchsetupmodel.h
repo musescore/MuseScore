@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
 #include "iinteractive.h"
+#include "musesounds/imusehublauncher.h"
 
 namespace mu::appshell {
 class FirstLaunchSetupModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -48,6 +49,7 @@ class FirstLaunchSetupModel : public QObject, public muse::Contextable, public m
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<musesounds::IMuseHubLauncher> museHubLauncher = { this };
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);

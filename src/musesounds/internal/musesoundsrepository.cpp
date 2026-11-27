@@ -172,11 +172,11 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             }
 
             SoundLibraryInfo soundLibrary;
+            soundLibrary.id = productObj.value("id").toString();
             soundLibrary.title = productObj.value("title").toString();
             soundLibrary.subtitle = productObj.value("subtitle").toString();
             soundLibrary.thumbnail = correctThumbnailSize(UriQuery(soundItemObj.value("iconImageUrl").toStdString()));
             soundLibrary.code = productObj.value("code").toString();
-            soundLibrary.uri = configuration()->soundPageUri(soundLibrary.code);
 
             catalogue.soundLibraries.emplace_back(soundLibrary);
         }

@@ -33,6 +33,7 @@ class MuseSoundsCheckUpdateScenario;
 class MuseSoundsCheckUpdateService;
 class MuseSamplerCheckStatusService;
 class MuseSamplerCheckStatusScenario;
+class MuseHubLauncher;
 class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -49,5 +50,6 @@ private:
     std::shared_ptr<MuseSoundsCheckUpdateService> m_museSoundsCheckUpdateService;
     std::shared_ptr<MuseSamplerCheckStatusService> m_museSamplerCheckStatusService;
     std::shared_ptr<MuseSamplerCheckStatusScenario> m_museSamplerCheckStatusScenario;
+    std::shared_ptr<MuseHubLauncher> m_museHubLauncher;
 };
 }
