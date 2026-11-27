@@ -29,17 +29,22 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/text.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
+#include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/sharedparttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffcontroltreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/stafftreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayertreeitem.h"
 
 #include "interactive/tests/mocks/interactivemock.h"
+#include "notation/tests/mocks/excerptnotationmock.h"
 #include "notation/tests/mocks/masternotationmock.h"
 #include "notation/tests/mocks/notationmock.h"
 #include "notation/tests/mocks/notationpartsmock.h"
@@ -67,6 +72,7 @@ protected:
         ON_CALL(*m_notation, parts()).WillByDefault(Return(m_parts));
         ON_CALL(*m_masterNotation, notation()).WillByDefault(Return(m_notation));
         ON_CALL(*m_masterNotation, parts()).WillByDefault(Return(m_masterParts));
+        ON_CALL(*m_masterNotation, excerpts()).WillByDefault(ReturnRef(m_excerpts));
 
         ON_CALL(*m_parts, part(_)).WillByDefault(Invoke([this](const ID& partId) -> const Part* {
             return isInPartScore(partId) ? m_score->partById(partId) : nullptr;
@@ -103,8 +109,22 @@ protected:
 
     void TearDown() override
     {
+        for (EngravingItem* element : m_elements) {
+            delete element;
+        }
+
         delete m_root;
         delete m_score;
+    }
+
+    //! A score element on the staff; without a staff, it has no instrument
+    EngravingItem* addElement(const Staff* staff)
+    {
+        Text* text = Factory::createText(m_score->dummy(), TextStyleType::DEFAULT, false);
+        text->setTrack(staff ? staff->idx() * VOICES : muse::nidx);
+        m_elements.push_back(text);
+
+        return text;
     }
 
     const Part* addPart(size_t staffCount = 1, const String& name = u"")
@@ -118,6 +138,11 @@ protected:
         }
 
         return part;
+    }
+
+    void addExcerpt()
+    {
+        m_excerpts.push_back(std::make_shared<NiceMock<ExcerptNotationMock> >());
     }
 
     //! Not in the part score the panel shows
@@ -148,9 +173,27 @@ protected:
         return m_partItem;
     }
 
-    static QVariant dragged(QObject* item)
+    SharedPart* addSharedPart(const std::vector<const Part*>& members)
     {
-        return QVariant::fromValue(item);
+        SharedPart* sharedPart = new SharedPart(m_score);
+        m_score->appendPart(sharedPart);
+        m_score->appendStaff(Factory::createStaff(sharedPart));
+
+        for (const Part* member : members) {
+            sharedPart->addOriginPart(const_cast<Part*>(member));
+        }
+
+        return sharedPart;
+    }
+
+    //! The root works out the group roles from the score's shared parts
+    SharedPartTreeItem* buildSharedPartTreeItem(const SharedPart* sharedPart)
+    {
+        SharedPartTreeItem* item = new SharedPartTreeItem(m_masterNotation, m_notation, m_root);
+        item->init(sharedPart);
+        m_root->appendChild(item);
+
+        return item;
     }
 
     //! Same as the up/down buttons: LayoutPanelTreeModel::moveRows()
@@ -196,8 +239,11 @@ protected:
 
     std::shared_ptr<NotationMock> m_notation;
     std::shared_ptr<MasterNotationMock> m_masterNotation;
+    ExcerptNotationList m_excerpts;
 
 private:
+    std::vector<EngravingItem*> m_elements;
+
     bool isInPartScore(const ID& partId) const
     {
         return !muse::contains(m_partsMissingFromPartScore, partId);
@@ -221,6 +267,7 @@ TEST_F(InstrumentsScene_PartTreeItemTests, Init_PartInScore)
     EXPECT_EQ(m_partItem->title(), QString("Flute 1"));
 
     // [THEN] It's visible, enabled and has its settings
+    EXPECT_TRUE(m_partItem->existsInScore());
     EXPECT_TRUE(m_partItem->isVisible());
     EXPECT_TRUE(m_partItem->isEnabled());
     EXPECT_TRUE(m_partItem->settingsAvailable());
@@ -260,12 +307,13 @@ TEST_F(InstrumentsScene_PartTreeItemTests, Init_PartMissingFromPartScore)
     EXPECT_EQ(m_partItem->part(), part);
     EXPECT_EQ(m_partItem->title(), QString("Flute"));
 
-    // [THEN] It's hidden, with no settings, and can't be expanded or removed
+    // [THEN] It's hidden and can't be removed, but can be expanded and has its settings
+    EXPECT_FALSE(m_partItem->existsInScore());
     EXPECT_FALSE(m_partItem->isVisible());
-    EXPECT_FALSE(m_partItem->settingsAvailable());
-    EXPECT_FALSE(m_partItem->settingsEnabled());
-    EXPECT_FALSE(m_partItem->isExpandable());
     EXPECT_FALSE(m_partItem->isRemovable());
+    EXPECT_TRUE(m_partItem->settingsAvailable());
+    EXPECT_TRUE(m_partItem->settingsEnabled());
+    EXPECT_TRUE(m_partItem->isExpandable());
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, MoveChildren_StaffDown)
@@ -391,13 +439,197 @@ TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop)
     SystemObjectsLayerTreeItem* layerItem = new SystemObjectsLayerTreeItem(m_masterNotation, m_notation, m_root);
 
     // [THEN] Instruments and system markings rows can be dropped on an instrument
-    EXPECT_TRUE(aItem->canAcceptDrop(dragged(bItem)));
-    EXPECT_TRUE(aItem->canAcceptDrop(dragged(layerItem)));
+    EXPECT_TRUE(aItem->canAcceptDrop(bItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_TRUE(aItem->canAcceptDrop(layerItem, LayoutPanelItemType::ON_ITEM));
 
     // [THEN] Staves and other objects can't
-    EXPECT_FALSE(aItem->canAcceptDrop(dragged(aItem->childAtRow(0))));
-    EXPECT_FALSE(aItem->canAcceptDrop(dragged(m_root)));
-    EXPECT_FALSE(aItem->canAcceptDrop(QVariant()));
+    EXPECT_FALSE(aItem->canAcceptDrop(aItem->childAtRow(0), LayoutPanelItemType::ON_ITEM));
+    EXPECT_FALSE(aItem->canAcceptDrop(m_root, LayoutPanelItemType::ON_ITEM));
+
+    // [GIVEN] A shared-staves group header
+    PartTreeItem* groupItem = new PartTreeItem(m_masterNotation, m_notation, m_root, LayoutPanelItemType::SHARED_PART);
+    m_root->appendChild(groupItem);
+
+    // [THEN] Instruments and groups can be dropped on each other
+    EXPECT_TRUE(aItem->canAcceptDrop(groupItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_TRUE(groupItem->canAcceptDrop(aItem, LayoutPanelItemType::ON_ITEM));
+
+    // [GIVEN] An instrument in another tree
+    RootTreeItem otherRoot(m_masterNotation, m_notation);
+    PartTreeItem* otherPartItem = new PartTreeItem(m_masterNotation, m_notation, &otherRoot);
+    otherRoot.appendChild(otherPartItem);
+
+    // [THEN] It can't be dropped on the group
+    EXPECT_FALSE(groupItem->canAcceptDrop(otherPartItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_EQ(groupItem->dropTarget(otherPartItem, LayoutPanelItemType::ON_ITEM), nullptr);
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, DropTarget_OnOtherGroup_Group)
+{
+    // [GIVEN] A, then B in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    PartTreeItem* header = buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] A dragged onto B or onto the group header joins the group on release
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), header);
+    EXPECT_EQ(header->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), header);
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_BelowOtherGroupFromAbove_True)
+{
+    // [GIVEN] A, then B in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] A dragged into the gap below the group moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_BelowOtherGroupFromBelow_False)
+{
+    // [GIVEN] B in a shared-staves group, then C
+    const Part* b = addPart();
+    const Part* c = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    PartTreeItem* cItem = buildPartTreeItem(c);
+
+    // [THEN] C dragged into the gap below the group is already after it: nothing moves, and there is no drop target
+    EXPECT_EQ(bItem->dropTarget(cItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_FALSE(bItem->canAcceptDrop(cItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_OwnGroup_True)
+{
+    // [GIVEN] B and C in the same shared-staves group
+    const Part* b = addPart();
+    const Part* c = addPart();
+    const SharedPart* s = addSharedPart({ b, c });
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    PartTreeItem* cItem = buildPartTreeItem(c);
+
+    // [THEN] B dragged onto C moves onto C's row, without a drop target
+    EXPECT_EQ(cItem->dropTarget(bItem, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(cItem->canAcceptDrop(bItem, LayoutPanelItemType::ON_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_NotInGroup_True)
+{
+    // [GIVEN] Two instruments
+    PartTreeItem* aItem = buildPartTreeItem(addPart());
+    PartTreeItem* bItem = buildPartTreeItem(addPart());
+
+    // [THEN] A dragged onto B or below it moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_GroupHeaderOnOtherGroup_True)
+{
+    // [GIVEN] Two shared-staves groups, B in the second
+    const Part* b = addPart();
+    const SharedPart* first = addSharedPart({});
+    const SharedPart* second = addSharedPart({ b });
+    PartTreeItem* firstHeader = buildSharedPartTreeItem(first);
+    buildSharedPartTreeItem(second);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] Only instruments join groups: the first group moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(firstHeader, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(firstHeader, LayoutPanelItemType::ON_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, ResolveMove_StavesAboveAddStaffRow)
+{
+    // [GIVEN] An instrument with two staves, then the "add staff" row
+    buildPartTreeItem(addPart(2));
+
+    // [THEN] The staves swap places
+    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = m_partItem->resolveMove(0, 0, 1, false /*isDrag*/);
+    ASSERT_TRUE(move);
+    EXPECT_EQ(move->sourceRow, 0);
+    EXPECT_EQ(move->count, 1);
+    EXPECT_EQ(move->destinationRow, 1);
+
+    // [THEN] Nothing moves onto the "add staff" row, above the first staff, or onto itself
+    EXPECT_FALSE(m_partItem->resolveMove(1, 1, 2, false /*isDrag*/));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, -1, false /*isDrag*/));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, 0, false /*isDrag*/));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, NeedsRemovalConfirmation_OnlyWithPartScores)
+{
+    // [GIVEN] An instrument, and no part scores
+    buildPartTreeItem(addPart());
+
+    // [THEN] It's removed without asking
+    EXPECT_FALSE(m_partItem->needsRemovalConfirmation());
+
+    // [WHEN] There is a part score
+    addExcerpt();
+
+    // [THEN] Removing it asks first, as it's also removed from the part score
+    EXPECT_TRUE(m_partItem->needsRemovalConfirmation());
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, IsSelectedInScore)
+{
+    // [GIVEN] Two instruments
+    const Part* a = addPart();
+    const Part* b = addPart();
+    PartTreeItem* aItem = buildPartTreeItem(a);
+
+    // [THEN] A's row follows a selection with an element of A
+    EXPECT_TRUE(aItem->isSelectedInScore({ addElement(b->staff(0)), addElement(a->staff(0)) }));
+
+    // [THEN] But not one with only other elements, or an empty one
+    EXPECT_FALSE(aItem->isSelectedInScore({ addElement(b->staff(0)), addElement(nullptr) }));
+    EXPECT_FALSE(aItem->isSelectedInScore({}));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, IsHiddenByCollapse)
+{
+    // [GIVEN] A collapsed, then B with two staves in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart(2);
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    PartTreeItem* header = buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    aItem->setIsExpanded(false);
+
+    // [WHEN] The group is expanded
+    header->setIsExpanded(true);
+
+    // [THEN] Nothing is hidden
+    EXPECT_FALSE(bItem->isHiddenByCollapse());
+    EXPECT_FALSE(bItem->childAtRow(0)->isHiddenByCollapse());
+
+    // [WHEN] The group is collapsed
+    header->setIsExpanded(false);
+
+    // [THEN] B and its staves are hidden, the header and A aren't
+    EXPECT_TRUE(bItem->isHiddenByCollapse());
+    EXPECT_TRUE(bItem->childAtRow(0)->isHiddenByCollapse());
+    EXPECT_TRUE(bItem->childAtRow(1)->isHiddenByCollapse());
+    EXPECT_FALSE(header->isHiddenByCollapse());
+
+    // [THEN] Neither are A's rows: the view hides the children of a collapsed row itself
+    EXPECT_FALSE(aItem->isHiddenByCollapse());
+    EXPECT_FALSE(aItem->childAtRow(0)->isHiddenByCollapse());
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, InstrumentId)

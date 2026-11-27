@@ -122,6 +122,15 @@ protected:
         return partItem;
     }
 
+    //! No root item works out the roles here, so they're set directly
+    PartTreeItem* buildGroupHeaderItem()
+    {
+        PartTreeItem* header = new PartTreeItem(m_masterNotation, m_notation, m_itemsOwner, LayoutPanelItemType::SHARED_PART);
+        header->setSharedGroup(LayoutPanelItemType::GROUP_HEADER, header);
+
+        return header;
+    }
+
     MasterScore* m_score = nullptr;
 
     std::shared_ptr<NotationPartsMock> m_parts;
@@ -272,4 +281,19 @@ TEST_F(InstrumentsScene_StaffTreeItemTests, SetVisible_ShowsHiddenPart)
     // [THEN] The instrument row is shown, the other staff row stays hidden
     EXPECT_TRUE(partItem->isVisible());
     EXPECT_FALSE(partItem->childAtRow(1)->isVisible());
+}
+
+TEST_F(InstrumentsScene_StaffTreeItemTests, CanAcceptDrop_StaffOnStaff_True)
+{
+    // [GIVEN] An instrument with two staves in a shared-staves group
+    PartTreeItem* partItem = buildPartTreeItem(addPart(2));
+    partItem->setSharedGroup(LayoutPanelItemType::GROUP_LAST_MEMBER, buildGroupHeaderItem());
+
+    // [WHEN] The first staff is dragged onto the second
+    const AbstractLayoutPanelTreeItem* dragged = partItem->childAtRow(0);
+    const AbstractLayoutPanelTreeItem* target = partItem->childAtRow(1);
+
+    // [THEN] It moves onto the second staff's row, and there is no drop target
+    EXPECT_TRUE(target->canAcceptDrop(dragged, LayoutPanelItemType::ON_ITEM));
+    EXPECT_EQ(target->dropTarget(dragged, LayoutPanelItemType::ON_ITEM), nullptr);
 }

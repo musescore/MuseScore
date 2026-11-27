@@ -25,9 +25,11 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/text.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/sharedparttreeitem.h"
@@ -71,8 +73,21 @@ protected:
 
     void TearDown() override
     {
+        for (EngravingItem* element : m_elements) {
+            delete element;
+        }
+
         delete m_root;
         delete m_score;
+    }
+
+    EngravingItem* addElement(const Staff* staff)
+    {
+        Text* text = Factory::createText(m_score->dummy(), TextStyleType::DEFAULT, false);
+        text->setTrack(staff->idx() * VOICES);
+        m_elements.push_back(text);
+
+        return text;
     }
 
     Part* addPart(const String& name)
@@ -113,6 +128,14 @@ protected:
         return item;
     }
 
+    PartTreeItem* buildPartTreeItem(const Part* part)
+    {
+        PartTreeItem* item = new PartTreeItem(m_masterNotation, m_notation, m_root);
+        item->init(part);
+
+        return item;
+    }
+
     static void notifyScoreChanged(AbstractLayoutPanelTreeItem* item, const ScoreChanges& changes = ScoreChanges())
     {
         item->onScoreChanged(changes);
@@ -123,6 +146,8 @@ protected:
     std::shared_ptr<NotationPartsMock> m_parts;
 
 private:
+    std::vector<EngravingItem*> m_elements;
+
     std::shared_ptr<NotationMock> m_notation;
     std::shared_ptr<MasterNotationMock> m_masterNotation;
 };
@@ -251,4 +276,30 @@ TEST_F(InstrumentsScene_SharedPartTreeItemTests, OnScoreChanged_KeepsTitleOnOthe
 
     // [THEN] The title isn't recomputed
     EXPECT_EQ(item->title(), QString("Trumpet 1–2"));
+}
+
+TEST_F(InstrumentsScene_SharedPartTreeItemTests, ApplyDrop_JoinsGroup)
+{
+    // [GIVEN] A group of two trumpets, and a third trumpet
+    SharedPart* sharedPart = addSharedPart({ u"Trumpet 1", u"Trumpet 2" });
+    const Part* part = addPart(u"Trumpet 3");
+    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
+    const PartTreeItem* partItem = buildPartTreeItem(part);
+
+    // [THEN] The third trumpet joins the group on the score
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(IDList { part->id() }, sharedPart->id()));
+
+    // [WHEN] It's dropped on the group
+    item->applyDrop(partItem);
+}
+
+TEST_F(InstrumentsScene_SharedPartTreeItemTests, IsSelectedInScore_NotSelected)
+{
+    // [GIVEN] A group of two trumpets
+    SharedPart* sharedPart = addSharedPart({ u"Trumpet 1", u"Trumpet 2" });
+    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
+
+    // [THEN] The header doesn't follow the selection of the combined staff, nor of its trumpets
+    EXPECT_FALSE(item->isSelectedInScore({ addElement(sharedPart->staff(0)) }));
+    EXPECT_FALSE(item->isSelectedInScore({ addElement(sharedPart->originParts().at(0)->staff(0)) }));
 }

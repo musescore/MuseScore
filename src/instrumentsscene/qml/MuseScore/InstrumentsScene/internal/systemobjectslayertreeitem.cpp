@@ -137,7 +137,7 @@ QString SystemObjectsLayerTreeItem::staffId() const
     return m_staff ? m_staff->id().toQString() : QString();
 }
 
-bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
+bool SystemObjectsLayerTreeItem::canAcceptDrop(const AbstractLayoutPanelTreeItem*, LayoutPanelItemType::DropPosition) const
 {
     return m_staffIdx != 0; // all except the first
 }

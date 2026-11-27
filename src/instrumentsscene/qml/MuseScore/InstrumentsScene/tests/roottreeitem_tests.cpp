@@ -27,6 +27,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
@@ -112,6 +113,21 @@ protected:
         m_sharedParts.push_back(part);
     }
 
+    const Part* addSharedPart(const String& name)
+    {
+        SharedPart* part = new SharedPart(m_score);
+        part->setLongNameAll(name);
+        m_score->appendPart(part);
+        m_score->appendStaff(Factory::createStaff(part));
+
+        return part;
+    }
+
+    void addToSharedPart(const Part* sharedPart, const Part* part)
+    {
+        toSharedPart(m_score->partById(sharedPart->id()))->addOriginPart(m_score->partById(part->id()));
+    }
+
     //! Same rows as LayoutPanelTreeModel::load() builds; part scores have no system markings rows
     void buildTree(bool withSystemObjects = true)
     {
@@ -129,8 +145,8 @@ protected:
                 }
             }
 
-            const LayoutPanelItemType::ItemType type = muse::contains(m_sharedParts, static_cast<const Part*>(part))
-                                                       ? LayoutPanelItemType::SHARED_PART : LayoutPanelItemType::PART;
+            const bool isSharedPart = part->isSharedPart() || muse::contains(m_sharedParts, static_cast<const Part*>(part));
+            const LayoutPanelItemType::ItemType type = isSharedPart ? LayoutPanelItemType::SHARED_PART : LayoutPanelItemType::PART;
             PartTreeItem* partItem = new PartTreeItem(m_masterNotation, m_notation, m_root, type);
             partItem->init(part);
             m_root->appendChild(partItem);
@@ -170,6 +186,17 @@ protected:
     void moveRow(int row, int toRow)
     {
         moveRows(row, 1, toRow);
+    }
+
+    //! "source row, row count, destination row", or "none"
+    std::string rowMove(int firstRow, int lastRow, int targetRow, bool isDrag = false) const
+    {
+        const std::optional<RootTreeItem::RowMove> move = m_root->resolveMove(firstRow, lastRow, targetRow, isDrag);
+        if (!move) {
+            return "none";
+        }
+
+        return std::to_string(move->sourceRow) + " " + std::to_string(move->count) + " " + std::to_string(move->destinationRow);
     }
 
     //! Same as LayoutPanelTreeModel during a drag: moveRows() for each one-row step, endActiveDrag() on drop
@@ -680,6 +707,49 @@ TEST_F(InstrumentsScene_RootTreeItemTests, MoveChildren_PartScore_MissingInstrum
     EXPECT_EQ(childNames(), "B A C");
 }
 
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_GroupMovedWithInstruments)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addToSharedPart(s, b);
+    buildTree(); // [A:0] A S B C
+
+    // [THEN] The group and its instrument go below C, B still in the group
+    INotationParts::PartsLayout expected;
+    expected.parts = { { a->id() }, { c->id() }, { s->id() }, { b->id(), s->id() } };
+    EXPECT_CALL(*m_parts, setPartsLayout(expected));
+
+    // [WHEN] The group is moved down past C with its instrument
+    moveRows(2, 2, 4);
+
+    // [THEN] The group and its instrument are below C
+    EXPECT_EQ(childNames(), "[A:0] A C S B");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_MemberOutOfGroup)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    const Part* d = addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    buildTree(); // [A:0] A S B C D
+
+    // [THEN] C is below D and leaves the group; B stays in it
+    INotationParts::PartsLayout expected;
+    expected.parts = { { a->id() }, { s->id() }, { b->id(), s->id() }, { d->id() }, { c->id() } };
+    EXPECT_CALL(*m_parts, setPartsLayout(expected));
+
+    // [WHEN] C is dragged below D
+    dragRow(4, 5);
+}
+
 TEST_F(InstrumentsScene_RootTreeItemTests, RemoveChildren_Instrument)
 {
     // [GIVEN] Three instruments, system markings only on the top staff
@@ -759,6 +829,124 @@ TEST_F(InstrumentsScene_RootTreeItemTests, RemoveChildren_WithoutDeleting)
     // [THEN] The rows are gone
     EXPECT_EQ(m_root->childCount(), 3);
     EXPECT_EQ(childNames(), "[A:0] A B");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_GroupHeader)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    buildTree(); // [A:0] A S B C D
+
+    // [THEN] The header moves down past D with its instruments, although the row below it is B
+    EXPECT_EQ(rowMove(2, 2, 3), "2 3 5");
+
+    // [THEN] The header moves up past A with its instruments
+    EXPECT_EQ(rowMove(2, 2, 1), "2 3 1");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_GroupHeaderWithMarkings)
+{
+    // [GIVEN] A, B and C in a shared-staves group, system markings above C, then D
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    addSystemObjects(c->staff(0));
+    buildTree(); // [A:0] A S B [C:0] C D
+
+    // [THEN] The header moves with its instruments and the markings among them
+    EXPECT_EQ(rowMove(2, 2, 6), "2 4 6");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_PastGroup)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    buildTree(); // [A:0] A S B C D
+
+    // [THEN] A moving down onto the header or an instrument of the group goes below the whole group
+    EXPECT_EQ(rowMove(1, 1, 2), "1 1 4");
+    EXPECT_EQ(rowMove(1, 1, 3), "1 1 4");
+
+    // [THEN] D moving up onto an instrument or the header of the group goes above the whole group
+    EXPECT_EQ(rowMove(5, 5, 4), "5 1 2");
+    EXPECT_EQ(rowMove(5, 5, 2), "5 1 2");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_InsideGroup)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    buildTree(); // [A:0] A S B C D
+
+    // [THEN] Instruments of the group swap places
+    EXPECT_EQ(rowMove(4, 4, 3), "4 1 3");
+    EXPECT_EQ(rowMove(3, 3, 4), "3 1 4");
+
+    // [THEN] The first instrument can't move up out of the group, nor the last one down
+    EXPECT_EQ(rowMove(3, 3, 2), "none");
+    EXPECT_EQ(rowMove(3, 3, 1), "none");
+    EXPECT_EQ(rowMove(4, 4, 5), "none");
+
+    // [THEN] Unless they're dragged
+    EXPECT_EQ(rowMove(3, 3, 2, true /*isDrag*/), "3 1 2");
+    EXPECT_EQ(rowMove(4, 4, 5, true /*isDrag*/), "4 1 5");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_DragOnlyMember)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addPart(u"C");
+    addToSharedPart(s, b);
+    buildTree(); // [A:0] A S B C
+
+    // [THEN] The group's only instrument can't be dragged out
+    EXPECT_EQ(rowMove(3, 3, 2, true /*isDrag*/), "none");
+    EXPECT_EQ(rowMove(3, 3, 4, true /*isDrag*/), "none");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_Ends)
+{
+    // [GIVEN] Two instruments, system markings above A
+    addPart(u"A");
+    addPart(u"B");
+    buildTree(); // [A:0] A B
+
+    // [THEN] Nothing moves above the first markings row, nor below the last row, nor onto itself
+    EXPECT_EQ(rowMove(1, 1, 0), "none");
+    EXPECT_EQ(rowMove(2, 2, 3), "none");
+    EXPECT_EQ(rowMove(1, 1, 1), "none");
+
+    // [THEN] The first markings row doesn't move
+    EXPECT_EQ(rowMove(0, 0, 1), "none");
+
+    // [THEN] The instruments swap places
+    EXPECT_EQ(rowMove(1, 1, 2), "1 1 2");
+    EXPECT_EQ(rowMove(2, 2, 1), "2 1 1");
 }
 
 TEST_F(InstrumentsScene_RootTreeItemTests, IsLastChild_AfterAppend)

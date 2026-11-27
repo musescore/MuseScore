@@ -21,8 +21,11 @@
  */
 #include "parttreeitem.h"
 
+#include <algorithm>
+
 #include "async/notifylist.h"
 
+#include "engraving/dom/engravingitem.h"
 #include "engraving/dom/sharedpart.h"
 
 #include "notation/inotation.h"
@@ -38,6 +41,9 @@ using namespace muse;
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)
     : AbstractLayoutPanelTreeItem(type, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
+    setSettingsAvailable(true);
+    setSettingsEnabled(true);
+    setIsExpandable(true);
     setIsSelectable(true);
 
     listenVisibilityChanged();
@@ -57,7 +63,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     }
 
     bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+    bool enabled = !isCombinedOntoSharedStaves(part);
 
     setId(part->id());
 
@@ -66,9 +72,6 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     setIsVisible(visible);
     setIsEnabled(enabled);
-    setSettingsAvailable(m_partExists);
-    setSettingsEnabled(m_partExists);
-    setIsExpandable(m_partExists);
     setIsRemovable(m_partExists);
 
     m_part = part;
@@ -78,6 +81,11 @@ void PartTreeItem::init(const notation::Part* masterPart)
 const Part* PartTreeItem::part() const
 {
     return m_part;
+}
+
+bool PartTreeItem::existsInScore() const
+{
+    return m_partExists;
 }
 
 LayoutPanelItemType::SharedGroupRole PartTreeItem::sharedGroupRole() const
@@ -109,7 +117,16 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 
     setTitle(m_part->partName().simplified());
     updateVisibility();
-    setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
+    setIsEnabled(!isCombinedOntoSharedStaves(m_part));
+}
+
+bool PartTreeItem::isCombinedOntoSharedStaves(const Part* part) const
+{
+    if (!notation()->isMaster()) {
+        return false;
+    }
+
+    return part->sharedPart() && part->sharedPart()->enabled();
 }
 
 void PartTreeItem::updateVisibility()
@@ -231,15 +248,70 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
     }
 }
 
-bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
+bool PartTreeItem::canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const
 {
-    if (auto item = dynamic_cast<const AbstractLayoutPanelTreeItem*>(obj.value<QObject*>())) {
-        if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            return true;
-        }
+    if (groupToJoin(dragged)) {
+        // Below the group: from above, resolveMove() puts it after the group; from below, it's already there
+        return dragged->row() < row();
     }
 
-    return AbstractLayoutPanelTreeItem::canAcceptDrop(obj);
+    if (dragged->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+        return true;
+    }
+
+    const bool isPartOrGroup = dragged->type() == LayoutPanelItemType::PART || dragged->type() == LayoutPanelItemType::SHARED_PART;
+    if (isPartOrGroup && dragged->parentItem() == parentItem()) {
+        return true;
+    }
+
+    return AbstractLayoutPanelTreeItem::canAcceptDrop(dragged, position);
+}
+
+AbstractLayoutPanelTreeItem* PartTreeItem::dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                                      LayoutPanelItemType::DropPosition position) const
+{
+    return position == LayoutPanelItemType::ON_ITEM ? groupToJoin(dragged) : nullptr;
+}
+
+PartTreeItem* PartTreeItem::groupToJoin(const AbstractLayoutPanelTreeItem* dragged) const
+{
+    if (dragged->type() != LayoutPanelItemType::PART || dragged->parentItem() != parentItem()) {
+        return nullptr;
+    }
+
+    PartTreeItem* group = sharedGroupHeader();
+    if (!group || static_cast<const PartTreeItem*>(dragged)->sharedGroupHeader() == group) {
+        return nullptr;
+    }
+
+    return group;
+}
+
+std::optional<AbstractLayoutPanelTreeItem::RowMove> PartTreeItem::resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const
+{
+    if (childType(targetRow) == LayoutPanelItemType::CONTROL_ADD_STAFF) {
+        return std::nullopt;
+    }
+
+    return AbstractLayoutPanelTreeItem::resolveMove(firstRow, lastRow, targetRow, isDrag);
+}
+
+bool PartTreeItem::needsRemovalConfirmation() const
+{
+    return !masterNotation()->excerpts().empty();
+}
+
+bool PartTreeItem::isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const
+{
+    return std::any_of(selection.cbegin(), selection.cend(), [this](const mu::engraving::EngravingItem* element) {
+        return element->part() && element->part()->id() == id();
+    });
+}
+
+bool PartTreeItem::isHiddenByCollapse() const
+{
+    const PartTreeItem* header = sharedGroupHeader();
+    return header && header != this && !header->isExpanded();
 }
 
 QString PartTreeItem::instrumentId() const

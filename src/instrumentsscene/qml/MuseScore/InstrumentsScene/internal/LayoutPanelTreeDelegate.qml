@@ -36,7 +36,6 @@ DropArea {
     required property int row
     required property int column
     required property int depth
-    required property bool expanded
     required property AbstractLayoutPanelTreeItem item
 
     required property LayoutPanelTreeModel treeModel
@@ -44,16 +43,18 @@ DropArea {
 
     // Shared by all rows, owned by the tree
     required property AbstractLayoutPanelTreeItem draggedItem
-    required property bool isGroupCollapsed
     required property PartTreeItem hoveredGroupHeader
     required property PartTreeItem pressedGroupHeader
 
     property int sideMargin: 0
     property int cardRadius: 0
     property int cardHeight: 30
+    property int groupPadding: 0
+    property int groupRadius: 0
 
     readonly property var modelIndex: root.treeView.index(root.row, root.column)
     readonly property PartTreeItem groupHeader: prv.groupPart?.sharedGroupHeader ?? null
+    readonly property bool isGroupCollapsed: Boolean(root.groupHeader) && !root.groupHeader.isExpanded
 
     signal groupHoverChanged(bool hovered)
     signal groupPressChanged(bool pressed)
@@ -63,19 +64,22 @@ DropArea {
     signal expandRequested(LayoutPanelCard card, bool expand)
     signal popupOpenedChanged(bool opened)
     signal navigationActivated(string name)
-    signal dropRequested()
+    signal dragMoved(int position)
+    signal contextMenuRequested(LayoutPanelCard card, real x, real y)
 
     QtObject {
         id: prv
 
         readonly property int itemSpacing: 8
-        readonly property int groupPadding: 4
-        readonly property int groupRadius: 6
 
         readonly property bool isDragged: Boolean(root.draggedItem) && root.item === root.draggedItem
         readonly property bool isGroupHeader: root.item?.type === LayoutPanelItemType.SHARED_PART
+        readonly property bool isDraggedGroup: prv.isDragged && prv.isGroupHeader
+        readonly property bool isDropTarget: Boolean(root.groupHeader) && root.groupHeader === root.treeModel.dropTarget
 
-        readonly property bool isCardBottom: root.depth === 0 ? !root.expanded : Boolean(root.item?.isLastChild)
+        readonly property bool isExpanded: Boolean(root.item?.isExpandable) && root.item.isExpanded
+        //! NOTE A group header has no child rows: its instruments are separate cards
+        readonly property bool isCardBottom: root.depth === 0 ? !prv.isExpanded || prv.isGroupHeader : Boolean(root.item?.isLastChild)
 
         // Staves and "Add staff" rows are in their part's group
         readonly property PartTreeItem groupPart: {
@@ -109,7 +113,7 @@ DropArea {
             return height + prv.itemSpacing
         }
 
-        return height + prv.groupPadding + (prv.isGroupBottom ? prv.itemSpacing : 0)
+        return height + root.groupPadding + (prv.isGroupBottom ? prv.itemSpacing : 0)
     }
 
     // The gaps between cards; clicks on the cards are handled by the cards
@@ -142,14 +146,14 @@ DropArea {
         anchors.fill: parent
         anchors.bottomMargin: prv.isGroupBottom ? prv.itemSpacing : 0
 
-        visible: prv.isInGroup
+        visible: prv.isInGroup && !prv.isDraggedGroup
 
-        topLeftRadius: prv.isGroupTop ? prv.groupRadius : 0
-        topRightRadius: prv.isGroupTop ? prv.groupRadius : 0
-        bottomLeftRadius: prv.isGroupBottom ? prv.groupRadius : 0
-        bottomRightRadius: prv.isGroupBottom ? prv.groupRadius : 0
+        topLeftRadius: prv.isGroupTop ? root.groupRadius : 0
+        topRightRadius: prv.isGroupTop ? root.groupRadius : 0
+        bottomLeftRadius: prv.isGroupBottom ? root.groupRadius : 0
+        bottomRightRadius: prv.isGroupBottom ? root.groupRadius : 0
 
-        color: groupBackground.isSelected ? ui.theme.accentColor : ui.theme.buttonColor
+        color: groupBackground.isSelected || prv.isDropTarget ? ui.theme.accentColor : ui.theme.buttonColor
         opacity: {
             if (groupBackground.isPressed) {
                 return 0.7
@@ -163,15 +167,27 @@ DropArea {
         }
     }
 
+    // Where the dragged group will land, the size of the collapsed group
+    Rectangle {
+        anchors.fill: groupBackground
+
+        visible: prv.isDraggedGroup
+
+        radius: root.groupRadius
+        color: "transparent"
+        border.width: 1.5
+        border.color: ui.theme.accentColor
+    }
+
     Item {
         id: content
 
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: prv.isGroupTop ? prv.groupPadding : 0
-        anchors.leftMargin: prv.isInGroup ? prv.groupPadding : 0
-        anchors.rightMargin: prv.isInGroup ? prv.groupPadding : 0
+        anchors.topMargin: prv.isGroupTop ? root.groupPadding : 0
+        anchors.leftMargin: prv.isInGroup ? root.groupPadding : 0
+        anchors.rightMargin: prv.isInGroup ? root.groupPadding : 0
 
         height: root.cardHeight
 
@@ -179,7 +195,7 @@ DropArea {
         Rectangle {
             anchors.fill: parent
 
-            visible: prv.isDragged
+            visible: prv.isDragged && !prv.isDraggedGroup && !root.treeModel.dropTarget
 
             radius: root.cardRadius
             color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
@@ -214,7 +230,7 @@ DropArea {
             modelIndex: root.modelIndex
             row: root.row
             depth: root.depth
-            isExpanded: prv.isGroupHeader ? !root.isGroupCollapsed : root.expanded
+            isExpanded: prv.isExpanded
             isInCombinedGroup: prv.isInCombinedGroup
 
             sideMargin: root.sideMargin
@@ -270,6 +286,14 @@ DropArea {
                 Qt.callLater(root.treeModel.ungroupSharedGroup, card.item.id)
             }
 
+            onContextMenuRequested: function(x, y) {
+                if (card.isSelectable && !card.item.isSelected) {
+                    root.treeModel.selectRow(root.modelIndex)
+                }
+
+                root.contextMenuRequested(card, x, y)
+            }
+
             onMousePressed: {
                 root.cardPressed(card)
             }
@@ -303,15 +327,18 @@ DropArea {
         }
     }
 
+    // The gap under the group
+    function dropPosition(drag) {
+        return drag.y >= groupBackground.height ? LayoutPanelItemType.BELOW_ITEM : LayoutPanelItemType.ON_ITEM
+    }
+
     onEntered: function(drag) {
-        if (!root.draggedItem || !root.item) {
-            return
-        }
+        root.dragMoved(root.dropPosition(drag))
+    }
 
-        if (root.item === root.draggedItem || !root.item.canAcceptDrop(root.draggedItem)) {
-            return
+    onPositionChanged: function(drag) {
+        if (prv.isGroupBottom) {
+            root.dragMoved(root.dropPosition(drag))
         }
-
-        root.dropRequested()
     }
 }

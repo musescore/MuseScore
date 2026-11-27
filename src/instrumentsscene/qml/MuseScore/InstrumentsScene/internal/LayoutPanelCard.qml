@@ -47,6 +47,7 @@ FocusableControl {
     readonly property bool isExpandable: item && item.isExpandable
 
     property int sideMargin: 0
+    property int contentPadding: 0
     property int cardRadius: 0
 
     readonly property alias isPopupOpened: cardContent.isPopupOpened
@@ -62,6 +63,7 @@ FocusableControl {
 
     signal expandRequested(bool expand)
     signal ungroupRequested()
+    signal contextMenuRequested(real x, real y)
 
     signal mousePressed()
     signal mouseReleased()
@@ -98,8 +100,21 @@ FocusableControl {
 
     mouseArea.hoverEnabled: root.visible
 
-    mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
-    mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+    mouseArea.onClicked: function(mouse) {
+        if (mouse.button === Qt.RightButton) {
+            const pos = root.mouseArea.mapToItem(root, mouse.x, mouse.y)
+            root.contextMenuRequested(pos.x, pos.y)
+            return
+        }
+
+        root.clicked(mouse)
+    }
+    mouseArea.onDoubleClicked: function(mouse) {
+        if (mouse.button === Qt.LeftButton) {
+            root.doubleClicked(mouse)
+        }
+    }
     mouseArea.onPressed: { root.mousePressed() }
     mouseArea.onReleased: { root.mouseReleased() }
     mouseArea.onCanceled: { root.mouseReleased() }
@@ -134,8 +149,10 @@ FocusableControl {
         id: cardContent
 
         anchors.fill: parent
-        anchors.leftMargin: root.sideMargin
-        anchors.rightMargin: root.sideMargin
+        anchors.topMargin: root.contentPadding
+        anchors.bottomMargin: root.contentPadding
+        anchors.leftMargin: root.sideMargin + root.contentPadding
+        anchors.rightMargin: root.sideMargin + root.contentPadding
 
         item: root.item
         isStaveSharingEnabled: root.treeView.model.isStaveSharingEnabled
@@ -243,6 +260,17 @@ FocusableControl {
                 target: root.background
                 color: ui.theme.accentColor
                 opacity: ui.theme.accentOpacityHit
+            }
+        },
+
+        State {
+            name: "DRAGGED_GROUP"
+            when: root.isDragged && root.type === LayoutPanelItemType.SHARED_PART
+
+            PropertyChanges {
+                target: root.background
+                color: ui.blendColors(ui.theme.backgroundPrimaryColor, ui.theme.buttonColor, 0.5)
+                opacity: 1
             }
         },
 

@@ -22,7 +22,11 @@
 
 #pragma once
 
+#include <optional>
+#include <set>
+
 #include <QAbstractItemModel>
+#include <QPersistentModelIndex>
 #include <QQmlParserStatus>
 #include <QVariant>
 #include <qqmlintegration.h>
@@ -36,6 +40,7 @@
 #include "rcommand/icommanddispatcher.h"
 #include "interactive/iinteractive.h"
 #include "shortcuts_v2/icommandshortcutsregister.h"
+#include "ui/inavigationcontroller.h"
 
 #include "layoutpanelutils.h"
 
@@ -45,6 +50,7 @@ class ItemMultiSelectionModel;
 
 namespace mu::instrumentsscene {
 class PartTreeItem;
+class RootTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
@@ -62,6 +68,10 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool isHideEmptyStavesEnabled READ isHideEmptyStavesEnabled NOTIFY isHideEmptyStavesEnabledChanged FINAL)
     Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY scoreChanged FINAL)
     Q_PROPERTY(QString scoreName READ scoreName NOTIFY scoreChanged FINAL)
+    Q_PROPERTY(bool hasHiddenOtherInstruments READ hasHiddenOtherInstruments NOTIFY hasHiddenOtherInstrumentsChanged FINAL)
+    Q_PROPERTY(AbstractLayoutPanelTreeItem * draggedItem READ draggedItem NOTIFY draggedIndexChanged FINAL)
+    Q_PROPERTY(QModelIndex draggedIndex READ draggedIndex NOTIFY draggedIndexChanged FINAL)
+    Q_PROPERTY(AbstractLayoutPanelTreeItem * dropTarget READ dropTarget NOTIFY dropTargetChanged FINAL)
 
     QML_ELEMENT
 
@@ -71,6 +81,7 @@ public:
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
 
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
     ~LayoutPanelTreeModel() override;
@@ -97,8 +108,14 @@ public:
     bool isHideEmptyStavesEnabled() const;
     bool isMasterScore() const;
     QString scoreName() const;
+    bool hasHiddenOtherInstruments() const;
+
+    AbstractLayoutPanelTreeItem* draggedItem() const;
+    QModelIndex draggedIndex() const;
+    AbstractLayoutPanelTreeItem* dropTarget() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void showOtherInstruments();
     Q_INVOKABLE void toggleStaveSharing(bool on);
     Q_INVOKABLE void ungroupSharedGroup(const QString& sharedPartId);
     Q_INVOKABLE void toggleHideEmptyStaves(bool on);
@@ -110,16 +127,26 @@ public:
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
+
+    //! The right-click menu for the selected rows; empty if there is none (e.g. only staves are selected)
+    Q_INVOKABLE QVariantList rowContextMenuItems() const;
+    Q_INVOKABLE void handleRowContextMenuItem(const QString& itemId);
     Q_INVOKABLE void changeVisibilityOfSelectedRows(bool visible);
     Q_INVOKABLE void changeVisibility(const QModelIndex& index, bool visible);
     Q_INVOKABLE void changeEnabledOfSelectedRows(bool enable);
     Q_INVOKABLE void changeEnabled(const QModelIndex& index, bool enable);
+    Q_INVOKABLE void setExpanded(const QModelIndex& index, bool expand);
+    Q_INVOKABLE void setAllExpanded(bool expand);
 
-    Q_INVOKABLE void startActiveDrag();
+    //! Brings back the keyboard focus that expanding or collapsing a row took from its rebuilt controls
+    Q_INVOKABLE void restoreNavigation();
+
+    Q_INVOKABLE void startActiveDrag(const QModelIndex& draggedIndex);
     Q_INVOKABLE void endActiveDrag();
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
+    Q_INVOKABLE void dragOver(const QModelIndex& targetIndex, LayoutPanelItemType::DropPosition position);
 
 signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
@@ -132,19 +159,19 @@ signals:
     void selectedItemsTypeChanged(int type);
     void isStaveSharingEnabledChanged(bool enabled);
     void isHideEmptyStavesEnabledChanged(bool enabled);
-    void sharedGroupEnabledChanged();
+    void expandedChanged(const QModelIndex& index);
     void scoreChanged();
+    void hasHiddenOtherInstrumentsChanged();
+    void draggedIndexChanged();
+    void dropTargetChanged();
 
 private slots:
     void updateRearrangementAvailability();
-    void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
-    void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
     void updateSelectedItemsType();
     void updateIsAddingSystemMarkingsAvailable();
     void updateIsStaveSharingEnabled();
     void updateIsHideEmptyStavesEnabled();
-    void updateSharedGroupRoles();
 
 private:
     void classBegin() override;
@@ -162,7 +189,6 @@ private:
 
     bool shouldShowSystemObjectLayers() const;
 
-    void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
     using PartList = std::vector<const engraving::Part*>;
@@ -182,11 +208,27 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
+    void setHasHiddenOtherInstruments(bool hasHidden);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
-    bool needWarnOnRemoveRows(int row, int count);
+    void initExpanded(AbstractLayoutPanelTreeItem* item);
+    void applyExpanded(AbstractLayoutPanelTreeItem* item, bool expand);
+    void updateExpanded(AbstractLayoutPanelTreeItem* item);
+
+    QModelIndexList sortedSelectedIndexes() const;
+    bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow, bool isDrag);
+    AbstractLayoutPanelTreeItem* itemOrRoot(const QModelIndex& index) const;
+    void moveDraggedRow(int targetRow);
+    void setDropTarget(AbstractLayoutPanelTreeItem* target);
+
     muse::async::Promise<bool> askAboutRemovingInstruments(int count);
+
+    std::vector<const PartTreeItem*> sharedGroupsToMoveInto(const std::vector<const PartTreeItem*>& parts) const;
+    std::vector<const PartTreeItem*> selectedPartItems() const;
+    void movePartsToSharedGroup(const muse::IDList& partIds, const muse::ID& sharedPartId);
+    void movePartsToNewSharedGroup(const muse::IDList& partIds);
+    void expandSharedGroup(const muse::ID& sharedPartId);
 
     AbstractLayoutPanelTreeItem* buildSharedPartItem(const notation::Part* part);
     AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
@@ -196,6 +238,7 @@ private:
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
 
     void updateSystemObjectLayers();
+    void updateAddStaffControls();
 
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
     const notation::Staff* resolveNewSystemObjectStaff() const;
@@ -210,9 +253,12 @@ private:
     bool m_isStaveSharingEnabled = false;
     bool m_isHideEmptyStavesEnabled = false;
 
+    bool m_showsOtherInstruments = false;
+    bool m_hasHiddenOtherInstruments = false;
+
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
-    AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
+    RootTreeItem* m_rootItem = nullptr;
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
     mu::notation::INotationPtr m_notation = nullptr;
@@ -226,6 +272,17 @@ private:
 
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
+    QPersistentModelIndex m_draggedIndex;
+    AbstractLayoutPanelTreeItem* m_dropTarget = nullptr;
+
+    std::set<muse::ID> m_expandedItems;
+
+    struct NavigationTarget {
+        std::string section;
+        std::string panel;
+        muse::ui::INavigation::Index index;
+    };
+    std::optional<NavigationTarget> m_navigationToRestore;
 
     muse::ID m_systemStaffToSelect;
 };

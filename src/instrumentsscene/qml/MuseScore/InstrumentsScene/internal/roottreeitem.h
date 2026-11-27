@@ -22,9 +22,12 @@
 
 #pragma once
 
+#include <optional>
+
 #include "abstractlayoutpaneltreeitem.h"
 
 namespace mu::instrumentsscene {
+class PartTreeItem;
 class RootTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
@@ -41,5 +44,24 @@ public:
     void applyToScore() override;
 
     void removeChildren(int row, int count, bool deleteChild) override;
+
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
+
+    //! A group header takes its instruments along, and other groups are jumped over as a whole
+    //! Instruments leave their group only by drag, and a group keeps at least one
+    //! Rows can't go above the top markings row; moving down, they land below lastRow
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const override;
+
+private:
+    struct RowRange {
+        int first = 0;
+        int last = 0;
+    };
+
+    void onChildrenChanged() override;
+    void updateSharedGroupRoles();
+
+    std::optional<RowRange> sharedGroupRange(int row) const;
+    int partItemCount(const RowRange& range) const;
 };
 }

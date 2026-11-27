@@ -52,6 +52,7 @@ public:
     virtual void init(const notation::Part* masterPart);
 
     const notation::Part* part() const;
+    bool existsInScore() const;
 
     LayoutPanelItemType::SharedGroupRole sharedGroupRole() const;
     PartTreeItem* sharedGroupHeader() const;
@@ -64,7 +65,22 @@ public:
 
     void removeChildren(int row, int count, bool deleteChild) override;
 
-    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
+    bool canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const override;
+
+    //! The group, for an instrument dropped on it from outside
+    AbstractLayoutPanelTreeItem* dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                            LayoutPanelItemType::DropPosition position) const override;
+
+    //! Staves stay above the "Add staff" row
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const override;
+
+    //! Removing an instrument also removes it from all part scores
+    bool needsRemovalConfirmation() const override;
+
+    bool isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const override;
+
+    //! The instruments of a collapsed group
+    Q_INVOKABLE bool isHiddenByCollapse() const override;
 
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();
@@ -79,6 +95,10 @@ protected:
     void updateVisibility();
 
 private:
+    bool isCombinedOntoSharedStaves(const notation::Part* part) const;
+
+    PartTreeItem* groupToJoin(const AbstractLayoutPanelTreeItem* dragged) const;
+
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;

@@ -67,7 +67,7 @@ Item {
         id: contextMenuModel
 
         onExpandCollapseAllRequested: function(expand) {
-            tree.expandCollapseAll(expand)
+            treeModel.setAllExpanded(expand)
         }
     }
 
@@ -193,7 +193,8 @@ Item {
             id: tree
 
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.fillHeight: !treeModel.hasHiddenOtherInstruments
+            Layout.preferredHeight: treeModel.hasHiddenOtherInstruments ? tree.contentHeight : -1
 
             visible: !treeModel.isEmpty
 
@@ -205,10 +206,38 @@ Item {
             sideMargin: contentColumn.sideMargin
         }
 
+        NavigationPanel {
+            id: otherInstrumentsNavigationPanel
+
+            name: "LayoutPanelOtherInstruments"
+            section: root.navigationSection
+            enabled: showOtherInstrumentsButton.visible
+            order: tree.navigationOrder + 1
+        }
+
+        FlatButton {
+            id: showOtherInstrumentsButton
+
+            Layout.fillWidth: true
+            Layout.leftMargin: contentColumn.sideMargin
+            Layout.rightMargin: contentColumn.sideMargin
+
+            visible: treeModel.hasHiddenOtherInstruments
+
+            navigation.panel: otherInstrumentsNavigationPanel
+            navigation.order: 0
+
+            text: qsTrc("layoutpanel", "Show other instruments")
+
+            onClicked: {
+                treeModel.showOtherInstruments()
+            }
+        }
+
         Item {
             Layout.fillHeight: true
 
-            visible: !treeModel.isAddingAvailable
+            visible: !treeModel.isAddingAvailable || treeModel.hasHiddenOtherInstruments
         }
     }
 }

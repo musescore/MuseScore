@@ -93,6 +93,11 @@ bool AbstractLayoutPanelTreeItem::isExpandable() const
     return m_isExpandable;
 }
 
+bool AbstractLayoutPanelTreeItem::isExpanded() const
+{
+    return m_isExpanded;
+}
+
 bool AbstractLayoutPanelTreeItem::settingsAvailable() const
 {
     return m_settingsAvailable;
@@ -108,18 +113,48 @@ bool AbstractLayoutPanelTreeItem::isRemovable() const
     return m_isRemovable;
 }
 
-bool AbstractLayoutPanelTreeItem::canAcceptDrop(const QVariant& obj) const
-{
-    auto item = dynamic_cast<const AbstractLayoutPanelTreeItem*>(obj.value<QObject*>());
-    if (!item) {
-        return false;
-    }
-
-    return item->m_parent == m_parent && item->m_type == m_type;
-}
-
 void AbstractLayoutPanelTreeItem::appendNewItem()
 {
+}
+
+bool AbstractLayoutPanelTreeItem::canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition) const
+{
+    return dragged->m_parent == m_parent && dragged->m_type == m_type;
+}
+
+AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::dropTarget(const AbstractLayoutPanelTreeItem*,
+                                                                     LayoutPanelItemType::DropPosition) const
+{
+    return nullptr;
+}
+
+void AbstractLayoutPanelTreeItem::applyDrop(const AbstractLayoutPanelTreeItem*)
+{
+}
+
+std::optional<AbstractLayoutPanelTreeItem::RowMove> AbstractLayoutPanelTreeItem::resolveMove(int firstRow, int lastRow,
+                                                                                             int targetRow, bool) const
+{
+    if (targetRow == firstRow || targetRow < 0 || targetRow >= childCount()) {
+        return std::nullopt;
+    }
+
+    return RowMove { firstRow, lastRow - firstRow + 1, targetRow };
+}
+
+bool AbstractLayoutPanelTreeItem::needsRemovalConfirmation() const
+{
+    return false;
+}
+
+bool AbstractLayoutPanelTreeItem::isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>&) const
+{
+    return false;
+}
+
+bool AbstractLayoutPanelTreeItem::isHiddenByCollapse() const
+{
+    return m_parent && m_parent->isHiddenByCollapse();
 }
 
 void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
@@ -133,7 +168,7 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
 
     int destinationRow_ = destinationRow;
     for (AbstractLayoutPanelTreeItem* child: childrenToMove) {
-        destinationParent->insertChild(child, destinationRow_);
+        destinationParent->doInsertChild(child, destinationRow_);
         destinationRow_++;
     }
 
@@ -143,7 +178,12 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
         childToRemoveIndex = sourceRow + count;
     }
 
-    AbstractLayoutPanelTreeItem::removeChildren(childToRemoveIndex, count);
+    doRemoveChildren(childToRemoveIndex, count, false);
+
+    onChildrenChanged();
+    if (destinationParent != this) {
+        destinationParent->onChildrenChanged();
+    }
 }
 
 void AbstractLayoutPanelTreeItem::applyToScore()
@@ -151,6 +191,12 @@ void AbstractLayoutPanelTreeItem::applyToScore()
 }
 
 void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool deleteChild)
+{
+    doRemoveChildren(row, count, deleteChild);
+    onChildrenChanged();
+}
+
+void AbstractLayoutPanelTreeItem::doRemoveChildren(int row, int count, bool deleteChild)
 {
     for (int i = row + count - 1; i >= row; --i) {
         AbstractLayoutPanelTreeItem* child = m_children.at(i);
@@ -169,6 +215,10 @@ void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool delete
 }
 
 void AbstractLayoutPanelTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
+{
+}
+
+void AbstractLayoutPanelTreeItem::onChildrenChanged()
 {
 }
 
@@ -232,27 +282,28 @@ void AbstractLayoutPanelTreeItem::setIsLastChild(bool isLast)
     emit isLastChildChanged(isLast);
 }
 
+void AbstractLayoutPanelTreeItem::setChildren(const QList<AbstractLayoutPanelTreeItem*>& children)
+{
+    for (AbstractLayoutPanelTreeItem* child : children) {
+        doInsertChild(child, m_children.size());
+    }
+
+    onChildrenChanged();
+}
+
 void AbstractLayoutPanelTreeItem::appendChild(AbstractLayoutPanelTreeItem* child)
 {
-    if (!child) {
-        return;
-    }
-
-    child->setParentItem(this);
-
-    if (!m_children.isEmpty()) {
-        m_children.last()->setIsLastChild(false);
-    }
-
-    m_children.append(child);
-    child->setIsLastChild(true);
-
-    if (isSelected()) {
-        child->setIsSelected(true);
-    }
+    doInsertChild(child, m_children.size());
+    onChildrenChanged();
 }
 
 void AbstractLayoutPanelTreeItem::insertChild(AbstractLayoutPanelTreeItem* child, int beforeRow)
+{
+    doInsertChild(child, beforeRow);
+    onChildrenChanged();
+}
+
+void AbstractLayoutPanelTreeItem::doInsertChild(AbstractLayoutPanelTreeItem* child, int beforeRow)
 {
     if (!child) {
         return;
@@ -342,6 +393,16 @@ void AbstractLayoutPanelTreeItem::setIsExpandable(bool expandable)
 
     m_isExpandable = expandable;
     emit isExpandableChanged(expandable);
+}
+
+void AbstractLayoutPanelTreeItem::setIsExpanded(bool expanded)
+{
+    if (m_isExpanded == expanded) {
+        return;
+    }
+
+    m_isExpanded = expanded;
+    emit isExpandedChanged();
 }
 
 void AbstractLayoutPanelTreeItem::setSettingsAvailable(bool available)

@@ -38,6 +38,23 @@ static inline bool isPartItem(const AbstractLayoutPanelTreeItem* item)
     return item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART;
 }
 
+static inline bool isSharedGroupMember(const PartTreeItem* item)
+{
+    return item && (item->sharedGroupRole() == LayoutPanelItemType::GROUP_MEMBER
+                    || item->sharedGroupRole() == LayoutPanelItemType::GROUP_LAST_MEMBER);
+}
+
+static const PartTreeItem* nextPartItemAfter(const QList<AbstractLayoutPanelTreeItem*>& items, int row)
+{
+    for (int i = row + 1; i < items.size(); ++i) {
+        if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            return dynamic_cast<const PartTreeItem*>(items.at(i));
+        }
+    }
+
+    return nullptr;
+}
+
 RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ROOT, masterNotation, notation, parent)
 {
@@ -62,12 +79,14 @@ void RootTreeItem::applyToScore()
     for (int row = childCount() - 1; row >= 0; --row) {
         AbstractLayoutPanelTreeItem* child = childAtRow(row);
         if (isPartItem(child)) {
-            partBelow = static_cast<const PartTreeItem*>(child)->part();
+            const PartTreeItem* partItem = static_cast<const PartTreeItem*>(child);
+            partBelow = partItem->part();
 
             if (notation()->parts()->partExists(child->id())) {
                 INotationParts::PartPlacement placement { child->id() };
-                if (const SharedPart* sharedPart = partBelow->sharedPart()) {
-                    placement.sharedPartId = sharedPart->id();
+                const PartTreeItem* header = partItem->sharedGroupHeader();
+                if (header && header != partItem) {
+                    placement.sharedPartId = header->id();
                 }
                 layout.parts.push_back(placement);
             }
@@ -127,4 +146,130 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
     }
 
     AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
+}
+
+void RootTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
+{
+    for (AbstractLayoutPanelTreeItem* child : childItems()) {
+        child->onScoreChanged(changes);
+    }
+
+    updateSharedGroupRoles();
+}
+
+std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const
+{
+    if (targetRow == firstRow) {
+        return std::nullopt;
+    }
+
+    const std::optional<RowRange> lastRowGroup = sharedGroupRange(lastRow);
+    if (lastRowGroup && lastRowGroup->first == lastRow) {
+        lastRow = lastRowGroup->last;
+    }
+
+    const bool up = targetRow < firstRow;
+    int destinationRow = up ? targetRow : std::max(targetRow, lastRow + 1);
+
+    const std::optional<RowRange> group = sharedGroupRange(firstRow);
+    const bool isGroupMember = group && childType(firstRow) == LayoutPanelItemType::PART;
+    const bool canLeaveGroup = isGroupMember && isDrag && partItemCount(*group) > 1;
+    if (isGroupMember && !canLeaveGroup && (destinationRow <= group->first || destinationRow > group->last)) {
+        return std::nullopt;
+    }
+
+    const std::optional<RowRange> destinationGroup = sharedGroupRange(destinationRow);
+    if (destinationGroup && (!group || group->first != destinationGroup->first)) {
+        destinationRow = up ? destinationGroup->first : destinationGroup->last;
+    }
+
+    const int minRow = childType(0) == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER ? 1 : 0;
+    if (firstRow < minRow || destinationRow < minRow || destinationRow >= childCount()) {
+        return std::nullopt;
+    }
+
+    return RowMove { firstRow, lastRow - firstRow + 1, destinationRow };
+}
+
+void RootTreeItem::onChildrenChanged()
+{
+    updateSharedGroupRoles();
+}
+
+void RootTreeItem::updateSharedGroupRoles()
+{
+    const QList<AbstractLayoutPanelTreeItem*>& items = childItems();
+    PartTreeItem* currentHeader = nullptr;
+
+    for (int i = 0; i < items.size(); ++i) {
+        PartTreeItem* partItem = dynamic_cast<PartTreeItem*>(items.at(i));
+        if (!partItem) {
+            // Markings rows sit next to their instrument, even inside a group
+            if (items.at(i)->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+                currentHeader = nullptr;
+            }
+            continue;
+        }
+
+        LayoutPanelItemType::SharedGroupRole role = LayoutPanelItemType::NOT_IN_GROUP;
+
+        if (partItem->type() == LayoutPanelItemType::SHARED_PART) {
+            currentHeader = partItem;
+            role = LayoutPanelItemType::GROUP_HEADER;
+        } else if (currentHeader && partItem->part()->sharedPart() == currentHeader->part()) {
+            const PartTreeItem* nextPartItem = nextPartItemAfter(items, i);
+            const bool isLast = !nextPartItem || nextPartItem->part()->sharedPart() != currentHeader->part();
+            role = isLast ? LayoutPanelItemType::GROUP_LAST_MEMBER : LayoutPanelItemType::GROUP_MEMBER;
+        } else {
+            currentHeader = nullptr;
+        }
+
+        partItem->setSharedGroup(role, currentHeader);
+    }
+}
+
+std::optional<RootTreeItem::RowRange> RootTreeItem::sharedGroupRange(int row) const
+{
+    const AbstractLayoutPanelTreeItem* item = childAtRow(row);
+    if (!item) {
+        return std::nullopt;
+    }
+
+    // A markings row is in a group only among its instruments
+    const bool isMarkings = item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
+    const PartTreeItem* partItem = isMarkings ? nextPartItemAfter(childItems(), row) : dynamic_cast<const PartTreeItem*>(item);
+    if (!partItem || !partItem->sharedGroupHeader() || (isMarkings && !isSharedGroupMember(partItem))) {
+        return std::nullopt;
+    }
+
+    const PartTreeItem* header = partItem->sharedGroupHeader();
+    RowRange range { header->row(), header->row() };
+
+    for (int r = range.first + 1; r < childCount(); ++r) {
+        const AbstractLayoutPanelTreeItem* child = childAtRow(r);
+        if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            continue;
+        }
+
+        const PartTreeItem* member = dynamic_cast<const PartTreeItem*>(child);
+        if (!member || member->sharedGroupHeader() != header) {
+            break;
+        }
+
+        range.last = r;
+    }
+
+    return range;
+}
+
+int RootTreeItem::partItemCount(const RowRange& range) const
+{
+    int count = 0;
+    for (int row = range.first + 1; row <= range.last; ++row) {
+        if (childType(row) == LayoutPanelItemType::PART) {
+            ++count;
+        }
+    }
+
+    return count;
 }

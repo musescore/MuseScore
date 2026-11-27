@@ -160,7 +160,7 @@ TEST_F(InstrumentsScene_SystemObjectsLayerTreeItemTests, Init_TopStaff)
     EXPECT_FALSE(m_item->isSelectable());
     EXPECT_FALSE(m_item->isRemovable());
     EXPECT_FALSE(m_item->isExpandable());
-    EXPECT_FALSE(m_item->canAcceptDrop(QVariant()));
+    EXPECT_FALSE(m_item->canAcceptDrop(m_item, LayoutPanelItemType::ON_ITEM));
 }
 
 TEST_F(InstrumentsScene_SystemObjectsLayerTreeItemTests, Init_OtherStaff)
@@ -172,7 +172,7 @@ TEST_F(InstrumentsScene_SystemObjectsLayerTreeItemTests, Init_OtherStaff)
     EXPECT_EQ(m_item->id(), staff(1)->id());
     EXPECT_TRUE(m_item->isSelectable());
     EXPECT_TRUE(m_item->isRemovable());
-    EXPECT_TRUE(m_item->canAcceptDrop(QVariant()));
+    EXPECT_TRUE(m_item->canAcceptDrop(m_item, LayoutPanelItemType::ON_ITEM));
 }
 
 TEST_F(InstrumentsScene_SystemObjectsLayerTreeItemTests, SetStaff_None)

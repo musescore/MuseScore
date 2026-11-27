@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <QObject>
 #include <QVariant>
 #include <QList>
@@ -35,6 +37,7 @@
 #include "layoutpanelitemtype.h"
 
 namespace mu::engraving {
+class EngravingItem;
 struct ScoreChanges;
 }
 
@@ -49,6 +52,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
     Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
+    Q_PROPERTY(bool isExpanded READ isExpanded NOTIFY isExpandedChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
@@ -72,6 +76,7 @@ public:
     bool isEnabled() const;
     bool isVisible() const;
     bool isExpandable() const;
+    bool isExpanded() const;
     bool isRemovable() const;
 
     bool isSelectable() const;
@@ -80,8 +85,34 @@ public:
     bool settingsAvailable() const;
     bool settingsEnabled() const;
 
-    Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
+
+    //! The dragged item moves onto this row while hovering at position, without a dropTarget()
+    virtual bool canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const;
+
+    //! Takes the dragged item on release at position on this row, highlighted while hovering
+    virtual AbstractLayoutPanelTreeItem* dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                                    LayoutPanelItemType::DropPosition position) const;
+
+    //! Called on release on dropTarget()
+    virtual void applyDrop(const AbstractLayoutPanelTreeItem* dragged);
+
+    struct RowMove {
+        int sourceRow = 0;
+        int count = 0;
+        int destinationRow = 0;
+    };
+
+    //! Moves the child rows onto targetRow; nullopt if they can't move there
+    virtual std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const;
+
+    virtual bool needsRemovalConfirmation() const;
+
+    //! Whether the row follows these selected score elements
+    virtual bool isSelectedInScore(const std::vector<mu::engraving::EngravingItem*>& selection) const;
+
+    //! Hidden in the view because a row it belongs to is collapsed
+    Q_INVOKABLE virtual bool isHiddenByCollapse() const;
 
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);
@@ -102,6 +133,7 @@ public:
 
     LayoutPanelItemType::ItemType childType(int row) const;
 
+    void setChildren(const QList<AbstractLayoutPanelTreeItem*>& children);
     void appendChild(AbstractLayoutPanelTreeItem* child);
     void insertChild(AbstractLayoutPanelTreeItem* child, int beforeRow);
 
@@ -116,6 +148,7 @@ public slots:
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
+    void setIsExpanded(bool expanded);
     void setIsRemovable(bool removable);
     void setIsSelectable(bool selectable);
     void setIsSelected(bool selected);
@@ -127,6 +160,7 @@ signals:
     void isEnabledChanged(bool enabled);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
+    void isExpandedChanged();
     void isRemovableChanged(bool isRemovable);
     void isSelectableChanged(bool isSelectable);
     void isSelectedChanged(bool isSelected);
@@ -138,9 +172,14 @@ protected:
     notation::IMasterNotationPtr masterNotation() const;
     notation::INotationPtr notation() const;
 
+    //! Called once after children are set, added, moved or removed
+    virtual void onChildrenChanged();
+
 private:
     int indexOf(const AbstractLayoutPanelTreeItem* item) const;
     void setIsLastChild(bool isLast);
+    void doInsertChild(AbstractLayoutPanelTreeItem* child, int beforeRow);
+    void doRemoveChildren(int row, int count, bool deleteChild);
 
     QList<AbstractLayoutPanelTreeItem*> m_children;
     AbstractLayoutPanelTreeItem* m_parent = nullptr;
@@ -151,6 +190,7 @@ private:
     bool m_isEnabled = true;
     bool m_isVisible = false;
     bool m_isExpandable = false;
+    bool m_isExpanded = false;
     bool m_isRemovable = false;
     bool m_isSelectable = false;
     bool m_isSelected = false;
