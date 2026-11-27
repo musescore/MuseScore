@@ -133,7 +133,7 @@ void AbstractLayoutPanelTreeItem::applyDrop(const AbstractLayoutPanelTreeItem*)
 }
 
 std::optional<AbstractLayoutPanelTreeItem::RowMove> AbstractLayoutPanelTreeItem::resolveMove(int firstRow, int lastRow,
-                                                                                             int targetRow) const
+                                                                                             int targetRow, bool) const
 {
     if (targetRow == firstRow || targetRow < 0 || targetRow >= childCount()) {
         return std::nullopt;

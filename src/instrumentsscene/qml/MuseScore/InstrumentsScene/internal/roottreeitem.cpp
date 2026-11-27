@@ -79,12 +79,14 @@ void RootTreeItem::applyToScore()
     for (int row = childCount() - 1; row >= 0; --row) {
         AbstractLayoutPanelTreeItem* child = childAtRow(row);
         if (isPartItem(child)) {
-            partBelow = static_cast<const PartTreeItem*>(child)->part();
+            const PartTreeItem* partItem = static_cast<const PartTreeItem*>(child);
+            partBelow = partItem->part();
 
             if (notation()->parts()->partExists(child->id())) {
                 INotationParts::PartPlacement placement { child->id() };
-                if (const SharedPart* sharedPart = partBelow->sharedPart()) {
-                    placement.sharedPartId = sharedPart->id();
+                const PartTreeItem* header = partItem->sharedGroupHeader();
+                if (header && header != partItem) {
+                    placement.sharedPartId = header->id();
                 }
                 layout.parts.push_back(placement);
             }
@@ -155,7 +157,7 @@ void RootTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
     updateSharedGroupRoles();
 }
 
-std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int lastRow, int targetRow) const
+std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const
 {
     if (targetRow == firstRow) {
         return std::nullopt;
@@ -171,7 +173,8 @@ std::optional<RootTreeItem::RowMove> RootTreeItem::resolveMove(int firstRow, int
 
     const std::optional<RowRange> group = sharedGroupRange(firstRow);
     const bool isGroupMember = group && childType(firstRow) == LayoutPanelItemType::PART;
-    if (isGroupMember && (destinationRow <= group->first || destinationRow > group->last)) {
+    const bool canLeaveGroup = isGroupMember && isDrag && partItemCount(*group) > 1;
+    if (isGroupMember && !canLeaveGroup && (destinationRow <= group->first || destinationRow > group->last)) {
         return std::nullopt;
     }
 
@@ -257,4 +260,16 @@ std::optional<RootTreeItem::RowRange> RootTreeItem::sharedGroupRange(int row) co
     }
 
     return range;
+}
+
+int RootTreeItem::partItemCount(const RowRange& range) const
+{
+    int count = 0;
+    for (int row = range.first + 1; row <= range.last; ++row) {
+        if (childType(row) == LayoutPanelItemType::PART) {
+            ++count;
+        }
+    }
+
+    return count;
 }

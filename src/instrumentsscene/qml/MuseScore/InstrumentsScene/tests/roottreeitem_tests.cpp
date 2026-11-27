@@ -189,9 +189,9 @@ protected:
     }
 
     //! "source row, row count, destination row", or "none"
-    std::string rowMove(int firstRow, int lastRow, int targetRow) const
+    std::string rowMove(int firstRow, int lastRow, int targetRow, bool isDrag = false) const
     {
-        const std::optional<RootTreeItem::RowMove> move = m_root->resolveMove(firstRow, lastRow, targetRow);
+        const std::optional<RootTreeItem::RowMove> move = m_root->resolveMove(firstRow, lastRow, targetRow, isDrag);
         if (!move) {
             return "none";
         }
@@ -729,6 +729,27 @@ TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_GroupMovedWith
     EXPECT_EQ(childNames(), "[A:0] A C S B");
 }
 
+TEST_F(InstrumentsScene_RootTreeItemTests, ApplyPanelOrderToScore_MemberOutOfGroup)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    const Part* a = addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    const Part* d = addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    buildTree(); // [A:0] A S B C D
+
+    // [THEN] C is below D and leaves the group; B stays in it
+    INotationParts::PartsLayout expected;
+    expected.parts = { { a->id() }, { s->id() }, { b->id(), s->id() }, { d->id() }, { c->id() } };
+    EXPECT_CALL(*m_parts, setPartsLayout(expected));
+
+    // [WHEN] C is dragged below D
+    dragRow(4, 5);
+}
+
 TEST_F(InstrumentsScene_RootTreeItemTests, RemoveChildren_Instrument)
 {
     // [GIVEN] Three instruments, system markings only on the top staff
@@ -887,6 +908,25 @@ TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_InsideGroup)
     EXPECT_EQ(rowMove(3, 3, 2), "none");
     EXPECT_EQ(rowMove(3, 3, 1), "none");
     EXPECT_EQ(rowMove(4, 4, 5), "none");
+
+    // [THEN] Unless they're dragged
+    EXPECT_EQ(rowMove(3, 3, 2, true /*isDrag*/), "3 1 2");
+    EXPECT_EQ(rowMove(4, 4, 5, true /*isDrag*/), "4 1 5");
+}
+
+TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_DragOnlyMember)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addPart(u"C");
+    addToSharedPart(s, b);
+    buildTree(); // [A:0] A S B C
+
+    // [THEN] The group's only instrument can't be dragged out
+    EXPECT_EQ(rowMove(3, 3, 2, true /*isDrag*/), "none");
+    EXPECT_EQ(rowMove(3, 3, 4, true /*isDrag*/), "none");
 }
 
 TEST_F(InstrumentsScene_RootTreeItemTests, ResolveMove_Ends)

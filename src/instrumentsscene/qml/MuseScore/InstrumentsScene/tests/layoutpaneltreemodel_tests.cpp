@@ -519,6 +519,33 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_GroupedInstrumentWithout
     EXPECT_TRUE(childItem(3, 0)->isLastChild());
 }
 
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SharedPartsChanged_AddStaffRowFollowsGroup)
+{
+    // [GIVEN] A, and B in a shared-staves group
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B
+
+    std::shared_ptr<int> resets = countEmits(&QAbstractItemModel::modelReset);
+
+    // [WHEN] B leaves the group on the score
+    toSharedPart(m_score->partById(s->id()))->removeOriginPart(m_score->partById(b->id()));
+    m_sharedPartsChanged.notify();
+
+    // [THEN] B gets the "add staff" row, without reloading the panel
+    EXPECT_EQ(childTypes(3), (ItemTypes { ItemType::STAFF, ItemType::CONTROL_ADD_STAFF }));
+    EXPECT_EQ(*resets, 0);
+
+    // [WHEN] B joins the group again
+    addToSharedPart(s, b);
+    m_sharedPartsChanged.notify();
+
+    // [THEN] The row goes again
+    EXPECT_EQ(childTypes(3), (ItemTypes { ItemType::STAFF }));
+}
+
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, Load_MarkingsInsideSharedGroup)
 {
     // [GIVEN] A, and B and C in a shared-staves group, system markings above C
@@ -1571,6 +1598,33 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_OffGroup_ClearsDropT
 
     // [WHEN] C is dropped
     EXPECT_CALL(*m_parts, movePartsToSharedPart(_, _)).Times(0);
+    m_model->endActiveDrag();
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_MemberOutOfGroup)
+{
+    // [GIVEN] A, B and C in a shared-staves group, then D
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addPart(u"D");
+    addToSharedPart(s, b);
+    addToSharedPart(s, c);
+    createModel(); // [A:0] A S B C D
+
+    // [WHEN] C is dragged onto D
+    m_model->startActiveDrag(row(4));
+    m_model->dragOver(row(5), LayoutPanelItemType::ON_ITEM);
+
+    // [THEN] C moves below D, out of the group, which the up/down buttons can't do
+    EXPECT_EQ(rowNames(), "[A:0] A S B D C");
+
+    // [THEN] On drop, the move and the leave are sent to the score at once
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(1);
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(_, _)).Times(0);
+
+    // [WHEN] C is dropped
     m_model->endActiveDrag();
 }
 

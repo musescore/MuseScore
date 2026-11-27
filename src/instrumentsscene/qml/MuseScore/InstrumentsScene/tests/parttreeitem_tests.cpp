@@ -558,16 +558,16 @@ TEST_F(InstrumentsScene_PartTreeItemTests, ResolveMove_StavesAboveAddStaffRow)
     buildPartTreeItem(addPart(2));
 
     // [THEN] The staves swap places
-    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = m_partItem->resolveMove(0, 0, 1);
+    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = m_partItem->resolveMove(0, 0, 1, false /*isDrag*/);
     ASSERT_TRUE(move);
     EXPECT_EQ(move->sourceRow, 0);
     EXPECT_EQ(move->count, 1);
     EXPECT_EQ(move->destinationRow, 1);
 
     // [THEN] Nothing moves onto the "add staff" row, above the first staff, or onto itself
-    EXPECT_FALSE(m_partItem->resolveMove(1, 1, 2));
-    EXPECT_FALSE(m_partItem->resolveMove(0, 0, -1));
-    EXPECT_FALSE(m_partItem->resolveMove(0, 0, 0));
+    EXPECT_FALSE(m_partItem->resolveMove(1, 1, 2, false /*isDrag*/));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, -1, false /*isDrag*/));
+    EXPECT_FALSE(m_partItem->resolveMove(0, 0, 0, false /*isDrag*/));
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, NeedsRemovalConfirmation_OnlyWithPartScores)

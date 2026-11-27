@@ -48,8 +48,9 @@ public:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
     //! A group header takes its instruments along, and other groups are jumped over as a whole
-    //! Rows can't leave their group or go above the top markings row; moving down, they land below lastRow
-    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const override;
+    //! Instruments leave their group only by drag, and a group keeps at least one
+    //! Rows can't go above the top markings row; moving down, they land below lastRow
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const override;
 
 private:
     struct RowRange {
@@ -61,5 +62,6 @@ private:
     void updateSharedGroupRoles();
 
     std::optional<RowRange> sharedGroupRange(int row) const;
+    int partItemCount(const RowRange& range) const;
 };
 }

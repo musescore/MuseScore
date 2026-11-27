@@ -72,7 +72,7 @@ public:
                                             LayoutPanelItemType::DropPosition position) const override;
 
     //! Staves stay above the "Add staff" row
-    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const override;
+    std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const override;
 
     //! Removing an instrument also removes it from all part scores
     bool needsRemovalConfirmation() const override;

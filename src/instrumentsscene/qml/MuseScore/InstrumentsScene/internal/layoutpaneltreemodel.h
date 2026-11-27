@@ -213,7 +213,7 @@ private:
     void updateExpanded(AbstractLayoutPanelTreeItem* item);
 
     QModelIndexList sortedSelectedIndexes() const;
-    bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow);
+    bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow, bool isDrag);
     AbstractLayoutPanelTreeItem* itemOrRoot(const QModelIndex& index) const;
     void moveDraggedRow(int targetRow);
     void setDropTarget(AbstractLayoutPanelTreeItem* target);
@@ -228,6 +228,7 @@ private:
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
 
     void updateSystemObjectLayers();
+    void updateAddStaffControls();
 
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
     const notation::Staff* resolveNewSystemObjectStaff() const;

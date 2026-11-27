@@ -287,13 +287,13 @@ PartTreeItem* PartTreeItem::groupToJoin(const AbstractLayoutPanelTreeItem* dragg
     return group;
 }
 
-std::optional<AbstractLayoutPanelTreeItem::RowMove> PartTreeItem::resolveMove(int firstRow, int lastRow, int targetRow) const
+std::optional<AbstractLayoutPanelTreeItem::RowMove> PartTreeItem::resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const
 {
     if (childType(targetRow) == LayoutPanelItemType::CONTROL_ADD_STAFF) {
         return std::nullopt;
     }
 
-    return AbstractLayoutPanelTreeItem::resolveMove(firstRow, lastRow, targetRow);
+    return AbstractLayoutPanelTreeItem::resolveMove(firstRow, lastRow, targetRow, isDrag);
 }
 
 bool PartTreeItem::needsRemovalConfirmation() const

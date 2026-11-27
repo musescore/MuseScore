@@ -218,6 +218,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
 
     m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
         updateIsStaveSharingEnabled();
+        updateAddStaffControls();
     }, Mode::SetReplace);
 }
 
@@ -592,7 +593,7 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
     }
 
     const QModelIndex& first = selectedIndexList.first();
-    moveRowRange(first.parent(), first.row(), selectedIndexList.last().row(), first.row() - 1);
+    moveRowRange(first.parent(), first.row(), selectedIndexList.last().row(), first.row() - 1, false /*isDrag*/);
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -608,7 +609,7 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
 
     const QModelIndex& first = selectedIndexList.first();
     const QModelIndex& last = selectedIndexList.last();
-    moveRowRange(first.parent(), first.row(), last.row(), last.row() + 1);
+    moveRowRange(first.parent(), first.row(), last.row(), last.row() + 1, false /*isDrag*/);
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -714,7 +715,7 @@ void LayoutPanelTreeModel::moveDraggedRow(int targetRow)
 {
     // m_draggedIndex follows the row
     const int row = m_draggedIndex.row();
-    if (moveRowRange(m_draggedIndex.parent(), row, row, targetRow)) {
+    if (moveRowRange(m_draggedIndex.parent(), row, row, targetRow, true /*isDrag*/)) {
         emit draggedIndexChanged();
     }
 }
@@ -1073,8 +1074,8 @@ void LayoutPanelTreeModel::updateRearrangementAvailability()
     const int lastRow = selectedIndexList.last().row();
     const AbstractLayoutPanelTreeItem* parentItem = itemOrRoot(selectedIndexList.first().parent());
 
-    setIsMovingUpAvailable(parentItem->resolveMove(firstRow, lastRow, firstRow - 1).has_value());
-    setIsMovingDownAvailable(parentItem->resolveMove(firstRow, lastRow, lastRow + 1).has_value());
+    setIsMovingUpAvailable(parentItem->resolveMove(firstRow, lastRow, firstRow - 1, false /*isDrag*/).has_value());
+    setIsMovingDownAvailable(parentItem->resolveMove(firstRow, lastRow, lastRow + 1, false /*isDrag*/).has_value());
 }
 
 void LayoutPanelTreeModel::updateRemovingAvailability()
@@ -1227,9 +1228,10 @@ QModelIndexList LayoutPanelTreeModel::sortedSelectedIndexes() const
     return indexes;
 }
 
-bool LayoutPanelTreeModel::moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow)
+bool LayoutPanelTreeModel::moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow, bool isDrag)
 {
-    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = itemOrRoot(parent)->resolveMove(firstRow, lastRow, targetRow);
+    const std::optional<AbstractLayoutPanelTreeItem::RowMove> move = itemOrRoot(parent)->resolveMove(firstRow, lastRow, targetRow,
+                                                                                                     isDrag);
     return move && moveRows(parent, move->sourceRow, move->count, parent, move->destinationRow);
 }
 
@@ -1403,6 +1405,40 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
     }
 
     updateIsAddingSystemMarkingsAvailable();
+}
+
+void LayoutPanelTreeModel::updateAddStaffControls()
+{
+    if (!m_rootItem) {
+        return;
+    }
+
+    for (int row = 0; row < m_rootItem->childCount(); ++row) {
+        PartTreeItem* partItem = dynamic_cast<PartTreeItem*>(m_rootItem->childAtRow(row));
+        if (!partItem || partItem->type() != LayoutPanelItemType::PART) {
+            continue;
+        }
+
+        const Part* masterPart = m_masterNotation->parts()->part(partItem->id());
+        const int lastRow = partItem->childCount() - 1;
+        const bool hasControl = partItem->childType(lastRow) == LayoutPanelItemType::CONTROL_ADD_STAFF;
+        const bool needsControl = masterPart && !masterPart->sharedPart() && partItem->existsInScore();
+        const QModelIndex partIndex = index(row, 0, QModelIndex());
+
+        if (needsControl && !hasControl) {
+            beginInsertRows(partIndex, lastRow + 1, lastRow + 1);
+            partItem->appendChild(buildAddStaffControlItem(partItem->id(), partItem));
+            endInsertRows();
+        } else if (!needsControl && hasControl) {
+            AbstractLayoutPanelTreeItem* control = partItem->childAtRow(lastRow);
+
+            beginRemoveRows(partIndex, lastRow, lastRow);
+            partItem->removeChildren(lastRow, 1, false);
+            endRemoveRows();
+
+            control->deleteLater();
+        }
+    }
 }
 
 const PartTreeItem* LayoutPanelTreeModel::findPartItemByStaff(const Staff* staff) const

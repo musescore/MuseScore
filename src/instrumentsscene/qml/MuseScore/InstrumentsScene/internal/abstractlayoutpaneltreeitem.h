@@ -104,7 +104,7 @@ public:
     };
 
     //! Moves the child rows onto targetRow; nullopt if they can't move there
-    virtual std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow) const;
+    virtual std::optional<RowMove> resolveMove(int firstRow, int lastRow, int targetRow, bool isDrag) const;
 
     virtual bool needsRemovalConfirmation() const;
 
