@@ -113,6 +113,14 @@ protected:
         return item;
     }
 
+    PartTreeItem* buildPartTreeItem(const Part* part)
+    {
+        PartTreeItem* item = new PartTreeItem(m_masterNotation, m_notation, m_root);
+        item->init(part);
+
+        return item;
+    }
+
     static void notifyScoreChanged(AbstractLayoutPanelTreeItem* item, const ScoreChanges& changes = ScoreChanges())
     {
         item->onScoreChanged(changes);
@@ -251,4 +259,19 @@ TEST_F(InstrumentsScene_SharedPartTreeItemTests, OnScoreChanged_KeepsTitleOnOthe
 
     // [THEN] The title isn't recomputed
     EXPECT_EQ(item->title(), QString("Trumpet 1–2"));
+}
+
+TEST_F(InstrumentsScene_SharedPartTreeItemTests, ApplyDrop_JoinsGroup)
+{
+    // [GIVEN] A group of two trumpets, and a third trumpet
+    SharedPart* sharedPart = addSharedPart({ u"Trumpet 1", u"Trumpet 2" });
+    const Part* part = addPart(u"Trumpet 3");
+    SharedPartTreeItem* item = buildSharedPartTreeItem(sharedPart);
+    const PartTreeItem* partItem = buildPartTreeItem(part);
+
+    // [THEN] The third trumpet joins the group on the score
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(IDList { part->id() }, sharedPart->id()));
+
+    // [WHEN] It's dropped on the group
+    item->applyDrop(partItem);
 }

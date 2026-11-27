@@ -244,8 +244,8 @@ Item {
                 prv.currentItemNavigationName = name
             }
 
-            onDragEntered: {
-                Qt.callLater(root.model.dragOver, treeDelegate.modelIndex)
+            onDragMoved: function(position) {
+                Qt.callLater(root.model.dragOver, treeDelegate.modelIndex, position)
             }
         }
     }

@@ -30,11 +30,13 @@
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/parttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/roottreeitem.h"
+#include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/sharedparttreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffcontroltreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/stafftreeitem.h"
 #include "instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayertreeitem.h"
@@ -148,9 +150,27 @@ protected:
         return m_partItem;
     }
 
-    static QVariant dragged(QObject* item)
+    SharedPart* addSharedPart(const std::vector<const Part*>& members)
     {
-        return QVariant::fromValue(item);
+        SharedPart* sharedPart = new SharedPart(m_score);
+        m_score->appendPart(sharedPart);
+        m_score->appendStaff(Factory::createStaff(sharedPart));
+
+        for (const Part* member : members) {
+            sharedPart->addOriginPart(const_cast<Part*>(member));
+        }
+
+        return sharedPart;
+    }
+
+    //! The root works out the group roles from the score's shared parts
+    SharedPartTreeItem* buildSharedPartTreeItem(const SharedPart* sharedPart)
+    {
+        SharedPartTreeItem* item = new SharedPartTreeItem(m_masterNotation, m_notation, m_root);
+        item->init(sharedPart);
+        m_root->appendChild(item);
+
+        return item;
     }
 
     //! Same as the up/down buttons: LayoutPanelTreeModel::moveRows()
@@ -393,21 +413,20 @@ TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop)
     SystemObjectsLayerTreeItem* layerItem = new SystemObjectsLayerTreeItem(m_masterNotation, m_notation, m_root);
 
     // [THEN] Instruments and system markings rows can be dropped on an instrument
-    EXPECT_TRUE(aItem->canAcceptDrop(dragged(bItem)));
-    EXPECT_TRUE(aItem->canAcceptDrop(dragged(layerItem)));
+    EXPECT_TRUE(aItem->canAcceptDrop(bItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_TRUE(aItem->canAcceptDrop(layerItem, LayoutPanelItemType::ON_ITEM));
 
     // [THEN] Staves and other objects can't
-    EXPECT_FALSE(aItem->canAcceptDrop(dragged(aItem->childAtRow(0))));
-    EXPECT_FALSE(aItem->canAcceptDrop(dragged(m_root)));
-    EXPECT_FALSE(aItem->canAcceptDrop(QVariant()));
+    EXPECT_FALSE(aItem->canAcceptDrop(aItem->childAtRow(0), LayoutPanelItemType::ON_ITEM));
+    EXPECT_FALSE(aItem->canAcceptDrop(m_root, LayoutPanelItemType::ON_ITEM));
 
     // [GIVEN] A shared-staves group header
     PartTreeItem* groupItem = new PartTreeItem(m_masterNotation, m_notation, m_root, LayoutPanelItemType::SHARED_PART);
     m_root->appendChild(groupItem);
 
     // [THEN] Instruments and groups can be dropped on each other
-    EXPECT_TRUE(aItem->canAcceptDrop(dragged(groupItem)));
-    EXPECT_TRUE(groupItem->canAcceptDrop(dragged(aItem)));
+    EXPECT_TRUE(aItem->canAcceptDrop(groupItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_TRUE(groupItem->canAcceptDrop(aItem, LayoutPanelItemType::ON_ITEM));
 
     // [GIVEN] An instrument in another tree
     RootTreeItem otherRoot(m_masterNotation, m_notation);
@@ -415,7 +434,96 @@ TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop)
     otherRoot.appendChild(otherPartItem);
 
     // [THEN] It can't be dropped on the group
-    EXPECT_FALSE(groupItem->canAcceptDrop(dragged(otherPartItem)));
+    EXPECT_FALSE(groupItem->canAcceptDrop(otherPartItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_EQ(groupItem->dropTarget(otherPartItem, LayoutPanelItemType::ON_ITEM), nullptr);
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, DropTarget_OnOtherGroup_Group)
+{
+    // [GIVEN] A, then B in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    PartTreeItem* header = buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] A dragged onto B or onto the group header joins the group on release
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), header);
+    EXPECT_EQ(header->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), header);
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_BelowOtherGroupFromAbove_True)
+{
+    // [GIVEN] A, then B in a shared-staves group
+    const Part* a = addPart();
+    const Part* b = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    PartTreeItem* aItem = buildPartTreeItem(a);
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] A dragged into the gap below the group moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_BelowOtherGroupFromBelow_False)
+{
+    // [GIVEN] B in a shared-staves group, then C
+    const Part* b = addPart();
+    const Part* c = addPart();
+    const SharedPart* s = addSharedPart({ b });
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    PartTreeItem* cItem = buildPartTreeItem(c);
+
+    // [THEN] C dragged into the gap below the group is already after it: nothing moves, and there is no drop target
+    EXPECT_EQ(bItem->dropTarget(cItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_FALSE(bItem->canAcceptDrop(cItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_OwnGroup_True)
+{
+    // [GIVEN] B and C in the same shared-staves group
+    const Part* b = addPart();
+    const Part* c = addPart();
+    const SharedPart* s = addSharedPart({ b, c });
+    buildSharedPartTreeItem(s);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+    PartTreeItem* cItem = buildPartTreeItem(c);
+
+    // [THEN] B dragged onto C moves onto C's row, without a drop target
+    EXPECT_EQ(cItem->dropTarget(bItem, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(cItem->canAcceptDrop(bItem, LayoutPanelItemType::ON_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_NotInGroup_True)
+{
+    // [GIVEN] Two instruments
+    PartTreeItem* aItem = buildPartTreeItem(addPart());
+    PartTreeItem* bItem = buildPartTreeItem(addPart());
+
+    // [THEN] A dragged onto B or below it moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::ON_ITEM));
+    EXPECT_EQ(bItem->dropTarget(aItem, LayoutPanelItemType::BELOW_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(aItem, LayoutPanelItemType::BELOW_ITEM));
+}
+
+TEST_F(InstrumentsScene_PartTreeItemTests, CanAcceptDrop_GroupHeaderOnOtherGroup_True)
+{
+    // [GIVEN] Two shared-staves groups, B in the second
+    const Part* b = addPart();
+    const SharedPart* first = addSharedPart({});
+    const SharedPart* second = addSharedPart({ b });
+    PartTreeItem* firstHeader = buildSharedPartTreeItem(first);
+    buildSharedPartTreeItem(second);
+    PartTreeItem* bItem = buildPartTreeItem(b);
+
+    // [THEN] Only instruments join groups: the first group moves onto B's row, without a drop target
+    EXPECT_EQ(bItem->dropTarget(firstHeader, LayoutPanelItemType::ON_ITEM), nullptr);
+    EXPECT_TRUE(bItem->canAcceptDrop(firstHeader, LayoutPanelItemType::ON_ITEM));
 }
 
 TEST_F(InstrumentsScene_PartTreeItemTests, InstrumentId)

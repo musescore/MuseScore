@@ -65,7 +65,11 @@ public:
 
     void removeChildren(int row, int count, bool deleteChild) override;
 
-    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
+    bool canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const override;
+
+    //! The group, for an instrument dropped on it from outside
+    AbstractLayoutPanelTreeItem* dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                            LayoutPanelItemType::DropPosition position) const override;
 
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();
@@ -81,6 +85,8 @@ protected:
 
 private:
     bool isCombinedOntoSharedStaves(const notation::Part* part) const;
+
+    PartTreeItem* groupToJoin(const AbstractLayoutPanelTreeItem* dragged) const;
 
     void createAndAddPart(const muse::ID& masterPartId);
 

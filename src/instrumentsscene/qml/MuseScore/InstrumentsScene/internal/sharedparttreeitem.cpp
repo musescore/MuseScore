@@ -46,6 +46,11 @@ void SharedPartTreeItem::init(const notation::Part* part)
     m_ignoreEnabledChanged = false;
 }
 
+void SharedPartTreeItem::applyDrop(const AbstractLayoutPanelTreeItem* dragged)
+{
+    notation()->parts()->movePartsToSharedPart({ dragged->id() }, id());
+}
+
 void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
 {
     updateVisibility();

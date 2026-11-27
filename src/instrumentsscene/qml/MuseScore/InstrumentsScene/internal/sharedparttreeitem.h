@@ -37,6 +37,8 @@ public:
 
     void init(const notation::Part* part) override;
 
+    void applyDrop(const AbstractLayoutPanelTreeItem* dragged) override;
+
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 

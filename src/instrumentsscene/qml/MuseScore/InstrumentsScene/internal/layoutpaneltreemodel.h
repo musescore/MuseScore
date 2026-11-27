@@ -71,6 +71,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool hasHiddenOtherInstruments READ hasHiddenOtherInstruments NOTIFY hasHiddenOtherInstrumentsChanged FINAL)
     Q_PROPERTY(AbstractLayoutPanelTreeItem * draggedItem READ draggedItem NOTIFY draggedIndexChanged FINAL)
     Q_PROPERTY(QModelIndex draggedIndex READ draggedIndex NOTIFY draggedIndexChanged FINAL)
+    Q_PROPERTY(AbstractLayoutPanelTreeItem * dropTarget READ dropTarget NOTIFY dropTargetChanged FINAL)
 
     QML_ELEMENT
 
@@ -111,6 +112,7 @@ public:
 
     AbstractLayoutPanelTreeItem* draggedItem() const;
     QModelIndex draggedIndex() const;
+    AbstractLayoutPanelTreeItem* dropTarget() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void showOtherInstruments();
@@ -140,7 +142,7 @@ public:
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
-    Q_INVOKABLE void dragOver(const QModelIndex& targetIndex);
+    Q_INVOKABLE void dragOver(const QModelIndex& targetIndex, LayoutPanelItemType::DropPosition position);
 
 signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
@@ -157,6 +159,7 @@ signals:
     void scoreChanged();
     void hasHiddenOtherInstrumentsChanged();
     void draggedIndexChanged();
+    void dropTargetChanged();
 
 private slots:
     void updateRearrangementAvailability();
@@ -213,6 +216,8 @@ private:
 
     QModelIndexList sortedSelectedIndexes() const;
     bool moveRowRange(const QModelIndex& parent, int firstRow, int lastRow, int targetRow);
+    void moveDraggedRow(int targetRow);
+    void setDropTarget(AbstractLayoutPanelTreeItem* target);
 
     bool needWarnOnRemoveRows(int row, int count);
     muse::async::Promise<bool> askAboutRemovingInstruments(int count);
@@ -259,6 +264,7 @@ private:
     bool m_dragInProgress = false;
     AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
     QPersistentModelIndex m_draggedIndex;
+    AbstractLayoutPanelTreeItem* m_dropTarget = nullptr;
 
     std::set<muse::ID> m_expandedItems;
 

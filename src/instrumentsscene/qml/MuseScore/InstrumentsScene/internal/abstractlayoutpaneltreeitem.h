@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <QObject>
 #include <QVariant>
 #include <QList>
@@ -82,8 +84,17 @@ public:
     bool settingsAvailable() const;
     bool settingsEnabled() const;
 
-    Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
+
+    //! The dragged item moves onto this row while hovering at position, without a dropTarget()
+    virtual bool canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const;
+
+    //! Takes the dragged item on release at position on this row, highlighted while hovering
+    virtual AbstractLayoutPanelTreeItem* dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                                    LayoutPanelItemType::DropPosition position) const;
+
+    //! Called on release on dropTarget()
+    virtual void applyDrop(const AbstractLayoutPanelTreeItem* dragged);
 
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);

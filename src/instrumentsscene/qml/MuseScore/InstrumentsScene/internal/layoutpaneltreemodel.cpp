@@ -380,6 +380,7 @@ void LayoutPanelTreeModel::clear()
 void LayoutPanelTreeModel::deleteItems()
 {
     m_dragSourceParentItem = nullptr;
+    setDropTarget(nullptr);
 
     if (m_dragInProgress) {
         m_dragInProgress = false;
@@ -691,29 +692,49 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
     return true;
 }
 
-void LayoutPanelTreeModel::dragOver(const QModelIndex& targetIndex)
+void LayoutPanelTreeModel::dragOver(const QModelIndex& targetIndex, LayoutPanelItemType::DropPosition position)
 {
-    AbstractLayoutPanelTreeItem* sourceItem = modelIndexToItem(m_draggedIndex);
-    const AbstractLayoutPanelTreeItem* targetItem = modelIndexToItem(targetIndex);
-    if (!sourceItem || !targetItem) {
+    AbstractLayoutPanelTreeItem* source = draggedItem();
+    const AbstractLayoutPanelTreeItem* target = modelIndexToItem(targetIndex);
+    if (!source || !target) {
         return;
     }
 
-    const QModelIndex parent = m_draggedIndex.parent();
-    if (targetIndex.parent() != parent) {
+    // A row deeper than the dragged one stands for its ancestor at the dragged row's level
+    while (target->parentItem() && target->parentItem() != source->parentItem()) {
+        target = target->parentItem();
+    }
+
+    if (target->parentItem() != source->parentItem()) {
+        setDropTarget(nullptr);
         return;
     }
 
-    const QVariant source = QVariant::fromValue(static_cast<QObject*>(sourceItem));
-    if (!targetItem->canAcceptDrop(source)) {
-        return;
-    }
+    AbstractLayoutPanelTreeItem* dropTarget = target->dropTarget(source, position);
+    setDropTarget(dropTarget);
 
-    // m_draggedIndex has followed the row
+    if (!dropTarget && target->canAcceptDrop(source, position)) {
+        moveDraggedRow(target->row());
+    }
+}
+
+void LayoutPanelTreeModel::moveDraggedRow(int targetRow)
+{
+    // m_draggedIndex follows the row
     const int row = m_draggedIndex.row();
-    if (moveRowRange(parent, row, row, targetIndex.row())) {
+    if (moveRowRange(m_draggedIndex.parent(), row, row, targetRow)) {
         emit draggedIndexChanged();
     }
+}
+
+void LayoutPanelTreeModel::setDropTarget(AbstractLayoutPanelTreeItem* target)
+{
+    if (m_dropTarget == target) {
+        return;
+    }
+
+    m_dropTarget = target;
+    emit dropTargetChanged();
 }
 
 void LayoutPanelTreeModel::startActiveDrag(const QModelIndex& draggedIndex)
@@ -739,6 +760,18 @@ void LayoutPanelTreeModel::endActiveDrag()
 
     if (item) {
         updateExpanded(item);
+    }
+
+    AbstractLayoutPanelTreeItem* dropTarget = m_dropTarget;
+    setDropTarget(nullptr);
+
+    if (item && dropTarget) {
+        m_dragSourceParentItem = nullptr;
+        m_dragInProgress = false;
+
+        // The live moves are dropped: the panel reloads from the score
+        dropTarget->applyDrop(item);
+        return;
     }
 
     setLoadingBlocked(true);
@@ -993,6 +1026,11 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::draggedItem() const
 QModelIndex LayoutPanelTreeModel::draggedIndex() const
 {
     return m_draggedIndex;
+}
+
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::dropTarget() const
+{
+    return m_dropTarget;
 }
 
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const

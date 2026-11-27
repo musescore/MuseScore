@@ -64,7 +64,7 @@ DropArea {
     signal expandRequested(LayoutPanelCard card, bool expand)
     signal popupOpenedChanged(bool opened)
     signal navigationActivated(string name)
-    signal dragEntered()
+    signal dragMoved(int position)
 
     QtObject {
         id: prv
@@ -74,6 +74,7 @@ DropArea {
         readonly property bool isDragged: Boolean(root.draggedItem) && root.item === root.draggedItem
         readonly property bool isGroupHeader: root.item?.type === LayoutPanelItemType.SHARED_PART
         readonly property bool isDraggedGroup: prv.isDragged && prv.isGroupHeader
+        readonly property bool isDropTarget: Boolean(root.groupHeader) && root.groupHeader === root.treeModel.dropTarget
 
         readonly property bool isExpanded: Boolean(root.item?.isExpandable) && root.item.isExpanded
         //! NOTE A group header has no child rows: its instruments are separate cards
@@ -151,7 +152,7 @@ DropArea {
         bottomLeftRadius: prv.isGroupBottom ? root.groupRadius : 0
         bottomRightRadius: prv.isGroupBottom ? root.groupRadius : 0
 
-        color: groupBackground.isSelected ? ui.theme.accentColor : ui.theme.buttonColor
+        color: groupBackground.isSelected || prv.isDropTarget ? ui.theme.accentColor : ui.theme.buttonColor
         opacity: {
             if (groupBackground.isPressed) {
                 return 0.7
@@ -193,7 +194,7 @@ DropArea {
         Rectangle {
             anchors.fill: parent
 
-            visible: prv.isDragged && !prv.isDraggedGroup
+            visible: prv.isDragged && !prv.isDraggedGroup && !root.treeModel.dropTarget
 
             radius: root.cardRadius
             color: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, 0.15)
@@ -317,7 +318,18 @@ DropArea {
         }
     }
 
-    onEntered: {
-        root.dragEntered()
+    // Below the item: the gap under the group's background
+    function dropPosition(drag) {
+        return drag.y >= groupBackground.height ? LayoutPanelItemType.BELOW_ITEM : LayoutPanelItemType.ON_ITEM
+    }
+
+    onEntered: function(drag) {
+        root.dragMoved(root.dropPosition(drag))
+    }
+
+    onPositionChanged: function(drag) {
+        if (prv.isGroupBottom) {
+            root.dragMoved(root.dropPosition(drag))
+        }
     }
 }

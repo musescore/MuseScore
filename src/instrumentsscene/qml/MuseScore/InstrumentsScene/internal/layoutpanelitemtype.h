@@ -48,5 +48,11 @@ enum SharedGroupRole {
     GROUP_LAST_MEMBER,
 };
 Q_ENUM_NS(SharedGroupRole)
+
+enum DropPosition {
+    ON_ITEM = 0,
+    BELOW_ITEM,
+};
+Q_ENUM_NS(DropPosition)
 }
 }

@@ -245,20 +245,43 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
     }
 }
 
-bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
+bool PartTreeItem::canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const
 {
-    if (auto item = dynamic_cast<const AbstractLayoutPanelTreeItem*>(obj.value<QObject*>())) {
-        if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            return true;
-        }
-
-        const bool isPartOrGroup = item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART;
-        if (isPartOrGroup && item->parentItem() == parentItem()) {
-            return true;
-        }
+    if (groupToJoin(dragged)) {
+        // Below the group: from above, resolveMove() puts it after the group; from below, it's already there
+        return dragged->row() < row();
     }
 
-    return AbstractLayoutPanelTreeItem::canAcceptDrop(obj);
+    if (dragged->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+        return true;
+    }
+
+    const bool isPartOrGroup = dragged->type() == LayoutPanelItemType::PART || dragged->type() == LayoutPanelItemType::SHARED_PART;
+    if (isPartOrGroup && dragged->parentItem() == parentItem()) {
+        return true;
+    }
+
+    return AbstractLayoutPanelTreeItem::canAcceptDrop(dragged, position);
+}
+
+AbstractLayoutPanelTreeItem* PartTreeItem::dropTarget(const AbstractLayoutPanelTreeItem* dragged,
+                                                      LayoutPanelItemType::DropPosition position) const
+{
+    return position == LayoutPanelItemType::ON_ITEM ? groupToJoin(dragged) : nullptr;
+}
+
+PartTreeItem* PartTreeItem::groupToJoin(const AbstractLayoutPanelTreeItem* dragged) const
+{
+    if (dragged->type() != LayoutPanelItemType::PART || dragged->parentItem() != parentItem()) {
+        return nullptr;
+    }
+
+    PartTreeItem* group = sharedGroupHeader();
+    if (!group || static_cast<const PartTreeItem*>(dragged)->sharedGroupHeader() == group) {
+        return nullptr;
+    }
+
+    return group;
 }
 
 QString PartTreeItem::instrumentId() const

@@ -46,7 +46,7 @@ public:
     void setSystemObjects(const SystemObjectGroups& systemObjects);
 
     Q_INVOKABLE QString staffId() const;
-    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
+    bool canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition position) const override;
 
 private:
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;

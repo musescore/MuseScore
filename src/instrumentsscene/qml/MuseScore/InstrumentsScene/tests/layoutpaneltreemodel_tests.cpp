@@ -1410,7 +1410,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_GroupHeader)
 
     // [WHEN] The group header is dragged onto C
     m_model->startActiveDrag(row(2));
-    m_model->dragOver(row(4));
+    m_model->dragOver(row(4), LayoutPanelItemType::ON_ITEM);
 
     // [THEN] The group moves below C with its instrument, and the dragged row follows the header
     EXPECT_EQ(rowNames(), "[A:0] A C S B");
@@ -1428,7 +1428,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_NotMoved)
 
     // [WHEN] B is dragged onto the group header
     m_model->startActiveDrag(row(3));
-    m_model->dragOver(row(2));
+    m_model->dragOver(row(2), LayoutPanelItemType::ON_ITEM);
 
     // [THEN] B stays in the group, and is still the dragged row
     EXPECT_EQ(rowNames(), "[A:0] A S B");
@@ -1446,7 +1446,7 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_StaffRow)
 
     // [WHEN] A's first staff is dragged onto its third, which has the group header's row number
     m_model->startActiveDrag(childRow(1, 0));
-    m_model->dragOver(childRow(1, 2));
+    m_model->dragOver(childRow(1, 2), LayoutPanelItemType::ON_ITEM);
 
     // [THEN] Only the staff moves, and the dragged row follows it
     EXPECT_EQ(rowNames(), "[A:0] A S B");
@@ -1455,13 +1455,123 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_StaffRow)
 
     m_model->endActiveDrag();
 
-    // [WHEN] The group header is dragged onto A's second staff, whose row number is A's
+    // [WHEN] The group header is dragged onto A's second staff
     m_model->startActiveDrag(row(2));
-    m_model->dragOver(childRow(1, 1));
+    m_model->dragOver(childRow(1, 1), LayoutPanelItemType::ON_ITEM);
 
-    // [THEN] A staff doesn't take a group, so nothing moves
-    EXPECT_EQ(rowNames(), "[A:0] A S B");
-    EXPECT_EQ(m_model->draggedIndex(), row(2));
+    // [THEN] Same as onto A: the group moves above A, and the dragged row follows the header
+    EXPECT_EQ(rowNames(), "[A:0] S B A");
+    EXPECT_EQ(m_model->draggedIndex(), row(1));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_GroupMemberStaff_JoinsOnDrop)
+{
+    // [GIVEN] A, B with two staves in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B", 2);
+    addPart(u"C");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B C
+
+    // [WHEN] C is dragged onto B's last staff
+    m_model->startActiveDrag(row(4));
+    m_model->dragOver(childRow(3, 1), LayoutPanelItemType::ON_ITEM);
+
+    // [THEN] Same as onto B: nothing moves, and the group is the drop target
+    EXPECT_EQ(rowNames(), "[A:0] A S B C");
+    EXPECT_EQ(m_model->dropTarget(), item(2));
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_InstrumentStaff_MovesToInstrument)
+{
+    // [GIVEN] A with two staves, then B
+    addPart(u"A", 2);
+    addPart(u"B");
+    createModel(); // [A:0] A B
+
+    // [WHEN] B is dragged onto A's last staff
+    m_model->startActiveDrag(row(2));
+    m_model->dragOver(childRow(1, 1), LayoutPanelItemType::ON_ITEM);
+
+    // [THEN] Same as onto A: B moves above A, and there is no drop target
+    EXPECT_EQ(rowNames(), "[A:0] B A");
+    EXPECT_EQ(m_model->draggedIndex(), row(1));
+    EXPECT_EQ(m_model->dropTarget(), nullptr);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_OtherGroup_JoinsOnDrop)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    const Part* c = addPart(u"C");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B C
+
+    // [WHEN] C is dragged onto B
+    m_model->startActiveDrag(row(4));
+    m_model->dragOver(row(3), LayoutPanelItemType::ON_ITEM);
+
+    // [THEN] Nothing moves, and the group is the drop target
+    EXPECT_EQ(rowNames(), "[A:0] A S B C");
+    EXPECT_EQ(m_model->dropTarget(), item(2));
+
+    // [WHEN] C is dropped
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(IDList { c->id() }, s->id())).Times(1);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(0);
+    m_model->endActiveDrag();
+
+    // [THEN] C joins the group, and there is no drop target
+    EXPECT_EQ(m_model->dropTarget(), nullptr);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_BelowGroup_MovesAfterGroup)
+{
+    // [GIVEN] C, then A, B in a shared-staves group
+    addPart(u"A");
+    addPart(u"C");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A C S B
+
+    // [WHEN] C is dragged into the gap below the group
+    m_model->startActiveDrag(row(2));
+    m_model->dragOver(row(4), LayoutPanelItemType::BELOW_ITEM);
+
+    // [THEN] C moves after the group, which isn't the drop target
+    EXPECT_EQ(rowNames(), "[A:0] A S B C");
+    EXPECT_EQ(m_model->dropTarget(), nullptr);
+
+    // [WHEN] C is dropped
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(_, _)).Times(0);
+    EXPECT_CALL(*m_parts, setPartsLayout(_)).Times(1);
+    m_model->endActiveDrag();
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, DragOver_OffGroup_ClearsDropTarget)
+{
+    // [GIVEN] A, B in a shared-staves group, then C
+    addPart(u"A");
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addPart(u"C");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B C
+
+    // [WHEN] C is dragged onto B, then back onto its own row
+    m_model->startActiveDrag(row(4));
+    m_model->dragOver(row(3), LayoutPanelItemType::ON_ITEM);
+    m_model->dragOver(row(4), LayoutPanelItemType::ON_ITEM);
+
+    // [THEN] The group is no longer the drop target
+    EXPECT_EQ(m_model->dropTarget(), nullptr);
+
+    // [WHEN] C is dropped
+    EXPECT_CALL(*m_parts, movePartsToSharedPart(_, _)).Times(0);
+    m_model->endActiveDrag();
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, SelectRow_MarksItemsSelected)

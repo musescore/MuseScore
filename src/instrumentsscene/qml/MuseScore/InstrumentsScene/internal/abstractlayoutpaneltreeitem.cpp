@@ -113,17 +113,22 @@ bool AbstractLayoutPanelTreeItem::isRemovable() const
     return m_isRemovable;
 }
 
-bool AbstractLayoutPanelTreeItem::canAcceptDrop(const QVariant& obj) const
+void AbstractLayoutPanelTreeItem::appendNewItem()
 {
-    auto item = dynamic_cast<const AbstractLayoutPanelTreeItem*>(obj.value<QObject*>());
-    if (!item) {
-        return false;
-    }
-
-    return item->m_parent == m_parent && item->m_type == m_type;
 }
 
-void AbstractLayoutPanelTreeItem::appendNewItem()
+bool AbstractLayoutPanelTreeItem::canAcceptDrop(const AbstractLayoutPanelTreeItem* dragged, LayoutPanelItemType::DropPosition) const
+{
+    return dragged->m_parent == m_parent && dragged->m_type == m_type;
+}
+
+AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::dropTarget(const AbstractLayoutPanelTreeItem*,
+                                                                     LayoutPanelItemType::DropPosition) const
+{
+    return nullptr;
+}
+
+void AbstractLayoutPanelTreeItem::applyDrop(const AbstractLayoutPanelTreeItem*)
 {
 }
 
