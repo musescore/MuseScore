@@ -918,6 +918,11 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                 destTick = startTick + Fraction::fromTicks(e.readInt());
             } else if (tag == "segDelta") {
                 segDelta = e.readInt();
+                if (destTrack < maxTrack) {
+                    for (; currSegm && segDelta > 0; segDelta--) {
+                        currSegm = currSegm->nextCR(destTrack);
+                    }
+                }
             } else if (tag == "Articulation"
                        || tag == "Ornament"
                        || tag == "Arpeggio"
@@ -985,6 +990,7 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
 
                 Breath* b = Factory::createBreath(score->dummy());
                 b->setTrack(destTrack);
+                b->resetProperty(Pid::PLACEMENT);
                 TRead::read(b, e, ctx);
                 b->setTrack(destTrack);
                 b->setOwnershipParent(seg);
@@ -1079,13 +1085,11 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
                     score->undoAddElement(el);
                 }
             } else if (tag == "Lyrics" || tag == "FiguredBass") {
-                // These elements are positioned respecting the distance in chords,
-                // rather than the time distance.
+                // These elements are positioned respecting the distance in chords
+                // (currSegm, advanced by segDelta above), rather than the time distance.
                 // TODO: is that appropriate for FiguredBass too? To be considered
                 // when overhauling FiguredBass.
-                for (; currSegm && segDelta > 0; segDelta--) {
-                    currSegm = currSegm->nextCR(destTrack);
-                }
+
                 // check the intended dest. track and segment exist
                 if (destTrack >= maxTrack || currSegm == nullptr) {
                     LOGD("PasteSymbols: no track or segment for %s", tag.ascii());
