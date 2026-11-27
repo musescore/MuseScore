@@ -50,6 +50,7 @@ class Box;
 
 struct ElementPattern {
     std::vector<EngravingItem*> el;
+    mu::engraving::ElementTypeSet types;
     int type = 0;
     int subtype = 0;
     staff_idx_t staffStart = 0;
