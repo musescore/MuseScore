@@ -3756,7 +3756,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
-    } else if (TRead::readProperty(s, tag, e, ctx, Pid::MASK_SLURTIE)) {
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::MASK_SLURTIE_SIGNATURES)) {
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::MASK_SLURTIE_MEASURE_NUMBERS)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment"

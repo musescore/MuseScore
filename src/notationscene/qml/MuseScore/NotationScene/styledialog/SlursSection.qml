@@ -135,19 +135,35 @@ StyledGroupBox {
             }
 
             CheckBox {
-                id: maskSlursCheckbox
+                id: maskSlursOverSignaturesCheckbox
                 text: qsTrc("notation/editstyle/slursandties", "Mask slurs over clefs, key and time signatures")
-                checked: root.pageModel.maskSlurs.value
+                checked: root.pageModel.maskSlursOverSignatures.value
                 width: parent.width
                 Layout.columnSpan: 2
 
                 onClicked: {
-                    root.pageModel.maskSlurs.value = !maskSlursCheckbox.checked
+                    root.pageModel.maskSlursOverSignatures.value = !maskSlursOverSignaturesCheckbox.checked
                 }
             }
 
             StyleResetButton {
-                styleItem: root.pageModel.maskSlurs
+                styleItem: root.pageModel.maskSlursOverSignatures
+            }
+
+            CheckBox {
+                id: maskSlursOverMeasureNumbersCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask slurs over measure numbers")
+                checked: root.pageModel.maskSlursOverMeasureNumbers.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskSlursOverMeasureNumbers.value = !maskSlursOverMeasureNumbersCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskSlursOverMeasureNumbers
             }
         }
 

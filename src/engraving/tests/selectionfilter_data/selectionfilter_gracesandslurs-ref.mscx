@@ -9,8 +9,9 @@
       <lyricsStackingOrder>0</lyricsStackingOrder>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
-      <maskSlurs>0</maskSlurs>
-      <maskTies>0</maskTies>
+      <maskSlursOverSignatures>0</maskSlursOverSignatures>
+      <maskTiesOverSignatures>0</maskTiesOverSignatures>
+      <measureNumberAvoidance>move-clear</measureNumberAvoidance>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

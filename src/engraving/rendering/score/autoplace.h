@@ -29,7 +29,6 @@ namespace mu::engraving::rendering::score {
 class Autoplace
 {
 public:
-
     static void autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add);
     static void autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add);
     static void autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool add = true)
@@ -43,13 +42,24 @@ public:
     }
 
     static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata);
+    static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 
-    static double distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
-                                     double minSkylineHorizontalClearance, double minDistance);
+private:
+    enum class CollisionStrategy : unsigned char {
+        MOVE_CLEAR,  // Move clear of everything in the skyline that overlaps horizontally
+        FIT_IN_GAPS, // Move only as far as the nearest gap the item fits into
+    };
+
+    static CollisionStrategy resolveCollisionStrategy(const EngravingItem* item);
 
     static void doAutoplaceElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, const System* system, bool above, bool add,
                                    double minSkylineHorizontalClearance, double spatium);
 
-    static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
+    static double distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
+                                     double minSkylineHorizontalClearance, double minDistance);
+
+    // Returns the smallest move away from the staff that leaves an item in a gap between skyline elements
+    static double distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox, bool above,
+                                       double minHorizontalClearance, double minDistance);
 };
 }

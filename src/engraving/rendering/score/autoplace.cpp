@@ -28,6 +28,7 @@
 #include "dom/lyrics.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/slurtie.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
 #include "dom/system.h"
@@ -92,9 +93,65 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
     doAutoplaceElement(item, ldata, system, above, /* add = */ false, /* minSkylineHorizontalClearance = */ 0.0, spatium);
 }
 
+Autoplace::CollisionStrategy Autoplace::resolveCollisionStrategy(const EngravingItem* item)
+{
+    if (item->isMeasureNumber()
+        && item->style().styleV(Sid::measureNumberAvoidance).value<MeasureNumberAvoidance>() == MeasureNumberAvoidance::FIT_IN_GAPS) {
+        return CollisionStrategy::FIT_IN_GAPS;
+    }
+
+    return CollisionStrategy::MOVE_CLEAR;
+}
+
+double Autoplace::distanceToNearestGap(const EngravingItem* item, const SkylineLine& skyline, const RectF& bbox,
+                                       bool above, double minHorizontalClearance, double minDistance)
+{
+    const auto innerEdge = [above](const RectF& r) { return above ? -r.bottom() : r.top(); };
+    const auto outerEdge = [above](const RectF& r) { return above ? -r.top() : r.bottom(); };
+
+    // Only elements that overlap the item horizontally can collide with it
+    std::vector<const ShapeElement*> obstacles;
+    for (const ShapeElement& el : skyline.elements()) {
+        const EngravingItem* skylineItem = el.item();
+        if (el.height() <= 0.0
+            || !mu::engraving::intersects(el.left(), el.right(), bbox.left(), bbox.right(), minHorizontalClearance)) {
+            continue;
+        }
+        if (skylineItem && itemsShouldIgnoreEachOther(item, skylineItem)) {
+            continue;
+        }
+        obstacles.push_back(&el);
+    }
+
+    std::sort(obstacles.begin(), obstacles.end(), [&innerEdge](const ShapeElement* a, const ShapeElement* b) {
+        return innerEdge(*a) < innerEdge(*b);
+    });
+
+    const double outerMinDistance = minDistance / 2;
+
+    double move = 0.0;
+    for (const ShapeElement* el : obstacles) {
+        if (muse::RealIsEqualOrLess(outerEdge(*el) + minDistance, innerEdge(bbox) + move)) {
+            // Between the item and the staff and already clear; moving further out keeps it clear
+            continue;
+        }
+        if (muse::RealIsEqualOrLess(outerEdge(bbox) + move + outerMinDistance, innerEdge(*el))) {
+            // The item fits in the gap on the staff side of this element, and every remaining element is further out
+            break;
+        }
+        move = std::max(move, outerEdge(*el) + minDistance - innerEdge(bbox));
+    }
+
+    return above ? -move : move;
+}
+
 double Autoplace::distanceToMoveItem(const EngravingItem* item, const SkylineLine& staffSkyline, const Shape& shape, bool above,
                                      double minSkylineHorizontalClearance, double minDistance)
 {
+    if (resolveCollisionStrategy(item) == CollisionStrategy::FIT_IN_GAPS) {
+        return distanceToNearestGap(item, staffSkyline, shape.bbox(), above, minSkylineHorizontalClearance, minDistance);
+    }
+
     const SkylineLine filteredSkyline = staffSkyline.getFilteredCopy([item](const ShapeElement& shapeEl) {
         const EngravingItem* skylineItem = shapeEl.item();
         if (!skylineItem) {
@@ -166,6 +223,12 @@ void Autoplace::doAutoplaceElement(const EngravingItem* item, EngravingItem::Lay
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
 {
     if (itemToAutoplace == itemInSkyline) {
+        return true;
+    }
+
+    // A slur or tie masked around measure numbers takes precedence over moving them clear, whatever the avoidance setting
+    if (itemToAutoplace->isMeasureNumber() && itemInSkyline->isSlurTieSegment()
+        && toSlurTieSegment(itemInSkyline)->masksOverMeasureNumbers()) {
         return true;
     }
 

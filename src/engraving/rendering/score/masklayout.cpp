@@ -47,8 +47,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
-    bool maskSlurs = ctx.conf().styleB(Sid::maskSlurs);
-    bool maskTies = ctx.conf().styleB(Sid::maskTies);
 
     for (const System* system : page->systems()) {
         std::vector<TextBase*> allSystemText = collectAllSystemText(system);
@@ -89,12 +87,11 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 
             spannerSeg->mutldata()->setMask(Shape());
 
-            AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
-            if (slurTieMaskOverride == AutoOnOff::ON
-                || (slurTieMaskOverride == AutoOnOff::AUTO
-                    && ((maskSlurs && spannerSeg->isSlurSegment())
-                        || (maskTies && spannerSeg->isTieSegment())))) {
-                computeSlurTieMasks(toSlurTieSegment(spannerSeg));
+            SlurTieSegment* slurTieSeg = toSlurTieSegment(spannerSeg);
+            const bool maskOverSignatures = slurTieSeg->masksOverSignatures();
+            const bool maskOverMeasureNumbers = slurTieSeg->masksOverMeasureNumbers();
+            if (maskOverSignatures || maskOverMeasureNumbers) {
+                computeSlurTieMasks(slurTieSeg, maskOverSignatures, maskOverMeasureNumbers);
             }
         }
     }
@@ -368,13 +365,11 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     staffLines->mutldata()->setMask(mask);
 }
 
-void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
+void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, bool maskOverSignatures, bool maskOverMeasureNumbers)
 {
     TRACEFUNC;
 
     Spanner* spanner = slurTieSegment->spanner();
-    const Segment* startSeg = spanner->startSegment();
-    const Segment* endSeg = spanner->endSegment();
     const EngravingItem* startElement = spanner->startElement();
     const EngravingItem* endElement = spanner->endElement();
     staff_idx_t startStaffIdx = startElement ? startElement->vStaffIdx() : 0;
@@ -384,27 +379,25 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     }
 
     std::vector<const EngravingItem*> itemsToMaskOver;
-    for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
-        if (!seg->enabled()
-            || !seg->isType(SegmentType::KeySigTypes | SegmentType::TimeSigTypes | SegmentType::ClefTypes)
-            || seg->system() != slurTieSegment->system()) {
-            continue;
-        }
-        for (staff_idx_t staffIdx = startStaffIdx; staffIdx <= endStaffIdx; ++staffIdx) {
-            if (EngravingItem* item = seg->element(staffIdx * VOICES)) { // Key/Time/Clef-type segments never have elements in any voice other than 0
-                itemsToMaskOver.push_back(item);
-            }
-        }
+    if (maskOverSignatures) {
+        collectSignaturesUnderSlurTie(slurTieSegment, startStaffIdx, endStaffIdx, itemsToMaskOver);
+    }
+    if (maskOverMeasureNumbers) {
+        collectMeasureNumbersUnderSlurTie(slurTieSegment, startStaffIdx, endStaffIdx, itemsToMaskOver);
     }
 
     PointF slurTiePos = slurTieSegment->pagePos();
     Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
 
-    Shape mask;
     const double spatium = slurTieSegment->spatium();
     const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::keysigLeftMargin)].defaultValue.toDouble() / 2;
     const double horizontalCollisionPadding = maskPadding;
     const double verticalCollisionPadding = spatium * 0.1;
+
+    /* Items at the same tick (e.g. a clef, key and time signature change, and the measure number of the bar they start)
+     * are grouped and break the slur/tie only once. Each group gets its own cut, so that a slur/tie spanning several
+     * of them is only broken around each one, not across the whole span between them. */
+    std::map<Fraction, Shape> groups;
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
@@ -420,25 +413,99 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
             continue;
         }
 
-        mask.add(filteredItemShape.translate(-slurTiePos));
+        // Framed text is masked up to its frame, as barlines are
+        const bool isFramedText = item->isTextBase() && toTextBase(item)->hasFrame();
+        filteredItemShape.pad(isFramedText ? 0.0 : maskPadding);
+        filteredItemShape.translate(-slurTiePos);
+
+        groups[item->tick()].add(filteredItemShape);
     }
 
-    if (mask.empty()) {
-        slurTieSegment->mutldata()->setMask(mask);
+    std::vector<RectF> cuts;
+    cuts.reserve(groups.size());
+    for (const auto& [tick, groupShape] : groups) {
+        cuts.push_back(groupShape.bbox());
+    }
+
+    if (cuts.empty()) {
+        slurTieSegment->mutldata()->setMask(Shape());
         return;
     }
 
     slurTieShape.translate(-slurTiePos);
 
-    // Use the mask's bbox to break the slur/tie only once, regardless of the mask elements in between:
-    RectF maskBbox = mask.bbox();
+    /* Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
+     * or not masked at all, so we extend each cut vertically to encompass the slur/tie's full height): */
+    const double maskTop = slurTieShape.top() - maskPadding;
+    const double maskHeight = slurTieShape.bottom() + maskPadding - maskTop;
 
-    // Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
-    // or not masked at all, so we extend the mask vertically to encompass the slur/tie's full height):
-    maskBbox.adjust(0.0, slurTieShape.top() - mask.top(), 0.0, slurTieShape.bottom() - mask.bottom());
-    maskBbox.pad(maskPadding);
+    // Cuts that overlap, or are too close to leave a visible piece of slur/tie between them, are merged into one
+    const double minFragmentLength = 0.5 * spatium;
+    std::sort(cuts.begin(), cuts.end(), [](const RectF& a, const RectF& b) { return a.left() < b.left(); });
 
-    slurTieSegment->mutldata()->setMask(maskBbox);
+    Shape mask;
+    double cutLeft = cuts.front().left();
+    double cutRight = cuts.front().right();
+    for (size_t i = 1; i < cuts.size(); ++i) {
+        if (cuts[i].left() - cutRight < minFragmentLength) {
+            cutRight = std::max(cutRight, cuts[i].right());
+            continue;
+        }
+        mask.add(RectF(cutLeft, maskTop, cutRight - cutLeft, maskHeight));
+        cutLeft = cuts[i].left();
+        cutRight = cuts[i].right();
+    }
+    mask.add(RectF(cutLeft, maskTop, cutRight - cutLeft, maskHeight));
+
+    slurTieSegment->mutldata()->setMask(mask);
+}
+
+void MaskLayout::collectSignaturesUnderSlurTie(const SlurTieSegment* slurTieSegment, staff_idx_t startStaffIdx, staff_idx_t endStaffIdx,
+                                               std::vector<const EngravingItem*>& items)
+{
+    const Spanner* spanner = slurTieSegment->spanner();
+    const Segment* startSeg = spanner->startSegment();
+    const Segment* endSeg = spanner->endSegment();
+
+    for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
+        if (!seg->enabled()
+            || !seg->isType(SegmentType::KeySigTypes | SegmentType::TimeSigTypes | SegmentType::ClefTypes)
+            || seg->system() != slurTieSegment->system()) {
+            continue;
+        }
+        for (staff_idx_t staffIdx = startStaffIdx; staffIdx <= endStaffIdx; ++staffIdx) {
+            // Key/Time/Clef-type segments never have elements in any voice other than 0
+            if (EngravingItem* item = seg->element(staff2track(staffIdx))) {
+                items.push_back(item);
+            }
+        }
+    }
+}
+
+void MaskLayout::collectMeasureNumbersUnderSlurTie(const SlurTieSegment* slurTieSegment, staff_idx_t startStaffIdx,
+                                                   staff_idx_t endStaffIdx, std::vector<const EngravingItem*>& items)
+{
+    const Spanner* spanner = slurTieSegment->spanner();
+
+    for (const MeasureBase* mb : slurTieSegment->system()->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        const Measure* measure = toMeasure(mb);
+        for (staff_idx_t staffIdx = 0; staffIdx < spanner->score()->nstaves(); ++staffIdx) {
+            const MeasureNumber* measureNumber = measure->measureNumber(staffIdx);
+            // A system number is drawn over the first visible staff, which may not be its own
+            const bool isOwnStaff = staffIdx >= startStaffIdx && staffIdx <= endStaffIdx;
+            if (!measureNumber || !(isOwnStaff || measureNumber->systemFlag())
+                || !measureNumber->visible() || !measure->showMeasureNumberOnStaff(staffIdx)) {
+                continue;
+            }
+            const staff_idx_t numberStaffIdx = measureNumber->effectiveStaffIdx();
+            if (numberStaffIdx >= startStaffIdx && numberStaffIdx <= endStaffIdx) {
+                items.push_back(measureNumber);
+            }
+        }
+    }
 }
 
 Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
