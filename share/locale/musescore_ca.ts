@@ -4897,7 +4897,7 @@ seguides de guions</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
+        <source>To key</source>
         <translation>A la tonalitat</translation>
     </message>
     <message>

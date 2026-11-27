@@ -4663,8 +4663,8 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="src/notationscene/widgets/transposedialog.ui" line="1"/>
-        <source>To Key</source>
-        <translation type="unfinished">To Key</translation>
+        <source>To key</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/notationscene/widgets/transposedialog.ui" line="1"/>
@@ -38220,3 +38220,5 @@ failed.</translation>
     </message>
 </context>
 </TS>
+
+

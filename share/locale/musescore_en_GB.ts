@@ -4897,8 +4897,8 @@ followed by dashes</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="38"/>
-        <source>To Key</source>
-        <translation>To Key</translation>
+        <source>To key</source>
+        <translation>To key</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="53"/>
