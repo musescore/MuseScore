@@ -1587,9 +1587,9 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     case engraving::FermataType::LongHenze:
     case engraving::FermataType::VeryLong:
     case engraving::FermataType::ShortHenze:
-    case engraving::FermataType::VeryShort: smufl = true;
+    case engraving::FermataType::VeryShort:
+    case engraving::FermataType::Curlew: smufl = true;
         break;
-    case engraving::FermataType::Curlew:
     case engraving::FermataType::Undefined:
         break;
     }
