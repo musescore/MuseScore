@@ -106,6 +106,16 @@ Item {
         }
     }
 
+    StyledMenuLoader {
+        id: rowContextMenu
+
+        menuAnchorItem: root.Window.window ? root.Window.window.contentItem : null
+
+        onHandleMenuItem: function(itemId) {
+            root.model.handleRowContextMenuItem(itemId)
+        }
+    }
+
     Connections {
         target: root.model
 
@@ -243,6 +253,18 @@ Item {
 
             onDragMoved: function(position) {
                 Qt.callLater(root.model.dragOver, treeDelegate.modelIndex, position)
+            }
+
+            onContextMenuRequested: function(card, x, y) {
+                const pos = card.mapToItem(root, x, y)
+
+                // Once the click is handled
+                Qt.callLater(function() {
+                    const items = root.model.rowContextMenuItems()
+                    if (items.length > 0) {
+                        rowContextMenu.open(items, pos.x, pos.y)
+                    }
+                })
             }
         }
     }

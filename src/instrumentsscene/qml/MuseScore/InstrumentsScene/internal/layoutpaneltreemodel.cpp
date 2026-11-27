@@ -56,6 +56,8 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
+static const QString REMOVE_MENU_ITEM_ID("remove");
+
 LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -640,6 +642,47 @@ void LayoutPanelTreeModel::removeSelectedRows()
             removeRows(first.row(), count, first.parent());
         }
     });
+}
+
+QVariantList LayoutPanelTreeModel::rowContextMenuItems() const
+{
+    int partCount = 0;
+    int systemMarkingsCount = 0;
+
+    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+        const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
+        if (!item) {
+            continue;
+        }
+
+        if (item->type() == LayoutPanelItemType::PART) {
+            ++partCount;
+        } else if (item->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            ++systemMarkingsCount;
+        }
+    }
+
+    if (partCount == 0 && systemMarkingsCount == 0) {
+        return {};
+    }
+
+    QString removeTitle;
+    if (systemMarkingsCount == 0) {
+        removeTitle = muse::qtrc("layoutpanel", "Remove instrument(s)", nullptr, partCount);
+    } else if (partCount == 0) {
+        removeTitle = muse::qtrc("layoutpanel", "Remove system markings");
+    } else {
+        removeTitle = muse::qtrc("layoutpanel", "Remove selected");
+    }
+
+    return { QVariantMap { { "id", REMOVE_MENU_ITEM_ID }, { "title", removeTitle } } };
+}
+
+void LayoutPanelTreeModel::handleRowContextMenuItem(const QString& itemId)
+{
+    if (itemId == REMOVE_MENU_ITEM_ID) {
+        removeSelectedRows();
+    }
 }
 
 bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,

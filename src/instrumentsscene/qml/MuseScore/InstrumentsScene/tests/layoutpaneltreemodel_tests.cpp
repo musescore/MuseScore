@@ -316,6 +316,17 @@ protected:
         return count;
     }
 
+    //! The titles in the selected rows' right-click menu
+    QStringList rowContextMenuTitles() const
+    {
+        QStringList titles;
+        for (const QVariant& menuItem : m_model->rowContextMenuItems()) {
+            titles << menuItem.toMap().value("title").toString();
+        }
+
+        return titles;
+    }
+
     //! E.g. "[A:0] A B [C:0] C": instrument titles, and "[instrument:staff index]" for system markings rows
     std::string rowNames() const
     {
@@ -1074,6 +1085,80 @@ TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RemoveSelectedRows_ScoreRemov
     // [THEN] The markings row above B follows the score without reloading the panel
     EXPECT_EQ(rowNames(), "[A:0] A B");
     EXPECT_EQ(*resets, 0);
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_Instruments)
+{
+    // [GIVEN] Two instruments
+    addPart(u"A");
+    addPart(u"B");
+    createModel(); // [A:0] A B
+
+    // [WHEN] B is selected
+    m_model->selectRow(row(2));
+
+    // [THEN] It can be removed
+    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove instrument(s)") });
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_Markings)
+{
+    // [GIVEN] Two instruments, system markings above A and B
+    addPart(u"A");
+    const Part* b = addPart(u"B");
+    addSystemObjects(b->staff(0));
+    createModel(); // [A:0] A [B:0] B
+
+    // [WHEN] The markings row above B is selected
+    m_model->selectRow(row(2));
+
+    // [THEN] The markings can be removed
+    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove system markings") });
+
+    // [WHEN] The markings row and B are selected
+    selectRows({ row(2), row(3) });
+
+    // [THEN] Both can be removed
+    EXPECT_EQ(rowContextMenuTitles(), QStringList { QString("Remove selected") });
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, RowContextMenuItems_NoMenu)
+{
+    // [GIVEN] A with two staves, then B in a shared-staves group
+    addPart(u"A", 2);
+    const Part* s = addSharedPart(u"S");
+    const Part* b = addPart(u"B");
+    addToSharedPart(s, b);
+    createModel(); // [A:0] A S B
+
+    // [WHEN] A staff is selected
+    m_model->selectRow(childRow(1, 0));
+
+    // [THEN] There's no menu
+    EXPECT_TRUE(rowContextMenuTitles().isEmpty());
+
+    // [WHEN] The group header is selected
+    m_model->selectRow(row(2));
+
+    // [THEN] There's no menu either
+    EXPECT_TRUE(rowContextMenuTitles().isEmpty());
+}
+
+TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, HandleRowContextMenuItem_Remove)
+{
+    // [GIVEN] Two instruments, B selected
+    addPart(u"A");
+    addPart(u"B");
+    createModel(); // [A:0] A B
+    m_model->selectRow(row(2));
+
+    // [THEN] B is removed
+    EXPECT_CALL(*m_parts, removeParts(_)).Times(1);
+
+    // [WHEN] "Remove instrument(s)" is chosen
+    const QVariantList menuItems = m_model->rowContextMenuItems();
+    ASSERT_EQ(menuItems.size(), 1);
+    m_model->handleRowContextMenuItem(menuItems.first().toMap().value("id").toString());
 }
 
 TEST_F(InstrumentsScene_LayoutPanelTreeModelTests, MoveRows_InvalidArguments)

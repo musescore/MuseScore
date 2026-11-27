@@ -63,6 +63,7 @@ FocusableControl {
 
     signal expandRequested(bool expand)
     signal ungroupRequested()
+    signal contextMenuRequested(real x, real y)
 
     signal mousePressed()
     signal mouseReleased()
@@ -99,8 +100,21 @@ FocusableControl {
 
     mouseArea.hoverEnabled: root.visible
 
-    mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
-    mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.acceptedButtons: Qt.LeftButton | Qt.RightButton
+    mouseArea.onClicked: function(mouse) {
+        if (mouse.button === Qt.RightButton) {
+            const pos = root.mouseArea.mapToItem(root, mouse.x, mouse.y)
+            root.contextMenuRequested(pos.x, pos.y)
+            return
+        }
+
+        root.clicked(mouse)
+    }
+    mouseArea.onDoubleClicked: function(mouse) {
+        if (mouse.button === Qt.LeftButton) {
+            root.doubleClicked(mouse)
+        }
+    }
     mouseArea.onPressed: { root.mousePressed() }
     mouseArea.onReleased: { root.mouseReleased() }
     mouseArea.onCanceled: { root.mouseReleased() }

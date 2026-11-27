@@ -65,6 +65,7 @@ DropArea {
     signal popupOpenedChanged(bool opened)
     signal navigationActivated(string name)
     signal dragMoved(int position)
+    signal contextMenuRequested(LayoutPanelCard card, real x, real y)
 
     QtObject {
         id: prv
@@ -283,6 +284,14 @@ DropArea {
 
             onUngroupRequested: {
                 Qt.callLater(root.treeModel.ungroupSharedGroup, card.item.id)
+            }
+
+            onContextMenuRequested: function(x, y) {
+                if (card.isSelectable && !card.item.isSelected) {
+                    root.treeModel.selectRow(root.modelIndex)
+                }
+
+                root.contextMenuRequested(card, x, y)
             }
 
             onMousePressed: {

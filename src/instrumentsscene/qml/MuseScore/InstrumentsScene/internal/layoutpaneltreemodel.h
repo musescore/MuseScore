@@ -127,6 +127,10 @@ public:
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
+
+    //! The right-click menu for the selected rows; empty if there is none (e.g. only staves are selected)
+    Q_INVOKABLE QVariantList rowContextMenuItems() const;
+    Q_INVOKABLE void handleRowContextMenuItem(const QString& itemId);
     Q_INVOKABLE void changeVisibilityOfSelectedRows(bool visible);
     Q_INVOKABLE void changeVisibility(const QModelIndex& index, bool visible);
     Q_INVOKABLE void changeEnabledOfSelectedRows(bool enable);
