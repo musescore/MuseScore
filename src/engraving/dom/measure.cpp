@@ -32,6 +32,7 @@
 #include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editmeasurerepeat.h"
+#include "../editing/editproperty.h"
 #include "../editing/editstaff.h"
 #include "../editing/editstavesharing.h"
 #include "../editing/editsystemlocks.h"
@@ -2853,6 +2854,23 @@ void Measure::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
             m->undoChangeProperty(id, v);
         }
     }
+    // Layout forces the end barline of a repeat-end measure to END_REPEAT but
+    // that change bypasses the undo stack. Record it here so undo/redo
+    // restores the original type and generated flag
+    if (id == Pid::REPEAT_END && v.toBool() && !repeatEnd()) {
+        if (Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks())) {
+            for (EngravingItem* e : seg->elist()) {
+                if (e && e->isBarLine() && !e->generated()
+                    && toBarLine(e)->barLineType() != BarLineType::END_REPEAT) {
+                    score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE,
+                                                     PropertyValue::fromValue(BarLineType::END_REPEAT),
+                                                     PropertyFlags::NOSTYLE));
+                    score()->undo(new ChangeProperty(e, Pid::GENERATED, true, PropertyFlags::NOSTYLE));
+                }
+            }
+        }
+    }
+
     EngravingObject::undoChangeProperty(id, v, ps);
 }
 

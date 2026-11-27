@@ -432,3 +432,82 @@ TEST_F(Engraving_BarlineTests, deleteSkipBarlines)
 
     delete score;
 }
+
+//---------------------------------------------------------
+//   undoEndRepeatRestoresBarline
+//   Set a double barline, add an end repeat, undo:
+//   the double barline must come back (#35533).
+//
+//   NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+TEST_F(Engraving_BarlineTests, undoEndRepeatRestoresBarline)
+{
+    MasterScore* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline01.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m = score->firstMeasure();
+    ASSERT_TRUE(m);
+
+    // set a double barline
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
+    score->undoChangeBarLineType(const_cast<BarLine*>(m->endBarLine()), BarLineType::DOUBLE, true);
+    score->endCmd();
+    ASSERT_EQ(m->endBarLineType(), BarLineType::DOUBLE);
+
+    // replace it with an end repeat
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
+    score->undoChangeBarLineType(const_cast<BarLine*>(m->endBarLine()), BarLineType::END_REPEAT, true);
+    score->endCmd();
+    ASSERT_EQ(m->endBarLineType(), BarLineType::END_REPEAT);
+
+    // undo: the double barline must be restored and still user set
+    EditData ed;
+    score->undoRedo(true, &ed);
+    EXPECT_FALSE(m->repeatEnd());
+    EXPECT_EQ(m->endBarLineType(), BarLineType::DOUBLE);
+    EXPECT_FALSE(m->endBarLine()->generated());
+
+    score->undoRedo(false, &ed);
+    EXPECT_TRUE(m->repeatEnd());
+    EXPECT_EQ(m->endBarLineType(), BarLineType::END_REPEAT);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   undoEndRepeatRestoresLastBarline
+//   Set a normal barline on the last measure, add an end repeat, undo:
+//   the normal barline must come back, not the final barline (#35533).
+//
+//   NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+TEST_F(Engraving_BarlineTests, undoEndRepeatRestoresLastBarline)
+{
+    MasterScore* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline01.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m = score->lastMeasure();
+    ASSERT_TRUE(m);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
+    score->undoChangeBarLineType(const_cast<BarLine*>(m->endBarLine()), BarLineType::NORMAL, true);
+    score->endCmd();
+    ASSERT_EQ(m->endBarLineType(), BarLineType::NORMAL);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
+    score->undoChangeBarLineType(const_cast<BarLine*>(m->endBarLine()), BarLineType::END_REPEAT, true);
+    score->endCmd();
+    ASSERT_EQ(m->endBarLineType(), BarLineType::END_REPEAT);
+
+    EditData ed;
+    score->undoRedo(true, &ed);
+    EXPECT_FALSE(m->repeatEnd());
+    EXPECT_EQ(m->endBarLineType(), BarLineType::NORMAL);
+    EXPECT_FALSE(m->endBarLine()->generated());
+
+    score->undoRedo(false, &ed);
+    EXPECT_TRUE(m->repeatEnd());
+    EXPECT_EQ(m->endBarLineType(), BarLineType::END_REPEAT);
+
+    delete score;
+}
