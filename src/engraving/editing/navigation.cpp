@@ -1104,8 +1104,8 @@ EngravingItem* Score::prevElement()
                         return annotation;
                     }
                 }
-                EngravingItem* el = startSeg->lastElementOfSegment(staffId);
-                if (stEl->isChordRest() || stEl->isNote()) {
+
+                if (stEl && (stEl->isChordRest() || stEl->isNote())) {
                     ChordRest* cr = startSeg->cr(stEl->track());
                     if (cr) {
                         EngravingItem* elCr = cr->lastElementBeforeSegment();
@@ -1113,6 +1113,21 @@ EngravingItem* Score::prevElement()
                             return elCr;
                         }
                     }
+                }
+
+                EngravingItem* el = startSeg->lastElementOfSegment(staffId);
+                // Nothing on this staff at the start (a note held through it): walk back
+                for (Segment* s = startSeg->prev1MMenabled(); !el && s; s = s->prev1MMenabled()) {
+                    if (Spanner* spanner = s->lastSpanner(staffId)) {
+                        return spanner->spannerSegments().front();
+                    }
+                    if (EngravingItem* annotation = s->lastAnnotation(staffId)) {
+                        return annotation;
+                    }
+                    el = s->lastElementOfSegment(staffId);
+                }
+                if (!el) {
+                    break;
                 }
                 if (el->isChord()) {
                     return toChord(el)->lastElementBeforeSegment();
