@@ -799,8 +799,6 @@ Note::Note(const Note& n, bool link)
         add(Factory::copyNoteDot(*dot));
     }
     m_mark = n.m_mark;
-    m_jianpuDigit = n.m_jianpuDigit;
-    m_jianpuAccidental = n.m_jianpuAccidental;
 
     setDropTarget(false);
 }
@@ -1241,7 +1239,7 @@ double Note::tabHeadWidth(const StaffType* tab) const
     if (tab && tab->isTabStaff() && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
         Font f = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
-        val = FontMetrics::width(f, m_fretString) * magS();
+        val = FontMetrics::width(f, ldata()->fretString.value()) * magS();
     } else {
         val = headWidth();
     }
@@ -3228,8 +3226,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::DEAD:
         setDeadNote(v.toBool());
         if (!staff()->isDrumStaff(tick())) {
-            NoteHeadGroup head
-                = (m_deadNote && m_headGroup != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
+            NoteHeadGroup head = m_deadNote ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
             setHeadGroup(head);
         }
         break;

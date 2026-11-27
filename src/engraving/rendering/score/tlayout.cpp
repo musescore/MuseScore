@@ -4160,6 +4160,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
     bool useJianpu = item->staff() && item->staff()->isJianpuStaff(item->chord()->tick());
     ldata->useTablature.set_value(useTablature);
+    ldata->fretString = String();
+    ldata->jianpuDigit = String();
+    ldata->jianpuAccidental = String();
 
     RectF noteBBox;
     if (useTablature) {
@@ -4170,21 +4173,23 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
         // not complete but we need systems to be laid out to add parenthesis
+        String fretString;
         if (item->fixed()) {
-            const_cast<Note*>(item)->setFretString(u"/");
+            fretString = u"/";
         } else {
-            const_cast<Note*>(item)->setFretString(tab->fretString(std::fabs(item->fret()), item->string(), item->deadNote()));
+            fretString = tab->fretString(std::fabs(item->fret()), item->string(), item->deadNote());
 
             if (item->negativeFretUsed() && !item->deadNote()) {
-                const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
+                fretString = u"-" + fretString;
             }
 
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
-                const_cast<Note*>(item)->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
+                fretString = String(u"%1 <%2>").arg(fretString, String::number(item->harmonicFret()));
             } else if (item->displayFret() == Note::DisplayFretOption::NaturalHarmonic) {
-                const_cast<Note*>(item)->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
+                fretString = String(u"<%1>").arg(String::number(item->harmonicFret()));
             }
         }
+        ldata->fretString = fretString;
 
         double w = item->tabHeadWidth(tab);
         double mags = item->magS();
@@ -4207,20 +4212,14 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             // tied continuation: accidental was already shown on the tied-from note
             accName = String();
         }
-        const_cast<Note*>(item)->setJianpuDigit(stepName);
-        const_cast<Note*>(item)->setJianpuAccidental(jianpuAccidentalMark(accName));
+        ldata->jianpuDigit = stepName;
+        ldata->jianpuAccidental = jianpuAccidentalMark(accName);
 
         double width = item->headWidth();
         double height = jianpu->jianpuBoxH() * item->magS();
 
         noteBBox = RectF(0, -height * .5, width, height);
     } else {
-        if (item->deadNote()) {
-            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
-        } else if (item->harmonic()) {
-            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
-        }
-
         SymId nh = item->noteHead();
         ldata->cachedNoteheadSym.set_value(nh);
 

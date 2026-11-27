@@ -566,7 +566,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
         painter->setPen(c);
         double startPosX = ldata->bbox().x();
 
-        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), ldata->fretString.value());
     }
     // NOT tablature
     else {

@@ -1520,7 +1520,7 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
         padding = std::max(padding, static_cast<double>(style.styleAbsolute(Sid::graceToMainNoteDist)));
     }
 
-    if (!note->fretString().empty() && item2->isNote()) { // This is a TAB fret mark
+    if (!note->ldata()->fretString.value().empty() && item2->isNote()) { // This is a TAB fret mark
         static constexpr double tabFretPaddingIncrease = 1.5; // TODO: style?
         padding *= tabFretPaddingIncrease;
     }

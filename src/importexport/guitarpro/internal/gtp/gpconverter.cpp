@@ -692,7 +692,10 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addPalmMute(gpnote, note);
     note->setGhost(gpnote->ghostNote());
 
-    note->setDeadNote(gpnote->muted());
+    if (gpnote->muted()) {
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+        note->setDeadNote(true);
+    }
     addAccent(gpnote, note);
     addSlide(gpnote, note);
     addPickScrape(gpnote, note);
@@ -1885,6 +1888,9 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     harmonicNote->setPitch(harmonicPitch);
     harmonicNote->setTpcFromPitch();
     harmonicNote->setHarmonic(true);
+    if (!harmonicNote->deadNote()) {
+        harmonicNote->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+    }
     note->setHarmonicPitchOffset(harmonicNote->pitch() - note->pitch());
 
     if (GPNote::Harmonic::isArtificial(gpnote->harmonic().type) && m_currentGPBeat) {

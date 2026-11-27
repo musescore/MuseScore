@@ -2437,7 +2437,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 
         const double startPosX = ldata->bbox().x();
         const double yOffset = tab->fretFontYOffset();
-        painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
+        painter->drawText(PointF(startPosX, yOffset * item->magS()), ldata->fretString.value());
     }
     // Jianpu
     else if (staffType && item->onJianpuStaff()) {
@@ -2446,12 +2446,12 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         painter->setFont(f);
 
         FontMetrics fm(f);
-        const double fw = fm.width(item->jianpuDigit());
+        const double fw = fm.width(ldata->jianpuDigit.value());
         const double bw = ldata->bbox().width();
         const double startPosX = ldata->bbox().x() + (bw - fw) * .5;
         const double startPosY = ldata->bbox().bottom();
-        drawJianpuAccidental(painter, f, fm, item->jianpuAccidental(), startPosX, startPosY);
-        painter->drawText(PointF(startPosX, startPosY), item->jianpuDigit());
+        drawJianpuAccidental(painter, f, fm, ldata->jianpuAccidental.value(), startPosX, startPosY);
+        painter->drawText(PointF(startPosX, startPosY), ldata->jianpuDigit.value());
     } else {
         // skip drawing, if second note of a cross-measure value
         if (item->chord() && item->chord()->crossMeasure() == CrossMeasure::SECOND) {
