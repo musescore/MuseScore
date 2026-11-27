@@ -199,7 +199,7 @@
         <eid>FJZ1BoUqwmH_OVhEMUFdBFF</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>QYL7/BYQcyD_ecJslQgdUgD</eid>
           </Fermata>
           <Chord>
@@ -214,7 +214,7 @@
         </voice>
         <voice>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>XavukKd5dlP_aIKEX2O5MUL</eid>
           </Fermata>
           <Chord>
