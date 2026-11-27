@@ -269,10 +269,10 @@ public:
     void doGlissandoStop(Glissando* gliss, Notations& notations, XmlWriter& xml);
 
 private:
-    int findNote(const Note* note, int type) const;
+    int findGlissando(const Glissando* gliss, int type) const;
 
-    const Note* m_glissNote[MAX_NUMBER_LEVEL];
-    const Note* m_slideNote[MAX_NUMBER_LEVEL];
+    const Glissando* m_gliss[MAX_NUMBER_LEVEL];
+    const Glissando* m_slide[MAX_NUMBER_LEVEL];
 };
 
 //---------------------------------------------------------
@@ -1017,27 +1017,27 @@ GlissandoHandler::GlissandoHandler()
 void GlissandoHandler::reset()
 {
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-        m_glissNote[i] = 0;
-        m_slideNote[i] = 0;
+        m_gliss[i] = nullptr;
+        m_slide[i] = nullptr;
     }
 }
 
 //---------------------------------------------------------
-//   findNote -- get index of Note in note table for subtype type
+//   findGlissando -- get index of Glissando in table for subtype type
 //   return -1 if not found
 //---------------------------------------------------------
 
-int GlissandoHandler::findNote(const Note* note, int type) const
+int GlissandoHandler::findGlissando(const Glissando* gliss, int type) const
 {
     if (type != 0 && type != 1) {
-        LOGD("GlissandoHandler::findNote: unknown glissando subtype %d", type);
+        LOGD("GlissandoHandler::findGlissando: unknown glissando subtype %d", type);
         return -1;
     }
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-        if (type == 0 && m_slideNote[i] == note) {
+        if (type == 0 && m_slide[i] == gliss) {
             return i;
         }
-        if (type == 1 && m_glissNote[i] == note) {
+        if (type == 1 && m_gliss[i] == gliss) {
             return i;
         }
     }
@@ -1055,31 +1055,29 @@ void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, 
         LOGD("doGlissandoStart: unknown glissando subtype %d", int(type));
         return;
     }
-    Note* note = toNote(gliss->startElement());
-    // check if on chord list
-    int i = findNote(note, int(type));
+    int t = (type == GlissandoType::STRAIGHT) ? 0 : 1;
+    int i = findGlissando(gliss, t);
     if (i >= 0) {
-        // print error and remove from list
-        LOGD("doGlissandoStart: note for glissando/slide %p already on list", gliss);
-        if (type == GlissandoType::STRAIGHT) {
-            m_slideNote[i] = 0;
-        }
-        if (type == GlissandoType::WAVY) {
-            m_glissNote[i] = 0;
-        }
-    }
-    // find free slot to store it
-    i = findNote(0, int(type));
-    if (i >= 0) {
-        if (type == GlissandoType::STRAIGHT) {
-            m_slideNote[i] = note;
-        }
-        if (type == GlissandoType::WAVY) {
-            m_glissNote[i] = note;
+        // stop was already seen (out-of-order)
+        if (t == 0) {
+            m_slide[i] = nullptr;
+        } else {
+            m_gliss[i] = nullptr;
         }
         glissando(gliss, i + 1, true, notations, xml);
     } else {
-        LOGD("doGlissandoStart: no free slot");
+        // find free slot
+        i = findGlissando(nullptr, t);
+        if (i >= 0) {
+            if (t == 0) {
+                m_slide[i] = gliss;
+            } else {
+                m_gliss[i] = gliss;
+            }
+            glissando(gliss, i + 1, true, notations, xml);
+        } else {
+            LOGD("doGlissandoStart: no free slot");
+        }
     }
 }
 
@@ -1091,23 +1089,33 @@ void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, X
 {
     GlissandoType type = gliss->glissandoType();
     if (type != GlissandoType::STRAIGHT && type != GlissandoType::WAVY) {
-        LOGD("doGlissandoStart: unknown glissando subtype %d", int(type));
+        LOGD("doGlissandoStop: unknown glissando subtype %d", int(type));
         return;
     }
-    Note* note = toNote(gliss->startElement());
-    for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-        if (type == GlissandoType::STRAIGHT && m_slideNote[i] == note) {
-            m_slideNote[i] = 0;
+    int t = (type == GlissandoType::STRAIGHT) ? 0 : 1;
+    int i = findGlissando(gliss, t);
+    if (i < 0) {
+        // start not seen yet (out-of-order)
+        i = findGlissando(nullptr, t);
+        if (i >= 0) {
+            if (t == 0) {
+                m_slide[i] = gliss;
+            } else {
+                m_gliss[i] = gliss;
+            }
             glissando(gliss, i + 1, false, notations, xml);
-            return;
+        } else {
+            LOGD("doGlissandoStop: no free slot");
         }
-        if (type == GlissandoType::WAVY && m_glissNote[i] == note) {
-            m_glissNote[i] = 0;
-            glissando(gliss, i + 1, false, notations, xml);
-            return;
+    } else {
+        // found (already started), stop it and clear slot
+        if (t == 0) {
+            m_slide[i] = nullptr;
+        } else {
+            m_gliss[i] = nullptr;
         }
+        glissando(gliss, i + 1, false, notations, xml);
     }
-    LOGD("doGlissandoStop: glissando note %p not found", note);
 }
 
 //---------------------------------------------------------
