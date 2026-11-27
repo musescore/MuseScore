@@ -2793,9 +2793,45 @@ struct AddFiguredBassCommand {
 };
 
 // add brackets commands
-inline static const muse::rcommand::Command ADD_BRACKETS_COMMAND("command://notation/add-brackets");
-inline static const muse::rcommand::Command ADD_PARENTHESES_COMMAND("command://notation/add-parentheses");
-inline static const muse::rcommand::Command ADD_BRACES_COMMAND("command://notation/add-braces");
+
+struct AddAccidentalBracketsCommand {
+    cprop_decl id = Command("command://notation/add-accidental-brackets");
+    cprop_decl title = MnemonicString("action", "Add brackets or braces to accidental");
+    cprop_decl description = TranslatableString("action", "Add brackets or braces to the selected accidental");
+    cprop_decl availabilities = Availability::API;
+
+    AccidentalBracketsMode mode = AccidentalBracketsMode::Brackets;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "mode", &AddAccidentalBracketsCommand::mode, "Brackets or braces" },
+    };
+};
+
+struct AddBracketsCommand {
+    cprop_decl id = Command("command://notation/add-accidental-brackets/brackets");
+    cprop_decl title = MnemonicString("action", "Add brackets to accidental");
+    cprop_decl description = TranslatableString("action", "Add brackets to accidental");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BRACKET_PARENTHESES_SQUARE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddAccidentalBracketsCommand(AccidentalBracketsMode::Brackets);
+};
+
+struct AddBracesCommand {
+    cprop_decl id = Command("command://notation/add-accidental-brackets/braces");
+    cprop_decl title = MnemonicString("action", "Add braces to element");
+    cprop_decl description = TranslatableString("action", "Add braces to element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BRACE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddAccidentalBracketsCommand(AccidentalBracketsMode::Braces);
+};
+
+struct ToggleParenthesesCommand {
+    cprop_decl id = Command("command://notation/add-parentheses");
+    cprop_decl title = MnemonicString("action", "Add parentheses to element");
+    cprop_decl description = TranslatableString("action", "Add parentheses to element");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::BRACKET_PARENTHESES);
+    cprop_decl availabilities = Availability::All;
+};
 
 // clef commands
 
@@ -2921,25 +2957,103 @@ struct JoinMeasuresCommand {
     cprop_decl availabilities = Availability::All;
 };
 
-// layout commands: section
-inline static const muse::rcommand::Command TOGGLE_SECTION_BREAK_COMMAND("command://notation/toggle-section-break");
+// layout commands: breaks
+
+struct ToggleLayoutBreakCommand {
+    cprop_decl id = Command("command://notation/toggle-layout-break");
+    cprop_decl title = MnemonicString("action", "Add/remove layout break");
+    cprop_decl description = TranslatableString("action", "Add/remove a system, page, or section break");
+    cprop_decl availabilities = Availability::API;
+
+    LayoutBreakMode type = LayoutBreakMode::System;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &ToggleLayoutBreakCommand::type, "Layout break type" },
+    };
+};
+
+struct ToggleSystemBreakCommand {
+    cprop_decl id = Command("command://notation/toggle-layout-break/system");
+    cprop_decl title = MnemonicString("action", "Add/remove system break");
+    cprop_decl description = TranslatableString("action", "Add/remove system break");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleLayoutBreakCommand(LayoutBreakMode::System);
+};
+
+struct TogglePageBreakCommand {
+    cprop_decl id = Command("command://notation/toggle-layout-break/page");
+    cprop_decl title = MnemonicString("action", "Add/remove page break");
+    cprop_decl description = TranslatableString("action", "Add/remove page break");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleLayoutBreakCommand(LayoutBreakMode::Page);
+};
+
+struct ToggleSectionBreakCommand {
+    cprop_decl id = Command("command://notation/toggle-layout-break/section");
+    cprop_decl title = MnemonicString("action", "Add/remove section break");
+    cprop_decl description = TranslatableString("action", "Add/remove section break");
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = ToggleLayoutBreakCommand(LayoutBreakMode::Section);
+};
 
 // layout commands: system
-inline static const muse::rcommand::Command TOGGLE_SYSTEM_BREAK_COMMAND("command://notation/toggle-system-break");
-inline static const muse::rcommand::Command APPLY_SYSTEM_LOCK_COMMAND("command://notation/apply-system-lock");
-inline static const muse::rcommand::Command TOGGLE_SYSTEM_LOCK_COMMAND("command://notation/toggle-system-lock");
-inline static const muse::rcommand::Command MAKE_INTO_SYSTEM_COMMAND("command://notation/make-into-system");
+
+struct ApplySystemLockCommand {
+    cprop_decl id = Command("command://notation/apply-system-lock");
+    cprop_decl title = MnemonicString("action", "Add/remove system lock");
+    cprop_decl description = TranslatableString("action", "Add/remove system lock");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct ToggleSystemLockCommand {
+    cprop_decl id = Command("command://notation/toggle-system-lock");
+    cprop_decl title = MnemonicString("action", "Lock/unlock selected system(s)");
+    cprop_decl description = TranslatableString("action", "Lock/unlock selected system(s)");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::SYSTEM_LOCK);
+    cprop_decl availabilities = Availability::All;
+};
+
+struct MakeIntoSystemCommand {
+    cprop_decl id = Command("command://notation/make-into-system");
+    cprop_decl title = MnemonicString("action", "Create system from selection");
+    cprop_decl description = TranslatableString("action", "Create system from selection");
+    cprop_decl availabilities = Availability::All;
+};
+
 inline static const muse::rcommand::Command MOVE_SYSTEM_TO_PREV_PAGE_COMMAND("command://notation/move-system-to-prev-page");
 inline static const muse::rcommand::Command MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND("command://notation/move-system-to-next-page");
 
 // layout commands: page
-inline static const muse::rcommand::Command TOGGLE_PAGE_BREAK_COMMAND("command://notation/toggle-page-break");
-inline static const muse::rcommand::Command APPLY_PAGE_LOCK_COMMAND("command://notation/apply-page-lock");
-inline static const muse::rcommand::Command TOGGLE_PAGE_LOCK_COMMAND("command://notation/toggle-page-lock");
-inline static const muse::rcommand::Command MAKE_INTO_PAGE_COMMAND("command://notation/make-into-page");
+
+struct ApplyPageLockCommand {
+    cprop_decl id = Command("command://notation/apply-page-lock");
+    cprop_decl title = MnemonicString("action", "Add/remove page lock");
+    cprop_decl description = TranslatableString("action", "Add/remove page lock");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct TogglePageLockCommand {
+    cprop_decl id = Command("command://notation/toggle-page-lock");
+    cprop_decl title = MnemonicString("action", "Lock/unlock selected page(s)");
+    cprop_decl description = TranslatableString("action", "Lock/unlock selected page(s)");
+    cprop_decl availabilities = Availability::All;
+};
+
+struct MakeIntoPageCommand {
+    cprop_decl id = Command("command://notation/make-into-page");
+    cprop_decl title = MnemonicString("action", "Create page from selection");
+    cprop_decl description = TranslatableString("action", "Create page from selection");
+    cprop_decl availabilities = Availability::All;
+};
 
 // layout commands: score
-inline static const muse::rcommand::Command TOGGLE_SCORE_LOCK_COMMAND("command://notation/toggle-score-lock");
+
+struct ToggleScoreLockCommand {
+    cprop_decl id = Command("command://notation/toggle-score-lock");
+    cprop_decl title = MnemonicString("action", "Lock/unlock all systems");
+    cprop_decl description = TranslatableString("action", "Lock/unlock all systems");
+    cprop_decl availabilities = Availability::All;
+};
 
 // layout commands: stretch
 
@@ -3129,7 +3243,6 @@ struct ResetToDefaultLayoutCommand {
 };
 
 // appearance commands
-
 struct FreezeCurrentPlacementCommand {
     cprop_decl id = Command("command://notation/freeze-current-placement");
     cprop_decl title = MnemonicString("action", "Freeze current placement");
@@ -3446,14 +3559,94 @@ inline static const muse::rcommand::Command SET_DURATION_256TH_TAB_COMMAND("comm
 inline static const muse::rcommand::Command SET_DURATION_512TH_TAB_COMMAND("command://notation/set-duration-512th-tab");
 inline static const muse::rcommand::Command SET_DURATION_1024TH_TAB_COMMAND("command://notation/set-duration-1024th-tab");
 
-inline static const muse::rcommand::Command ADD_STANDARD_BEND_COMMAND("command://notation/add-standard-bend");
-inline static const muse::rcommand::Command ADD_PRE_BEND_COMMAND("command://notation/add-pre-bend");
-inline static const muse::rcommand::Command ADD_GRACE_NOTE_BEND_COMMAND("command://notation/add-grace-note-bend");
-inline static const muse::rcommand::Command ADD_SLIGHT_BEND_COMMAND("command://notation/add-slight-bend");
-inline static const muse::rcommand::Command ADD_DIVE_COMMAND("command://notation/add-dive");
-inline static const muse::rcommand::Command ADD_PRE_DIVE_COMMAND("command://notation/add-pre-dive");
-inline static const muse::rcommand::Command ADD_DIP_COMMAND("command://notation/add-dip");
-inline static const muse::rcommand::Command ADD_SCOOP_COMMAND("command://notation/add-scoop");
+struct AddGuitarBendCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend");
+    cprop_decl title = MnemonicString("action", "Add guitar bend");
+    cprop_decl description = TranslatableString("action", "Add a guitar bend");
+    cprop_decl availabilities = Availability::API;
+
+    GuitarBendType type = GuitarBendType::BEND;
+
+    cprop_decl input = FieldsScheme {
+        Field{ "type", &AddGuitarBendCommand::type, "Guitar bend type" },
+    };
+};
+
+struct AddStandardBendCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/bend");
+    cprop_decl title = MnemonicString("action", "Standard bend");
+    cprop_decl description = TranslatableString("action", "Add standard bend");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_BEND_REGULAR);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::BEND);
+};
+
+struct AddPreBendCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/pre-bend");
+    cprop_decl title = MnemonicString("action", "Pre-bend");
+    cprop_decl description = TranslatableString("action", "Add pre-bend");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_PRE_BEND);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::PRE_BEND);
+};
+
+struct AddGraceNoteBendCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/grace-note-bend");
+    cprop_decl title = MnemonicString("action", "Grace note bend");
+    cprop_decl description = TranslatableString("action", "Add grace note bend");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_GRACE_NOTE_BEND);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::GRACE_NOTE_BEND);
+};
+
+struct AddSlightBendCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/slight-bend");
+    cprop_decl title = MnemonicString("action", "Slight bend");
+    cprop_decl description = TranslatableString("action", "Add slight bend");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_SLIGHT_BEND);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::SLIGHT_BEND);
+};
+
+struct AddDiveCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/dive");
+    //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
+    cprop_decl title = MnemonicString("action", "Dive");
+    cprop_decl description = TranslatableString("action", "Add dive");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_DIVE_REGULAR);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::DIVE);
+};
+
+struct AddPreDiveCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/pre-dive");
+    //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
+    cprop_decl title = MnemonicString("action", "Pre-dive");
+    cprop_decl description = TranslatableString("action", "Add pre-dive");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_PRE_DIVE);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::PRE_DIVE);
+};
+
+struct AddDipCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/dip");
+    //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
+    cprop_decl title = MnemonicString("action", "Dip");
+    cprop_decl description = TranslatableString("action", "Add dip");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_DIP_DOWN);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::DIP);
+};
+
+struct AddScoopCommand {
+    cprop_decl id = Command("command://notation/add-guitar-bend/scoop");
+    //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
+    cprop_decl title = MnemonicString("action", "Scoop");
+    cprop_decl description = TranslatableString("action", "Add scoop");
+    cprop_decl decoration = Decoration(muse::ui::IconCode::Code::GUITAR_SCOOP);
+    cprop_decl availabilities = Availability::UI;
+    cprop_decl redirect = AddGuitarBendCommand(GuitarBendType::SCOOP);
+};
 
 inline static const muse::rcommand::Command ADD_HAMMER_ON_PULL_OFF_COMMAND("command://notation/add-hammer-on-pull-off");
 

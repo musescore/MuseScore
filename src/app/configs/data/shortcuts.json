@@ -165,8 +165,8 @@
         {"command": "command://notation/voice-assignment-all-in-instrument",  "sequences": ["Ctrl+Alt+5"]},
         {"command": "command://notation/voice-assignment-all-in-staff",  "sequences": ["Ctrl+Alt+6"]},
         {"command": "command://notation/select/all",  "sequences": ["Ctrl+A"]},
-        {"command": "command://notation/toggle-system-break",  "sequences": ["Return","Enter"]},
-        {"command": "command://notation/toggle-page-break",  "sequences": ["Ctrl+Return","Ctrl+Enter"]},
+        {"command": "command://notation/toggle-layout-break/system",  "sequences": ["Return","Enter"]},
+        {"command": "command://notation/toggle-layout-break/page",  "sequences": ["Ctrl+Return","Ctrl+Enter"]},
         {"command": "command://notation/apply-system-lock",  "sequences": ["Alt+Return","Alt+Enter"]},
         {"command": "command://notation/reset-shapes-and-positions",  "sequences": ["Ctrl+R"]},
         {"command": "command://notation/freeze-current-placement",  "sequences": ["Ctrl+Alt+Shift+F"]},
@@ -189,8 +189,8 @@
         {"command": "command://notation/toggle-mmrest",  "sequences": ["Ctrl+Shift+M"], "autorepeat": false},
         {"command": "command://notation/toggle-note-input/toggle-insert-mode",  "sequences": ["Ctrl+I"]},
         {"command": "command://notation/view/context-menu-of-selection",  "sequences": ["Shift+F10","Ctrl+Shift+F10"]},
-        {"command": "command://notation/add-standard-bend",  "sequences": ["Alt+B"]},
-        {"command": "command://notation/add-grace-note-bend",  "sequences": ["Ctrl+Alt+B"]}
+        {"command": "command://notation/add-guitar-bend/bend",  "sequences": ["Alt+B"]},
+        {"command": "command://notation/add-guitar-bend/grace-note-bend",  "sequences": ["Ctrl+Alt+B"]}
       ]
     },
     {

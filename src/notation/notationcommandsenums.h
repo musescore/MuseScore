@@ -299,6 +299,21 @@ struct RespellPitchesModeContract {
     } };
 };
 
+struct AccidentalBracketsModeContract {
+    static constexpr EnumTable<AccidentalBracketsMode, 2> table { {
+        { "brackets", AccidentalBracketsMode::Brackets, "brackets" },
+        { "braces", AccidentalBracketsMode::Braces, "braces" },
+    } };
+};
+
+struct LayoutBreakModeContract {
+    static constexpr EnumTable<LayoutBreakMode, 3> table { {
+        { "system", LayoutBreakMode::System, "system break" },
+        { "page", LayoutBreakMode::Page, "page break" },
+        { "section", LayoutBreakMode::Section, "section break" },
+    } };
+};
+
 struct OttavaTypeContract {
     static constexpr EnumTable<OttavaType, 6> table { {
         { "8va", OttavaType::OTTAVA_8VA, "8va alta" },
@@ -316,6 +331,19 @@ struct HairpinTypeContract {
         { "diminuendo", HairpinType::DIM_HAIRPIN, "diminuendo hairpin" },
         { "crescendo-line", HairpinType::CRESC_LINE, "crescendo line" },
         { "diminuendo-line", HairpinType::DIM_LINE, "diminuendo line" },
+    } };
+};
+
+struct GuitarBendTypeContract {
+    static constexpr EnumTable<GuitarBendType, 8> table { {
+        { "bend", GuitarBendType::BEND, "standard bend" },
+        { "pre-bend", GuitarBendType::PRE_BEND, "pre-bend" },
+        { "grace-note-bend", GuitarBendType::GRACE_NOTE_BEND, "grace note bend" },
+        { "slight-bend", GuitarBendType::SLIGHT_BEND, "slight bend" },
+        { "dive", GuitarBendType::DIVE, "dive" },
+        { "pre-dive", GuitarBendType::PRE_DIVE, "pre-dive" },
+        { "dip", GuitarBendType::DIP, "dip" },
+        { "scoop", GuitarBendType::SCOOP, "scoop" },
     } };
 };
 
@@ -458,8 +486,11 @@ DECLARE_ENUM_CONTRACT(mu::notation::BowTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::StaffImplodeExplodeModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::EnharmonicSpellingModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::RespellPitchesModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::AccidentalBracketsModeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::LayoutBreakModeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::OttavaTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::HairpinTypeContract);
+DECLARE_ENUM_CONTRACT(mu::notation::GuitarBendTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::TransposeDirectionContract);
 DECLARE_ENUM_CONTRACT(mu::notation::ScoreConfigTypeContract);
 DECLARE_ENUM_CONTRACT(mu::notation::PastingTypeContract);

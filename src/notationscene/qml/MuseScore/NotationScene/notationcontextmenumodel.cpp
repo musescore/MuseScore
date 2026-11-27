@@ -156,7 +156,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     if (projectSession()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
         items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
     }
-    items << makeMenuItem(MAKE_INTO_SYSTEM_COMMAND);
+    items << makeMenuItem(MakeIntoSystemCommand::id);
     items << makeSeparator();
     items << makeMenuItem(OpenMeasurePropertiesCommand::id);
 

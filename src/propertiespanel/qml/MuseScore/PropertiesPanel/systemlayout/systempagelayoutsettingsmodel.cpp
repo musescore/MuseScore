@@ -123,7 +123,7 @@ QString SystemPageLayoutSettingsModel::shortcutMoveSystemDownPage() const
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoPage() const
 {
-    return shortcutsForCommand(MAKE_INTO_PAGE_COMMAND);
+    return shortcutsForCommand(MakeIntoPageCommand::id);
 }
 
 void SystemPageLayoutSettingsModel::makeIntoPage()
@@ -189,7 +189,7 @@ void SystemPageLayoutSettingsModel::toggleSystemLock()
 
 QString SystemPageLayoutSettingsModel::shortcutToggleSystemLock() const
 {
-    return shortcutsForCommand(TOGGLE_SYSTEM_LOCK_COMMAND);
+    return shortcutsForCommand(ToggleSystemLockCommand::id);
 }
 
 void SystemPageLayoutSettingsModel::togglePageLock()
@@ -203,7 +203,7 @@ void SystemPageLayoutSettingsModel::togglePageLock()
 
 QString SystemPageLayoutSettingsModel::shortcutTogglePageLock() const
 {
-    return shortcutsForCommand(TOGGLE_PAGE_LOCK_COMMAND);
+    return shortcutsForCommand(TogglePageLockCommand::id);
 }
 
 bool SystemPageLayoutSettingsModel::allSystemsAreLocked() const
@@ -416,5 +416,5 @@ void SystemPageLayoutSettingsModel::makeIntoSystem()
 
 QString SystemPageLayoutSettingsModel::shortcutMakeIntoSystem() const
 {
-    return shortcutsForCommand(MAKE_INTO_SYSTEM_COMMAND);
+    return shortcutsForCommand(MakeIntoSystemCommand::id);
 }
