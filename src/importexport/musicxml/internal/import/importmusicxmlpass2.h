@@ -23,6 +23,7 @@
 #pragma once
 
 #include <array>
+#include <set>
 
 #include "importmusicxmlpass1.h"
 #include "../shared/musicxmlsupport.h"
@@ -447,6 +448,7 @@ private:
     void initPartState(const muse::String& partId);
     SpannerSet findIncompleteSpannersAtPartEnd();
     engraving::Err parse();
+    void linkAlternateStaves();
     void scorePartwise();
     void partList();
     void scorePart();
@@ -499,6 +501,7 @@ private:
     MusicXmlParserPass1& m_pass1;          // the pass1 results
     MusicXmlLogger* m_logger = nullptr;    // Error logger
     muse::String m_errors;                       // Errors to present to the user
+    std::set<engraving::staff_idx_t> m_alternateStaves;  // staves marked as the same music as the staff above
 
     // part specific data (TODO: move to part-specific class)
 
