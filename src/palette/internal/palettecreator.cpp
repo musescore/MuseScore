@@ -982,7 +982,8 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
         FermataType::LongHenze,
         FermataType::ShortHenze,
         FermataType::VeryLong,
-        FermataType::VeryShort
+        FermataType::VeryShort,
+        FermataType::Curlew
     };
 
     // Breaths
