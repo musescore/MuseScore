@@ -116,7 +116,7 @@
         <eid>R_R</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>S_S</eid>
             </Fermata>
@@ -167,7 +167,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>d_d</eid>
             </Fermata>
@@ -255,7 +255,7 @@
         <eid>v_v</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>w_w</eid>
             </Fermata>
@@ -306,7 +306,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>7_7</eid>
             </Fermata>
@@ -376,7 +376,7 @@
         <eid>JB_JB</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>KB_KB</eid>
             </Fermata>
@@ -459,7 +459,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>cB_cB</eid>
             </Fermata>
@@ -531,7 +531,7 @@
       <Measure>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>pB_pB</eid>
             </Fermata>
@@ -595,7 +595,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>2B_2B</eid>
             </Fermata>
@@ -703,7 +703,7 @@
       <Measure>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>LC_LC</eid>
             </Fermata>
@@ -753,7 +753,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>VC_VC</eid>
             </Fermata>
@@ -821,7 +821,7 @@
       <Measure>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>iC_iC</eid>
             </Fermata>
@@ -911,7 +911,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <timeStretch>-1</timeStretch>
             <eid>0C_0C</eid>
             </Fermata>

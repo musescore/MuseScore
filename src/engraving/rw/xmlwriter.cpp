@@ -335,6 +335,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::MARKER_TYPE: {
         element(name, TConv::toXml(data.value<MarkerType>()));
     } break;
+    case P_TYPE::FERMATA_TYPE: {
+        element(name, TConv::toXml(data.value<FermataType>()));
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

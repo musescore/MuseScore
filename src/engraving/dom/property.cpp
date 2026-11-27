@@ -471,6 +471,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::PREFER_SHARP_FLAT,                   P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "preferSharpFlat",                 QT_TRANSLATE_NOOP("engraving/propertyName", "prefer sharps or flats") },
 
     { Pid::PLAY_TECH_TYPE,                      P_TYPE::PLAYTECH_TYPE,             PropertyGroup::APPEARANCE, true,  "playTechType",                    QT_TRANSLATE_NOOP("engraving/propertyName", "playing technique type") },
+    { Pid::FERMATA_TYPE,                        P_TYPE::FERMATA_TYPE,              PropertyGroup::APPEARANCE, true,  "fermataType",                     QT_TRANSLATE_NOOP("engraving/propertyName", "fermata type") },
 
     { Pid::TEMPO_CHANGE_TYPE,                   P_TYPE::TEMPOCHANGE_TYPE,          PropertyGroup::APPEARANCE, true,  "tempoChangeType",                 QT_TRANSLATE_NOOP("engraving/propertyName", "gradual tempo change type") },
     { Pid::TEMPO_EASING_METHOD,                 P_TYPE::CHANGE_METHOD,             PropertyGroup::APPEARANCE, true,  "tempoEasingMethod",               QT_TRANSLATE_NOOP("engraving/propertyName", "tempo easing method") },

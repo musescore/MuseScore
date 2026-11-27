@@ -96,7 +96,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>I_I</eid>
             </Fermata>
           <Chord>
@@ -109,7 +109,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>L_L</eid>
             </Fermata>
           <Chord>
@@ -122,7 +122,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>O_O</eid>
             </Fermata>
           <Chord>
@@ -135,7 +135,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataBelow</subtype>
+            <fermataType>normal</fermataType>
             <eid>R_R</eid>
             <placement>below</placement>
             </Fermata>
@@ -154,7 +154,7 @@
         <eid>U_U</eid>
         <voice>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>V_V</eid>
             </Fermata>
           <Chord>
@@ -167,7 +167,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>Y_Y</eid>
             </Fermata>
           <Chord>
@@ -180,7 +180,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>b_b</eid>
             </Fermata>
           <Chord>
@@ -193,7 +193,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataShortBelow</subtype>
+            <fermataType>short</fermataType>
             <eid>e_e</eid>
             <placement>below</placement>
             </Fermata>
@@ -212,7 +212,7 @@
         <eid>h_h</eid>
         <voice>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>i_i</eid>
             </Fermata>
           <Chord>
@@ -225,7 +225,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>l_l</eid>
             </Fermata>
           <Chord>
@@ -238,7 +238,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>o_o</eid>
             </Fermata>
           <Chord>
@@ -251,7 +251,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataLongBelow</subtype>
+            <fermataType>long</fermataType>
             <eid>r_r</eid>
             <placement>below</placement>
             </Fermata>
@@ -274,7 +274,7 @@
           </LayoutBreak>
         <voice>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>w_w</eid>
             </Fermata>
           <Chord>
@@ -287,7 +287,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>z_z</eid>
             </Fermata>
           <Chord>
@@ -300,7 +300,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>2_2</eid>
             </Fermata>
           <Chord>
@@ -313,7 +313,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataVeryLongBelow</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>5_5</eid>
             <placement>below</placement>
             </Fermata>
@@ -2439,7 +2439,7 @@
         <eid>LI_LI</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>MI_MI</eid>
             </Fermata>
           <Rest>
@@ -2447,7 +2447,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataShortAbove</subtype>
+            <fermataType>short</fermataType>
             <eid>OI_OI</eid>
             </Fermata>
           <Rest>
@@ -2455,7 +2455,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataLongAbove</subtype>
+            <fermataType>long</fermataType>
             <eid>QI_QI</eid>
             </Fermata>
           <Rest>
@@ -2463,7 +2463,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
+            <fermataType>veryLong</fermataType>
             <eid>SI_SI</eid>
             </Fermata>
           <Rest>

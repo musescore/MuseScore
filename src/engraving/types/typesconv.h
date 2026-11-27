@@ -192,6 +192,9 @@ public:
     static AsciiStringView toXml(TremoloBarType v);
     static TremoloBarType fromXml(const AsciiStringView& str, TremoloBarType def);
 
+    static AsciiStringView toXml(FermataType v);
+    static FermataType fromXml(const AsciiStringView& str, FermataType def);
+
     static const TranslatableString& userName(BracketType v);
     static String translatedUserName(BracketType v);
     static AsciiStringView toXml(BracketType v);

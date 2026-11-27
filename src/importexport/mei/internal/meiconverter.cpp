@@ -1554,7 +1554,12 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
         symId = engraving::SymId::fermataBelow;
     }
 
-    fermata->setSymId(symId);
+    const engraving::FermataType fermataType = engraving::Fermata::fermataTypeFromSymId(symId);
+    if (fermataType == engraving::FermataType::Undefined) {
+        warning = true;
+    }
+
+    fermata->setFermataType(fermataType);
     if (below) {
         fermata->setPlacement(engraving::PlacementV::BELOW);
     }
@@ -1567,35 +1572,25 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
 {
     libmei::Fermata meiFermata;
 
-    bool below = false;
+    const engraving::FermataType fermataType = fermata->fermataType();
+    const bool below = fermataType != engraving::FermataType::Undefined && fermataType != engraving::FermataType::Curlew
+                       && !fermata->placeAbove();
     bool smufl = false;
     // @shape and @glyph.name
-    switch (fermata->symId()) {
-    case (engraving::SymId::fermataAbove): break;
-    case (engraving::SymId::fermataBelow): below = true;
+    switch (fermataType) {
+    case engraving::FermataType::Normal:
         break;
-    case (engraving::SymId::fermataLongAbove): meiFermata.SetShape(libmei::fermataVis_SHAPE_square);
+    case engraving::FermataType::Long: meiFermata.SetShape(libmei::fermataVis_SHAPE_square);
         break;
-    case (engraving::SymId::fermataLongBelow): meiFermata.SetShape(libmei::fermataVis_SHAPE_square);
-        below = true;
+    case engraving::FermataType::Short: meiFermata.SetShape(libmei::fermataVis_SHAPE_angular);
         break;
-    case (engraving::SymId::fermataShortAbove): meiFermata.SetShape(libmei::fermataVis_SHAPE_angular);
+    case engraving::FermataType::LongHenze:
+    case engraving::FermataType::VeryLong:
+    case engraving::FermataType::ShortHenze:
+    case engraving::FermataType::VeryShort: smufl = true;
         break;
-    case (engraving::SymId::fermataShortBelow): meiFermata.SetShape(libmei::fermataVis_SHAPE_angular);
-        below = true;
-        break;
-    case (engraving::SymId::fermataLongHenzeAbove):
-    case (engraving::SymId::fermataVeryLongAbove):
-    case (engraving::SymId::fermataShortHenzeAbove):
-    case (engraving::SymId::fermataVeryShortAbove): smufl = true;
-        break;
-    case (engraving::SymId::fermataLongHenzeBelow):
-    case (engraving::SymId::fermataVeryLongBelow):
-    case (engraving::SymId::fermataShortHenzeBelow):
-    case (engraving::SymId::fermataVeryShortBelow): smufl = true;
-        below = true;
-        break;
-    default:
+    case engraving::FermataType::Curlew:
+    case engraving::FermataType::Undefined:
         break;
     }
     // @place
@@ -1604,7 +1599,7 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     }
     // @glyph.name
     if (smufl) {
-        AsciiStringView glyphName = engraving::SymNames::nameForSymId(fermata->symId());
+        AsciiStringView glyphName = engraving::SymNames::nameForSymId(engraving::Fermata::symIdForFermataType(fermataType, !below));
         meiFermata.SetGlyphName(glyphName.ascii());
         meiFermata.SetGlyphAuth(SMUFL_AUTH);
     }

@@ -291,7 +291,7 @@
         <eid>n_n</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>o_o</eid>
             </Fermata>
           <Chord>

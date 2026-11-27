@@ -207,7 +207,7 @@
         <endRepeat>2</endRepeat>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>fzLI+yJqUlP_uhbqADcTav</eid>
             </Fermata>
           <Chord>

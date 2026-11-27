@@ -117,7 +117,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>S_S</eid>
             </Fermata>
           <Chord>
@@ -159,7 +159,7 @@
         <eid>a_a</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>b_b</eid>
             </Fermata>
           <Chord>
@@ -174,7 +174,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>e_e</eid>
             </Fermata>
           <Rest>
@@ -182,7 +182,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>g_g</eid>
             </Fermata>
           <Chord>
@@ -213,7 +213,7 @@
         <eid>m_m</eid>
         <voice>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>n_n</eid>
             </Fermata>
           <Chord>

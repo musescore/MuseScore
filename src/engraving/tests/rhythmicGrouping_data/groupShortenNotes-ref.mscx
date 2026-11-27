@@ -314,7 +314,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>3_3</eid>
             </Fermata>
           <Chord>
@@ -459,7 +459,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>WB_WB</eid>
             </Fermata>
           <Chord>

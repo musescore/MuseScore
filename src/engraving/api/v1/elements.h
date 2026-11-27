@@ -265,6 +265,8 @@ class EngravingItem : public apiv1::ScoreElement
 
     /** APIDOC
      * Subtype of this element.
+     * For fermatas, this is a FermataType value as of MuseScore 5.0;
+     * prior to 5.0 it was a SymId value (always the "Above" variant).
      * @readonly
      * @q_property {Number}
      * @since 4.6
@@ -830,6 +832,10 @@ class EngravingItem : public apiv1::ScoreElement
     /// one of PluginAPI::PluginAPI::SymId values.
     /// Valid for symbols, articulation, fermatas and breaths.
     API_PROPERTY(symbol,                  SYMBOL)
+    /// For fermatas: The fermata type,
+    /// one of PluginAPI::PluginAPI::FermataType values.
+    /// \since MuseScore 5.0
+    API_PROPERTY_T(int, fermataType,      FERMATA_TYPE)
     /// For jumps: Whether to play repeats.
     API_PROPERTY_T(bool, playRepeats,     PLAY_REPEATS)
     /// For horizontal frames: Whether to generate brackets,

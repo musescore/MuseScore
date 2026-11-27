@@ -1976,25 +1976,34 @@ static void fermata(const Fermata* const a, XmlWriter& xml)
     tagName += String(u" type=\"%1\"").arg(a->placement() == PlacementV::ABOVE ? u"upright" : u"inverted");
     tagName += ExportMusicXml::fermataPosition(a);
     tagName += color2xml(a);
-    SymId id = a->symId();
-    if (id == SymId::fermataAbove || id == SymId::fermataBelow) {
+    switch (a->fermataType()) {
+    case FermataType::Normal:
         xml.tagRaw(tagName);
-    } else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow) {
+        break;
+    case FermataType::Short:
         xml.tagRaw(tagName, "angled");
-    } else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow) {
+        break;
+    case FermataType::Long:
         xml.tagRaw(tagName, "square");
-    } else if (id == SymId::fermataVeryShortAbove || id == SymId::fermataVeryShortBelow) {
+        break;
+    case FermataType::VeryShort:
         xml.tagRaw(tagName, "double-angled");
-    } else if (id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow) {
+        break;
+    case FermataType::VeryLong:
         xml.tagRaw(tagName, "double-square");
-    } else if (id == SymId::fermataLongHenzeAbove || id == SymId::fermataLongHenzeBelow) {
+        break;
+    case FermataType::LongHenze:
         xml.tagRaw(tagName, "double-dot");
-    } else if (id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow) {
+        break;
+    case FermataType::ShortHenze:
         xml.tagRaw(tagName, "half-curve");
-    } else if (id == SymId::curlewSign) {
+        break;
+    case FermataType::Curlew:
         xml.tagRaw(tagName, "curlew");
-    } else {
-        LOGD("unsupported fermata SymId %d", static_cast<int>(id));
+        break;
+    case FermataType::Undefined:
+        LOGD("unsupported fermata type");
+        break;
     }
 }
 

@@ -120,6 +120,7 @@ enum class P_TYPE : unsigned char {
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
     MARKER_TYPE,
+    FERMATA_TYPE,
     ACTION_TYPE,
 
     LH_TAPPING_SYMBOL,
@@ -375,6 +376,9 @@ public:
 
     PropertyValue(const MarkerType& v)
         : m_type(P_TYPE::MARKER_TYPE), m_data(make_data<MarkerType>(v)) {}
+
+    PropertyValue(const FermataType& v)
+        : m_type(P_TYPE::FERMATA_TYPE), m_data(make_data<FermataType>(v)) {}
 
     PropertyValue(const MeasureNumberPlacement& v)
         : m_type(P_TYPE::MEASURE_NUMBER_PLACEMENT), m_data(make_data<MeasureNumberPlacement>(v)) {}

@@ -82,7 +82,7 @@ void MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata, track
     /// an independently round-trippable fermata duration separate from the fermata subtype/symbol.
     /// Therefore, we ignore the `duration` value in MNX in favor of the `symbol` to determine
     /// the Fermata's symbol.
-    fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
+    fermata->setFermataTypeAndTimeStretch(Fermata::fermataTypeFromSymId(toMuseScoreFermataSymId(mnxFermata.symbol())));
     setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.orient(), fermata));
     seg->add(fermata);
 }

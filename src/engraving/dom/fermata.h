@@ -54,10 +54,13 @@ public:
 
     double mag() const override;
 
-    SymId symId() const { return m_symId; }
-    void setSymId(SymId id) { m_symId = id; }
-    void setSymIdAndTimeStretch(SymId id);
-    FermataType fermataType() const;
+    FermataType fermataType() const { return m_fermataType; }
+    void setFermataType(FermataType type) { m_fermataType = type; }
+    void setFermataTypeAndTimeStretch(FermataType type);
+
+    static SymId symIdForFermataType(FermataType type, bool above);
+    static FermataType fermataTypeFromSymId(SymId id);
+
     int subtype() const override;
     TranslatableString subtypeUserName() const override;
 
@@ -83,12 +86,24 @@ public:
 
     Sid defaultPosSid() const override;
 
+    struct LayoutData : public EngravingItem::LayoutData
+    {
+        ld_field<SymId> symId = { "[Fermata] symId", SymId::noSym };
+
+        void reset() override
+        {
+            EngravingItem::LayoutData::reset();
+            symId.reset();
+        }
+    };
+    DECLARE_LAYOUTDATA_METHODS(Fermata)
+
 private:
 
     friend class Factory;
     Fermata(DummyParentOr<Segment> parent);
 
-    SymId m_symId = SymId::noSym;
+    FermataType m_fermataType = FermataType::Normal;
     double m_timeStretch = -1.0;
     bool m_play = true;
 };

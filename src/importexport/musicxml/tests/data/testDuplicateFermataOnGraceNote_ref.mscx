@@ -232,11 +232,11 @@
             <sigD>8</sigD>
             </TimeSig>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>N_N</eid>
             </Fermata>
           <Fermata>
-            <subtype>fermataAbove</subtype>
+            <fermataType>normal</fermataType>
             <eid>O_O</eid>
             </Fermata>
           <Tempo>
