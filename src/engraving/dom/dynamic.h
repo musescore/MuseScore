@@ -59,6 +59,23 @@ public:
         const char* name = nullptr;
     };
 
+    struct RepeatDynamicLevels {
+        std::vector<DynamicType> levels;
+
+        DynamicType levelForPass(int playbackCount) const
+        {
+            if (levels.empty()) {
+                return DynamicType::OTHER;
+            }
+            if (playbackCount <= 1) {
+                return levels.front();
+            }
+
+            const size_t index = static_cast<size_t>(playbackCount - 1);
+            return index >= levels.size() ? levels.back() : levels[index];
+        }
+    };
+
     Dynamic(DummyParentOr<Segment> parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
@@ -68,8 +85,15 @@ public:
 
     void setDynamicType(DynamicType val) { m_dynamicType = val; }
     void setDynamicType(const String&);
+    void setXmlText(const char* str) { setXmlText(String::fromUtf8(str)); }
+    void setXmlText(const String&) override;
 
     DynamicType dynamicType() const { return m_dynamicType; }
+    DynamicType dynamicTypeForPlayback(int playbackCount) const;
+    bool hasRepeatPlaybackLevels() const { return !m_repeatPlaybackLevels.levels.empty(); }
+    const RepeatDynamicLevels& repeatPlaybackLevels() const { return m_repeatPlaybackLevels; }
+    void setRepeatPlaybackLevels(const String& levels);
+    String repeatPlaybackLevelsAsString() const;
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
 
@@ -149,7 +173,9 @@ private:
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
     std::pair<DynamicType, String> parseDynamicText(const String&) const;
+    std::optional<std::vector<DynamicType>> parseRepeatPlaybackLevels(const String&, const std::vector<Dyn>&) const;
     DynamicType m_dynamicType = DynamicType::OTHER;
+    RepeatDynamicLevels m_repeatPlaybackLevels;
     bool m_playDynamic = true;
 
     mutable PointF m_dragOffset;

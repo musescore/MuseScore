@@ -1593,7 +1593,10 @@ DynamicType TConv::dynamicType(const AsciiStringView& tag)
         return search->second;
     }
 
-    return DynamicType::OTHER;
+    // This fallback is necessary for recognizing subsequent dynamics in combinations ("f-p", not just "f", etc.).
+    return dynamicValid(tag) ? std::find_if(DYNAMIC_TYPES.cbegin(), DYNAMIC_TYPES.cend(), [tag](const DynamicItem& i) {
+        return i.xml == tag;
+    })->type : DynamicType::OTHER;
 }
 
 bool TConv::dynamicValid(const AsciiStringView& tag)
