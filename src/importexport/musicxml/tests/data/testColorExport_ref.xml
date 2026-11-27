@@ -120,6 +120,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>down</stem>
+        <notehead color="#7F010203">normal</notehead>
         <notations>
           <tied type="stop"/>
           <fermata type="upright" color="#55FF00"/>
