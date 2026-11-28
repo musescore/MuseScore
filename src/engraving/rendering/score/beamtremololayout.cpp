@@ -185,7 +185,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
                 const bool beamClearsAnchor = (ldata->up && muse::RealIsEqualOrLess(desiredY, anchor.y() + reduction))
                                               || (!ldata->up && muse::RealIsEqualOrMore(desiredY, anchor.y() - reduction));
 
-                const Note* note = ldata->up ? toChord(chordRest)->downNote() : toChord(chordRest)->upNote();
+                const Note* note = ldata->up ? toChord(chordRest)->visibleDownNote() : toChord(chordRest)->visibleUpNote();
                 const double noteAnchor = (ldata->up ? note->stemUpSE().y() : note->stemDownNW().y()) + note->pagePos().y()
                                           - item->pagePos().y();
                 // Resultant length in quarter spaces
@@ -1418,7 +1418,7 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
         return chord->upNote()->pagePos().y();
     }
 
-    Note* note = cr->up() ? chord->downNote() : chord->upNote();
+    Note* note = cr->up() ? chord->visibleDownNote() : chord->visibleUpNote();
     PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;

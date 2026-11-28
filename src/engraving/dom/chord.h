@@ -193,6 +193,8 @@ public:
     // Chord has at least one Note
     Note* upNote() const;
     Note* downNote() const;
+    Note* visibleUpNote() const;
+    Note* visibleDownNote() const;
     int upString() const;
     int downString() const;
     std::vector<int> noteDistances() const;

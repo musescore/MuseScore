@@ -182,6 +182,46 @@ Note* Chord::downNote() const
 }
 
 //---------------------------------------------------------
+//   visibleUpNote / visibleDownNote
+//    like upNote / downNote, but ignoring invisible notes,
+//    so that the stem only spans the visible notes.
+//    Fall back to upNote / downNote on TAB staves
+//    or if no note is visible.
+//---------------------------------------------------------
+
+Note* Chord::visibleUpNote() const
+{
+    Note* result = upNote();
+    if (result->visible() || onTabStaff()) {
+        return result;
+    }
+
+    Note* visibleNote = nullptr;
+    for (Note* n : m_notes) {
+        if (n->visible() && (!visibleNote || n->line() < visibleNote->line())) {
+            visibleNote = n;
+        }
+    }
+    return visibleNote ? visibleNote : result;
+}
+
+Note* Chord::visibleDownNote() const
+{
+    Note* result = downNote();
+    if (result->visible() || onTabStaff()) {
+        return result;
+    }
+
+    Note* visibleNote = nullptr;
+    for (Note* n : m_notes) {
+        if (n->visible() && (!visibleNote || n->line() > visibleNote->line())) {
+            visibleNote = n;
+        }
+    }
+    return visibleNote ? visibleNote : result;
+}
+
+//---------------------------------------------------------
 //   upLine / downLine
 //---------------------------------------------------------
 

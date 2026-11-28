@@ -5490,8 +5490,8 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             }
             // in other TAB types, no correction
         } else { // non-TAB
-            // move stem start to note attach point
-            Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+            // move stem start to note attach point (ignoring invisible notes)
+            Note* note = up ? item->chord()->visibleDownNote() : item->chord()->visibleUpNote();
             if ((up && !note->ldata()->mirror.value(LD_ACCESS::BAD)) || (!up && note->ldata()->mirror.value(LD_ACCESS::BAD))) {
                 y1 = note->stemUpSE().y();
             } else {
