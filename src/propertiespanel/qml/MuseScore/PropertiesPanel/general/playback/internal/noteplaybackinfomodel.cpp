@@ -81,7 +81,8 @@ QString formatBpm(double bpm)
     return QString::number(bpm, 'f', 1);
 }
 
-QString measureRef(const EngravingItem* item)
+//! "m. 3" / "m. 3–4"; spoken (for screen readers): "measure 3" / "measures 3 to 4"
+QString measureRef(const EngravingItem* item, bool spoken = false)
 {
     const Score* score = item->score();
     const Measure* startMeasure = score->tick2measure(item->tick());
@@ -105,11 +106,15 @@ QString measureRef(const EngravingItem* item)
                         : start;
 
         if (end != start) {
-            return muse::qtrc("propertiespanel", "m. %1–%2").arg(start).arg(end);
+            return spoken
+                   ? muse::qtrc("propertiespanel", "measures %1 to %2").arg(start).arg(end)
+                   : muse::qtrc("propertiespanel", "m. %1–%2").arg(start).arg(end);
         }
     }
 
-    return muse::qtrc("propertiespanel", "m. %1").arg(start);
+    return spoken
+           ? muse::qtrc("propertiespanel", "measure %1").arg(start)
+           : muse::qtrc("propertiespanel", "m. %1").arg(start);
 }
 
 QString itemName(const EngravingItem* item)
@@ -166,6 +171,33 @@ QString symbolText(SymId id)
            : QString();
 }
 
+//! A symbol part; "spoken" is what a screen reader says for it, e.g. "Forte" or "Crescendo"
+QVariantMap symbolPart(SymId id)
+{
+    QVariantMap part = labelPart(symbolText(id), true);
+    part["spoken"] = SymNames::translatedUserNameForSymId(id).toQString();
+
+    return part;
+}
+
+//! What a screen reader says for label parts: the text as written, symbols by name
+QString spokenParts(const QVariantList& parts)
+{
+    static const QRegularExpression whitespace(QStringLiteral("\\s+"));
+
+    QString spoken;
+
+    for (const QVariant& partValue : parts) {
+        const QVariantMap part = partValue.toMap();
+
+        spoken += part.value("isSymbol").toBool()
+                  ? (QStringLiteral(" ") + part.value("spoken").toString() + QStringLiteral(" "))
+                  : part.value("text").toString();
+    }
+
+    return spoken.replace(whitespace, QStringLiteral(" ")).trimmed();
+}
+
 //! Score text as label parts: <sym> tags become symbols, other formatting is dropped
 QVariantList partsFromXml(const String& xml)
 {
@@ -177,20 +209,36 @@ QVariantList partsFromXml(const String& xml)
 
     QVariantList parts;
     QString pending;
+    QStringList pendingSpoken; // the names of the symbols in pending
     bool pendingIsSymbol = false;
 
-    const auto append = [&](const QString& text, bool isSymbol) {
+    const auto flushPending = [&]() {
+        QVariantMap part = labelPart(pending, pendingIsSymbol);
+
+        if (pendingIsSymbol) {
+            part["spoken"] = pendingSpoken.join(QStringLiteral(" "));
+        }
+
+        parts << part;
+        pending.clear();
+        pendingSpoken.clear();
+    };
+
+    const auto append = [&](const QString& text, bool isSymbol, const QString& spoken = QString()) {
         if (text.isEmpty()) {
             return;
         }
 
         if (!pending.isEmpty() && (pendingIsSymbol != isSymbol)) {
-            parts << labelPart(pending, pendingIsSymbol);
-            pending.clear();
+            flushPending();
         }
 
         pending += text;
         pendingIsSymbol = isSymbol;
+
+        if (isSymbol) {
+            pendingSpoken << spoken;
+        }
     };
 
     QString plain;
@@ -217,7 +265,8 @@ QVariantList partsFromXml(const String& xml)
             flushPlain();
 
             const String name = String::fromQString(source.mid(nameStart, nameEnd - nameStart));
-            append(symbolText(SymNames::symIdByName(name)), true);
+            const SymId id = SymNames::symIdByName(name);
+            append(symbolText(id), true, SymNames::translatedUserNameForSymId(id).toQString());
 
             i = nameEnd + symClose.size();
             continue;
@@ -236,7 +285,7 @@ QVariantList partsFromXml(const String& xml)
     flushPlain();
 
     if (!pending.isEmpty()) {
-        parts << labelPart(pending, pendingIsSymbol);
+        flushPending();
     }
 
     // No space before the first part or after the last
@@ -322,10 +371,8 @@ QVariantList writtenParts(const EngravingItem* item)
                          ? SymId::dynamicCrescendoHairpin
                          : SymId::dynamicDiminuendoHairpin;
 
-        const QString symbol = symbolText(id);
-
-        if (!symbol.isEmpty()) {
-            return { labelPart(symbol, true) };
+        if (!symbolText(id).isEmpty()) {
+            return { symbolPart(id) };
         }
     }
 
@@ -347,8 +394,8 @@ QVariantList writtenParts(const EngravingItem* item)
         id = toBreath(item)->symId();
     }
 
-    if (const QString symbol = symbolText(id); !symbol.isEmpty()) {
-        return { labelPart(symbol, true) };
+    if (!symbolText(id).isEmpty()) {
+        return { symbolPart(id) };
     }
 
     if (item->isTextBase()) {
@@ -382,13 +429,18 @@ QVariantList itemParts(const EngravingItem* item)
     return parts;
 }
 
-//! "m. 3" or "m. 3–4"; withStaff adds the staff: "m. 3, s. 2"
-QString itemLocation(const EngravingItem* item, bool withStaff)
+//! "m. 3" or "m. 3–4"; withStaff adds the staff: "m. 3, s. 2". spoken: "measure 3, staff 2"
+QString itemLocation(
+    const EngravingItem* item,
+    bool withStaff,
+    bool spoken = false)
 {
-    QString location = measureRef(item);
+    QString location = measureRef(item, spoken);
 
     if (withStaff) {
-        const QString staff = muse::qtrc("propertiespanel", "s. %1").arg(item->staffIdx() + 1);
+        const QString staff = spoken
+                              ? muse::qtrc("propertiespanel", "staff %1").arg(item->staffIdx() + 1)
+                              : muse::qtrc("propertiespanel", "s. %1").arg(item->staffIdx() + 1);
 
         location = location.isEmpty()
                    ? staff
@@ -454,13 +506,15 @@ struct RowSpec {
     QString text {};
     QString prefix {};
     QString detail {};
+    QString spokenPrefix {}; // the prefix in full for screen readers, if it's shortened
     QString suffix {}; // added after the item or text, e.g. " (+12)"
 
     QVariantList parts {}; // if set, shown instead of the item or text
     QVariantList lines {}; // listed under the label, each a list of parts like it
 };
 
-//! One row per spec: { parts, prefix, location, detail, lines, itemIndex }; itemIndex is -1 when there's no item to show.
+//! One row per spec: { parts, prefix, location, detail, lines, itemIndex, accessibleText }; itemIndex is -1 when there's no
+//! item to show. accessibleText is the whole row as a screen reader says it, with nothing abbreviated.
 //! Rows that would read the same (e.g. a hairpin on each staff of a piano) get the staff in their location.
 QVariantList makeRows(const std::vector<RowSpec>& specs, std::vector<const EngravingItem*>& items)
 {
@@ -506,15 +560,37 @@ QVariantList makeRows(const std::vector<RowSpec>& specs, std::vector<const Engra
         row["detail"] = spec.detail;
         row["lines"] = spec.lines;
 
+        const QString spokenPrefix = spec.spokenPrefix.isEmpty() ? spec.prefix : spec.spokenPrefix;
+        QString label = spokenParts(parts.at(i));
+
+        if (!spokenPrefix.isEmpty()) {
+            label = spokenPrefix + QStringLiteral(" ") + label;
+        }
+
+        QStringList spoken { label };
+
+        if (!spec.detail.isEmpty()) {
+            spoken << spec.detail;
+        }
+
+        for (const QVariant& line : spec.lines) {
+            spoken << spokenParts(line.toList());
+        }
+
         if (spec.item) {
             const bool isAmbiguous = keys.count(keys.at(keyIndex)) > 1;
 
             row["location"] = itemLocation(spec.item, isAmbiguous);
             row["itemIndex"] = registerItem(items, spec.item);
+
+            spoken << itemLocation(spec.item, isAmbiguous, true /*spoken*/);
         } else {
             row["location"] = QString();
             row["itemIndex"] = -1;
         }
+
+        spoken.removeAll(QString());
+        row["accessibleText"] = spoken.join(QStringLiteral(", "));
 
         rows << row;
     }
@@ -522,17 +598,24 @@ QVariantList makeRows(const std::vector<RowSpec>& specs, std::vector<const Engra
     return rows;
 }
 
-RowSpec sourceSpec(const NotePlaybackSource& source, const QString& prefix = QString())
+RowSpec sourceSpec(
+    const NotePlaybackSource& source,
+    const QString& prefix = QString(),
+    const QString& spokenPrefix = QString())
 {
+    RowSpec spec;
+
+    spec.item = source.item;
+    spec.prefix = prefix;
+    spec.spokenPrefix = spokenPrefix;
+
     if (!source.item) {
-        return { nullptr, muse::qtrc("propertiespanel", "Point drawn in the automation lane"), prefix, QString() };
+        spec.text = muse::qtrc("propertiespanel", "Point drawn in the automation lane");
+    } else if (source.editedInAutomation) {
+        spec.detail = muse::qtrc("propertiespanel", "Edited in the automation lane");
     }
 
-    const QString detail = source.editedInAutomation
-                           ? muse::qtrc("propertiespanel", "Edited in the automation lane")
-                           : QString();
-
-    return { source.item, QString(), prefix, detail };
+    return spec;
 }
 
 //! The sources, then what their gradual changes start from (prefixed "Orig:")
@@ -551,7 +634,9 @@ QVariantList sourceRows(
         const bool isListed = std::ranges::find(sources, origin) != sources.end();
 
         if (!isListed) {
-            specs.push_back(sourceSpec(origin, muse::qtrc("propertiespanel", "Orig:", "the marking a gradual change starts from")));
+            specs.push_back(sourceSpec(origin,
+                                       muse::qtrc("propertiespanel", "Orig:", "the marking a gradual change starts from"),
+                                       muse::qtrc("propertiespanel", "Starts from:", "the marking a gradual change starts from")));
         }
     }
 
@@ -682,8 +767,8 @@ QVariantList lineParts(const MarkingLine& line)
     QVariantList parts;
 
     if (line.glyph != SymId::noSym) {
-        if (const QString symbol = symbolText(line.glyph); !symbol.isEmpty()) {
-            parts << labelPart(symbol, true);
+        if (!symbolText(line.glyph).isEmpty()) {
+            parts << symbolPart(line.glyph);
         }
     }
 
@@ -1279,6 +1364,7 @@ void NotePlaybackInfoModel::showSelectedNote()
 
     m_hoveredIndex = -1;
     m_pinnedIndex = -1;
+    m_shownIndex = -1;
     emit focusChanged();
 
     const notation::INotationInteractionPtr interaction = notation->interaction();
@@ -1335,6 +1421,8 @@ void NotePlaybackInfoModel::applyFocus()
                       : m_pinnedIndex;
 
     if (index < 0) {
+        m_shownIndex = -1;
+
         interaction->setPlaybackInfluenceHighlight({});
         interaction->endCentering(true);
 
@@ -1344,6 +1432,14 @@ void NotePlaybackInfoModel::applyFocus()
     const EngravingItem* item = m_items.at(index);
 
     interaction->setPlaybackInfluenceHighlight({ item });
+
+    // Only a different item moves the view. The same one again (e.g. its row losing and regaining the hover when
+    // playback stops) leaves the view where it is, which may be where playback took it.
+    if (index == m_shownIndex) {
+        return;
+    }
+
+    m_shownIndex = index;
 
     if (const EngravingItem* shown = itemInCurrentScore(item)) {
         interaction->centerOnItem(shown);
@@ -1356,6 +1452,7 @@ void NotePlaybackInfoModel::clearFocus()
 
     m_hoveredIndex = -1;
     m_pinnedIndex = -1;
+    m_shownIndex = -1;
 
     if (!hadFocus) {
         return;

@@ -97,8 +97,12 @@ void ModifierHoldWatcher::onModifiersChanged(Qt::KeyboardModifiers pressed)
     m_pressed = pressed;
 
     if (m_modifiers == Qt::NoModifier || m_pressed != m_modifiers) {
-        // Releasing (or adding) a key ends a cancellation too
-        m_isCancelled = false;
+        // Only releasing one of the configured keys ends a cancellation: pressing and releasing an extra
+        // modifier (e.g. Meta while Ctrl+Alt+Shift stay down) brings back the same keys, still cancelled
+        if ((m_pressed & m_modifiers) != m_modifiers) {
+            m_isCancelled = false;
+        }
+
         setHeld(false);
 
         return;

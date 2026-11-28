@@ -238,7 +238,8 @@ const Dynamic* hairpinEndDynamic(const Hairpin* hairpin)
 
 //! A curve point at a hairpin's end can carry the hairpin's id even when its level is the dynamic the hairpin
 //! ends on (one point per tick; whichever was added first keeps its id). Once the note is past the hairpin,
-//! that dynamic is what sets its level, so credit it instead.
+//! that dynamic is what sets its level, so credit it instead (unless the point was edited in the automation lane:
+//! the edit is what sets the level then).
 void creditHairpinEndDynamics(std::vector<NotePlaybackSource>& sources, int attackTick)
 {
     std::vector<NotePlaybackSource> credited;
@@ -246,6 +247,7 @@ void creditHairpinEndDynamics(std::vector<NotePlaybackSource>& sources, int atta
     for (NotePlaybackSource source : sources) {
         const bool isPastHairpin = (source.item != nullptr)
                                    && (source.item->isHairpin())
+                                   && !source.editedInAutomation
                                    && (attackTick >= toHairpin(source.item)->tick2().ticks());
 
         if (isPastHairpin) {

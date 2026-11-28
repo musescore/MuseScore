@@ -62,6 +62,7 @@ static constexpr int MEASURE_TICKS = 4 * QUARTER_TICKS; // all the scores here a
 //! m2: staff 1 crescendo from beat 2 to beat 4; staff 2 ff for that staff only on beat 1
 //! m3: staff 1 f + diminuendo from beat 1 to beat 3, p on beat 3, fermata on beat 4
 //! m4-m5: repeated twice; staff 1 pp on m5 beat 4; flute 8va over m4
+//! m6: after the repeat; staff 1 "pizz." on beat 1
 static const String INFLUENCES_SCORE(NOTE_INFO_DIR + u"influences.mscx");
 
 static constexpr staff_idx_t PIANO_RH = 0;
@@ -495,6 +496,78 @@ TEST_F(Engraving_NotePlaybackInfoTests, AutomationLaneEdits)
     ASSERT_EQ(drawn.passes.front().dynamicSources.size(), 1);
     EXPECT_EQ(drawn.passes.front().dynamicSources.front(), (NotePlaybackSource { nullptr, false }));
     EXPECT_NEAR(drawn.passes.front().dynamicValue, 0.6, 0.001);
+}
+
+//! A hairpin's end point edited in the automation lane stays credited to the hairpin, not the dynamic it ends on
+TEST_F(Engraving_NotePlaybackInfoTests, Hairpin_EditedEndPoint_KeepsHairpin)
+{
+    // [GIVEN] The diminuendo in m3 ends on a p (beat 3)
+    MasterScore* score = load(INFLUENCES_SCORE);
+    ASSERT_TRUE(score);
+
+    const EngravingItem* p = annotationAt(score, PIANO_RH, tickAt(2, 2), ElementType::DYNAMIC);
+    const Spanner* dim = spannerAt(score, PIANO_RH, tickAt(2, 0), ElementType::HAIRPIN);
+    ASSERT_TRUE(p && dim);
+
+    const AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, score->staff(PIANO_RH)->id());
+    const AutomationCurve& curve = score->automationData()->curve(key);
+
+    const auto endPoint = curve.find(tickAt(2, 2));
+    ASSERT_TRUE(endPoint != curve.cend());
+
+    // [WHEN] The end point, carrying the hairpin's id, is changed by hand
+    AutomationPoint edited = endPoint->second;
+    edited.itemId = dim->eid();
+    edited.value.outValue = 0.3;
+    edited.generated = false;
+
+    AutomationPointEdits edits { { tickAt(2, 2), AutomationPointEdit::SetPoint { edited } } };
+
+    score->startCmd(TranslatableString::untranslatable("NotePlaybackInfo tests"));
+    score->editAutomationPoints(key, edits);
+    score->endCmd();
+
+    // [THEN] The note there credits the edited hairpin point, not the p
+    const NotePlaybackInfo info = infoAt(PIANO_RH, 2, 2);
+    ASSERT_TRUE(info.isValid());
+    EXPECT_EQ(info.passes.front().dynamicSources, (std::vector<NotePlaybackSource> { { dim, true } }));
+}
+
+//! A deleted marking after a repeat is gone from playback too. Playback keeps it at its playback position, a repeat
+//! later than its score tick, so clearing by score tick alone used to leave it there.
+TEST_F(Engraving_NotePlaybackInfoTests, DeletedMarkingAfterRepeat_NoLongerCredited)
+{
+    MasterScore* score = load(INFLUENCES_SCORE);
+    ASSERT_TRUE(score);
+
+    EngravingItem* pizz = const_cast<EngravingItem*>(annotationAt(score, PIANO_RH, tickAt(5, 0), ElementType::PLAYTECH_ANNOTATION));
+    ASSERT_TRUE(pizz);
+
+    // [GIVEN] The note under it plays a repeat (two measures) later than its score tick
+    const NotePlaybackInfo before = infoAt(PIANO_RH, 5, 1);
+    ASSERT_TRUE(before.isValid());
+    ASSERT_EQ(before.passes.size(), 1);
+    ASSERT_EQ(before.passes.front().utick - before.note->tick().ticks(), 2 * MEASURE_TICKS);
+    EXPECT_EQ(before.sound.playingTechnique, pizz);
+
+    // [WHEN] The "pizz." is deleted
+    score->startCmd(TranslatableString::untranslatable("NotePlaybackInfo tests"));
+    score->undoRemoveElement(pizz);
+    score->endCmd();
+
+    ScoreChanges changes;
+    changes.tickFrom = tickAt(5, 0);
+    changes.tickTo = tickAt(5, 0);
+    changes.staffIdxFrom = PIANO_RH;
+    changes.staffIdxTo = PIANO_RH;
+    changes.changedTypes = { ElementType::PLAYTECH_ANNOTATION };
+
+    score->changesChannel().send(changes);
+
+    // [THEN] Nothing credits it any more
+    const NotePlaybackInfo after = infoAt(PIANO_RH, 5, 1);
+    ASSERT_TRUE(after.isValid());
+    EXPECT_EQ(after.sound.playingTechnique, nullptr);
 }
 
 //! listedItems: each item once, tempo before dynamic before markings

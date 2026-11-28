@@ -87,6 +87,7 @@ public:
     PlaybackContextSources sources(const track_idx_t trackIdx, const int nominalPositionTick) const;
 
     void update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo, bool expandRepeats = true);
+    //! tickFrom and tickTo are score ticks: the entries are cleared in every pass through the repeats that plays them
     void clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo);
 
 private:
@@ -126,6 +127,7 @@ private:
     const Score* m_score = nullptr;
 
     std::set<track_idx_t> m_usedTracks;
+    bool m_expandRepeats = true; // as in the last update(), so clear() finds the entries where update() put them
     mutable std::unordered_map<track_idx_t, const AutomationCurve*> m_dynamicsCurveByTrack;
     SoundPresetsByTrack m_soundPresetsByTrack;
     TextArticulationsByTrack m_textArticulationsByTrack;

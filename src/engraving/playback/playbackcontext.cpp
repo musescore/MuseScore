@@ -22,7 +22,9 @@
 
 #include "playbackcontext.h"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include "dom/lyrics.h"
 #include "dom/measure.h"
@@ -285,6 +287,7 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
     }
 
     m_dynamicsCurveByTrack.clear();
+    m_expandRepeats = expandRepeats;
 
     for (const RepeatSegment* repeatSegment : m_score->repeatList(expandRepeats)) {
         const int repeatStartTick = repeatSegment->tick;
@@ -328,10 +331,37 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
 
 void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo)
 {
-    const auto eraseTickRangeByTrack = [trackFrom, trackTo, tickFrom, tickTo](auto& byTrackMap) {
+    // The maps are keyed by playback position (update() adds each repeat pass's offset to the score tick), so the
+    // score range is cleared in every pass that plays it. A whole-score clear empties the tracks outright: it also
+    // follows changes to the repeats themselves, after which the old positions no longer match any pass.
+    const Measure* lastMeasure = m_score ? m_score->lastMeasure() : nullptr;
+    const bool isWholeScore = !lastMeasure || (tickFrom <= 0 && tickTo >= lastMeasure->endTick().ticks());
+
+    std::vector<std::pair<int, int> > positionRanges;
+
+    if (isWholeScore) {
+        positionRanges.emplace_back(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+    } else {
+        for (const RepeatSegment* repeatSegment : m_score->repeatList(m_expandRepeats)) {
+            const int from = std::max(tickFrom, repeatSegment->tick);
+            const int to = std::min(tickTo, repeatSegment->endTick() - 1);
+
+            if (from > to) {
+                continue;
+            }
+
+            const int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+            positionRanges.emplace_back(from + tickPositionOffset, to + tickPositionOffset);
+        }
+    }
+
+    const auto eraseTickRangeByTrack = [trackFrom, trackTo, &positionRanges](auto& byTrackMap) {
         for (auto it = byTrackMap.lower_bound(trackFrom); it != byTrackMap.end() && it->first < trackTo;) {
             auto& innerMap = it->second;
-            innerMap.erase(innerMap.lower_bound(tickFrom), innerMap.upper_bound(tickTo));
+
+            for (const auto& [from, to] : positionRanges) {
+                innerMap.erase(innerMap.lower_bound(from), innerMap.upper_bound(to));
+            }
 
             if (innerMap.empty()) {
                 it = byTrackMap.erase(it);

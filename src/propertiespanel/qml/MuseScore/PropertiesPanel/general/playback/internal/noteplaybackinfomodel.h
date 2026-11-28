@@ -150,5 +150,6 @@ private:
 
     int m_hoveredIndex = -1;
     int m_pinnedIndex = -1;
+    int m_shownIndex = -1; // the item the view was last centered on for a hover or pin
 };
 } // namespace mu::propertiespanel

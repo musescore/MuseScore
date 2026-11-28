@@ -461,6 +461,10 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
 {
     m_pageCache.clear();
 
+    // Both are positions in the notation being unloaded
+    m_glide.stop();
+    m_viewPositionBeforeCentering.reset();
+
     m_notation->notationChanged().disconnect(this);
     m_notation->elements()->msScore()->changesChannel().disconnect(this);
     INotationInteractionPtr interaction = m_notation->interaction();
@@ -1711,6 +1715,12 @@ void AbstractNotationPaintView::onPlayingChanged()
     TRACEFUNC;
 
     bool isPlaying = playbackState()->isPlaying();
+
+    // The view never moves for the note info during playback, so a glide still in flight stops where it is
+    if (isPlaying) {
+        m_glide.stop();
+    }
+
     m_playbackCursor->setVisible(isPlaying);
 
     if (m_playbackCursorItem) {

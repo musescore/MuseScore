@@ -33,13 +33,30 @@ ExpandableBlank {
 
     required property NotePlaybackInfoModel model
 
-    property int navigationRowEnd: navigation.row
+    //! Keyboard navigation order: the header, the pitch button, then every row as it's shown
+    readonly property int pitchButtonNavigationRow: navigation.row + 1
+    readonly property int pitchRowsNavigationStart: pitchButtonNavigationRow + 1
 
-    enabled: model ? !model.isEmpty : false
-    title: model ? model.title : ""
-    isExpanded: true
+    property int navigationRowEnd: navigationRowAfterPasses
+                                   + (root.model ? root.model.soundRows.length + root.model.otherMarkings.length : 0)
 
-    width: parent.width
+    readonly property int navigationRowAfterPasses: passNavigationStart(root.model ? root.model.passes.length : 0)
+
+    //! Each pass lists its tempo rows and markings, then its dynamic rows and markings
+    function passRowCount(pass) {
+        return pass.tempoRows.length + root.model.tempoMarkings.length
+               + pass.dynamicRows.length + root.model.dynamicMarkings.length
+    }
+
+    function passNavigationStart(passIndex) {
+        let navigationRow = pitchRowsNavigationStart + (root.model ? root.model.pitchRows.length : 0)
+
+        for (let i = 0; i < passIndex; ++i) {
+            navigationRow += passRowCount(root.model.passes[i])
+        }
+
+        return navigationRow
+    }
 
     FontMetrics {
         id: bodyMetrics
@@ -131,9 +148,11 @@ ExpandableBlank {
     //! A listed score item: [prefix] label .... location, with what it does (or more lines of label parts) below. Hover: highlight it, scrolling
     //! to it only if it's out of view. Click: keep it that way. Double-click: select it. itemIndex < 0: plain text.
     component ItemRow: Item {
-        id: row
+        id: itemRow
 
         required property var modelData
+        required property int navigationRow
+        required property string sectionName
 
         readonly property int itemIndex: modelData.itemIndex
         readonly property bool isInteractive: itemIndex >= 0
@@ -142,18 +161,63 @@ ExpandableBlank {
         width: parent ? parent.width : 0
         implicitHeight: rowLayout.implicitHeight + 4
 
+        //! Keyboard: reaching the row is a hover; activating it is a click, and again on the pinned row a double-click
+        NavigationControl {
+            id: rowNavigation
+
+            name: "NotePlaybackInfoRow" + itemRow.navigationRow
+            enabled: itemRow.visible && root.navigation.panel !== null
+            panel: root.navigation.panel
+            row: itemRow.navigationRow
+
+            accessible.role: itemRow.isInteractive ? MUAccessible.Button : MUAccessible.Information
+            accessible.name: itemRow.sectionName + ": " + itemRow.modelData.accessibleText
+            accessible.visualItem: itemRow
+            accessible.enabled: rowNavigation.enabled
+
+            onActiveChanged: {
+                if (!itemRow.isInteractive) {
+                    return
+                }
+
+                if (rowNavigation.active) {
+                    root.model.hoverItem(itemRow.itemIndex)
+                } else {
+                    root.model.unhoverItem(itemRow.itemIndex)
+                }
+            }
+
+            onTriggered: {
+                if (!itemRow.isInteractive) {
+                    return
+                }
+
+                if (itemRow.isPinned) {
+                    root.model.doubleClickItem(itemRow.itemIndex)
+                } else {
+                    root.model.clickItem(itemRow.itemIndex)
+                }
+
+                rowNavigation.notifyAboutControlWasTriggered()
+            }
+        }
+
+        NavigationFocusBorder {
+            navigationCtrl: rowNavigation
+        }
+
         Rectangle {
             anchors.fill: parent
             radius: 3
 
-            color: row.isPinned ? ui.theme.accentColor : ui.theme.buttonColor
+            color: itemRow.isPinned ? ui.theme.accentColor : ui.theme.buttonColor
 
             opacity: {
-                if (row.isPinned) {
+                if (itemRow.isPinned) {
                     return ui.theme.accentOpacityNormal
                 }
 
-                return (row.isInteractive && rowMouseArea.containsMouse) ? ui.theme.buttonOpacityHover : 0
+                return (itemRow.isInteractive && rowMouseArea.containsMouse) ? ui.theme.buttonOpacityHover : 0
             }
         }
 
@@ -168,7 +232,7 @@ ExpandableBlank {
             StyledTextLabel {
                 Layout.alignment: Qt.AlignTop
                 visible: !isEmpty
-                text: row.modelData.prefix
+                text: itemRow.modelData.prefix
                 opacity: 0.6
             }
 
@@ -178,13 +242,13 @@ ExpandableBlank {
 
                 LabelParts {
                     width: parent.width
-                    parts: row.modelData.parts
+                    parts: itemRow.modelData.parts
                 }
 
                 StyledTextLabel {
                     width: parent.width
                     visible: !isEmpty
-                    text: row.modelData.detail
+                    text: itemRow.modelData.detail
                     opacity: 0.6
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.Wrap
@@ -192,7 +256,7 @@ ExpandableBlank {
 
                 // e.g. the staccato and tenuto that make up a tenuto-staccato, or "(Strings only)"
                 Repeater {
-                    model: row.modelData.lines || []
+                    model: itemRow.modelData.lines || []
 
                     delegate: LabelParts {
                         required property var modelData
@@ -207,7 +271,7 @@ ExpandableBlank {
             StyledTextLabel {
                 Layout.alignment: Qt.AlignTop | Qt.AlignRight
                 visible: !isEmpty
-                text: row.modelData.location
+                text: itemRow.modelData.location
                 opacity: 0.6
                 horizontalAlignment: Text.AlignRight
             }
@@ -217,13 +281,13 @@ ExpandableBlank {
             id: rowMouseArea
 
             anchors.fill: parent
-            enabled: row.isInteractive
+            enabled: itemRow.isInteractive
             hoverEnabled: true
 
-            onEntered: root.model.hoverItem(row.itemIndex)
-            onExited: root.model.unhoverItem(row.itemIndex)
-            onClicked: root.model.clickItem(row.itemIndex)
-            onDoubleClicked: root.model.doubleClickItem(row.itemIndex)
+            onEntered: root.model.hoverItem(itemRow.itemIndex)
+            onExited: root.model.unhoverItem(itemRow.itemIndex)
+            onClicked: root.model.clickItem(itemRow.itemIndex)
+            onDoubleClicked: root.model.doubleClickItem(itemRow.itemIndex)
         }
     }
 
@@ -235,13 +299,21 @@ ExpandableBlank {
         property var markings: []
         property real topGap: 3 // keeps the first row clear of the value above it
 
+        property int navigationRowStart: 0
+        property string sectionName: ""
+
         spacing: 2
         topPadding: (rows.length + markings.length) > 0 ? topGap : 0
 
         Repeater {
             model: section.rows
 
-            delegate: ItemRow {}
+            delegate: ItemRow {
+                required property int index
+
+                navigationRow: section.navigationRowStart + index
+                sectionName: section.sectionName
+            }
         }
 
         Rectangle {
@@ -254,7 +326,12 @@ ExpandableBlank {
         Repeater {
             model: section.markings
 
-            delegate: ItemRow {}
+            delegate: ItemRow {
+                required property int index
+
+                navigationRow: section.navigationRowStart + section.rows.length + index
+                sectionName: section.sectionName
+            }
         }
     }
 
@@ -362,6 +439,30 @@ ExpandableBlank {
                     border.color: ui.theme.strokeColor
                 }
 
+                NavigationControl {
+                    id: pitchNavigation
+
+                    name: "NotePlaybackInfoShowNote"
+                    enabled: pitchButton.visible && root.navigation.panel !== null
+                    panel: root.navigation.panel
+                    row: root.pitchButtonNavigationRow
+
+                    accessible.role: MUAccessible.Button
+                    accessible.name: pitchLabelMetrics.text + ": " + pitchText.text + ", " + pitchButton.tooltipText
+                    accessible.visualItem: pitchButton
+                    accessible.enabled: pitchNavigation.enabled
+
+                    onTriggered: {
+                        root.model.showSelectedNote()
+                        pitchNavigation.notifyAboutControlWasTriggered()
+                    }
+                }
+
+                NavigationFocusBorder {
+                    navigationCtrl: pitchNavigation
+                    anchors.fill: pitchFrame
+                }
+
                 StyledTextLabel {
                     id: pitchText
 
@@ -396,6 +497,8 @@ ExpandableBlank {
                 Layout.fillWidth: true
                 visible: rows.length > 0
                 rows: root.model ? root.model.pitchRows : []
+                navigationRowStart: root.pitchRowsNavigationStart
+                sectionName: pitchLabelMetrics.text
             }
         }
 
@@ -406,6 +509,14 @@ ExpandableBlank {
                 id: passColumn
 
                 required property var modelData
+                required property int index
+
+                readonly property int navigationRowStart: root.passNavigationStart(index)
+
+                //! e.g. "Repeat pass 2, Tempo"
+                function sectionName(name) {
+                    return passColumn.modelData.label ? (passColumn.modelData.label + ", " + name) : name
+                }
 
                 width: content.width
                 spacing: 6
@@ -454,6 +565,8 @@ ExpandableBlank {
                         Layout.fillWidth: true
                         rows: passColumn.modelData.tempoRows
                         markings: root.model ? root.model.tempoMarkings : []
+                        navigationRowStart: passColumn.navigationRowStart
+                        sectionName: passColumn.sectionName(tempoLabelMetrics.text)
                     }
 
                     // --- Dynamic
@@ -524,6 +637,10 @@ ExpandableBlank {
                         Layout.fillWidth: true
                         rows: passColumn.modelData.dynamicRows
                         markings: root.model ? root.model.dynamicMarkings : []
+                        navigationRowStart: passColumn.navigationRowStart
+                                            + passColumn.modelData.tempoRows.length
+                                            + (root.model ? root.model.tempoMarkings.length : 0)
+                        sectionName: passColumn.sectionName(dynamicLabelMetrics.text)
                     }
                 }
             }
@@ -548,6 +665,8 @@ ExpandableBlank {
                 Layout.fillWidth: true
                 topGap: 0 // nothing above it
                 rows: root.model ? root.model.soundRows : []
+                navigationRowStart: root.navigationRowAfterPasses
+                sectionName: soundLabelMetrics.text
             }
         }
 
@@ -570,6 +689,8 @@ ExpandableBlank {
                 Layout.fillWidth: true
                 topGap: 0 // nothing above it
                 rows: root.model ? root.model.otherMarkings : []
+                navigationRowStart: root.navigationRowAfterPasses + (root.model ? root.model.soundRows.length : 0)
+                sectionName: otherLabelMetrics.text
             }
         }
 
