@@ -24,11 +24,14 @@
 
 #include "engraving/api/v1/apistructs.h"
 #include "engraving/api/v1/cursor.h"
+#include "engraving/api/v1/elements.h"
 
+#include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
@@ -412,4 +415,97 @@ TEST(Engraving_ApiCursorTests, addTupletInsideLongerChord)
     EXPECT_FALSE(chordRestAt(score, Fraction(1, 8), 1));
 
     delete score;
+}
+
+TEST(Engraving_ApiCursorTests, addSpanner)
+{
+    std::unique_ptr<MasterScore> score(readScoreWithEighths());
+    ASSERT_TRUE(score);
+    apiv1::Cursor cursor(score.get());
+    for (ElementType type : { ElementType::TEXTLINE, ElementType::PEDAL, ElementType::VOLTA,
+                              ElementType::TRILL, ElementType::VIBRATO, ElementType::LET_RING, ElementType::PALM_MUTE,
+                              ElementType::WHAMMY_BAR, ElementType::RASGUEADO, ElementType::HARMONIC_MARK,
+                              ElementType::PICK_SCRAPE, ElementType::GRADUAL_TEMPO_CHANGE, ElementType::SLUR,
+                              ElementType::HAIRPIN, ElementType::OTTAVA, ElementType::NOTELINE }) {
+        SCOPED_TRACE(static_cast<int>(type));
+        rewindTo(cursor, 1);
+        auto* spanner = toSpanner(Factory::createItem(type, score->dummy()));
+        apiv1::Spanner wrapped(spanner);
+        spanner->setTicks(Fraction(1, 4));
+        score->startCmd(TranslatableString::untranslatable("Add spanner"));
+        cursor.add(&wrapped);
+        score->endCmd();
+        ASSERT_EQ(wrapped.ownership(), apiv1::Ownership::SCORE);
+        EXPECT_EQ(spanner->track(), 0u);
+        EXPECT_EQ(spanner->track2(), 0u);
+        if (spanner->anchor() == Spanner::Anchor::MEASURE) {
+            EXPECT_EQ(spanner->tick(), Fraction(0, 1));
+            EXPECT_EQ(spanner->tick2(), score->firstMeasure()->endTick());
+        } else {
+            EXPECT_EQ(spanner->tick(), Fraction(1, 8));
+            EXPECT_EQ(spanner->tick2(), Fraction(3, 8));
+        }
+        auto* first = toChord(chordRestAt(score.get(), Fraction(1, 8)));
+        auto* last = toChord(chordRestAt(score.get(), Fraction(3, 8)));
+        if (type == ElementType::SLUR) {
+            EXPECT_EQ(spanner->startElement(), first);
+            EXPECT_EQ(spanner->endElement(), last);
+        } else if (type == ElementType::NOTELINE) {
+            EXPECT_EQ(spanner->startElement(), first->upNote());
+            EXPECT_EQ(spanner->endElement(), last->upNote());
+        }
+        const auto isAttached = [&]() {
+            if (type == ElementType::NOTELINE) {
+                return muse::contains(first->upNote()->spannerFor(), spanner);
+            }
+            return muse::contains(score->spannerList(), spanner);
+        };
+        EXPECT_TRUE(isAttached());
+        score->undoRedo(true, nullptr);
+        EXPECT_FALSE(isAttached());
+        score->undoRedo(false, nullptr);
+        EXPECT_TRUE(isAttached());
+        score->undoRedo(true, nullptr);
+    }
+}
+
+TEST(Engraving_ApiCursorTests, retryInvalidSpanner)
+{
+    std::unique_ptr<MasterScore> score(readScoreWithEighths());
+    ASSERT_TRUE(score);
+    apiv1::Cursor cursor(score.get());
+    rewindTo(cursor, 0);
+    auto* line = toSpanner(Factory::createItem(ElementType::TEXTLINE, score->dummy()));
+    apiv1::Spanner wrapped(line);
+    score->startCmd(TranslatableString::untranslatable("Add text line"));
+    line->setTicks(score->endTick() + Fraction(1, 8));
+    cursor.add(&wrapped);
+    ASSERT_EQ(wrapped.ownership(), apiv1::Ownership::PLUGIN);
+    line->setTicks(Fraction(0, 1));
+    cursor.add(&wrapped);
+    score->endCmd();
+    ASSERT_EQ(wrapped.ownership(), apiv1::Ownership::SCORE);
+    EXPECT_EQ(line->tick2(), Fraction(1, 8));
+}
+
+TEST(Engraving_ApiCursorTests, reopenPickScrape)
+{
+    std::unique_ptr<MasterScore> score(readScoreWithEighths());
+    ASSERT_TRUE(score);
+    apiv1::Cursor cursor(score.get());
+    rewindTo(cursor, 1);
+    apiv1::Spanner pickScrape(toSpanner(Factory::createItem(ElementType::PICK_SCRAPE, score->dummy())));
+    score->startCmd(TranslatableString::untranslatable("Add pick scrape"));
+    cursor.add(&pickScrape);
+    score->endCmd();
+
+    ASSERT_TRUE(ScoreRW::saveScore(score.get(), u"cursor-pick-scrape.mscx"));
+    std::unique_ptr<MasterScore> reopened(ScoreRW::readScore(u"cursor-pick-scrape.mscx", true));
+    ASSERT_TRUE(reopened);
+    EXPECT_TRUE(reopened->sanityCheck());
+    const auto spanners = reopened->spannerList();
+    ASSERT_EQ(spanners.size(), 1u);
+    EXPECT_TRUE(spanners.front()->isPickScrape());
+    EXPECT_EQ(spanners.front()->tick(), Fraction(1, 8));
+    EXPECT_EQ(spanners.front()->ticks(), Fraction(1, 8));
 }
