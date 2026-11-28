@@ -69,6 +69,9 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         return;
     }
 
+    // buzz rolls are drawn as a symbol, which is scaled by the item's mag
+    item->mutldata()->setMag(item->chord()->mag());
+
     item->computeShape();      // set bbox
     item->setPath(item->basePath());
 
