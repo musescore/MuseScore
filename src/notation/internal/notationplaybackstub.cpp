@@ -186,6 +186,11 @@ tick_t NotationPlaybackStub::beatToRawTick(int, int) const
     return 0;
 }
 
+mu::engraving::NotePlaybackInfo NotationPlaybackStub::notePlaybackInfo(const mu::engraving::Note*) const
+{
+    return {};
+}
+
 double NotationPlaybackStub::tempoMultiplier() const
 {
     return 0;

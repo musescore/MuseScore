@@ -38,6 +38,7 @@
 #include "playbackeventsrenderer.h"
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
+#include "noteplaybackinfo.h"
 
 namespace mu::engraving {
 class Score;
@@ -90,6 +91,20 @@ public:
     void triggerCountIn(int tick, muse::mpe::duration_t& countInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
+
+    //! Runs the same articulation parsers playback uses, on the note's chord and on the note itself,
+    //! and returns the score item that produced each articulation type. Playing techniques set by
+    //! earlier text (pizz., mute, ...) are left out; they don't come from an item on this chord.
+    std::map<muse::mpe::ArticulationType, const EngravingItem*> articulationSources(const Note* note, int tickPositionOffset) const;
+
+    //! The score items that choose which sound plays the note: playing technique text, Muse Sounds flags and the
+    //! lyric syllable (on this note, or held from an earlier one through its melisma). Each applies from where it is
+    //! until the next one.
+    PlaybackContextSources soundSources(const Note* note, int tickPositionOffset) const;
+
+    //! Everything that shapes how the note plays (see NotePlaybackInfo), with the repeats played as playback plays them
+    NotePlaybackInfo notePlaybackInfo(const Note* note) const;
+
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
 

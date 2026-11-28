@@ -21,7 +21,10 @@
  */
 #pragma once
 
+#include <optional>
+
 #include <QTimer>
+#include <QVariantAnimation>
 #include <QElapsedTimer>
 #include <qqmlintegration.h>
 
@@ -268,6 +271,14 @@ private:
 
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
+    //! Moves the view to logicPos over a moment instead of at once, so it's clear where it went. A glide already
+    //! under way turns toward the new position from where it is; anything else that moves the view stops it.
+    void glideCanvasToPosition(const muse::PointF& logicPos);
+    bool isGliding() const { return m_glide.state() == QAbstractAnimation::Running; }
+
+    //! The viewport where the view is going: where a glide ends, or where the view is if it isn't gliding
+    muse::RectF destinationViewport() const;
+
     void onPlayingChanged();
     void updatePlaybackCursorInterpolated();
     void movePlaybackCursor(muse::midi::tick_t tick);
@@ -320,6 +331,12 @@ private:
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
 
+    //! Where the view was before the first of a series of centering requests moved it (see INotationInteraction::endCentering)
+    std::optional<muse::PointF> m_viewPositionBeforeCentering;
+
+    QVariantAnimation m_glide;
+    bool m_isGlideStep = false; // the glide itself is moving the view
+
     struct PageCache {
         const Page* page = nullptr;
         std::optional<bool> adjustVerticallyDuringPlayback;
@@ -337,4 +354,4 @@ private:
     QTimer m_updatePlaybackCursorInterpolatedTimer;
     QElapsedTimer m_elapsedTimer;
 };
-}
+} // namespace mu::notation

@@ -38,7 +38,9 @@ public:
     MOCK_METHOD(muse::SizeF, pageSizeInch, (), (const, override));
     MOCK_METHOD(muse::SizeF, pageSizeInch, (const Options& opt), (const, override));
 
-    MOCK_METHOD(void, paintView, (muse::draw::Painter * painter, const muse::RectF& frameRect, bool isPrinting, bool isAutomation),
+    MOCK_METHOD(void, paintView,
+                (muse::draw::Painter * painter, const muse::RectF& frameRect, bool isPrinting, bool isAutomation,
+                 bool showPlaybackInfluence),
                 (override));
     MOCK_METHOD(void, paintPdf, (muse::draw::Painter * painter, const Options& opt), (override));
     MOCK_METHOD(void, paintPrint, (muse::draw::Painter * painter, const Options& opt), (override));

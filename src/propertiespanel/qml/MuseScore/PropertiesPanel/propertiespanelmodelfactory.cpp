@@ -231,6 +231,7 @@ PropertiesPanelAbstractModel* PropertiesPanelModelFactory::newPropertiesPanelLis
         return new BreathPlaybackModel(parent, iocCtx, repository);
     case PropertiesPanelModelType::TYPE_ARPEGGIO:
         return new ArpeggioPlaybackModel(parent, iocCtx, repository);
+    case PropertiesPanelModelType::TYPE_NOTE_PLAYBACK_INFO: // only ever created by PlaybackProxyModel
     case PropertiesPanelModelType::TYPE_UNDEFINED:
         break;
     }

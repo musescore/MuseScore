@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <optional>
+#include <unordered_set>
 #include <vector>
 
 #include <QTimer>
@@ -355,6 +356,18 @@ public:
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;
 
+    void centerOnItem(const mu::engraving::EngravingItem* item) override;
+    void endCentering(bool restoreView) override;
+
+    void setPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) override;
+    void setHeldPlaybackInfluenceHighlight(const std::vector<const mu::engraving::EngravingItem*>& items) override;
+    const std::unordered_set<const mu::engraving::EngravingItem*>& playbackInfluenceHighlight() const override
+    {
+        return m_playbackInfluenceHighlight;
+    }
+
+    muse::async::Notification playbackInfluenceHighlightChanged() const override { return m_playbackInfluenceHighlightChanged; }
+
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
 
     void checkAndShowError() override;
@@ -608,6 +621,13 @@ private:
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
 
+    void updatePlaybackInfluenceHighlight();
+
+    std::unordered_set<const mu::engraving::EngravingItem*> m_focusedPlaybackInfluence; // hovered or pinned in the Info panel
+    std::unordered_set<const mu::engraving::EngravingItem*> m_heldPlaybackInfluence;    // while the highlight keys are held
+    std::unordered_set<const mu::engraving::EngravingItem*> m_playbackInfluenceHighlight; // both
+    muse::async::Notification m_playbackInfluenceHighlightChanged;
+
     QTimer m_textCursorBlinkTimer;
 };
-}
+} // namespace mu::notation

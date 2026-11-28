@@ -25,12 +25,17 @@
 #include <qqmlintegration.h>
 
 #include "abstractnotationpaintview.h"
+#include "modifierholdwatcher.h"
+
+#include "shortcuts_v2/icommandshortcutsregister.h"
 
 namespace mu::notation {
 class NotationPaintView : public AbstractNotationPaintView
 {
     Q_OBJECT
     QML_ELEMENT
+
+    muse::GlobalInject<muse::shortcuts::ICommandShortcutsRegister> commandShortcutsRegister;
 
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
@@ -44,6 +49,16 @@ private:
     void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix,
                          bool overrideZoomType = true) override;
 
+    //! While the highlight keys are held: color everything that affects the selected note's playback (if a single
+    //! note is selected); otherwise nothing. The view doesn't move.
+    void updateHeldPlaybackInfluence();
+
+    //! The keys of the "Highlight playback influences" shortcut (none if it has no modifiers-only sequence)
+    Qt::KeyboardModifiers playbackInfluenceModifiers() const;
+
     bool m_isLocalMatrixUpdate = false;
+
+    ModifierHoldWatcher m_influenceKeys;
+    INotationPtr m_heldInfluenceNotation; // the notation the held highlight was set on
 };
 }

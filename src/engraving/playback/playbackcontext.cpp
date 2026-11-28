@@ -22,7 +22,9 @@
 
 #include "playbackcontext.h"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include "dom/lyrics.h"
 #include "dom/measure.h"
@@ -285,6 +287,7 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
     }
 
     m_dynamicsCurveByTrack.clear();
+    m_expandRepeats = expandRepeats;
 
     for (const RepeatSegment* repeatSegment : m_score->repeatList(expandRepeats)) {
         const int repeatStartTick = repeatSegment->tick;
@@ -328,10 +331,37 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
 
 void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo)
 {
-    const auto eraseTickRangeByTrack = [trackFrom, trackTo, tickFrom, tickTo](auto& byTrackMap) {
+    // The maps are keyed by playback position (update() adds each repeat pass's offset to the score tick), so the
+    // score range is cleared in every pass that plays it. A whole-score clear empties the tracks outright: it also
+    // follows changes to the repeats themselves, after which the old positions no longer match any pass.
+    const Measure* lastMeasure = m_score ? m_score->lastMeasure() : nullptr;
+    const bool isWholeScore = !lastMeasure || (tickFrom <= 0 && tickTo >= lastMeasure->endTick().ticks());
+
+    std::vector<std::pair<int, int> > positionRanges;
+
+    if (isWholeScore) {
+        positionRanges.emplace_back(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+    } else {
+        for (const RepeatSegment* repeatSegment : m_score->repeatList(m_expandRepeats)) {
+            const int from = std::max(tickFrom, repeatSegment->tick);
+            const int to = std::min(tickTo, repeatSegment->endTick() - 1);
+
+            if (from > to) {
+                continue;
+            }
+
+            const int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+            positionRanges.emplace_back(from + tickPositionOffset, to + tickPositionOffset);
+        }
+    }
+
+    const auto eraseTickRangeByTrack = [trackFrom, trackTo, &positionRanges](auto& byTrackMap) {
         for (auto it = byTrackMap.lower_bound(trackFrom); it != byTrackMap.end() && it->first < trackTo;) {
             auto& innerMap = it->second;
-            innerMap.erase(innerMap.lower_bound(tickFrom), innerMap.upper_bound(tickTo));
+
+            for (const auto& [from, to] : positionRanges) {
+                innerMap.erase(innerMap.lower_bound(from), innerMap.upper_bound(to));
+            }
 
             if (innerMap.empty()) {
                 it = byTrackMap.erase(it);
@@ -345,6 +375,10 @@ void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t track
     eraseTickRangeByTrack(m_textArticulationsByTrack);
     eraseTickRangeByTrack(m_syllablesByTrack);
     eraseTickRangeByTrack(m_playTechniquesByTrack);
+    eraseTickRangeByTrack(m_soundPresetSourcesByTrack);
+    eraseTickRangeByTrack(m_textArticulationSourcesByTrack);
+    eraseTickRangeByTrack(m_syllableSourcesByTrack);
+    eraseTickRangeByTrack(m_playTechniqueSourcesByTrack);
     eraseTickRangeByTrack(m_multiVerseLyricsPositionMap);
 
     muse::remove_if(m_currentVerseNumByChordRest, [trackFrom, trackTo, tickFrom, tickTo](const auto& pair) {
@@ -364,6 +398,45 @@ bool PlaybackContext::hasSoundFlags(const track_idx_t trackFrom, const track_idx
     return hasEntryInRange(m_soundPresetsByTrack) || hasEntryInRange(m_textArticulationsByTrack);
 }
 
+PlaybackContextSources PlaybackContext::sources(const track_idx_t trackIdx, const int nominalPositionTick) const
+{
+    const auto find = [trackIdx, nominalPositionTick](const SourcesByTrack& byTrack) -> const SourcesMap::value_type* {
+        const auto trackIt = byTrack.find(trackIdx);
+
+        if (trackIt == byTrack.end()) {
+            return nullptr;
+        }
+
+        const auto it = muse::findLessOrEqual(trackIt->second, nominalPositionTick);
+
+        return (it != trackIt->second.end())
+               ? &(*it)
+               : nullptr;
+    };
+
+    const auto firstItem = [](const SourcesMap::value_type* entry) -> const EngravingItem* {
+        return (entry && !entry->second.empty())
+               ? entry->second.front()
+               : nullptr;
+    };
+
+    PlaybackContextSources result;
+
+    result.playingTechnique = firstItem(find(m_playTechniqueSourcesByTrack));
+    result.textArticulation = firstItem(find(m_textArticulationSourcesByTrack));
+
+    if (const SourcesMap::value_type* presets = find(m_soundPresetSourcesByTrack)) {
+        result.soundPresets = presets->second;
+    }
+
+    if (const SourcesMap::value_type* syllable = find(m_syllableSourcesByTrack)) {
+        result.syllable = firstItem(syllable);
+        result.syllableStartsHere = (syllable->first == nominalPositionTick);
+    }
+
+    return result;
+}
+
 void PlaybackContext::updatePlayTechMap(const Part* part, const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
     if (!annotation->playPlayTechAnnotation()) {
@@ -381,12 +454,15 @@ void PlaybackContext::updatePlayTechMap(const Part* part, const PlayTechAnnotati
     textArticulation.text = mpe::ORDINARY_PLAYING_TECHNIQUE_CODE;
 
     const TrackRange trackRange = part->trackRange();
+
     for (track_idx_t idx = trackRange.startTrack; idx < trackRange.endTrack; ++idx) {
         m_playTechniquesByTrack[idx][segmentPositionTick] = type;
+        m_playTechniqueSourcesByTrack[idx][segmentPositionTick] = { annotation };
 
         if (cancelPlayTechniques) {
             textArticulation.layerIdx = static_cast<layer_idx_t>(idx);
             m_textArticulationsByTrack[idx][segmentPositionTick] = textArticulation;
+            m_textArticulationSourcesByTrack[idx][segmentPositionTick] = { annotation };
         }
     }
 }
@@ -413,6 +489,11 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
     for (const auto& pair : flagsOnSegment) {
         const SoundFlag* flag = pair.second;
 
+        // The flag belongs to a staff text, which is what the score shows
+        const EngravingItem* flagSource = flag->ownershipParentItem()
+                                          ? flag->ownershipParentItem()
+                                          : flag;
+
         for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
             if (!trackAccepted(flag, trackIdx)) {
                 continue;
@@ -434,6 +515,8 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
             if (!presets.empty()) {
                 SoundPresetChangeEventList& target = m_soundPresetsByTrack[trackIdx][segmentPositionTick];
                 target.insert(target.end(), std::make_move_iterator(presets.begin()), std::make_move_iterator(presets.end()));
+
+                m_soundPresetSourcesByTrack[trackIdx][segmentPositionTick].push_back(flagSource);
             }
 
             if (!flag->playingTechnique().empty()) {
@@ -441,12 +524,14 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const Part* part, 
                 event.text = flag->playingTechnique();
                 event.layerIdx = static_cast<layer_idx_t>(trackIdx);
                 m_textArticulationsByTrack[trackIdx][segmentPositionTick] = std::move(event);
+                m_textArticulationSourcesByTrack[trackIdx][segmentPositionTick] = { flagSource };
             }
         }
 
         if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
             for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
                 m_playTechniquesByTrack[trackIdx][segmentPositionTick] = PlayingTechniqueType::Natural;
+                m_playTechniqueSourcesByTrack[trackIdx][segmentPositionTick] = { flagSource };
             }
         }
     }
@@ -485,6 +570,7 @@ void PlaybackContext::updateSyllableMap(const TextBase* text, const int segmentP
         track_idx_t trackIdx = staff2track(staffIdx, voiceIdx);
         syllable.layerIdx = static_cast<layer_idx_t>(trackIdx);
         m_syllablesByTrack[trackIdx][segmentPositionTick] = syllable;
+        m_syllableSourcesByTrack[trackIdx][segmentPositionTick] = { text };
     }
 }
 
@@ -642,6 +728,16 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
             copyItemsInRange(m_syllablesByTrack, trackRange.startTrack, trackRange.endTrack, startTick, endTick, newItemsOffsetTick);
             copyItemsInRange(m_playTechniquesByTrack, trackRange.startTrack, trackRange.endTrack, startTick, endTick,
                              newItemsOffsetTick);
+
+            for (SourcesByTrack* sources : {
+                &m_soundPresetSourcesByTrack,
+                &m_textArticulationSourcesByTrack,
+                &m_syllableSourcesByTrack,
+                &m_playTechniqueSourcesByTrack
+            }
+                 ) {
+                copyItemsInRange(*sources, trackRange.startTrack, trackRange.endTrack, startTick, endTick, newItemsOffsetTick);
+            }
 
             currMeasure = currMeasure->nextMeasure();
             if (!currMeasure) {

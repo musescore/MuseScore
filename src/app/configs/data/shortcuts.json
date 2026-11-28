@@ -80,6 +80,7 @@
         {"command": "command://notation/select/last-item",  "sequences": ["Ctrl+End"]},
         {"command": "command://notation/undo",  "sequences": ["Ctrl+Z","F14"]},
         {"command": "command://notation/redo",  "sequences": ["Ctrl+Shift+Z"]},
+        {"command": "command://notation/view/highlight-playback-influences",  "sequences": ["Ctrl+Alt+Shift"], "modifiersOnly": true},
         {"command": "command://notation/cancel",  "sequences": ["Esc"]},
         {"command": "command://notation/toggle-note-input/by-note-name",  "sequences": ["N"], "autorepeat": false},
         {"command": "command://notation/toggle-note-input/by-duration",  "sequences": ["M"], "autorepeat": false},

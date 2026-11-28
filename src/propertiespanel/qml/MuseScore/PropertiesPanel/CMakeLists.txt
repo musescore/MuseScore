@@ -44,6 +44,8 @@ qt_add_qml_module(propertiespanel_qml
         general/playback/internal/glissandoplaybackmodel.h
         general/playback/internal/gradualtempochangeplaybackmodel.cpp
         general/playback/internal/gradualtempochangeplaybackmodel.h
+        general/playback/internal/noteplaybackinfomodel.cpp
+        general/playback/internal/noteplaybackinfomodel.h
         general/playback/internal/noteplaybackmodel.cpp
         general/playback/internal/noteplaybackmodel.h
         general/playback/playbackproxymodel.cpp
@@ -273,6 +275,7 @@ qt_add_qml_module(propertiespanel_qml
         general/playback/internal/GlissandoExpandableBlank.qml
         general/playback/internal/GradualTempoChangeBlank.qml
         general/playback/internal/NoteExpandableBlank.qml
+        general/playback/internal/NotePlaybackInfoBlank.qml
         general/playback/PlaybackSettings.qml
         PropertiesPanel.qml
         PropertiesPanelSectionDelegate.qml

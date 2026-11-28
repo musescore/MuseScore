@@ -41,6 +41,7 @@
 
 #include "notationerrors.h"
 
+#include "containers.h"
 #include "log.h"
 #include "translation.h"
 
@@ -458,6 +459,11 @@ MeasureBeat NotationPlayback::beat(tick_t tick) const
 tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
 {
     return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
+}
+
+NotePlaybackInfo NotationPlayback::notePlaybackInfo(const Note* note) const
+{
+    return m_playbackModel.notePlaybackInfo(note);
 }
 
 double NotationPlayback::tempoMultiplier() const

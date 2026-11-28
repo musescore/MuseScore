@@ -106,6 +106,11 @@ public:
 
     virtual muse::draw::Color noteInputPreviewColor() const = 0;
 
+    //! The color of the items the note playback Info panel shows as affecting the selected note's playback
+    virtual QColor playbackInfluenceHighlightColor() const = 0;
+    virtual void setPlaybackInfluenceHighlightColor(const QColor& color) = 0;
+    virtual muse::async::Notification playbackInfluenceHighlightColorChanged() const = 0;
+
     virtual bool useNoteInputCursorInInputByDuration() const = 0;
     virtual void setUseNoteInputCursorInInputByDuration(bool use) = 0;
     virtual muse::async::Notification useNoteInputCursorInInputByDurationChanged() const = 0;

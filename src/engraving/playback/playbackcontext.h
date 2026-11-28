@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include <map>
+#include <vector>
+
 #include "mpe/mpetypes.h"
 #include "mpe/events.h"
 
@@ -30,6 +33,7 @@
 #include "../types/types.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Segment;
 class PlayTechAnnotation;
 class SoundFlag;
@@ -39,6 +43,18 @@ class MeasureRepeat;
 class TextBase;
 class ChordRest;
 class RepeatSegment;
+
+//! The score items behind what playingTechnique(), soundPresets(), textArticulation() and syllable() return
+struct PlaybackContextSources {
+    const EngravingItem* playingTechnique = nullptr;
+
+    std::vector<const EngravingItem*> soundPresets;
+
+    const EngravingItem* textArticulation = nullptr;
+    const EngravingItem* syllable = nullptr;
+
+    bool syllableStartsHere = false; // false: the position continues an earlier syllable
+};
 
 class PlaybackContext
 {
@@ -68,7 +84,10 @@ public:
 
     bool hasSoundFlags(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
+    PlaybackContextSources sources(const track_idx_t trackIdx, const int nominalPositionTick) const;
+
     void update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo, bool expandRepeats = true);
+    //! tickFrom and tickTo are score ticks: the entries are cleared in every pass through the repeats that plays them
     void clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo);
 
 private:
@@ -85,6 +104,10 @@ private:
     using PlayTechniquesByTrack = std::map<track_idx_t, PlayTechniquesMap>;
 
     using SoundFlagMap = std::unordered_map<staff_idx_t, const SoundFlag*>;
+
+    // Kept in step with the maps above (same tracks and ticks), so a lookup finds the item behind each entry
+    using SourcesMap = std::map<int /*nominalPositionTick*/, std::vector<const EngravingItem*> >;
+    using SourcesByTrack = std::map<track_idx_t, SourcesMap>;
 
     void updatePlayTechMap(const Part* part, const PlayTechAnnotation* annotation, const int segmentPositionTick);
     void updateSoundPresetAndTextArticulationMap(const Part* part, const SoundFlagMap& flagsOnSegment, const int segmentPositionTick);
@@ -104,11 +127,17 @@ private:
     const Score* m_score = nullptr;
 
     std::set<track_idx_t> m_usedTracks;
+    bool m_expandRepeats = true; // as in the last update(), so clear() finds the entries where update() put them
     mutable std::unordered_map<track_idx_t, const AutomationCurve*> m_dynamicsCurveByTrack;
     SoundPresetsByTrack m_soundPresetsByTrack;
     TextArticulationsByTrack m_textArticulationsByTrack;
     SyllablesByTrack m_syllablesByTrack;
     PlayTechniquesByTrack m_playTechniquesByTrack;
+
+    SourcesByTrack m_soundPresetSourcesByTrack;
+    SourcesByTrack m_textArticulationSourcesByTrack;
+    SourcesByTrack m_syllableSourcesByTrack;
+    SourcesByTrack m_playTechniqueSourcesByTrack;
 
     std::unordered_map<const ChordRest*, int> m_currentVerseNumByChordRest;
     std::map<track_idx_t, std::set<int /*tick*/> > m_multiVerseLyricsPositionMap;

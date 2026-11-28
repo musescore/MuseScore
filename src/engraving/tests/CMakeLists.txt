@@ -139,6 +139,7 @@ set(MODULE_TEST_SRC ${MODULE_TEST_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/bendsrenderer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/noteplaybackinfo_tests.cpp
 )
 endif()
 

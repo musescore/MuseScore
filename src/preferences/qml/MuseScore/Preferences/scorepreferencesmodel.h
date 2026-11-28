@@ -23,6 +23,7 @@
 
 #include <qqmlintegration.h>
 
+#include <QColor>
 #include <QObject>
 
 #include "modularity/ioc.h"
@@ -38,6 +39,9 @@ class ScorePreferencesModel : public QObject, public muse::Contextable, public m
 
     Q_PROPERTY(QString defaultStylePath READ defaultStylePath WRITE setDefaultStylePath NOTIFY defaultStylePathChanged)
     Q_PROPERTY(QString defaultPartStylePath READ defaultPartStylePath WRITE setDefaultPartStylePath NOTIFY defaultPartStylePathChanged)
+    Q_PROPERTY(
+        QColor playbackInfluenceHighlightColor READ playbackInfluenceHighlightColor WRITE setPlaybackInfluenceHighlightColor
+        NOTIFY playbackInfluenceHighlightColorChanged)
 
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
 
@@ -52,8 +56,13 @@ public:
     QString defaultPartStylePath() const;
     void setDefaultPartStylePath(const QString& path);
 
+    //! The color of what affects the selected note's playback (see Properties > Playback > Info)
+    QColor playbackInfluenceHighlightColor() const;
+    void setPlaybackInfluenceHighlightColor(const QColor& color);
+
 signals:
     void defaultStylePathChanged();
     void defaultPartStylePathChanged();
+    void playbackInfluenceHighlightColorChanged();
 };
 }

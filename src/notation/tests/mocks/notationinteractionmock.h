@@ -281,6 +281,13 @@ public:
     MOCK_METHOD(void, showItem, (const mu::engraving::EngravingItem*, int), (override));
     MOCK_METHOD(muse::async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));
 
+    MOCK_METHOD(void, centerOnItem, (const mu::engraving::EngravingItem*), (override));
+    MOCK_METHOD(void, endCentering, (bool), (override));
+    MOCK_METHOD(void, setPlaybackInfluenceHighlight, (const std::vector<const mu::engraving::EngravingItem*>&), (override));
+    MOCK_METHOD(void, setHeldPlaybackInfluenceHighlight, (const std::vector<const mu::engraving::EngravingItem*>&), (override));
+    MOCK_METHOD((const std::unordered_set<const mu::engraving::EngravingItem*>&), playbackInfluenceHighlight, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, playbackInfluenceHighlightChanged, (), (const, override));
+
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<muse::RectF()>&), (override));
     MOCK_METHOD(void, checkAndShowError, (), (override));
     MOCK_METHOD(void, toggleDebugShowGapRests, (), (override));

@@ -155,6 +155,7 @@ public:
         TYPE_SYMBOL,
         TYPE_NOTELINE,
         TYPE_PLAY_COUNT_TEXT,
+        TYPE_NOTE_PLAYBACK_INFO,
     };
     Q_ENUM(PropertiesPanelModelType)
 

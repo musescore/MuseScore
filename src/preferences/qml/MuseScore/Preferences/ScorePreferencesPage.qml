@@ -37,12 +37,28 @@ PreferencesPage {
         scorePreferencesModel.load()
     }
 
-    DefaultStyleSection {
+    Column {
         width: parent.width
+        spacing: root.sectionsSpacing
 
-        model: scorePreferencesModel
+        DefaultStyleSection {
+            width: parent.width
 
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+            model: scorePreferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+        }
+
+        SeparatorLine {}
+
+        PlaybackInfluenceSection {
+            width: parent.width
+
+            model: scorePreferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+        }
     }
 }

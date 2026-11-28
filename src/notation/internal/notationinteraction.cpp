@@ -7992,6 +7992,92 @@ muse::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::
     return m_showItemRequested;
 }
 
+//! The item to scroll to for item: a spanner itself has no layout, so its first segment shows where it starts
+static const EngravingItem* centeringTarget(const EngravingItem* item)
+{
+    if (item && item->isSpanner() && !toSpanner(item)->spannerSegments().empty()) {
+        return toSpanner(item)->frontSegment();
+    }
+
+    return item;
+}
+
+void NotationInteraction::centerOnItem(const EngravingItem* item)
+{
+    if (!item) {
+        return;
+    }
+
+    const EngravingItem* shownItem = centeringTarget(item);
+
+    ShowItemRequest request;
+    request.item = shownItem;
+    request.showRect = shownItem->canvasBoundingRect();
+    request.center = true;
+
+    m_showItemRequested.send(request);
+}
+
+void NotationInteraction::endCentering(bool restoreView)
+{
+    ShowItemRequest request;
+    request.endCentering = true;
+    request.restoreView = restoreView;
+
+    m_showItemRequested.send(request);
+}
+
+namespace notationinteraction_detail {
+//! The items and their linked copies: an item may come from the main score while a part is shown (or the other way around)
+std::unordered_set<const EngravingItem*> withLinkedCopies(const std::vector<const EngravingItem*>& items)
+{
+    std::unordered_set<const EngravingItem*> result;
+
+    for (const EngravingItem* item : items) {
+        if (!item) {
+            continue;
+        }
+
+        result.insert(item);
+
+        if (item->links()) {
+            for (const EngravingObject* linked : *item->links()) {
+                if (linked->isEngravingItem()) {
+                    result.insert(static_cast<const EngravingItem*>(linked));
+                }
+            }
+        }
+    }
+
+    return result;
+}
+} // namespace notationinteraction_detail
+
+void NotationInteraction::setPlaybackInfluenceHighlight(const std::vector<const EngravingItem*>& items)
+{
+    m_focusedPlaybackInfluence = notationinteraction_detail::withLinkedCopies(items);
+    updatePlaybackInfluenceHighlight();
+}
+
+void NotationInteraction::setHeldPlaybackInfluenceHighlight(const std::vector<const EngravingItem*>& items)
+{
+    m_heldPlaybackInfluence = notationinteraction_detail::withLinkedCopies(items);
+    updatePlaybackInfluenceHighlight();
+}
+
+void NotationInteraction::updatePlaybackInfluenceHighlight()
+{
+    std::unordered_set<const EngravingItem*> highlight = m_focusedPlaybackInfluence;
+    highlight.insert(m_heldPlaybackInfluence.begin(), m_heldPlaybackInfluence.end());
+
+    if (highlight == m_playbackInfluenceHighlight) {
+        return;
+    }
+
+    m_playbackInfluenceHighlight = std::move(highlight);
+    m_playbackInfluenceHighlightChanged.notify();
+}
+
 void NotationInteraction::setGetViewRectFunc(const std::function<RectF()>& func)
 {
     static_cast<NotationNoteInput*>(m_noteInput.get())->setGetViewRectFunc(func);

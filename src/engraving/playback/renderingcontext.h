@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <map>
+
 #include "mpe/events.h"
 
 #include "../dom/chord.h"
@@ -32,6 +34,12 @@
 #include "playbackcontext.h"
 
 namespace mu::engraving {
+//! Which score item made each articulation type appear while parsing (the first item to add a type keeps it).
+//! Only used when inspecting a note (e.g. by the Properties panel); normal playback rendering leaves it unset.
+struct ArticulationSourceRecorder {
+    std::map<muse::mpe::ArticulationType, const EngravingItem*> sources;
+};
+
 struct RenderingContext {
     muse::mpe::timestamp_t nominalTimestamp = 0;
     muse::mpe::duration_t nominalDuration = 0;
@@ -49,6 +57,8 @@ struct RenderingContext {
     const Score* score = nullptr;
     const muse::mpe::ArticulationsProfilePtr profile;
     const PlaybackContextPtr playbackCtx;
+
+    ArticulationSourceRecorder* sourceRecorder = nullptr;
 
     bool isValid() const
     {

@@ -3485,6 +3485,10 @@ inline static const muse::rcommand::Command CONTEXT_MENU_OF_SELECTION_COMMAND("c
 
 inline static const muse::rcommand::Command SHOW_SEARCH_COMMAND("command://notation/view/show-search");
 
+//! Held rather than pressed (a modifiers-only shortcut): the score view watches the keys itself, nothing dispatches it
+inline static const muse::rcommand::Command HIGHLIGHT_PLAYBACK_INFLUENCES_COMMAND(
+    "command://notation/view/highlight-playback-influences");
+
 // piano keyboard commands
 inline static const muse::rcommand::Command PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND("command://notation/piano-keyboard/set-number-of-keys");
 
