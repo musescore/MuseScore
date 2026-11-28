@@ -50,6 +50,7 @@ public:
     int octaveShift(const engraving::staff_idx_t staff, const engraving::Fraction f) const;
     void addOctaveShift(const engraving::staff_idx_t staff, const int shift, const engraving::Fraction f);
     void calcOctaveShifts();
+    bool hasOctaveShifts() const;
     void setName(muse::String nm) { m_name = nm; }
     muse::String getName() const { return m_name; }
     void setPrintName(const bool b) { m_printName = b; }

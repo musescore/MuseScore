@@ -2380,6 +2380,11 @@ void MusicXmlParserPass2::part()
     }
 #endif
 
+    // Pass 1 records octave shifts in cumulative part time.
+    const bool hasOctaveShifts = mxmlPart.hasOctaveShifts();
+    const size_t partMeasureCount = mxmlPart.nMeasures();
+    Fraction partMeasureStart;
+
     // read the measures
     size_t nr = 0; // current measure sequence number (always increments by one for each measure)
     m_measureNumber = 0; // written measure number (doesn't always increment by 1)
@@ -2387,10 +2392,17 @@ void MusicXmlParserPass2::part()
         if (m_e.name() == "measure") {
             Fraction t = m_pass1.getMeasureStart(nr);
             if (t.isValid()) {
-                measure(id, t);
+                Fraction octaveShiftTimeOffset(0, 0); // Invalid when the part has no octave shifts.
+                if (hasOctaveShifts) {
+                    octaveShiftTimeOffset = nr < partMeasureCount ? partMeasureStart - t : Fraction(0, 1);
+                }
+                measure(id, t, octaveShiftTimeOffset);
             } else {
                 m_logger->logError(String(u"no valid start time for measure %1").arg(nr + 1), &m_e);
                 m_e.skipCurrentElement();
+            }
+            if (hasOctaveShifts && nr < partMeasureCount) {
+                partMeasureStart += mxmlPart.measureDuration(nr);
             }
             ++nr;
         } else {
@@ -2823,7 +2835,7 @@ static bool canAddTempoText(const Score* const score, const int tick)
  Parse the /score-partwise/part/measure node.
  */
 
-void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
+void MusicXmlParserPass2::measure(const String& partId, const Fraction time, const Fraction& octaveShiftTimeOffset)
 {
     // "measure numbers" don't have to be actual numbers in MusicXML
     bool isNumericMeasureNumber = false;
@@ -2952,8 +2964,8 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             int alt = -10;                          // any number outside range of xml-tag "alter"
             // note: chord and grace note handling done in note()
             // dura > 0 if valid rest or first note of chord found
-            Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
-                           tupletStates, tuplets, arpMap, delayedArps);
+            Note* n = note(partId, measure, time + mTime, time + prevTime, octaveShiftTimeOffset, missingPrev, dura, missingCurr,
+                           cv, gcl, gac, beams, fbl, alt, tupletStates, tuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
                 prevChord = n->chord();          // remember last non-grace chord
             }
@@ -7070,6 +7082,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
                                 Measure* measure,
                                 const Fraction sTime,
                                 const Fraction prevSTime,
+                                const Fraction& octaveShiftTimeOffset,
                                 Fraction& missingPrev,
                                 Fraction& dura,
                                 Fraction& missingCurr,
@@ -7354,8 +7367,11 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
         }
         note = Factory::createNote(c);
-        const staff_idx_t ottavaStaff = (msTrack - m_pass1.trackForPart(partId)) / VOICES;
-        const int octaveShift = m_pass1.octaveShift(partId, ottavaStaff, noteStartTime);
+        int octaveShift = 0;
+        if (octaveShiftTimeOffset.isValid()) {
+            const staff_idx_t ottavaStaff = (msTrack - m_pass1.trackForPart(partId)) / VOICES;
+            octaveShift = m_pass1.octaveShift(partId, ottavaStaff, noteStartTime + octaveShiftTimeOffset);
+        }
         const Staff* st = c->staff();
         if (isSingleDrumset && mnp.unpitched() && instrumentId.empty()) {
             xmlSetDrumsetPitch(note, c, st, mnp.displayStep(), mnp.displayOctave(), headGroup, stemDir, instrument);
