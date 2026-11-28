@@ -22,6 +22,8 @@
 
 #include "musicxmlpart.h"
 
+#include <algorithm>
+
 #include "engraving/dom/interval.h"
 #include "engraving/dom/mscore.h"
 
@@ -164,6 +166,13 @@ String MusicXmlPart::toString() const
 Interval MusicXmlPart::interval(const Fraction f) const
 {
     return _intervals.interval(f);
+}
+
+bool MusicXmlPart::hasOctaveShifts() const
+{
+    return std::any_of(m_octaveShifts.cbegin(), m_octaveShifts.cend(), [](const MusicXmlOctaveShiftList& shifts) {
+        return !shifts.empty();
+    });
 }
 
 int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
