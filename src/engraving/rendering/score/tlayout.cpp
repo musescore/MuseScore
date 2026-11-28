@@ -5466,6 +5466,11 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     double y1 = 0.0; // vertical displacement to match note attach point
     double y2 = _up * (item->length());
 
+    // for connecting the stem to invisible notes beyond the visible ones
+    const Note* startNote = nullptr;
+    const Note* invisibleStartNote = nullptr;
+    const Note* invisibleEndNote = nullptr;
+
     bool isTabStaff = false;
     if (item->chord()) {
         ldata->setMag(item->chord()->mag());
@@ -5491,7 +5496,8 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             // in other TAB types, no correction
         } else { // non-TAB
             // move stem start to note attach point (ignoring invisible notes)
-            Note* note = up ? item->chord()->visibleDownNote() : item->chord()->visibleUpNote();
+            const Chord* chord = item->chord();
+            Note* note = up ? chord->visibleDownNote() : chord->visibleUpNote();
             if ((up && !note->ldata()->mirror.value(LD_ACCESS::BAD)) || (!up && note->ldata()->mirror.value(LD_ACCESS::BAD))) {
                 y1 = note->stemUpSE().y();
             } else {
@@ -5499,6 +5505,16 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             }
 
             ldata->setPosY(note->ldata()->pos().y());
+
+            startNote = note;
+            const Note* outerStartNote = up ? chord->downNote() : chord->upNote();
+            if (outerStartNote != note) {
+                invisibleStartNote = outerStartNote;
+            }
+            const Note* outerEndNote = up ? chord->upNote() : chord->downNote();
+            if (outerEndNote != (up ? chord->visibleUpNote() : chord->visibleDownNote())) {
+                invisibleEndNote = outerEndNote;
+            }
         }
 
         const Hook* hook = item->chord()->hook();
@@ -5517,6 +5533,20 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
 
     LineF line = LineF(lineX, y1, lineX, y2);
     ldata->line = line;
+
+    ldata->invisibleExtensions.clear();
+    if (invisibleStartNote) {
+        // from the invisible note on the notehead side to the start of the stem
+        const double y = y1 + invisibleStartNote->ldata()->pos().y() - startNote->ldata()->pos().y();
+        ldata->invisibleExtensions.emplace_back(lineX, y, lineX, y1);
+    }
+    if (invisibleEndNote) {
+        // from the end of the stem to the invisible note beyond it, if the stem doesn't reach it
+        const double y = invisibleEndNote->ldata()->pos().y() - startNote->ldata()->pos().y();
+        if ((up && y < y2) || (!up && y > y2)) {
+            ldata->invisibleExtensions.emplace_back(lineX, y2, lineX, y);
+        }
+    }
 
     // compute line and bounding rectangle
     RectF rect(line.p1(), line.p2() + PointF(0.0, ldata->beamCorrection));

@@ -3070,6 +3070,14 @@ void TDraw::draw(const Stem* item, Painter* painter, const PaintOptions& opt)
     painter->setPen(Pen(item->curColor(opt), item->lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(ldata->line);
 
+    // connect the stem to invisible notes, when invisible elements are shown
+    if (!ldata->invisibleExtensions.empty() && !opt.isPrinting && item->score()->isShowInvisible()) {
+        painter->setPen(Pen(item->curColor(false, opt), item->lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+        for (const LineF& extension : ldata->invisibleExtensions) {
+            painter->drawLine(extension);
+        }
+    }
+
     if (!isTablature) {
         return;
     }
