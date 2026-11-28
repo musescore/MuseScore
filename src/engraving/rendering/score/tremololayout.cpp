@@ -57,7 +57,8 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * 0.5;
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
+        h = (ctx.conf().styleS(Sid::tremoloNoteSidePadding).val() * item->spatium() + item->ldata()->bbox().height())
+            * item->chord1()->intrinsicMag();
     }
 
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
@@ -96,7 +97,8 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         }
 
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord()->intrinsicMag();
+        h = (ctx.conf().styleS(Sid::tremoloNoteSidePadding).val() * item->spatium() + item->ldata()->bbox().height())
+            * item->chord()->intrinsicMag();
     }
 
     layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
@@ -119,7 +121,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
     double mag = item->chord()->intrinsicMag();
     spatium *= mag;
 
-    double yOffset = h - ctx.conf().styleAbsolute(Sid::tremoloOutSidePadding) * mag;
+    double yOffset = h - ctx.conf().styleS(Sid::tremoloOutSidePadding).val() * spatium;
 
     int beams = item->chord()->beams();
     if (item->chord()->hook()) {
