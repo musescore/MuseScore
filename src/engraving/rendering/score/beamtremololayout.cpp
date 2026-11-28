@@ -185,7 +185,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
                 const bool beamClearsAnchor = (ldata->up && muse::RealIsEqualOrLess(desiredY, anchor.y() + reduction))
                                               || (!ldata->up && muse::RealIsEqualOrMore(desiredY, anchor.y() - reduction));
 
-                const Note* note = ldata->up ? toChord(chordRest)->downNote() : toChord(chordRest)->upNote();
+                const Note* note = ldata->up ? toChord(chordRest)->visibleDownNote() : toChord(chordRest)->visibleUpNote();
                 const double noteAnchor = (ldata->up ? note->stemUpSE().y() : note->stemDownNW().y()) + note->pagePos().y()
                                           - item->pagePos().y();
                 // Resultant length in quarter spaces
@@ -1021,15 +1021,23 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
         if (!topLast && !bottomLast && topFirst && bottomFirst) {
             // if there are only two notes, one on each staff, special case
             // take max slope into account
+            // StemLayout::stemPos() starts at the outermost visible note, but the slope
+            // should take all notes into account, including invisible ones
+            auto stemStartY = [](const Chord* chord) {
+                const bool up = chord->ldata()->up;
+                const Note* outerNote = up ? chord->downNote() : chord->upNote();
+                const Note* visibleNote = up ? chord->visibleDownNote() : chord->visibleUpNote();
+                return StemLayout::stemPos(chord).y() + outerNote->pos().y() - visibleNote->pos().y();
+            };
             double yFirst, yLast;
             // we can't rely on comparing topFirst and bottomFirst ->tick() because beamed
             // graces have the same tick
             if (ldata->elements[0] == topFirst) {
-                yFirst = StemLayout::stemPos(topFirst).y();
-                yLast = StemLayout::stemPos(bottomFirst).y();
+                yFirst = stemStartY(topFirst);
+                yLast = stemStartY(bottomFirst);
             } else {
-                yFirst = StemLayout::stemPos(bottomFirst).y();
-                yLast = StemLayout::stemPos(topFirst).y();
+                yFirst = stemStartY(bottomFirst);
+                yLast = stemStartY(topFirst);
             }
             int desiredSlant = round((yFirst - yLast) / spatium);
             int slant = std::min(std::abs(desiredSlant), getMaxSlope(ldata));
@@ -1418,7 +1426,7 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
         return chord->upNote()->pagePos().y();
     }
 
-    Note* note = cr->up() ? chord->downNote() : chord->upNote();
+    Note* note = cr->up() ? chord->visibleDownNote() : chord->visibleUpNote();
     PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;

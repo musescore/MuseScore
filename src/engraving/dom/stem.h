@@ -83,6 +83,9 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;
         double beamCorrection = 0.0;
+        // segments connecting the stem to invisible notes beyond it,
+        // only drawn when invisible elements are shown (not part of the bbox)
+        std::vector<LineF> invisibleExtensions;
     };
     DECLARE_LAYOUTDATA_METHODS(Stem)
 

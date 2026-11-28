@@ -1422,6 +1422,12 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
 
             if (note->visible()) { // if one note is visible,
                 visible = true;    // all lines between it and the staff are visible
+                // including lines already added for invisible notes further from the staff
+                for (auto& d : vecLines) {
+                    if ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) {
+                        d.visible = true;
+                    }
+                }
             }
             hw = std::max(hw, note->headWidth());
 

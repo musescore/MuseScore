@@ -64,11 +64,16 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = (ldata->up ? item->upNote()->stemUpSE().y() : item->downNote()->stemDownNW().y()) / item->intrinsicMag()
+    // invisible notes are ignored, so that the stem only spans the visible notes
+    const Note* upNote = item->visibleUpNote();
+    const Note* downNote = item->visibleDownNote();
+    const int upLine = tab ? item->upLine() : upNote->line();
+    const int downLine = tab ? item->downLine() : downNote->line();
+    double extraHeight = (ldata->up ? upNote->stemUpSE().y() : downNote->stemDownNW().y()) / item->intrinsicMag()
                          / spatium;
     int shortestStem = style.styleB(Sid::useWideBeams) ? 12 : (style.styleD(Sid::shortestStem) + std::abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
-    int chordHeight = (item->downLine() - item->upLine()) * quarterSpacesPerLine; // convert to quarter spaces
+    int chordHeight = (downLine - upLine) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
 
     int minStemLengthQuarterSpaces = calcMinStemLength(item, ctx);
@@ -83,8 +88,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     int idealStemLength = defaultStemLength;
 
     if (ldata->up) {
-        int stemEndPosition = item->upLine() * quarterSpacesPerLine - defaultStemLength;
-        double stemEndPositionMag = (double)item->upLine() * quarterSpacesPerLine - (defaultStemLength * item->intrinsicMag());
+        int stemEndPosition = upLine * quarterSpacesPerLine - defaultStemLength;
+        double stemEndPositionMag = (double)upLine * quarterSpacesPerLine - (defaultStemLength * item->intrinsicMag());
 
         if (stemEndPositionMag <= -shortStemStart) {
             int reduction = maxReduction(item, ctx, std::abs((int)floor(stemEndPositionMag) + shortStemStart));
@@ -98,8 +103,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
         }
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     } else {
-        int stemEndPosition = item->downLine() * quarterSpacesPerLine + defaultStemLength;
-        double stemEndPositionMag = (double)item->downLine() * quarterSpacesPerLine + (defaultStemLength * item->intrinsicMag());
+        int stemEndPosition = downLine * quarterSpacesPerLine + defaultStemLength;
+        double stemEndPositionMag = (double)downLine * quarterSpacesPerLine + (defaultStemLength * item->intrinsicMag());
 
         int downShortStemStart = (staffLineCount - 1) * (2 * quarterSpacesPerLine) + shortStemStart;
         if (stemEndPositionMag >= downShortStemStart) {
@@ -121,7 +126,7 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
 
     double finalStemLength = (chordHeight / 4.0 * spatium) + ((stemLength / 4.0 * spatium) * item->intrinsicMag());
     double extraLength = 0.;
-    Note* startNote = ldata->up ? item->downNote() : item->upNote();
+    const Note* startNote = ldata->up ? downNote : upNote;
     if (!startNote->fixed()) {
         // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
         // in those cases, we have to add the extra amount to it to bring it to a minimum.
@@ -233,12 +238,12 @@ PointF StemLayout::stemPos(const Chord* item)
     }
 
     if (item->ldata()->up) {
-        const Note* downNote = item->downNote();
+        const Note* downNote = item->visibleDownNote();
         double nhw = item->notes().size() == 1 ? downNote->bboxRightPos() : item->noteHeadWidth();
         return item->pagePos() + PointF(nhw, downNote->pos().y());
     }
 
-    return item->pagePos() + PointF(0.0, item->upNote()->pos().y());
+    return item->pagePos() + PointF(0.0, item->visibleUpNote()->pos().y());
 }
 
 PointF StemLayout::stemPos(const Rest* item)
@@ -430,7 +435,7 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
 
         int outsideStaffOffset = 0;
         if (!staff->isTabStaff(item->tick())) {
-            Note* lineNote = ldata->up ? item->upNote() : item->downNote();
+            Note* lineNote = ldata->up ? item->visibleUpNote() : item->visibleDownNote();
             if (lineNote->line() == INVALID_LINE) {
                 lineNote->updateLine();
             }
@@ -495,10 +500,10 @@ int StemLayout::calc4BeamsException(const Chord* item, int stemLength)
     const Chord::LayoutData* ldata = item->ldata();
     int difference = 0;
     int staffLines = (item->staff()->lines(item->tick()) - 1) * 2;
-    if (ldata->up && item->upNote()->line() > staffLines) {
-        difference = item->upNote()->line() - staffLines;
-    } else if (!ldata->up && item->downNote()->line() < 0) {
-        difference = std::abs(item->downNote()->line());
+    if (ldata->up && item->visibleUpNote()->line() > staffLines) {
+        difference = item->visibleUpNote()->line() - staffLines;
+    } else if (!ldata->up && item->visibleDownNote()->line() < 0) {
+        difference = std::abs(item->visibleDownNote()->line());
     }
     switch (difference) {
     case 2:
