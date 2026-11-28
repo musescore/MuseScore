@@ -30,6 +30,8 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/spanner.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempotimeline.h"
@@ -267,10 +269,95 @@ bool Cursor::nextMeasure()
     return segment();
 }
 
+static bool prepareCursorSpanner(mu::engraving::Spanner* spanner, mu::engraving::Segment* segment, mu::engraving::track_idx_t track)
+{
+    using namespace mu::engraving;
+    using Anchor = mu::engraving::Spanner::Anchor;
+    switch (spanner->type()) {
+    case ElementType::SLUR:
+    case ElementType::HAIRPIN:
+    case ElementType::OTTAVA:
+    case ElementType::NOTELINE:
+    case ElementType::TEXTLINE:
+    case ElementType::VOLTA:
+    case ElementType::PEDAL:
+    case ElementType::TRILL:
+    case ElementType::VIBRATO:
+    case ElementType::GRADUAL_TEMPO_CHANGE:
+    case ElementType::LET_RING:
+    case ElementType::PALM_MUTE:
+    case ElementType::WHAMMY_BAR:
+    case ElementType::RASGUEADO:
+    case ElementType::HARMONIC_MARK:
+    case ElementType::PICK_SCRAPE:
+        break;
+    default:
+        return false;
+    }
+
+    auto* score = segment->score();
+    auto* item = segment->element(track);
+    if (!item || !item->isChordRest() || spanner->score() != score) {
+        return false;
+    }
+    auto* start = toChordRest(item);
+    const auto endTrack = spanner->track2() == muse::nidx ? track : spanner->track2();
+    if (endTrack >= score->ntracks() || score->staff(track2staff(endTrack))->part() != start->part()) {
+        return false;
+    }
+
+    const auto anchor = spanner->anchor();
+    const auto tick = anchor == Anchor::MEASURE ? segment->measure()->tick() : segment->tick();
+    auto duration = spanner->ticks();
+    if (!duration.isValid() || duration.negative()) {
+        return false;
+    }
+    if (duration.isZero()) {
+        duration = anchor == Anchor::MEASURE ? segment->measure()->ticks() : start->actualTicks();
+    }
+    auto endTick = tick + duration;
+    if (endTick > score->endTick()) {
+        return false;
+    }
+    if (anchor == Anchor::MEASURE) {
+        endTick = score->tick2measure(endTick - mu::engraving::Fraction::eps())->endTick();
+    }
+    if (anchor == Anchor::CHORDREST || anchor == Anchor::NOTE) {
+        auto* endSegment = score->tick2segment(endTick, true, SegmentType::ChordRest);
+        auto* end = endSegment ? endSegment->element(endTrack) : nullptr;
+        if (anchor == Anchor::CHORDREST && spanner->ticks().isZero()
+            && (toSlur(spanner)->isIncoming() || toSlur(spanner)->isOutgoing())) {
+            end = start;
+            endTick = tick;
+        }
+        if (!end || !end->isChordRest()) {
+            return false;
+        }
+        if (anchor == Anchor::NOTE) {
+            if (!start->isChord() || !end->isChord()) {
+                return false;
+            }
+            spanner->setNoteSpan(toChord(start)->upNote(), toChord(end)->upNote());
+            return true;
+        }
+        spanner->setStartElement(start);
+        spanner->setEndElement(end);
+    }
+    spanner->setOwnershipParent(score->dummy());
+    spanner->setTrack(track);
+    spanner->setTrack2(endTick == tick ? track : endTrack);
+    spanner->setTick(tick);
+    spanner->setTick2(endTick);
+    return true;
+}
+
 //---------------------------------------------------------
 //   add
 ///   Adds the given element to a score at this cursor's
-///   position.
+///   position. For supported lines, spannerTicks defaults to the current
+///   chord/rest's duration and spannerTrack2 to the cursor's track.
+///   Note-anchored lines connect the upper notes of the two chords.
+///   Voltas start at the beginning of the measure and default to one measure.
 //---------------------------------------------------------
 
 void Cursor::add(EngravingItem* wrapped)
@@ -289,6 +376,16 @@ void Cursor::add(EngravingItem* wrapped)
 
     const int m_track = track();
     mu::engraving::Segment* _segment = segment();
+
+    if (s->isSpanner()) {
+        if (!prepareCursorSpanner(toSpanner(s), _segment, m_track)) {
+            LOGW("Cursor::add: Cannot anchor %s at this position", s->typeName());
+            return;
+        }
+        wrapped->setOwnership(Ownership::SCORE);
+        m_score->undoAddElement(s);
+        return;
+    }
 
     wrapped->setOwnership(Ownership::SCORE);
     s->setScore(m_score);

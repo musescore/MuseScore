@@ -435,6 +435,7 @@ enum class ElementType {
     WHAMMY_BAR            = int(mu::engraving::ElementType::WHAMMY_BAR),
     RASGUEADO             = int(mu::engraving::ElementType::RASGUEADO),
     HARMONIC_MARK         = int(mu::engraving::ElementType::HARMONIC_MARK),
+    PICK_SCRAPE           = int(mu::engraving::ElementType::PICK_SCRAPE),
     TEXTLINE              = int(mu::engraving::ElementType::TEXTLINE),
     TEXTLINE_BASE         = int(mu::engraving::ElementType::TEXTLINE_BASE),
     NOTELINE              = int(mu::engraving::ElementType::NOTELINE),

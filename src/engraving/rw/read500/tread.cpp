@@ -279,6 +279,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
         break;
+    case ElementType::PICK_SCRAPE: read(toTextLineBase(item), xml, ctx);
+        break;
     case ElementType::PLAY_COUNT_TEXT: read(item_cast<PlayCountText*>(item), xml, ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: read(item_cast<PlayTechAnnotation*>(item), xml, ctx);
