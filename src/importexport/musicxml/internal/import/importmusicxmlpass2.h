@@ -464,8 +464,8 @@ private:
     engraving::Note* note(const muse::String& partId, engraving::Measure* measure, const engraving::Fraction sTime,
                           const engraving::Fraction prevTime, const engraving::Fraction& octaveShiftTimeOffset,
                           engraving::Fraction& missingPrev, engraving::Fraction& dura, engraving::Fraction& missingCurr,
-                          muse::String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl,
-                          int& alt, MusicXmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
+                          muse::String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl, int& alt,
+                          MusicXmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     void notePrintSpacingNo(engraving::Fraction& dura);
     engraving::FiguredBassItem* figure(const int idx, const bool paren, engraving::FiguredBass* parent);
     engraving::FiguredBass* figuredBass();
