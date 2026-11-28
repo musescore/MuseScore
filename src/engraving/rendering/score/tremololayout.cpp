@@ -57,8 +57,7 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * 0.5;
         y = anchor1->y();
-        h = (ctx.conf().styleS(Sid::tremoloNoteSidePadding).val() * item->spatium() + item->ldata()->bbox().height())
-            * item->chord1()->intrinsicMag();
+        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
     }
 
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
